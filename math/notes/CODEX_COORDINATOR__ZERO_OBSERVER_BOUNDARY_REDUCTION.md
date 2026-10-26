@@ -25,6 +25,11 @@ Section 9 selects a single subcritical penalty instead. Its all-zero endpoint
 is impossible, leaving only an actual ALL-END minimum or an inherited mixed
 endpoint. This avoids selecting the absorbing alternative as a separate
 source; it does not prove that absorbing ALL-END minima are absent.
+Section 10 gives an exact infinite three-owner Nash tail refuting an
+asymptotic-collapse shortcut for the actual branch. Its active payoffs and
+relative collision mass remain positive, and repetition leaves a fixed
+observer regret. The example has an absorbing equilibrium; it excludes
+no positive-gap source and does not change the two remaining cases.
 
 Sections 1--4 passed [independent adversarial review](../feedback/CODEX_COORDINATOR__ZERO_OBSERVER_BOUNDARY_REDUCTION__BY_CODEX_BOUNDARY_ADVERSARY.md)
 at the exact version pinned there. Sections 5--6 passed
@@ -39,6 +44,9 @@ reviews in the latter record and
 Section 9 has scoped independent reviews
 [here](../feedback/CODEX_COORDINATOR__ZERO_OBSERVER_BOUNDARY_REDUCTION__BY_CODEX_CLOSURE_ADVERSARY.md)
 and [here](../feedback/CODEX_COORDINATOR__ZERO_OBSERVER_BOUNDARY_REDUCTION__BY_CODEX_MIXED_BOUNDARY_EXCHANGE.md).
+Section 10 has independent scoped reviews
+[here](../feedback/CODEX_COORDINATOR__ZERO_OBSERVER_BOUNDARY_REDUCTION__BY_CODEX_ACTUAL_ROOT_TAIL.md)
+and [here](../feedback/CODEX_COORDINATOR__ZERO_OBSERVER_BOUNDARY_REDUCTION__BY_CODEX_ACTUAL_GLOBAL_VARIATION.md).
 This is not a Lean result or an export. Fin4 remains open: neither the
 actual-minimum branch nor a repair that uses the boundary tail's
 global-minimum ancestry is resolved.
@@ -1130,3 +1138,171 @@ therefore enough, but an improvement vanishing with its error is not.
 Every d_i here uses the full unilateral behavioral cap. This statement
 specifies the missing construction; it does not supply it or imply that
 arbitrary local/component-preserving edits can achieve it.
+
+
+## 10. An actual three-owner tail need not collapse
+
+This exact control, derived with CODEX_ACTUAL_TAIL_COMPACTNESS, rules out a
+proposed shortcut in the actual branch. Conditional tails inherit observer
+optimality and ALL-END activity, but their objective need not minimize. If
+the pivot has no finite atoms after a cut, that tail is full native Nash.
+It is tempting to argue that its three remaining owners must become
+dominated by one owner, lose positive active payoffs, or have negligible
+relative collision mass. The example below disproves all three conclusions,
+even with the generic screens used by the existing tail reductions.
+
+It is ordinary mathematics, not a counterexample to case (1). Write
+A=inf sum_i d_i over actual absorbing profiles. The example has A=0 and
+m=0, with an explicit absorbing full Nash profile. No source satisfying
+m>0 and global J_r-minimality is excluded or refuted by this section.
+
+### Complete table
+
+Players are {0,1,2,3}, pivot0, and T={1,2,3}, cyclically ordered 1->2->3->1.
+For a nonempty coalition S write k(S)=sum_(j in S) 2^j. All own singletons,
+live play and literal AllNever pay zero. The following rules give all 60 cells.
+
+For row0, with (g1,g2,g3)=(-4,1,6), put
+
+    Z0(S)=sum_(j in S) g_j     if S is contained in T,
+    Z0({0})=0,
+    Z0(S)=-10-k(S)            if 0 belongs to S and |S|>=2.
+
+For each i in T, put Z_i({0})=-5 and Z_i(S)=-10-k(S)-i whenever
+0 belongs to S and |S|>=2. On the seven nonempty subsets of T, write
+j=next(i), h=prev(i), and set
+
+    Zi(i)=0, Zi(j)=2, Zi(h)=-1,
+    Zi(ij)=3, Zi(ih)=1, Zi(jh)=1/2, Zi(T)=4.
+
+### Actual laws and full response proof
+
+Pivot0 chooses Never. At every date n>=0, all three observers independently
+Quit with the same conditional hazard q_n, where
+
+    q_0=1/100,
+    q_(n+1)=q_n(3+q_n/2)/[4(1-q_n)^2].                 (1)
+
+For 0<q<=1/100, the ratio in (1) is at most 4/5: its numerator is at most
+601/200, whereas (16/5)(99/100)^2=9801/3125>601/200.
+Thus 0<q_n<=(1/100)(4/5)^n, sum q_n<=1/20, and each observer has
+literal Never mass N=product_n(1-q_n)>=19/20. Each has infinite finite
+support. These are actual independent behavioral laws, not abstract limits.
+
+At any date n, an observer's forced-Quit value against the other two
+observers is Q_n=4q_n. Its passive current contribution is
+P_n=q_n-q_n^2/2, and its deleted survival is H_n=(1-q_n)^2. Equation (1)
+gives the exact identity
+
+    P_n+H_n(4q_(n+1))=4q_n=Q_n.                       (2)
+
+Because 4q_n tends to zero, iteration of (2) identifies 4q_n with the
+ACTUAL Never payoff from date n: the unaccounted terminal remainder tends
+to zero even though deleted survival has a positive limit. A forced Quit
+at any later date has the same payoff, by (2) along its finite prefix.
+Thus every pure finite deadline and Never pays 4q_n from date n. Their
+mixtures exhaust unrestricted unilateral behavioral deviations along the
+unique live history. The prescribed observer payoff and full cap are
+therefore U_i(n)=B_i(n)=e_i(n)=4q_n.
+
+Pivot0's passive current contribution is 3q_n, since its passive rewards
+are additive and sum g_j=3. Its conditional Never payoff is consequently
+
+    e0(n)=sum_(k>=n) 3q_k product_(n<=l<k)(1-q_l)^3>0.
+
+Its forced-current Quit payoff is nonpositive, since every participant
+reward is negative except its singleton zero. Comparing at any forced
+deadline, earlier passive outcomes cancel, and Never is strictly better
+on the surviving branch. Thus B0(n)=U0(n)=e0(n), including against every
+mixture and unrestricted behavioral replacement. The whole profile and
+every conditional tail are exact native full Nash and ALL-END.
+
+All three active coordinates have positive payoff. If
+f_n=1-product_(k>=n)(1-q_k) is their common conditional finite mass, then
+q_(n+1)/q_n->3/4, sum_(k>=n)q_k/q_n->4 by geometric domination, and
+f_n=sum_(k>=n)q_k+O((sum_(k>=n)q_k)^2). Hence
+
+    f_n/q_n->4,     U_i(n)/f_n->1.
+
+No observer dominates another, and active payoffs do not vanish relative
+to finite mass. This is not an all-zero-active-payoff renewal situation.
+More quantitatively, let beta_n=3f_n and let C_n be the sum over the three
+observer pairs of their probabilities of choosing the SAME finite date
+in the conditional tail. If p_(n,k)=q_k product_(n<=l<k)(1-q_l), then
+C_n=3 sum_(k>=n) p_(n,k)^2. Geometric domination gives
+
+    beta_n/q_n->12,   C_n/q_n^2->48/7,
+    C_n/beta_n^2->1/21,   U_i(n)/beta_n->1/3.
+
+Thus even the normalized pair-collision scale stays strictly positive.
+
+### Repetition leaves a fixed observer regret
+
+The obstruction also appears directly in the repeated-block operation. Fix
+a conditional tail n, put N=1-f_n, and retain one observer. For k copies,
+the complete prescribed payoff and cap in the semantic closure are
+
+    U^(k)=4q_n(1-N^(3k))/(1-N^3),
+    B^(k)=4q_n(1-N^(2k))/(1-N^2).
+
+To justify these coordinates, first censor a tail to a finite block and
+append an unused final date, so that its old Never query remains available.
+Concatenation has U'=U+nu U_tail and B'=max(B,e+h B_tail). At the limiting
+Nash block U=B=e=4q_n>0, with nu=N^3 and deleted survival h=N^2; induction
+gives the displayed formulas. For each fixed k, take sufficiently accurate
+finite blocks before passing to their limit. No infinite calendar is
+executed before another block.
+
+Taking k to infinity at fixed n, then n to infinity, the observer debt is
+
+    4q_n[1/(1-N^2)-1/(1-N^3)] -> 1/6,
+
+using f_n/q_n->4. Thus shrinking the tail and then repeating it enough to
+make its Never mass small does not make observer regret vanish. This is an
+exact realization of the general retained-cap obstruction, not merely an
+upper bound that fails to prove convergence.
+
+### Exact singleton, pair and joining screens
+
+The singleton matrix and its strict pivot inverse column are
+
+    Gamma=[0,-4,1,6; -5,0,2,-1; -5,-1,0,2; -5,2,-1,0],
+    Gamma^-1 e0=(1/15,1/3,1/3,1/3)>0.
+
+Its principal determinants in lexicographic subset order, for sizes2,3,4,
+are (-20,5,30,2,2,2), (45,-80,20,7), and 105. Every column has a negative
+entry. Consequently Gamma is R0: a complementary nonnegative vector of
+support>=2 would lie in an invertible principal kernel, while support1
+contradicts the negative entry in that column.
+
+Every recipient's 15 rewards are pairwise distinct. For J_ij=Z_i(ij), the
+six determinants Gamma_ij J_ji-Gamma_ji J_ij are
+(-9,-92,-227,5,-5,5). The four principal triple determinants of J-Gamma
+are (396,531,872,9), all nonzero. Thus the generic assumptions used in
+three-owner dispersion and zero-face joining arguments do not remove this
+tail. The core contact pencil has
+
+    det(Gamma_T-z J_T)=(1-4z)(7z^2-11z+7).
+
+At z=1/4 its kernel contains (1,1,1)>0, matching q_n/f_n->1/4.
+
+The only triple with nonnegative inverse is T. Its inverse is
+(1/7)[2,1,4;4,2,1;1,4,2], but its outside inverse row is
+(-4,1,6)Gamma_T^-1=(2/7,22/7,-3/7). Every other triple has an observer
+row with both off-diagonal entries negative; a nonnegative inverse would
+produce w>=0 with Gamma_child w=1, contradicting that row. Thus every raw
+passive-child inverse selector fails, despite the exact tail above.
+
+### Why this is a solved-game control
+
+Let all three observers Quit0 surely and pivot0 choose Never. Each observer
+receives4; any later deadline or Never gives1/2. Pivot0 receives3; Quit0
+gives-25 and every later deadline or Never gives3. This is an absorbing
+full Nash profile, proving A=0 directly. Nothing here supplies a positive
+absorbing gap or a global J_r minimum with 0<r<m.
+
+The existing [finite-exact-Nash control](CODEX_GLOBAL_CREATIVE__FINITE_EXACT_NASH_INCOMPLETENESS.md) has a one-date
+positive-Never Nash and a separate infinite PROPER Nash. This control
+instead realizes an infinite IMPROPER three-owner Nash whose hazards tend
+to zero and whose active payoffs stay comparable to the finite tails. Its
+purpose is precisely to falsify the proposed asymptotic collapse step.

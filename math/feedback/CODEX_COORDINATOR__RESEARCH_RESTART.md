@@ -170,6 +170,14 @@ that is reuse, not a new result, and does not make its endpoint a minimum.
 The required construction is fixed positive improvement of `d_p+r nu`
 while every observer debt tends to zero. It remains missing.
 
+Section 10 records an exact obstruction to an attempted actual-tail shortcut.
+An infinite three-owner full Nash tail can have positive Never mass, positive
+active payoffs proportional to its remaining finite mass, and a nonvanishing
+relative collision mass, even under the listed generic matrix screens.
+Repetition leaves observer regret tending to 1/6. Two independent reviews
+pass this internal control. Its table has an explicit absorbing equilibrium;
+it eliminates no positive-gap source and does not decide the actual branch.
+
 The source-realization theorem and the consolidated full-law controls are
 internal ordinary mathematics. No new Lean implementation is claimed.
 The earlier all-END/constrained-minimum source was already available;
