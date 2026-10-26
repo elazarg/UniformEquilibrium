@@ -13,6 +13,31 @@ sources. An exported mathematical proof is not a new Lean theorem.
 
 ## Constructed equilibrium classes
 
+The [explicit singleton-chamber theorem](../exports/EXPLICIT_SINGLETON_CHAMBER_UNIFORM_EQUILIBRIUM.md)
+replaces local coefficient restrictions by eight singleton signs and three
+explicit rational inequalities. Ten core collision entries are arbitrary
+finite numbers. The four remaining core coefficients satisfy
+`A>g, c>0, u>=0, v<Gamma32`, with no upper bound on their magnitudes.
+For each such fixed table, a finite threshold covers
+`p<=-q0, K>=M(1+|p|)`, where `q0>=0` and
+`q0>(c/(-Gamma23))Gamma21`. In particular Gamma21 may be positive;
+when it is negative, q0=0 covers every nonpositive p. Thresholds are uniform
+on compact subsets of the stated raw conditions, not over all unrestricted
+core entries at once. The 21 free joining entries and arbitrary own levels
+do not affect the threshold.
+
+The new convergence estimate permits a backward contraction slower than the
+phase contraction. On its explicit separating ray, `Z3(13)=10` gives ratios
+`5/6>3/4`; all stationary equilibria and all actual sure roots are excluded
+for every `K>=100,p=0`. The canonical checker verifies the ray with
+`--uniform-k 0 10`. Both complete reviews are
+[here](../feedback/EXPLICIT_SINGLETON_CHAMBER_UNIFORM_EQUILIBRIUM__BY_GLOBAL_TOPOLOGY.md)
+and [here](../feedback/EXPLICIT_SINGLETON_CHAMBER_UNIFORM_EQUILIBRIUM__BY_BEST_RESPONSE.md).
+This is additional raw-table coverage, not a new global-minimum reduction.
+It does not contain the older neighborhood's negative-u perturbations.
+An exact singleton matrix outside the new chamber under every admissible
+labeling is included in the packet; its outer-return inequality fails.
+
 The [robust central negative-wedge theorem](../exports/CENTRAL_NEGATIVE_WEDGE_UNIFORM_EQUILIBRIUM.md)
 adds one finite constant `C>=100` and one fixed coefficient neighborhood
 covering every `p<=0, K>=C(1+|p|/6)`. The other 26 nontrivial displayed

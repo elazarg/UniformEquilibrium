@@ -11,6 +11,17 @@ for the exact three minimum problems, canonical proofs, and method
 obstructions. The map is the working entry point; this file does not
 repeat its mathematics or retain a chronological activity log.
 
+The [explicit singleton-chamber packet](../exports/EXPLICIT_SINGLETON_CHAMBER_UNIFORM_EQUILIBRIUM.md)
+gives finite raw inequalities in place of a small coefficient neighborhood,
+ten arbitrary core collision entries, and four core coefficients in unbounded
+specified ranges. A sufficiently negative p also permits positive Gamma21.
+For each admissible fixed table, all `K>=M(1+|p|), p<=-q0` have UE;
+the threshold depends on the fixed core data. Two complete independent
+reviews are linked in the source map. The separating ray `Z3(13)=10,p=0`
+excludes every stationary support and sure-root pattern for all K>=100,
+verified by `--uniform-k 0 10`. The singleton chamber itself is not exhaustive,
+and both global-minimum cases remain open.
+
 The [robust central negative-wedge packet](../exports/CENTRAL_NEGATIVE_WEDGE_UNIFORM_EQUILIBRIUM.md)
 proves UE for `p<=0, K>=C(1+|p|/6)`, for one finite existential C and one
 fixed neighborhood of the other 26 nontrivial coefficients. Uniform finite

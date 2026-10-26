@@ -3,7 +3,9 @@ Standard library only. Native table columns are coalition masks 0,...,15;
 original nonempty rewards are 1+Z, while live/Never remains zero.
 Optional rational CLI arguments set p=Z_2({1,2}) and K=-Z_1({1,2});
 their defaults are zero and 100.
-Alternatively --uniform-k proves both exclusions for every K>=100 at p=0.
+Alternatively --uniform-k [p] [u] proves both exclusions for every K>=100,
+with nonnegative p and u=Z_3({1,3}); both default to zero. A failed finite
+certificate stops with an assertion and makes no exclusion claim.
 """
 from fractions import Fraction as Q
 from itertools import product
@@ -12,14 +14,21 @@ import sys
 
 pair_premium = Q(0)
 pair_cost = Q(100)
+joining_premium = Q(0)
 uniform_k = False
 if __name__ == '__main__':
  args = sys.argv[1:]
- if args == ['--uniform-k']:
+ if args and args[0] == '--uniform-k':
+  if len(args)>3:
+   raise SystemExit('usage: SIGNED_FIN4_STATIONARY_CHECK.py --uniform-k [p] [u]')
   uniform_k = True
+  if len(args)>1:pair_premium = Q(args[1])
+  if len(args)>2:joining_premium = Q(args[2])
+  if pair_premium<0 or joining_premium<0:
+   raise SystemExit('uniform-k requires p>=0 and u>=0')
  else:
   if len(args)>2 or any(a.startswith('--') for a in args):
-   raise SystemExit('usage: SIGNED_FIN4_STATIONARY_CHECK.py [p] [K] | --uniform-k')
+   raise SystemExit('usage: SIGNED_FIN4_STATIONARY_CHECK.py [p] [K] | --uniform-k [p] [u]')
   if args:pair_premium = Q(args[0])
   if len(args)==2:pair_cost = Q(args[1])
 Z = [
@@ -30,6 +39,7 @@ Z = [
 ]
 Z[2][6] = pair_premium
 Z[1][6] = -pair_cost
+Z[3][10] = joining_premium
 Z = [[Q(x) for x in row] for row in Z]
 G = [[Z[i][1 << j] for j in range(4)] for i in range(4)]
 
@@ -84,7 +94,7 @@ def restrict(p,pat,free):
 
 def exclude(pat,polynomials=F):
  if uniform_k and polynomials is F and pat[0]==0 and pat[2]==2 and (pat[1]!=0 or pat[3]!=0):
-  return 1 # F2>0: Q2=w(3-y)>=0, P2=-2y-w+2yw<0.
+  return 1 # F2>0: Q2=p*y*(1-w)+w*(3-y)>=0, P2=-2y-w+2yw<0.
  # Increasing K decreases row1 by a nonnegative multiple of
  # (1-q0)q2(1-q3), with an additional factor (1-H1) for F.
  # A formerly active/sure row therefore requires its baseline value >=0;
@@ -168,9 +178,11 @@ def exclude(pat,polynomials=F):
 
 if __name__=='__main__':
  total=sum(exclude(pat) for pat in product((0,1,2),repeat=4) if any(pat))
- if pair_premium==0 and pair_cost==100:assert total==(862 if uniform_k else 978),total
- scope='every K>=100, p=0' if uniform_k else f'K={pair_cost}, p={pair_premium}'
+ known={(Q(0),Q(0)):(862,369),(Q(1),Q(0)):(862,371),(Q(0),Q(10)):(864,371)}
+ expected=known.get((pair_premium,joining_premium)) if uniform_k else ((978,369) if pair_premium==0 and pair_cost==100 else None)
+ if expected:assert total==expected[0],total
+ scope=f'every K>=100, p={pair_premium}, u={joining_premium}' if uniform_k else f'K={pair_cost}, p={pair_premium}'
  print(f'EXACT RATIONAL PASS: {scope}; all 80 nonzero supports excluded; {total} nodes')
  roots=sum(exclude(pat,ROOT) for pat in product((0,1,2),repeat=4) if 1 in pat)
- if pair_premium==0 and pair_cost==100:assert roots==369,roots
+ if expected:assert roots==expected[1],roots
  print(f'EXACT RATIONAL PASS: {scope}; all 65 sure-root patterns excluded; {roots} nodes')
