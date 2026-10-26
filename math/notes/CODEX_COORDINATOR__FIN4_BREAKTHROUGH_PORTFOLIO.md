@@ -86,6 +86,38 @@ available.
 
 ## Constructed equilibrium classes
 
+The canonical two-premium family is now covered for **every real p once
+K exceeds one finite threshold**. The new
+[compact negative-ratio theorem](../exports/COMPACT_NEGATIVE_PREMIUM_RATIOS_UNIFORM_EQUILIBRIUM.md)
+proves UE uniformly on every fixed band `0<q_-<=-p/K<=q_+<infinity` for
+sufficiently large K. A finite backward core stops at exact entrance value
+zero; connected terminal phases, exact deletion and a product-degree
+argument produce all required strategic data. Its complete behavioral
+consumer fixes the core and target before accuracy. Both fresh whole-proof
+reviews are [here](../feedback/COMPACT_NEGATIVE_PREMIUM_RATIOS_UNIFORM_EQUILIBRIUM__BY_BEST_RESPONSE.md)
+and [here](../feedback/COMPACT_NEGATIVE_PREMIUM_RATIOS_UNIFORM_EQUILIBRIUM__BY_SECOND_FRESH_REVIEW.md).
+
+Here is the precise combination. Let Cminus>=100 be the constant from the
+[central negative theorem](../exports/CENTRAL_NEGATIVE_WEDGE_UNIFORM_EQUILIBRIUM.md)
+and set delta=3/Cminus. For K>=2Cminus and 0<=-p/K<=delta,
+`Cminus(1+|p|/6)<=Cminus+K/2<=K`. The new theorem covers the compact
+band[delta,2]. For -p/K>=2 and K>=100 the
+[explicit negative outer cone](../exports/UNBOUNDED_PAIR_PREMIUMS_UNIFORM_EQUILIBRIUM.md)
+applies. The [nonnegative theorem](../exports/ALL_NONNEGATIVE_PAIR_PREMIUMS_UNIFORM_EQUILIBRIUM.md)
+covers p>=0. Taking the maximum of these finitely many thresholds gives
+one Cstar with `K>=Cstar, p in R => UE` for the displayed canonical family.
+No numerical Cstar or arbitrary-table conclusion is claimed. The bounded-K
+strip and the broader raw-table frontier remain unresolved.
+
+The exact negative-wedge certificate excludes every stationary and sure-root
+Nash selection on `K>=100, -K/10<=p<=0`, in1230/369 nodes. The ray p=-K/10
+separates the new producer from the explicit central/outer bounds and the
+other audited raw selectors. The older general singleton-chamber theorem
+does accept its fixed coefficients, but supplies an unspecified central-cone
+constant; no claim that its actual producer necessarily fails on this ray
+is made. The increment is complete compact-ratio coverage and the resulting
+all-real-p conclusion, rather than another unspecified central cone.
+
 The [weighted collision-dominance theorem](../exports/WEIGHTED_COLLISION_DOMINANCE_UNIFORM_EQUILIBRIUM.md)
 replaces separate large-reward rays by a uniform region with any number of
 favorable coordinates, including different coalition sizes and passive
@@ -177,8 +209,10 @@ patterns and all65 sure-root patterns in1046/371 nodes. Complete compared
 raw selectors also fail on the ray. The two fresh whole-artifact reviews are
 [here](../feedback/ALL_NONNEGATIVE_PAIR_PREMIUMS_UNIFORM_EQUILIBRIUM__BY_FRESH_REVIEW.md)
 and [here](../feedback/ALL_NONNEGATIVE_PAIR_PREMIUMS_UNIFORM_EQUILIBRIUM__BY_SECOND_FRESH_REVIEW.md).
-Negative intermediate ratios, bounded-K positive tables outside the explicit
-cone, and both arbitrary-game global-minimum cases remain open.
+The compact negative-ratio theorem above supplies the complementary sign
+and completes the canonical family's sufficiently-large-K parameter plane.
+Bounded-K tables outside the explicit cones and both arbitrary-game
+global-minimum cases remain open.
 
 The [robust central negative-wedge theorem](../exports/CENTRAL_NEGATIVE_WEDGE_UNIFORM_EQUILIBRIUM.md)
 adds one finite constant `C>=100` and one fixed coefficient neighborhood
