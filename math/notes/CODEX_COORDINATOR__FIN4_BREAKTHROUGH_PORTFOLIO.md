@@ -47,10 +47,42 @@ completes the one-pivot matrix by a four-cycle of joining premiums. At M=14,
 an exact rational certificate excludes all80 nonzero stationary patterns
 and all65 sure-owner root patterns. Complete trap, anchor, ledger, pair and
 the audited scalar-circuit selections also fail. This does not prove that
-the game lacks UE. Under a hypothetical positive absorbing gap, the actual
-source cases I2, I3p and I3o are excluded throughout M>11. Only F and I4
-survive on the actual side; inherited endpoints remain separate. An exact
-admissible last root shows that F requires a global argument.
+the game lacks UE.
+
+The [open four-owner tail theorem](CODEX_COORDINATOR__FOUR_OWNER_TAIL_REGION.md)
+excludes every proper nonempty infinite-owner set throughout M>11 and on
+an explicit open region in the singleton and participant-pair entries.
+All remaining higher rewards are arbitrary finite. It needs neither a
+positive absorbing gap nor genericity: actual ALL-END and zero observer
+debts suffice. Only F and I4 survive on the actual side; inherited endpoints
+remain separate.
+
+At a benchmark global minimum, direct zero-cap prefix surgery proves cap
+positivity without genericity. Its first support is02,012 or0123; a finite
+last support is012 or0123. These six endpoint combinations have exact
+contact and hazard restrictions. The complete last-root relation reduces
+to two one-dimensional algebraic branches, with an exact M14 cap-sign
+partition. Actual positive-cap finite and infinite controls show why local
+feasibility alone does not eliminate F or I4. The infinite control is full
+native Nash; it is neither a global minimum nor an original-game UE.
+
+The [cyclic joining-cap theorem](CODEX_COORDINATOR__CYCLIC_JOINING_CAP_REGION.md)
+also identifies the entire positive-continuation region admitting a nonzero
+Nash root. Its raw joining-increment hypotheses work for every n>=3. The
+region has a finite polynomial test, is convex after logarithms, and has one
+critical Perron boundary on each positive ray. A positive subcritical minimum
+must lie strictly outside it. The M14 specialization gives an exact algebraic
+boundary and explicit excluded cap inequalities. This constrains the global
+minimum without assuming its realization or varying an inherited fixed-cap
+fibre; it does not itself produce UE.
+
+The concrete next obligation is a global descent for the no-child benchmark:
+use its six finite endpoint combinations or four-owner tail, together with
+the excluded cap region, while retaining all observer comparisons. The
+inherited branch separately requires a replacement preserving the head's
+full caps. Further local tail or last-root feasibility searches cannot by
+themselves settle either obligation; exact admissible controls are already
+available.
 
 ## Constructed equilibrium classes
 
@@ -136,7 +168,7 @@ consumer are produced. No numerical C or coefficient neighborhood is claimed.
 The seven row0 caps, 21 free joining entries and arbitrary own levels retain
 their scope.
 
-This contains the entire existence class of the
+This implies the asymptotic existence statement of the
 [central positive-wedge packet](../exports/CENTRAL_POSITIVE_WEDGE_UNIFORM_EQUILIBRIUM.md),
 whose frozen proof remains available; its coverage is not counted again.
 The separating ray p=K/1000 is beyond the former central spectral mechanism.
