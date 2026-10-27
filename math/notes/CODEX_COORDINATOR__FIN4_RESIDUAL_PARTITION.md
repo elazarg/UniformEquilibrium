@@ -640,7 +640,7 @@ five cases exhaust the set of owners with infinitely many finite atoms:
 | I2 | pivot and one observer | Both late finite masses are comparable. |
 | I3p | pivot and two observers | Pivot mass is a fixed fraction of total late finite mass. |
 | I3o | three observers, pivot excluded | Late tails are full native Nash; all three masses are comparable. |
-| I4 | all four | No further eventual-owner exclusion is established here. |
+| I4 | all four | Controlled-window restrictions apply when the additional raw matrix test holds. |
 
 There cannot be exactly one infinite owner. The resulting one-owner tail
 would be full native Nash: if the pivot is quiet its prescribed Never is
@@ -677,6 +677,17 @@ In I3p, epsilon<=f_p, so f_p>=c beta/(2M+1). In I3o the pivot also has
 zero debt, so d_p=0 and every one of the three finite masses is at least
 c beta. This does not justify renewing a three-owner native Nash tail:
 its active payoffs need not be zero. None of these five cases is closed.
+
+There is an additional actual-mode reduction under the finite raw criterion
+in [the fixed-cap controlled-window theorem](../exports/FIXED_CAP_CONTROLLED_WINDOW_MINIMUM_EXCLUSION.md).
+Every qualifying fixed full-support window must eventually contain a pivot
+contact at one of its marked dates. For the no-child premium ray M>=14,
+eventual full support forces geometric decay of the remaining finite masses.
+At M14 the set of strict pivot dates must have zero upper Banach density.
+Thus the actual I4 obligation there separates into infinitely recurring
+missing-owner hazards and eventual full support with these contact and rate
+restrictions. Neither part is eliminated. This condition comes from a
+cap-preserving global comparison, not from assuming descendant minimality.
 
 ### 9.2. Inherited endpoint: classify its zero caps
 
@@ -721,6 +732,89 @@ kappa=min_F0 J_r-mu>0. Prefix debt recursion yields
 
 Thus the incoming head must absorb a fixed positive amount at this fixed
 source. This quantitative gap supplies no replacement endpoint.
+
+### 9.3. Three zero observer caps: an inherited ratio restriction
+
+This is a source restriction, not an equilibrium theorem. Use the native
+augmented semantic carrier and retained-query graft operation of
+`CODEX_COORDINATOR__ZERO_OBSERVER_BOUNDARY_REDUCTION.md`. Let C be its
+zero-observer-debt set at pivot p, let
+
+    m=min{d_p(Z): Z in C, nu(Z)=0}>0,
+    0<r<m,  mu=min_(Z in C)[d_p(Z)+r nu(Z)]<m.
+
+Suppose a global minimizer Y is ALL-END and has a representation
+Y=Phi_P(Q), where P is an actual head with all marginal Never masses
+positive, and Q is in C with positive joint Never mass and ALL-END caps
+
+    B_i(Q)=e_i(Q)=U_i(Q)=0  (i != p),
+    b=B_p(Q)=e_p(Q)>0.
+
+Put u=U_p(Q), v=nu(Q), n=N_p(Q), h=v/n, and for the actual head put
+
+    s=nu(P)>0, h_P=s/N_p(P), g=B_p(P)-e_p(P)>=0.
+
+Then h<1 and v<1, and the following exact inequalities hold:
+
+    b/(1-h)-u/(1-v) >= m,                         (1)
+    u+r(1-v) >= (h_P b-g)/s >= 0.                 (2)
+
+Consequently b >= (m-r)(1-h). If equality holds, P itself is an actual
+global minimizer at r. In particular, after prioritizing the actual
+minimum branch, every remaining inherited endpoint in this pattern obeys
+
+    b > (m-r)(1-h).                               (3)
+
+The complete source subbranch b<(m-r)(1-h) is impossible. At the equality
+boundary the inherited representation supplies an actual minimum rather
+than another irreducible endpoint.
+
+Proof. The native Never payoff satisfies
+`|e_p(Q)|<=M(1-h)` for a finite reward bound M, first on actual laws and
+then by continuity on the augmented carrier. Thus b>0 gives h<1; also
+0<v<=h<1.
+
+All observer caps and payoffs of Q are zero. Retained-query grafting Q
+into itself therefore preserves observer feasibility. Its k-fold graft
+has, exactly,
+
+    B_p=e_p=b sum_(j=0)^(k-1) h^j,
+    U_p=u sum_(j=0)^(k-1) v^j,
+    nu=v^k.
+
+For the cap identity, the old finite branch is no larger than the old
+Never-through-tail branch because every graft is ALL-END; attaching the
+positive cap b increases that branch. Every observer cap/payoff remains
+zero. Compactness gives an absorbing point in C with pivot debt equal
+to the left side of (1), proving (1).
+
+Replacing Q by literal AllNever leaves all observer caps and payoffs of
+Phi_P(Q) unchanged: their tail cap and payoff are both zero. Hence P
+itself belongs to C. Moreover, ALL-END of Y implies
+
+    B_p(Y)=e_p(P)+h_P b >= B_p(P),
+
+so 0<=g<=h_P b. The exact full-cap head formula gives
+
+    J_r(P)-J_r(Y)
+       =g-h_P b+s[u+r(1-v)] >=0,
+
+which proves (2). No minimization of J_r on Q itself is asserted.
+Combining (1) and (2),
+
+    b/(1-h) >= m+u/(1-v) >= m-r.
+
+If equality holds, both inequalities are equalities, so
+u+r(1-v)=0. Equation (2) forces g=h_P b and the displayed head objective
+difference is zero. Thus J_r(P)=mu. This proves the stated priority
+partition without assuming that a selected nonactual minimum excludes
+other actual minima.
+
+All replacements retain the three full observer caps exactly. The proof
+uses no finite-calendar approximation, local Nash-root surrogate, or
+claim that the abstract endpoint is executed after an infinite head.
+
+Independent whole review: [the inherited ratio restriction](../feedback/INHERITED_ZERO_OBSERVER_RATIO__BY_CONTACT_REVIEW.md).
 
 ## 10. Finite interval tests for the actual two-owner tail
 

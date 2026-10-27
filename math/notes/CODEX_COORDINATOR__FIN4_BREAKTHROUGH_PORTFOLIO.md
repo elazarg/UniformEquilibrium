@@ -66,6 +66,34 @@ partition. Actual positive-cap finite and infinite controls show why local
 feasibility alone does not eliminate F or I4. The infinite control is full
 native Nash; it is neither a global minimum nor an original-game UE.
 
+The [finite-profile descent](CODEX_COORDINATOR__ONE_DATE_GLOBAL_DESCENT.md)
+now excludes the entire one-occupied-date actual minimum class at M14,
+including the positive finite control. An actual infinite tail and an exact
+first-root repair lower the whole objective for every positive penalty;
+the sign certificate covers the complete admissible branch. Longer finite
+profiles require their own whole-profile comparison.
+
+The [fixed-cap controlled-window theorem](../exports/FIXED_CAP_CONTROLLED_WINDOW_MINIMUM_EXCLUSION.md)
+adds a different global variation. A finite raw matrix test, including
+passive pair rewards, supplies negative constrained curvature for any number
+of players. The variation preserves every entrance full cap and thus works
+under an arbitrary unchanged earlier head. At the no-child benchmark it
+excludes every qualifying fixed window with five strict pivot dates; tied
+dates may remain inside the window under the stated rank test. A Fourier
+certificate extends this exclusion to every premium M>=14, with all rewards
+on larger coalitions arbitrary fixed finite numbers.
+
+Consequently an eventually full-support actual minimum on this ray has a
+geometrically decaying remaining finite mass. At M14 its strict-pivot dates
+must additionally have zero upper Banach density: every sufficiently long
+interval has a vanishing fraction of such dates, uniformly in its location.
+The proof selects one fixed additive cube before applying the window
+cutoff. This is a restriction on actual minima, not a UE existence class or
+a realization theorem. Sparse owner calendars, contact-dominated tails and
+inherited endpoints remain open. Two final whole-proof reviews are
+[here](../feedback/FIXED_CAP_CONTROLLED_WINDOW_MINIMUM_EXCLUSION__BY_ADVERSARY.md)
+and [here](../feedback/FIXED_CAP_CONTROLLED_WINDOW_MINIMUM_EXCLUSION__BY_FRESH_REVIEW.md).
+
 The [cyclic joining-cap theorem](CODEX_COORDINATOR__CYCLIC_JOINING_CAP_REGION.md)
 also identifies the entire positive-continuation region admitting a nonzero
 Nash root. Its raw joining-increment hypotheses work for every n>=3. The
@@ -76,13 +104,15 @@ boundary and explicit excluded cap inequalities. This constrains the global
 minimum without assuming its realization or varying an inherited fixed-cap
 fibre; it does not itself produce UE.
 
-The concrete next obligation is a global descent for the no-child benchmark:
-use its six finite endpoint combinations or four-owner tail, together with
-the excluded cap region, while retaining all observer comparisons. The
-inherited branch separately requires a replacement preserving the head's
-full caps. Further local tail or last-root feasibility searches cannot by
-themselves settle either obligation; exact admissible controls are already
-available.
+The next obligations are longer finite descents, sparse four-owner calendars,
+and eventual full-support tails whose pivot comparisons are predominantly
+tied. Extending the energy argument to windows of unbounded length still
+requires control of its normal multipliers; geometric decay alone does not
+supply that step. The inherited branch separately requires a replacement
+preserving the head's full caps. Its three-zero-observer/positive-pivot case
+now satisfies the strict ratio restriction in Section 9.3 of the residual
+partition; equality instead produces an actual minimum. No remaining
+inherited cap pattern is entirely eliminated.
 
 ## Constructed equilibrium classes
 

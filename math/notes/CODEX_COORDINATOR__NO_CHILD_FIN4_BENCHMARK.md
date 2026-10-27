@@ -4,7 +4,10 @@ This is a benchmark and a coverage audit, not a counterexample to UE.
 The M=14 table below has an exact finite certificate excluding every
 stationary terminal Nash profile and every sure-first terminal Nash profile
 with arbitrary behavioral continuation. Several complete raw producer
-families also fail. Arbitrary nonstationary strategies remain unresolved.
+families also fail. Arbitrary nonstationary strategies remain unresolved. The
+[one-date global descent](CODEX_COORDINATOR__ONE_DATE_GLOBAL_DESCENT.md)
+now excludes every actual selected minimum with at most one occupied date;
+this is a global variation, not another local feasibility test.
 
 ## Table
 
@@ -418,8 +421,10 @@ The exact interval checks give
 
 Here13/11 is the sum of the positive inverse column Gamma^-1 e2.
 No relation between this chosen r and the table's unknown absorbing
-partial-Nash minimum m is asserted, and the profile is NOT proved globally
-minimizing. Hence this is a precise barrier: the last-root constraints,
+partial-Nash minimum m is asserted. The
+[one-date global descent](CODEX_COORDINATOR__ONE_DATE_GLOBAL_DESCENT.md)
+proves that this profile is NOT globally minimizing for any r>0.
+It remains a precise barrier to purely local exclusions: the last-root constraints,
 positive caps, positive Never masses, observer optimality, and these scalar
 inequalities do not by themselves eliminate F. Any exclusion must use a
 further global variational argument or another genuinely stronger property.
@@ -682,8 +687,12 @@ above leaves six possible first/last support pairs: first02,012,0123 and
 last012,0123. The first02 case has the additional exact contact and bound(1).
 Intermediate dates and their number remain unrestricted. These are necessary
 endpoint restrictions, not six solved strategy classes or a bound on the
-number of phases. The positive-cap one-date control shows why the final
-root alone cannot provide the missing global improvement.
+number of phases. The
+[one-date global descent](CODEX_COORDINATOR__ONE_DATE_GLOBAL_DESCENT.md)
+excludes the entire one-occupied-date actual minimum class, including the
+positive-cap control. Every remaining finite minimum has at least two
+occupied dates. Applying that variation to a descendant still requires
+pricing its earlier head; the longer finite branch remains open.
 
 ## Exact four-owner local profiles
 
@@ -931,6 +940,26 @@ Both exact constructions show why a future I4 exclusion must use additional
 global-minimum information, rather than claiming that local contact,
 ALL-END, or even positive-cap native Nash conditions are inconsistent.
 
+## Global restrictions on the eventual full-support I4 branch
+
+The [fixed-cap controlled-window theorem](../exports/FIXED_CAP_CONTROLLED_WINDOW_MINIMUM_EXCLUSION.md)
+now supplies such a global comparison. At every sufficiently late fixed
+window passing its control-rank test, some marked pivot date must be tied.
+It preserves all four entrance full caps, so an arbitrary earlier history
+does not obstruct this particular variation. Tied unmarked dates are kept
+exactly tied.
+
+For every M>=14, an actual minimum with eventual full support therefore has
+geometrically decaying remaining finite masses. At M14, strict pivot-Never
+dates must further have zero upper Banach density. The finite rank and
+curvature checks, the entire premium-ray polynomial certificate, and the
+all-power spectral arithmetic are reproduced by
+[one exact checker](../experiments/CODEX_NO_CHILD__CONTROLLED_WINDOW_CHECK.py).
+The complete proof has two independent whole reviews linked from the
+portfolio. No inference eliminates all-contact tails, sparse owner
+calendars, or inherited endpoints. The unresolved long-window extension
+requires control of normal multipliers in addition to geometric tail decay.
+
 ## Verification and retained scope
 
 The original complete-pattern checker remains
@@ -954,5 +983,8 @@ additional cap-region cross-reference above.
 
 No result here proves global-minimum realization for a local control,
 positive absorbing gap, a UE counterexample, or arbitrary Fin4 closure.
-The next obligation is a global variation or an inherited-endpoint
-replacement that respects the full observer comparisons.
+The next finite obligation is a whole-profile variation for at least two
+occupied dates; the inherited branch requires a replacement respecting the
+head's full observer comparisons. The one-date result and its exact
+certificate have a
+[fresh whole-proof review](../feedback/ONE_DATE_GLOBAL_DESCENT__BY_FRESH_REVIEW.md).
