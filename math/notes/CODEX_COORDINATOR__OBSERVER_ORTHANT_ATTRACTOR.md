@@ -1,10 +1,13 @@
-# A raw observer orthant attractor with arbitrary higher rewards
+# The sharp joining region for a local observer orthant attractor
 
 Owner: CODEX_COORDINATOR. Ordinary mathematics. This is a local observer
 producer, not a four-player uniform-equilibrium theorem. The final corollary
 prices an arbitrary fourth player in a sufficiently thin neighborhood of a
-positive pivot axis. Producing such an entry and a recurrent return family
-remains a separate obligation.
+positive pivot axis. The five joining inequalities below are sharp at first
+order within the displayed joining sign pattern. Producing an entry and a
+recurrent return family remains a separate obligation; returns confined near zero with uniformly small hazards
+cannot supply vanishing survival, as shown in the
+[global entry analysis](CODEX_COORDINATOR__GLOBAL_ENTRY_AND_EXCURSIONS.md).
 
 There are three observers, ordered (0,1,3), with independent private
 Continue/Quit choices and native own-singleton and Never rewards zero.
@@ -21,9 +24,9 @@ r_r=p_r-K_r; these joining-penalty coefficients may have either sign.
 
 Assume the strict raw inequalities
 
- J03=h-B<0, J10=C-i>0, J13=j-D<0,
- J30=k-E<0, J31=F-l>0,
- eta1=j*C-i*D>0, eta3=k*F-l*E>0.
+ C>i, F>l,
+ eta1=j*C-i*D>0, eta3=k*F-l*E>0,
+ (A+g)*D*E>(h-B)*C*F.
 
 Assume G is invertible and d=-1^T G^-1 has signs(-,+,+). These hypotheses
 concern only singleton and participant-pair rewards. They impose no sign or
@@ -61,22 +64,26 @@ number of dates.
 
 Set m=min(-d0,d1,d3)>0 and
 
- mu=(l/F+k/E)/2,
- b_t=mu*F-l=eta3/(2E)>0,
- b_a=k-mu*E=eta3/(2F)>0.
+ mu=(l/F+min(1,k/E))/2,
+ b_t=mu*F-l>0, b_a=k-mu*E>0,
+ H0=max(h-B,0), m0=A+g-H0*C*F/(D*E)>0,
+ Rbar=2*F*(C+abs(r1))/(D*E),
+ Q=2*F*(E*abs(r1)+C*abs(r3))/(D*E^2).
 
-The pair assumptions imply 0<mu<1. Choose delta in(0,1] satisfying
+The assumptions F>l and eta3>0 imply 0<mu<1 and both b coefficients
+are positive. The final joining inequality is equivalent to m0>0.
+Choose delta in(0,1] satisfying
 
  |r0|*delta<=B/2,
  |r1|*delta<=min(C,D)/2,
  |r3|*delta<=E/2,
- |K0|*delta<=min(-J01,-J03),
- |K1|*delta<=J10/2,
+ |K1|*delta<=(C-i)/2,
  |D*p1-j*r1|*delta<=eta1/2,
  |p3-mu*r3|*delta<=min(b_t,b_a),
+ delta*(H0*Q+abs(K0)*Rbar)<=m0/2,
  delta*sum_r |d_r*p_r|<=1.
 
-Here J01=-A-g<0. Every right side is strictly positive, so these finitely
+Every right side is strictly positive, so these finitely
 many upper bounds produce such a delta even when some left coefficient
 vanishes. For example take the minimum of1 and all positive right-side
 bounds divided by1 plus the corresponding absolute coefficient.
@@ -143,11 +150,26 @@ comparisons; no strategic root is assumed as input.
 Write N_r=v_r+G_r*x+p_r*prod_(s!=r)x_s for the numerator in(1).
 For coordinate0, substitution of Ccap0=-S gives
 
- N0=J01*t+J03*z+K0*t*z
-    <=(J01*t+J03*z)/2<0.
+ N0=-(A+g)*t+(h-B)*z+K0*t*z.
 
-We used tz<=delta(t+z)/2 and the chosen bound on |K0|. The strict
-inequality holds because t>0, including on the face z=0.
+The face has z=0. On full support, u,w>=0 imply
+
+ D*z<=(C+abs(r1)*delta)*a,
+ (E-abs(r3)*delta)*a<=F*t.
+
+Consequently z/t<=R_delta, where
+
+ R_delta=F*(C+abs(r1)*delta)/[D*(E-abs(r3)*delta)],
+ R_delta<=Rbar, R_delta-C*F/(D*E)<=Q*delta.
+
+The last bound follows by subtracting the two fractions and using
+E-abs(r3)*delta>=E/2. For either support,
+
+ N0/t<=-(A+g)+H0*R_delta+abs(K0)*delta*R_delta
+      <=-m0+delta*(H0*Q+abs(K0)*Rbar)<=-m0/2<0.
+
+Thus coordinate0 stays strictly negative, even when its participant reward
+J03=h-B is positive.
 
 For coordinate1, Ccap1=u holds for both selected supports. Consequently
 
@@ -257,6 +279,98 @@ comparison is therefore strict: C_p<beta_n. All four root comparisons hold,
 and summability gives convergence of beta. The finite-word closure argument
 now retains the complete four-player payoff/cap/survival tuple. No actual
 continuation is assumed at the synthetic seed.
+
+## Maximal first-order region and exact failures
+
+Within the fixed six joining-increment signs, the closed first-order
+orthant-invariance region is exactly
+
+ C>=i, F>=l, j*C>=i*D, k*F>=l*E,
+ (A+g)*D*E>=(h-B)*C*F.
+
+The strict hypotheses used above are its interior. If any weak inequality
+is strictly violated, there are interior seeds (-S,u,w), S,u,w>0,
+arbitrarily close to zero, whose unique sufficiently small proper Nash root
+leaves the orthant. This persists for every fixed finite choice of the higher
+rewards. Equality cases are not claimed robust under arbitrary higher rewards.
+
+The former sufficient restrictions J03<0,J13<0,J30<0 are unnecessary.
+For example, take
+
+ (g,h,i,j,k,l)=(1,2,1,1,1,1),
+ (A,B,C,D,E,F)=(16,1,2,1/2,1/2,2).
+
+All five strict inequalities hold while J03,J13,J30 are all positive.
+This is an open enlargement of the local producer, not a new UE class.
+
+For an INTERIOR seed u,w>0, every sufficiently small proper Nash root must
+have a>0: if a=0, positive t would require C1=-D*z=u>0, impossible;
+therefore t=0, and positive z would require C3=0=w, also impossible.
+All odds zero fail C0<=-S. Next t>0: if t=0 and z>0, active3 requires
+C3=-E*a=w>0, impossible; if also z=0, C0=0 fails. Thus the only possible
+supports are01 and013. On01 the active equalities determine a0,t0. On013
+the monotone scalar equation determines the unique root, and it exists
+exactly when the face test fails. Hence the selected small root is the only
+small proper Nash root at an interior seed.
+
+This uniqueness claim is deliberately not made on boundary seeds u*w=0;
+other supports can occur there. For example u=w=0 allows a solo3 root.
+
+### Proof of first-order necessity and sufficiency
+
+Set all higher rewards p_r=K_r=0. The root equations are now linear.
+On a full root u,w>=0 are precisely
+
+ a<=F*t/E, z<=C*a/D, a,t,z>=0.
+
+This cone has the three generating rays, in odds order(a,t,z),
+
+ R1=(0,1,0), R2=(F/E,1,0), R3=(F/E,1,C*F/(D*E)).
+
+The numerators on a full root are
+
+ N0=-(A+g)*t+(h-B)*z,
+ N1=(C-i)*a+(j-D)*z,
+ N3=(F-l)*t+(k-E)*a.
+
+On R1, N3=F-l. On R2, N1=(C-i)F/E and N3=(kF-lE)/E.
+On R3, N1=(jC-iD)F/(DE) and
+N0=-(A+g)+(h-B)CF/(DE). Thus the five weak inequalities are necessary and sufficient on
+this cone. Face01 permits a/t beyond F/E, with w>=0, and its output has
+N1=(C-i)a and N3>=max(0,Ft-Ea)+ka-lt. Splitting at a/t=F/E shows that
+exactly the same three tests C>=i,F>=l,kF>=lE suffice; N0 is strictly
+negative there. Hence the five weak inequalities characterize the entire selected first-order map.
+
+A strict violation at a generating ray persists after perturbing to a,t>0,
+u,w>0, keeping the relevant face or full-root formulas. Scale such a seed
+and its odds by tau>0. The zero-higher reward equations remain exact, and
+the failed numerator is tau times a fixed strictly wrong-signed number.
+The small proper root is unique by the argument above.
+
+For arbitrary fixed higher rewards, choose the same scaled interior seed.
+The exact selected odds divided by tau converge to that unique linear root:
+C0=-tau*S bounds t+z=O(tau), C1=tau*u bounds a=O(tau), and every limit
+solves the unique linear complementarity equations. The quadratic higher
+terms are O(tau^2), so the output divided by tau converges to the same
+strictly wrong-signed numerator. This proves the sharp local obstruction.
+
+### Five exact separating examples
+
+Fix (g,h,i,j,k,l)=(1,2,1,1,1,1), so det G=1, and set p=K=0.
+In the following rows all five strict inequalities except the named one hold strictly.
+Each listed seed and odds may be multiplied by any tau>0; the same wrong
+output sign remains. The seeds have S,u,w>0, so the proper root is unique.
+
+| Failed test | (A,B,C,D,E,F) | seed(-S,u,w) | odds(a,t,z) | failed numerator |
+|---|---|---|---|---|
+| C>i | (1,2,1/2,1/4,1,2) | (-1,1/2,3) | (1,1,0) | N1=-1/2 |
+| jC>iD | (1,2,2,3,1,2) | (-17/5,1/5,1/10) | (19/10,1,6/5) | N1=-1/2 |
+| F>l | (1,2,2,1,1/4,1/2) | (-1,1/5,1/2) | (1/10,1,0) | N3=-2/5 |
+| kF>lE | (1,2,2,1,3,2) | (-1,6/5,1/4) | (3/5,1,0) | N3=-3/20 |
+| last inequality | (1,1/2,2,1,1,2) | (-9/4,1/2,1/2) | (3/2,1,5/2) | N0=7/4 |
+
+These are obstructions to the local whole-orthant method, not to UE or to
+all proper roots at larger annotations, and not to sure-root methods.
 
 ## Source correspondence and the remaining producer problem
 

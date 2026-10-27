@@ -93,17 +93,46 @@ with the switched observer producer.
 ## What remains beyond this family
 
 The generic actual/inherited source partition remains open for reward tables
-outside the stated existence classes. The new
+outside the stated existence classes. The
 [observer attractor](CODEX_COORDINATOR__OBSERVER_ORTHANT_ATTRACTOR.md)
-provides a concrete next step: the positive-determinant observer singleton
-chamber admits signed Lyapunov weights, and explicit joining conditions
-produce an observer-zero limit from every sufficiently small cap vector
-with signs (-,+,+). All higher rewards may be arbitrary finite numbers.
-Near a positive pivot axis, a sufficiently small such entry also prices an
-arbitrary fourth player's full comparison. The remaining producer tasks
-are to reach these entries from nonnegative four-player seeds and produce
-a bounded recurrent family with uniform survival reduction. The family
-theorem supplies these global steps only under its stated raw data.
+has a sharp first-order joining region within its six prescribed joining
+signs: five weak inequalities exactly characterize orthant preservation;
+their strict versions produce the nonlinear repair for arbitrary finite
+higher rewards. Three former participant-pair sign restrictions are
+unnecessary, even simultaneously. A strict failure gives arbitrarily small
+interior seeds whose unique small proper root leaves the orthant. The
+fourth player's comparison is controlled near a positive pivot axis.
+
+The [global entry analysis](CODEX_COORDINATOR__GLOBAL_ENTRY_AND_EXCURSIONS.md)
+shows why this local theorem is insufficient. A signed weighted-payoff bound
+forces a return scheme with vanishing survival to leave a quantified region
+of small values and small hazards. In an explicit raw class every small-root
+word from the pivot axis stalls before entry. Conversely, seven joining
+signs alone produce a uniformly absorbing exact Nash root on a whole
+continuation face, with arbitrary finite remaining rewards. A compact limit
+also gives an actual one-date native Nash profile with positive absorption.
+The unresolved step is to control the successors of these larger roots and
+produce a bounded recurrent family; repeating a partially absorbing native
+Nash profile need not remain Nash. This is a concrete global obligation,
+not an assumption that the local repair automatically recurs. The premium
+family theorem supplies the complete global construction only for its stated
+raw class. No generic singleton template is closed for arbitrary collisions.
+
+The [two-owner replacement](CODEX_COORDINATOR__TWO_OWNER_CONTACT_REPLACEMENT.md)
+sharpens the independent actual-source route. Generically the three observer
+caps determine all pair-tail moments relevant to the objective, so a
+same-pair cap-preserving edit is neutral. An extreme actual partner law can
+nevertheless be selected while preserving the complete payoff/cap/Never tuple
+and the old head. On each finite interval it has at most two more partner
+atoms than additional pivot/quiet contacts. When the existing raw test forces
+late common support, a quiet observer has infinitely many exact response
+ties. Activating that observer with a compensated decrease of the inherited
+objective remains open; the result does not eliminate I2.
+
+Whole mathematical reviews cover the [local theorem](../feedback/CODEX_COORDINATOR__OBSERVER_ORTHANT_ATTRACTOR__BY_GENERAL_REVIEW.md),
+[entry analysis](../feedback/CODEX_COORDINATOR__GLOBAL_ENTRY_AND_EXCURSIONS__BY_REVIEW.md),
+and [two-owner replacement](../feedback/CODEX_COORDINATOR__TWO_OWNER_CONTACT_REPLACEMENT__BY_INDEPENDENT_REVIEW.md).
+These are internal results; none is presented as a newly closed UE class.
 
 The [open four-owner tail theorem](CODEX_COORDINATOR__FOUR_OWNER_TAIL_REGION.md)
 retains broader independent scope. Throughout its explicit open region in

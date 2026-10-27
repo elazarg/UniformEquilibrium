@@ -1039,6 +1039,31 @@ calendar without retaining these data is not a descent of the selected
 source. If all three possible partners fail the tests, I2 is absent at that
 pivot; F, I3p, I3o, I4 and the inherited endpoint cases still require work.
 
+## 11. An actual two-owner replacement with extra contacts
+
+The [complete replacement theorem](CODEX_COORDINATOR__TWO_OWNER_CONTACT_REPLACEMENT.md)
+retains the entire (U,B,N) tuple of an I2 tail and its original head. Fix the
+pivot law and vary the partner only on its existing response-contact set,
+retaining its total finite mass and tie probability. Uniform pair-tail
+comparability makes this feasible set compact in total variation. An extreme
+law has, on every finite physical-date interval,
+
+    positive partner atoms <= 2 + tied pivot/quiet comparisons.
+
+If A<0 or the screen O in(13) is empty, late common support is forced.
+Then some quiet observer has infinitely many exact Quit-versus-Never ties
+in an equivalent actual minimum. With no quiet ties, the count would make
+all late partner atoms pivot ties, forcing its rate A/C to equal rho and
+contradicting GC-AJ!=0.
+
+The same theorem gives a generic rigidity obstruction: the three observer
+caps determine P,I,T, and hence the pivot debt and Never mass, among
+observer-exact ALL-END pair tails. Same-pair cap-preserving edits therefore
+cannot descend. The produced quiet contacts permit a new-owner activation
+attempt, but no such compensated descent is yet proved. Its objective must
+retain the inherited head's full maximum and coefficient
+lambda=1/N_p(head); conditional-tail minimality is not supplied.
+
 ## Verification and next obligations
 
 Independent reviews cover the complete [matrix partition, Sections1–8](../feedback/FIN4_RESIDUAL_PARTITION_MATRIX__BY_FRESH_REVIEW.md)

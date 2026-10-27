@@ -1,118 +1,96 @@
-# Review of the observer attractor with arbitrary higher rewards
+# Independent whole review of the canonical observer attractor
 
-**Verdict: PASS as a reusable internal producer component.** No unresolved
-mathematical objection. Reviewed the entire 274-line canonical note
-`math/notes/CODEX_COORDINATOR__OBSERVER_ORTHANT_ATTRACTOR.md`, SHA256
-`3fcf145336ee4a2eedbc78198570fabd50f5f5ab4439260ed7bfbda6d7a5e61a`.
+Reviewer: RAW_ENTRY. I did not author the joining classification or the
+canonical local-attractor proof. This review covers the entire canonical
+`math/notes/CODEX_COORDINATOR__OBSERVER_ORTHANT_ATTRACTOR.md`, with its final
+SHA256 recorded below.
 
-The generalized theorem retains explicit singleton and participant-pair
-conditions, while all three passive pair rewards and all three participant
-triple rewards may be arbitrary finite signed numbers. It produces observer
-Nash prefixes from every specified sufficiently small seed in the sign
-orthant. Its additional corollary proves quiet-pivot safety for an arbitrary
-fourth-player row after explicit further smallness restrictions. Producing
-entry from a nonnegative seed, recurrent returns and UE remain outside its
-conclusion.
-I independently audited this extension; I authored the earlier specialized
-premium observer-process lemma, so this remains a contributor/component
-review rather than an independent whole-UE review or export admission.
+Verdict: **PASS as ordinary mathematics: a local strategy-producing theorem,
+sharp first-order joining classification, and fourth-player local corollary.**
+There is no unresolved mathematical objection. This is not a UE theorem or
+an export admission: entry and a recurrent absorbing construction remain open.
 
-## Complete audit
+## Scope of the whole-proof check
 
-1. The raw table gives the displayed Ccap polynomials with
-   r_i=p_i-K_i, and gives the passive quadratic terms in the diagonal
-   output exactly. Signed r_i are not silently treated as nonnegative.
-2. All delta right sides are positive. The pair guards give
-   0<l/F<k/E<1, so mu lies in(0,1) and both displayed margins b_t,b_a
-   are strictly positive. The explicit epsilon bounds every trial scalar
-   point, not only its eventual root. They also bound the face root,
-   including u=0. All denominator bounds follow from the same delta.
-3. At a failed face test, w/F<S/A; the full scalar interval is nonempty.
-   The signed derivative numerators are bounded below by AB/2 and FE/2.
-   The derivative f' has both positive terms because C-r1*z>=C/2 and
-   D+r1*a>=D/2. Both endpoint signs are strict. This supplies one unique
-   positive interior root without a numerical or supplied-root assumption.
-4. I checked the exact row0 and row1 identities. The row0 bound remains
-   strict because t>0. Both row1 coefficient numerators are positive, so
-   its nonnegativity also holds at u=0 and z=0. For row3, the key step is
-   valid: w>=max(Ccap3,0) implies w>=mu*Ccap3 for0<mu<1. This handles
-   the quiet observer on the face and negative Ccap3. The resulting
-   b_t*t+b_a*a margin controls either sign of its passive quadratic term,
-   and is strict even when a=0. No division by a,t,z,u or w is used to
-   establish these boundary comparisons.
-5. The Lyapunov identity includes the passive quadratic contribution.
-   Its absolute bound is at most half the sum of all odds by the explicit
-   delta condition. The remaining discarded sum is nonnegative because
-   each d_i*N_i is nonnegative. Thus V' remains nonnegative and satisfies
-   V'<=V-sum(x)/2. Iteration stays in the same domain and all odds are
-   summable.
-6. The enforced first two comparisons give S,u tending to zero. For the
-   third increment, the stated coefficient is valid using
-   1-1/((1+a)(1+t))<=a+t and at<=delta(a+t). Hence w converges. A
-   positive limit forces eventual face01 selections, where the exact
-   recurrence S'=(A+g)S/(A+S) expands every0<S<g. This contradicts
-   S tending to zero. All three observer annotations therefore vanish.
-7. Each finite selected prefix word is exactly diagonal Nash from the
-   fixed synthetic seed. Summable odds give positive limiting marginal
-   survivals. Closure of these finite words supplies the endpoint; it
-   does not execute a continuation after infinitely many dates.
+I independently recomputed d=-1^T G^-1 and its sign equivalence with
+hil-gjk>0. All explicit delta and epsilon bounds have positive right sides
+under the five strict raw inequalities. The new mu lies strictly between
+l/F and min(1,k/E), so both drift coefficients are positive without the
+removed participant-pair sign restrictions.
 
-I independently verified with exact SymPy identities both signed scalar
-selection derivatives, the row0 and row1 formulas, and the row3 mu-margin
-identity. The full argument above also checks the inequalities and boundary
-quantifiers that symbolic identity checks alone would not establish.
+The scalar root selector supplies the strategic roots from raw data. Its
+signed denominators stay positive, z decreases, a increases, and f increases
+strictly. The two endpoint signs follow exactly from failure of the explicit
+face test. The odds bounds hold over the entire search interval. At an
+interior seed every small proper root must have a,t>0, hence support01 or013;
+the face equations or scalar equation then prove uniqueness. This argument
+correctly excludes sure roots and does not claim uniqueness at boundary
+seeds, where the displayed solo3 alternative is real.
 
-The final statement correctly says roots are **supported on**01 or013.
-When u=0 and the face test holds, a0=0 and the actual support is just1;
-the construction and all sign arguments explicitly cover this case.
+I checked each exact sign identity in the assembled proof. The new N0
+estimate follows from the full-root inequalities for a,z: subtracting
+CF/(DE) from R_delta gives numerator
+F*delta*(E|r1|+C|r3|) over D*E*(E-|r3|delta), yielding Q*delta. The K0
+remainder is controlled by t<=delta and z/t<=R_delta. The face case gives
+N0=-(A+g)t directly. For N1, the two exact coefficients are C-i and
+jC-iD with the stated signed higher-order corrections. For N3,
+w>=max(C3,0)>=mu*C3 is valid for both signs of C3; the a*t error is bounded
+by delta(a+t)/2. Thus all signs used in the Lyapunov proof are justified.
 
-## Raw singleton equivalence and the four-player corollary
+The exact signed Lyapunov identity gives V'<=V-(a+t+z)/2. It both preserves
+the smallness domain and proves summable odds. Active equalities imply S,u
+converge to zero. The stated absolute-increment bound makes w convergent;
+a positive limit would force the01 face forever and then
+S'=(A+g)S/(A+S)>S near zero, a contradiction. The full finite-word
+payoff/cap/survival tuple converges. Its fixed-seed closure interpretation
+uses finite prefixes and does not execute a tail after infinitely many dates.
+All marginal survivals remain positive, as explicitly stated.
 
-I reviewed the complete determinant/sign equivalence, including the exact
-formulas for alpha,beta,gamma. Direct multiplication gives dG=-1 and
-D0=det G=h*i*l-g*j*k. Positivity of all three weight magnitudes is exactly
-D0>0 in this strict sign chamber; the alpha numerator is correctly stated.
-The earlier exact SymPy determinant and signed-weight checks apply to these
-unchanged formulas.
+The fourth-player argument is independent of its own Nash assertion:
+passive updates first bound |beta| by B, summable odds bound total pivot
+drift by bmin/4, and the additional delta bound makes every joining offer
+at most bmin/4. Hence beta>=3bmin/4 strictly prices every pivot comparison.
+This is not circular. The same finite-word closure then retains all four
+full behavioral caps, and no actual continuation is assumed at the seed.
 
-The added local four-player corollary is valid. The further delta and epsilon
-restrictions can be imposed together with all earlier bounds. With the pivot
-prescribed quiet, the observer root equations use exactly the restricted
-table; arbitrary observer rewards on coalitions containing the pivot never
-enter their deviations. The passive pivot update is a convex combination,
-so its absolute value stays at most B before any Nash comparison is assumed.
-Its total variation is at most2(K+B)V_initial<=bmin/4. This proves the lower
-value bound3bmin/4 without circularly assuming pivot optimality.
+## Sharpness and attempted falsification
 
-Own pivot singleton zero removes the constant term from its joining offer.
-All seven remaining coefficients are bounded by K. Since each odds is at
-most delta<=1, D-1<=3delta+3delta^2+delta^3<=7delta<=12delta. Hence the
-joining offer has absolute value at most bmin/4, strictly below the pivot's
-continuation value. All constructed roots are therefore full four-player
-Nash. Summability gives convergence of the pivot value and the complete
-payoff/cap/survival tuple. The asserted endpoint interval[3bmin/4,B] follows.
+I recomputed the three generating rays of the first-order full-root cone.
+Evaluation of its linear output numerators gives exactly the five weak
+inequalities. On the01 face, minimizing
+max(0,Ft-Ea)+ka-lt on either side of a/t=F/E gives F>=l and kF>=lE;
+C>=i is the remaining face test, and N0 is already negative. Thus no
+unexamined face enlarges the claimed closed region.
 
-This is a return from the specified signed orthant near a positive axis,
-not a statement about all nearby annotations. The corollary produces neither
-an initial entry from a nonnegative proxy seed nor a recurrent collection of
-entries with a uniform survival contraction. The note states these limits
-explicitly, so the stronger corollary does not become an unsupported UE claim.
+Every strict violated ray can be perturbed to positive a,t,z,u,w while
+retaining the wrong output sign. Scaling gives interior seeds arbitrarily
+near zero. For fixed arbitrary higher rewards, active0 forces t+z=O(tau),
+active1 gives a=O(tau), and the normalized roots converge to the unique
+linear root. Quadratic terms are O(tau^2), so the strict wrong sign persists.
+The conclusion concerns every sufficiently small proper root, not only a
+preferred selector; nonlocal and sure-root alternatives remain available.
 
-## Semantic correspondence and scope
+I independently ran exact Fraction checks of all five rational examples:
+only the named inequality fails; the listed active and quiet comparisons
+hold; and the failed numerator is respectively -1/2,-1/2,-2/5,-3/20,7/4.
+The enlarged-region example also passes all five strict inequalities while
+J03,J13,J30 are simultaneously positive. This verifies an open enlargement
+of the previous local theorem, including arbitrary finite higher rewards.
 
-The relevant existing source declarations are
-`quittingTerminalSemanticPrefix_diagonal_eq_of_isZeroNash` and
-`continuous_quittingTerminalSemanticPrefix` in
-`UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean`, and
-`quittingContinuationBestResponseValue_rootThenContinuation_eq_max`
-in `UniformEquilibrium/Quitting/Root/TerminalDebtPrefix.lean`.
-Their arbitrary-reward finite-prefix semantics support the formulas used
-here, including the passive pair terms. The fixed synthetic-seed closure
-is ordinary mathematics; no membership of an arbitrary negative seed in
-the actual-profile carrier is assumed. No Lean compilation was run.
+## Evidence and limits
 
-The six higher observer rewards and arbitrary fourth-player rewards affect
-the size of the produced entry region, not the strict singleton/participant-
-pair guards. This strengthens the local return component, but does not by
-itself exclude a four-player counterexample class. Internal status and the
-contributor/component review disclosure remain appropriate.
+I inspected the original canonical observer proof, the separate proposed
+joining classification, and the diagonal prefix theorem in
+UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean. The assembled
+proof retains the original recursion, Lyapunov convergence, finite-word
+semantics, and arbitrary-fourth-player argument; no lemma was lost in the
+replacement of the joining inequalities. No new Lean build or formalized
+claim is made.
+
+The mathematical review does not depend on the availability of the linked
+global-entry note. That separate obstruction is not a premise of the local
+theorem. This packet supplies neither raw entry from positive pivot seeds
+nor recurrence with survival tending to zero, and it closes no UE reward
+class by itself.
+
+Final canonical SHA256: 3993c8884e453d6749500ab04b9797852285cf95c451679fe63e6269a7d45da4.
