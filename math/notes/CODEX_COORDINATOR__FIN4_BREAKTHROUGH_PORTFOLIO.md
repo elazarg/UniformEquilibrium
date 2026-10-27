@@ -98,7 +98,10 @@ geometrically decaying remaining finite mass. At M14 the stronger
 [eventual native Nash-tail theorem](../exports/EVENTUAL_NATIVE_NASH_TAIL_AT_ACTUAL_M14_MINIMUM.md)
 excludes infinitely many strict pivot dates, however sparse they are.
 Every eventually full-support actual minimum therefore has a finite head
-followed by a fully contact native Nash tail. The proof controls normal
+followed by a fully contact native Nash tail. The benchmark's canonical-tail
+classification shows that, after a further finite cut, this tail belongs to
+one fixed one-parameter family. Jointly empty dates may first be deleted
+without changing the full source tuple. The proof controls normal
 multipliers on arbitrarily long windows; the earlier zero-density conclusion
 is subsumed at M14. These are restrictions on actual minima, not UE existence
 classes or realization theorems. Two final whole-proof reviews of the generic
@@ -117,14 +120,18 @@ minimum without assuming its realization or varying an inherited fixed-cap
 fibre; it does not itself produce UE.
 
 At M14 and a sufficiently small selectable penalty, the remaining actual
-obligations are sparse four-owner calendars and finite heads followed by
-native Nash tails. The latter reduction does not
-remove the finite head or the positive Never mass of its tail. The inherited
-branch separately requires a replacement
-preserving the head's full caps. Its three-zero-observer/positive-pivot case
+obligations are calendars with infinitely many nonempty proper-support dates
+and finite heads followed by canonical native Nash tails. The latter reduction
+does not remove the finite head or the positive Never mass of its tail. The
+inherited branch separately requires a replacement preserving the head's full
+caps. Its three-zero-observer/positive-pivot case
 now satisfies the strict ratio restriction in Section 9.3 of the residual
 partition; equality instead produces an actual minimum. No remaining
-inherited cap pattern is entirely eliminated.
+inherited cap pattern is entirely eliminated. The canonical-tail uniqueness,
+fixed-cap amplitude obstruction and exact finite-head transversality have a
+[fresh whole review](../feedback/NO_CHILD_FIN4_CANONICAL_TAIL__BY_FRESH_REVIEW.md);
+the obstruction makes changing the head's cap requirements essential to that
+local continuation method.
 
 ## Constructed equilibrium classes
 

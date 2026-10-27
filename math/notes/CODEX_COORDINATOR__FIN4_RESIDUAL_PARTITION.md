@@ -688,11 +688,13 @@ eventual full support forces geometric decay of the remaining finite masses.
 At M14 the stronger
 [eventual native Nash-tail theorem](../exports/EVENTUAL_NATIVE_NASH_TAIL_AT_ACTUAL_M14_MINIMUM.md)
 allows only finitely many strict pivot dates in an eventually full-support
-minimum. Thus the actual I4 obligation there separates into infinitely
-recurring missing-owner hazards and a finite head followed by a native Nash
-tail. Neither part is eliminated. These conditions come from global
-comparisons, not from assuming descendant minimality; the tail retains
-positive Never mass.
+minimum. Jointly empty dates can first be deleted without changing its full
+augmented tuple, as proved in the [benchmark](CODEX_COORDINATOR__NO_CHILD_FIN4_BENCHMARK.md).
+Thus the actual I4 obligation there separates into infinitely many nonempty
+proper-support dates and a finite head followed by a canonical native Nash
+tail from one fixed one-parameter family. Neither part is eliminated. These
+conditions come from global comparisons, not from assuming descendant
+minimality; the tail retains positive Never mass.
 
 The [complete M14 finite-mode theorem](../exports/NO_FINITE_ACTUAL_MINIMA_AT_SMALL_PENALTY_M14.md)
 also excludes F for every sufficiently small selectable penalty

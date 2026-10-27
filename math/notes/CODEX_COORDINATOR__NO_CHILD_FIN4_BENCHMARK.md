@@ -979,6 +979,143 @@ head before that Nash tail, and inherited endpoints remain unresolved. The
 and [fresh](../feedback/EVENTUAL_NATIVE_NASH_TAIL_AT_ACTUAL_M14_MINIMUM__BY_FRESH_REVIEW.md)
 reviews cover the complete frozen proof.
 
+## Canonical tails, calendar compression and finite-head transversality
+
+These ordinary mathematical lemmas refine the M14 actual-source branch.
+They do not exclude finite heads followed by native Nash tails, or prove UE.
+
+### Empty dates can be removed without changing an ALL-END source tuple
+
+Delete every date at which all four prescribed hazards vanish, preserving
+order and simultaneity at the retained dates. Pushing forward the four
+independent stopping laws preserves their terminal outcome law and Never
+atoms, hence U,e,N. Every compressed unilateral response lifts to the original
+retained dates, so B_compressed<=B_original. With finitely many retained dates,
+a response after the last one lifts to any later original date; sole-Quit
+native payoff is zero. Since Never attains e=B_original and e is unchanged,
+B_compressed>=e=B_original as well. Thus the full augmented tuple is unchanged.
+In particular an actual ALL-END global minimum remains the same minimum.
+
+Apply the [eventual-contact theorem](../exports/EVENTUAL_NATIVE_NASH_TAIL_AT_ACTUAL_M14_MINIMUM.md)
+to this compressed calendar. Its eventual-full-support case has a finite head
+followed by full native Nash. The remaining sparse case therefore requires
+infinitely many NONEMPTY proper-support dates; inserted blank dates do not
+create another residual mode. No finite-horizon time bound is transported.
+
+### Every late full-contact, full-support tail is canonical
+
+Use the actual C2 full-contact curve constructed above and the M14 root maps.
+The local analytic forward map is T(q)=Q^-1(H(q)^-1[Q(q)-P(q)]), with
+DT(0)=A=I-J^-1 Gamma. The cited theorem's exact spectrum gives one stable
+real eigenvalue lambda in(13/20,2/3), one real eigenvalue u>1, and a nonreal
+pair of modulus R>u. Rescale the curve's positive amplitude so that
+
+    q(0)=0, q'(0)=h>0, sum h=1-lambda,
+    T(q(s))=q(lambda s), Gamma h=(1-lambda)Jh.                 (C1)
+
+This EXISTING construction contains every sufficiently late actual
+full-contact, full-support tail. Indeed choose a left lambda eigenfunctional
+ell with ell(h)=1 and unstable invariant complement U. Reparametrize the
+curve by t=ell(q(s)), writing q_graph(t)=ht+chi(t), chi in U. In coordinates
+q=q_graph(t)+z, z in U, invariance and differentiation give
+z_next=A_U z+b(t,z), where b(t,0)=0 and D_z b(0,0)=0. Choose an equivalent
+norm with ||A_U^-1||<1. On a small neighborhood |b(t,z)|<=delta|z| therefore
+implies |z|<=c|z_next| for one c<1. Positive Never mass gives q_n->0; iterating
+on its actual contact orbit yields z_n=0. Injectivity of the curve then gives,
+after a finite cut K, q_n=q(lambda^(n-K)s) for one s>0.
+
+Write e(s)=Q(q(s)) and nu(s)=prod_(n>=0)prod_i[1-q_i(lambda^n s)]. Contact
+recursion telescopes: every finite deadline and Never has payoff e_i(s),
+hence this is native Nash against all behavioral deviations. The logarithmic
+product and its first two derivative series converge uniformly, so nu is C2.
+With w^T=1^T Gamma^-1 the normalization gives
+
+    e'(0)=Jh, nu(0)=1, nu'(0)=-1, w^T e'(0)=1.               (C2)
+
+Thus the eventual-full-support actual branch, after calendar compression,
+has a finite head followed by this one-parameter family. Positive Never
+mass remains; native Nash is not UE for the shifted original table.
+
+### A free amplitude still leaves late fixed-cap windows isolated
+
+Use the cited theorem's analytic backward chart q=Psi(t,g),
+F(t,g)=Q(Psi(t,g))+g e2, defined by Q(q)-P(q)-H(q)t+g e2=0. At zero,
+M=F_t=J(J-Gamma)^-1 and b=F_g=-Gamma(J-Gamma)^-1e2. On the canonical tail
+set M_n=F_t(e(lambda^(n+1)s),0), b_n=F_g(e(lambda^(n+1)s),0).
+They converge geometrically. The proved spectrum and asymptotic conjugacy
+produce a nonzero real homogeneous adjoint z_(n+1)=M_n^T z_n with
+z_n=(1/u)^(n-K)[z_*+o(1)], where z_* is a 1/u eigenvector of M^T.
+The proved cyclicity gives b^T z_*!=0. Choosing its sign and a late K gives
+
+    b_n^T z_n>0 for every n>=K.                              (C3)
+
+The amplitude derivative X_n=lambda^n e'(lambda^n s) satisfies
+X_n=M_n X_(n+1). Hence z_n^T X_n is constant and, since both factors tend
+to zero, is exactly zero. In particular z_n^T e'(lambda^n s)=0.
+Fix finite N>K, vary controls g_K,...,g_(N-1)>=0 and terminal amplitude
+a near lambda^N s, and let E(g,a) be the backward entrance map. Then
+
+    z_K^T partial_(g_n)E=b_n^T z_n>0,
+    z_K^T partial_a E=z_N^T e'(lambda^N s)=0.                 (C4)
+
+A linearized feasible direction fixing E has delta g_n>=0; pairing with
+z_K forces all delta g_n=0. Invertibility of M_n and e'!=0 then force
+delta a=0. The entire linearized feasible cone is {0}. Consequently this
+fixed-entrance point is locally isolated for EACH finite N: normalized
+secants of a distinct convergent feasible sequence would contradict that
+cone. No uniform neighborhood in N or infinite-dimensional isolation follows.
+A useful global variation must also change the head or its cap requirements,
+or use a different observer-exact continuation family.
+
+### Exact whole-head transversality, including the boundary term
+
+Take a finite head q_0,...,q_(N-1) followed by canonical amplitude s>0.
+Let rho>0 be the source penalty, C=prod_(k<N)prod_i(1-q_i,k),
+A_i,k=prod_(k<=ell<N)H_i(q_ell), and A_i=A_i,0. On the ALL-END stratum,
+
+    J(q,s)=J_head(q)+(A_2-C)e_2(s)+rho C nu(s),
+    partial_s G_i,k=A_i,k e'_i(s), G_i,k=e_i,k-Q_i(q_k).      (C5)
+
+Indeed tail contributions to pivot Never and prescribed payoff are A_2 e_2
+and C e_2; backward Never recursion gives the second identity. Eliminate the
+head's zero-hazard coordinates, impose G_i,k=0 at active observers and
+G_i,k>=0 elsewhere, and vary the remaining open hazards and s. These are
+legitimate ALL-END observer-optimal comparisons. A source minimum is a local
+minimum here, so Fritz John gives alpha>=0 and contact prices eta, not all
+zero: eta is unrestricted at equality contacts, nonpositive at binding
+inequalities and zero at strict inequalities. Interior amplitude stationarity is
+
+    Xi^T e'(s)+alpha rho C nu'(s)=0,
+    Xi_i=alpha(A_2-C)1_(i=2)+sum_(k<N)eta_i,k A_i,k.          (C6)
+
+Observer equality prices have no automatic sign. Nor can one invert an
+arbitrary head contact Jacobian without checking its rank; the previously
+proved chart only guarantees sufficiently late invertibility.
+For the storage Phi of the cited theorem, set
+
+    V(s)=rho nu(s)-rho+rho w^T e(s)-Phi(e(s)),
+    mu_N=Xi-alpha rho C w+alpha C grad Phi(e(s)).
+
+Then(C6) becomes mu_N^T e'(s)+alpha C V'(s)=0. The boundary term matters:
+globally J=V_0+rho-rho w^T e_0+Phi(e_0), so free entrance caps do not allow
+minimizing V_0 alone. Formally extend mu by the exact storage adjoint
+mu_(n+1)=M_n^T mu_n+alpha pi_n l_t,n, where pi_n is joint survival from the
+original entrance and l_t,n the stage derivative including its continuation
+cost. Put X_n=lambda^(n-N)e'(lambda^(n-N)s) and
+Y_n=lambda^(n-N)V'(lambda^(n-N)s). Differentiated recursion makes
+mu_n^T X_n+alpha pi_n Y_n constant, hence zero by transversality.
+Since V(s)=O(s^2), Y_n=O(lambda^(2(n-N))). The growing adjoint mode 1/lambda
+pairs nontrivially with e'(0), so this identity kills that mode. Remaining
+homogeneous modes and geometric forcing decay. This FORMAL extension need
+not satisfy the switch inequalities of newly added one-sided gap controls;
+compatible multiplier feasibility still needs proof. Even a feasible extension
+can retain the decaying real-stable mode(C3).
+
+The open task is a global head comparison or a different continuation family.
+These identities alone exclude no finite head or inherited endpoint.
+
+Independent whole review: [canonical tails and head transversality](../feedback/NO_CHILD_FIN4_CANONICAL_TAIL__BY_FRESH_REVIEW.md).
+
 ## Verification and retained scope
 
 The original complete-pattern checker remains
@@ -1009,7 +1146,8 @@ reviews cover the entire frozen proof.
 
 No result here proves global-minimum realization for a local control,
 positive absorbing gap, a UE counterexample, or arbitrary Fin4 closure.
-At sufficiently small penalties the actual branch consists of sparse
-four-owner calendars or finite heads followed by native Nash tails. The
+At sufficiently small penalties the actual branch consists of calendars with
+infinitely many nonempty proper-support dates, or finite heads followed by
+canonical native Nash tails. The
 inherited branch requires a replacement respecting the head's full observer
 comparisons.

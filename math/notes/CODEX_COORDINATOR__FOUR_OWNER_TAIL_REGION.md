@@ -139,9 +139,13 @@ where the theorem holds. The finite remainder rewards affect only how
 late(2) applies, not these raw conditions. This includes generic tables
 without invoking a transfer of an old selected minimum to new rewards.
 
-Finite-support actual sources and inherited endpoints remain unresolved.
-Exact four-owner ALL-END tails exist in the benchmark, so the conclusion
-is a proper support restriction rather than an I4 exclusion.
+This support theorem leaves finite calendars and inherited endpoints. At
+the exact M14 benchmark, the separate
+[finite-mode exclusion](../exports/NO_FINITE_ACTUAL_MINIMA_AT_SMALL_PENALTY_M14.md)
+removes finite actual source minima at sufficiently small selectable
+penalties. That conclusion is not asserted throughout this open raw region.
+Exact four-owner ALL-END tails exist in the benchmark, so the support
+restriction itself does not exclude I4.
 
 ## Exact boundary control
 
