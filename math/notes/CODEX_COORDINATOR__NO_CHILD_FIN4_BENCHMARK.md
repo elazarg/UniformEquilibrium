@@ -5,9 +5,10 @@ The M=14 table below has an exact finite certificate excluding every
 stationary terminal Nash profile and every sure-first terminal Nash profile
 with arbitrary behavioral continuation. Several complete raw producer
 families also fail. Arbitrary nonstationary strategies remain unresolved. The
-[one-date global descent](CODEX_COORDINATOR__ONE_DATE_GLOBAL_DESCENT.md)
-now excludes every actual selected minimum with at most one occupied date;
-this is a global variation, not another local feasibility test.
+[finite-profile descents](CODEX_COORDINATOR__FINITE_GLOBAL_DESCENT.md)
+exclude every actual selected minimum with at most one occupied date and
+force every two-date minimum to begin with all four owners. These are
+whole-profile comparisons, not additional local feasibility tests.
 
 ## Table
 
@@ -422,7 +423,7 @@ The exact interval checks give
 Here13/11 is the sum of the positive inverse column Gamma^-1 e2.
 No relation between this chosen r and the table's unknown absorbing
 partial-Nash minimum m is asserted. The
-[one-date global descent](CODEX_COORDINATOR__ONE_DATE_GLOBAL_DESCENT.md)
+[one-date global descent](CODEX_COORDINATOR__FINITE_GLOBAL_DESCENT.md)
 proves that this profile is NOT globally minimizing for any r>0.
 It remains a precise barrier to purely local exclusions: the last-root constraints,
 positive caps, positive Never masses, observer optimality, and these scalar
@@ -688,11 +689,20 @@ last012,0123. The first02 case has the additional exact contact and bound(1).
 Intermediate dates and their number remain unrestricted. These are necessary
 endpoint restrictions, not six solved strategy classes or a bound on the
 number of phases. The
-[one-date global descent](CODEX_COORDINATOR__ONE_DATE_GLOBAL_DESCENT.md)
+[one-date global descent](CODEX_COORDINATOR__FINITE_GLOBAL_DESCENT.md)
 excludes the entire one-occupied-date actual minimum class, including the
 positive-cap control. Every remaining finite minimum has at least two
 occupied dates. Applying that variation to a descendant still requires
 pricing its earlier head; the longer finite branch remains open.
+
+The same canonical proof now excludes first02 at exactly two occupied dates
+for every r>0, and first012 for the selected r=m/2. The latter uses the
+existing inverse-axis bound m<=11/156, together with exact first-root
+monotonicity and the quiet observer's comparison. The full-first/triple-last case also fails: positive first Quit payoffs
+give root survival>25/324, while the triple last debt exceeds1/2; their
+product exceeds11/312>=r. Thus only full/full remains at two occupied dates.
+For three or more dates the original six endpoint pairs remain necessary.
+No feasibility claim is made for any surviving pair.
 
 ## Exact four-owner local profiles
 

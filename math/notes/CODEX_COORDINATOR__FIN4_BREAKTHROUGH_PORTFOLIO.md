@@ -66,12 +66,17 @@ partition. Actual positive-cap finite and infinite controls show why local
 feasibility alone does not eliminate F or I4. The infinite control is full
 native Nash; it is neither a global minimum nor an original-game UE.
 
-The [finite-profile descent](CODEX_COORDINATOR__ONE_DATE_GLOBAL_DESCENT.md)
+The [finite-profile descent](CODEX_COORDINATOR__FINITE_GLOBAL_DESCENT.md)
 now excludes the entire one-occupied-date actual minimum class at M14,
 including the positive finite control. An actual infinite tail and an exact
 first-root repair lower the whole objective for every positive penalty;
-the sign certificate covers the complete admissible branch. Longer finite
-profiles require their own whole-profile comparison.
+the sign certificate covers the complete admissible branch. A second
+whole-profile argument excludes two-date minima beginning with02, and an
+exact monotonicity argument excludes those beginning with012 for r=m/2.
+The additional survival/debt comparison excludes a triple last root as
+well. Thus every surviving two-date minimum has full support at both dates. The complete interval certificates share one small checker;
+the [fresh review](../feedback/TWO_DATE_GLOBAL_DESCENT__BY_FRESH_REVIEW.md)+covers both exclusions. Three or more occupied dates retain the six earlier
+endpoint combinations.
 
 The [fixed-cap controlled-window theorem](../exports/FIXED_CAP_CONTROLLED_WINDOW_MINIMUM_EXCLUSION.md)
 adds a different global variation. A finite raw matrix test, including

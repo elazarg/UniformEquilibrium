@@ -4,7 +4,8 @@ Verdict: PASS for the ordinary mathematical residual-class exclusion in the revi
 
 ## Exact scope and bytes
 
-Reviewed the entire `math/notes/CODEX_COORDINATOR__ONE_DATE_GLOBAL_DESCENT.md`, SHA256
+Reviewed the complete one-date source manuscript, now the first part of
+`math/notes/CODEX_COORDINATOR__FINITE_GLOBAL_DESCENT.md`. Its source SHA256 is
 
     624876f3f0d866cc8188d2268a229bba614693d86bc27842725a8a0de833438a
 
@@ -90,3 +91,5 @@ The source correspondence read was `quittingContinuationBestResponseValue_rootTh
 The draft deliberately uses its canonical conference classification dependency and is not a standalone export packet. Internal retention is appropriate without duplicating that complete classification. This review approves its precise residual-class exclusion, not raw-table UE existence or arbitrary Fin4 closure.
 
 The proof and checker were copied byte-for-byte into their canonical paths above. The canonical benchmark subsequently gained cross-references to this result; its classification and resultant proof used here are unchanged.
+
+The one-date source at the pinned hash is also preserved in commit `9bde2e4a`. Its complete proof now forms the first part of the finite-descent note; only headings were changed when the independently reviewed two-date extension was appended.
