@@ -33,7 +33,9 @@ weighted-dominance tests. Across every generic residual matrix, the same
 source argument supplies at least one such positive direction per recipient.
 
 The separate global-source partition has five actual eventual-owner cases
-and five inherited endpoint cap patterns. None is declared solved. The
+and five inherited endpoint cap patterns. None is universally solved over
+arbitrary raw tables; the benchmark reductions below close several cases
+under explicit raw conditions. The
 two-owner actual case now has explicit necessary interval tests using the
 two quiet observers, including a stronger contact-rate test when late
 pivot-only atoms are impossible. These can remove that branch for a given
@@ -66,17 +68,20 @@ partition. Actual positive-cap finite and infinite controls show why local
 feasibility alone does not eliminate F or I4. The infinite control is full
 native Nash; it is neither a global minimum nor an original-game UE.
 
-The [finite-profile descent](CODEX_COORDINATOR__FINITE_GLOBAL_DESCENT.md)
-now excludes the entire one-occupied-date actual minimum class at M14,
-including the positive finite control. An actual infinite tail and an exact
-first-root repair lower the whole objective for every positive penalty;
-the sign certificate covers the complete admissible branch. A second
-whole-profile argument excludes two-date minima beginning with02, and an
-exact monotonicity argument excludes those beginning with012 for r=m/2.
-The additional survival/debt comparison excludes a triple last root as
-well. Thus every surviving two-date minimum has full support at both dates. The complete interval certificates share one small checker;
-the [fresh review](../feedback/TWO_DATE_GLOBAL_DESCENT__BY_FRESH_REVIEW.md)+covers both exclusions. Three or more occupied dates retain the six earlier
-endpoint combinations.
+The [complete finite-mode exclusion](../exports/NO_FINITE_ACTUAL_MINIMA_AT_SMALL_PENALTY_M14.md)
+removes F at M14 for every sufficiently small selectable penalty
+`0<r<min(m,r0)`. There is no bound on the number of dates. If finite minima
+existed as r tends to zero, their last roots would converge to the unique
+nonempty native Nash root. Its cap admits no nonempty proper Nash prefix.
+Compressing the intervening pivot-only block then excludes a penultimate
+observer date; a produced semantic inverse-axis tail excludes the remaining
+one-date case. No conditional tail is assumed to minimize the objective.
+Together with the four-owner theorem, only I4 remains in the actual branch
+at these penalties. The [exact checker](../experiments/CODEX_NO_CHILD__FINITE_SOURCE_CHECK.py)
+and the [adversarial](../feedback/NO_FINITE_ACTUAL_MINIMA_AT_SMALL_PENALTY_M14__BY_ADVERSARY.md)
+and [fresh](../feedback/NO_FINITE_ACTUAL_MINIMA_AT_SMALL_PENALTY_M14__BY_FRESH_REVIEW.md)
+whole reviews cover the complete proof. This is a benchmark source reduction,
+not an arbitrary-table existence theorem.
 
 The [fixed-cap controlled-window theorem](../exports/FIXED_CAP_CONTROLLED_WINDOW_MINIMUM_EXCLUSION.md)
 adds a different global variation. A finite raw matrix test, including
@@ -89,13 +94,15 @@ certificate extends this exclusion to every premium M>=14, with all rewards
 on larger coalitions arbitrary fixed finite numbers.
 
 Consequently an eventually full-support actual minimum on this ray has a
-geometrically decaying remaining finite mass. At M14 its strict-pivot dates
-must additionally have zero upper Banach density: every sufficiently long
-interval has a vanishing fraction of such dates, uniformly in its location.
-The proof selects one fixed additive cube before applying the window
-cutoff. This is a restriction on actual minima, not a UE existence class or
-a realization theorem. Sparse owner calendars, contact-dominated tails and
-inherited endpoints remain open. Two final whole-proof reviews are
+geometrically decaying remaining finite mass. At M14 the stronger
+[eventual native Nash-tail theorem](../exports/EVENTUAL_NATIVE_NASH_TAIL_AT_ACTUAL_M14_MINIMUM.md)
+excludes infinitely many strict pivot dates, however sparse they are.
+Every eventually full-support actual minimum therefore has a finite head
+followed by a fully contact native Nash tail. The proof controls normal
+multipliers on arbitrarily long windows; the earlier zero-density conclusion
+is subsumed at M14. These are restrictions on actual minima, not UE existence
+classes or realization theorems. Two final whole-proof reviews of the generic
+fixed-window packet are
 [here](../feedback/FIXED_CAP_CONTROLLED_WINDOW_MINIMUM_EXCLUSION__BY_ADVERSARY.md)
 and [here](../feedback/FIXED_CAP_CONTROLLED_WINDOW_MINIMUM_EXCLUSION__BY_FRESH_REVIEW.md).
 
@@ -109,11 +116,11 @@ boundary and explicit excluded cap inequalities. This constrains the global
 minimum without assuming its realization or varying an inherited fixed-cap
 fibre; it does not itself produce UE.
 
-The next obligations are longer finite descents, sparse four-owner calendars,
-and eventual full-support tails whose pivot comparisons are predominantly
-tied. Extending the energy argument to windows of unbounded length still
-requires control of its normal multipliers; geometric decay alone does not
-supply that step. The inherited branch separately requires a replacement
+At M14 and a sufficiently small selectable penalty, the remaining actual
+obligations are sparse four-owner calendars and finite heads followed by
+native Nash tails. The latter reduction does not
+remove the finite head or the positive Never mass of its tail. The inherited
+branch separately requires a replacement
 preserving the head's full caps. Its three-zero-observer/positive-pivot case
 now satisfies the strict ratio restriction in Section 9.3 of the residual
 partition; equality instead produces an actual minimum. No remaining

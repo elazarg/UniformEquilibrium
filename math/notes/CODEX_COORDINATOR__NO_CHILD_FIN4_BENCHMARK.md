@@ -5,10 +5,12 @@ The M=14 table below has an exact finite certificate excluding every
 stationary terminal Nash profile and every sure-first terminal Nash profile
 with arbitrary behavioral continuation. Several complete raw producer
 families also fail. Arbitrary nonstationary strategies remain unresolved. The
-[finite-profile descents](CODEX_COORDINATOR__FINITE_GLOBAL_DESCENT.md)
-exclude every actual selected minimum with at most one occupied date and
-force every two-date minimum to begin with all four owners. These are
-whole-profile comparisons, not additional local feasibility tests.
+[complete finite-mode theorem](../exports/NO_FINITE_ACTUAL_MINIMA_AT_SMALL_PENALTY_M14.md)
+excludes every finite-calendar actual selected minimum for sufficiently
+small selectable penalties, without a bound on the number of dates.
+Together with the four-owner support theorem, it leaves only I4 on the
+actual side. Eventual full support then forces a finite head followed by
+a native Nash tail. Inherited semantic endpoints remain a separate branch.
 
 ## Table
 
@@ -423,9 +425,10 @@ The exact interval checks give
 Here13/11 is the sum of the positive inverse column Gamma^-1 e2.
 No relation between this chosen r and the table's unknown absorbing
 partial-Nash minimum m is asserted. The
-[one-date global descent](CODEX_COORDINATOR__FINITE_GLOBAL_DESCENT.md)
-proves that this profile is NOT globally minimizing for any r>0.
-It remains a precise barrier to purely local exclusions: the last-root constraints,
+[complete finite-mode theorem](../exports/NO_FINITE_ACTUAL_MINIMA_AT_SMALL_PENALTY_M14.md)
+excludes finite actual source minima for sufficiently small selectable
+penalties. This control remains a precise barrier to purely local exclusions:
+the last-root constraints,
 positive caps, positive Never masses, observer optimality, and these scalar
 inequalities do not by themselves eliminate F. Any exclusion must use a
 further global variational argument or another genuinely stronger property.
@@ -686,23 +689,20 @@ The independent last-root classification says that a nonempty final root
 can have support only012 or0123. Combining it with the selected first root
 above leaves six possible first/last support pairs: first02,012,0123 and
 last012,0123. The first02 case has the additional exact contact and bound(1).
-Intermediate dates and their number remain unrestricted. These are necessary
-endpoint restrictions, not six solved strategy classes or a bound on the
-number of phases. The
-[one-date global descent](CODEX_COORDINATOR__FINITE_GLOBAL_DESCENT.md)
-excludes the entire one-occupied-date actual minimum class, including the
-positive-cap control. Every remaining finite minimum has at least two
-occupied dates. Applying that variation to a descendant still requires
-pricing its earlier head; the longer finite branch remains open.
+These are necessary endpoint restrictions at an arbitrary prescribed penalty,
+not six strategy classes or a bound on the number of phases. The
+[complete finite-mode theorem](../exports/NO_FINITE_ACTUAL_MINIMA_AT_SMALL_PENALTY_M14.md)
+now removes the entire finite actual branch when the source penalty is chosen
+sufficiently small. Its compactness argument handles unbounded calendar
+lengths: last roots approach the unique nonempty native Nash root; its cap
+forbids a nonempty Nash prefix; an intervening pivot-only block cannot evade
+that obstruction. A produced semantic tail supplies the remaining one-date
+descent. The theorem uses global minimality at the entrance, never at a
+conditional tail.
 
-The same canonical proof now excludes first02 at exactly two occupied dates
-for every r>0, and first012 for the selected r=m/2. The latter uses the
-existing inverse-axis bound m<=11/156, together with exact first-root
-monotonicity and the quiet observer's comparison. The full-first/triple-last case also fails: positive first Quit payoffs
-give root survival>25/324, while the triple last debt exceeds1/2; their
-product exceeds11/312>=r. Thus only full/full remains at two occupied dates.
-For three or more dates the original six endpoint pairs remain necessary.
-No feasibility claim is made for any surviving pair.
+The penalty remains selectable throughout `0<r<m`; the result gives one
+range `0<r<min(m,r0)`, not a new bound at the specific choice r=m/2. No
+actual-source realization or inherited-endpoint replacement is inferred.
 
 ## Exact four-owner local profiles
 
@@ -960,15 +960,24 @@ does not obstruct this particular variation. Tied unmarked dates are kept
 exactly tied.
 
 For every M>=14, an actual minimum with eventual full support therefore has
-geometrically decaying remaining finite masses. At M14, strict pivot-Never
-dates must further have zero upper Banach density. The finite rank and
+geometrically decaying remaining finite masses. The finite rank and
 curvature checks, the entire premium-ray polynomial certificate, and the
 all-power spectral arithmetic are reproduced by
 [one exact checker](../experiments/CODEX_NO_CHILD__CONTROLLED_WINDOW_CHECK.py).
 The complete proof has two independent whole reviews linked from the
-portfolio. No inference eliminates all-contact tails, sparse owner
-calendars, or inherited endpoints. The unresolved long-window extension
-requires control of normal multipliers in addition to geometric tail decay.
+portfolio.
+
+At M14, the stronger
+[eventual native Nash-tail theorem](../exports/EVENTUAL_NATIVE_NASH_TAIL_AT_ACTUAL_M14_MINIMUM.md)
+excludes infinitely many strict pivot dates. Its uniform storage estimate,
+finite regular anchor and compact normal-multiplier argument handle windows
+of arbitrary length. Thus eventual full support forces a finite head followed
+by an actual native Nash tail, with positive Never mass. The earlier
+zero-density result is subsumed here. Sparse owner calendars, the finite
+head before that Nash tail, and inherited endpoints remain unresolved. The
+[adversarial](../feedback/EVENTUAL_NATIVE_NASH_TAIL_AT_ACTUAL_M14_MINIMUM__BY_ADVERSARY.md)
+and [fresh](../feedback/EVENTUAL_NATIVE_NASH_TAIL_AT_ACTUAL_M14_MINIMUM__BY_FRESH_REVIEW.md)
+reviews cover the complete frozen proof.
 
 ## Verification and retained scope
 
@@ -991,10 +1000,16 @@ The [consolidated scope review](../feedback/NO_CHILD_FIN4_CONSOLIDATION__BY_SECO
 checks the combined benchmark and general support theorem before the
 additional cap-region cross-reference above.
 
+The [finite-source checker](../experiments/CODEX_NO_CHILD__FINITE_SOURCE_CHECK.py)
+reproduces the native Nash algebra, strict no-prefix certificate and all472
+positive Bernstein coefficients for the complete finite-mode theorem. Its
+[adversarial](../feedback/NO_FINITE_ACTUAL_MINIMA_AT_SMALL_PENALTY_M14__BY_ADVERSARY.md)
+and [fresh](../feedback/NO_FINITE_ACTUAL_MINIMA_AT_SMALL_PENALTY_M14__BY_FRESH_REVIEW.md)
+reviews cover the entire frozen proof.
+
 No result here proves global-minimum realization for a local control,
 positive absorbing gap, a UE counterexample, or arbitrary Fin4 closure.
-The next finite obligation is a whole-profile variation for at least two
-occupied dates; the inherited branch requires a replacement respecting the
-head's full observer comparisons. The one-date result and its exact
-certificate have a
-[fresh whole-proof review](../feedback/ONE_DATE_GLOBAL_DESCENT__BY_FRESH_REVIEW.md).
+At sufficiently small penalties the actual branch consists of sparse
+four-owner calendars or finite heads followed by native Nash tails. The
+inherited branch requires a replacement respecting the head's full observer
+comparisons.

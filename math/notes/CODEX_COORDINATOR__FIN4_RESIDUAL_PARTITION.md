@@ -6,7 +6,9 @@ ten pointed sign templates and explicit polygon tests. Section9 partitions
 the actual global source and inherited endpoints; Section10 adds a necessary
 raw pair test for one actual-source branch. These are different axes, with
 no unproved exclusions between them. None of the ten matrix templates or
-the ten global-source cases is declared solved by this note.
+the ten global-source cases is universally solved for arbitrary tables.
+The M14 specialization below now excludes its entire finite actual mode
+at sufficiently small selectable penalties.
 
 The [weighted collision theorem](../exports/WEIGHTED_COLLISION_DOMINANCE_UNIFORM_EQUILIBRIUM.md)
 separately supplies at most43 finite raw existence tests at each fixed
@@ -683,11 +685,21 @@ in [the fixed-cap controlled-window theorem](../exports/FIXED_CAP_CONTROLLED_WIN
 Every qualifying fixed full-support window must eventually contain a pivot
 contact at one of its marked dates. For the no-child premium ray M>=14,
 eventual full support forces geometric decay of the remaining finite masses.
-At M14 the set of strict pivot dates must have zero upper Banach density.
-Thus the actual I4 obligation there separates into infinitely recurring
-missing-owner hazards and eventual full support with these contact and rate
-restrictions. Neither part is eliminated. This condition comes from a
-cap-preserving global comparison, not from assuming descendant minimality.
+At M14 the stronger
+[eventual native Nash-tail theorem](../exports/EVENTUAL_NATIVE_NASH_TAIL_AT_ACTUAL_M14_MINIMUM.md)
+allows only finitely many strict pivot dates in an eventually full-support
+minimum. Thus the actual I4 obligation there separates into infinitely
+recurring missing-owner hazards and a finite head followed by a native Nash
+tail. Neither part is eliminated. These conditions come from global
+comparisons, not from assuming descendant minimality; the tail retains
+positive Never mass.
+
+The [complete M14 finite-mode theorem](../exports/NO_FINITE_ACTUAL_MINIMA_AT_SMALL_PENALTY_M14.md)
+also excludes F for every sufficiently small selectable penalty
+`0<r<min(m,r0)`, without a bound on the number of dates. Combining it with
+the [four-owner support theorem](CODEX_COORDINATOR__FOUR_OWNER_TAIL_REGION.md)
+leaves only I4 on the actual side for this benchmark and source choice.
+This does not close F for arbitrary tables or at every prescribed r.
 
 ### 9.2. Inherited endpoint: classify its zero caps
 
