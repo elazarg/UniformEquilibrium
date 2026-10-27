@@ -133,6 +133,15 @@ fixed-cap amplitude obstruction and exact finite-head transversality have a
 the obstruction makes changing the head's cap requirements essential to that
 local continuation method.
 
+Even with changing entrance caps, canonical-tail amplitude need not decrease
+Never probability monotonically. The benchmark now contains a continuous
+actual native Nash family with41 repaired roots and an interior Never
+minimum; every member also lies outside the entire nonempty Nash-prefix
+region. Exact rational interval certificates and a
+[whole review](../feedback/NO_CHILD_FIN4_CANONICAL_HEAD_TURN__BY_INTERVAL_REVIEW.md)
+establish this obstruction. It is not a global source minimum and does not
+exclude other head-gap directions or a nonlocal replacement.
+
 ## Constructed equilibrium classes
 
 The canonical two-premium family is now covered for **every real p once

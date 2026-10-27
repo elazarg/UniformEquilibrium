@@ -1116,6 +1116,150 @@ These identities alone exclude no finite head or inherited endpoint.
 
 Independent whole review: [canonical tails and head transversality](../feedback/NO_CHILD_FIN4_CANONICAL_TAIL__BY_FRESH_REVIEW.md).
 
+### Canonical-tail amplitude can have an interior minimum after repairing a head
+
+This is an exact obstruction to one proposed descent, not a source-minimum
+construction or a UE counterexample. There exists a continuous family of
+actual M14 full native Nash profiles, consisting of41 full-support roots
+followed by the canonical tail, whose joint Never probability has an interior
+minimum as that tail's amplitude varies. Every member has positive caps and
+admits no nonempty native Nash prefix. Thus neither monotone amplitude repair
+nor a Nash-prefix graft closes the finite-head case.
+
+Let theta be the unique positive zero of
+
+    p(t)=13611t^4+248t^3-1076t^2-204t-11, lambda=1-theta.
+
+Use the positive polynomial vector
+
+    v0=(5theta+1)(209theta^2+57theta+4),
+    v1=(5theta+1)(155theta^2+64theta+5),
+    v2=970theta^3+493theta^2+52theta+1,
+    v3=1747theta^3+457theta^2+57theta+3,
+    h=theta v/(sum v).
+
+Exact evaluation gives
+34954025/10^8<theta<34954026/10^8,
+13/20<lambda<2/3, 3/40<h_i<1/10, (Jh)_i>1/10,
+sum h=1-lambda, and Gamma h=(1-lambda)Jh.
+
+We first make the local canonical-tail bounds explicit. With the benchmark's
+hazard polynomials P,Q,H, set
+
+    W(q,t)=Q(q)-P(q)-H(q)Q(t)=Lq-Jt+R(q,t), L=J-Gamma.
+
+In each row of R, the sums of absolute coefficients at degrees2,...,6 are
+at most133,188,155,70,13 respectively. Direct rational multiplication gives
+||L^-1 J||_infinity=2529/1571 and ||L^-1||_infinity=843/1571.
+On the complex disk |s|<=epsilon0=1/1000 take the radius4 ball of analytic
+u vanishing to order2, with norm sup||u(s)||_infinity/|s|^2. The map
+
+    K(u)(s)=L^-1 J u(lambda s)
+       -L^-1 R(hs+u(s),h lambda s+u(lambda s))
+
+is an invariant strict contraction. Both arguments of R are bounded by
+a|s|, a=11/100. Writing c_d for the five coefficient bounds above,
+
+    sum_(d=2)^6 c_d a^d epsilon0^(d-2)<2,
+    (2529/1571)(4/9)4+(843/1571)2<4,
+    (2529/1571)(4/9)
+       +(843/1571)sum_(d=2)^6 d c_d(a epsilon0)^(d-1)<.732.
+
+The fixed point gives q(s)=hs+u(s), ||u(s)||_infinity<=4s^2 and the exact
+contact recursion q(s),q(lambda s). Positivity and summability produce actual
+independent clocks. Telescoping contact shows every finite deadline and Never
+has payoff e(s)=Q(q(s)), so all behavioral responses are priced. The local
+curve agrees with the canonically normalized curve already constructed above.
+The row norm of J is23 and Q's nonlinear coefficient sums are31 and13;
+therefore
+
+    ||e(s)-Jh s||_infinity<=93s^2,
+    |nu(s)-(1-s)|<=30s^2.                                    (T1)
+
+For the second inequality, summing all four hazard errors gives at most
+16s^2/(1-lambda^2)<=28.8s^2. Summing
+|log(1-z)+z|<=z^2/[2(1-z)] adds less than.1s^2. Hence
+|log nu+s|<=29s^2; exponentiation adds at mosts^2/2.
+
+Now let the exact seed amplitude range over
+
+    I=[65/10^10,75/10^10], s_mid=70/10^10.
+
+Start with the actual seed tail just produced. For each seed, prepend40
+small positive solutions of C(x)=e_tail and then one larger positive solution,
+where C(x)=Lx-R_old(x) is the exact odds contact polynomial from the benchmark.
+At every step set
+
+    e_new=Q_odds(x), nu_new=nu_tail/prod_i(1+x_i).
+
+Each such root is full native Nash against its tail. The finite construction
+therefore remains actual full native Nash against all behavioral deviations.
+No endpoint is placed after an infinite head.
+
+The accompanying single fail-closed rational interval checker certifies these
+41 root maps continuously on ALL of I. Its existence test is explicit: at a
+nominated positive center x0 and a fixed rational matrix B, it verifies that
+x -> x-B(C(x)-v) maps the root box strictly into itself for every cap v in
+the input box, and ||I-B DC||_infinity<1 on that box. Banach gives the unique
+root there, and the analytic implicit theorem gives its cap derivative.
+The inverse enclosure uses
+
+    DC^-1=(I-E)^-1 B, E=I-B DC,
+    |(DC^-1-B)_ij|<=kappa/(1-kappa) max_k |B_kj|.
+
+For the output cap it bounds Q'_odds DC^-1 over the box and integrates from
+the verified center cap C(x0). The input box is enlarged to contain this
+center cap before applying the mean-value argument. Direct root survival
+products propagate nu. All arithmetic used to assert these inequalities is
+rational with outward dyadic rounding; floating arithmetic only nominates
+centers and cannot make a failed inclusion pass.
+
+The parameter interval is covered by its ten rational subintervals with
+endpoints k/10^10, k=65,...,75. At every root depth, a common convex hull of
+all ten root boxes also passes ||I-B DC||_infinity<1. Consequently any two
+roots there with the same cap coincide, so the branches on neighboring
+subintervals glue continuously. The local seed is analytic; thus the complete
+actual Nash family is continuous. Its exact three-value certificate is
+
+| Seed amplitude | Joint Never bound |
+|---|---|
+|65/10^10|nu>5694/10000|
+|70/10^10|nu<5689/10000|
+|75/10^10|nu>5704/10000|
+
+Continuity and compactness now give a minimum attained strictly inside I.
+This is a minimum only along this produced family, not over the source C.
+
+Uniformly on I the same checker gives entrance caps
+
+    e>b0=(1,8,16,8)/100.                                   (T2)
+
+The existing exact inverse A=L^-1 satisfies A b0>(37/1000)1 and
+A1>(12/25)1. Any nonempty proper Nash prefix at positive e must have full
+support by predecessor closure. A solution C(x)=e would then give, for
+t=min x_i,
+
+    t>37/1000+(36/5)t^2,
+
+impossible because the discriminant is-41/625. If j were a sure quitter,
+every owner except j and its premium successor would strictly Continue:
+every joining increment against a coalition containing j is negative there.
+The successor would then strictly Quit, making j's own joining increment
+strictly negative and contradicting its sure Quit. Thus sure-quitter Nash
+prefixes are impossible as well, for any continuation. No member of this
+family admits a nonempty Nash prefix at all.
+
+This refutes monotone canonical-amplitude descent even when the finite head
+is repaired exactly and all player debts stay zero. It differs from the
+fixed-entrance isolation above: entrance caps vary here. It is also distinct
+from generic local/component traps because it occurs inside the exact M14
+canonical-tail architecture. It does not show a local minimum against other
+head-gap directions, a global minimum in C, positive absorbing gap, or absence
+of original-game UE. A nonlocal comparison remains possible.
+
+Exact reproduction: [canonical-head interval checker](../experiments/CODEX_NO_CHILD__CANONICAL_HEAD_TURN_CHECK.py).
+Independent [whole review](../feedback/NO_CHILD_FIN4_CANONICAL_HEAD_TURN__BY_INTERVAL_REVIEW.md).
+
 ## Verification and retained scope
 
 The original complete-pattern checker remains
