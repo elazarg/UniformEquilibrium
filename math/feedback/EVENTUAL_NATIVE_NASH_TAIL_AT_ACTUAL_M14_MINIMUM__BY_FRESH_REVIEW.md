@@ -2,7 +2,7 @@
 
 Verdict: PASS as an ordinary-mathematical theorem under the exact actual-source hypotheses. No unresolved mathematical objection remains. This is not a Lean check or a Fin4 closure.
 
-Reviewed final curated artifact: `math/exports/EVENTUAL_NATIVE_NASH_TAIL_AT_ACTUAL_M14_MINIMUM.md`, SHA256 `b7109fa02539682cf9a5d2485f8032ed6183585395378460b7d5a8959453b031`.
+Reviewed final curated artifact: `math/notes/EVENTUAL_NATIVE_NASH_TAIL_AT_ACTUAL_M14_MINIMUM.md`, SHA256 `b7109fa02539682cf9a5d2485f8032ed6183585395378460b7d5a8959453b031`.
 
 Reviewed and rerun checker: `math/experiments/CODEX_NO_CHILD__EVENTUAL_CONTACT_CHECK.py`, SHA256 `0d82103bf77edfba7b13ad92084bfe693371a4565083796999dcfa103021d1b8`.
 

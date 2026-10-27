@@ -1,16 +1,21 @@
-# A no-child benchmark with exact stationary and sure-root exclusions
+# The M14 no-child benchmark: equilibrium and exact method boundaries
 
-This is a benchmark and a coverage audit, not a counterexample to UE.
-The M=14 table below has an exact finite certificate excluding every
+The exact M14 table has a uniform equilibrium. The
+[direct producer](../exports/M14_QUITTING_GAME_UNIFORM_EQUILIBRIUM.md)
+gives one fixed payoff `(4,4,4+b_*,4)`, with `b_* in [4/5,9/10]`, and
+controls unrestricted behavioral deviations on every sufficiently long
+horizon. Its actual finite native profiles have all four debts and joint
+Never probability tending to zero. Thus the native absorbing pivot minimum
+is zero; no positive-gap actual or inherited source case remains at M14.
+Arbitrary Fin4 remains open.
+
+This note retains exact method boundaries and local controls. Every
 stationary terminal Nash profile and every sure-first terminal Nash profile
-with arbitrary behavioral continuation. Several complete raw producer
-families also fail. Arbitrary nonstationary strategies remain unresolved. The
-[complete finite-mode theorem](../exports/NO_FINITE_ACTUAL_MINIMA_AT_SMALL_PENALTY_M14.md)
-excludes every finite-calendar actual selected minimum for sufficiently
-small selectable penalties, without a bound on the number of dates.
-Together with the four-owner support theorem, it leaves only I4 on the
-actual side. Eventual full support then forces a finite head followed by
-a native Nash tail. Inherited semantic endpoints remain a separate branch.
+with arbitrary continuation is excluded, and several complete raw producer
+criteria fail. These failures are compatible with the new nonstationary
+producer. Conditional minimum restrictions below are tools for comparison,
+not remaining M14 counterexample cases. Results stated throughout M>11
+retain that broader scope.
 
 ## Table
 
@@ -187,10 +192,10 @@ neighborhoods and arbitrary supplied-controller certificates have not been
 classified. Proper-child singleton equilibria have an outside successor who
 profits by joining; this rejects raw universal safety bounds, but by itself
 does NOT rule out every possible nonstationary child equilibrium selection.
-The table is therefore a useful no-child research target, not a proved
-unrestricted counterexample and not a claim of universal producer coverage.
+The table therefore separates the direct return producer from these exact
+criteria. No exhaustive claim about all nonstationary architectures is made.
 
-## Exact remaining source partition
+## Conditional source geometry and its broader raw scope
 
 The [open four-owner tail theorem](CODEX_COORDINATOR__FOUR_OWNER_TAIL_REGION.md)
 applies throughout M>11. Every actual ALL-END profile with positive marginal
@@ -205,7 +210,8 @@ At a hypothetical actual global minimum, the first root has support02,
 first/last support combinations on the finite side. The proofs below give
 further contact and hazard inequalities. Both finite and four-owner local
 controls satisfy positive-cap conditions, so local feasibility does not
-eliminate either branch. Inherited semantic endpoints remain separate.
+eliminate either branch. At exact M14 the direct producer rules out the
+positive-gap premise of both actual and inherited source alternatives.
 
 The [cyclic joining-cap region](CODEX_COORDINATOR__CYCLIC_JOINING_CAP_REGION.md)
 gives a further global constraint. Positive continuation vectors admitting a
@@ -423,11 +429,9 @@ The exact interval checks give
  N2=8/9 < 1/(1+r*13/11).
 
 Here13/11 is the sum of the positive inverse column Gamma^-1 e2.
-No relation between this chosen r and the table's unknown absorbing
-partial-Nash minimum m is asserted. The
-[complete finite-mode theorem](../exports/NO_FINITE_ACTUAL_MINIMA_AT_SMALL_PENALTY_M14.md)
-excludes finite actual source minima for sufficiently small selectable
-penalties. This control remains a precise barrier to purely local exclusions:
+The direct producer proves that the table's absorbing partial-Nash minimum
+is m=0, so this chosen r is not subcritical. This control remains a precise
+barrier to purely local exclusions:
 the last-root constraints,
 positive caps, positive Never masses, observer optimality, and these scalar
 inequalities do not by themselves eliminate F. Any exclusion must use a
@@ -498,6 +502,47 @@ for74/100<z<3/4. Continuity forces each of the indicated unique zeros to
 occur on the legal contact branch, while the resultant excludes any other
 zeros. This proves every stated sign interval without selecting numerical
 solutions or asserting a global minimum.
+
+### 6. The unique nonempty proper native Nash root has no Nash prefix
+
+At a proper native Nash root against literal Never, an active owner must
+have its premium predecessor active: otherwise every nonzero term in its
+contact equation C_i=0 is strictly negative. A singleton root violates the
+quiet successor comparison. Thus every nonempty root has full support,
+and the preceding partition gives its unique pivot coordinate z=alpha.
+
+For x_alpha, monotonicity of the two phi maps and F_z gives the rational box
+
+    .126<x0<.129, .122<x1<.125, .120<x2<.121, .133<x3<.136.
+
+For the y bounds, the upper estimate of F_z(.133) is
+-57077215903529/6417899800000000, and the lower estimate of F_z(.136)
+is2219971/2087187500. Applying phi twice gives the remaining bounds.
+All denominators are positive on this box. Substitution into
+B_i=H_i Gamma_i x gives
+
+    B_alpha>(10000/716319,7750000/89858239,
+             13000/80159,968000/11390481)>b0=(1,8,16,8)/100.
+
+Here the joining-increment matrix and its exact positive inverse are
+
+    L=J-Gamma=[0,-4,14,-7;14,0,-6,-6;-6,-7,0,14;-6,14,-6,0],
+
+    A=L^-1=(1/6284)[714,1057,810,609;
+                    732,714,672,994;
+                    994,609,758,663;
+                    672,810,1132,758].
+
+It satisfies A1>(12/25)1 and
+
+    A b0=(13501/314200,6287/157100,11649/314200,1958/39275)
+           >(37/1000)1.
+
+The quadratic no-prefix argument at(T2) below therefore applies to B_alpha:
+no nonempty proper Nash root can be prepended. These are algebraic
+properties of a native finite profile, independent of global minimization.
+The [exact native-root checker](../experiments/CODEX_NO_CHILD__NATIVE_ROOT_NO_PREFIX_CHECK.py)
+verifies the resultant, brackets, inverse, cap bounds and discriminant.
 
 ## Global-minimum first-root restrictions
 
@@ -690,25 +735,17 @@ can have support only012 or0123. Combining it with the selected first root
 above leaves six possible first/last support pairs: first02,012,0123 and
 last012,0123. The first02 case has the additional exact contact and bound(1).
 These are necessary endpoint restrictions at an arbitrary prescribed penalty,
-not six strategy classes or a bound on the number of phases. The
-[complete finite-mode theorem](../exports/NO_FINITE_ACTUAL_MINIMA_AT_SMALL_PENALTY_M14.md)
-now removes the entire finite actual branch when the source penalty is chosen
-sufficiently small. Its compactness argument handles unbounded calendar
-lengths: last roots approach the unique nonempty native Nash root; its cap
-forbids a nonempty Nash prefix; an intervening pivot-only block cannot evade
-that obstruction. A produced semantic tail supplies the remaining one-date
-descent. The theorem uses global minimality at the entrance, never at a
-conditional tail.
-
-The penalty remains selectable throughout `0<r<m`; the result gives one
-range `0<r<min(m,r0)`, not a new bound at the specific choice r=m/2. No
-actual-source realization or inherited-endpoint replacement is inferred.
+not six strategy classes or a bound on the number of phases. At exact M14,
+the direct equilibrium producer independently proves m=0,
+so there is no positive subcritical penalty and no positive-gap minimum of
+this kind. The endpoint restrictions remain useful conditional algebra for
+the broader premium family; they are not residual cases at the solved point.
 
 ## Exact four-owner local profiles
 
 This is an ordinary mathematical local construction, not an equilibrium
 existence theorem for the original shifted game and not a global-minimum
-source. It proves that the surviving I4 pattern cannot be excluded from
+source. It proves that an I4 pattern cannot be excluded from
 ALL-END, zero observer debt, positive Never masses and small-tail contact
 conditions alone. At M14 a stronger construction below has zero debt for
 all four owners and strictly positive native caps.
@@ -946,9 +983,9 @@ player's debt in that shifted game equal to `4 nu(s)>0`. The construction
 does not place a continuation after infinitely many dates and does not
 assert that repeating this positive-Never profile preserves Nash.
 
-Both exact constructions show why a future I4 exclusion must use additional
-global-minimum information, rather than claiming that local contact,
-ALL-END, or even positive-cap native Nash conditions are inconsistent.
+Both exact constructions show that local contact, ALL-END, and even
+positive-cap native Nash conditions are consistent. A source exclusion
+requires further global information or an independent producer.
 
 ## Global restrictions on the eventual full-support I4 branch
 
@@ -968,21 +1005,23 @@ The complete proof has two independent whole reviews linked from the
 portfolio.
 
 At M14, the stronger
-[eventual native Nash-tail theorem](../exports/EVENTUAL_NATIVE_NASH_TAIL_AT_ACTUAL_M14_MINIMUM.md)
+[eventual native Nash-tail theorem](EVENTUAL_NATIVE_NASH_TAIL_AT_ACTUAL_M14_MINIMUM.md)
 excludes infinitely many strict pivot dates. Its uniform storage estimate,
 finite regular anchor and compact normal-multiplier argument handle windows
 of arbitrary length. Thus eventual full support forces a finite head followed
 by an actual native Nash tail, with positive Never mass. The earlier
-zero-density result is subsumed here. Sparse owner calendars, the finite
-head before that Nash tail, and inherited endpoints remain unresolved. The
+zero-density result is subsumed here. These conditional restrictions do not
+supply the direct return proof; that proof independently eliminates every
+positive-gap source at M14. The
 [adversarial](../feedback/EVENTUAL_NATIVE_NASH_TAIL_AT_ACTUAL_M14_MINIMUM__BY_ADVERSARY.md)
 and [fresh](../feedback/EVENTUAL_NATIVE_NASH_TAIL_AT_ACTUAL_M14_MINIMUM__BY_FRESH_REVIEW.md)
 reviews cover the complete frozen proof.
 
 ## Canonical tails, calendar compression and finite-head transversality
 
-These ordinary mathematical lemmas refine the M14 actual-source branch.
-They do not exclude finite heads followed by native Nash tails, or prove UE.
+These ordinary mathematical lemmas classify actual native Nash tails and
+show limitations of constrained local variations. They remain method
+boundaries even though original-game UE is supplied by a separate producer.
 
 ### Empty dates can be removed without changing an ALL-END source tuple
 
@@ -996,11 +1035,11 @@ native payoff is zero. Since Never attains e=B_original and e is unchanged,
 B_compressed>=e=B_original as well. Thus the full augmented tuple is unchanged.
 In particular an actual ALL-END global minimum remains the same minimum.
 
-Apply the [eventual-contact theorem](../exports/EVENTUAL_NATIVE_NASH_TAIL_AT_ACTUAL_M14_MINIMUM.md)
+Apply the [eventual-contact theorem](EVENTUAL_NATIVE_NASH_TAIL_AT_ACTUAL_M14_MINIMUM.md)
 to this compressed calendar. Its eventual-full-support case has a finite head
-followed by full native Nash. The remaining sparse case therefore requires
-infinitely many NONEMPTY proper-support dates; inserted blank dates do not
-create another residual mode. No finite-horizon time bound is transported.
+followed by full native Nash. Its sparse complement requires infinitely many
+NONEMPTY proper-support dates; inserted blank dates do not create a distinct
+support pattern. No finite-horizon time bound is transported.
 
 ### Every late full-contact, full-support tail is canonical
 
@@ -1281,17 +1320,14 @@ The [consolidated scope review](../feedback/NO_CHILD_FIN4_CONSOLIDATION__BY_SECO
 checks the combined benchmark and general support theorem before the
 additional cap-region cross-reference above.
 
-The [finite-source checker](../experiments/CODEX_NO_CHILD__FINITE_SOURCE_CHECK.py)
-reproduces the native Nash algebra, strict no-prefix certificate and all472
-positive Bernstein coefficients for the complete finite-mode theorem. Its
-[adversarial](../feedback/NO_FINITE_ACTUAL_MINIMA_AT_SMALL_PENALTY_M14__BY_ADVERSARY.md)
-and [fresh](../feedback/NO_FINITE_ACTUAL_MINIMA_AT_SMALL_PENALTY_M14__BY_FRESH_REVIEW.md)
-reviews cover the entire frozen proof.
+The [native-root checker](../experiments/CODEX_NO_CHILD__NATIVE_ROOT_NO_PREFIX_CHECK.py)
+reproduces the unique nonempty proper native Nash root, its rational cap
+bounds, and the strict no-prefix certificate. The conditional minimum proof
+uses the [internal eventual-contact theorem](EVENTUAL_NATIVE_NASH_TAIL_AT_ACTUAL_M14_MINIMUM.md);
+its exact spectral and multiplier arguments also support the canonical-tail
+classification above.
 
-No result here proves global-minimum realization for a local control,
-positive absorbing gap, a UE counterexample, or arbitrary Fin4 closure.
-At sufficiently small penalties the actual branch consists of calendars with
-infinitely many nonempty proper-support dates, or finite heads followed by
-canonical native Nash tails. The
-inherited branch requires a replacement respecting the head's full observer
-comparisons.
+The local controls are not global minima and are not counterexamples to UE.
+The separate M14 equilibrium producer proves native absorbing gap zero and
+original uniform equilibrium. The arbitrary-table Fin4 problem, including
+its generic actual/inherited source alternatives, remains open.

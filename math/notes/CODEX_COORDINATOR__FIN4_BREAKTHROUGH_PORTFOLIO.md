@@ -34,8 +34,8 @@ source argument supplies at least one such positive direction per recipient.
 
 The separate global-source partition has five actual eventual-owner cases
 and five inherited endpoint cap patterns. None is universally solved over
-arbitrary raw tables; the benchmark reductions below close several cases
-under explicit raw conditions. The
+arbitrary raw tables; the M14 producer below closes every source case at one
+exact table, and other raw conditions exclude selected modes. The
 two-owner actual case now has explicit necessary interval tests using the
 two quiet observers, including a stronger contact-rate test when late
 pivot-only atoms are impossible. These can remove that branch for a given
@@ -44,103 +44,79 @@ exact checker verifies the matrix controls and the interval boundary cases.
 The matrix and source classifications are distinct axes, with no assumed
 incidence exclusions between them.
 
-The [no-child benchmark](CODEX_COORDINATOR__NO_CHILD_FIN4_BENCHMARK.md)
-completes the one-pivot matrix by a four-cycle of joining premiums. At M=14,
-an exact rational certificate excludes all80 nonzero stationary patterns
-and all65 sure-owner root patterns. Complete trap, anchor, ledger, pair and
-the audited scalar-circuit selections also fail. This does not prove that
-the game lacks UE.
+## The M14 benchmark is solved
+
+The [M14 equilibrium theorem](../exports/M14_QUITTING_GAME_UNIFORM_EQUILIBRIUM.md)
+constructs a uniform-equilibrium payoff `(4,4,4+b_*,4)`, with
+`b_* in [4/5,9/10]`, for the exact no-child benchmark. It also constructs
+actual finite native profiles with all four full behavioral debts and joint
+Never probability tending to zero. Thus its native absorbing pivot minimum
+is zero: every positive-gap actual and inherited source alternative is
+excluded at this table, including sparse calendars and finite heads followed
+by canonical Nash tails.
+
+The mechanism is a return on diagonal proxy values `b e2`. Three singleton
+limits and eight finite atoms lead to an explicit ray with one negative
+observer cap. A rational interval certificate supplies 305 observer roots;
+an analytic invariant cone supplies the remaining return to `b' e2`.
+Every return contracts joint survival by at most `45/311`, up to an arbitrary
+finite-word approximation error. Nonexpansiveness controls the errors when
+returns are concatenated. A terminal proxy cap above the actual postword cap
+converts these finite words into actual approximate equilibria. Compactness
+fixes the payoff before accuracy, and the proof controls every behavioral
+deviation at all sufficiently long horizons.
+
+The [complete checker](../experiments/M14_UNIFORM_EQUILIBRIUM_CHECK.py)
+uses exact rational outward intervals for every acceptance test. Two
+independent whole-proof reviews, including attempted falsification, are
+[here](../feedback/M14_QUITTING_GAME_UNIFORM_EQUILIBRIUM__BY_HEAD_REVIEW.md)
+and [here](../feedback/M14_QUITTING_GAME_UNIFORM_EQUILIBRIUM__BY_INHERITED_REVIEW.md).
+This is ordinary mathematics with a finite exact certificate, not a new
+Lean theorem.
+
+The [benchmark audit](CODEX_COORDINATOR__NO_CHILD_FIN4_BENCHMARK.md)
+retains its independent method boundaries: all 80 nonzero stationary
+patterns and all 65 sure-owner root patterns fail, as do the displayed
+complete trap, anchor, ledger, pair and scalar-circuit criteria. Actual
+positive-cap native Nash tails exist, and an exactly repaired canonical-tail
+family can have an interior Never minimum while admitting no Nash prefix.
+These explain why local exclusions alone do not supply the new return.
+
+## What remains beyond M14
+
+No arbitrary-table return producer is known. The five actual-source cases
+and five inherited cap patterns remain a partition of the generic
+positive-gap obligation for other tables. The concrete next producer problem
+is to find, from those raw rewards, a bounded family of proxy values above
+the true terminal caps and uniformly contracting finite-word returns into
+that family. M14 supplies one complete construction; it does not establish
+that every residual table has such returns.
 
 The [open four-owner tail theorem](CODEX_COORDINATOR__FOUR_OWNER_TAIL_REGION.md)
 excludes every proper nonempty infinite-owner set throughout M>11 and on
 an explicit open region in the singleton and participant-pair entries.
-All remaining higher rewards are arbitrary finite. It needs neither a
-positive absorbing gap nor genericity: actual ALL-END and zero observer
-debts suffice. Only F and I4 survive on the actual side; inherited endpoints
-remain separate.
-
-At a benchmark global minimum, direct zero-cap prefix surgery proves cap
-positivity without genericity. Its first support is02,012 or0123; a finite
-last support is012 or0123. These six endpoint combinations have exact
-contact and hazard restrictions. The complete last-root relation reduces
-to two one-dimensional algebraic branches, with an exact M14 cap-sign
-partition. Actual positive-cap finite and infinite controls show why local
-feasibility alone does not eliminate F or I4. The infinite control is full
-native Nash; it is neither a global minimum nor an original-game UE.
-
-The [complete finite-mode exclusion](../exports/NO_FINITE_ACTUAL_MINIMA_AT_SMALL_PENALTY_M14.md)
-removes F at M14 for every sufficiently small selectable penalty
-`0<r<min(m,r0)`. There is no bound on the number of dates. If finite minima
-existed as r tends to zero, their last roots would converge to the unique
-nonempty native Nash root. Its cap admits no nonempty proper Nash prefix.
-Compressing the intervening pivot-only block then excludes a penultimate
-observer date; a produced semantic inverse-axis tail excludes the remaining
-one-date case. No conditional tail is assumed to minimize the objective.
-Together with the four-owner theorem, only I4 remains in the actual branch
-at these penalties. The [exact checker](../experiments/CODEX_NO_CHILD__FINITE_SOURCE_CHECK.py)
-and the [adversarial](../feedback/NO_FINITE_ACTUAL_MINIMA_AT_SMALL_PENALTY_M14__BY_ADVERSARY.md)
-and [fresh](../feedback/NO_FINITE_ACTUAL_MINIMA_AT_SMALL_PENALTY_M14__BY_FRESH_REVIEW.md)
-whole reviews cover the complete proof. This is a benchmark source reduction,
-not an arbitrary-table existence theorem.
+Higher rewards are arbitrary finite. It needs neither a positive absorbing
+gap nor genericity: actual ALL-END and zero observer debts suffice. Only F
+and I4 survive under this support test; inherited endpoints remain separate.
+The direct equilibrium theorem above is asserted only at exact M14.
 
 The [fixed-cap controlled-window theorem](../exports/FIXED_CAP_CONTROLLED_WINDOW_MINIMUM_EXCLUSION.md)
-adds a different global variation. A finite raw matrix test, including
+retains broader independent scope. A finite raw matrix test, including
 passive pair rewards, supplies negative constrained curvature for any number
-of players. The variation preserves every entrance full cap and thus works
-under an arbitrary unchanged earlier head. At the no-child benchmark it
-excludes every qualifying fixed window with five strict pivot dates; tied
-dates may remain inside the window under the stated rank test. A Fourier
-certificate extends this exclusion to every premium M>=14, with all rewards
-on larger coalitions arbitrary fixed finite numbers.
-
-Consequently an eventually full-support actual minimum on this ray has a
-geometrically decaying remaining finite mass. At M14 the stronger
-[eventual native Nash-tail theorem](../exports/EVENTUAL_NATIVE_NASH_TAIL_AT_ACTUAL_M14_MINIMUM.md)
-excludes infinitely many strict pivot dates, however sparse they are.
-Every eventually full-support actual minimum therefore has a finite head
-followed by a fully contact native Nash tail. The benchmark's canonical-tail
-classification shows that, after a further finite cut, this tail belongs to
-one fixed one-parameter family. Jointly empty dates may first be deleted
-without changing the full source tuple. The proof controls normal
-multipliers on arbitrarily long windows; the earlier zero-density conclusion
-is subsumed at M14. These are restrictions on actual minima, not UE existence
-classes or realization theorems. Two final whole-proof reviews of the generic
-fixed-window packet are
+of players and preserves every entrance full cap. Its premium-ray certificate
+works for every M>=14, with arbitrary fixed finite higher-coalition rewards.
+An eventually full-support actual minimum on this ray has geometrically
+decaying remaining finite mass. Its complete reviews are
 [here](../feedback/FIXED_CAP_CONTROLLED_WINDOW_MINIMUM_EXCLUSION__BY_ADVERSARY.md)
 and [here](../feedback/FIXED_CAP_CONTROLLED_WINDOW_MINIMUM_EXCLUSION__BY_FRESH_REVIEW.md).
 
 The [cyclic joining-cap theorem](CODEX_COORDINATOR__CYCLIC_JOINING_CAP_REGION.md)
-also identifies the entire positive-continuation region admitting a nonzero
-Nash root. Its raw joining-increment hypotheses work for every n>=3. The
-region has a finite polynomial test, is convex after logarithms, and has one
-critical Perron boundary on each positive ray. A positive subcritical minimum
-must lie strictly outside it. The M14 specialization gives an exact algebraic
-boundary and explicit excluded cap inequalities. This constrains the global
-minimum without assuming its realization or varying an inherited fixed-cap
-fibre; it does not itself produce UE.
-
-At M14 and a sufficiently small selectable penalty, the remaining actual
-obligations are calendars with infinitely many nonempty proper-support dates
-and finite heads followed by canonical native Nash tails. The latter reduction
-does not remove the finite head or the positive Never mass of its tail. The
-inherited branch separately requires a replacement preserving the head's full
-caps. Its three-zero-observer/positive-pivot case
-now satisfies the strict ratio restriction in Section 9.3 of the residual
-partition; equality instead produces an actual minimum. No remaining
-inherited cap pattern is entirely eliminated. The canonical-tail uniqueness,
-fixed-cap amplitude obstruction and exact finite-head transversality have a
-[fresh whole review](../feedback/NO_CHILD_FIN4_CANONICAL_TAIL__BY_FRESH_REVIEW.md);
-the obstruction makes changing the head's cap requirements essential to that
-local continuation method.
-
-Even with changing entrance caps, canonical-tail amplitude need not decrease
-Never probability monotonically. The benchmark now contains a continuous
-actual native Nash family with41 repaired roots and an interior Never
-minimum; every member also lies outside the entire nonempty Nash-prefix
-region. Exact rational interval certificates and a
-[whole review](../feedback/NO_CHILD_FIN4_CANONICAL_HEAD_TURN__BY_INTERVAL_REVIEW.md)
-establish this obstruction. It is not a global source minimum and does not
-exclude other head-gap directions or a nonlocal replacement.
+identifies the entire positive-continuation region admitting a nonzero Nash
+root under its raw joining-increment hypotheses for every n>=3. The region
+has a finite polynomial test, is convex after logarithms, and has one critical
+Perron boundary on each positive ray. A positive subcritical minimum must lie
+strictly outside it. This remains a necessary condition for other tables,
+not an arbitrary-table UE producer.
 
 ## Constructed equilibrium classes
 

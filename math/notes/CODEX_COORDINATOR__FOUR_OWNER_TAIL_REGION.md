@@ -141,9 +141,10 @@ without invoking a transfer of an old selected minimum to new rewards.
 
 This support theorem leaves finite calendars and inherited endpoints. At
 the exact M14 benchmark, the separate
-[finite-mode exclusion](../exports/NO_FINITE_ACTUAL_MINIMA_AT_SMALL_PENALTY_M14.md)
-removes finite actual source minima at sufficiently small selectable
-penalties. That conclusion is not asserted throughout this open raw region.
+[direct equilibrium producer](../exports/M14_QUITTING_GAME_UNIFORM_EQUILIBRIUM.md)
+proves native absorbing gap zero and original-game UE, removing the entire
+positive-gap source there. That conclusion is not asserted throughout this
+open raw region.
 Exact four-owner ALL-END tails exist in the benchmark, so the support
 restriction itself does not exclude I4.
 

@@ -1,8 +1,6 @@
-"""Exact rational certificates for the M14 finite-source exclusion.
+"""Exact rational M14 native-root and no-Nash-prefix certificates.
 Requires SymPy; uses no floating arithmetic, sampling, or external files.
 """
-from itertools import product
-from math import comb
 import sympy as s
 Q=s.Rational
 Gamma=s.Matrix([[0,-1,-1,2],[-1,0,1,1],[1,2,0,-1],[1,-1,1,0]])
@@ -52,19 +50,3 @@ assert all(v>Q(37,1000) for v in A*blo)
 assert all(Q(12,25)<v<1 for v in A*s.ones(4,1))
 assert 1-4*Q(36,5)*Q(37,1000)==-Q(41,625)
 print('PASS native-Nash uniqueness and strict no-prefix rational certificates',flush=True)
-x=s.symbols('x0:4');t=s.symbols('t0:4')
-D=s.Matrix(4,4,lambda i,j:0 if i==j else L[i,j]-5*(sum(x[k] for k in range(4) if k not in(i,j))+s.prod(x[k] for k in range(4) if k not in(i,j))))
-det=s.Poly(D.det(method='domain-ge'),*x)
-u=[s.Poly(v,*x) for v in D.adjugate()*s.Matrix([0,0,1,0])]
-P=s.prod(1+q for q in x)
-S=s.expand(sum(s.prod(1+x[j] for j in range(4) if j!=i)*u[i].as_expr() for i in range(4)))
-polys=[det.as_expr(),13*P*det.as_expr()+11*S,-11*(P*u[2].as_expr()-x[2]*S)]
-expected=[Q(23793606226737828229,1953125000000000),Q(468002355419767964503678041841,3051757812500000000000000),Q(8171189161025339761981431647753,500000000000000000000000000)]
-for label,p,minimum in zip(['det D','positive survival gain','negative deficit gain'],polys,expected):
- p=s.Poly(p,*x);degrees=p.degree_list()
- q=s.Poly(p.as_expr().subs({x[i]:lo+(hi-lo)*t[i] for i,(lo,hi) in enumerate(box)},simultaneous=True).expand(),*t)
- bs=[]
- for k in product(*[range(v+1) for v in degrees]):
-  bs.append(sum(c*s.prod(Q(comb(k[i],m[i]),comb(degrees[i],m[i])) for i in range(4)) for m,c in q.terms() if all(m[i]<=k[i] for i in range(4))))
- assert min(bs)==minimum>0
- print('PASS',label,'degrees',degrees,'Bernstein coefficients',len(bs),'minimum',min(bs),flush=True)

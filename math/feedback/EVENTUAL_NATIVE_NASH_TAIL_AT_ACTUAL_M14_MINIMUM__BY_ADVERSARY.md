@@ -6,7 +6,7 @@ is a review of the full proof, not inherited approval of its component notes. I 
 420-line curation, including all new scope, source, boundary and handoff
 text. Its compressed proof retains every substantive step audited below.
 
-Proof: `math/exports/EVENTUAL_NATIVE_NASH_TAIL_AT_ACTUAL_M14_MINIMUM.md`
+Proof: `math/notes/EVENTUAL_NATIVE_NASH_TAIL_AT_ACTUAL_M14_MINIMUM.md`
 SHA256 `b7109fa02539682cf9a5d2485f8032ed6183585395378460b7d5a8959453b031`.
 Exact checker: `math/experiments/CODEX_NO_CHILD__EVENTUAL_CONTACT_CHECK.py`
 SHA256 `0d82103bf77edfba7b13ad92084bfe693371a4565083796999dcfa103021d1b8`.
