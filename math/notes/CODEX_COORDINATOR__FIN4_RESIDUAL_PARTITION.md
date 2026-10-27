@@ -7,11 +7,11 @@ the actual global source and inherited endpoints; Section10 adds a necessary
 raw pair test for one actual-source branch. These are different axes, with
 no unproved exclusions between them. None of the ten matrix templates or
 the ten global-source cases is universally solved for arbitrary tables.
-The exact M14 specialization is closed by the
-[direct equilibrium producer](../exports/M14_QUITTING_GAME_UNIFORM_EQUILIBRIUM.md):
-its native absorbing pivot minimum is zero, so none of these positive-gap
-source cases occurs there. This does not close a source case for arbitrary
-tables.
+The [no-child premium family](../exports/NO_CHILD_PREMIUM_FAMILY_UNIFORM_EQUILIBRIUM.md)
+has UE for every real M. For M>=11 and its stated unbounded raw completions,
+the native absorbing pivot minimum is zero, so none of these positive-gap
+source cases occurs there. No source case is universally closed for
+arbitrary tables.
 
 The [weighted collision theorem](../exports/WEIGHTED_COLLISION_DOMINANCE_UNIFORM_EQUILIBRIUM.md)
 separately supplies at most43 finite raw existence tests at each fixed
@@ -440,6 +440,16 @@ explicit G>=L0,B<=cG raw existence test from the weighted collision theorem.
 Every counterexample in this chamber must fail ALL ten. Arbitrary higher
 rewards outside these successful regions remain unresolved.
 
+The [observer-attractor theorem](CODEX_COORDINATOR__OBSERVER_ORTHANT_ATTRACTOR.md)
+now supplies a general local producer component in this singleton chamber.
+The condition R>0 is exactly what gives its signed Lyapunov weights on013.
+Under its additional raw joining conditions, every sufficiently small
+(-,+,+) observer annotation can be sent to zero by produced01/013 roots,
+with arbitrary finite higher rewards. Near a positive pivot axis, further
+smallness also prices that player's full comparison. Reaching such entries
+from nonnegative seeds and producing a bounded recurrent return family
+remain separate obligations; this does not eliminate the entire matrix cell.
+
 ### 7.2. Multiple strict pivots remain a finite polygon refinement
 
 For any pointed matrix(1), let V=B^-1 and R=cV. Its observer column j is
@@ -688,14 +698,14 @@ in [the fixed-cap controlled-window theorem](../exports/FIXED_CAP_CONTROLLED_WIN
 Every qualifying fixed full-support window must eventually contain a pivot
 contact at one of its marked dates. For the no-child premium ray M>=14,
 eventual full support forces geometric decay of the remaining finite masses.
-At the exact M14 table, the
-[direct producer](../exports/M14_QUITTING_GAME_UNIFORM_EQUILIBRIUM.md)
+For every M>=11 in the canonical no-child family and its stated raw
+completions, the [direct producer](../exports/NO_CHILD_PREMIUM_FAMILY_UNIFORM_EQUILIBRIUM.md)
 constructs actual finite profiles whose four native debts and joint Never
 probability all tend to zero. Their augmented limit belongs to C0 and has
 pivot debt zero, so m=0. Thus the positive-gap premise of this entire source
-partition fails at M14, for both actual and inherited alternatives. No
+partition fails, for both actual and inherited alternatives. No
 realization theorem or replacement preserving an inherited head is needed
-for this table. The generic partition above remains open.
+for these tables. The generic partition above remains open.
 
 ### 9.2. Inherited endpoint: classify its zero caps
 

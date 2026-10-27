@@ -4,7 +4,7 @@ This ordinary mathematical result partitions positive continuation caps by
 explicit polynomial inequalities for an arbitrary raw table in the chamber
 below. It gives a necessary condition at every positive subcritical global
 minimum. The M14 benchmark supplies an exact boundary control; its UE is
-proved separately by the [direct return producer](../exports/M14_QUITTING_GAME_UNIFORM_EQUILIBRIUM.md).
+proved separately by the [direct return producer](../exports/NO_CHILD_PREMIUM_FAMILY_UNIFORM_EQUILIBRIUM.md).
 This cap-region theorem does not assert that a particular cap vector is an
 executable continuation or produce UE for every table in the chamber.
 

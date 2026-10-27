@@ -34,9 +34,10 @@ source argument supplies at least one such positive direction per recipient.
 
 The separate global-source partition has five actual eventual-owner cases
 and five inherited endpoint cap patterns. None is universally solved over
-arbitrary raw tables; the M14 producer below closes every source case at one
-exact table, and other raw conditions exclude selected modes. The
-two-owner actual case now has explicit necessary interval tests using the
+arbitrary raw tables; the premium-family producer below eliminates the
+positive-gap source throughout its stated raw class, and other conditions
+exclude selected modes. The two-owner actual case has explicit necessary
+interval tests using the
 two quiet observers, including a stronger contact-rate test when late
 pivot-only atoms are impossible. These can remove that branch for a given
 table/pivot; they do not replace the other source obligations. One compact
@@ -44,76 +45,88 @@ exact checker verifies the matrix controls and the interval boundary cases.
 The matrix and source classifications are distinct axes, with no assumed
 incidence exclusions between them.
 
-## The M14 benchmark is solved
+## The no-child premium family is solved
 
-The [M14 equilibrium theorem](../exports/M14_QUITTING_GAME_UNIFORM_EQUILIBRIUM.md)
-constructs a uniform-equilibrium payoff `(4,4,4+b_*,4)`, with
-`b_* in [4/5,9/10]`, for the exact no-child benchmark. It also constructs
-actual finite native profiles with all four full behavioral debts and joint
-Never probability tending to zero. Thus its native absorbing pivot minimum
-is zero: every positive-gap actual and inherited source alternative is
-excluded at this table, including sparse calendars and finite heads followed
-by canonical Nash tails.
+The [premium-family theorem](../exports/NO_CHILD_PREMIUM_FAMILY_UNIFORM_EQUILIBRIUM.md)
+proves uniform equilibrium for the canonical no-child table `4+Z^M` for
+**every real M**. This closes the entire premium parameter, including its
+unbounded range. The canonical table has the displayed benchmark singleton
+matrix, four successor-pair premiums M-1, all other nonsingleton participant
+rewards -5, and passive nonsingleton rewards zero.
 
-The mechanism is a return on diagonal proxy values `b e2`. Three singleton
-limits and eight finite atoms lead to an explicit ray with one negative
-observer cap. A rational interval certificate supplies 305 observer roots;
-an analytic invariant cone supplies the remaining return to `b' e2`.
-Every return contracts joint survival by at most `45/311`, up to an arbitrary
-finite-word approximation error. Nonexpansiveness controls the errors when
-returns are concatenated. A terminal proxy cap above the actual postword cap
-converts these finite words into actual approximate equilibria. Compactness
-fixes the payoff before accuracy, and the proof controls every behavioral
-deviation at all sufficiently long horizons.
+For M>=11 the theorem also allows 32 nonsingleton coordinates to vary:
+twenty freely and twelve under explicit one-sided or coupled inequalities,
+all with unbounded ranges. It permits arbitrary signed recipient offsets
+and positive recipient scales. The proof produces actual finite native
+profiles whose four full behavioral debts and every marginal Never
+probability tend to zero. Thus the native absorbing pivot minimum is zero
+throughout this stated class; none of its positive-gap actual or inherited
+source cases remains. The singleton geometry and twelve observer
+nonsingleton coordinates remain restricted.
 
-The [complete checker](../experiments/M14_UNIFORM_EQUILIBRIUM_CHECK.py)
-uses exact rational outward intervals for every acceptance test. Two
-independent whole-proof reviews, including attempted falsification, are
-[here](../feedback/M14_QUITTING_GAME_UNIFORM_EQUILIBRIUM__BY_HEAD_REVIEW.md)
-and [here](../feedback/M14_QUITTING_GAME_UNIFORM_EQUILIBRIUM__BY_INHERITED_REVIEW.md).
-This is ordinary mathematics with a finite exact certificate, not a new
-Lean theorem.
+The mechanism combines an explicit prefix with an observer process that
+switches between supports 01 and 013. A signed linear potential decreases
+by at least the sum of the root odds, forcing all observer values to zero.
+An invariant cone prices every pivot deviation. The returned pivot value
+stays in a bounded positive interval, while each player's survival contracts
+for every fixed finite table. Finite-word approximation, repeated returns,
+and per-player survival control then supply the actual equilibrium and
+allow signed payoff offsets.
+
+The [self-contained checker](../experiments/NO_CHILD_PREMIUM_FAMILY_CHECK.py)
+verifies all 2,436 rational Bernstein coefficients needed for the cone over
+the entire parameter range. It uses no sampled roots or numerical orbits.
+Two independent whole-proof reviews, including attempted falsification, are
+[here](../feedback/NO_CHILD_PREMIUM_FAMILY_UNIFORM_EQUILIBRIUM__BY_ADVERSARY.md)
+and [here](../feedback/NO_CHILD_PREMIUM_FAMILY_UNIFORM_EQUILIBRIUM__BY_FRESH_REVIEW.md).
+This is ordinary mathematics with an exact finite certificate; Lean
+formalization remains outstanding.
 
 The [benchmark audit](CODEX_COORDINATOR__NO_CHILD_FIN4_BENCHMARK.md)
-retains its independent method boundaries: all 80 nonzero stationary
-patterns and all 65 sure-owner root patterns fail, as do the displayed
-complete trap, anchor, ledger, pair and scalar-circuit criteria. Actual
-positive-cap native Nash tails exist, and an exactly repaired canonical-tail
-family can have an interior Never minimum while admitting no Nash prefix.
-These explain why local exclusions alone do not supply the new return.
+retains independent method boundaries: exact stationary and sure-root
+exclusions, complete raw-selector failures, positive-cap native Nash tails,
+and an actual canonical-tail family with an interior Never minimum and no
+Nash prefix. M13 and M15 give additional exact separating tables for the new
+family theorem, as checked in its reviews. These obstructions are compatible
+with the switched observer producer.
 
-## What remains beyond M14
+## What remains beyond this family
 
-No arbitrary-table return producer is known. The five actual-source cases
-and five inherited cap patterns remain a partition of the generic
-positive-gap obligation for other tables. The concrete next producer problem
-is to find, from those raw rewards, a bounded family of proxy values above
-the true terminal caps and uniformly contracting finite-word returns into
-that family. M14 supplies one complete construction; it does not establish
-that every residual table has such returns.
+The generic actual/inherited source partition remains open for reward tables
+outside the stated existence classes. The new
+[observer attractor](CODEX_COORDINATOR__OBSERVER_ORTHANT_ATTRACTOR.md)
+provides a concrete next step: the positive-determinant observer singleton
+chamber admits signed Lyapunov weights, and explicit joining conditions
+produce an observer-zero limit from every sufficiently small cap vector
+with signs (-,+,+). All higher rewards may be arbitrary finite numbers.
+Near a positive pivot axis, a sufficiently small such entry also prices an
+arbitrary fourth player's full comparison. The remaining producer tasks
+are to reach these entries from nonnegative four-player seeds and produce
+a bounded recurrent family with uniform survival reduction. The family
+theorem supplies these global steps only under its stated raw data.
 
 The [open four-owner tail theorem](CODEX_COORDINATOR__FOUR_OWNER_TAIL_REGION.md)
-excludes every proper nonempty infinite-owner set throughout M>11 and on
-an explicit open region in the singleton and participant-pair entries.
-Higher rewards are arbitrary finite. It needs neither a positive absorbing
-gap nor genericity: actual ALL-END and zero observer debts suffice. Only F
-and I4 survive under this support test; inherited endpoints remain separate.
-The direct equilibrium theorem above is asserted only at exact M14.
+retains broader independent scope. Throughout its explicit open region in
+singleton and participant-pair entries, every proper nonempty infinite-owner
+set is excluded; higher rewards are arbitrary finite. Actual ALL-END and
+zero observer debts suffice. Finite calendars and four infinite owners
+remain under this support test, with inherited endpoints separate. The
+premium-family existence theorem does not cover every table in that region.
 
 The [fixed-cap controlled-window theorem](../exports/FIXED_CAP_CONTROLLED_WINDOW_MINIMUM_EXCLUSION.md)
-retains broader independent scope. A finite raw matrix test, including
-passive pair rewards, supplies negative constrained curvature for any number
-of players and preserves every entrance full cap. Its premium-ray certificate
-works for every M>=14, with arbitrary fixed finite higher-coalition rewards.
-An eventually full-support actual minimum on this ray has geometrically
-decaying remaining finite mass. Its complete reviews are
+also remains broader than the new existence class. Its finite raw matrix test
+works for any number of players and preserves every entrance full cap. The
+premium-ray certificate allows all fixed finite higher-coalition rewards,
+including ones outside the new producer's bounds. Under its hypotheses an
+eventually full-support actual minimum has geometrically decaying remaining
+finite mass. Its complete reviews are
 [here](../feedback/FIXED_CAP_CONTROLLED_WINDOW_MINIMUM_EXCLUSION__BY_ADVERSARY.md)
 and [here](../feedback/FIXED_CAP_CONTROLLED_WINDOW_MINIMUM_EXCLUSION__BY_FRESH_REVIEW.md).
 
 The [cyclic joining-cap theorem](CODEX_COORDINATOR__CYCLIC_JOINING_CAP_REGION.md)
-identifies the entire positive-continuation region admitting a nonzero Nash
-root under its raw joining-increment hypotheses for every n>=3. The region
-has a finite polynomial test, is convex after logarithms, and has one critical
+identifies the positive-continuation region admitting a nonzero Nash root
+under its raw joining-increment hypotheses for every n>=3. The region has a
+finite polynomial test, is convex after logarithms, and has one critical
 Perron boundary on each positive ray. A positive subcritical minimum must lie
 strictly outside it. This remains a necessary condition for other tables,
 not an arbitrary-table UE producer.

@@ -1,21 +1,21 @@
-# The M14 no-child benchmark: equilibrium and exact method boundaries
+# The no-child premium family: equilibrium and exact method boundaries
 
-The exact M14 table has a uniform equilibrium. The
-[direct producer](../exports/M14_QUITTING_GAME_UNIFORM_EQUILIBRIUM.md)
-gives one fixed payoff `(4,4,4+b_*,4)`, with `b_* in [4/5,9/10]`, and
-controls unrestricted behavioral deviations on every sufficiently long
-horizon. Its actual finite native profiles have all four debts and joint
-Never probability tending to zero. Thus the native absorbing pivot minimum
-is zero; no positive-gap actual or inherited source case remains at M14.
-Arbitrary Fin4 remains open.
+The canonical table `4+Z^M` has a uniform equilibrium for every real M, by
+[the premium-family producer](../exports/NO_CHILD_PREMIUM_FAMILY_UNIFORM_EQUILIBRIUM.md).
+For M>=11 it supplies a fixed payoff `(4,4,4+b_*,4)`, with
+`b_* in [3/16,2]`, and covers its displayed unbounded raw completions.
+Its actual finite native profiles have all four debts and every marginal
+Never probability tending to zero. Thus no positive-gap actual or inherited
+source case remains in that raw class. Arbitrary Fin4 remains open.
 
-This note retains exact method boundaries and local controls. Every
-stationary terminal Nash profile and every sure-first terminal Nash profile
-with arbitrary continuation is excluded, and several complete raw producer
-criteria fail. These failures are compatible with the new nonstationary
-producer. Conditional minimum restrictions below are tools for comparison,
-not remaining M14 counterexample cases. Results stated throughout M>11
-retain that broader scope.
+This note retains exact method boundaries and local controls, chiefly at
+M14. Every stationary terminal Nash profile and every sure-first terminal
+Nash profile with arbitrary continuation is excluded there, and several
+complete raw producer criteria fail. These failures are compatible with the
+switched observer producer. Conditional minimum restrictions below are tools
+for comparison, not remaining counterexample cases in the solved family.
+Support and window results allowing broader reward variation retain their
+separate scope.
 
 ## Table
 
@@ -210,8 +210,8 @@ At a hypothetical actual global minimum, the first root has support02,
 first/last support combinations on the finite side. The proofs below give
 further contact and hazard inequalities. Both finite and four-owner local
 controls satisfy positive-cap conditions, so local feasibility does not
-eliminate either branch. At exact M14 the direct producer rules out the
-positive-gap premise of both actual and inherited source alternatives.
+eliminate either branch. For the canonical family at every M>=11, the direct producer rules out
+the positive-gap premise of both actual and inherited source alternatives.
 
 The [cyclic joining-cap region](CODEX_COORDINATOR__CYCLIC_JOINING_CAP_REGION.md)
 gives a further global constraint. Positive continuation vectors admitting a
@@ -735,11 +735,12 @@ can have support only012 or0123. Combining it with the selected first root
 above leaves six possible first/last support pairs: first02,012,0123 and
 last012,0123. The first02 case has the additional exact contact and bound(1).
 These are necessary endpoint restrictions at an arbitrary prescribed penalty,
-not six strategy classes or a bound on the number of phases. At exact M14,
-the direct equilibrium producer independently proves m=0,
+not six strategy classes or a bound on the number of phases. For the canonical family at every M>=11,
+the direct equilibrium producer proves m=0,
 so there is no positive subcritical penalty and no positive-gap minimum of
 this kind. The endpoint restrictions remain useful conditional algebra for
-the broader premium family; they are not residual cases at the solved point.
+reward variations outside the solved class; they are not residual cases
+for the canonical premium family.
 
 ## Exact four-owner local profiles
 
@@ -1328,6 +1329,7 @@ its exact spectral and multiplier arguments also support the canonical-tail
 classification above.
 
 The local controls are not global minima and are not counterexamples to UE.
-The separate M14 equilibrium producer proves native absorbing gap zero and
-original uniform equilibrium. The arbitrary-table Fin4 problem, including
+The separate family producer proves native absorbing gap zero for M>=11
+and original uniform equilibrium for every real M. The arbitrary-table Fin4
+problem, including
 its generic actual/inherited source alternatives, remains open.

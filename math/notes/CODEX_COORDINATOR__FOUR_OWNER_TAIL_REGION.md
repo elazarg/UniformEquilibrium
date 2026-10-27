@@ -140,11 +140,11 @@ late(2) applies, not these raw conditions. This includes generic tables
 without invoking a transfer of an old selected minimum to new rewards.
 
 This support theorem leaves finite calendars and inherited endpoints. At
-the exact M14 benchmark, the separate
-[direct equilibrium producer](../exports/M14_QUITTING_GAME_UNIFORM_EQUILIBRIUM.md)
-proves native absorbing gap zero and original-game UE, removing the entire
-positive-gap source there. That conclusion is not asserted throughout this
-open raw region.
+every canonical benchmark parameter M>11, the separate
+[direct equilibrium producer](../exports/NO_CHILD_PREMIUM_FAMILY_UNIFORM_EQUILIBRIUM.md)
+proves native absorbing gap zero and original-game UE, also for its stated
+unbounded raw completions. That conclusion is not asserted throughout the
+whole open raw region of this support theorem.
 Exact four-owner ALL-END tails exist in the benchmark, so the support
 restriction itself does not exclude I4.
 
