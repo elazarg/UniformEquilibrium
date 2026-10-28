@@ -475,3 +475,208 @@ All displayed polynomial formulas, discriminants, rational endpoints and
 thresholds were checked by exact symbolic arithmetic. No Lean check was run.
 The two half-line producers cover every real K under the displayed strip
 hypotheses. The remaining parameter regions are not closed by this argument.
+
+## 6. Two collision coordinates: complementary return and punishment regions
+
+This section changes the fixed table, rather than extending Section5's
+quantifiers to unspecified higher rewards. Use the complete native table in
+Section3 of the [three-owner return theorem](../exports/THREE_OWNER_JOINT_RETURN_UNIFORM_EQUILIBRIUM.md),
+fix eta=12281660/12608823, and vary
+
+    R=Z0(23), t=Z3(023), K=-Z1(12), p=Z2(12).
+
+All other native entries remain exactly those printed there. Original own
+levels are arbitrary. The following are rigorous ordinary mathematical
+conclusions, not Lean checks or a complete classification of this surface:
+
+| Raw region | Sufficient K | Produced profile |
+|---|---:|---|
+|t<=28599/29, every real R|K>=1|Five-date joint02 return|
+|Every real t, R>=-24669707057411/1265373653200|K>=4|Return or two-date punishment|
+|t=987, R<=-4362032648577602898/131342371529720117|K>=2|Finite joint023 return|
+
+Every row permits arbitrary real p and arbitrary original own levels. The
+second row closes the entire t axis on the half-plane R>=-19.495986... .
+The third row covers the whole left tail R<=-33.211161... at t=987.
+No claim that these regions exhaust all existing producers is made.
+
+### 6.1 Complete t axis on the right half-plane
+
+Put t0=28599/29 and Rstar=-24669707057411/1265373653200.
+For t<=t0, use the five-date certificate in Section6 of the
+[direct-return theorem](../exports/CORE_FREE_JOINT_RETURN_UNIFORM_EQUILIBRIUM.md).
+Its only joint date has hazards x=87/947,b=3/10 for players0,2. All other
+dates have solo player3. R occurs in none of its expectations or deviation
+offers. Changing t changes only the quiet3 joint Quit offer, which is
+
+    x*b*(t-t0).
+
+The current player3 value is zero, so this comparison holds exactly when
+t<=t0, including equality. All other comparisons and the opponents-only
+absorption bound are unchanged. This proves the first row of the table.
+
+For t>=t0 and R>=Rstar define
+
+    x=2929/(29t+3148), z=9/(10R+209).
+
+At date1 prescribe hazards (x,0,1,z). After all Continue, prescribe certain
+quitting by players0,1 at date2, while players2,3 Continue. Later play is
+irrelevant. Since Rstar>-39/2>-20 and t0>986, both mixed hazards are proper.
+Players0 and3 face certain player2 quitting at date1. Their indifferences are
+
+    Quit0-Continue0 = 9/10-(R+209/10)*z = 0,
+    Quit3-Continue3 = -101+(t+3148/29)*x = 0.
+
+A player2 deviation reaching date2 faces Continue reward Z2(01)=-10 and
+Quit reward Z2(012)=-100. Its exact native FULL continuation cap is -10.
+Writing a2=2+eta, its date1 Quit and complete Continue offers are
+
+    Q2=a2*x*(1-z)+3*(1-x)*z-100*x*z,
+    C2=2*x*(1-z)-(1-x)*z-5*x*z-10*(1-x)*(1-z).
+
+Their exact difference is
+
+    Q2-C2 = [1260882300*R*t+21926311900*R
+             +25671563628*t-646880811457]
+               /[434787*(10R+209)*(29t+3148)].       (6.1)
+
+Its numerator vanishes at (Rstar,t0). Its R derivative is positive for
+t>=t0. Its t derivative is 1260882300*R+25671563628, already positive at
+R=-39/2. Thus (6.1) is nonnegative on the whole closed quadrant.
+
+Quiet player1 faces certain absorption by player2 and has
+
+    P1=(1+9*x+17*z-43*x*z)/2,
+    Q1=-K*(1-x)*(1-z)+6*x*(1-z)+11*(1-x)*z-9*x*z.
+
+The Continue-minus-Quit margin increases with K. At K=4 it is exactly
+
+    [1305*R*t-19435*R+25578*t-366281]
+       /[(10R+209)*(29t+3148)].                     (6.2)
+
+The numerator increases in R and t throughout R>=-39/2,t>=986 and equals
+282749/2>0 at that lower corner. Hence every root comparison holds for K>=4.
+
+Every deviator other than player2 faces sure player2 at date1; a deviating
+player2 faces sure players0,1 by date2. Thus every complete behavioral
+replacement absorbs by date2. Restoring own levels adds the same kappa_i
+to every compared payoff. The prescribed payoff is the fixed target given
+by kappa plus the native date1 expectation, and uniform O(1/T) terminal-to-
+average error gives the original uniform-equilibrium contract. The punishment
+need not itself be an equilibrium: only its actual response cap for player2
+is used, and that cap has been computed. This proves the second row.
+
+For a slightly sharper t=987 slice, the same calculation gives
+
+    R>=-24690952489379/1266417142000, K>=3.
+
+Indeed x=2929/31771, and (6.1) becomes
+
+    [126641714200-197462864269*z]/13813617777.
+
+Thus z<=zmax=126641714200/197462864269. Quiet1's necessary and sufficient
+bound is K>=(66247*z-11492)/(28842*(1-z)); it increases with z, and its
+value at zmax is 3060195202214026/1021311805145049<3. At R=-6 the hazards
+are x=2929/31771,z=9/149, and even K>=-223217/807576 suffices.
+
+### 6.2 An automatic left tail with no assumed quadratic root
+
+Fix t=987 and put b=319/1066,x=319/3475. For lambda>0 define
+
+    R(lambda)=-(1714394856543602220*lambda^2
+                -698031641881466077*lambda-61079706181272)
+                 /[11214320*lambda*
+                       (8242257159*lambda-1923377191)].       (6.3)
+
+On 0<lambda<=3/500 the denominator is nonzero, the function tends to
+-infinity at zero, and
+
+    R(3/500)=-4362032648577602898/131342371529720117=:Rleft.
+
+Continuity therefore supplies a lambda in that interval for EVERY finite
+R<=Rleft; monotonicity is unnecessary. Solving the three-owner theorem's
+quadratic for R gives exactly (6.3): only
+
+    a0=-23-b*(R+20)/(1-b)
+
+depends on R, and its coefficient in that equation is nonzero here. Thus
+the selected lambda is a genuine physical quadratic root. Its constant
+coefficient is nonzero, so the polynomial is never identically zero.
+
+All remaining guards can be checked on a compact lambda interval without
+interval-evaluating the unbounded R itself. Put
+
+    z=lambda/(1+lambda), T=x*eta/(1-x),
+    X0=(-b/10-20lambda)/(1+lambda),
+    X2=[x*(2+eta)+lambda*(3-103x)]/(1+lambda),
+    U2=T+lambda*[4-95x/(1-x)],
+    tau=(X2-U2)/(X2+1), U0=3tau+(1-tau)X0.
+
+The last expression equals the theorem's C+lambda*a0 at R=R(lambda).
+Define H=(1-x)(1-b)(1-z), and the literal passive row1 sum
+
+    P1=(1-z)*[2x(1-b)+(1-x)b/2+5xb]
+        +z*[-3(1-x)(1-b)+3x(1-b)+9(1-x)b-8xb],
+    X1=(P1-3tau*H)/[1-(1-tau)H],
+    j=3tau-(1-tau)X1, a=1/20,
+    Y=(3a+(1-a)X0,-3a+(1-a)X1,-a+(1-a)X2,0).
+
+Here is a finite exact verification of every required guard. Partition
+[0,3/500] into the100 intervals [3n/50000,3(n+1)/50000], n=0,...,99.
+On each interval use exact rational endpoint addition, the minimum and
+maximum of the four endpoint products, and reciprocal [l,u] -> [1/u,1/l]
+only when zero is excluded. Evaluate the preceding formulas in their printed
+order. Every denominator excludes zero; every resulting bound satisfies
+
+    Y0>.0084, Y1>.1434, Y2-3a>.0212,
+    U0>.279, U2>.0648, X1>.3089, X2>.2328,
+    j>0, U2-3j/100>.0607,
+    tau-a>.0859, 1-tau>.8625, X0<0.
+
+All decimals are exact rationals. These are reproducible finite rational
+inequalities, not floating-point sampling. They prove the prefix, physical
+continuation and wash guards of the three-owner theorem. In particular,
+Y0>0 gives the required prefix lower bound, and the positive Y1 and Y2-3a
+give its two other upper bounds. At the joint date, the positive quiet1
+Quit terms divided by (1-x)b(1-z) are at most
+
+    6x/(1-x)+19lambda < 2/3+57/500 <1.
+
+Hence K>=2 suffices. The theorem now constructs the finite wash and return;
+the opponents-only absorption bound proves its full behavioral and original
+uniform-payoff conclusions. The finite period length need not be five.
+This proves the third row without assuming any strategic witness or root.
+
+### 6.3 A concrete gap requiring a different mechanism
+
+At R=-25,t=987,p=0,K>=1000,original own levels all1, neither preceding
+tail closes the table. For a period with one proper joint023 date and
+otherwise proper solo3 dates, at least one with positive hazard, the
+necessary polynomial is, up to positive scale,
+
+    -596387876039319780*lambda^2
+      -158797459367088077*lambda-61079706181272.
+
+All coefficients are negative, so there is no positive root. The row3
+equations uniquely force b=319/1066,x=319/3475; another root selection
+cannot repair this architecture. This is not a no-UE conclusion.
+
+For the same table, apply the exact census algorithm in Section6.1 of the
+three-owner theorem. Recompute its coefficient dictionaries and origin
+constants after substituting R=-25 in the literal table. The continuation
+lower vector is L=(-25,-8,-10,-12); all other algorithmic rules are unchanged.
+Exact rational Bernstein subdivision excludes all80 nonzero stationary
+patterns in866 nodes and all65 sure-first patterns in197 nodes, with no
+unresolved box. AllNever fails because original own rewards are positive.
+The complete table and cited algorithm specify this computation without any
+temporary checker dependency. Thus a different stationary or sure-first root
+cannot repair this particular gap. No all-behavior regret gap is established.
+
+The relevant existing semantic declarations are
+`quittingContinuationBestResponseValue_rootThenContinuation_eq_max`
+(`UniformEquilibrium/Quitting/Root/TerminalDebtPrefix.lean`) and
+`quittingGame_fixedProfile_uniformPayoffWitnesses_of_terminalNash_exact`
+(`UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`).
+Their full-cap and fixed-target scopes were inspected; no Lean command was run.
+The next concrete question is a nonstationary producer for R=-25,t=987,
+with a genuinely different joint/return schedule.

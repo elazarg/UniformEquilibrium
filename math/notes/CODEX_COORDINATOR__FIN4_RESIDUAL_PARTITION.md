@@ -64,6 +64,15 @@ quiet3 Quit offer. The new theorem still requires its physical-root,
 continuation, prefix and wash tests; it does not close every table that
 fails the old quiet3 guard or any entire global-source case.
 
+Section6 of the complete-axis note partitions two higher-reward coordinates
+of this fixed table, R=Z0(23) and t=Z3(023). For K>=4 and R>=-19.495986...,
+EVERY real t is covered: the old return handles t<=28599/29, and a sure
+player2 root with an actual two-date punishment handles the complement.
+At t=987 the three-owner producer separately covers every R<=-33.211161...
+with K>=2. At R=-25,t=987,p=0,K>=1000,own levels1, exact calculations
+exclude all stationary/sure-first choices and the one-joint/solo3 return;
+this is a concrete remaining construction target, not a counterexample.
+
 The [root geometry extension](CODEX_COORDINATOR__JOINT_RETURN_ROOT_GEOMETRY.md)
 replaces the finite-core producer's simple-root assumption by a sign-changing
 root, including its adjacent-length boundary. In the positive d chamber,
