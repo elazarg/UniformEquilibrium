@@ -72,6 +72,11 @@ At t=987 the three-owner producer separately covers every R<=-33.211161...
 with K>=2. At R=-25,t=987,p=0,K>=1000,own levels1, exact calculations
 exclude all stationary/sure-first choices and the one-joint/solo3 return;
 this is a concrete remaining construction target, not a counterexample.
+Sections5–6 of the solo-return note additionally exclude every exact calendar
+of separated joint02/023 and solo3 dates, including infinite nonperiodic
+calendars, and every period with two adjacent proper joint023 dates followed
+by a proper solo3 return. These are restrictions on exact architectures;
+they do not exclude vanishing-error profiles or arbitrary behavior.
 
 The [root geometry extension](CODEX_COORDINATOR__JOINT_RETURN_ROOT_GEOMETRY.md)
 replaces the finite-core producer's simple-root assumption by a sign-changing

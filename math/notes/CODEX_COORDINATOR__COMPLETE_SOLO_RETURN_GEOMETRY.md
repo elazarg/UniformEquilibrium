@@ -287,3 +287,302 @@ new Lean theorem is asserted.
 The scalar criterion isolates a real first-root barrier. Progress beyond
 it requires another support or another continuation geometry; subdivision,
 overshooting, and longer solo3 words cannot change that obstruction.
+
+## 5. No exact separated-joint calendar at the middle point
+
+Status: ordinary mathematics, not Lean checked. An architecture obstruction,
+not a counterexample or an obstruction to vanishing-error equilibria.
+
+Use the complete native table in Section3 of the
+[three-owner theorem](../exports/THREE_OWNER_JOINT_RETURN_UNIFORM_EQUILIBRIUM.md),
+with eta=12281660/12608823, R=Z0(23)=-25,
+t=Z3(023)=987, and arbitrary K,p. Only its rows0,2,3 enter this proof;
+player1 never quits, so its penalty K and the row2 reward p at coalition12
+are unused.
+Consider a deterministic live-state calendar whose nonempty dates are either
+proper joint02 hazards (x,0,b,0), proper joint023 hazards (x,0,b,z), or proper
+solo3 hazards (0,0,0,q). Here every displayed active probability lies strictly
+between zero and one. Require every two successive joint dates to be separated
+by at least one positive solo3 date; consecutive solo3 dates are allowed.
+
+THEOREM. No almost-surely absorbing calendar of this form has exact Bellman
+Nash comparisons at every date. Consequently no nonempty finite-period calendar in
+this class is an exact terminal Nash profile. If original own levels are all
+strictly positive, no finite or infinite exact terminal Nash profile of this
+calendar form exists, even without assuming absorption in advance.
+
+This rules out arbitrary lengths and nonperiodic separated-joint schedules.
+It does not rule out adjacent joint dates, different active sets, arbitrary
+behavioral profiles, or approximate Nash profiles with errors tending to zero.
+
+### 5.1 A scalar quantity and exact joint drift
+
+Use actual conditional native continuation vectors V. Under almost-sure
+prescribed absorption these are legitimate row shifts of original payoffs.
+They are bounded by the finite reward ranges. Finite activity with proper
+hazards cannot absorb almost surely. If there are only finitely many joint
+dates, an almost-surely absorbing tail consists only of solo3 dates; its
+actual native row2 value is -1, contradicting the positive quiet2 Quit
+offer at any positive solo3 date. Thus it suffices to consider infinitely
+many joints and discard a finite initial partial block. At a positive solo3 date,
+owner3 indifference forces its continuation and current value to be zero.
+For the other rows, current V and successor U satisfy
+
+    V=q*(3,-3,-1,0)+(1-q)*U.
+
+Quiet2's offer is 3q, so V2>=3q>0 and U2=(V2+q)/(1-q)>0.
+Thus all annotations adjacent to solo3 dates have positive row2. Every joint
+is bracketed by such dates (discard an initial partial block in an infinite
+calendar). Throughout the remaining calendar, 0<V2<=3: player1 never quits
+and every possible prescribed row2 absorbing reward is at most3.
+Likewise -25<=V0<=3. Define
+
+    Phi(V)=(V0-3)/(V2+1),     -28<=Phi(V)<=0.
+
+It is unchanged across every solo3 date.
+
+A separated joint has current X3=0 and successor U3=0. Put
+
+    b*=319/1066, eta=12281660/12608823.
+
+For a joint02 date, row3's passive equality forces
+x=b/[1+(219/29)b]. Its quiet3 Quit comparison then forces b<=b*<3/10.
+Active0,2 indifference gives
+
+    X0=-b/10, X2=x*(2+eta),
+    U0=9b/[10(1-b)], U2=x*eta/(1-x).
+
+Writing W=(U0-3)(X2+1)-(U2+1)(X0-3), direct expansion gives
+
+    W=29b(10b-3)(71659209b^2-1272539233b-210147050)
+        /[4347870(b-1)(190b+29)(219b+29)] <0.       (1)
+
+Moreover, on 0<b<=b*,
+
+    -W >= (1682/1306383)*b > b/1000.              (2)
+
+To verify this bound, use 3-10b>=4/533, the absolute value of the quadratic
+factor at least210147050, and
+(1-b)(190b+29)(219b+29)<=86*95. All inequalities include endpoints.
+Since both row2 annotations are at most3,
+
+    Phi(U)-Phi(X)=W/[(U2+1)(X2+1)] <=-b/16000.
+
+The date's prescribed absorption probability alpha=x+b-xb satisfies
+alpha<=2b. Thus Phi falls by at least alpha/32000.
+
+For a joint023 date, its active3 indifference and both zero annotations force
+
+    b=b*, x=319/3475.
+
+Set lambda=z/(1-z)>0. Current and successor outer rows are
+
+    X0=(-b/10-20lambda)/(1+lambda),
+    X2=[x*(2+eta)+lambda*(3-103x)]/(1+lambda),
+    U0=9b/[10(1-b)]+lambda*[-23+5b/(1-b)],
+    U2=x*eta/(1-x)+lambda*[4-95x/(1-x)].
+
+Positivity of X2 implies lambda<206246183/4876570992<1/20.
+Now W=(1+lambda)*[(U0-3)(X2+1)-(U2+1)(X0-3)] is exactly
+
+    -319*(596387876039319780lambda^2
+          +158797459367088077lambda+61079706181272)
+          /12656828795288418000.                 (3)
+
+Every coefficient inside parentheses is positive, and
+-W>=811851094659407/527367866470350750>1/1000.
+The denominator (1+lambda)(U2+1)(X2+1) is less than17.
+Therefore Phi falls by more than1/17000, hence by at least alpha/17000.
+Combining the two joint types, every joint decreases Phi by at least
+alpha/40000, while every solo3 date leaves it unchanged.
+
+### 5.2 Infinite calendars cannot absorb almost surely
+
+The bounded range of Phi implies that the sum of joint absorption
+probabilities is finite. More explicitly it is at most28*40000 after any
+initial partial block. At a solo3 date,
+
+    U2-V2=q*(U2+1)>=q.
+
+At a joint date, write V2=P2+(1-alpha)U2. The current prescribed coalition
+rewards lie between-100 and3, and U2<=3. Hence
+
+    U2-V2 >= -103*alpha.
+
+Telescoping the row2 values over any finite initial interval now yields
+
+    sum_solo q <= 3+103*sum_joint alpha.
+
+Thus the sum of ALL prescribed datewise absorption probabilities is finite.
+Every individual probability is less than1 because all active hazards are
+proper. Their survival product is strictly positive, contradicting the
+assumed almost-sure absorption. In a periodic calendar the strict scalar
+decrease already gives an immediate contradiction after one period.
+
+### 5.3 Removing the absorption assumption for positive original own levels
+
+For completeness, suppose an exact original terminal Nash calendar with
+strictly positive kappa_i had positive probability of Never. Then all four
+sums of datewise hazards are finite. In particular, opponents' current
+quitting probabilities tend to zero, and conditional probabilities of any
+future prescribed absorption tend to zero. At sufficiently late live dates,
+the prescribed original conditional payoff tends to zero, while the immediate
+Quit payoff of each player tends to its kappa_i>0. The live history has
+positive probability. Deviating only there gives a strict improvement, a
+contradiction. Hence every such exact original Nash calendar must absorb
+almost surely; the preceding obstruction applies.
+
+This last argument uses complete deviation agency and actual conditional
+payoffs, not assumed continuation annotations. It is not uniform in the
+approximation error and supplies no unrestricted positive exploitability gap.
+
+## 6. Two adjacent triple dates do not repair the middle point
+
+Ordinary mathematics with an exact rational elimination certificate, not Lean
+checked. This is an architecture exclusion, not a UE counterexample or a new
+conjecture-facing export. Use the complete table of Section3 in
+`math/exports/THREE_OWNER_JOINT_RETURN_UNIFORM_EQUILIBRIUM.md`, replacing
+R=Z0(23) by -25, with t=Z3(023)=987 and eta=12281660/12608823. K,p and original
+own levels may be arbitrary: the exclusion does not use row1 or coalition12.
+
+**Claim.** No exact terminal Nash period consists of two adjacent dates at
+which precisely owners0,2,3 mix properly, followed by a nonempty finite word
+of proper solo3 dates. Cyclic rotations and inserted all-Continue dates do not
+change the statement. This leaves three or more adjacent joint dates, different
+active supports, sure phases and arbitrary nonperiodic strategies open.
+
+### 6.1 Necessary equations and exact elimination
+
+Let the two joint dates have hazards (x,0,a,z1) and (y,0,b,z2), with all six
+nonzero coordinates strictly between zero and one. Write l=z1/(1-z1)>0 and
+m=z2/(1-z2)>0. A proper solo3 date forces native value3 to zero at both its
+ends, so the first joint input and second joint output have row3 value zero.
+At a joint date with hazards (u,0,v,z), the native player3 offers are
+
+    P3=v-u-(219/29)*u*v,
+    Q3=u-100*v+1086*u*v,
+    H3=(1-u)*(1-v).
+
+The first Q3 must vanish; the second P3=Q3. Thus necessarily
+
+    x=100*a/(1+1086*a),
+    y=2929*b/(58+31713*b).
+
+The intervening value is P3 at the second date, so the remaining row3 equation
+is P3(x,a)+H3(x,a)*P3(y,b)=0. Up to its nonzero factor this is p(a,b)=0, where
+
+    p=30481204*a^2*b^2-42927544*a^2*b-61828*a^2
+      -30450290*a*b^2+19228682*a*b+18502*a
+      -30914*b^2+9251*b.
+
+For an arbitrary joint hazard pair(u,v), define
+
+    C(v)=9*v/[10*(1-v)], T(u)=eta*u/(1-u),
+    A0(v)=-23+5*v/(1-v), A2(u)=4-95*u/(1-u).
+
+Owner0/2 indifference requires successor values C(v)+A0(v)*odds and
+T(u)+A2(u)*odds. Their current values are
+
+    Q0(v,odds)=(-v/10-20*odds)/(1+odds),
+    Q2(u,odds)=[u*(2+eta)+(3-103*u)*odds]/(1+odds).
+
+Set V=l*(1+m). The first-date successor equals the second-date input, giving
+an exact linear system for V,m:
+
+    M [V,m]^T = [-b/10-C(a), y*(2+eta)-T(x)]^T,
+    M = [[A0(a), C(a)+20],
+         [A2(x), T(x)-3+103*y]].                 (A)
+
+All its coefficients are explicit rational functions of a,b. Where M is
+invertible solve (A), then l=V/(1+m). Define
+
+    X0=Q0(a,l), X2=Q2(x,l),
+    U0=C(b)+A0(b)*m, U2=T(y)+A2(y)*m.
+
+The solo3 return, with any number of dates, lies on an affine line parallel
+to G=(3,-3,-1,0). Therefore the second necessary equation is
+
+    (U0-3)*(X2+1)-(U2+1)*(X0-3)=0.              (B)
+
+The current value U2 before the first positive solo3 hazard must be positive:
+its Quit offer equals3q>0. We show that (A),(B),p=0 never supply this.
+
+### 6.2 Complete finite algebraic certificate
+
+All polynomial operations in this paragraph are over the rationals. Cancel
+each rational function before taking its numerator. For an explicit convention,
+use the rational expressions (A) and Cramer's rule, without primitive-part
+normalization, then cancel as usual; global nonzero scalar factors do not
+change any root or Sturm variation difference.
+
+The common polynomial denominator of the Cramer solutions V,m, up to constants,
+is
+
+    D=76393665241525179*a^2*b-340455325400506*a^2
+      -38551100718248691*a*b+323433727449644*a
+      -229721533207530*b-20111072685.
+
+In fact det(M)=-2D/[63044115*(a-1)*(986a+1)*(31713b+58)].
+Let NV,Nm denote the reduced polynomial numerators of V,m. Exact resultants give
+
+    gcd(Res_a(D,p), Res_a(D,NV), Res_a(D,Nm))
+       = nonzero constant * (31713b+58).
+
+Thus no singular compatible system exists with 0<b<1. This handles the case
+that would otherwise be lost by Cramer's rule.
+
+Let r be the reduced numerator of the left side of (B). Its bidegree in(a,b)
+is(6,6). The resultant Res_a(p,r) is a nonzero constant times
+
+    b*(31713b+58)^2*h(b),
+
+where h has degree19. These definitions specify h without retaining its large
+integer coefficient list. The subresultant chain of r,p in the variable a has
+degrees6,2,1,0. Its linear member is L1(b)*a+L0(b), with
+
+    gcd(h,L1)=1.
+
+Every candidate in the physical interval therefore has
+`a=-L0(b)/L1(b)`. The rational function has reduced numerator and denominator
+of degree16. Sturm's sequence of h has variations V(0)=13,V(1)=5. There are
+exactly eight roots in(0,1), one in each of the following rational intervals;
+N means the interval(N/10^8,(N+1)/10^8).
+
+| N | Variations at its two ends | Certified failure |
+|---:|---:|---|
+|1433|13,12|a<0|
+|139241|12,11|l<0 and m<0|
+|756524|11,10|l<0 and m<0|
+|1649695|10,9|a<0|
+|42078231|9,8|-94/1000<U2<-93/1000|
+|60087710|8,7|-447/1000<U2<-446/1000|
+|66721526|7,6|a<0|
+|73975975|6,5|a<0|
+
+The sign checks use rational root isolation refined to width below10^-50,
+Horner interval evaluation of -L0/L1, and literal rational interval evaluation
+of the Cramer expressions and U2. Reciprocal is used only when its denominator
+interval excludes zero. These instructions give a finite reproducible exact
+certificate from the small formulas (A),(B),p and eta; no numerical optimizer
+or floating sign decision is an input. Each listed h root is simple. The two
+remaining probability/odds candidates have positive l,m but strictly negative
+U2, contradicting the first positive solo3 comparison. This proves the claim.
+
+### 6.3 Scope and source audit
+
+The argument only uses necessary active indifferences, payoff transport and one
+quiet2 comparison; quiet1 can only further restrict the candidate set. Under
+this proper periodic architecture every unilateral replacement faces positive
+opponents-only absorption per period, so subtracting the original own levels
+is valid. Thus the same exclusion applies to arbitrary original own levels.
+
+The full root/continuation cap interface inspected was
+`quittingContinuationBestResponseValue_rootThenContinuation_eq_max`
+(`UniformEquilibrium/Quitting/Root/TerminalDebtPrefix.lean`). No Lean command
+was run. The mathematical definitions here give only an exclusion of the
+stated finite grammar; they do not estimate unrestricted terminal exploitability.
+
+This settles the most immediate adjacent-pair extension of the failed
+single-joint return. A concrete next question is whether changing the active
+support inside the adjacent block, or using three adjacent joint dates, can
+produce a positive exit at this same raw table.
