@@ -27,6 +27,32 @@ the positive-Gamma10 control at ell=1/2, outside both prior return criteria
 under every relabeling. This closes a reward region, not a whole source case;
 no numerical threshold such as K=100 is claimed.
 
+The [joint-return theorem](../exports/JOINT_QUITTING_NEGATIVE_VALUE_UNIFORM_EQUILIBRIUM.md)
+adds an explicit cubic raw test with positive joining excess, arbitrary real
+pair reward p and K>=M(1+|p|). It permits either sign of Z0(02) above Gamma02,
+positive Z0(03) under its prefix test, and arbitrary other row0 joining rewards.
+Its finite-core construction covers the transitions between adjacent core
+lengths. A separate exact certificate proves a75-date equilibrium at the
+fully specified K=1000, eta=1/100 table and throughout a neighborhood in all60
+original rewards. The example escapes stationary/sure-first producers and
+all14 proper-child choices in the five raw withdrawal families.
+
+Within that singleton/core template, the complementary inequality
+Z0(02)<=Gamma02 already gives a pure stationary player2 equilibrium when
+kappa2>=0, K>=max(0,-Gamma12), and Z3(23)<=Gamma32: each observer's joining
+reward is at most its passive singleton reward, and player2 cannot improve
+its nonnegative own reward by Never. This elementary complement needs its
+own-level hypothesis. The cubic and other return guards on the surviving
+side are not automatic; arbitrary collision rewards remain open.
+
+The [harmonic prefix test](CODEX_COORDINATOR__HARMONIC_PREFIX_ORDER_TEST.md)
+separately constrains a genuine global minimum at harmonic equality by75
+explicit weak-order inequalities. A negative test gives full-regret descent;
+a strictly positive minimum blocks every sufficiently small finite prefix,
+uniformly over calendar length. Equality and the strict harmonic interior
+remain unresolved by that second-order test. This is an internal source
+restriction and method boundary, not a new UE reward class.
+
 For the inherited pattern with three zero observer caps, the
 [complete word optimization](CODEX_COORDINATOR__INHERITED_ABSORBING_WORD_OPTIMIZATION.md)
 exhausts all finite, countable and limiting alternations of the endpoint and
