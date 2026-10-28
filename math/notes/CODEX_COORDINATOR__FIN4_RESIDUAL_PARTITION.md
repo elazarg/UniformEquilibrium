@@ -37,6 +37,20 @@ fully specified K=1000, eta=1/100 table and throughout a neighborhood in all60
 original rewards. The example escapes stationary/sure-first producers and
 all14 proper-child choices in the five raw withdrawal families.
 
+The [direct joint return](../exports/CORE_FREE_JOINT_RETURN_UNIFORM_EQUILIBRIUM.md)
+covers the complementary wash inequality, including its equality boundary
+and nonnegative continuations. Together the two producers cover the
+[complete positive joining-excess axis](CODEX_COORDINATOR__COMPLETE_JOINING_EXCESS_AXIS.md)
+of the displayed canonical family: every eta>0 and every real p, with a
+finite sufficient K threshold. On the whole tail
+eta>=305713711170/4725703339153, its explicit K bound is independent of
+both p and eta. The direct producer uses only one joint02 date and solo3
+dates; its exact rational example has five dates and works for every K>=1
+and arbitrary p. At p=0 and K>=1000 that example is stationary-free and
+fails the finite-core guard strictly. This closes a surviving region, with
+no arbitrary-table or whole-source-case conclusion. The singleton sign
+architecture and the other raw return guards still restrict the class.
+
 Within that singleton/core template, the complementary inequality
 Z0(02)<=Gamma02 already gives a pure stationary player2 equilibrium when
 kappa2>=0, K>=max(0,-Gamma12), and Z3(23)<=Gamma32: each observer's joining
