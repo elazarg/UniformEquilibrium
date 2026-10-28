@@ -1,9 +1,13 @@
-# Singleton topology for the signed joint-return architecture
+# The residual singleton sign atlas and its strategy boundaries
 
-Owner: CODEX_COORDINATOR. Proved finite sign classification, ordinary mathematics, not Lean
-checked. This concerns the prerequisites of one specified return architecture,
-not equilibrium existence or an obstruction to more general joint/solo returns.
-No higher-reward, physical-root, prefix or continuation guard is automatic.
+Owner: CODEX_COORDINATOR. Ordinary mathematics, not Lean checked. Sections1–3
+classify signed joint-return prerequisites. Section4 gives exactly21 realizable
+full sign orbits under the listed necessary singleton restrictions. The linked
+absorption-path theorem excludes diffuse Nash-approximation sequences on that
+residual when at least one own singleton payoff is positive.
+These classify known matrix restrictions and strategy architectures;
+they do not prove UE on a new reward class. Higher-reward, physical-root,
+prefix and continuation guards remain independent.
 
 ## 1. Exact conclusions
 
@@ -102,115 +106,11 @@ violate its negative column. The complete pointed degree formula then gives
 degree +1. Thus the failures satisfy all the residual hypotheses, not merely
 necessary sign approximations. Pivot0 is the least original strict pivot.
 
-The following standalone standard-library code is the finite certificate.
-It checks the entire sign census and all exact witnesses; no sampled or
-floating-point calculation enters the proof.
-
-```python
-from itertools import product, permutations, combinations
-from fractions import Fraction as Q
-
-I = range(4)
-P = list(permutations(I))
-J = [(i, j) for i in range(3) for j in range(3) if i != j]
-T = [(-1,-1,-1,-1,-1,1),(-1,-1,-1,-1,1,1),
-     (-1,-1,-1,1,-1,1),(-1,-1,-1,1,1,1),
-     (-1,-1,1,-1,1,-1),(-1,-1,1,-1,1,1),
-     (-1,1,-1,1,-1,1),(-1,1,1,-1,-1,1),
-     (-1,1,1,-1,1,1),(-1,1,1,1,1,1)]
-
-def matrix(w):
-    B = [[0]*3 for _ in range(3)]
-    for (i,j), z in zip(J,w): B[i][j] = z
-    return B
-
-def det(A):
-    n = len(A)
-    return sum((-1)**sum(p[i]>p[j] for i in range(n) for j in range(i+1,n))
-               * prod(A[i][p[i]] for i in range(n))
-               for p in permutations(range(n)))
-
-def prod(a):
-    z = 1
-    for t in a: z *= t
-    return z
-
-def sub(A,S): return [[A[i][j] for j in S] for i in S]
-def inv(A):
-    n = len(A); d = det(A)
-    return [[Q((-1)**(i+j)*det([[A[a][b] for b in range(n) if b!=i]
-                   for a in range(n) if a!=j]),d)
-             for j in range(n)] for i in range(n)]
-
-def kinds(H):
-    a = [p for p in P if H[p[0]][p[2]]<0<H[p[2]][p[0]]
-         and H[p[0]][p[3]]>0]
-    g = [p for p in a if H[p[1]][p[3]]<0]
-    gh = [p for p in g if H[p[2]][p[3]]<0]
-    h = [p for p in a if H[p[2]][p[3]]<0]
-    return tuple(map(bool,(a,g,gh,h)))
-
-# Necessary sign filters only; they deliberately over-admit numerical data.
-counts = []
-for word in T:
-    B = matrix(word); row = [0,0,0,0]
-    for r,c in product(product((-1,1),repeat=3),repeat=2):
-        if any(B[i][(i+1)%3]==B[i][(i+2)%3]!=r[i] for i in range(3)): continue
-        if max(r)<0 or max(c)<0: continue
-        H = [[0]+list(c)]+[[-r[i]]+B[i] for i in range(3)]
-        if any(min(H[i][j] for i in I)>=0 for j in I): continue
-        if not any(H[i][j]==H[j][i]==-1 for i,j in combinations(I,2)): continue
-        eligible = [(i,j) for i,j in combinations(range(3),2)
-                    if B[i][j]*B[j][i]>0 and r[i]==B[i][j] and r[j]==B[j][i]]
-        if any(c[i]==c[j]==1 for i,j in eligible): continue
-        # Only template8 has inverse-positive B; its failed passive row needs c<0 somewhere.
-        if word==T[7] and min(c)>0: continue
-        a,g,gh,h = kinds(H)
-        row[0] += 1
-        for j,z in enumerate((a,g,gh),1): row[j] += not z
-        assert a == h
-        if not a:
-            assert word==T[2] and r==(-1,1,1) and c==(1,-1,-1)
-            assert all(H[i][j]==H[j][i] for i,j in combinations(I,2))
-            assert all(sum(H[i][j]>0 for j in I)==1 for i in I)
-    counts.append(row)
-assert counts == [[5,0,1,1],[5,0,2,2],[15,1,3,5],[10,0,2,2],
-                  [9,0,0,0],[3,0,0,1],[20,0,7,9],[30,0,0,0],
-                  [9,0,0,1],[2,0,0,1]]
-
-# Exact residual counterexamples: (pointed template, observer word, outside row).
-W = [(1,(-1,-1,-1,-3,-1,4),(-3,5,-1)),
-     (2,(-1,-2,-2,-1,1,1),(5,-3,-1)),
-     (3,(-1,-1,-1,2,-1,2),(3,-1,-1)),
-     (4,(-1,-1,-2,1,1,2),(3,-1,-1)),
-     (6,(-1,-1,1,-2,1,1),(-1,3,-1)),
-     (7,(-2,1,-1,2,-1,3),(3,1,-3)),
-     (9,(-1,2,2,-1,1,1),(-3,3,1)),
-     (10,(-1,2,3,1,1,1),(-1,5,-3))]
-for t,word,c in W:
-    B=matrix(word); r=[sum(v) for v in B]
-    H=[[0]+list(c)]+[[-r[i]]+B[i] for i in range(3)]
-    assert tuple(1 if z>0 else -1 for z in word)==T[t-1]
-    assert sum(c)==1 and all(r) and det(H)==det(B)>0
-    assert all(H[i][j]!=0 for i in I for j in I if i!=j)
-    assert all(det(sub(H,S))!=0 for n in (2,3,4) for S in combinations(I,n))
-    V=inv(H)
-    assert all(z!=0 for v in V for z in v) and all(V[i][0]==1 for i in I)
-    assert all(any(H[i][j]<0 for i in I) for j in I)
-    assert any(H[i][j]<0 and H[j][i]<0 for i,j in combinations(I,2))
-    for i,j in combinations(range(3),2):
-        D=Q(c[i]*r[j],B[j][i])+Q(c[j]*r[i],B[i][j])
-        if B[i][j]*B[j][i]>0 and r[i]*B[i][j]>0 and r[j]*B[j][i]>0: assert D<0
-    for S in combinations(I,3):
-        U=inv(sub(H,S)); o=next(i for i in I if i not in S)
-        if all(z>=0 for v in U for z in v):
-            assert any(sum(H[o][S[i]]*U[i][j] for i in range(3))<0 for j in range(3))
-    a,g,gh,h=kinds(H)
-    assert not gh, (t,kinds(H))
-    assert g == (t in (6,9,10))
-    assert a == (t!=3)
-print('PASS: exhaustive necessary sign census and all exact residual counterexamples.')
-```
+The exact standard-library checker is
+[CODEX_PARTITION__FIN4_SINGLETON_CELLS_CHECK.py](../experiments/CODEX_PARTITION__FIN4_SINGLETON_CELLS_CHECK.py).
+Its `check_joint_return_topology()` verifies the complete prerequisite census
+and every rational sharpness witness above. Run the file with Python3; no
+sampled or floating-point calculation enters the proof.
 
 ## 3. Scope, producer use, and previous obstructions
 
@@ -238,3 +138,189 @@ Inspected sources: `CODEX_COORDINATOR__FIN4_RESIDUAL_PARTITION.md`, Sections
 raw sign assumptions and comparison scope of the frozen
 `CORE_FREE_JOINT_RETURN_UNIFORM_EQUILIBRIUM.md`.
 No Lean check is claimed.
+
+## 4. Exactly21 realizable full sign orbits
+
+Let Gamma be a real4x4 zero-diagonal matrix. Require all off-diagonal entries
+and all principal determinants of sizes2,3,4 nonzero. Impose:
+
+1. Every column has a negative entry, Gamma is R0 and has complementarity degree+1.
+2. det Gamma>0 and some inverse column is strictly positive.
+3. Some reciprocal pair has both entries negative.
+4. Every principal triple with nonnegative inverse has a negative coordinate
+   in its outside inverse row.
+5. Under no relabeling does Gamma satisfy the negative-chord Hamiltonian
+   sign criterion: opposite-sign adjacent directed four-cycle, mutually
+   negative opposite chord02, and at least one positive entry on chord13.
+
+THEOREM. Up to simultaneous permutation of rows and columns, exactly21
+strict off-diagonal sign patterns occur in this domain. They are the
+canonical words in the table below. Every word has an integer matrix witness
+with every full inverse entry nonzero as well. Only rows14,16,19 admit ANY
+positive directed Hamiltonian four-cycle. In every other row the positive
+entry digraph has no spanning directed cycle.
+
+The word order is row-major off-diagonal
+(01,02,03,10,12,13,20,21,23,30,31,32); canonical means lexicographically
+least under all24 simultaneous permutations, with '-' before '+'. The
+witness need not have that literal labeling: the word identifies its orbit.
+For the displayed witness data form B from its six off-diagonal entries
+(12,13,21,23,31,32), let r=B1, and take H=[0,c;-r,B]. Thus nine integers
+specify every witness, and H1=e0 automatically.
+
+|Row|Canonical sign word|B entries|c|Positive Hamiltonian cycle?|
+|---:|---|---|---|---|
+|1|`--+--+-+---+`|(-4,-6,-5,-9,-3,7)|(-2,-12,15)|no|
+|2|`--+--+-+--+-`|(-6,-7,-1,-4,-1,6)|(-6,8,-1)|no|
+|3|`--+--+-+--++`|(-4,-6,-5,-9,-3,7)|(-9,6,4)|no|
+|4|`--+--+-+-+--`|(-8,-4,-4,5,-6,7)|(-1,9,-7)|no|
+|5|`--+--+-+-+-+`|(-4,-6,-5,-9,-3,7)|(2,-7,6)|no|
+|6|`--+--+++---+`|(-6,-1,-6,-9,8,6)|(-3,-9,13)|no|
+|7|`--+--+++--+-`|(-6,-1,-6,-9,8,6)|(-5,10,-4)|no|
+|8|`--+--+++--++`|(-6,-1,-6,-9,8,6)|(4,-10,7)|no|
+|9|`--+-+--+-+--`|(-3,-1,-3,7,-1,4)|(11,-2,-8)|no|
+|10|`--+-+--+-+-+`|(-2,1,-1,8,-1,9)|(8,-2,-5)|no|
+|11|`--+-+--++-+-`|(-7,-6,-7,4,-2,4)|(-5,-2,8)|no|
+|12|`--+-+--++-++`|(-4,-7,-5,9,-9,1)|(-12,11,2)|no|
+|13|`--+-+--++++-`|(-3,2,-6,9,-2,1)|(10,-2,-7)|no|
+|14|`--+-+-++-++-`|(-8,-7,-3,8,2,9)|(11,10,-20)|yes|
+|15|`--+-+++----+`|(-9,-8,8,-2,5,1)|(-6,9,-2)|no|
+|16|`--+-+++---++`|(-6,4,4,-1,-3,7)|(10,-11,2)|yes|
+|17|`--+-+++--+-+`|(-3,2,-6,9,-2,1)|(-2,10,-7)|no|
+|18|`--+-++++---+`|(-5,-5,5,-2,1,-6)|(-2,1,2)|no|
+|19|`--+-++++--++`|(-8,6,8,5,5,9)|(-1,9,-7)|yes|
+|20|`--+-++++-+--`|(-2,1,-1,8,-1,9)|(7,8,-14)|no|
+|21|`--+-++++-+-+`|(-3,2,-6,9,-2,1)|(9,3,-11)|no|
+
+These are sign orbits, not connected numerical cells. Within each orbit,
+principal determinant and complementarity inequalities still restrict the
+magnitudes. The existing pointed polygon tests give those conditions for
+each choice of inverse-positive pivot. This theorem does not assert that
+every matrix with one of these sign patterns satisfies the domain.
+
+### Exhaustive upper classification
+
+Choose a strictly positive inverse column v=Gamma^{-1}e_p and put
+H=Gamma diag(v). After moving p to0,
+
+    H=[0,c;-r,B], r=B1, sum c=1, det H=det B>0.
+
+This is a positive column scaling for matrix classification, not a claimed
+payoff-game invariance. Permuting the three observers puts the six signs of
+B into one of the existing ten observer templates. These and their exact
+polygon conditions were proved in
+CODEX_COORDINATOR__FIN4_RESIDUAL_PARTITION.md, Sections2–6.
+
+The elementary sign consequences used below are: row-sum signs must agree
+with two equal row signs; r and c each have a positive coordinate; negative
+columns and a negative reciprocal pair must exist; for an eligible pair
+
+    B_ij B_ji>0, r_i/B_ij>0, r_j/B_ji>0,
+    D_ij=c_i r_j/B_ji+c_j r_i/B_ij<0;
+
+in particular c_i,c_j cannot both be positive. If B has positive inverse,
+c cannot be entirely positive. These necessary tests give108 pointed sign
+assignments and28 unpointed sign orbits. The negative-chord test removes5
+pointed assignments in2 full orbits, leaving26 candidate orbits.
+
+Five of those26 are numerically impossible. Their canonical words are
+
+    --+--+-+-++-, --+--+++-++-, --+-+-+--++-,
+    --+-+-+-+++-, --+-+++--++-.
+
+The following elementary contradictions remove ALL of their pointed
+representatives; the finite checker enumerates that coverage.
+
+For template3 write B=[0,-a,-b;-c,0,d;-e,f,0], all letters positive.
+For r=(-,-,+), outside row C=(-u,1+u+w,-w), u,w>0, the eligible pair12 has
+
+    D12=-u(1-d/c)+(1+u+w)(1+b/a)>0.
+
+This contradicts D12<0; d<c is supplied by r2<0. The case r=(-,+,-),
+C=(-,-,+) is obtained by swapping observers2,3.
+
+For template7 write B=[0,-a,b;-c,0,d;-e,f,0], det B=ade-bcf.
+If r=(+,-,+), then b>a,d<c,f>e and bcf>ade, contradicting det B>0,
+for every outside row. If r=(-,-,+) and C=(-u,1+u+w,-w), determinant
+positivity gives b/a<de/(cf)<d/c. Then
+
+    D12=-u(1-d/c)+(1+u+w)(1-b/a)>0,
+
+again a contradiction.
+
+For template4 write B=[0,-a,-b;-c,0,d;e,f,0]. If r=(-,+,+) and
+C=(-u,1+u+w,-w), the eligible positive pair23 has
+
+    D23=(1+u+w)(1+e/f)-w(1-c/d)>0.
+
+If r=(-,-,+) with the same C signs, the template3 D12 argument applies.
+
+For template8 write B=[0,-a,b;c,0,-d;-e,f,0], det B=bcf-ade>0.
+Suppose r=(-,-,+), C=(1+v+w,-v,-w), v,w>0. Thus b<a,c<d,e<f.
+The adjugate rows are
+
+    (df,bf,ad), (de,be,bc), (cf,ae,ac).
+
+The first row strictly dominates each other row coordinatewise: bf>ae
+uses bcf>ade and c<d; the other comparisons follow directly from the
+three row-sum signs. Consequently C adj(B)>0 and C B^{-1}>0, contradicting
+the passive-child failure. Cyclic observer permutations give the other
+two forbidden template8 assignments.
+
+The five missing full orbits have only these pointed representations:
+
+|Canonical word|Template; signs(r); signs(C)|
+|---|---|
+|--+--+-+-++-|3;--+;-+- / 3;-+-;--+ / 7;+-+;-+-|
+|--+--+++-++-|7;--+;-+-|
+|--+-+-+--++-|4;-++;-+- / 7;+-+;+--|
+|--+-+-+-+++-|8;--+;+-- / 8;-+-;--+ / 8;+--;-+-|
+|--+-+++--++-|4;--+;-+- / 7;+-+;++-|
+
+Every remaining full orbit appears in the21-witness table, completing both
+upper and lower directions. The witness verification checks all principal
+nonsingularities and every inverse-positive child. Negative columns and
+principal nonsingularity imply R0. The full complementarity support census
+at offset-e0 has exactly the full root x=1, with local index sign(det H)=+1;
+hence the complementarity degree is+1. No sampled infeasibility assertion
+is used in the upper proof.
+
+### Source correspondence and strategic use
+
+The original no-UE sources inspected are
+standardQMatrixSide_of_not_exists_uniformEquilibriumPayoff
+(UniformEquilibrium/Quitting/Classification/LCP/CounterexampleNecessary.lean)
+and the nonnegative-inverse consumer
+exists_uniformEquilibriumPayoff_of_nonnegative_singletonInverse
+(UniformEquilibrium/Quitting/Classification/LCP/NonnegativeInverseCriterion.lean).
+The negative-chord whole-completion theorem is the reviewed packet
+../exports/NEGATIVE_CHORD_HAMILTONIAN_UNIFORM_EQUILIBRIUM.md.
+The other five matrix restrictions and pointed normal form are the existing
+coordinator partition, with its exact checker
+../experiments/CODEX_PARTITION__FIN4_SINGLETON_CELLS_CHECK.py.
+
+The atlas gives a complete finite sign target for further singleton-only
+producers. In particular a proof covering positive-Hamiltonian matrices
+would remove exactly THREE real admitted sign orbits (rows14,16,19), not an
+unquantified graph class. No such general theorem is assumed here. Outside
+those three orbits, a different mechanism is required. The44 higher-coalition
+coordinates remain arbitrary data to be handled after the singleton screens.
+
+## 5. Consequence for equilibrium construction
+
+The [complete absorption-path obstruction](CODEX_COORDINATOR__DIFFUSE_APPROXIMATION_ATOM_OBSTRUCTION.md)
+covers every matrix satisfying these residual restrictions. Its graph proof
+is independent of the finite enumeration. In particular, no finite balanced
+singleton cycle exists at any period on these matrices. More strongly,
+for bounded completions and at least one own level bounded positively away
+from zero, every sufficiently accurate actual terminal Nash approximation
+must have a first-absorption date of uniformly positive probability.
+The obstruction allows arbitrary nonperiodic behavior and infinite switching;
+it supplies neither such an approximation nor a positive gap against all
+behavior. The three positive-Hamiltonian orbits therefore cannot be closed
+by merely extending a pure-singleton balanced cycle.
+
+The exact checker above also runs `check_unpointed_residual_atlas()`: it
+verifies all21 witnesses, the26-to21 exclusion list, the full complementarity
+support census, and the three positive-Hamiltonian orbits. No Lean command
+was run. Further positive producers must still handle the collision rewards.

@@ -367,3 +367,200 @@ def check_i2_screen():
 if __name__ == "__main__":
     check_i2_screen()
     print("PASS: exact I2 interval, common-atom and endpoint controls")
+
+
+def check_joint_return_topology():
+    I = range(4)
+    P = list(permutations(I))
+    J = [(i, j) for i in range(3) for j in range(3) if i != j]
+    T = [(-1,-1,-1,-1,-1,1),(-1,-1,-1,-1,1,1),
+         (-1,-1,-1,1,-1,1),(-1,-1,-1,1,1,1),
+         (-1,-1,1,-1,1,-1),(-1,-1,1,-1,1,1),
+         (-1,1,-1,1,-1,1),(-1,1,1,-1,-1,1),
+         (-1,1,1,-1,1,1),(-1,1,1,1,1,1)]
+
+
+
+
+
+    def kinds(H):
+        a = [p for p in P if H[p[0]][p[2]]<0<H[p[2]][p[0]]
+             and H[p[0]][p[3]]>0]
+        g = [p for p in a if H[p[1]][p[3]]<0]
+        gh = [p for p in g if H[p[2]][p[3]]<0]
+        h = [p for p in a if H[p[2]][p[3]]<0]
+        return tuple(map(bool,(a,g,gh,h)))
+
+    # Necessary sign filters only; they deliberately over-admit numerical data.
+    counts = []
+    for word in T:
+        B = matrix(word); row = [0,0,0,0]
+        for r,c in product(product((-1,1),repeat=3),repeat=2):
+            if any(B[i][(i+1)%3]==B[i][(i+2)%3]!=r[i] for i in range(3)): continue
+            if max(r)<0 or max(c)<0: continue
+            H = [[0]+list(c)]+[[-r[i]]+B[i] for i in range(3)]
+            if any(min(H[i][j] for i in I)>=0 for j in I): continue
+            if not any(H[i][j]==H[j][i]==-1 for i,j in combinations(I,2)): continue
+            eligible = [(i,j) for i,j in combinations(range(3),2)
+                        if B[i][j]*B[j][i]>0 and r[i]==B[i][j] and r[j]==B[j][i]]
+            if any(c[i]==c[j]==1 for i,j in eligible): continue
+            # Only template8 has inverse-positive B; its failed passive row needs c<0 somewhere.
+            if word==T[7] and min(c)>0: continue
+            a,g,gh,h = kinds(H)
+            row[0] += 1
+            for j,z in enumerate((a,g,gh),1): row[j] += not z
+            assert a == h
+            if not a:
+                assert word==T[2] and r==(-1,1,1) and c==(1,-1,-1)
+                assert all(H[i][j]==H[j][i] for i,j in combinations(I,2))
+                assert all(sum(H[i][j]>0 for j in I)==1 for i in I)
+        counts.append(row)
+    assert counts == [[5,0,1,1],[5,0,2,2],[15,1,3,5],[10,0,2,2],
+                      [9,0,0,0],[3,0,0,1],[20,0,7,9],[30,0,0,0],
+                      [9,0,0,1],[2,0,0,1]]
+
+    # Exact residual counterexamples: (pointed template, observer word, outside row).
+    W = [(1,(-1,-1,-1,-3,-1,4),(-3,5,-1)),
+         (2,(-1,-2,-2,-1,1,1),(5,-3,-1)),
+         (3,(-1,-1,-1,2,-1,2),(3,-1,-1)),
+         (4,(-1,-1,-2,1,1,2),(3,-1,-1)),
+         (6,(-1,-1,1,-2,1,1),(-1,3,-1)),
+         (7,(-2,1,-1,2,-1,3),(3,1,-3)),
+         (9,(-1,2,2,-1,1,1),(-3,3,1)),
+         (10,(-1,2,3,1,1,1),(-1,5,-3))]
+    for t,word,c in W:
+        B=matrix(word); r=[sum(v) for v in B]
+        H=[[0]+list(c)]+[[-r[i]]+B[i] for i in range(3)]
+        assert tuple(1 if z>0 else -1 for z in word)==T[t-1]
+        assert sum(c)==1 and all(r) and det(H)==det(B)>0
+        assert all(H[i][j]!=0 for i in I for j in I if i!=j)
+        assert all(det(submatrix(H,S))!=0 for n in (2,3,4) for S in combinations(I,n))
+        V=inverse(H)
+        assert all(z!=0 for v in V for z in v) and all(V[i][0]==1 for i in I)
+        assert all(any(H[i][j]<0 for i in I) for j in I)
+        assert any(H[i][j]<0 and H[j][i]<0 for i,j in combinations(I,2))
+        for i,j in combinations(range(3),2):
+            D=Q(c[i]*r[j],B[j][i])+Q(c[j]*r[i],B[i][j])
+            if B[i][j]*B[j][i]>0 and r[i]*B[i][j]>0 and r[j]*B[j][i]>0: assert D<0
+        for S in combinations(I,3):
+            U=inverse(submatrix(H,S)); o=next(i for i in I if i not in S)
+            if all(z>=0 for v in U for z in v):
+                assert any(sum(H[o][S[i]]*U[i][j] for i in range(3))<0 for j in range(3))
+        a,g,gh,h=kinds(H)
+        assert not gh, (t,kinds(H))
+        assert g == (t in (6,9,10))
+        assert a == (t!=3)
+    print('PASS: exhaustive necessary sign census and all exact residual counterexamples.')
+
+
+def check_unpointed_residual_atlas():
+    I=range(4); P=list(permutations(I))
+    J=[(i,j) for i in range(3) for j in range(3) if i!=j]
+    POS=[(i,j) for i in I for j in I if i!=j]
+    T=[(-1,-1,-1,-1,-1,1),(-1,-1,-1,-1,1,1),
+       (-1,-1,-1,1,-1,1),(-1,-1,-1,1,1,1),
+       (-1,-1,1,-1,1,-1),(-1,-1,1,-1,1,1),
+       (-1,1,-1,1,-1,1),(-1,1,1,-1,-1,1),
+       (-1,1,1,-1,1,1),(-1,1,1,1,1,1)]
+    def canon(H):
+     return min(tuple(1 if H[p[i]][p[j]]>0 else -1 for i,j in POS) for p in P)
+    def word(H):return ''.join('+' if x>0 else '-' for x in canon(H))
+    def ham(H):return any(all(H[p[j]][p[(j+1)%4]]>0 for j in I) for p in P)
+    def nc(H):
+     return any(all(H[p[(j+1)%4]][p[j]]<0<H[p[j]][p[(j+1)%4]] for j in I)
+      and H[p[0]][p[2]]<0 and H[p[2]][p[0]]<0
+      and (H[p[1]][p[3]]>0 or H[p[3]][p[1]]>0) for p in P)
+    def signs(v):return ''.join('+' if x>0 else '-' for x in v)
+    A=[]
+    for ti,w in enumerate(T,1):
+     B=matrix(w)
+     for r,c in product(product((-1,1),repeat=3),repeat=2):
+      if any(B[i][(i+1)%3]==B[i][(i+2)%3]!=r[i] for i in range(3)):continue
+      if max(r)<0 or max(c)<0:continue
+      H=[[0]+list(c)]+[[-r[i]]+B[i] for i in range(3)]
+      if any(min(H[i][j] for i in I)>=0 for j in I):continue
+      if not any(H[i][j]==H[j][i]==-1 for i,j in combinations(I,2)):continue
+      E=[(i,j) for i,j in combinations(range(3),2)
+         if B[i][j]*B[j][i]>0 and r[i]==B[i][j] and r[j]==B[j][i]]
+      if any(c[i]==c[j]==1 for i,j in E):continue
+      if ti==8 and min(c)>0:continue
+      A.append((ti,signs(r),signs(c),H))
+    assert len(A)==108 and len({word(H) for _,_,_,H in A})==28
+    A=[v for v in A if not nc(v[3])]
+    assert len(A)==103 and len({word(H) for _,_,_,H in A})==26
+    forbidden={
+     '--+--+-+-++-':{(3,'--+','-+-'),(3,'-+-','--+'),(7,'+-+','-+-')},
+     '--+--+++-++-':{(7,'--+','-+-')},
+     '--+-+-+--++-':{(4,'-++','-+-'),(7,'+-+','+--')},
+     '--+-+-+-+++-':{(8,'--+','+--'),(8,'-+-','--+'),(8,'+--','-+-')},
+     '--+-+++--++-':{(4,'--+','-+-'),(7,'+-+','++-')}}
+    for s,reps in forbidden.items():
+     assert {(ti,r,c) for ti,r,c,H in A if word(H)==s}==reps
+    allowed={word(H) for _,_,_,H in A}-set(forbidden)
+    assert len(allowed)==21
+
+    W=[
+    ('--+--+-+---+',(-4,-6,-5,-9,-3,7),(-2,-12,15)),
+    ('--+--+-+--+-',(-6,-7,-1,-4,-1,6),(-6,8,-1)),
+    ('--+--+-+--++',(-4,-6,-5,-9,-3,7),(-9,6,4)),
+    ('--+--+-+-+--',(-8,-4,-4,5,-6,7),(-1,9,-7)),
+    ('--+--+-+-+-+',(-4,-6,-5,-9,-3,7),(2,-7,6)),
+    ('--+--+++---+',(-6,-1,-6,-9,8,6),(-3,-9,13)),
+    ('--+--+++--+-',(-6,-1,-6,-9,8,6),(-5,10,-4)),
+    ('--+--+++--++',(-6,-1,-6,-9,8,6),(4,-10,7)),
+    ('--+-+--+-+--',(-3,-1,-3,7,-1,4),(11,-2,-8)),
+    ('--+-+--+-+-+',(-2,1,-1,8,-1,9),(8,-2,-5)),
+    ('--+-+--++-+-',(-7,-6,-7,4,-2,4),(-5,-2,8)),
+    ('--+-+--++-++',(-4,-7,-5,9,-9,1),(-12,11,2)),
+    ('--+-+--++++-',(-3,2,-6,9,-2,1),(10,-2,-7)),
+    ('--+-+-++-++-',(-8,-7,-3,8,2,9),(11,10,-20)),
+    ('--+-+++----+',(-9,-8,8,-2,5,1),(-6,9,-2)),
+    ('--+-+++---++',(-6,4,4,-1,-3,7),(10,-11,2)),
+    ('--+-+++--+-+',(-3,2,-6,9,-2,1),(-2,10,-7)),
+    ('--+-++++---+',(-5,-5,5,-2,1,-6),(-2,1,2)),
+    ('--+-++++--++',(-8,6,8,5,5,9),(-1,9,-7)),
+    ('--+-++++-+--',(-2,1,-1,8,-1,9),(7,8,-14)),
+    ('--+-++++-+-+',(-3,2,-6,9,-2,1),(9,3,-11))]
+    assert {s for s,_,_ in W}==allowed and len(W)==21
+
+    positive_ham=[]
+    opposition_types={1:[],3:[],4:[]}
+    for n,(s,w,c) in enumerate(W,1):
+     B=matrix(w);H=[[0]+list(c)]+[[-sum(row)]+row for row in B]
+     V=inverse(H)
+     assert sum(c)==1 and det(H)>0 and word(H)==s and not nc(H)
+     assert all(V[i][0]==1 for i in I) and all(x for row in V for x in row)
+     assert all(det(submatrix(H,S)) for k in (2,3,4) for S in combinations(I,k))
+     assert all(any(H[i][j]<0 for i in I) for j in I)
+     assert any(H[i][j]<0 and H[j][i]<0 for i,j in combinations(I,2))
+     for S in combinations(I,3):
+      U=inverse(submatrix(H,S));o=next(i for i in I if i not in S)
+      if all(x>0 for row in U for x in row):
+       assert any(sum(H[o][S[i]]*U[i][j] for i in range(3))<0 for j in range(3))
+     # Empty/singleton supports fail by target-e0 and negative columns.
+     roots=[]
+     for k in (2,3,4):
+      for S in combinations(I,k):
+       U=inverse(submatrix(H,S));x=[Q(0)]*4
+       for i in range(k):x[S[i]]=sum(U[i][j]*int(S[j]==0) for j in range(k))
+       if any(x[i]<=0 for i in S):continue
+       y=[sum(H[i][j]*x[j] for j in I)-int(i==0) for i in I]
+       if min(y)>=0:roots.append((tuple(S),x,y))
+     assert roots==[((0,1,2,3),[Q(1)]*4,[Q(0)]*4)]
+     if ham(H):positive_ham.append(n)
+     edges={(i,j) for i in I for j in I if H[j][i]<0<H[i][j]}
+     assert not any(all((p[j],p[(j+1)%4]) in edges for j in I) for p in P)
+     reach=edges|{(i,i) for i in I}
+     for k in I:
+      reach|={(i,j) for i in I for j in I if (i,k) in reach and (k,j) in reach}
+     largest=max(sum((i,j) in reach and (j,i) in reach for j in I) for i in I)
+     opposition_types[largest].append(n)
+    assert opposition_types=={1:[2,3,4,7,9,10,11,12,13,14,17,20,21],
+                             3:[1,5,8,15,16,18,19],4:[6]}
+    assert positive_ham==[14,16,19]
+    print('PASS:21 generic sign orbits; 3 positive Hamiltonian; opposition graphs 13 acyclic / 7 triangle / 1 bowtie.')
+
+
+if __name__ == "__main__":
+    check_joint_return_topology()
+    check_unpointed_residual_atlas()

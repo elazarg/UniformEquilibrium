@@ -25,6 +25,26 @@ and there is no proved correspondence between their ten cases and the ten
 pointed matrix templates. No coverage percentage, bounded residual reward
 set, or lower-dimensional counterexample locus follows from this atlas.
 
+The [complete singleton sign atlas](CODEX_COORDINATOR__JOINT_RETURN_SINGLETON_TOPOLOGY.md)
+sharpens the conservative sign census to exactly21 realizable full sign orbits
+under the stated necessary matrix screens, with exact witnesses for every
+orbit. Their opposition graphs split into13 acyclic, seven single-triangle,
+and one negative-cross bowtie class. Five of the26 post-Hamiltonian candidate
+orbits are impossible by exact inequalities. This resolves numerical
+realizability of the sign census; it does not exclude an additional UE class.
+
+The [diffuse-approximation obstruction](CODEX_COORDINATOR__DIFFUSE_APPROXIMATION_ATOM_OBSTRUCTION.md)
+applies to every matrix in that generic residual. For bounded reward
+completions with at least one own level bounded positively away from zero,
+every sufficiently accurate actual terminal Nash profile must have a first-
+absorption date of uniformly positive probability. The date can be arbitrarily
+late. The proof covers nonperiodic calendars and infinite switching, and also
+rules out every finite balanced singleton certificate. It does not rule out
+profiles with a substantial date atom, produce an equilibrium, or apply to a
+positive-gap minimizing source whose regret does not tend to zero. The next
+constructive mechanism must retain such atoms and control their full
+continuation caps; refining singleton dates alone cannot close these classes.
+
 The exact global target remains terminal approximate Nash at every error,
 equivalently zero infimum of full behavioral exploitability. A counterexample
 requires one positive gap against EVERY behavioral profile. Reward robustness
@@ -1562,6 +1582,14 @@ quittingContinuationBestResponseValue_rootThenContinuation_eq_max in
 UniformEquilibrium/Quitting/Root/TerminalDebtPrefix.lean. No Lean command ran.
 
 ## Verification and next obligations
+
+The21-orbit atlas and its exact checker have a
+[final independent review](../feedback/FIN4_SINGLETON_ATLAS__BY_INDEPENDENT_REVIEW.md).
+The complete diffuse-approximation obstruction has separate final
+[whole-proof/adapter](../feedback/FIN4_DIFFUSE_ATOM__BY_ADAPTER_REVIEW.md)
+and [adversarial geometry](../feedback/FIN4_DIFFUSE_ATOM__BY_GEOMETRY_REVIEW.md)
+reviews pinned to the retained bytes. They approve ordinary mathematics,
+not Lean verification or additional reward-table UE coverage.
 
 The complete axis-insertion test in Section13 has an
 [independent whole review](../feedback/FIN4_INHERITED_AXIS_INSERTION__BY_REVIEW.md)
