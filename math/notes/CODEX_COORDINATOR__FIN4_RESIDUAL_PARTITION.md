@@ -28,11 +28,21 @@ canonical choice r=m/2, its stronger absorbing test and the prior finite tests
 exhaust that entire replacement family for every head threshold. Exact scalar
 data still pass the full test; the endpoint pattern itself remains open.
 
-The [proper one-date obstruction](CODEX_COORDINATOR__FINITE_PROPER_ROOT_OBSTRUCTION.md)
-preserves any supplied strict-column singleton matrix and shows that proper
-one-date reselection and complete direct/appended axis replacements can all
-fail to improve a strict proper-class minimum. Its explicit absorbing Nash
-escape gives m=0, so it excludes a local proof mechanism, not actual case F.
+The [finite-global obstruction](CODEX_COORDINATOR__FINITE_PROPER_ROOT_OBSTRUCTION.md)
+preserves any supplied strict-column singleton matrix and minimizes over ALL
+one-date observer-Nash profiles, including sure quitters. Every minimum lies
+on an isolated interior component, despite a positive one-date absorbing gap,
+the canonical penalty and all axis comparisons. Vanishing observer error
+within this controller class cannot connect it to a spanning component.
+The explicit calibration has true arbitrary-calendar m=0; actual case F
+remains open.
+
+The [all-horizon selector obstruction](CODEX_COORDINATOR__GLOBAL_NEVER_SELECTION_OBSTRUCTION.md)
+also preserves any admissible singleton matrix. Globally maximizing an
+observer-Never score with unique maximum at the all-Never vector can retain
+a fixed full-regret gap at every horizon, even among approximate menu Nash
+profiles. It rules out that selection rule, not minimization of full regret
+or of the observer Never product.
 
 ## 1. Scope and generic source
 

@@ -1,102 +1,119 @@
-# Independent review: singleton-preserving proper one-date obstruction
+# Independent whole review: isolated observer oval and global one-date minima
 
-Reviewer: WORD_REVIEW. Ordinary mathematics; no Lean build.
+Reviewer: STRATEGY_INDEPENDENT. Ordinary mathematics; no Lean build.
 
 Artifact reviewed:
 `math/notes/CODEX_COORDINATOR__FINITE_PROPER_ROOT_OBSTRUCTION.md`, SHA256
-`916bd6696a78b0d76fe431e3678b649d2fb12e2692c3c3232d604f74f17629e4`.
-The complete final canonical artifact, including the repaired scope wording,
-is reviewed. Comparison with the reviewed scratch proof found only status,
-review-link, and explicit axis-source reference changes; no mathematics changed.
+`2ebea03674cae5e7b1d5a3fc7c8f537ae9665f977303f47d6f261c6199b985a9`.
+The complete final canonical artifact was compared with the reviewed draft;
+only status, references, and the explicit remaining-task wording changed.
+This review covers the entire final proof, including the complete reward
+embedding, all Nash supports, the canonical finite absorbing comparison,
+positive-error separation, all axis comparisons, and the actual stationary
+escape. No unresolved mathematical objection remains.
 
-**Verdict: mathematical PASS for the explicit replacement obstruction.**
-The claim reviewed is that, above every invertible zero-diagonal Gamma with
-Gamma^-1 e_0>0, the displayed reward completion has a unique minimum in its
-entire proper one-date ALL-END zero-observer-debt class; neither replacing
-that minimizing point by any inverse-axis block nor appending any such block
-to that point lowers its objective. The same table has an explicit absorbing
-Nash profile. No positive-gap global source or actual Fin4 case is excluded.
+**Verdict: mathematical PASS as a finite-controller selection obstruction.**
+It refutes global-minimum-to-spanning-component selection in the one-date
+partial-Nash correspondence, including vanishing observer error within that
+controller class. It is not a positive-gap table or a closure of Fin4 case F.
 
-## Complete proof audit
+## Independently reconstructed checks
 
-The reward rules assign all fifteen nonempty-coalition rewards in each of
-four rows and retain the exact singleton matrix. For a proper one-date root,
-all opposing Continue probabilities are positive. Dividing immediate Quit
-minus Never by their product gives the printed joining polynomials. All
-later deadlines agree with Never, so the two endpoint comparisons exhaust
-all complete unilateral response laws, not merely current-stage deviations.
-ALL-END and zero observer debts therefore give C_i<=0 and x_i C_i=0 exactly.
+1. **Full table and complete deviations.** Each G_i is multiaffine in opponents'
+   probabilities, independent of the owner's probability, and zero at the
+   origin. Thus vertex interpolation gives exactly the printed joining
+   advantage. The reward rule assigns each of the sixty cells once and
+   preserves every Gamma singleton literally. Against one-date opponent
+   laws, every later deadline and Never gives the same passive payoff P_i.
+   Consequently B_i=P_i+max(G_i,0) and d_i=max(G_i,0)-q_i G_i price ALL
+   complete unilateral laws. There is no added correlation or observability.
 
-If any observer odds vanish, the inequalities successively force all four
-odds to vanish. Otherwise the observer equalities form the invertible
-circulant system with coefficient matrix
+2. **All observer supports.** Splitting on y using G2=x-z independently gives
+   the seven printed pieces. For y=0, Nash requires x<=z and the other
+   inequalities force p=0,x=0. For interior y, x=z; x=z=0 gives exactly the
+   strip, x=z=1 is excluded, and interior x gives the quadratic curve. For
+   y=1, x>=z; x=0 gives the strip top, interior x gives z=2p-1 and the
+   rational branch or the p=1/2 segment, and x=1 gives the final two pieces.
+   In particular the rational branch satisfies
+   x-z=2(54p^2-73p+27)/(63-54p)>0 and x<=1 exactly when p<=9/11.
+   This is an exhaustive support check, not a sampled root census.
 
-    [0,1,-2; -2,0,1; 1,-2,0].
+3. **Exactly two components.** The discriminant polynomial becomes
+   576s^4-124s^2+4 after p=s+1/2. This yields precisely the four radical
+   roots printed in the artifact. The four probability-boundary evaluations
+   are correct; both indicated quadratics have negative discriminants.
+   They locate the one feasible origin arc and the central closed oval,
+   with no high-p interior branch. The seven nonoval pieces attach in
+   order and span p=0 to1. The oval lies strictly inside the cube and is
+   separated from that compact component. Simple discriminant roots prove
+   regularity at its folds; away from them the observer Jacobian determinant
+   is -g_t. Thus the two regular slice roots have opposite indices.
 
-Its determinant is -7 and its inverse sends the all-ones vector to minus
-that vector. Hence all observer odds equal the pivot odds. This proves the
-complete proper feasible-ray classification, including its zero endpoint.
+4. **Pivot sign, finite absorbing minimum, and global minimizers.** The
+   substitution into F factors exactly as printed. The final quadratic has
+   discriminant -1537623<0. The oval's unique G0-zero point is therefore
+   (p,x,y,z)=(1/2,2/3,1/3,2/3), and the sign test at the other p=1/2 root
+   gives G0/delta=-19/44. Hence the whole oval is ALL-END. Independently
+   differentiating the curve at its zero point gives y'=1/11,p'=6/11,
+   (G0/delta)'=0 and nu'=-53/198; thus that point is not minimizing.
+   The printed lower bounds on every other component piece are correct.
+   All absorbing observer equilibria were separately checked: the exact
+   minimum is9delta/34, attained at p=9/34,x=z=0,y=1. With r=m1/2,
+   every global minimizer lies on the oval and has G0<0 strictly. The
+   actual full-calendar absorbing minimum is not used in this argument.
 
-Substitution gives the printed J_r and exact factorization of
-J_r-3r/16. The factor multiplying (z-1)^2 is strictly positive, so the
-half-hazard root is the unique global minimum of this entire proper class.
-At that root all passive caps are (R_i+4K)/8; the stated K bound makes each
-strictly larger than r/2. Pivot debt r/8, Never mass1/16 and all printed
-source-like scalar inequalities follow. They are local/data properties and
-are not confused with global constrained minimality.
+5. **Positive source scalars and axis families.** The two x,y lower-bound
+   substitutions are correct: 60p^2-34p+5 has discriminant-44, and
+   12p^2-14p+1 is negative on[1/4,3/4]. Thus all opposing pair probabilities
+   on the oval are at least1/36, and P_i>=-M+K/36>4delta+r.
+   Together with |G0|<=111delta/44 this proves all stated payoff and cap
+   inequalities. The delta restriction gives r<=alpha/(4S^2), whereas the
+   oval has lambda>4/3. The complete axis append difference is therefore
+   strictly positive at every T>0, including T=infinity. The exact direct
+   replacement minimum and its integrated bound >=7r/8 are correct.
+   These arguments retain the full old cap maximum and observer comparisons.
 
-For the appended inverse-axis block, the retained-query graft keeps observer
-payoffs and full caps unchanged. The old pivot cap is Never-active, so the
-exact increment is the displayed formula with deleted survival twice joint
-survival. Convexity of z^c gives its strictly positive lower bound for every
-T>0, including the absorbing limit. The restriction on r implies rS<1.
+6. **Small-error separation.** The prescribed rho is positive because O,E,
+   and the cube boundary are disjoint compact sets. Its closed neighborhood
+   U remains inside the cube and misses E. The continuous observer regret
+   R has no zero on boundary U, so epsilon_boundary>0. The second compact
+   set L has no zero of R either, since its J threshold is below every
+   exact equilibrium in E. The value gamma=7delta/22032 is exactly
+   (delta/162-delta/204)/4. Thus both the path obstruction and the global
+   near-minimum assertion follow. Their constants are fixed for ONE date;
+   the proof supplies no uniform separation as the calendar grows.
 
-For direct replacement, differentiation gives the unique minimizer
-z=(1+rS)^(-k/alpha) and the exact value f(r). The derivative identity
-f'(r)=(1+rS)^(-S/alpha) is correct. Its tangent lower bound at zero integrates
-to f(r)>=r-r^2 S^2/(2alpha)>=3r/4, safely above the trapped value3r/16.
-These are whole-family inequalities, not a derivative-only or finite-sample
-check. The inverse-axis carrier construction used is the same ordinary
-construction in `CODEX_VARIATIONAL_ESCAPE__CONSTRAINED_REPAIR_AND_CONE_GRAFT_OBSTRUCTION.md`,
-Section2; no additional strategic supply is assumed.
+7. **Actual infinite-clock Nash escape.** At the displayed calibration,
+   Gamma^-1 e0=(1,2/5,2/5,1/5), so alpha=1,S=2. Both the delta and K
+   hypotheses hold. With hazards8/9 and1/2 for players1 and3, their passive
+   one-step values are -1/2 and-8/9 and their Quit values are both-1.
+   Waiting until the other active player quits also pays-1. Thus every pure
+   deadline and Never ties for each active player. For the quiet players,
+   the prescribed and Quit values are exactly those printed, with margins
 
-With all three observers quitting surely and the pivot Never, each observer
-gets K from every deadline and Never; the pivot gets K by waiting and K-r
-by joining. Thus all four full debts vanish and the profile absorbs. This
-establishes m=0 directly and prevents mistaking the example for positive-gap
-ancestry or an unrestricted global minimum.
+       u0-Q0=(8K+3)/306-2delta/11>0,
+       u2-Q2=(8K-108)/306>0.
 
-The polynomial minimum factorization and circulant identities were also
-verified independently by exact SymPy arithmetic. In particular the second
-derivative of J_r along the ray at z=1 is5r/16>0.
+   At K=1000,delta=1/4 these inequalities hold strictly. A quiet player's
+   deadline T has payoff (1-c^T)u_i+c^T Q_i, c=1/18; Never pays u_i.
+   Hence all complete deviations are covered. Absorption occurs almost
+   surely and the true arbitrary-calendar minimum is0, despite m1=9/136.
 
-## Adversarial checks, repairs and scope
+## Scope and falsification discipline
 
-The original phrase 'different one-date support component' could falsely
-suggest disconnection of the complete feasible set. There is a feasible
-boundary segment with observer hazards all1 and pivot hazard decreasing
-from1 to0, connecting the proper ray's limit to the absorbing escape.
-The revised text correctly states only that the escape is outside the
-closure of the proper feasible ray and belongs to a different support
-stratum. It explicitly records the connecting boundary segment.
+The component-isolation assertion has deliberately been restricted to the
+complete ONE-DATE graph, including all its support faces. It is not isolation
+in the graph of arbitrary complete clock laws. The actual stationary escape
+shows why that distinction matters, rather than leaving it as a hypothetical
+caveat. The source's true positive absorbing gap is absent in the calibration.
 
-Repeated higher rewards violate row-distinctness premises available at the
-generic actual F source. The revised artifact states this limitation and
-makes no unsupported robustness claim. The exact singleton preservation
-means that any restrictions on Gamma alone still hold, including the full
-strict-column/source singleton conditions when that Gamma is supplied.
-It does not supply the other actual-source hypotheses.
+The proof also does not assert generic row distinctness or a raw Fin4 class
+exclusion. Its durable output is an exact falsifier of the stated finite
+selection mechanism and its small-error relaxation. It leaves unrestricted
+whole-calendar continuation and its connection to genuine global-minimum
+ancestry unresolved.
 
-The proof covers the union of three replacement families from the designated
-minimizing point. It does not analyze arbitrary compositions or excursions
-that temporarily increase the objective. This distinction is material and
-is explicit in the final reviewed wording.
-
-Compared with `CODEX_GLOBAL_CREATIVE__FINITE_EXACT_NASH_INCOMPLETENESS.md`, the
-new construction has a different narrow scope: it preserves an arbitrary
-strict-column singleton matrix and gives a full-support, positive-pivot-debt,
-ALL-END proper root with two complete axis families blocked. The earlier
-note classifies all finite full Nash laws for one particular table. Neither
-result supplies positive-gap ancestry. The new result is therefore a useful
-method obstruction if retained compactly, not an additional counterexample
-exclusion or UE reward class and not a new export on that basis.
+All displayed factorizations and rational identities were independently
+checked with symbolic algebra or Fraction arithmetic, and the inequalities
+were checked analytically. No tracked edit, Lean command, or git operation
+was performed for this review.
