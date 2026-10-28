@@ -6,7 +6,7 @@ mathematical review; no Lean change or build.
 Reviewed artifact: Section12 of
 math/notes/CODEX_COORDINATOR__FIN4_RESIDUAL_PARTITION.md, beginning with
 "## 12. Complete self-repetition test for three zero observer caps" and
-ending immediately before "## Verification and next obligations".
+ending immediately before the next numbered section (Section13).
 Exact section SHA256: 047bce920402a654a0de8c750512ea0821feff66464eb2552b9a4165588f3353.
 
 Verdict: PASS for the complete stated necessary-condition and all-repetition

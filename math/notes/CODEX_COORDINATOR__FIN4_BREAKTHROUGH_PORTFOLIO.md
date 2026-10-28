@@ -141,6 +141,24 @@ the global objective and inherited head must do the work. The complete
 checks actual laws and full behavioral responses. No global minimum or
 positive-gap example is supplied by this local construction.
 
+The [chronological two-owner theorem](../exports/CHRONOLOGICAL_TWO_OWNER_TAIL_EXCLUSION.md)
+now excludes an additional open region of I2. Its two raw polyhedra describe
+common atoms and pivot-only atoms. Every common atom sends the normalized
+tail ratio beyond the permitted pivot-only inputs; further common atoms
+increase it by a fixed factor. The resulting infinite itinerary contradicts
+a ratio bound proved directly from quiet-row reward inequalities. The theorem
+therefore needs neither a positive gap nor a global-minimum assumption.
+
+An exact residual singleton matrix and open pair-reward neighborhood exclude
+ALL three partners at pivot0, with arbitrary finite higher rewards. The
+previous interval tests leave one partner open, and an explicit feasible
+one-date comparison defeats every pointwise separating-weight exclusion.
+The common and solo input regions even overlap: chronology supplies the new
+restriction. The [adversarial](../feedback/CHRONOLOGICAL_TWO_OWNER_TAIL_EXCLUSION__BY_ADVERSARY.md)
+and [fresh](../feedback/CHRONOLOGICAL_TWO_OWNER_TAIL_EXCLUSION__BY_FRESH_REVIEW.md)
+whole reviews check the final packet. This is an actual-mode exclusion on a
+raw region, not a UE existence theorem or universal closure of I2.
+
 For an inherited endpoint with three zero observer caps, Section12 of the
 [residual partition](CODEX_COORDINATOR__FIN4_RESIDUAL_PARTITION.md) adds
 u+r(1-v)<=b/N_p(Y), strictly for a least-pivot-Never selected global minimum.
@@ -148,7 +166,14 @@ Together with the existing removal inequality, this is equivalent to ALL
 finite and infinite self-repetition comparisons. It removes an additional
 region of endpoint data; once the inequality holds, longer repetitions
 cannot close the case. Its [independent review](../feedback/FIN4_INHERITED_SELF_REPETITION__BY_REVIEW.md)
-pins the exact section.
+pins the exact section. Section13 now exhausts all insertions of an
+inverse-column axis block BEFORE that endpoint, with the old head retained.
+The full cap maximum gives five explicit scalar cases. A rational scalar
+control passes the earlier removal, repetition, absorbing and append-axis
+tests, and every direct-axis replacement, but fails the new insertion test.
+This is a further source-data restriction, not a new reward-class UE theorem;
+its [whole review](../feedback/FIN4_INHERITED_AXIS_INSERTION__BY_REVIEW.md)
+checks the exact section.
 
 Whole mathematical reviews cover the [local theorem](../feedback/CODEX_COORDINATOR__OBSERVER_ORTHANT_ATTRACTOR__BY_GENERAL_REVIEW.md),
 [entry analysis](../feedback/CODEX_COORDINATOR__GLOBAL_ENTRY_AND_EXCURSIONS__BY_REVIEW.md),
@@ -206,6 +231,16 @@ existing criteria, nor a proof that the entire test reduces to stationarity.
 This complete existence theorem therefore remains internal and is not counted
 as a new Fin4 counterexample-class exclusion. No claim of a universal finite
 test for arbitrary rewards is made.
+
+A linear obstruction limits this route even before choosing a box. If H is
+strictly positive, the single-coordinate corners force TL to have positive
+diagonal and nonpositive off-diagonal entries. Thus no column L[:,i] may be
+componentwise dominated by a nonnegative combination of the other columns:
+its nonnegative separating row T[i,:] would give a contradiction. For the
+canonical premium table with K=100,p=0,u=0, columns1 and3 satisfy
+2L[:,1]-L[:,3]=(0,97,0,4)>=0. Every box and every nonnegative T therefore
+fail on that already solved stationary-free control, regardless of higher
+joining coefficients. The broader stationary-overlap question remains open.
 
 ## Constructed equilibrium classes
 

@@ -868,6 +868,14 @@ If any step fails, this partner cannot occur in I2 at the selected source.
 
    If O is empty, again require rho in I.
 
+The additional [chronological two-owner exclusion](../exports/CHRONOLOGICAL_TWO_OWNER_TAIL_EXCLUSION.md)
+can reject a partner even when both interval tests pass. It checks the output
+of a common atom against the admissible inputs of pivot-only atoms, using
+three affine implications on two raw polyhedra. Its direct quiet-row bound
+supplies comparability without a gap or genericity premise. An explicit open
+singleton/pair region excludes all three partners at pivot0, with every higher
+reward arbitrary finite. This does not remove the other source cases.
+
 Test(13) also reduces to an affine interval, so no general linear solver is
 needed. Put c_j(x)=Gamma_jp-x Z_j(jp), d_j=Gamma_ji. Intersect its stated
 CLOSED x domain with
@@ -1165,7 +1173,197 @@ Closing this pattern requires a replacement outside that family or a raw
 bound forcing the inequality to fail. Independent review is recorded in
 [the repetition audit](../feedback/FIN4_INHERITED_SELF_REPETITION__BY_REVIEW.md).
 
+## 13. Complete inverse-axis insertion test at three zero observer caps
+
+This ordinary mathematical source restriction exhausts a different family of
+endpoint replacements. It does not eliminate the whole endpoint pattern or
+prove a new UE reward class.
+
+### Source and operation
+
+Use Section12's full source: C is the compact augmented native carrier with
+zero debts for the three observers; m=min_{C,nu=0}d_p>0, 0<r<m,
+mu=min_C(d_p+r nu)<m. A global minimum Y is ALL-END and
+Y=Phi_P(Q), where P is an actual positive-Never head and Q has all three
+observer payoffs, full caps and Never responses zero. The pivot coordinates
+are b=B_p(Q)=e_p(Q)>0, u=U_p(Q), n=N_p(Q), v=nu(Q), h=v/n.
+Section12 gives 0<n<1 and 0<v<h<1. Write
+
+ s=nu(P)>0, lambda=1/N_p(P), g=B_p(P)-e_p(P),
+ t=g/(s lambda), 0<=t<=b.
+
+Assume the source-supplied strict inverse column
+
+ a_vec=Gamma^{-1} e_p>0, alpha=a_vec[p],
+ k=sum_{i!=p}a_vec[i]>0, S=k+alpha.
+
+The existing inverse-axis construction in Section2 of
+[the inverse-axis construction](CODEX_VARIATIONAL_ESCAPE__CONSTRAINED_REPAIR_AND_CONE_GRAFT_OBSTRUCTION.md)
+supplies carrier blocks E_T, T>=0, with all observer U=B=e=0 and
+
+ b_T=(1-exp(-kT))/k,
+ u_T=(1-exp(-ST))/S,
+ N_i(E_T)=exp(-a_vec[i]T).
+
+These are limits of finite independent-clock profiles. At mesh width delta,
+all prescribed and forced-deadline collision errors are O(delta), uniformly
+in the deadline; Never is included. An empty final date retains the old
+Never query. Finite concatenations followed by diagonal limits establish
+on the SAME augmented carrier the retained-query operation
+
+ U_i(A*D)=U_i(A)+nu(A)U_i(D),
+ B_i(A*D)=max(B_i(A),e_i(A)+h_i(A)B_i(D)),
+ e_i(A*D)=e_i(A)+h_i(A)e_i(D),
+ N_i(A*D)=N_i(A)N_i(D).
+
+Thus R_T=E_T*Q has observers U=B=e=0 exactly, and
+
+ b(R_T)=b_T+exp(-kT)b,
+ u(R_T)=u_T+exp(-ST)u,
+ nu(R_T)=exp(-ST)v,
+ N_p(R_T)=exp(-alpha T)n.                         (1)
+
+The cap identity uses b>0: the through-tail branch exceeds the old b_T.
+No END attainment at a finite time is assumed. Nor is an infinite block
+executed before Q: this is a diagonal limit of genuine finite grafts.
+Since the observer caps and payoffs of R_T equal those of Q, Phi_P(R_T)
+belongs to C and retains all original-head observer comparisons. Its pivot
+cap is the FULL maximum, including the old finite-head branch. Hence,
+putting w=u-rv,
+
+ J_r(Phi_P(R_T))
+ =e_p(P)-U_p(P)+s F(exp(-kT)),
+ F(z)=lambda max(t,1/k+(b-1/k)z)-1/S+(1/S-w)z^(S/k).
+                                                               (2)
+
+In particular F(1)=lambda b-w. The limit T=infinity is an absorbing
+point of C. It need not be represented by an actual infinite concatenation.
+Compactness and continuity of the displayed coordinates suffice.
+
+### Complete finite test
+
+Set a=1/k and c=S/k>1. All comparisons J_r(Phi_P(R_T))>=mu for
+0<=T<=infinity are equivalent to the following single row for the relevant
+case (weak inequalities in this table express comparisons alone):
+
+| Case | Necessary and sufficient inequality |
+|---|---|
+| b<a | lambda(1-kb)>=1-Sw |
+| b=a | w>=1/S |
+| b>a and t<=a | w>=1/S+lambda(b-a) |
+| b>a and a<t<b | w>=1/S+lambda(b-t)/(1-((t-a)/(b-a))^c) |
+| b>a and t=b | w>=1/S |
+
+The actual subcritical source makes rows2,3,5 STRICT. Row4 is strict if
+Y was selected with the least pivot Never mass among all global minima.
+Row1 stays weak; equality at the initial derivative can be harmless.
+
+Proof. If b<a, the cap branch a+(b-a)z is at least b>=t everywhere.
+In T coordinates, the derivative of F(exp(-kT)) has sign
+
+ lambda(1-kb)-(1-Sw)exp(-alpha T).
+
+If its value at zero is nonnegative, it remains nonnegative: the first term
+is positive, and the second term either decreases toward zero or is already
+nonpositive. Conversely a negative derivative at zero improves the source.
+This proves row1. At b=a the linear term is constant and row2 follows.
+
+Suppose b>a. If t<=a there is no switch. Necessarily w>1/S for any weak
+comparison, since w<=1/S would make F(0)<F(1). With w>1/S the function F
+is concave in z, so its minimum is at0 or1. The endpoint comparison is
+exactly row3. (The printed weak row3 already entails w>1/S.)
+
+If a<t<b, put z0=(t-a)/(b-a) in(0,1). Necessarily w>1/S: at the switch,
+
+ F(z0)-F(1)=-lambda(b-t)+(w-1/S)(1-z0^c).
+
+When w>1/S, F decreases on[0,z0], and is concave on[z0,1]. Its minimum
+is therefore attained at z0 or1. The same displayed difference proves
+row4. If t=b, the head maximum is constant for every z, giving row5.
+
+For rows2,3,5, equality gives F(0)=F(1), an absorbing global minimum
+at value mu<m, impossible. At row4 equality gives a finite T0>0 with
+J_r(Phi_P(R_T0))=mu and pivot Never mass
+N_p(Y)exp(-alpha T0)<N_p(Y), contradicting the stated least-mass selection.
+
+There is also the quantitative absorbing comparison, valid in every row:
+
+ w >= lambda[b-max(t,1/k)]+1/S+(m-mu)/s.             (3)
+
+It is simply J_r(Phi_P(R_infinity))>=m. This extra bound uses m, whereas
+the table characterizes the full family of comparisons only against mu.
+
+### Rational separation from prior displayed source tests
+
+This is a scalar consistency control, NOT an actual game/source. Choose
+
+ alpha=k=1, S=2, m=3/10, r=1/5, mu=13/100,
+ n=3/4, h=4/5, v=3/5,
+ b=1/10, u=8/125, lambda=11/10, s=1/2, g=1/50.
+
+If desired, complete the head's pivot scalars by
+
+ e_p(P)=1/5, U_p(P)=153/1000, B_p(P)=11/50.
+
+Then B_p(Y)=51/200, U_p(Y)=37/200, nu(Y)=3/10,
+J_r(Y)=13/100. Thus B_p(Y)>mu and U_p(Y)>r nu(Y).
+The old head's full cap maximum is active through Q since
+0<g=1/50<s lambda b=11/200. Also J_r(P)=167/1000>mu and
+J_r(Q)=39/250>mu. The inherited debt budget is nonnegative:
+mu-s J_r(Q)=13/250.
+
+The previous ratio, removal, repetition and append-axis tests all pass:
+
+ b/(1-h)-u/(1-v)=17/50>m,
+ b>(m-r)(1-h)=1/50,
+ u+r(1-v)=18/125>lambda b-g/s=7/100,
+ u+r(1-v)=18/125<lambda b/n=11/75,
+ N_p(Y)=n/lambda=15/22<1/(1+rS)=5/7.
+
+The last bound is equivalent to ALL append-axis comparisons, not merely
+its derivative. The axis-only competitor also gives the known global
+upper bound f(r)<=alpha/(Sk)[1-(1+rS)^(-k/alpha)]=1/7;
+our mu=13/100 satisfies it. The axis absorbing debt alpha/(Sk)=1/2
+exceeds m. The new quantitative comparison(3) also passes: F(0)-F(1)
+=217/500>(m-mu)/s=17/50.
+
+It even passes every DIRECT replacement Q by E_T, with the old head
+retained. Its tail-dependent cost, with z=exp(-T), is
+
+ H(z)=max(1/25,(11/10)(1-z))-1/2+(7/10)z^2.
+
+The switch is z=53/55. On[0,53/55], the quadratic has its minimum
+at z=11/14, with value47/280. On[53/55,1], H is increasing, so its
+minimum is no lower. Hence min H=47/280>83/500=F(1).
+
+Nevertheless the new row1 fails strictly:
+
+ lambda(1-kb)=99/100 < 1-Su+rSv=139/125.
+
+For an exact finite witness choose exp(-T)=9/10. Formula(2) becomes
+F(z)=3/5-(99/100)z+(139/250)z^2, so
+
+ F(9/10)-F(1)=-83/12500,
+ J_r(Phi_P(R_log(10/9)))-mu=-83/25000.
+
+The head maximum remains its through-tail branch. Thus this is a strict
+new source-data exclusion, independent of all the previously displayed
+scalar screens, including the old full append-axis family. It supplies no
+actual positive-gap game and no new unconditional UE reward class.
+
+Source declarations inspected: quittingTerminalSemanticPrefix and
+quittingTerminalSemanticPair_rootThenContinuation in
+UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean;
+quittingContinuationBestResponseValue_rootThenContinuation_eq_max in
+UniformEquilibrium/Quitting/Root/TerminalDebtPrefix.lean. No Lean command ran.
+
 ## Verification and next obligations
+
+The complete axis-insertion test in Section13 has an
+[independent whole review](../feedback/FIN4_INHERITED_AXIS_INSERTION__BY_REVIEW.md)
+pinned to that section. The self-contained chronological theorem has two
+whole reviews, [first](../feedback/CHRONOLOGICAL_TWO_OWNER_TAIL_EXCLUSION__BY_ADVERSARY.md)
+and [second](../feedback/CHRONOLOGICAL_TWO_OWNER_TAIL_EXCLUSION__BY_FRESH_REVIEW.md).
 
 Independent reviews cover the complete [matrix partition, Sections1–8](../feedback/FIN4_RESIDUAL_PARTITION_MATRIX__BY_FRESH_REVIEW.md)
 and the [source partition and pair tests, Sections9–10](../feedback/FIN4_RESIDUAL_PARTITION_SOURCE__BY_CHAMBER.md),
@@ -1190,7 +1388,7 @@ source and genericity assumptions remain mathematical prerequisites.
 The next independent tasks are to cover the arbitrary collision rewards in
 these singleton cells; to eliminate F, I2, I3p, I3o, I4 using the actual
 source rather than local optimality; or to replace one of the five endpoint
-patterns while preserving its inherited full-cap comparisons. The new pair
-filter removes I2 only at a pivot where all three partners fail its raw test.
+patterns while preserving its inherited full-cap comparisons. The interval and chronological
+filters remove I2 at a pivot when every partner is excluded by one of them.
 No correspondence between a matrix template and a global source case is
 claimed without an additional proof.
