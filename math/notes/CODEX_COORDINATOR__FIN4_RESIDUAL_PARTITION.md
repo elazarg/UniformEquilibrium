@@ -13,6 +13,52 @@ the native absorbing pivot minimum is zero, so none of these positive-gap
 source cases occurs there. No source case is universally closed for
 arbitrary tables.
 
+The domain has three distinct levels. The sixty raw rewards consist of four
+own-singleton levels, twelve off-own singleton comparisons Gamma, and
+forty-four higher-coalition rewards. Sections1–8 classify a conservative
+intersection of necessary singleton tests; additional whole-completion
+producers, including the negative-chord test in Section8, remove more of it.
+The higher-reward theorems below give overlapping sufficient regions, not
+an exhaustive partition of those forty-four coordinates. Sections9–13 instead
+classify selected minimizing objects. Their cases are not raw-table cells,
+and there is no proved correspondence between their ten cases and the ten
+pointed matrix templates. No coverage percentage, bounded residual reward
+set, or lower-dimensional counterexample locus follows from this atlas.
+
+The exact global target remains terminal approximate Nash at every error,
+equivalently zero infimum of full behavioral exploitability. A counterexample
+requires one positive gap against EVERY behavioral profile. Reward robustness
+makes positive-gap tables an open set, so a counterexample cannot survive
+only on an exceptional equality surface. Generic rational representatives
+can be selected; this does not transport a chosen minimum, profile, or law
+through independently selected normalizations. Own-zero native games always
+have the all-Never equilibrium: their positive-gap premise is over absorbing
+profiles, not unrestricted native profiles.
+
+Exact finite-period production is already known to be nonuniversal. The
+tracked declaration `no_isQuittingBlockCertificate_solanPassivePaddedReward_one`
+(`UniformEquilibrium/Quitting/Boundary/Analytic/SolanPassivePaddingBlockNoGo.lean`)
+gives an explicit integral four-player table with no exact absorbing
+punishment-admissible block certificate of any finite period. Growing the
+exact families below is useful reward coverage, but cannot alone supply a
+universal producer in that certificate language. The exact alternative
+`quittingGame_exists_uniformEquilibriumPayoff_iff_fixedBoxPackets_or_sureRoot`
+(`UniformEquilibrium/Quitting/Projective/FixedBoxForwardCharacterization.lean`)
+identifies a global target under its normality and positive-own-level
+hypotheses: bounded approximate packets with error controlled relative to
+absorption, or a Nash root against actual punishment values with a sure
+quitter. Producing one alternative from every remaining table is open.
+
+The source reductions also remain separate. The tracked unrestricted SUM
+source has full-debt and reset-rigid chambers; the reviewed least-Never
+source has two bridge configurations; the native observer-exact source in
+Section9 has five actual and five inherited cases. No surviving top-level
+case in these partitions has a universal consumer. MAX-minimum equal-debt
+and harmonic tests, SUM-minimum margins, and constrained native minima have
+different objectives and cannot be imposed on one selected point without
+an adapter. The stationary UE branch has a consumer; the finite-calendar
+constrained source F in Section9 is not that branch and remains open.
+
 The [weighted collision theorem](../exports/WEIGHTED_COLLISION_DOMINANCE_UNIFORM_EQUILIBRIUM.md)
 separately supplies at most43 finite raw existence tests at each fixed
 singleton matrix. Its successful regions are removed before attacking the
@@ -689,6 +735,31 @@ The failed sign, non-Q/homogeneous, degree, strict-column and passive-child
 branches are already eliminated by their established matrix-only producers
 or source reductions. Sections2–7 reorganize their surviving intersection;
 they do not eliminate another game from it.
+
+This intersection is not the complete complement of known singleton-only
+existence criteria. In particular, the
+[negative-chord Hamiltonian theorem](../exports/NEGATIVE_CHORD_HAMILTONIAN_UNIFORM_EQUILIBRIUM.md)
+gives UE for EVERY higher-coalition completion and arbitrary own levels if,
+after a relabeling with indices modulo4,
+
+    Gamma_(j+1),j<=0<=Gamma_j,(j+1) for every j,
+    Gamma_02<=0, Gamma_20<=0,
+    Gamma_13>=0 or Gamma_31>=0.
+
+Its expanding singleton-cycle producer allows the other opposite chord to
+have mixed signs. The larger-eigenvalue four-cycle theorem is contained in
+this sign class; the smaller-eigenvalue-greater-than-one branch has negative
+full determinant and is already outside the present det Gamma>0 source.
+Thus a surviving counterexample must fail this additional sign test under
+EVERY labeling. The explicit matrix
+
+    [0,1,-1/2,-1; -1,0,1/4,1; -1,-1,0,14/5; 2,-1,-1,0]
+
+passes the five tests of Section1 but is covered by this theorem. The ten
+pointed templates therefore contain already-solved subregions. No whole
+template is asserted solved for arbitrary higher rewards; the matrix
+classification remains a useful necessary scaffold, not an exhaustive
+equilibrium classification.
 
 Within an admitted cell, retain the ORIGINAL reward table and apply the
 remaining sufficient criteria with their actual collision hypotheses. In
