@@ -129,6 +129,27 @@ late common support, a quiet observer has infinitely many exact response
 ties. Activating that observer with a compensated decrease of the inherited
 objective remains open; the result does not eliminate I2.
 
+The [exact local realization theorem](CODEX_COORDINATOR__I2_STRICT_SCREEN_REALIZATION.md)
+now realizes every strict passing common-support I2 screen, with its generic
+nonzero pair entry, by actual infinite laws. One quiet observer is tied at
+every date, the other is strictly quiet, and the partner law is extreme in
+the retained-moment feasible set. All higher rewards are arbitrary finite.
+A weighted sequence-space contraction handles resonances. Thus these local
+calendar and extremality conditions cannot eliminate an open passing cell;
+the global objective and inherited head must do the work. The complete
+[review](../feedback/CODEX_COORDINATOR__I2_STRICT_SCREEN_REALIZATION__BY_REVIEW.md)
+checks actual laws and full behavioral responses. No global minimum or
+positive-gap example is supplied by this local construction.
+
+For an inherited endpoint with three zero observer caps, Section12 of the
+[residual partition](CODEX_COORDINATOR__FIN4_RESIDUAL_PARTITION.md) adds
+u+r(1-v)<=b/N_p(Y), strictly for a least-pivot-Never selected global minimum.
+Together with the existing removal inequality, this is equivalent to ALL
+finite and infinite self-repetition comparisons. It removes an additional
+region of endpoint data; once the inequality holds, longer repetitions
+cannot close the case. Its [independent review](../feedback/FIN4_INHERITED_SELF_REPETITION__BY_REVIEW.md)
+pins the exact section.
+
 Whole mathematical reviews cover the [local theorem](../feedback/CODEX_COORDINATOR__OBSERVER_ORTHANT_ATTRACTOR__BY_GENERAL_REVIEW.md),
 [entry analysis](../feedback/CODEX_COORDINATOR__GLOBAL_ENTRY_AND_EXCURSIONS__BY_REVIEW.md),
 and [two-owner replacement](../feedback/CODEX_COORDINATOR__TWO_OWNER_CONTACT_REPLACEMENT__BY_INDEPENDENT_REVIEW.md).
@@ -159,6 +180,32 @@ finite polynomial test, is convex after logarithms, and has one critical
 Perron boundary on each positive ray. A positive subcritical minimum must lie
 strictly outside it. This remains a necessary condition for other tables,
 not an arbitrary-table UE producer.
+
+## A general finite reward test with coverage still under audit
+
+The [finite vertex criterion](CODEX_COORDINATOR__FINITE_VERTEX_CAP_ROOT_CRITERION.md)
+proves UE for any finite number of players at least two, including arbitrary
+signed recipient offsets. Compute the joining polynomial C and rowwise
+reward bound H from the native table. An invertible nonnegative matrix T
+and positive odds box xbar must satisfy
+
+    0<=z-T C(z)<=xbar-T H
+
+at every box vertex. This is finite raw arithmetic; it assumes no strategic
+entry or return. Brouwer produces a nontrivial exact root at every nonzero
+nonnegative cap within the reward box. A global partial-Nash minimum in the
+closure of profiles where every clock is finite would then admit strict
+descent. Hence the full behavioral gap is zero on that stronger carrier,
+which also justifies arbitrary signed offsets and the uniform horizon limit.
+
+Two independent whole-proof reviews passed: [adversarial](../feedback/CODEX_COORDINATOR__FINITE_VERTEX_CAP_ROOT_CRITERION__BY_ADVERSARY.md)
+and [fresh](../feedback/CODEX_COORDINATOR__FINITE_VERTEX_CAP_ROOT_CRITERION__BY_FRESH_REVIEW.md).
+The important remaining issue is coverage. Tested examples admit stationary
+equilibria numerically; there is no certified example outside all applicable
+existing criteria, nor a proof that the entire test reduces to stationarity.
+This complete existence theorem therefore remains internal and is not counted
+as a new Fin4 counterexample-class exclusion. No claim of a universal finite
+test for arbitrary rewards is made.
 
 ## Constructed equilibrium classes
 

@@ -1064,6 +1064,107 @@ attempt, but no such compensated descent is yet proved. Its objective must
 retain the inherited head's full maximum and coefficient
 lambda=1/N_p(head); conditional-tail minimality is not supplied.
 
+The converse local calculation is now complete on the strict common-support
+screen: when the final cross inequality in(12) at z=rho is strict and the
+generic pair reward Z_h({h,i}) is nonzero, the
+[exact realization theorem](CODEX_COORDINATOR__I2_STRICT_SCREEN_REALIZATION.md)
+constructs an actual infinite pair tail for every finite choice of the higher
+rewards. One quiet observer ties at every date, the other is strictly quiet,
+and the partner law is extreme in the same retained-moment set. Pivot debt
+is positive and quadratic. These are local configurations, without the
+required head or global minimality. They show that further local calendar
+existence or contact-extremality tests cannot discard any open strict passing
+cell. The equality boundary and the global variational obligation remain.
+
+## 12. Complete self-repetition test for three zero observer caps
+
+The following strengthens Section9.3 with a necessary source inequality.
+It excludes a subregion of inherited endpoint data and exhausts all
+self-repetition comparisons; it does not close the endpoint pattern.
+
+Use the native augmented carrier and retained-query graft from the
+[zero-observer boundary reduction](CODEX_COORDINATOR__ZERO_OBSERVER_BOUNDARY_REDUCTION.md). Let C impose zero debt for all observers,
+m=min_{C,nu=0} d_p>0, 0<r<m, mu=min_C(d_p+r nu). Let Y be an ALL-END global
+minimum represented as Y=Phi_P(Q), with P an actual positive-Never head.
+Suppose Q has zero observer payoffs and caps, is ALL-END, and has
+
+ b=B_p(Q)=e_p(Q)>0, u=U_p(Q), v=nu(Q)>0, n=N_p(Q), h=v/n.
+
+Write s=nu(P)>0, lambda=1/N_p(P), and
+
+ g=B_p(P)-e_p(P), A=u+r(1-v).
+
+The existing source gives 0<=g<=s lambda b and 0<v<=h<1. In fact n<1:
+if n=1, the complete-law identity |U_p-e_p|<=2M(1-N_p) gives u=b.
+Repeating Q then gives an absorbing zero-debt limit (h=v), contrary to m>0.
+Thus 0<n<1 and 0<v<h<1.
+
+**Proposition.** Every such inherited endpoint satisfies
+
+    A <= lambda b/n = b/N_p(Y).                          (1)
+
+Together with the already established removal inequality
+
+    A >= lambda b-g/s,                                  (2)
+
+these are exactly the global-minimality comparisons against every competitor
+Phi_P(Q^k), k=0,1,2,...,infinity. Here Q^0 is literal AllNever. The separate
+comparison of Q^infinity itself to m remains necessary; it is not asserted
+to follow from (1)--(2).
+
+If Y is selected with the least pivot Never mass among all global minima,
+then (1) is strict. Such a selection exists because the minimizing fibre is
+compact and every subcritical minimum has positive joint Never mass.
+
+Proof. Each Q^k is obtained by retained-query grafts and has exactly
+
+ B_p(Q^k)=b sum_{j=0}^{k-1}h^j,
+ U_p(Q^k)=u sum_{j=0}^{k-1}v^j, nu(Q^k)=v^k.
+
+All observer caps and payoffs remain zero. Therefore the original head's
+three observer comparisons are unchanged. For k>=1, the pivot tail cap is
+at least b, so ALL-END of Y implies that the head's continuation-through-tail
+cap branch remains maximal. Consequently, exactly,
+
+ [J_r(Phi_P(Q^k))-J_r(Y)]/s
+       =sum_{j=1}^{k-1}[lambda b h^j-A v^j].             (3)
+
+At k=2, nonnegativity of (3) gives lambda b h-A v>=0, proving (1).
+Conversely, h/v=1/n>=1 and lambda b>0 imply that (1) makes every summand
+in (3) nonnegative. Hence every finite k comparison holds. Boundedness and
+compactness give the k=infinity comparison by taking limits. The k=0
+comparison is exactly g-s lambda b+s A>=0, which is (2). Thus no further
+self-repetition inequality remains after these two tests.
+
+If equality holds in (1), k=2 has exactly J_r=mu, while
+N_p(Phi_P(Q^2))=N_p(P)n^2<N_p(P)n=N_p(Y). This contradicts the stated
+least-pivot-Never selection and proves strictness.
+
+The retained-query operation uses limits of finite grafts on the original semantic
+carrier, not execution of a continuation after infinitely many dates. This
+proposition has the same interpretation. The retained old-head maximum is
+not dropped: its branch is justified separately for k>=1, while k=0 uses
+the exact maximum through g.
+
+### Comparison with the prior scalar conditions
+
+Condition (1) is not a formal consequence of the displayed removal,
+absorbing-ratio and inverse-axis Never inequalities alone. For an arithmetic
+control, take
+
+ m=3/5, r=1/2, n=h=9/10, v=81/100,
+ b=u=3/20, lambda=6/5, g=0, S=1/2.
+
+Then b/(1-h)-u/(1-v)=27/38>m, A=49/200>lambda b=9/50,
+and N_p(Y)=n/lambda=3/4<1/(1+r S)=4/5. But
+A=49/200>lambda b/n=1/5, so (1) fails. This is only a strictness check
+between scalar screens, not an actual positive-gap game or endpoint.
+
+After this inequality holds, longer repetitions cannot yield a descent.
+Closing this pattern requires a replacement outside that family or a raw
+bound forcing the inequality to fail. Independent review is recorded in
+[the repetition audit](../feedback/FIN4_INHERITED_SELF_REPETITION__BY_REVIEW.md).
+
 ## Verification and next obligations
 
 Independent reviews cover the complete [matrix partition, Sections1–8](../feedback/FIN4_RESIDUAL_PARTITION_MATRIX__BY_FRESH_REVIEW.md)

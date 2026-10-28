@@ -283,3 +283,18 @@ This is a necessary condition at the selected global minimum, not a claim
 that outside D is an equilibrium obstruction or that all source points
 are actual. It does not preserve an inherited head's fixed observer caps
 and is not an admissible variation inside that separately constrained fibre.
+
+## A whole reward-box consumer
+
+The [finite vertex criterion](CODEX_COORDINATOR__FINITE_VERTEX_CAP_ROOT_CRITERION.md)
+provides a complete equilibrium conclusion under an additional raw box test.
+In this cyclic chamber, write H_i=max(0,max_D Z_i(D)). If an explicit
+supersolution xbar>0 satisfies C(xbar)>=H, monotone iteration supplies a
+nonzero root at every nonzero nonnegative attainable cap. The stronger
+all-marginal-finite carrier minimum then gives approximate full Nash profiles
+and UE after arbitrary signed row offsets. This condition is sufficient;
+it is not asserted necessary or supplied by every table in the chamber.
+The general vertex theorem permits signed higher joining terms and does not
+require L inverse-positive. Its coverage beyond existing stationary and
+other existence criteria remains unproved, so no additional Fin4 class is
+counted from this consumer yet.
