@@ -240,3 +240,238 @@ The singleton topology obstruction in the axis note is therefore specific
 to its finite-core architecture: the signed-e direct construction handles
 this H for the stated higher-reward family. Producing equilibria for arbitrary
 higher rewards on the remaining singleton patterns remains an open obligation.
+
+## 5. The entire penalty axis on a parameter strip
+
+This section fixes the complete table displayed below. It combines an exact
+stationary bridge with the finite direct return to cover every real K.
+
+### Exact table and conclusion
+
+Use arbitrary original own levels kappa_i and r_i(D)=kappa_i+Z_i(D) on nonempty
+coalitions, with live and literal Never rewards zero. The complete native table is
+
+| D | Z0 | Z1 | Z2 | Z3 |
+|---|---:|---:|---:|---:|
+|0|0|2|2|-1|
+|1|3|0|-2|-2|
+|2|-1|1/2|0|1|
+|3|3|-3|-1|0|
+|01|0|-1|-10|-12|
+|02|-1/10|5|2+eta|-219/29|
+|12|-12|-K|p|-6|
+|03|-20|3|-5|1|
+|13|2|-100|-1|10|
+|23|-6|9|3|-100|
+|012|-20|6|-100|11|
+|013|-20|8|10|-10|
+|023|-20|-8|-100|15/2|
+|123|-8|11|2|1|
+|0123|-5|-9|-100|21/2|
+
+Put eta_min=305713711170/4725703339153. Every table with
+
+    eta_min <= eta <= 1,       -8 <= p <= 1,       K in R
+
+has an exact proper terminal Nash profile and its original uniform-equilibrium
+payoff, against every complete behavioral replacement. The profile is stationary
+when K<=-1/2 and is the existing finite core-free return when K>=-1/2. Both
+branches include the split boundary. In particular this closes the entire K
+axis at eta=1,p=0 and at eta=12281660/12608823,p=0.
+
+The stationary assertion is stronger in eta: it holds for every 0<eta<=1,
+-8<=p<=1 and K<=-1/2. The core-free assertion is stronger in p and eta: it
+holds for every eta>=eta_min, every p in R and K>=-1/2. No all-K conclusion
+is claimed below eta_min, above eta=1, or outside the bounded p interval.
+
+### Narrow existing-source comparison
+
+The table and finite return are those of Sections5–6 of
+`math/exports/CORE_FREE_JOINT_RETURN_UNIFORM_EQUILIBRIUM.md`.
+Its existing sufficient K bound can be improved by checking its sole
+K-dependent comparison; this is done below without altering the construction.
+
+The full singleton inverse is
+
+    [2/5,2/7,12/35,9/35;
+     1/5,2/7,-9/35,2/35;
+     4/5,6/7,-6/35,48/35;
+     2/5,0,1/5,2/5].
+
+Thus `BOUNDARY_INVERSE_COLUMN_UNIFORM_EQUILIBRIUM.md` already covers the
+K-to-minus-infinity positive-jackpot tail: its recipient1 inverse column is
+nonnegative, has zero set {3}, and the corresponding inverse principal entry
+is 2/5>0. It provides an existential tail threshold, not the finite bridge
+proved here. On support012 the positive recipient1 inverse column has zero
+outside singleton projection, so the strict outside test in
+`WEIGHTED_COLLISION_DOMINANCE_UNIFORM_EQUILIBRIUM.md` does not apply on that
+support. The construction below explicitly prices the outside quadratic terms.
+The separate `SIGNED_COLLISION_PARAMETER_UNIFORM_EQUILIBRIUM.md` fixes different
+singleton12 and pair13 entries and is not this table unchanged.
+No exhaustive exclusion of every other implemented producer is claimed.
+
+### Stationary construction on K<=-1/2
+
+Write a=2+eta, so 2<a<=3. Seek stationary hazards (x,y,z,0), with z in(0,1].
+For each player define H_i as opponent all-Continue probability, Q_i as the
+forced-Quit native reward, P_i as the native stopping contribution when that
+player Continues, and F_i=(1-H_i)Q_i-P_i. Active indifference is F_i=0;
+the quiet player3 needs F3<=0.
+
+Player0's equation is f0(y,z)=0, where
+
+    10 F0 = f0(y,z)
+      =199z(z-1)y^2+(-198z^2+139z-30)y+z(10-z).
+
+For z in(0,1], f0 is strictly decreasing in y>=0: its quadratic coefficient
+is nonpositive, and the discriminant of -198z^2+139z-30 is -4439<0.
+It is positive at y=0, while
+
+    f0(1/4,z)=(-609z^2+517z-120)/16<0
+
+because the discriminant is -25031. Thus there is one simple root y(z) in
+(0,1/4), continuous through z=1 and extending to y(0)=0 with y'(0)=1/3.
+We also have y(z)<3z/4. Indeed
+
+    f0(3z/4,z)=z*J(z)/16,
+    J(z)=1791z^3-4167z^2+1652z-200<0 on[0,1].
+
+For z<=1/3, J(z)<=-3570z^2+1652z-200<0, whose discriminant is -126896.
+For z>=1/3, J'(z)=5373z^2-8334z+1652<0: this convex quadratic is negative
+at both endpoints 1/3 and1. Finally J(1/3)=-46.
+
+With this y, player2's equation is the quadratic in x
+
+    f2(x,y)=(x+y-xy)*[a*x*(1-y)-100xy+p*y*(1-x)]
+              -2x+2y+10xy=0.
+
+At x=0 it is y(2+py)>0, since p>=-8 and y<1/4. It increases with a and p
+at a fixed x in(0,1), so at x=1/10,
+
+    f2(1/10,y)<=(-17+233y-846y^2)/100<0,
+
+the last discriminant being -3239. A quadratic with these opposite endpoint
+signs has exactly one simple root x(y) in(0,1/10). Its derivative in x is
+negative at that root, so these roots form one continuous branch. Near y=0
+the branch has x=y+O(y^2), by the IFT at (x,y)=(0,0).
+
+Moreover x<2y. For y>=1/20 this follows from x<1/10. For y<1/20, evaluate
+at x=2y and bound a<=3,p<=1 to get
+
+    f2(2y,y)<=y*(-2+41y-638y^2+416y^3)
+             <=y*(-2+41y-600y^2)<0.
+
+The last quadratic is negative because its discriminant is -3119. Uniqueness
+of the root then gives x<2y. Consequently x<3z/2 and y<3z/4 throughout.
+
+Set h1=x+z-xz and define
+
+    K(z)=[-x+7xz-(2x+z/2+5xz/2)/h1]/[z*(1-x)].
+
+This is exactly player1's indifference equation, because
+
+    Q1=-x+7xz-K*z*(1-x),  P1=2x+z/2+5xz/2.
+
+It is continuous on(0,1]. Since x=z/3+O(z^2), y=z/3+O(z^2),
+
+    K(z)=-7/(8z)+O(1) -> -infinity as z -> 0+.
+
+At z=1, y=9/89 and
+
+    K(1)=(3x-1)/[2(1-x)] > -1/2.
+
+Hence IVT supplies some z in(0,1) for EVERY prescribed K<=-1/2. No monotonicity
+of K(z), radical selection or numerical root search is required.
+
+### Exact outside inequality on the entire stationary branch
+
+The own row3 expectations are
+
+    Q3=(1-z)*(x+10y-21xy)
+          +z*(-100+(215/2)x+101y-98xy),
+    P3=-x-2y+z-9xy-(219/29)xz-5yz+(1002/29)xyz.
+
+Since x<1/10,y<1/4, the second bracket in Q3 is below -64. Therefore
+
+    Q3 <= x+10y-64z <= -55z.
+
+The active equations themselves give
+
+    3y-z <=14yz,
+    x-y <=5xy+(x+y)*(3x+y)/2.
+
+For the first, use P0=3y-z-14yz=(y+z-yz)Q0 with
+Q0=-z*(1+199y)/10<0. For the second, use f2=0 and the upper bound
+Q2<=3x+y. These inequalities imply
+
+    -P3 <=14xy+(x+y)*(3x+y)/2+(219/29)xz+19yz
+         <=(43833/928)*z^2 <48z^2.
+
+Here the final estimate uses x<3z/2,y<3z/4; its coefficient is exactly
+63/4+189/32+657/58+57/4. Finally 1-H3>=z and Q3<0, so
+
+    F3=(1-H3)Q3-P3 < -55z^2+48z^2 = -7z^2 <0.
+
+Thus the entire constructed branch is legal, including its approach to
+z=0 and its finite endpoint. The outside comparison is not a numerical check.
+
+### The existing direct return on K>=-1/2
+
+Section5 of the core-free packet already proves every remaining raw return
+guard for eta>=eta_min, parametrized by a unique b in(0,331/1000], with
+
+    eta=-(3b-1)(73b-1450)(190b+29)
+               /[29b*(219b^2-1030b-1160)],
+    x=29b/(29+219b),
+    X1=(1504b^2-161b+2610)/[2*(7629b+2030)].
+
+Player1 always Continues in that finite construction. The only comparison
+that contains K is its joint02 Quit offer
+
+    x*(-1+7b)-K*(1-x)*b <= X1.
+
+At K=-1/2 its exact margin is
+
+    H(b)/[2*(219b+29)*(7629b+2030)],
+    H(b)=-4217508b^3-980282b^2+625791b+75690.
+
+H is strictly concave on[0,1/3], with H(0)=75690 and H(1/3)=172465/9.
+It is therefore strictly positive throughout that interval. Increasing K
+only improves this comparison. All other comparisons are independent of K,
+and p is invisible because player1 never quits. Thus the same finite return
+works for every eta>=eta_min,p in R,K>=-1/2. This rechecks the construction
+under a weaker K bound rather than silently invoking its former sufficient
+bound outside its stated range.
+
+At the explicit five-date eta=12281660/12608823, Section6's fixed profile
+has the EXACT optimal lower bound
+
+    K >= -7197986/9285205 = -0.775210240377... .
+
+Substitution of b=3/10,x=87/947,X1=134853/431870 into the joint comparison
+gives this value. Equality is legal; below it a reached joint-date Quit
+replacement by player1 is profitable. This provides an explicit overlap
+with the stationary K<=-1/2 half-line.
+
+### Complete behavioral and original uniform payoff
+
+For the stationary branch, every player has a proper opponent. Let
+U_i=P_i/(1-H_i). The active equalities give Q_i=U_i and quiet3 has Q3<U3.
+Each prescribed Bellman equation is exact and both action endpoints are at
+most U_i. Against any complete behavioral replacement, opponents-only survival
+is bounded by H_i^n. Unrolling the inequalities and letting this bounded
+remainder vanish proves exact terminal Nash and identifies U as its native
+terminal payoff. Every replacement absorbs almost surely, so restoring the
+own level adds exactly kappa_i. The geometric absorption-time bound makes
+terminal and N-date-average payoffs uniformly close over every replacement.
+The SAME stationary profile consequently yields its fixed original UE target.
+
+The direct-return branch uses the frozen packet's exact finite-root comparisons
+and joint02 opponents-only absorption bound. Its unchanged complete behavioral
+and original uniform-payoff consumer applies verbatim. These two exact profile
+producers cover K<=-1/2 and K>=-1/2 with no gap.
+
+All displayed polynomial formulas, discriminants, rational endpoints and
+thresholds were checked by exact symbolic arithmetic. No Lean check was run.
+The two half-line producers cover every real K under the displayed strip
+hypotheses. The remaining parameter regions are not closed by this argument.

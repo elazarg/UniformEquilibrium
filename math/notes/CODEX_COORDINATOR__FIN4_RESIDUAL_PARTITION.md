@@ -44,12 +44,25 @@ and nonnegative continuations. Together the two producers cover the
 of the displayed canonical family: every eta>0 and every real p, with a
 finite sufficient K threshold. On the whole tail
 eta>=305713711170/4725703339153, its explicit K bound is independent of
-both p and eta. The direct producer uses only one joint02 date and solo3
-dates; its exact rational example has five dates and works for every K>=1
-and arbitrary p. At p=0 and K>=1000 that example is stationary-free and
-fails the finite-core guard strictly. This closes a surviving region, with
-no arbitrary-table or whole-source-case conclusion. The singleton sign
-architecture and the other raw return guards still restrict the class.
+both p and eta. For the complete fixed canonical table, Section5 additionally
+closes EVERY real K when
+305713711170/4725703339153<=eta<=1 and -8<=p<=1: a stationary012 producer
+covers K<=-1/2, and the direct return covers K>=-1/2. This full K axis
+requires the fixed higher rewards printed there. The direct producer's
+five-date example is stationary-free at p=0,K>=1000; stationary existence
+is a genuine complementary mechanism elsewhere in the strip.
+
+The [three-owner joint return](../exports/THREE_OWNER_JOINT_RETURN_UNIFORM_EQUILIBRIUM.md)
+crosses the earlier quiet3 joining barrier by letting player3 mix at the
+joint date. A raw linear equation makes both of player3's values zero;
+a quadratic supplies the return. Its exact five-date family permits K>=2,
+arbitrary p and arbitrary own levels. At K>=1000,p=0,own levels1, the example
+lies outside all80 stationary patterns, all65 sure-first selection patterns,
+all14 proper children in the five withdrawal families, and the audited
+earlier raw producers. The old joint02 root instead has a strictly positive
+quiet3 Quit offer. The new theorem still requires its physical-root,
+continuation, prefix and wash tests; it does not close every table that
+fails the old quiet3 guard or any entire global-source case.
 
 The [root geometry extension](CODEX_COORDINATOR__JOINT_RETURN_ROOT_GEOMETRY.md)
 replaces the finite-core producer's simple-root assumption by a sign-changing
@@ -61,6 +74,17 @@ The complete-axis note also removes the direct producer's sign requirement
 on Gamma32. Its three-date rational example works on pointed witness3,
 whose singleton pattern defeats every labeling of the finite-core producer.
 Only the displayed higher-reward family is covered on that matrix.
+
+The [complete scalar solo-return classification](CODEX_COORDINATOR__COMPLETE_SOLO_RETURN_GEOMETRY.md)
+gives necessary and sufficient conditions for a finite solo word with
+positive outer endpoints, for arbitrary singleton and joining signs. Its
+first-step test shows that a violated wash-entry inequality cannot be repaired
+by lengthening the word. A separate positive-continuation joint producer
+removes all singleton sign restrictions and works on a completion of the
+exceptional matching pattern. The [singleton topology census](CODEX_COORDINATOR__JOINT_RETURN_SINGLETON_TOPOLOGY.md)
+classifies exactly which pointed templates guarantee the earlier signed
+architecture prerequisites. Those are prerequisite tests, not UE classifications;
+higher rewards and physical return guards remain independent.
 
 Within that singleton/core template, the complementary inequality
 Z0(02)<=Gamma02 already gives a pure stationary player2 equilibrium when
@@ -84,6 +108,12 @@ independent law of the modified-Never game. At a genuine positive global
 MAX minimum m, auxiliary regret is at least absorption times m^2/(64M),
 where M bounds the original rewards. Producing a block below this ratio
 would contradict that source; the bound does not produce such a block.
+The same note proves that a sufficiently flattened canonical counterexample,
+with all four own rewards1 and all terminal rewards positive, has a uniform
+gap between its genuine global MAX minimum and every sufficiently accurate
+finite-menu Nash law. This rules out the proposed menu-Nash approximation
+bridge even with positive own rewards. It neither constructs a counterexample
+nor closes a source case.
 
 For the inherited pattern with three zero observer caps, the
 [complete word optimization](CODEX_COORDINATOR__INHERITED_ABSORBING_WORD_OPTIMIZATION.md)
