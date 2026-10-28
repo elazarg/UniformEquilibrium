@@ -20,6 +20,20 @@ remaining collision rewards. The [negative-pair return theorem](../exports/NEGAT
 closes its entire displayed outside-weight sign split, including equality.
 Neither theorem covers all singleton cells or arbitrary collision rewards.
 
+For the inherited pattern with three zero observer caps, the
+[complete word optimization](CODEX_COORDINATOR__INHERITED_ABSORBING_WORD_OPTIMIZATION.md)
+exhausts all finite, countable and limiting alternations of the endpoint and
+its inverse-axis blocks, with the full original-head cap retained. At the
+canonical choice r=m/2, its stronger absorbing test and the prior finite tests
+exhaust that entire replacement family for every head threshold. Exact scalar
+data still pass the full test; the endpoint pattern itself remains open.
+
+The [proper one-date obstruction](CODEX_COORDINATOR__FINITE_PROPER_ROOT_OBSTRUCTION.md)
+preserves any supplied strict-column singleton matrix and shows that proper
+one-date reselection and complete direct/appended axis replacements can all
+fail to improve a strict proper-class minimum. Its explicit absorbing Nash
+escape gives m=0, so it excludes a local proof mechanism, not actual case F.
+
 ## 1. Scope and generic source
 
 Let Gamma be a real four-by-four zero-diagonal matrix. Work in the generic
@@ -1388,7 +1402,11 @@ source and genericity assumptions remain mathematical prerequisites.
 The next independent tasks are to cover the arbitrary collision rewards in
 these singleton cells; to eliminate F, I2, I3p, I3o, I4 using the actual
 source rather than local optimality; or to replace one of the five endpoint
-patterns while preserving its inherited full-cap comparisons. The interval and chronological
+patterns while preserving its inherited full-cap comparisons. In the
+three-zero-cap pattern, further alternations of the same endpoint and inverse
+axis cannot strengthen the complete word test at r=m/2; a closure needs
+another replacement or an actual-source reason that this test fails.
+The interval and chronological
 filters remove I2 at a pivot when every partner is excluded by one of them.
 No correspondence between a matrix template and a global source case is
 claimed without an additional proof.
