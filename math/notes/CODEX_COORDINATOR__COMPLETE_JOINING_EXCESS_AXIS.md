@@ -115,3 +115,128 @@ be treated as that theorem's full hypothesis.
 The next substantial obligation is a producer for arbitrary higher rewards
 on the remaining matrix patterns, or a true global-source exclusion. The
 completed eta axis and the sign extension do not supply either one.
+
+## 4. Direct returns beyond that singleton architecture
+
+The direct-return theorem also admits the signed reciprocal entry below.
+This extension does not claim separation from every existing UE producer.
+
+### 4.1. Removing the sign of e
+
+In the direct-return raw theorem, replace `e>0,D>0` by
+
+    e!=0, D!=0, 0<x=e*b/D<1.
+
+Keep every other hypothesis and definition, including the nonzero polynomial
+test. The theorem and its complete behavioral-deviation conclusion remain
+valid. The joint root's current row3 value is `e*b-x*D=0`. All other root
+comparisons use the resulting physical probability x and the raw rewards.
+Writing `tau=(C+s*b)/(k+s*b)`, exact elimination gives
+
+    T+h*tau-(1-tau)*x*(f+eta)
+      =-b*P_eta(b)/[(1-b)(k+s*b)*D*(D-e*b)].
+
+The denominator is nonzero: `k+s*b>0` follows from the retained C guard, and
+`D*(D-e*b)=D^2*(1-x)>0`. Thus the cubic still gives exactly the required
+row2 affine-return identity. The row1 identity and positivity of its j
+denominator are unchanged. The prefix, wash, final return, and absorption
+arguments use no sign of e or D. This proves the extension, including both
+signs of j and the equality wash boundary, without a simple-root requirement.
+
+On the no-wash branch `j<=0`, h may additionally be any real number. Retain
+the other assumptions and require a raw prefix probability a satisfying
+
+    B/(H+B)<a<min(tau,X1/(X1+g)),
+    (1-a)*X2>(h+c)*a.
+
+This is still an explicit interval test: additionally impose `a<u2`, where
+`u2=X2/(X2+h+c)` if `h+c>0`, and `u2=1` otherwise; select the midpoint of
+the resulting interval. The second inequality says precisely `Y2>c*a`.
+The continuation U has nonnegative quiet coordinates, with `U0,U2>0`;
+Y has strictly positive quiet coordinates. Their exact solo3 return stays
+on the segment between these endpoints. Subdivide the total mass so that
+`c*q<min(T,Y2)` at every root. Quiet1's joining reward is negative, quiet0 has
+current value at least `k*q>zeta0*q`, and owner3 is indifferent. No step of
+this no-wash proof needs `h>0`. This extension leaves g,c,A unchanged.
+
+### 4.2. An exact three-date example on pointed witness3
+
+The previously identified singleton matrix is
+
+    H=[0,3,-3,1;2,0,-1,-1;-1,-1,0,2;-1,-2,3,0].
+
+Relabel by `(new0,new1,new2,new3)=(old3,old1,old0,old2)`. Its new matrix is
+
+    Gamma=[0,-2,-1,3;-1,0,2,-1;1,3,0,-3;2,-1,-1,0].
+
+Thus `beta=1,e=-1,d=-2,f=1,k=3,h=3,g=1,n=-1,ell=2`.
+Choose the higher entries
+
+    Z0(02)=0, Z1(02)=5, Z2(02)=9/5, Z3(02)=-10,
+    Z0(03)=0, Z1(13)=-2, Z2(23)=1,
+    Z3(03),Z3(23),Z3(023)<=0.
+
+Let `Z1(12)=-K`. Every other higher entry is arbitrary fixed finite,
+including `p=Z2(12)`, provided
+
+    K >= [7*Z1(01)+Z1(012)-14]/4.                    (8)
+
+For a complete concrete table, set K=1, set the three displayed nonpositive
+row3 entries to -1, and set every otherwise unspecified higher entry to zero.
+Original rewards are `r(D)=kappa+Z(D)` with arbitrary original own levels
+kappa; original live/Never payoffs remain zero.
+
+Here `s=0,eta=4/5,A=2,c=1,zeta0=0`, and the raw polynomial is
+
+    P_eta(b)=-6*(7b-1)*(8b-1).
+
+Select
+
+    b=1/8, D=-5/8, x=1/5, C=1/7, T=1/5,
+    P1=3/20, j=-2/7, X1=7/20, X2=9/25, tau=1/21.
+
+Repeat the three independent hazard vectors
+
+    (0,0,0,1/42), (1/5,0,1/8,0), (0,0,0,1/41).
+
+Their current values are, respectively,
+
+    Y=(1/14,89/280,7/25,0),
+    X=(0,7/20,9/25,0),
+    U=(1/7,2/7,1/5,0).
+
+With `G=(3,-1,-3,0)`, exact transport gives
+`Y=(G+41X)/42` and `U=(G+40Y)/41`. At the joint date owner0 has
+Quit=Continue=0, while owner2 has Quit=Continue=9/25. Quiet1's margin is
+
+    [4K-7*Z1(01)-Z1(012)+14]/40 >= 0.
+
+Quiet3 has current value zero and Quit offer
+
+    [7*Z3(03)+4*Z3(23)+Z3(023)]/40 <= 0.
+
+The quiet0,1,2 margins at the two solo3 dates are
+
+| Current value | Quiet0 | Quiet1 | Quiet2 |
+|---|---:|---:|---:|
+| Y | 1/14 | 307/840 | 269/1050 |
+| U | 1/7 | 96/287 | 36/205 |
+
+Owner3 is indifferent at both dates. Thus all first-action comparisons hold
+exactly. Condition (8) is the exact quiet1 threshold; a convenient sufficient
+bound is `K>=1+(7/4)*max(Z1(01),0)+(1/4)*max(Z1(012),0)`.
+
+Every unilateral deviator faces opponents-only absorption at least 1/8 per
+three-date period, independent of that player's behavior. Bounded Bellman
+unrolling proves exact terminal Nash against every complete behavioral
+replacement, including Never. It also justifies arbitrary native row shifts.
+The same profile has fixed original uniform-equilibrium target `kappa+Y`;
+the standard bound is `52R/T_horizon` for the discrepancy between terminal
+and finite-horizon average payoffs when original rewards are bounded by R.
+Apart from the two entries bounded in (8), the remaining unspecified higher
+entries, including p, occur in no executed comparison.
+
+The singleton topology obstruction in the axis note is therefore specific
+to its finite-core architecture: the signed-e direct construction handles
+this H for the stated higher-reward family. Producing equilibria for arbitrary
+higher rewards on the remaining singleton patterns remains an open obligation.

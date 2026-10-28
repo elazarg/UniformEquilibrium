@@ -51,6 +51,17 @@ fails the finite-core guard strictly. This closes a surviving region, with
 no arbitrary-table or whole-source-case conclusion. The singleton sign
 architecture and the other raw return guards still restrict the class.
 
+The [root geometry extension](CODEX_COORDINATOR__JOINT_RETURN_ROOT_GEOMETRY.md)
+replaces the finite-core producer's simple-root assumption by a sign-changing
+root, including its adjacent-length boundary. In the positive d chamber,
+f*e*k>h*beta*d guarantees a physical sign-changing cubic root for every eta>0;
+the remaining quiet-owner and return guards still need verification. Exact
+triple-root and three-root examples prevent an unjustified uniqueness shortcut.
+The complete-axis note also removes the direct producer's sign requirement
+on Gamma32. Its three-date rational example works on pointed witness3,
+whose singleton pattern defeats every labeling of the finite-core producer.
+Only the displayed higher-reward family is covered on that matrix.
+
 Within that singleton/core template, the complementary inequality
 Z0(02)<=Gamma02 already gives a pure stationary player2 equilibrium when
 kappa2>=0, K>=max(0,-Gamma12), and Z3(23)<=Gamma32: each observer's joining
@@ -66,6 +77,13 @@ a strictly positive minimum blocks every sufficiently small finite prefix,
 uniformly over calendar length. Equality and the strict harmonic interior
 remain unresolved by that second-order test. This is an internal source
 restriction and method boundary, not a new UE reward class.
+
+The [whole-block regret bound](CODEX_COORDINATOR__GLOBAL_FINITE_BLOCK_REGRET_RATE.md)
+extends the critical-box repair to every finite timing block and every
+independent law of the modified-Never game. At a genuine positive global
+MAX minimum m, auxiliary regret is at least absorption times m^2/(64M),
+where M bounds the original rewards. Producing a block below this ratio
+would contradict that source; the bound does not produce such a block.
 
 For the inherited pattern with three zero observer caps, the
 [complete word optimization](CODEX_COORDINATOR__INHERITED_ABSORBING_WORD_OPTIMIZATION.md)
