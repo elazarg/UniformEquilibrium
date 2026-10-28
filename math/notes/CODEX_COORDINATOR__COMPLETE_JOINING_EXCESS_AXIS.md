@@ -1,9 +1,14 @@
-# Complete positive joining-excess axis and the remaining joint-return boundary
+# Complete joining-excess axis and collision-plane coverage
 
 Owner: CODEX_COORDINATOR. Ordinary mathematics, not checked in Lean. The
-positive joining-excess axis below is completely covered. Arbitrary Fin4
+positive joining-excess axis below is completely covered. Section7 closes
+the full collision plane for K>=0 and nonnegative own levels; Section8
+extends the proof to a specified negative-K region. Arbitrary Fin4
 remains open; this is a family with a fixed singleton matrix and specified
 higher entries, not an arbitrary-table theorem.
+
+The exact Section8 proof has an independent
+[localized-extension review](../feedback/CODEX_COORDINATOR__COMPLETE_JOINING_EXCESS_AXIS__BY_LOCALIZED_EXTENSION_REVIEW.md).
 
 ## 1. Exact raw family
 
@@ -647,10 +652,11 @@ the opponents-only absorption bound proves its full behavioral and original
 uniform-payoff conclusions. The finite period length need not be five.
 This proves the third row without assuming any strategic witness or root.
 
-### 6.3 A concrete gap requiring a different mechanism
+### 6.3 Exact limits of the earlier return and punishment mechanisms
 
 At R=-25,t=987,p=0,K>=1000,original own levels all1, neither preceding
-tail closes the table. For a period with one proper joint023 date and
+tail supplies UE. Section7 closes this table by bounded Nash invariance.
+For a period with one proper joint023 date and
 otherwise proper solo3 dates, at least one with positive hazard, the
 necessary polynomial is, up to positive scale,
 
@@ -678,5 +684,108 @@ The relevant existing semantic declarations are
 `quittingGame_fixedProfile_uniformPayoffWitnesses_of_terminalNash_exact`
 (`UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`).
 Their full-cap and fixed-target scopes were inspected; no Lean command was run.
-The next concrete question is a nonstationary producer for R=-25,t=987,
-with a genuinely different joint/return schedule.
+These complete architecture exclusions remain valid on a table now known to
+have UE. They delimit the earlier methods, not the current existence frontier.
+
+## 7. Complete collision plane for nonnegative own levels
+
+For the literal table of Section6, the
+[passive-payoff threshold theorem](../exports/PASSIVE_THRESHOLD_UNIFORM_EQUILIBRIUM.md)
+proves UE for every real R,t,p, every K>=0, and nonnegative original own
+levels. The three covering regions are:
+
+| Raw region | Mechanism |
+|---|---|
+|R<=-33/100, every real t|Bounded Nash invariance|
+|Every real R, t<=28599/29|Exact five-date return|
+|R>=-33/100, t>=28599/29|Two-date punishment profile|
+
+Every row allows K>=0 and arbitrary p. The first row follows from the new
+raw inequalities with H=3,a=100,c=11: their nontrivial comparisons are
+-67,-1167,33+100R,-778. It also allows every real eta. The two other rows
+use eta=12281660/12608823 and explicit profiles whose complete unilateral
+comparisons are proved in the linked theorem. Those explicit profiles permit
+arbitrary original own levels; the union of all three rows is claimed only
+for nonnegative own levels. The earlier Section6 regions with arbitrary
+own levels remain useful under their separate hypotheses.
+
+The R=-25,t=987 benchmark is therefore solved. Section8 gives an additional
+negative-K region. The next obligation is to cover arbitrary higher rewards
+outside these criteria, including the remaining negative-K or negative-own
+regions. No exhaustiveness claim for those remaining portions is made.
+
+## 8. A negative-K region from the localized invariant
+
+Use the complete native table in Section7 of
+[Passive threshold uniform equilibrium](../exports/PASSIVE_THRESHOLD_UNIFORM_EQUILIBRIUM.md).
+Define, for R<-33/100,
+
+    F(R)=639/6700                         if R<=-1,
+    F(R)=(609-30R)/[100(-33-100R)]         if -1<R<-33/100.
+
+There is UE whenever
+
+    K<0,  R<-33/100,  p<=K F(R),  kappa_i>=0.             (8.1)
+
+The parameters eta and t are arbitrary finite reals. We prove (8.1) using
+Sections3–5 of the linked export: their localized invariant consumer applies
+even though its particular raw criterion has a Z1(12)<=0 guard that fails here.
+
+First fix beta in (3/4,100/111) and suppose
+
+    R<=3-3/beta,  p<=K f(beta),
+    f(b)=(30+173b)/[100(100-111b)].                        (8.2)
+
+Write a=-K>0 and choose 3<V<beta/(1-beta). All player0 participant rewards
+are nonpositive and all row0 rewards are at most3, so every prefix preserves
+v0<V. We show that every nonzero Nash root against an input in this domain
+has a nonpositive current native payoff coordinate.
+
+If player0 is active, its supported Quit payoff is nonpositive. With0
+inactive, a sole active owner has own Quit payoff0. Active pair12 has
+Q2=p q1<0; pair13 has Q1=-100q3<0; pair23 has Q3=-100q2<0. Only active
+set123 remains. Put y=q1, b=q2, z=q3. Its active Quit offers are
+
+    Q1=a b(1-z)+z(111b-100),
+    Q2=p y(1-z)+z(3-y),
+    Q3=10y-100b+91yb.
+
+Suppose all are positive and b<=beta. Then Q3>0 gives
+y>100b/(10+91b). Neither z=0 nor z=1 is possible: Q2<0 at0 and Q1<0
+at1. Since p<0 and every denominator below is positive, Q2>0 and Q1>0 give
+
+    z/(1-z)>-p y/(3-y)>-100pb/(30+173b),
+    z/(1-z)<a b/(100-111b).
+
+Consequently -p<a f(b)<=a f(beta), contradicting (8.2). Here
+f'(b)=2063/[10(100-111b)^2]>0. Thus b>beta. For player0, replace v0
+by V and take the four (y,z) corners. The upper bounds are
+
+    V-(V+1)b,  3+(R-3)b,  3-15b,  2-10b.
+
+All are strictly negative for b>beta under our choices of V and R.
+Bilinear interpolation gives current payoff0<0, the remaining contradiction.
+Zero root preserves its input. Hence {v0<V,min_i v_i<=0} is Nash invariant.
+All fixed-seed prefix closures stay in a strict interior row0 bound, since
+V>3. The linked export's local escape and actual least-Never argument give
+absorbing native debts tending to zero; its nonnegative-own-level consumer
+gives one fixed original UE payoff.
+
+To obtain (8.1), when -1<R<-33/100 take beta=3/(3-R). Then beta is in
+the required interval and f(beta)=F(R). When R<=-1 and p<K639/6700,
+choose beta>3/4 sufficiently close to3/4, using f(3/4)=639/6700.
+At p=K639/6700, apply the strict result to p-epsilon and let epsilon
+decrease to0. Only Z2(12) changes: prescribed and deviating expected payoffs
+each change by at most epsilon, so total native debt changes by at most
+2epsilon. The same profiles remain absorbing. Thus absorbing debt infimum0
+and the original UE conclusion also hold at equality.
+
+The p restriction cannot be discarded using this invariant alone. At
+eta=12281660/12608823,R=-25,t=987,K=-1/4,p=0, the exact root
+q=(0,3/5,1/10,1/10000) is Nash against
+v=(0,-13483/359964,60011/19998,143/18). Its output is
+(429991/500000,6443/400000,3/12500,73/50), strictly positive in every row.
+All v coordinates lie within the literal reward ranges and v1<0. This is an
+invariant failure, not a counterexample to UE or a sharpness claim for F.
+The exact control and ratio identities are reproduced by
+[the rational checker](../experiments/CODEX_COORDINATOR__PASSIVE_THRESHOLD_CHECK.py).

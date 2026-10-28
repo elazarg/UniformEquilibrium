@@ -5,6 +5,15 @@ classifies this finite solo3 architecture. The raw producer broadens one
 higher-reward class; it does not solve arbitrary Fin4 or establish separation
 from every existing producer.
 
+Section7 retains a finite approximation mechanism with two distinct joint
+pairs, arbitrary signed own levels, and unrestricted behavioral deviation
+bounds. Its benchmark overlaps the passive-threshold theorem, so this is an
+internal constructive record. The exact section has an independent
+[consumer review](../feedback/CODEX_COORDINATOR__COMPLETE_SOLO_RETURN_GEOMETRY__BY_RESET_CONSUMER_REVIEW.md).
+Run `python math/experiments/CODEX_COORDINATOR__TWO_PAIR_RESET_CHECK.py`
+from the repository root for its rational quadratic and interval checks
+(requires SymPy).
+
 ## 1. Exact scalar classification
 
 Let
@@ -586,3 +595,205 @@ This settles the most immediate adjacent-pair extension of the failed
 single-joint return. A concrete next question is whether changing the active
 support inside the adjacent block, or using three adjacent joint dates, can
 produce a positive exit at this same raw table.
+
+## 7. A two-pair reset with a produced quadratic macro
+
+Ordinary mathematics, not Lean checked. A joint02 date, ten solo3 dates,
+and a finite truncation of a contracting joint03 reset produce arbitrarily
+accurate finite periodic profiles. The period may grow with accuracy.
+The [passive-payoff threshold theorem](../exports/PASSIVE_THRESHOLD_UNIFORM_EQUILIBRIUM.md)
+separately covers the old benchmark with
+nonnegative own levels; this section is retained as a distinct construction,
+not counted or exported as an additional counterexample-class exclusion.
+
+### Raw criterion and finite selection
+
+Write Z_i(D)=r_i(D)-r_i({i}), Gamma_ij=Z_i({j}), and kappa_i=r_i({i}).
+Native own singletons are zero. Original own levels may have either sign.
+Fix the labeling0,1,2,3 and b=2/5. Require
+
+    k=Gamma03>0, d=-Gamma30>0, A=-Z0(03)>0, B=Z3(03)>0,
+    Z0(02)<0, Z0(02)-Gamma02>0,
+    r2=Z2(02)>0, r2-Gamma20>0.
+
+Define u=-b Z0(02), Y0=b[Z0(02)-Gamma02]/(1-b), tau=Y0/k, and require
+0<tau<1. For i=1,2 put
+
+    c_i=-[Z_i(03)+A Gamma_i3/k+B Gamma_i0/d]/[1+A/k+B/d],
+    a_i=(c_i+Gamma_i3)/k, h_i=(c_i+Gamma_i0)/d.
+
+For one variable x form
+
+    w=Gamma30 x(1-b)+Gamma32(1-x)b+Z3(02)xb,
+    X2=x r2, D=(1+u/k)(1+w/d),
+    L2=(X2+a_2 u+h_2 w+c_2)/D-c_2,
+    Y2=x(r2-Gamma20)/(1-x).
+
+After cancelling denominators, the equation
+
+    Y2=tau Gamma23+(1-tau)L2                         (Q)
+
+has a polynomial numerator of degree at most2. Require it not identically
+zero. Test its finitely many real roots, retaining any x with0<x<1,w>0
+and all the following guards. Put
+
+    S=(1-x)(1-b),
+    P1=Gamma10 x(1-b)+Gamma12(1-x)b+Z1(02)xb,
+    L1=[P1+S tau Gamma13+a_1 u+h_1 w+c_1-c_1 D]
+                                      /[D-S(1-tau)],
+    Y1=tau Gamma13+(1-tau)L1, X1=P1+S Y1,
+    X=(-u,X1,X2,w), Y=(Y0,Y1,Y2,0), L=(0,L1,L2,0).
+
+The denominator defining L1 is positive because D>1>S(1-tau). Require
+
+    X1 >= Z1(01)x(1-b)+Z1(12)(1-x)b+Z1(012)xb,
+    w  >= Z3(03)x(1-b)+Z3(23)(1-x)b+Z3(023)xb.     (J)
+
+Produce q=1-(1-tau)^(1/10) and require, for i=0,1,2,
+
+    min(Y_i,L_i) >= q Z_i({i,3}).                  (S)
+
+The row0 comparison is automatic. Finally for i=1,2 define
+
+    alpha_i=[Gamma_i0-Z_i({i,0})]/(B+d),
+    beta_i=[Gamma_i3-Z_i({i,3})]/(A+k),
+    gamma_i=[Z_i(03)-Z_i({i,0,3})]/[(B+d)(A+k)],
+    U_i=(L_i-Gamma_i3)/k+beta_i,
+    W_i=(L_i-Gamma_i0)/d+alpha_i,
+    T_i=(L_i+c_i)/(kd)+gamma_i,
+
+and require
+
+    L_i>0, U_i>=0, T_i>=0, L_i+min(W_i,0)w>0.      (R)
+
+These are finite raw-table calculations and a quadratic root selection.
+No strategy, continuation vector or favorable return is supplied as input.
+Every table passing them has a fixed uniform-equilibrium payoff kappa+L.
+
+### Exact roots, limiting endpoint and finite error
+
+At joint02 with hazards(x,0,b,0) and successor Y, owners0,2 are indifferent
+by the definitions of Y0,Y2. Its current annotation is X; (J) supplies the
+two quiet comparisons. Equation(Q) and the L1 equation give
+
+    Y=tau Gamma[:,3]+(1-tau)L.
+
+Ten equal solo3 hazards q therefore take Y chronologically to L. All values
+lie on the segment from Y to L. Owner3 is indifferent, and(S) bounds every
+quiet offer at each of those ten dates.
+
+Starting with continuation X, repeatedly PREPEND joint03 roots. If the
+current continuation is(-u_n,v1_n,v2_n,w_n), use
+
+    q0=w_n/(B+d+w_n), q3=u_n/(A+k+u_n), q1=q2=0.
+
+Active indifference is literal: -A q3=k q3-(1-q3)u_n and
+B q0=-d q0+(1-q0)w_n. Thus
+
+    u_(n+1)=A u_n/(A+k+u_n), w_(n+1)=B w_n/(B+d+w_n).
+
+Put r=A/(A+k)<1 and h=B/(B+d)<1. Then u_n<=u r^n and w_n<=w h^n.
+For D_n=(1+u_n/k)(1+w_n/d), substitution in passive Bellman recursion gives
+
+    [v_i,n+a_i u_n+h_i w_n+c_i]/D_n=L_i+c_i.
+
+Its three coefficient identities are
+
+    a_i k-c_i=Gamma_i3, h_i d-c_i=Gamma_i0,
+    -a_i(A+k)-h_i(B+d)+c_i=Z_i(03)-Gamma_i0-Gamma_i3.
+
+Hence the N-step initial annotation X_N converges to L, with
+
+    |v_i,n-L_i| <= |L_i-Gamma_i3|u r^n/k
+                 +|L_i-Gamma_i0|w h^n/d
+                 +|L_i+c_i|uw(rh)^n/(kd).           (E)
+
+Together with the active-coordinate bounds this explicitly bounds
+ delta_N=||X_N-L||_infinity by a geometrically vanishing quantity.
+After division by positive opponent survival, a quiet owner's exact
+Continue-minus-Quit margin at a reset root is
+
+    L_i+U_i u_n+W_i w_n+T_i u_n w_n.
+
+Since u_n>=0 and0<=w_n<=w, (R) proves strict positivity at EVERY reset
+step. Thus no infinite list of comparisons remains unverified.
+
+### All behavioral deviations and one fixed uniform target
+
+For each N, execute the N reset roots in reverse prepending order, then the
+joint02 macro, then the ten solo3 dates, and repeat this FINITE period.
+Use annotations X_N through the reset to X, then Y through the solo return.
+At the last solo date its nominal successor L is replaced by X_N. This is
+the only seam; its Bellman error and each action-endpoint excess are at most
+ delta_N. A forced Quit payoff is unaffected by successor values; a forced
+Continue payoff changes by opponent survival times the coordinate change.
+
+At the macro date, every player has an opponent who quits with probability
+at least g=min(x,b)>0. Under ANY complete unilateral behavioral replacement,
+including nonperiodic stopping rules, survival through k periods is at most
+(1-g)^k. Opponents retain their prescribed private product hazards. Unrolling
+the exact endpoint inequalities, the seam error is charged at most once per
+period, so every deviator's native terminal payoff is at most
+ (X_N)_i+delta_N/g. The bounded terminal annotation remainder vanishes.
+Prescribed Bellman recursion gives |U_i^N-(X_N)_i|<=delta_N/g. Consequently
+
+    full MAX terminal regret <=2 delta_N/g,
+    ||U^N-L||_infinity <=delta_N(1+1/g).
+
+These bounds do not grow with the number of reset dates. Every unilateral
+replacement absorbs almost surely, so arbitrary original own levels add
+exactly kappa_i to every terminal comparison. The fixed target is kappa+L.
+If M bounds this fixed game's original rewards, expected absorption time
+is at most(N+12)/g under every replacement. Terminal and T-date-average
+payoffs differ by at most2M(N+12)/(gT). Choose N for the desired terminal
+accuracy, then a horizon threshold; that SAME profile works for every larger
+horizon and the SAME target. No infinite reset is executed before another
+date, and no exact finite-period equilibrium is asserted.
+
+### One exact example and independent-coordinate scope
+
+Use the canonical native table from Sections5–6, with
+ e=12281660/12608823, K>=1 and arbitrary R=Z0(23), p=Z2(12).
+Let x be the unique root in[78295/10^6,78296/10^6] of
+
+    P(x)=31906921688093 x^2-21898290083611 x+1518934471518.
+
+P has opposite signs at the endpoints and P'<0 throughout that interval.
+With b=2/5 the raw formulas give u=1/25, tau=1/5,
+ w=(58-583x)/145, X2=(2+e)x, Y2=e x/(1-x). The closure identity is
+
+    (1-tau)L2-tau-Y2
+          =P(x)/[31143792810(x-1)(583x-203)]=0.
+
+Exact rational bounds throughout the stated bracket are
+
+    85/1000<w<86/1000, 35/100<L1,L2<36/100,
+    25/100<X1<27/100, 8/100<Y2<9/100.
+
+For each bound, cancel its rational difference and substitute
+x=78295/10^6+y/10^6. Numerator and denominator have strictly positive
+Bernstein coefficients on[0,1] after a common sign change; their degrees are
+at most2 and1. This finite exact test proves the bounds. They imply(S):
+tau/10<=q<=1/40, 3q<Y2, Y1=(4/5)L1-3/5>-3/5>-100q, and row0 is
+nonnegative. For(R), the specialized coefficients are
+
+    U1=(L1+3)/3+97/23, W1=L1-1/2,
+    T1=(L1+45/26)/3-5/46,
+    U2=(L2+1)/3-4/23, W2=L2-2-e/2,
+    T2=(L2+29/26)/3+95/46.
+
+The interval bounds prove U_i,T_i>0 and L_i+min(W_i,0)w>0. Quiet1's
+joint offer is negative for K>=1 while X1>0. Quiet3's joint comparison is
+exactly t=Z3(023)<=Tstar, where Tstar=101/x-104-219/29>1178.
+Thus t=987 is strictly inside this producer, for arbitrary own levels.
+The simple selected root and strict guards persist in an open neighborhood
+of this example in all60 original reward coordinates.
+
+Thirty native coordinates are invisible to this construction and every
+unilateral deviation: all24 Z_j(D) with j in{0,2,3} and1 in D;
+Z0(23),Z0(023); and Z1(23),Z1(023),Z1(123),Z1(0123). They may vary
+independently without bound. Prescribed coalitions lie in{0,2,3,02,03}; a
+player1 deviation can add1 only to the empty set or0,2,3,02,03, giving its six
+possible payoff cells1,01,12,13,012,013. This checks the complete agency
+scope. These properties describe this producer; no separate coverage
+increment over the newer passive-payoff threshold theorem is asserted.

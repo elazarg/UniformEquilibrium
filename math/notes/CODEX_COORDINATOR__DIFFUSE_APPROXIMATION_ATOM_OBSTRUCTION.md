@@ -327,7 +327,7 @@ contradicting four recurrent owners. This completes the no-path proof.
 
 ## 4. Exact example and the uniform conclusion
 
-The canonical remaining construction target has singleton matrix
+The canonical test table has singleton matrix
 
     Gamma = [0,3,-1,3;
              2,0,1/2,-3;
@@ -347,7 +347,11 @@ The exact identity
 
 then forces v_2>=(2/19)(1-t)>0, so a_2=0. Rows3 and2 now force a_0=a_3=0,
 a contradiction. This certificate covers every finite higher-reward completion
-of this matrix, including the R=-25,t=987 construction target.
+of this matrix, including the R=-25,t=987 benchmark. The
+[passive-payoff threshold theorem](../exports/PASSIVE_THRESHOLD_UNIFORM_EQUILIBRIUM.md)
+now proves UE on that benchmark for nonnegative own levels. Thus the
+necessary date atom constrains its approximate profiles; it does not prevent
+their existence.
 
 To prove(1), suppose no common neighborhood and positive constants existed.
 For each n choose Gamma_n within1/n of Gamma, rewards bounded by M, maximum

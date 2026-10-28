@@ -13,6 +13,32 @@ the native absorbing pivot minimum is zero, so none of these positive-gap
 source cases occurs there. No source case is universally closed for
 arbitrary tables.
 
+The [passive-payoff threshold theorem](../exports/PASSIVE_THRESHOLD_UNIFORM_EQUILIBRIUM.md)
+now closes the former R=-25,t=987 benchmark and its entire collision plane:
+at eta=12281660/12608823, every real R,t,p and every K>=0 have UE for
+nonnegative original own levels. Its general raw criterion also permits
+arbitrary unlisted rewards. The new mechanism restricts Nash invariance to
+continuation values bounded by the actual rewards. At the benchmark every
+global marked-cone invariant fails, but the produced bounded invariant
+suffices. This is additional reward-table coverage, not merely a stronger
+profile claim on an already solved family. It closes no entire singleton
+sign orbit or global-source case for arbitrary higher rewards.
+
+The [collision-plane note, Section8](CODEX_COORDINATOR__COMPLETE_JOINING_EXCESS_AXIS.md)
+also applies this consumer at K<0, proving a whole region with p bounded
+above by an explicit negative function of K,R, for arbitrary eta,t. Its exact
+positive-crossing control shows why the same invariant does not extend to
+all negative K merely by dropping that bound.
+
+The same theorem gives a finite necessary test for any counterexample with
+nonnegative own levels: at least one of eleven support systems must admit a
+proper Nash root that crosses from a nonpositive continuation coordinate to
+strictly positive outputs inside the explicit reward box. Eliminating the
+continuations leaves at most44 polynomial systems of degree at most3 in at
+most four hazards. Infeasibility proves UE; feasibility alone supplies neither
+an actual minimizing source nor a positive behavioral gap. The exact systems
+and their complete consumer are in Section11 of the theorem.
+
 The domain has three distinct levels. The sixty raw rewards consist of four
 own-singleton levels, twelve off-own singleton comparisons Gamma, and
 forty-four higher-coalition rewards. Sections1–8 classify a conservative
@@ -41,9 +67,10 @@ absorption date of uniformly positive probability. The date can be arbitrarily
 late. The proof covers nonperiodic calendars and infinite switching, and also
 rules out every finite balanced singleton certificate. It does not rule out
 profiles with a substantial date atom, produce an equilibrium, or apply to a
-positive-gap minimizing source whose regret does not tend to zero. The next
+positive-gap minimizing source whose regret does not tend to zero. A general
 constructive mechanism must retain such atoms and control their full
 continuation caps; refining singleton dates alone cannot close these classes.
+The solved benchmark shows that this obstruction is compatible with UE.
 
 The exact global target remains terminal approximate Nash at every error,
 equivalently zero infimum of full behavioral exploitability. A counterexample
@@ -1583,6 +1610,17 @@ UniformEquilibrium/Quitting/Root/TerminalDebtPrefix.lean. No Lean command ran.
 
 ## Verification and next obligations
 
+The passive-threshold export has independent
+[adversarial](../feedback/PASSIVE_THRESHOLD_UNIFORM_EQUILIBRIUM__BY_ADVERSARIAL_REVIEW.md),
+[localized-consumer](../feedback/PASSIVE_THRESHOLD_UNIFORM_EQUILIBRIUM__BY_LOCALIZED_CONSUMER_REVIEW.md),
+and [coverage](../feedback/PASSIVE_THRESHOLD_UNIFORM_EQUILIBRIUM__BY_COVERAGE_REVIEW.md)
+reviews pinned to its exact bytes. Run
+`python math/experiments/CODEX_COORDINATOR__PASSIVE_THRESHOLD_CHECK.py`
+from the repository root for its rational boundary profiles, all marked-set
+controls, and symbolic two-date identities; this small check uses SymPy.
+The theorem and its finite-support criterion are ordinary mathematics, not
+new Lean-checked declarations.
+
 The21-orbit atlas and its exact checker have a
 [final independent review](../feedback/FIN4_SINGLETON_ATLAS__BY_INDEPENDENT_REVIEW.md).
 The complete diffuse-approximation obstruction has separate final
@@ -1617,7 +1655,11 @@ also verifies the strict/weak interval boundaries in Section10 and exposes
 `passes_necessary` supplies neither a profile nor a counterexample; the
 source and genericity assumptions remain mathematical prerequisites.
 
-The next independent tasks are to cover the arbitrary collision rewards in
+The next finite classification task is to intersect the eleven bounded
+crossing systems with these singleton cells and existing collision criteria.
+For a feasible crossing, a closure needs a cap-compatible construction or an
+actual-source contradiction; a virtual crossing by itself proves neither.
+The broader tasks remain to cover arbitrary collision rewards in
 these singleton cells; to eliminate F, I2, I3p, I3o, I4 using the actual
 source rather than local optimality; or to replace one of the five endpoint
 patterns while preserving its inherited full-cap comparisons. In the
