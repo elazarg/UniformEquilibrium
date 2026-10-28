@@ -19,6 +19,13 @@ singleton matrix. Its successful regions are removed before attacking the
 remaining collision rewards. The [negative-pair return theorem](../exports/NEGATIVE_PAIR_OUTER_DICHOTOMY_UNIFORM_EQUILIBRIUM.md)
 closes its entire displayed outside-weight sign split, including equality.
 Neither theorem covers all singleton cells or arbitrary collision rewards.
+The [finite singleton split theorem](../exports/FINITE_SINGLETON_SPLIT_UNIFORM_EQUILIBRIUM.md)
+adds a raw joining test that permits a negative outside return value. Its
+explicit singleton family has UE for every -1/6<ell<4, p<=0 and sufficiently
+large K/(1+|p|); the earlier diffuse return required ell>2/3. The new part includes
+the positive-Gamma10 control at ell=1/2, outside both prior return criteria
+under every relabeling. This closes a reward region, not a whole source case;
+no numerical threshold such as K=100 is claimed.
 
 For the inherited pattern with three zero observer caps, the
 [complete word optimization](CODEX_COORDINATOR__INHERITED_ABSORBING_WORD_OPTIMIZATION.md)
