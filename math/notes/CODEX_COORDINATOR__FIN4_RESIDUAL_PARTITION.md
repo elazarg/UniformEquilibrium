@@ -114,8 +114,32 @@ marked minimum has finite actual approximants with no payoff or Never-mass
 drift, and total debt at most48M/k. This gives a complete countable hierarchy
 of finite polynomial tests for that source's closure membership. The
 approximants need not be exact Nash; the finite exact classification cannot
-be applied to them. No additional source case is eliminated by this
-representation alone. A descent using GLOBAL extremality remains open.
+be applied to them. Strict negativity does not fix this: the cap control
+also yields a negative actual Nash source separated from every finite exact
+Nash annotation. No additional source case is eliminated by approximation
+alone.
+
+The actual-domain note's Section11 now gives a joint head-and-tail descent:
+an eligible zero-payoff owner supplies an exact Nash insertion in the actual
+continuation, and a regular retained head is adjusted to keep all full caps.
+An explicit derivative test excludes this source mode when positive;
+binding quiet comparisons are allowed when their derivatives point strictly
+toward Continue. The construction extends to finite regular head words and
+has an exact control with all four owners active in its tail. Eligibility,
+regularity, the quiet-tie signs and the descent sign are additional conditions,
+so this closes no entire source case or new raw reward class.
+
+Section12 preserves the SAME global Never objective in further comparisons:
+strictly negative minima impose a uniform positive regret floor on any fixed
+one-owner Never reduction, and retained heads impose global minimization on
+explicit tail-payoff slices. Adapting the existing incoming-boundary mechanism
+also tracks original Never separately from escaping finite mass. Under positive
+absorbing debt, a zero boundary realizes the full source; otherwise the boundary
+lies on a nonnegative zero-payoff face and globally minimizes Never on its exact
+payoff fibre. Under the separate generic dispersion assumptions, it retains
+at least three escaping finite owners.
+Neither the attained source nor that inherited fibre is universally repaired.
+A descent from every GLOBAL marked minimum remains open.
 
 The domain has three distinct levels. The sixty raw rewards consist of four
 own-singleton levels, twelve off-own singleton comparisons Gamma, and

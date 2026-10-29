@@ -1,4 +1,4 @@
-"""Exact actual zero-debt positive-Never Nash-word trap; no numerical root census."""
+"""Exact actual continuation controls and head/tail descent; no numerical root census."""
 from fractions import Fraction as F
 from itertools import product
 import sympy as S
@@ -136,3 +136,72 @@ assert 39>Q(1200,1799)
 assert (Q(41,4)+Q(9,94000))/47000<Q(1,2)
 assert Q(1,2)/(Q(5,4)*(1+Q(1,3599)))==Q(3599,9000)
 print('PASS: exhaustive-support identities, strict interval bounds, trap and global minimum bounds')
+
+# Section11: compensate a regular three-owner head over an ALL-active tail.
+# All identities are symbolic; interval signs also have proofs in the note.
+def descent_reward(i, coalition):
+    if 0 in coalition:
+        if i == 0:
+            return s.Integer(0)
+        if i not in coalition:
+            return s.Rational(13, 4)
+        return s.Integer(5 if len(coalition) == 2 else 2)
+    if i == 0:
+        return s.Integer({1: 1, 2: -1, 3: 0}[len(coalition)])
+    if i in coalition:
+        return s.Integer(0 if len(coalition) == 1 else -1)
+    return s.Integer(-2 if len(coalition) == 1 else -1)
+
+
+def descent_offers(hazards, continuation):
+    quit_offers, continue_offers = [], []
+    for i in range(4):
+        others = [j for j in range(4) if j != i]
+        qi = ci = s.Integer(0)
+        for bits in product((0, 1), repeat=3):
+            coalition = {j for j, bit in zip(others, bits) if bit}
+            probability = s.prod(hazards[j] if j in coalition else 1-hazards[j]
+                                 for j in others)
+            qi += probability*descent_reward(i, coalition | {i})
+            ci += probability*(descent_reward(i, coalition) if coalition
+                               else continuation[i])
+        quit_offers.append(s.cancel(qi))
+        continue_offers.append(s.cancel(ci))
+    return quit_offers, continue_offers
+
+
+assert all(descent_reward(i, {i}) == 0 for i in range(4))
+tail = [s.Integer(0), s.Integer(1), s.Integer(1), s.Integer(1)]
+tq, tc = descent_offers([s.Rational(1, 2)]*4, [0]*4)
+assert tq == tc == tail  # Full one-date cap: Quit0 or Continue/Never.
+tau = s.symbols('tau', real=True)
+qt, ct = descent_offers([tau, 0, 0, 0], tail)
+assert qt[0] == ct[0] == 0
+for i in range(1, 4):
+    assert same(qt[i]-ct[i], 11*tau/4-1)
+    assert same(ct[i], 1+9*tau/4)
+z = (4+9*tau)/(12+9*tau)
+hq, hc = descent_offers([0, z, z, z], ct)
+assert hq[0] == 0 and same(hc[0], 3*z*(1-z)*(1-2*z))
+assert all(same(hq[i], hc[i]) and same(hq[i], -(2*z-z*z))
+           for i in range(1, 4))
+assert s.Rational(4, 11) < s.Rational(4, 9)  # z<1/2 on the claimed interval.
+assert [v.subs(tau, 0) for v in hc] == [s.Rational(2, 9)]+[s.Rational(-5, 9)]*3
+
+hx = s.symbols('h0:4')
+oq, oc = descent_offers(hx, tail)
+gaps = [s.expand(a-b) for a, b in zip(oq, oc)]
+at_head = dict(zip(hx, [0]+[s.Rational(1, 3)]*3))
+jacobian = s.Matrix([[s.diff(gaps[i], hx[j]).subs(at_head)
+                      for j in range(1, 4)] for i in range(1, 4)])
+assert jacobian == s.ones(3)-s.eye(3) and jacobian.det() == 2
+direction = jacobian.inv()*s.ones(3, 1)  # H_i*(Gamma_i0-w_i)=(4/9)*(9/4)=1.
+assert direction == s.ones(3, 1)/2
+never = (1-tau)*(1-z)**3/16
+assert same(never, 32*(1-tau)/(12+9*tau)**3)
+assert never.subs(tau, 0) == s.Rational(1, 54)
+assert (s.diff(never, tau)/never).subs(tau, 0) == -s.Rational(13, 4)
+# The control's existing absorbing equilibrium prevents any new-coverage claim.
+pq, pc = descent_offers([0, 1, 1, 1], [0]*4)
+assert pq == pc == [0, -1, -1, -1]
+print('PASS: all-active exact tail, compensated full-cap head, Jacobian, and strict Never descent')
