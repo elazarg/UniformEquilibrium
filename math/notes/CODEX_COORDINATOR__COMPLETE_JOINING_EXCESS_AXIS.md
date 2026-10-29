@@ -835,12 +835,29 @@ a good root: their indices sum to zero. At such a generic input, failure of
 selected return requires the bad pair to be its sole Nash root. For the
 broader class allowing the unlisted rewards to vary, the
 [exact recovery obstruction](CODEX_COORDINATOR__BOUNDED_CROSSING_SELECTION.md)
-shows that allowing arbitrarily long Nash words on the entire passive box
-cannot close this strip: an interior input has a unique bad pair, followed
-by a positive point whose only Nash root is AllContinue. That input lies
-outside the actual payoff convex hull. The next task is to exploit actual
-joint continuation constraints, or use a construction beyond exact Nash
-prefixes. A virtual positive crossing alone proves neither impossibility
-of UE nor occurrence at an actual minimum.
+shows that allowing arbitrarily long exact Nash words cannot close this
+strip even on actual full-cap zero-debt inputs with positive Never masses.
+Its unique bad pair leads to a positive point whose only Nash root is
+AllContinue. Joint reselection of the two existing dates gives a decreasing
+zero-debt Never path, while a binding version blocks all local changes on
+that fixed calendar. Both games already have absorbing equilibria; neither
+source is a global marked minimum. The remaining actual-geometry argument
+must exploit global least-Never extremality or a broader strategy change.
+
+The [opposed-pair face repair](../exports/QUIET_FACE_OPPOSED_PAIR_UNIFORM_EQUILIBRIUM.md)
+now closes a separate completion class across this entire strip. It permits
+four independent joining gains involving0, with explicit sign conditions,
+eight raw convexity inequalities, row3 joining upper bounds and weak row0
+endpoint conditions. The row2 passive bound is W2<=5(p+2); row3 passive
+rewards have no upper bound. A rational path preserves both active equations,
+and a cubic upper comparison keeps the third owner quiet until a good012
+root is reached. For unit gains and W2<=10, including row3 increments smaller
+than-1, its self-contained outer-case proof covers every real a=-K and every
+p>=0 under these completion conditions. The literal benchmark completions
+in Sections7–8 need not meet
+these new conditions; no closure of their entire remaining strip is claimed.
+A separating table passes this new producer while escaping the prior audited
+raw producer families. This is additional UE coverage, not merely an
+improved root certificate on the old class.
 Negative p outside the main criterion and signed original own levels are
 separate remaining portions; this strip is not the full Fin4 frontier.

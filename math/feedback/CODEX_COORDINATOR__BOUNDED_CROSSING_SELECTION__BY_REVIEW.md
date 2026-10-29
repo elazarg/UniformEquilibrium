@@ -1,17 +1,19 @@
 # Independent whole review of closed actual geometry and bounded recovery
 
-Reviewer: PAIR_CROSSINGS. Ordinary mathematics, not Lean checked.
-Artifact: `math/notes/CODEX_COORDINATOR__BOUNDED_CROSSING_SELECTION.md`, 340 lines.
-SHA256: `cf3241e9dd547e6bcfbb668bdf3a0de603a9d809aac9e4bcedf535645494c974`.
+Reviewer: PAIR_CROSSINGS. Ordinary mathematics; no Lean or build command ran.
+Reviewed [note](../notes/CODEX_COORDINATOR__BOUNDED_CROSSING_SELECTION.md): 515 lines.
+Note SHA256: `bbbccc73458ff318c75b1cef621ea2d2d4dd2c591d9a5fc3bc296faacf552e29`.
+Companion [exact checker](../experiments/CODEX_COORDINATOR__ACTUAL_CONTINUATION_GEOMETRY_CHECK.py).
+Checker SHA256: `207a7ed3c6df3df5e5fe0f8630c152b6f01c983e7741b5b72d9dd491c6ad257f`.
 
-Verdict: PASS. I independently checked the entire current note, including the
-compact-domain and bounded-word consumers, the exact independent annotation
-image, the finite crossing systems, the raw IVT recovery, and the complete
-four-player all-word barrier. No unresolved mathematical objection remains.
-This verdict does not inherit an earlier component review or a numerical root
-search. The statements remain ordinary mathematics and their stated scope is
-preserved: neither the barrier nor a feasible crossing system is a UE
-counterexample.
+Verdict: PASS, with no unresolved mathematical objection. I independently
+reviewed every current section: the compact-domain and bounded-word consumers,
+exact independent annotation image, finite crossing systems, raw IVT recovery,
+actual full-cap trap, joint reselection, fixed-calendar local minimum, finite
+support grammar, and sharp one-cap compression boundary. The review includes
+an attempt to find missing root supports, deviations, nearby calendar branches,
+or unsupported actual-source identifications. Neither a feasible crossing
+system nor these examples is a UE counterexample.
 
 ## 1. Compact closed-domain consumer
 
@@ -101,7 +103,7 @@ There is no unsupported zero padding or change of physical date order.
 
 Expanding the two active gaps gives exactly the displayed rational x(z),b(z).
 The x denominator is positive at both endpoints and hence throughout the
-interval. Its derivative is
+interval. The derivative of x is
 
  x'(z)=((D-A)v2-A d2)/[(d2+v2)(1-z)-Dz]^2<0.
 
@@ -117,34 +119,105 @@ x>0, and all three active indifferences. Player0's participant cap then makes
 its supported output nonpositive. The proof produces the branch from raw
 rewards and does not assume a recovery root.
 
-## 6. Full-core barrier and actual-domain separation
+## 6. Actual zero-debt source and the all-word trap
 
-I checked all sixty rewards, the stated passive intervals, and the full/core
-gap decomposition g_i=(1-q0)g_i^core-(1+c_i)q0. The root uniqueness proof
-includes all sure-owner and pure boundary possibilities. In particular q0=1
-is impossible; q1=0 is impossible; player1's gap forces either q2<=1/10
-or q2>=97/99, and the latter forces the already excluded q0=1. On the first
-branch alpha<=1/36. If q0>0, its indifference forces q1>=224/225, giving
-player2 gap at least 403/135 before subtracting at most 1/18; this forces
-q2=1, a contradiction. Therefore q0=0. The remaining inequalities give
-q1<=1/10, then q3=0, and finally q1=q2=1/10.
+The sixty rewards are fully specified. Each gamma_i>-1, so the last solo0
+period has full caps (0,gamma/2), even though its first core coordinate is
+negative. The specified physical dates begin at the first available period;
+there is no omitted earlier Quit deviation. Every later pure deadline and
+Never gives the stated cap. At the first period the two active equations
+are exact, and quiet2 has 3613/18000<1/3. Backward full-cap prefixing gives
+U=B=e=(901/45,-1/36,1/3,2) and Never product 3599/9000, with every marginal
+Never mass positive. This is an actual complete-strategy source.
 
-The resulting output is exactly (1209/20,1/40,1/10,357/50). At every strictly
-positive input with u0<=100, active player1 would force q2>=97/99, again
-forcing the impossible q0=1. Thus AllContinue is the unique root there.
-This proves failure of every finite Nash-prefix recovery from the displayed
-interior input, including words with sure roots, rather than merely a failure
-of a particular two-step formula.
+I checked the whole-game gap identity (2). A sure0 is impossible. If q1=0,
+players3 and2 strictly Continue, then player0 Continues and player1 must Quit,
+a contradiction. The two signs in player1's affine gap restrict q2 to the
+low or high branch. The high branch forces the impossible sure0; on the low
+branch row0 Continue is at least 443/25>0, so q0=0. Player2 Continue then
+implies q1<=1/10; both endpoint bounds for player3 are strictly negative.
+The remaining two indifferences force q1=q2=1/10. This handles all pure,
+mixed, and sure-owner patterns. The output is exactly the displayed positive
+vector. At any positive input with u0<=100, the same high-branch contradiction
+makes AllContinue unique. Thus every finite Nash word from the actual source
+is bad; no claim about approximate prefixes or arbitrary strategy changes is
+needed or implied.
 
-The inequality Z2(A)+Z0(A)/25<=3 holds on every coalition and on Never;
-it passes to every actual payoff and its closure. The proposed input has
-v2+v0/25=10/3>3, so it lies outside the actual payoff hull and hence outside
-K_ind's diagonal. This prevents an erroneous actual-source conclusion. The
-sure-player0 profile is an absorbing native equilibrium: every other owner
-gets c_i>=0 instead of its joining payoff -1. Nonnegative own offsets preserve
-the original equilibrium conclusion.
+## 7. Joint reselection
 
-I also independently reconstructed the full barrier table and used exact
-symbolic expansion to check its gap identities, output, passive box and
-separating inequality. Those calculations support the explicit proof; no
-floating-point decision or bounded-support root search is used.
+The two-period profile at parameter r satisfies both active equations.
+Direct expansion gives the stated v(r), full zero debt, Never product, and
+quiet2 slack 2r(1195-3r)/D>0 on 0<r<=1. The Never derivative is the displayed
+strictly negative rational expression. At r=1 the last period absorbs surely.
+For every intermediate r, V-12A>0 and C-4B>0 give the same complete uniqueness
+argument, with player1's low threshold 4A/(1+4A). The row3 output numerator
+is bounded below as stated using C>4B and A<1/4. Hence the exact calendar
+reselection reaches absorption while every added finite Nash word fails.
+
+## 8. Full two-date local minimum and finite grammar
+
+With gamma2=5408/3599, the first quiet2 comparison is exactly binding and
+all other quiet comparisons are strict. In a neighborhood, positive Never
+masses imply Nash optimality in every conditional tail: a profitable tail
+replacement would improve the original law by a positive reach factor.
+Last-period strictness forces support {0}; first-period strictness forces q0=0,
+and the existing positive hazards of1,3 persist. Thus the ONLY nearby cases
+are first support13 or123. There are no additional two-date probability-law
+degrees of freedom beyond the stated conditional hazards.
+
+The active equations solve for x,z exactly. Quiet2 requires F<=0 on y=0,
+and F=0 on y>0. The pair identity F(r,0)=3ABr(r-r0) leaves only r<=r0
+locally; Never product increases away from r0 along that feasible arc.
+F_r=3/7198 is nonzero, so the implicit-function theorem exhausts the adjacent
+triple branch. I independently recomputed r',x',z' and the positive logarithmic
+Never derivative 4157665811/29100. These two half-arcs exhaust the full nearby
+two-date zero-debt set and establish a strict local minimum there. Negative
+row1 persists. This is explicitly a FIXED-CALENDAR local minimum, not a local
+minimum over every larger or infinite calendar.
+
+The external unique pair root and all four displayed outputs check exactly.
+It leaves the marked set, consistent with the local assertion. For the finite
+grammar, the exact-support/reduced-word convention removes degeneracies.
+Every13 root makes row0 payoff positive, after which no nonzero solo0 prefix
+is Nash. The preceding solo0 block has the same zero-debt annotations and
+Never mass as one aggregate hazard r. Its first13 root is admissible exactly
+for 0<r<=1/2. The displayed strictly negative quiet2 deficit prevents a second
+13 root. Therefore the claimed classification and minimum hold on that grammar's
+one13 component, not on unrestricted calendars or all components.
+
+## 9. One-cap compression boundary
+
+For arbitrary independent replacements, m_t is exactly the probability of
+player1 quitting at t before any dummy strictly earlier. Simultaneous dummy
+quits are correctly retained. Hence e0=sum m_t and
+V0(t)=sum_{s<t}m_s+2m_t, independent of owner0's own law. The geometric source
+has every finite deadline and Never equal to alpha. A finite replacement
+preserving e0=alpha has a last positive effective atom, whose deadline yields
+strictly more than alpha. Thus even (e0,B0) cannot be exactly compressed,
+regardless of changes to the other laws or caps.
+
+For m positive effective atoms, each a_j<=delta+sum_{l>j}a_l follows from
+the full cap definition. Backward induction gives sum a_j<=(2^m-1)delta.
+The stated finite geometric masses attain equality, sum to alpha, and retain
+U,e,N exactly; all other rows have zero debt. This is a sharp quantitative
+semantic-compression obstruction, stronger than failure of a chosen algorithm.
+The linked earlier prescribed-outcome record already warns that full-cap
+compression can fail; the present one-cap bound does not misstate that history.
+
+Both strategic examples explicitly have absorbing equilibria, and the binding
+example also has a marked absorbing equilibrium with Never product zero.
+Neither actual trap is a global marked least-Never source. No global least-
+Never obstruction, positive absorbing debt gap, or no-UE game is claimed.
+
+Independent exact checks reconstructed both full-cap sources and external
+crossings, all reselection identities, the binding implicit derivatives, and
+the finite-grammar deficit using rational symbolic arithmetic. The all-support
+and local-exhaustion arguments above are analytic proofs, not solver output.
+
+I read and ran the pinned companion checker successfully. It independently
+enumerates every relevant pure deadline for the two actual finite profiles,
+including Never and the common late row, and uses exact symbolic arithmetic
+for the displayed identities. Its finite compression checks are controls only;
+the arbitrary-m bound is the analytic backward-induction proof in Section 9.
+The complete uniqueness and local exhaustion conclusions come from the
+arguments reviewed above, not from numerical or bounded root searches.

@@ -22,7 +22,28 @@ sure-first patterns fail, as do all 15 marked invariants even on the paired
 calendar outer domain. The new mechanism selects a low-output or sure Nash
 root using the passive bound and negative indices; other Nash roots may
 cross into strictly positive payoffs. Within the fixed core and p>=0, its
-remaining strip is -1/2<K<0,p>0. This is not a partition of arbitrary Fin4.
+opposed-pair strip is -1/2<K<0,p>0. The next theorem closes a further part of that strip; these
+are sufficient raw regions, not a partition of arbitrary Fin4.
+
+The [opposed-pair face repair](../exports/QUIET_FACE_OPPOSED_PAIR_UNIFORM_EQUILIBRIUM.md)
+closes a further part of that strip using four independent joining gains
+involving0. The two row1 gains are nonnegative with the second positive;
+the two row2 gains are nonpositive. Four row3 upper bounds, eight finite
+convexity tests, weak row0 joining gains, W2<=5(p+2), and an endpoint test
+complete the raw criterion. There is no passive bound on row3. The proof
+keeps owners1,2 indifferent along a rational one-variable path, controls
+quiet3 with a cubic upper bound, and finds a low-output012 root by the
+intermediate value theorem. No equal-increment restriction is required.
+The scalar row3 bound is selected by fourteen affine inequalities, so it is
+itself a finite raw test. In the unit-gain specialization with W2<=10,
+the outer cases and repair cover EVERY real K and EVERY p>=0 under the
+stated completion conditions. They do not cover all completions of the
+singleton matrix. An exact unequal-gain example also has strict margins,
+giving a relative open completion class while the numerical core stays fixed.
+A literal table accepted by this producer fails all80 stationary and all65
+arbitrary-punishment sure-first patterns, as well as the audited complete
+withdrawal, weighted and return/reset selector families. This is an additional
+UE class; the proof and coverage checks are ordinary mathematics, not Lean.
 
 The [passive-payoff threshold theorem](../exports/PASSIVE_THRESHOLD_UNIFORM_EQUILIBRIUM.md)
 closes the former R=-25,t=987 benchmark and its entire collision plane:
@@ -56,10 +77,18 @@ levels needs an actual independent diagonal U=e at which every Nash root
 is proper and has strictly positive outputs. The eight payoff/Never
 annotations have an exact representation on 32 finite dates plus Never;
 this preserves neither full response caps nor
-equilibrium support. The same note gives an exact opposed-pair trap proving
-that finite Nash-word recovery over the entire passive box is too strong.
-Its trapped input violates an actual joint-payoff inequality, keeping the
-smaller actual domain as the next concrete target.
+equilibrium support. The same note now supplies an ACTUAL opposed-pair
+trap with U=B=e and every Never mass positive: its unique Nash prefix has
+positive output, after which only AllContinue is Nash. Joint reselection of
+its two existing dates nevertheless gives an exact zero-debt path to
+absorption. A binding version is a strict local Never-product minimum on the
+entire two-date zero-debt set, including its adjacent triple branch; it is
+still not a global marked minimum. These examples already have UE. They show
+why actual realizability, full-cap equality, or fixed-calendar local
+minimality cannot replace GLOBAL least-Never extremality in the remaining
+argument. Exact finite compression cannot supply the missing step either:
+even one cap may require infinite support, with sharp finite error
+alpha/(2^m-1) in the explicit control.
 
 The domain has three distinct levels. The sixty raw rewards consist of four
 own-singleton levels, twelve off-own singleton comparisons Gamma, and
