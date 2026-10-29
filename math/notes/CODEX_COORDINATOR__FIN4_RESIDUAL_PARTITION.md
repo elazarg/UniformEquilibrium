@@ -13,8 +13,19 @@ the native absorbing pivot minimum is zero, so none of these positive-gap
 source cases occurs there. No source case is universally closed for
 arbitrary tables.
 
+The [passive-bound selected-root theorem](../exports/PASSIVE_BOUND_TRIPLE_SELECTION_UNIFORM_EQUILIBRIUM.md)
+closes the entire p=0 benchmark cylinder for all real K, eta, R and t, with
+nonnegative own levels. Its general raw inequalities cover a mixed triple
+core and an open neighborhood in all sixty original reward coordinates of
+an exact separating table. At that table all 80 stationary patterns and all 65
+sure-first patterns fail, as do all 15 marked invariants even on the paired
+calendar outer domain. The new mechanism selects a low-output or sure Nash
+root using the passive bound and negative indices; other Nash roots may
+cross into strictly positive payoffs. Within the fixed core and p>=0, its
+remaining strip is -1/2<K<0,p>0. This is not a partition of arbitrary Fin4.
+
 The [passive-payoff threshold theorem](../exports/PASSIVE_THRESHOLD_UNIFORM_EQUILIBRIUM.md)
-now closes the former R=-25,t=987 benchmark and its entire collision plane:
+closes the former R=-25,t=987 benchmark and its entire collision plane:
 at eta=12281660/12608823, every real R,t,p and every K>=0 have UE for
 nonnegative original own levels. Its general raw criterion also permits
 arbitrary unlisted rewards. The new mechanism restricts Nash invariance to
@@ -38,6 +49,17 @@ continuations leaves at most44 polynomial systems of degree at most3 in at
 most four hazards. Infeasibility proves UE; feasibility alone supplies neither
 an actual minimizing source nor a positive behavioral gap. The exact systems
 and their complete consumer are in Section11 of the theorem.
+
+The [actual-domain reduction](CODEX_COORDINATOR__BOUNDED_CROSSING_SELECTION.md)
+strengthens the source restriction: a counterexample with nonnegative own
+levels needs an actual independent diagonal U=e at which every Nash root
+is proper and has strictly positive outputs. The eight payoff/Never
+annotations have an exact representation on 32 finite dates plus Never;
+this preserves neither full response caps nor
+equilibrium support. The same note gives an exact opposed-pair trap proving
+that finite Nash-word recovery over the entire passive box is too strong.
+Its trapped input violates an actual joint-payoff inequality, keeping the
+smaller actual domain as the next concrete target.
 
 The domain has three distinct levels. The sixty raw rewards consist of four
 own-singleton levels, twelve off-own singleton comparisons Gamma, and
@@ -1609,6 +1631,22 @@ quittingContinuationBestResponseValue_rootThenContinuation_eq_max in
 UniformEquilibrium/Quitting/Root/TerminalDebtPrefix.lean. No Lean command ran.
 
 ## Verification and next obligations
+
+The selected-root export has final whole-proof reviews
+[one](../feedback/PASSIVE_BOUND_TRIPLE_SELECTION_UNIFORM_EQUILIBRIUM__BY_REVIEW_ONE.md)
+and [two](../feedback/PASSIVE_BOUND_TRIPLE_SELECTION_UNIFORM_EQUILIBRIUM__BY_REVIEW_TWO.md),
+with a separate [complete producer audit](../feedback/PASSIVE_BOUND_TRIPLE_SELECTION_UNIFORM_EQUILIBRIUM__BY_COVERAGE_AUDIT.md)
+and [independent coverage review](../feedback/PASSIVE_BOUND_TRIPLE_SELECTION_UNIFORM_EQUILIBRIUM__BY_COVERAGE_REVIEW.md).
+Its two exact checks are
+`python math/experiments/CODEX_COORDINATOR__PASSIVE_BOUND_SELECTION_CENSUS.py`
+and `python math/experiments/CODEX_COORDINATOR__PASSIVE_BOUND_CALENDAR_CHECK.py`.
+The [supporting note](CODEX_COORDINATOR__BOUNDED_CROSSING_SELECTION.md)
+retains the exact representation on 32 dates of independent payoff/Never
+annotations and bounded-word recovery. These preserve useful reductions,
+but supply no additional UE class beyond the exported theorem. Its
+[independent whole-note review](../feedback/CODEX_COORDINATOR__BOUNDED_CROSSING_SELECTION__BY_REVIEW.md)
+also checks the complete opposed-pair recovery obstruction and its
+separation from actual continuation data.
 
 The passive-threshold export has independent
 [adversarial](../feedback/PASSIVE_THRESHOLD_UNIFORM_EQUILIBRIUM__BY_ADVERSARIAL_REVIEW.md),

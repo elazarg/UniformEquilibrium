@@ -1,7 +1,8 @@
 # Complete joining-excess axis and collision-plane coverage
 
 Owner: CODEX_COORDINATOR. Ordinary mathematics, not checked in Lean. The
-positive joining-excess axis below is completely covered. Section7 closes
+positive joining-excess axis below is completely covered. Section9 closes
+the entire p=0 cylinder for all real K, eta, R and t. Section7 closes
 the full collision plane for K>=0 and nonnegative own levels; Section8
 extends the proof to a specified negative-K region. Arbitrary Fin4
 remains open; this is a family with a fixed singleton matrix and specified
@@ -712,7 +713,9 @@ own levels remain useful under their separate hypotheses.
 The R=-25,t=987 benchmark is therefore solved. Section8 gives an additional
 negative-K region. The next obligation is to cover arbitrary higher rewards
 outside these criteria, including the remaining negative-K or negative-own
-regions. No exhaustiveness claim for those remaining portions is made.
+regions. Section9 now closes every negative-K point on p=0 and two outer
+regions for p>=0, allowing arbitrary eta,R,t. No exhaustiveness claim for
+the other remaining portions is made.
 
 ## 8. A negative-K region from the localized invariant
 
@@ -789,3 +792,55 @@ All v coordinates lie within the literal reward ranges and v1<0. This is an
 invariant failure, not a counterexample to UE or a sharpness claim for F.
 The exact control and ratio identities are reproduced by
 [the rational checker](../experiments/CODEX_COORDINATOR__PASSIVE_THRESHOLD_CHECK.py).
+
+## 9. The complete p=0 cylinder and the opposed-pair remainder
+
+The [passive-bound selected-root theorem](../exports/PASSIVE_BOUND_TRIPLE_SELECTION_UNIFORM_EQUILIBRIUM.md)
+applies to the complete table used in Sections7–8 for every real eta,R,t
+and nonnegative own levels whenever
+
+    p>=0 and (K>=0 or K<=-1/2 or p=0).
+
+In particular, the entire p=0 cylinder is solved for every real K,eta,R,t.
+The same conclusion permits all unlisted rewards in the export's core table
+to vary subject only to nonpositive player0 participant rewards and the
+player2 passive bound10. Its main theorem gives explicit inequalities in
+the core rewards as well, rather than fixing those entries universally.
+
+To check this application, put a=-K and write c_ij=Z_i(ij)-Gamma_ij. The
+core has c12=a-1/2, (c21,c23,c31,c13,c32)=(p+2,4,12,-97,-101),
+triple differences (b1,b2,b3)=(2,3,7), and passive bound U<=10. Thus the
+export's quantities satisfy X<=5,F>=66,G>=95,Y<=10/11 and alpha=190,
+with positive affine slope58. Its BLOCK alternative holds for a<=0.
+For a>=0 the determinant bound is greater than24719/2; its INDEX alternative
+holds for a>=1/2, or for p=0 because pair12 then has zero owner2 reward.
+These checks exhaust the displayed union, including all equality boundaries.
+
+The mechanism is selection, not universal invariance. The exact crossing
+at the end of Section8 remains a valid positive-output Nash root even though
+the table now has UE. A passive bound makes every bad triple regular with
+index-1 and gives at most one such triple. Eligible bad pairs also have
+index-1. Total Nash degree+1 forces an alternative good root. The export
+proves that these selected roots suffice on the closed passive domain,
+including local stalls and complete unilateral deviations.
+
+Within p>=0, the only fixed-core strip left outside this raw criterion is
+
+    -1/2<K<0, p>0.
+
+Here the active pair12 has opposite joining signs and may have index+1.
+Its continuation equations are v1=(-K-1/2)x2<0 and v2=(p+2)x1>0.
+At a generic input, coexistence of a bad pair and a bad triple still forces
+a good root: their indices sum to zero. At such a generic input, failure of
+selected return requires the bad pair to be its sole Nash root. For the
+broader class allowing the unlisted rewards to vary, the
+[exact recovery obstruction](CODEX_COORDINATOR__BOUNDED_CROSSING_SELECTION.md)
+shows that allowing arbitrarily long Nash words on the entire passive box
+cannot close this strip: an interior input has a unique bad pair, followed
+by a positive point whose only Nash root is AllContinue. That input lies
+outside the actual payoff convex hull. The next task is to exploit actual
+joint continuation constraints, or use a construction beyond exact Nash
+prefixes. A virtual positive crossing alone proves neither impossibility
+of UE nor occurrence at an actual minimum.
+Negative p outside the main criterion and signed original own levels are
+separate remaining portions; this strip is not the full Fin4 frontier.
