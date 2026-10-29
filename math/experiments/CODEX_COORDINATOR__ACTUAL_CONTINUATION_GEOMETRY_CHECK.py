@@ -77,16 +77,6 @@ for i in range(4):
 q=[0,F(3613,57613),F(1,10),0];Q,C=ends(q,vb)
 assert all((q[i]==0 or Q[i]>=C[i]) and(q[i]==1 or C[i]>=Q[i]) for i in range(4))
 assert [q[i]*Q[i]+(1-q[i])*C[i] for i in range(4)]==[F(12809661,576130),F(1,40),F(3613,57613),F(469644,288065)]
-y=S.symbols('y');A=S.Rational(1,2);B=S.Rational(2,3599)
-x=(12*A*r+101*y)/(12+7*y);z=(97*B*r-y/4)/(97-2*y)
-poly=3*x+4*z+3*x*z-gamma[2]*r
-assert S.cancel(poly.subs(y,0)-3*A*B*r*(r-S.Rational(1,2)))==0
-at={r:S.Rational(1,2),y:0}
-Fr=S.diff(poly,r).subs(at);Fy=S.diff(poly,y).subs(at)
-assert Fr==S.Rational(3,7198)
-rp=-Fy/Fr;xp=(S.diff(x,r)*rp+S.diff(x,y)).subs(at);zp=(S.diff(z,r)*rp+S.diff(z,y)).subs(at)
-assert (rp,xp,zp)==(S.Rational(-46188057,776),S.Rational(-69262831,2328),S.Rational(-11547912,349103))
-assert -2*rp-xp/(1+x.subs(at))-1-zp/(1+z.subs(at))==S.Rational(4157665811,29100)
 a=200*r/(3599+2*r);b=10*r/(r+2);c=r*(3614-2*r)/D
 assert S.cancel(c-b/4-4*a/97-a*b/388+r*(3958*r+1047599)/(194*D))==0
 q=[0,r/(r+2),0,2*r/(3599+2*r)];Q,C=ends(q,[r*g for g in gamma])
@@ -96,4 +86,53 @@ for m in range(1,9):
  alpha=F(1,2);delta=alpha/(2**m-1);mass=[delta*2**(m-1-t) for t in range(m)]
  assert sum(mass)==alpha
  assert all(mass[t]-sum(mass[t+1:])==delta for t in range(m))
-print('PASS: exact reselection curve, binding full caps/local derivatives, finite support grammar, and sharp compression controls')
+print('PASS: exact reselection curve, binding full caps, finite support grammar, and sharp compression controls')
+
+# Complete all-support finite-calendar classification and sharp path barrier.
+from fractions import Fraction as Q
+import sympy as s
+
+r, y = s.symbols('r y', real=True)
+a = s.Rational(194, 3599)
+g = s.Rational(5408, 3599)
+B = s.Rational(2, 3599)
+x = (6*r + 101*y)/(12 + 7*y)
+z = (194*r/s.Integer(3599) - y/4)/(97 - 2*y)
+F = 3*x + 4*z + 3*x*z - g*r
+same = lambda lhs, rhs: s.cancel(lhs-rhs) == 0
+assert same(F.subs(y, 0), 3*r*(2*r-1)/7198)
+assert same(s.diff(x,y), (1212-42*r)/(12+7*y)**2)
+assert same(s.diff(z,y), 97*(16*r-3599)/(14396*(97-2*y)**2))
+assert same(F.subs(y, 776*r/s.Integer(3599)),
+            13*r*(32531361-1129856*r)/(7198*(1358*r+10797)))
+# Full rectangle: 0<=r<=1, 0<=y<=776*r/3599<1/4.
+assert Q(776,3599)<Q(1,4)
+assert Q(1170)/(Q(55,4)**2)>Q(61,10)
+assert -Q(97,4)/(Q(193,2)**2)>-Q(1,300)
+assert Q(125,48)<3
+assert 3*Q(61,10)-Q(13,300)>18
+# Triple rectangle r<=1/2, y<=388/3599<1/8.
+assert Q(388,3599)<Q(1,8)
+assert Q(1191)/(Q(103,8)**2)>7
+assert Q(125,96)<Q(4,3)
+assert 21-Q(8,300)>20
+assert Q(1212,144)<9
+assert -Q(97,4)/(Q(387,4)**2)>-Q(1,380)
+assert Q(3,143960)<Q(1,47000)
+assert Q(1,2)+Q(9,47000)<Q(501,1000)
+assert Q(2,3599)-Q(1,47000*380)>Q(1,1800)
+# Exact signs used to eliminate other supports and control every output.
+aa, gg = Q(194,3599), Q(5408,3599)
+assert 50*gg/(4+gg)>12*aa
+assert 4*gg-404*aa-6+Q(28,3)*gg*aa<0
+assert 6-Q(2,3)*gg+4*aa-8*gg*aa>0
+assert Q(1,18)-Q(1,188000)-Q(11,2*47000*1799)>0
+assert Q(50,1799)<Q(1,4)
+assert Q(501,1000)+Q(3,1799)+Q(501,1000*1799)<Q(503,1000)
+assert (5-Q(1,470))/((1+Q(251,1000))*(1+Q(1,1000)))>3
+assert 3>4*Q(51,100)
+assert (50-Q(4,47000))/((1+Q(251,1000))*(1+Q(1,1000))**2)>39
+assert 39>Q(1200,1799)
+assert (Q(41,4)+Q(9,94000))/47000<Q(1,2)
+assert Q(1,2)/(Q(5,4)*(1+Q(1,3599)))==Q(3599,9000)
+print('PASS: exhaustive-support identities, strict interval bounds, trap and global minimum bounds')

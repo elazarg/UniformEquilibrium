@@ -10,11 +10,16 @@ independent reward-class exclusion for the recovery example.
 
 For the numerical core, write a=-K. The selected theorem covers all real a
 when p=0, and a<=0 or a>=1/2 when p>=0. The opposed-pair strip 0<a<1/2,p>0 permits pair12 with positive ambient
-index. Sections6–9 show that exact actual realizability, full zero debt,
-positive Never masses, and even local Never minimality on a fixed calendar
-do not supply
-universal Nash-prefix return. A global least-Never argument must use its
-extremality; finite exact cap compression is unavailable.
+index. Sections6–9 show that exact actual realizability and full zero debt do
+not supply universal Nash-prefix return. The binding example is now
+classified over ALL finite exact calendars: its nonsolo component has a
+positive minimum Never product and an exact barrier through AllNever.
+Section10 nevertheless approximates every compact minimizing source on a
+finite calendar while preserving its payoff, Never response and original
+Never masses EXACTLY. Only full caps incur error. The exact-profile
+classification does not apply to these positive-debt approximants;
+global extremality remains a separate constraint. Exact cap compression
+is unavailable.
 
 ## 1. Closed actual domains replace arbitrary virtual boxes
 
@@ -388,78 +393,232 @@ C-2B/3+4A-8AB>4B/3+4A>0, using A<1/4. Row0 output is at most100, so
 only AllContinue can follow. Exact reselection of existing periods escapes
 this trap; adding any finite number of exact Nash prefixes does not.
 
-## 8. A binding comparison creates a full two-date local minimum
+## 8. The complete marked geometry on every finite calendar
 
 Change only the completion parameter gamma2 in Section6 to5408/3599,
-throughout its coalition rule. The same two physical dates and hazards give
+throughout its coalition rule. Write a=194/3599, g=5408/3599,
+B=2/3599, gamma=(-a,g,6). The same two physical dates and hazards give
 
-    U=B=e=(901/45,-1/36,3613/18000,2),
+    U=B_cap=e=(901/45,-1/36,3613/18000,2),
     N=(1/2,4/5,1,3599/3600), nu=3599/9000.
 
-The first period's quiet2 comparison is now exactly binding. All last-period
-quiet comparisons and the first-period quiet0 comparison are strict. We
-classify ALL nearby two-date zero-debt laws, not just the original supports.
-Positive marginal Never masses persist. Every conditional tail is then
-exact Nash: a profitable conditional replacement could be used after that
-positive-probability all-Continue history. Conversely backward Nash prefixing
-from Never preserves zero debt.
+Here B_cap denotes the response vector; the scalar B above is2/3599.
+The first quiet2 comparison binds. This point is a global minimum of nu
+across the ENTIRE nonsolo marked finite-calendar class, not just a local
+minimum on its two prescribed dates.
 
-Put A=1/2,B=2/3599,r0=1/2. Strict comparisons force the last support to be
-{0}, with hazard r, and the first support to be13 or123. Let x,y,z be the
-first-period odds of owners1,2,3. Active indifference for1 and3 gives
+Precisely, every finite-calendar exact native Nash profile with positive
+joint Never probability and min U<=0 has the same FULL(U,B_cap,e,N)
+annotations as one of: AllNever; a solo0 root of hazard0<r<1; one pair13
+root over a solo0 tail with0<r<=1/2; or one triple123 root over a solo0
+tail with0<r<1/2. Every nonsolo form has nu>=3599/9000, with equality
+only at the displayed binding annotations. Every continuous marked exact
+finite-calendar path from these annotations to a smaller nu must pass
+through AllNever, where nu=1. The calendar length and active supports may
+vary arbitrarily along that path. The exact annotation set is a loop of
+the pair and triple arcs, with the solo0 interval attached at AllNever.
+This classifies finite exact profiles, not infinite calendars or limits
+of profiles with positive debt. The table already has pure0 UE.
 
-    x=(12Ar+101y)/(12+7y),
-    z=(97Br-y/4)/(97-2y).
+### Exhaustive roots over a solo0 tail
 
-The remaining comparison is F(r,y)<=0 for y=0, and F(r,y)=0 for y>0, where
+Write v(r)=(0,-ar,gr,6r), 0<=r<=1. For any one-stage Nash root q,
 
-    F(r,y)=3x+4z+3xz-(5408/3599)r.
+    g_i=(1-q0) g_i^core-(1+gamma_i) q0,  i=1,2,3,
+    C0=100(1-q2)(q1+q3-q1*q3)-3q2, Q0=0.
 
-On the pair arc, F(r,0)=3ABr(r-r0), so locally r<=r0. Its Never product
-(1-r)/[(1+Ar)(1+Br)] strictly decreases in r, hence increases when departing
-from r0 along the feasible pair arc. On the triple arc F_r(r0,0)=3/7198>0,
-so the implicit function theorem produces the unique nearby branch r(y).
-At y=0 exact differentiation gives
+A sure0 forces all core players quiet, and is Nash. If q1=0 then
+`g3^core=-101q2-6r(1-q2)` forces q3=0 except possibly r=q2=0;
+in that exception q3>0 makes g2^core=4q3>0 and forces q2=1,
+a contradiction. Then q2>0 would either have g2^core=-gr<0 or,
+when r=0, make C0=-3q2<0 and force the impossible sure0 with core
+activity. Consequently either every core player is quiet or q1>0.
 
-    r'=-46188057/776, x'=-69262831/2328,
-    z'=-11547912/349103,
-    (log nu)'=-r'/(1-r)-x'/(1+x)-1-z'/(1+z)
-             =4157665811/29100>0.
+If core players are quiet, the exact roots are solo0 hazards satisfying
 
-Thus the source is a STRICT local minimum of nu on the entire two-date
-zero-debt set, including the adjacent triple branch. Its negative row1
-persists, so this is also a strict local minimum with min U<=0 imposed.
+    q0 >= ar/(1-a+ar),
 
-The Section6 support proof still applies: v2=3613/18000 replaces1/3,
-q1=3613/57613 replaces1/10, and every player3 bound only becomes stricter.
-The unique external root is (0,3613/57613,1/10,0), with positive output
+including q0=0 when r=0. Their aggregate tail is again v(r') with
+r'=q0+(1-q0)r.
 
-    (12809661/576130,1/40,3613/57613,469644/288065).
+Assume now q1>0. Necessarily q0<1 and g1^core>=0. Its exact expression is
 
-Only AllContinue follows. That prefix decreases Never mass but leaves the
-marked set; it does not contradict marked local minimality. The pure0
-absorbing equilibrium still exists and is marked. Hence this point is not
-a global marked minimum, and no positive absorbing debt gap is established.
+ g1^core=(1-q3)[ar(1-q2)-q2/4]+q3(-97+99q2).
 
-A finite support-grammar extension is also exact. Allow arbitrarily many
-Nash periods, initialized at Never, with positive joint Never mass. Delete
-zero roots and require each remaining root to have EXACT support{0} or{1,3}. Every13 prefix gives positive row0 payoff, precluding a
-later prefix supported on0. All solo0 periods therefore come later in
-physical time and aggregate to one hazard r. With D=(r+2)(2r+3599), the first13 root has quiet2
-slack 3r(1-2r)/D, so it exists exactly when0<r<=1/2. Its output is
+It excludes the entire interval
 
-    v0=100(1-7198/D), -v1=a=200r/(3599+2r),
-    v2=c=r(3614-2r)/D, v3=b=10r/(r+2).
+    b(r)<q2<97/99,  b(r)=4ar/(1+4ar).
 
-A second13 root would need c>=b/4+4a/97+ab/388. Instead
+The high branch q2>=97/99 gives C0<=100(1-q2)-3q2<0 and forces
+sure0, contradiction. Hence q2<=b(r)<1/4.
 
-    c-b/4-4a/97-ab/388=-r(3958r+1047599)/(194D)<0.
+If q2=0 then C0>0 and q0=0. Otherwise g2^core>=0. Put S=q1+q3.
+Since g2^core=3q1+4(1-q1)q3-gr(1-q1)(1-q3),
 
-Every nonempty reduced word is consequently solo0 alone, or one13 root over an
-aggregate solo0 tail with r<=1/2. The binding point minimizes nu on the
-latter component. Extra periods in this grammar do not escape; another
-support or a nonlocal change of component is required. This statement does
-not quantify arbitrary larger calendars with unrestricted supports.
+    S>=gr/(4+gr),
+    C0>=50(1-q2)S-3q2
+       >= [50gr/(4+gr)-12ar]/(1+4ar)>0.
+
+The last inequality holds for 0<r<=1 since 50g/(4+g)>12a;
+at r=0 the bound q2<=b(r)=0 excludes this case. Therefore q0=0.
+Moreover q1=1 forces q2=1 by g2^core=3, and q3=1 makes
+g1^core=-97+99q2<0. Thus q1,q2,q3 are all proper, and q1>0.
+No singleton1 root is possible: if q2=q3=0 then g1^core=ar>0,
+forcing q1=1; at r=0, quiet2 again prohibits q1>0.
+All remaining roots have supports12,13,123, as follows.
+
+#### Pair12
+
+For r>0 its odds are x=gr/3, y=4ar, z=0. The quiet3 gap times
+(1+x)(1+y) is
+
+    r(4g-404a-6)+(28/3)ga r^2<0, 0<r<=1.
+
+Its outputs for rows1 and2 are positive by the participant rewards a_core=1/4
+and p=1. Row0 is positive by the preceding argument. The row3 output has
+positive numerator
+
+    r[6-2g/3+4a-8ga r]>0.
+
+So this root leaves the marked set and has all-positive output.
+
+#### Pair13
+
+Its odds are x=r/2,y=0,z=Br. The quiet2 gap multiplied by (1+x)(1+z) is
+
+    F(r,0)=3r(2r-1)/7198.
+
+It exists exactly for 0<r<=1/2. With D=(r+2)(3599+2r), its binding-table
+output (V,-A,C2,C3) is
+
+ (100(1-7198/D), -200r/(3599+2r), r(3614-2r)/D, 10r/(r+2)).
+
+This is the row2 formula for gamma2=5408/3599; the earlier Section7 uses
+a different completion and has a different row2 payoff.
+
+#### Triple123
+
+With odds y of owner2, the active1 and active3 equations force
+
+    x=(6r+101y)/(12+7y),
+    z=(194r/3599-y/4)/(97-2y).
+
+Proper positive roots therefore require 0<y<776r/3599. The remaining
+active2 equation is
+
+    F(r,y)=3x+4z+3xz-gr=0.
+
+On 0<=r<=1, 0<=y<=776r/3599, z>=0,
+
+    x_y=(1212-42r)/(12+7y)^2,
+    z_y=97(16r-3599)/[14396(97-2y)^2].
+
+Since y<1/4, x_y>61/10, -1/300<z_y<0, and x<3, it follows
+that F_y=(3+3z)x_y+(4+3x)z_y>18. Also
+
+ F(r,776r/3599)
+    =13r(32531361-1129856r)/[7198(1358r+10797)]>0,  0<r<=1.
+
+Therefore a unique triple root exists exactly for 0<r<1/2. At r=1/2
+it meets pair13 at y=0. For this range y<1/8 and the same estimates
+sharpen to x_y>7, x<4/3, and F_y>20.
+
+### Every core-marked output has the same one-step trap
+
+For the triple branch put delta=1/2-r. By F_y>20 and the value F(r,0),
+
+    0<y<3r*delta/71980,
+    y<r/47000,  y<delta/47000.
+
+Also x_y<9 and z_y>-1/380 on the relevant rectangle, so
+
+    r/2<=x<501r/1000,
+    r/1800<z<=2r/3599<r/1799.
+
+Write the triple output (V,-A,C2,C3). Exact participant formulas are
+
+    A=(100z-y/4-11yz)/[(1+y)(1+z)],
+    C2=(x+3z+2xz)/[(1+x)(1+z)],
+    C3=(10x-100y+xy)/[(1+x)(1+y)],
+    V=[100(x+z+xz)-3y(1+x)(1+z)]/[(1+x)(1+y)(1+z)].
+
+The displayed elementary bounds imply
+
+    0<A<1/4, 0<C2<51r/100<1, C3>3r>4C2,
+    V>39r>12A,  V<=100.
+
+For example A<100r/1799; C2<x+3z+2xz<503r/1000;
+C3>(5-1/470)r/[(1+251/1000)(1+1/1000)]>3r;
+and V>[50r-4r/47000]/[(1+251/1000)(1+1/1000)^2]>39r.
+A>0 follows from z>r/1800 and y<r/47000.
+
+The canonical Section7 support proof applies to any vector
+(V,-A,C2,C3) satisfying these inequalities: its unique Nash root has
+support12, odds x=C2/3,y=4A, and all-positive output. At every all-positive
+output with row0<=100 only AllContinue is Nash. The pair13 outputs satisfy
+the same inequalities by their binding-table formulas above. Thus no further
+nonzero marked prefix can follow either13 or123.
+
+### The minimum is global within the nonsolo finite class
+
+Pair13 has nu=(1-r)/[(1+r/2)(1+Br)], strictly decreasing for r<=1/2.
+Its minimum is 3599/9000 at r=1/2.
+
+For a triple root, delta=1/2-r>0 and y<delta/47000. Since x<=r/2+9y,
+
+ (1+x)(1+y)
+   <=1+r/2+(10+r/2)y+9y^2
+   <5/4-delta/2+(41/4+9/94000)delta/47000
+   <5/4.
+
+Also 1+z<=1+B/2 and 1-r>1/2. Hence
+
+    nu=(1-r)/[(1+x)(1+y)(1+z)] >3599/9000.
+
+Every positive-Never actual exact equilibrium on a finite calendar is a
+finite word of Nash roots initialized at AllNever, by conditional optimality
+at each all-Continue history, all of which have positive probability because
+nu>0. An empty period is Nash only when its continuation is nonnegative,
+so empty periods cannot be silently prepended to a negative tail. At AllNever the exhaustive classification
+above permits only solo0 (or the zero root). Induction now gives exactly
+the four marked forms claimed. All solo0 stages combine to aggregate r,
+preserving the four actual U,e,B,N coordinates; replacing them by one
+solo0 stage preserves equilibrium. This proves all-support/all-finite-date
+scope, including support changes and arbitrary subdivisions.
+
+### An exact nonlocal barrier for continuous finite-calendar deformations
+
+Let a continuous path of full annotations consist pointwise of exact native
+Nash profiles on finite calendars, with a nonpositive payoff coordinate.
+Calendar lengths may be unbounded along the path. Suppose it starts at the
+binding trap and ends with nu<3599/9000 (in particular, at an absorbing
+profile). Then the path passes through the AllNever annotation nu=1.
+
+Indeed, until the first time it can reach a smaller Never product, every
+positive-Never point belongs to the exhaustive classification. The union of
+the pair13 and triple123 images has nu>=3599/9000. Its closure meets the
+solo0 image only at r=0: at every r>0 both core hazards q1 and q3 are positive,
+while the solo0 image has N1=N2=N3=1. Conversely any sequence on the core
+branches with those Never masses tending to1 has x,z tending to0, hence r
+tending to0, and all four Never masses tend to1. The core-branch closure
+has nu>=3599/9000, so it cannot meet an absorbing annotation. Continuity
+therefore forces the path from the core branch through its sole intersection
+with the solo0 image, namely AllNever. The barrier is sharp: decrease r
+from1/2 to0 along pair13, then increase a solo0 hazard from0 to1 at the
+FIRST physical date. Keeping that hazard behind an empty earlier date
+would fail Nash because row1's continuation is negative.
+
+More precisely, N0=1-r identifies the parameter on both core arcs, and
+N2 distinguishes their interiors. The strict F_y bound and y<3r(1/2-r)/71980
+make the triple arc continuous with the same two endpoints as the pair arc.
+Thus their full annotation images form an embedded circle; the solo0
+interval0<=r<1 attaches to it only at AllNever.
+
+This is stronger than a fixed-calendar local-minimum obstruction. It does
+not apply if the deformation allows positive debt, loses the marked condition,
+uses genuinely infinite-calendar equilibria, or jumps discontinuously between
+components. A global marked minimum compares all components and is not
+constrained by this path barrier.
 
 ## 9. Even one full cap prevents exact finite compression
 
@@ -498,18 +657,234 @@ These laws preserve U,e,N EXACTLY; their total debt is delta. This game
 already has the pure0 absorbing equilibrium. The result is a sharp semantic
 compression boundary, not another UE exclusion.
 
+## 10. Exact continuation fibres with approximated full caps
+
+Let n>=2 owners independently choose times in Nat union {Never}; the first
+finite coalition is paid by an arbitrary real reward table of absolute bound
+M>=0, with AllNever value zero. U_i is prescribed payoff, e_i is the response
+payoff when i always Never, B_i is the supremum over every behavioral response,
+and N_i is the original marginal Never mass. Write C for the Euclidean closure
+of all actual annotations (U,B,e,N).
+
+For every integer k>=1 and every Y=(u,b,e,N) in C, there is an actual independent
+profile q with all finite atoms on the literal calendar {0,...,L_k-1}, where
+
+    L_k = 2 n(n+1) k + 4 n^2,
+
+such that
+
+    U(q)=u, e(q)=e, N(q)=N,
+    max_i |B_i(q)-b_i| <= n(n-1) M/k.                 (A)
+
+For Fin4: L_k=40k+64 and cap error 12M/k. The statement allows arbitrary
+signed own singleton rewards. The exact equalities hold simultaneously;
+q is one product law, not a correlated mixture. The finite calendar retains
+enough empty gaps to preserve the entire pure-reply menu during retiming.
+
+If u=b=e=v at Y, then exactly
+
+    U(q)=e(q)=v, N(q)=N,
+    0<=B_i(q)-v_i<=n(n-1)M/k.                        (B)
+
+Thus an abstract zero-debt compact source admits arbitrarily accurate actual
+approximants on its EXACT prescribed/Never-payoff and original-Never-mass fibre.
+No payoff-mark drift or Never-product drift is needed in this approximation.
+
+### Common small-mass cells
+
+For each original marginal p_i, mark its first finite crossing of each level
+j/k, j=1,...,k, whenever that level is attained at a finite date. Let F be the
+union of marks, m=|F|<=nk. Partition Nat into its m marked singletons and its
+at most m+1 nonempty intervening gaps, and add {Never} as a separate cell.
+Every owner's mass in any gap is at most 1/k.
+
+Indeed a gap mass greater than 1/k gives a grid level strictly between the
+cumulative mass preceding the gap and the cumulative mass through some finite
+date in the gap. Its first crossing would be marked inside the gap. The same
+argument treats the unbounded final gap by taking a finite partial sum. Zero
+or absent gaps cause no problem. Never is not part of the final finite gap.
+
+### Sparse exact moment matching without changing cell masses
+
+Fix all other current marginals and replace p_i. The vector (U,e) is affine
+in p_i; e_i is constant. At most 2n-1 coordinates therefore change. Let K_i
+be the number of partition cells with positive p_i mass. Adjoin the K_i
+cell indicators, whose sum is one, to those 2n-1 conditional reward vectors.
+Their affine dimension is at most (K_i-1)+(2n-1).
+
+The countable barycentre belongs to the ordinary convex hull of its positive
+support vectors. For completeness: it belongs to the closed convex hull;
+if it lies on a relative supporting hyperplane, the nonnegative distance to
+that hyperplane has mean zero, so every positive-mass vector lies there.
+Reduce affine dimension. If no supporting hyperplane remains, the point lies
+in the relative interior, which agrees with that of the ordinary convex
+hull. Dimension induction proves the assertion. Caratheodory now replaces
+p_i by at most K_i+2n-1 of its existing positive-mass actions while preserving
+all (U,e) and every cell mass exactly.
+
+Perform this once for each owner, using the CURRENT opponents. Every step
+preserves the entire (U,e) vector; each owner's cell masses remain its original
+ones. In particular all N_i are exactly retained. The final independent
+profile q0 is finitely supported. Each occupied cell needs at least one
+support point, so each owner has at most 2n-1 extra points beyond one per
+occupied cell. Marked cells and Never have only one possible point anyway.
+Writing g_i for the number of its occupied finite gaps, its finite gap support
+has at most g_i+2n-1 points. Taking the union over players and then adding the
+m common marked dates, the total number d of occupied finite dates satisfies
+
+    d <= m + sum_i (g_i+2n-1)
+      <= m+n(m+1+2n-1) = (n+1)m+2n^2
+      <= n(n+1)k+2n^2.                               (C)
+
+Some marked dates may disappear from a particular player's support; their
+cell masses across all owners remain fixed. Using m as an upper bound is safe.
+
+### Uniform approximation of EVERY response
+
+Couple each owner's original and reduced times by first selecting their
+common cell and then coupling their conditional draws arbitrarily. Make
+these couplings independent across owners. Against a fixed deviator i at
+one deterministic deadline t, terminal coalitions can differ only if:
+
+(a) two opponents' cell labels coincide in one finite gap; or
+(b) an opponent occupies the finite gap containing t.
+
+Away from (a),(b), opponent clocks have identical weak order and ties,
+and identical comparison with t, in the original and reduced profiles.
+Marked singleton times are literally equal. Never remains Never.
+
+For an opponent pair j,l, independence and small gap masses give
+
+    P(same finite gap)=sum_G p_j(G)p_l(G)<=1/k.
+
+There are choose(n-1,2) opponent pairs. For finite t in a gap, each of the
+n-1 opponents is in that gap with probability at most 1/k. Thus the exceptional
+probability is at most
+
+    [choose(n-1,2)+(n-1)]/k = n(n-1)/(2k).
+
+For t=Never or a marked singleton, clause(b) is absent, so the same upper
+bound remains valid. Every response payoff differs by at most 2M times this
+probability. Hence uniformly over ALL finite deadlines and Never,
+
+    |V_i^q0(t)-V_i^p(t)|<=n(n-1)M/k.
+
+Behavioral responses are mixtures of these pure times. Taking suprema gives
+|B_i(q0)-B_i(p)|<=n(n-1)M/k. This is not merely comparison of the supported
+responses or the compressed timing game's restricted Nash inequalities.
+
+### Retiming preserves all gaps and all caps
+
+List the d occupied finite dates as t_1<...<t_d. If d=0 use AllNever.
+Otherwise set s_1=0 if t_1=0, and s_1=1 if t_1>0. Recursively set
+
+    s_(j+1)-s_j = 1 if t_(j+1)=t_j+1, and 2 otherwise.
+
+Then 0<=s_j<=2d-1. Push every marginal through t_j ->s_j, fixing Never.
+This preserves prescribed terminal coalitions and all Never-counterfactual
+coalitions, hence U,e,N. It also preserves every pure-response payoff in
+both directions: a deadline is either an occupied atom, in a nonempty gap
+before/between atoms, after the last atom, or Never. Exactly the same classes
+exist after retiming. Select the matching atom or any point of the matching
+gap. The weak comparisons with every occupied opponent time agree.
+The after-last finite class and Never are distinct and both retained.
+Therefore ALL B_i are exactly preserved by retiming.
+
+This uses the union of every player's occupied dates. An atom occupied only
+by the deviator is harmless: an extra response class relative to the larger
+union either coincides with an opponent-menu class or subdivides it into
+identical payoffs. No response option is added or removed.
+
+By(C), the finite atoms lie in {0,...,L_k-1}. This proves(A) for actual Y.
+The gap rule is essential for arbitrary singleton rewards; blindly ranking
+occupied dates can remove the initial or intermediate profitable response.
+
+### Compact-closure points and exact-fibre recovery
+
+Take actual annotations Y_r converging to Y in C. For a fixed k, apply the
+construction to every Y_r and place the resulting laws on the SAME literal
+calendar {0,...,L_k-1,Never}. The product of n finite probability simplexes
+is compact, so select a convergent subsequence of these laws, with limit q.
+
+On that fixed calendar U,e,N are polynomials in the law masses. Each B_i is
+the maximum of finitely many polynomial response payoffs, using the menu
+{0,...,L_k,Never}. Every later finite deadline is outcome-equivalent to L_k.
+Consequently the full caps are continuous on this compact simplex, even
+when occupied dates vanish at the limit. The finite menus use all possible
+dates, not a support-dependent menu. Passing to the limit proves(A) exactly.
+Since B_i(q)>=U_i(q), zero-debt sources give(B).
+
+The order of quantifiers is important: fix k, compress the whole approximating
+sequence with one uniform calendar bound, and only then take the finite-law
+limit. Truncating each source at an uncontrolled cutoff would not prove this
+exact-fibre conclusion.
+
+### Exact marked-source consumer
+
+Specialize now to Fin4. Assume native own rewards are zero, and use the
+existing compact marked minimum source: minimize nu=product_i N_i over Y in C with U=B and min_i U_i<=0.
+If the absorbing native debt infimum A_Z>0, its repair estimate gives
+
+    A_Z<=sum_i(B_i-U_i)+14M nu^(1/4),
+
+so its minimum m is positive. Every N_i>0, and the exact actual inequality
+B_i-U_i>=N_i(B_i-e_i), extended to C, yields U=B=e=v.
+The theorem then supplies, for EACH k, an actual finite law q_k with
+
+    U(q_k)=e(q_k)=v, N(q_k)=N*, min v<=0,
+    product_i N_i(q_k)=m,
+    total debt(q_k)<=48M/k                            (Fin4).
+
+This is a stronger normal form for the SAME globally selected source. It
+preserves its marked payoff and original Never product exactly. It does not
+make q_k exact Nash, select a different minimum, or prove that a finite
+calendar has an exact marked minimizer. The exact finite-calendar obstruction
+in Section9 remains consistent with it.
+
+A rigorous practical consequence is a hierarchy of finite real-algebraic
+necessary tests for a proposed selected source (v,N): for every k, there must
+exist a point of the L_k-date product simplex satisfying U=e=v, marginal
+Never masses N, and every pure reply payoff <=v_i+12M/k. Those are finitely
+many polynomial weak inequalities of degree at most n, plus exact moments.
+Failure at ANY level rules out that candidate source. Passing all levels is
+EXACTLY equivalent to (v,v,v,N) lying in C: the reverse direction follows
+by taking these actual annotations to their stated zero-debt limit.
+This equivalence is a countable hierarchy, not a finite UE decision procedure.
+
+No finite level is shown to remove an entire new raw reward class. This
+is a stronger representation of the same actual source. Global marked minimality is not
+replaced by its finite-calendar local version.
+
 ## Verification and remaining target
 
 The [exact geometry checker](../experiments/CODEX_COORDINATOR__ACTUAL_CONTINUATION_GEOMETRY_CHECK.py)
-reconstructs full caps and Never masses, checks the source and crossing,
-and verifies the reselection and binding-branch identities. The all-support
-uniqueness, local exhaustion, and finite-compression impossibility arguments
-are the proofs above, not numerical root searches.
+reconstructs full caps and Never masses and checks the source, crossing,
+reselection, complete finite-calendar classification, and survival bounds.
+The all-support exhaustion and exact-fibre approximation are mathematical
+proofs, not conclusions from numerical root searches.
 
-The actual-domain test of Section3 remains a necessary condition. Its source
-can no longer be eliminated merely by adding full-cap equality or positive
-Never masses: Section6 meets both. Even a local minimum on a fixed calendar
-is insufficient by Section8. The live target is to exploit a GLOBAL marked
-least-Never source (or its positive-gap provenance), with either unrestricted
-calendar reselection or a genuinely new strategy construction. Exact finite
-compression of its caps cannot be assumed. Fin4 remains open.
+Section10 sharpens the implemented common-quantile approximation, which
+retains N and controls caps but changes U and e. The new step is simultaneous
+exact moment matching inside its common cells, before fixed-calendar
+compactness. Relevant declarations inspected without running Lean are
+`hasEscapeAwareQuantileClockCompressionAtBound` and
+`HasEscapeAwareQuantileClockPayoffTransportAtBound`
+(`UniformEquilibrium/Quitting/Paths/CommonQuantileClockTransport.lean`),
+`quittingRootSequenceHazardTerminalValue_eq_expect_stoppingLaw`
+(`UniformEquilibrium/Quitting/Paths/BehaviorStoppingPayoff.lean`),
+`quittingPureClockOrderEquivalent_finiteCalendarRetiming`
+(`UniformEquilibrium/Quitting/Paths/CommonStoppingCalendarRetiming.lean`), and
+`exists_mem_quittingFiniteOpponentAtomGapReplyMenu_payoff_eq_cap`
+(`UniformEquilibrium/Quitting/Terminal/FiniteOpponentAtomGapReplyMenu.lean`).
+The quantile cells are defined in `MathUE/Probability/QuantileClock.lean`.
+These checked ingredients do not already state the simultaneous exact-fibre
+conclusion proved here. No fresh Lean certification is claimed.
+
+The live target is GLOBAL marked least-Never extremality, retaining the
+full cap constraints. Its selected payoff and original Never masses can
+now be fixed exactly across finite actual approximants. Those approximants
+have small positive debt; Section8's exact-profile classification cannot
+be applied to them. Even unrestricted finite-calendar exact deformations
+can encounter a barrier requiring a nonlocal move through AllNever.
+A source-consuming descent argument or a new strategy construction is
+still needed. Fin4 remains open.

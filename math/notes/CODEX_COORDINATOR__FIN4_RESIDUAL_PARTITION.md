@@ -45,6 +45,21 @@ arbitrary-punishment sure-first patterns, as well as the audited complete
 withdrawal, weighted and return/reset selector families. This is an additional
 UE class; the proof and coverage checks are ordinary mathematics, not Lean.
 
+The [exact opposed-pair path theorem](../exports/EXACT_OPPOSED_PAIR_PATH_UNIFORM_EQUILIBRIUM.md)
+removes the numerical-core restriction and uses all four ACTUAL quiet-player
+joining differences separately. Eliminating the quiet continuation at its
+initial Nash comparison leaves four univariate quadratic tests, including
+interior vertices. These exactly classify the chosen path's binding-
+continuation envelope; they are sufficient, not necessary, for UE. Either
+active owner may become sure first, and the exact endpoint comparison can
+hold despite an adverse individual joining gain for owner0. An audited
+literal table with d0=e0=1,d1=e1=8/5 passes this producer while every scalar
+fails the frozen curvature criterion; all80 stationary and all65 arbitrary-
+punishment sure-first patterns and the complete audited legacy selectors
+also fail. Separate controls show why a common quiet-player bound loses
+information. This is new reward coverage and a finite path classification,
+not an exhaustive classification of actual continuations or arbitrary Fin4.
+
 The [passive-payoff threshold theorem](../exports/PASSIVE_THRESHOLD_UNIFORM_EQUILIBRIUM.md)
 closes the former R=-25,t=987 benchmark and its entire collision plane:
 at eta=12281660/12608823, every real R,t,p and every K>=0 have UE for
@@ -81,14 +96,26 @@ equilibrium support. The same note now supplies an ACTUAL opposed-pair
 trap with U=B=e and every Never mass positive: its unique Nash prefix has
 positive output, after which only AllContinue is Nash. Joint reselection of
 its two existing dates nevertheless gives an exact zero-debt path to
-absorption. A binding version is a strict local Never-product minimum on the
-entire two-date zero-debt set, including its adjacent triple branch; it is
-still not a global marked minimum. These examples already have UE. They show
-why actual realizability, full-cap equality, or fixed-calendar local
-minimality cannot replace GLOBAL least-Never extremality in the remaining
-argument. Exact finite compression cannot supply the missing step either:
-even one cap may require infinite support, with sharp finite error
-alpha/(2^m-1) in the explicit control.
+absorption. The binding version now has a COMPLETE classification of its
+marked exact equilibria over every finite calendar and every active support.
+Their full annotations form a circle (pair13 and triple123 arcs), with the
+solo0 interval attached at AllNever. The binding source minimizes nu on
+the circle at3599/9000. Any continuous marked exact finite-calendar path
+to a smaller nu must pass through AllNever, where nu=1. This includes
+unbounded calendar lengths along the path. The source is still not a
+global marked minimum, and the table already has UE.
+
+Exact cap compression remains impossible: even one cap may need infinite
+support, with sharp finite error alpha/(2^m-1) in the control. A stronger
+approximation now preserves EXACTLY the same U,e and ORIGINAL N at every
+compact semantic point. For each integer k>=1 it uses at most40k+64 finite
+dates with full-cap error at most12M/k. Thus the same globally selected
+marked minimum has finite actual approximants with no payoff or Never-mass
+drift, and total debt at most48M/k. This gives a complete countable hierarchy
+of finite polynomial tests for that source's closure membership. The
+approximants need not be exact Nash; the finite exact classification cannot
+be applied to them. No additional source case is eliminated by this
+representation alone. A descent using GLOBAL extremality remains open.
 
 The domain has three distinct levels. The sixty raw rewards consist of four
 own-singleton levels, twelve off-own singleton comparisons Gamma, and
