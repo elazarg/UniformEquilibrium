@@ -119,13 +119,17 @@ also yields a negative actual Nash source separated from every finite exact
 Nash annotation. No additional source case is eliminated by approximation
 alone.
 
-The actual-domain note's Section11 now gives a joint head-and-tail descent:
-an eligible zero-payoff owner supplies an exact Nash insertion in the actual
-continuation, and a regular retained head is adjusted to keep all full caps.
+The actual-domain note's Section11 gives a joint head-and-tail descent:
+an eligible zero-payoff owner supplies an exact Nash insertion in the compact
+actual continuation domain, and a regular retained head is adjusted to keep all full caps.
 An explicit derivative test excludes this source mode when positive;
 binding quiet comparisons are allowed when their derivatives point strictly
 toward Continue. The construction extends to finite regular head words and
-has an exact control with all four owners active in its tail. Eligibility,
+uses the complete finite/countable/compact one-owner clock test. Its exact
+two-zero control admits a geometric insertion while EVERY nonempty finite
+one-owner insertion fails. The geometric mechanism already appears in the
+canonical pivot proof; this is a broader application to the same marked
+objective, not a new clock mechanism. Eligibility,
 regularity, the quiet-tie signs and the descent sign are additional conditions,
 so this closes no entire source case or new raw reward class.
 
@@ -137,7 +141,23 @@ also tracks original Never separately from escaping finite mass. Under positive
 absorbing debt, a zero boundary realizes the full source; otherwise the boundary
 lies on a nonnegative zero-payoff face and globally minimizes Never on its exact
 payoff fibre. Under the separate generic dispersion assumptions, it retains
-at least three escaping finite owners.
+at least three escaping finite owners. At a two-zero face, all proper
+zero-owner prefixes fail exactly when both cross singletons are negative
+and each joining reward is greater than its singleton. More generally, the
+complete linear clock relaxation either has a common direction satisfying
+(Gamma-rJ)v>=0 for r in[0,1],v>=0,sum v=1, or fails a finite sequence of
+deadline tests. Failure gives a class where EVERY small prefix
+incurs debt proportional to its finite mass, even with arbitrary timing and
+positive-payoff-owner participation. Such a face, or a singleton-zero face,
+can only be reached after FINITELY many extracted roots. A genuinely
+nonstopping visible head with nonzero limiting payoff must have two or three
+zeros and admit that common direction. The obstruction covers all six
+noncyclic mixed-column sign patterns with a separated joining-ratio threshold;
+an actual all-four-active control passes one date but fails by nineteen.
+This classifies the linear relaxation and excludes local prefix repairs;
+it neither produces nonlinear Nash clocks nor excludes those faces when
+reached finitely. An actual finite control gives marked descent by changing
+the continuation at a face whose fixed-tail prefix directions all fail.
 Neither the attained source nor that inherited fibre is universally repaired.
 A descent from every GLOBAL marked minimum remains open.
 

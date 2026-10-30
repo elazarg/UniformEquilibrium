@@ -137,71 +137,154 @@ assert (Q(41,4)+Q(9,94000))/47000<Q(1,2)
 assert Q(1,2)/(Q(5,4)*(1+Q(1,3599)))==Q(3599,9000)
 print('PASS: exhaustive-support identities, strict interval bounds, trap and global minimum bounds')
 
-# Section11: compensate a regular three-owner head over an ALL-active tail.
-# All identities are symbolic; interval signs also have proofs in the note.
-def descent_reward(i, coalition):
-    if 0 in coalition:
-        if i == 0:
-            return s.Integer(0)
-        if i not in coalition:
-            return s.Rational(13, 4)
-        return s.Integer(5 if len(coalition) == 2 else 2)
-    if i == 0:
-        return s.Integer({1: 1, 2: -1, 3: 0}[len(coalition)])
-    if i in coalition:
-        return s.Integer(0 if len(coalition) == 1 else -1)
-    return s.Integer(-2 if len(coalition) == 1 else -1)
+# Section11: geometric insertion at a two-zero tail, with exact head compensation.
+q=s.symbols('q0:4')
 
+def reward(i,A):
+    if 0 not in A:
+        if i==0:return s.Integer({1:1,2:-4,3:12}[len(A)])
+        if A=={i}:return s.Integer(0)
+        if i in A:
+            return s.Integer((-3 if i==1 else -2) if len(A)==2 else (2 if i==1 else 0))
+        if len(A)==1:return s.Integer(-2)
+        return s.Integer(0 if i==1 else -1)
+    if i==0:
+        return s.Integer({1:0,2:2,3:-6,4:12}[len(A)])
+    if i==1:
+        if i not in A:return s.Integer(1) if A=={0} else s.Rational(4,5)
+        return s.Integer(2) if A=={0,1} else s.Rational(2,5)
+    if i==2:
+        if i not in A:return s.Integer(-1) if A=={0} else s.Rational(31,5)
+        return s.Integer(-1) if A=={0,2} else s.Integer(6)
+    if i not in A:return s.Integer(2) if A=={0} else s.Rational(19,5)
+    return s.Integer(2) if A=={0,3} else s.Rational(18,5)
 
-def descent_offers(hazards, continuation):
-    quit_offers, continue_offers = [], []
-    for i in range(4):
-        others = [j for j in range(4) if j != i]
-        qi = ci = s.Integer(0)
-        for bits in product((0, 1), repeat=3):
-            coalition = {j for j, bit in zip(others, bits) if bit}
-            probability = s.prod(hazards[j] if j in coalition else 1-hazards[j]
-                                 for j in others)
-            qi += probability*descent_reward(i, coalition | {i})
-            ci += probability*(descent_reward(i, coalition) if coalition
-                               else continuation[i])
-        quit_offers.append(s.cancel(qi))
-        continue_offers.append(s.cancel(ci))
-    return quit_offers, continue_offers
+def offers(i, reward_fn=reward):
+    others=[j for j in range(4) if j!=i]
+    Q=P=s.Integer(0)
+    for bs in product([0,1],repeat=3):
+        A={j for j,b in zip(others,bs) if b}
+        pr=s.prod(q[j] if j in A else 1-q[j] for j in others)
+        Q+=pr*reward_fn(i,A|{i})
+        if A:P+=pr*reward_fn(i,A)
+    return s.expand(Q),s.expand(P)
 
+for i in range(4):assert reward(i,{i})==0
+OP=[offers(i) for i in range(4)]
+tail_sub=dict(zip(q,[s.Rational(1,2)]+[s.Rational(1,3)]*3))
+w=[s.Integer(0),s.Integer(0),s.Integer(1),s.Integer(1)]
+assert [v[0].subs(tail_sub) for v in OP]==w
+assert [v[1].subs(tail_sub) for v in OP]==w
+head_sub=dict(zip(q,[0]+[s.Rational(1,2)]*3))
+H=[s.prod(1-q[k] for k in range(4) if k!=i) for i in range(4)]
+g=[OP[i][0]-OP[i][1]-H[i]*w[i] for i in range(4)]
+assert [g[i].subs(head_sub) for i in range(4)]==[-s.Rational(3,8),0,0,0]
+assert [OP[i][1].subs(head_sub)+H[i].subs(head_sub)*w[i] for i in range(4)]==[s.Rational(3,8),-1,-1,-1]
+J=s.Matrix([[s.diff(g[i],q[j]).subs(head_sub) for j in [1,2,3]] for i in [1,2,3]])
+assert J==s.ones(3)-s.eye(3)
+assert J.det()==2
+# The last-atom test forbids every nonempty finite one-owner insertion.
+assert reward(1,{0,1})-reward(1,{0})==1
+assert reward(0,{0,1})-reward(0,{1})==1
+# Geometric j=0 rate1/2 meets zero observer1 exactly.
+r=s.Rational(1,2)
+assert r*reward(1,{0,1})==reward(1,{0})
+a=s.Matrix([reward(i,{0})-w[i] for i in [1,2,3]])
+assert a==s.Matrix([1,-2,1])
+b=J.inv()*a/4
+assert b==s.Matrix([-s.Rational(1,4),s.Rational(1,2),-s.Rational(1,4)])
+L=1+sum(2*x for x in b)
+assert L==1
+assert s.prod(1-v for v in tail_sub.values())==s.Rational(4,27)
+assert s.Rational(1,8)*s.Rational(4,27)==s.Rational(1,54)
+# Positive outside rows allow beta<=2/3 (row2 is the binding buffer).
+assert r*reward(2,{0,2})-reward(2,{0})==s.Rational(1,2)
+assert r*reward(3,{0,3})-reward(3,{0})==-1
+# Pure123 is already an absorbing equilibrium; this is no new raw UE class.
+pure_sub=dict(zip(q,[0,1,1,1]))
+for i in range(4):
+    d=(OP[i][0]-OP[i][1]).subs(pure_sub)
+    assert d<=0 if i==0 else d>=0
 
-assert all(descent_reward(i, {i}) == 0 for i in range(4))
-tail = [s.Integer(0), s.Integer(1), s.Integer(1), s.Integer(1)]
-tq, tc = descent_offers([s.Rational(1, 2)]*4, [0]*4)
-assert tq == tc == tail  # Full one-date cap: Quit0 or Continue/Never.
-tau = s.symbols('tau', real=True)
-qt, ct = descent_offers([tau, 0, 0, 0], tail)
-assert qt[0] == ct[0] == 0
-for i in range(1, 4):
-    assert same(qt[i]-ct[i], 11*tau/4-1)
-    assert same(ct[i], 1+9*tau/4)
-z = (4+9*tau)/(12+9*tau)
-hq, hc = descent_offers([0, z, z, z], ct)
-assert hq[0] == 0 and same(hc[0], 3*z*(1-z)*(1-2*z))
-assert all(same(hq[i], hc[i]) and same(hq[i], -(2*z-z*z))
-           for i in range(1, 4))
-assert s.Rational(4, 11) < s.Rational(4, 9)  # z<1/2 on the claimed interval.
-assert [v.subs(tau, 0) for v in hc] == [s.Rational(2, 9)]+[s.Rational(-5, 9)]*3
+# Symbolic active branch, without selecting numerical roots.
+tau=s.symbols('tau', real=True)
+x1,x2,x3=s.symbols('x1 x2 x3', positive=True)
+odds=dict(zip(q,[0,x1/(1+x1),x2/(1+x2),x3/(1+x3)]))
+wt=[0,tau,1-2*tau,1+tau]
+branch=[-x2-x3+2*x2*x3-tau, x1*x3-1+2*tau, x1*x2-1-tau]
+for i in [1,2,3]:
+    assert same(((OP[i][0]-OP[i][1])/H[i]).subs(odds)-wt[i],branch[i-1])
+poly=tau*x1**2+(2-tau)*x1-2+2*tau+4*tau**2
+assert same(branch[0].subs({x2:(1+tau)/x1,x3:(1-2*tau)/x1}),-poly/x1**2)
+at_zero={x1:1,tau:0}
+assert poly.subs(at_zero)==0 and s.diff(poly,x1).subs(at_zero)==2
+x1prime=-s.diff(poly,tau).subs(at_zero)/s.diff(poly,x1).subs(at_zero)
+assert x1prime==-1
+assert 1-x1prime==2 and -2-x1prime==-1
+assert -1-2*sum(b)==-1  # Complete original Never logarithmic derivative.
+assert all(any(reward(i,{j})<0 for i in range(4) if i!=j) for j in range(4))
+print('PASS: two-zero full-cap tail, finite-clock obstruction, geometric insertion, exact compensated branch and Never descent')
 
-hx = s.symbols('h0:4')
-oq, oc = descent_offers(hx, tail)
-gaps = [s.expand(a-b) for a, b in zip(oq, oc)]
-at_head = dict(zip(hx, [0]+[s.Rational(1, 3)]*3))
-jacobian = s.Matrix([[s.diff(gaps[i], hx[j]).subs(at_head)
-                      for j in range(1, 4)] for i in range(1, 4)])
-assert jacobian == s.ones(3)-s.eye(3) and jacobian.det() == 2
-direction = jacobian.inv()*s.ones(3, 1)  # H_i*(Gamma_i0-w_i)=(4/9)*(9/4)=1.
-assert direction == s.ones(3, 1)/2
-never = (1-tau)*(1-z)**3/16
-assert same(never, 32*(1-tau)/(12+9*tau)**3)
-assert never.subs(tau, 0) == s.Rational(1, 54)
-assert (s.diff(never, tau)/never).subs(tau, 0) == -s.Rational(13, 4)
-# The control's existing absorbing equilibrium prevents any new-coverage claim.
-pq, pc = descent_offers([0, 1, 1, 1], [0]*4)
-assert pq == pc == [0, -1, -1, -1]
-print('PASS: all-active exact tail, compensated full-cap head, Jacobian, and strict Never descent')
+# Section12: a moving actual continuation defeats the fixed-tail floor.
+beta=s.symbols('beta', positive=True)
+def moving_reward(i,A):
+    if i==0:
+        if A=={1}: return s.Integer(-2)
+        if A=={0,1}: return s.Integer(-1)
+        return s.Integer(int(2 in A)-int(3 in A))
+    if i==1:
+        if A=={0}: return s.Integer(-2)
+        if A=={0,1}: return s.Integer(-1)
+        return s.Integer(0)
+    return s.Integer(int((3 if i==2 else 2) in A))
+OP=[offers(i,moving_reward) for i in range(4)]
+assert all(moving_reward(i,{i})==0 for i in range(4))
+assert moving_reward(0,{1})==moving_reward(1,{0})==-2
+assert moving_reward(0,{0,1})==moving_reward(1,{0,1})==-1
+S=s.Rational(1,2)+beta/(1-beta)
+qt={q[0]:0,q[1]:0,q[2]:S,q[3]:s.Rational(1,2)}
+w=[beta/(1-beta),0,s.Rational(1,2),S]
+for i in range(4):
+    assert s.simplify(OP[i][0].subs(qt)-w[i])==0
+    assert s.simplify(OP[i][1].subs(qt)-w[i])==0
+qh={q[0]:0,q[1]:beta,q[2]:0,q[3]:0}
+H=[s.prod(1-q[j] for j in range(4) if j!=i) for i in range(4)]
+Q=[s.simplify(OP[i][0].subs(qh)) for i in range(4)]
+C=[s.simplify(OP[i][1].subs(qh)+H[i].subs(qh)*w[i]) for i in range(4)]
+assert Q==[-beta,0,0,0]
+assert C==[-beta,0,(1-beta)/2,(1+beta)/2]
+assert s.simplify((1-beta)*(1-S)/2-(s.Rational(1,4)-3*beta/4))==0
+# For 0<beta<1/3 every tail hazard is proper and positive-owner gaps >0.
+pure=dict(zip(q,[0,0,1,1]))
+assert all(s.simplify((Q-P).subs(pure))==0 for Q,P in OP)
+print('PASS: blocked pair with actual nearby-tail marked descent and zero full debt')
+
+# Section12: exact first-date-feasible control and finite nineteen-date certificate.
+G=s.Matrix([[0,1,1],[1,0,-1],[-1,-100,0]])
+J=s.Matrix([[0,2,2],[2,0,-s.Rational(3,2)],[-s.Rational(3,2),-150,0]])
+assert G*s.ones(3,1)/3-J*s.Matrix([0,1,0])/3==s.Matrix([0,0,s.Rational(49,3)])
+assert 3**18>1200*2**18
+assert min(J[i,j]/G[i,j] for i in range(3) for j in range(3) if G[i,j]>0)==2
+assert max(J[i,j]/G[i,j] for i in range(3) for j in range(3) if G[i,j]<0)==s.Rational(3,2)
+
+def rigid_reward(i,A):
+    if i==0:
+        return s.Integer(A!={0})
+    core={1,2,3}
+    if len(A)==1:
+        return G[i-1,next(iter(A))-1] if 0 not in A else s.Integer(0)
+    if len(A)==2 and i in A and A<=core:
+        j=next(iter(A-{i}))
+        return J[i-1,j-1]
+    if A==core-{i}:return -sum(G.row(i-1))
+    if A==core:return -sum(J.row(i-1))
+    return s.Integer(0)
+
+OP=[offers(i,rigid_reward) for i in range(4)]
+root=s.symbols('root', nonnegative=True)
+at_root=dict(zip(q,[root]+[s.Rational(1,2)]*3))
+want=[s.Rational(7,8),0,0,0]
+assert [s.simplify(Q.subs(at_root)) for Q,P in OP]==want
+assert [s.simplify(P.subs(at_root)) for Q,P in OP]==want
+assert s.prod(1-x for x in at_root.values())==(1-root)/8
+print('PASS: nineteen-date obstruction, actual four-owner continuation, and payoff-preserving existing-law descent')

@@ -21,10 +21,15 @@ classification does not apply to these positive-debt approximants;
 global extremality remains a separate constraint. Exact cap compression
 is unavailable, even for strictly negative marked sources.
 Section11 gives an exact joint head-and-tail descent in C with a finite
-derivative test, including inward-moving quiet ties. Its hypotheses are not
+derivative test, including inward-moving quiet ties and the complete finite,
+countable and compact one-owner clock classification. Its hypotheses are not
 produced at every source. Section12 retains the same global Never objective
-in whole-law comparisons and at inherited continuation fibres. No new raw
-reward class or complete Fin4 source branch is claimed closed.
+in whole-law comparisons and at inherited continuation fibres. It classifies
+proper two-zero prefixes and classifies the complete linear clock relaxation
+by a common matrix-pencil direction. Failure has a finite deadline certificate
+and forces the visible head to terminate finitely. An actual control shows
+why changing the tail escapes this local
+obstruction. No new raw reward class or complete Fin4 source branch is closed.
 
 ## 1. Closed actual domains replace arbitrary virtual boxes
 
@@ -890,12 +895,14 @@ Assume the active Jacobian
 
     J=(partial g_i/partial q_l)_(i,l in S)
 
-is invertible. Choose an owner j such that
+is invertible. Choose an owner j with w_j=0 for which the CLOSED interval
 
-    w_j=0,
-    Z_k({k,j})-Gamma_kj<=0 for every k!=j with w_k=0.  (ELIG)
+    I_j={r in[0,1]: r Z_k({k,j})<=Gamma_kj
+                         for every k!=j with w_k=0}  (ELIG)
 
-If j is the only zero payoff of W, eligibility is automatic. Define
+is nonempty. Rate1 recovers the one-period insertion; smaller rates genuinely
+enlarge the allowed timing class. If j is the only zero payoff of W,
+eligibility is automatic. Define
 
     a=Gamma[:,j]-w,
     b=J^(-1) diag_(i in S)(H_i(q)) a_S,
@@ -912,23 +919,68 @@ STRICTLY SMALLER original Never product. Therefore any global marked
 least-Never source of this form must, for every eligible j, satisfy L_j<=0
 or have a quiet tie whose displayed derivative is nonnegative.
 
-### Complete independent implementation and full caps
+### Complete one-owner timing classification and full caps
 
-Insert a solo-j period of hazard t immediately before W. Its own comparison
-is equality, because w_j=Z_j({j})=0. For k!=j its gap is exactly
+For r>0 in I_j, give j finite atoms t r(1-r)^n at n=0,1,... and original
+Never mass1-t; all other head laws are Never. This is a diluted geometric
+clock, with rate1 interpreted as a single atom. For k!=j, its actual head
+Never payoff and complete head cap are
 
-    t[Z_k({k,j})-Gamma_kj]-(1-t)w_k.
+    e_k(head)=t Gamma_kj,
+    B_k(head)=t max(Gamma_kj,r Z_k({k,j})).
 
-Eligibility handles zero w_k; positive w_k keep their comparisons strict for
-small t>=0. Thus this is an exact Nash prefix, with
+Indeed the deadline n payoff is t Gamma_kj plus
+t(1-r)^n[r Z_k({k,j})-Gamma_kj]; Never has the limiting value. The mover's
+payoff and cap are0. Semantic concatenation with W therefore gives
 
     w(t)=(1-t)w+t Gamma[:,j],
-    U(W(t))=B(W(t))=e(W(t))=w(t),
+    U(W(t))=e(W(t))=w(t),
+    B_k(W(t))=max(t max(Gamma_kj,r Z_k({k,j})),w_k(t)) for k!=j,
+    B_j(W(t))=w_j(t)=0,
     N_i(W(t))=(1-t*1_(i=j))N_i(W).
 
-Nonnegative w is essential: at t=0 the inserted empty period offers Quit0,
-so it preserves the old full cap only when w>=0. No unavailable earlier
-deadline is silently removed. The perturbed w(t) need not stay nonnegative.
+Consequently U=B=e exactly whenever
+
+    t[r Z_k({k,j})-Gamma_kj]^+ <= (1-t)w_k for k!=j.  (BUFFER)
+
+Eligibility handles every zero w_k, and positive w_k permit all sufficiently
+small t>=0. Infinite heads are implemented in C by finite truncations,
+retaining a boundary query and appending actual approximants of W. Head
+truncation errors tend to0 uniformly over complete responses. This never
+executes W after infinitely many natural dates.
+
+If the only feasible rate is r=0, use positive geometric rates decreasing
+to0 at FIXED t. Every zero observer's cap excess tends to0, since(ELIG)
+then says Gamma_kj>=0. Positive observers obey(BUFFER) uniformly for small t.
+The limit in C still has U=B=e=w(t) and exactly the displayed original N.
+It need not have an actual head representative. Finite mass escaping to later
+dates is not renamed Never. At t=0 the head has cap0, so nonnegative w is
+essential to preserve the old cap; w(t) itself may become negative.
+
+This classifies ALL one-owner timing insertions, not just geometric witnesses.
+For an arbitrary actual head with atoms p_n, total finite mass t>0 and
+R_n=sum_(m>=n)p_m, each zero observer requires
+
+    Z_k({k,j})p_n<=Gamma_kj R_n for every n.
+
+At any positive atom, p_n/R_n in(0,1] is one COMMON feasible rate. At the
+last atom of a finite head it equals1. Conversely the geometric law realizes
+any feasible positive rate. For a compact head limit of finite masses
+t_l->t>0, the first physical deadline and zero debt at positive original
+Never give Z_k({k,j})p_l(0)-Gamma_kj t_l<=o(1) on every zero row. Extracting
+p_l(0)/t_l in[0,1] proves closed-interval necessity. Thus exact finite heads
+exist iff1 belongs to I_j; actual countable heads iff I_j meets(0,1]; and
+compact heads iff I_j is nonempty, in each case for sufficiently small mass.
+For example Gamma=0<Z_k({k,j}) permits only the compact endpoint r=0.
+
+The geometric burst and common pencil inequality already occur in
+[the canonical pivot reduction, Proof Section13](../exports/UNIVERSAL_CANONICAL_PIVOT_EXIT_REDUCTION.md),
+with an objective transfer in
+[the absorbing partial-Nash minimum note, Section5](CODEX_EXPENSIVE_EXIT__ABSORBING_PARTIAL_NASH_MINIMUM.md).
+They are reused here. The refinements are the complete timing converse,
+closed endpoint, and their application to this same marked Never objective.
+
+### Compensating the retained head
 
 Keep quiet head hazards0. The implicit function theorem gives q_S(t) through
 q_S solving g_i(q(t),w(t))=0 for all i in S. Proper active hazards persist.
@@ -937,7 +989,7 @@ makes the comparison strictly favorable to Continue for small positive t.
 Consequently Y(t)=Phi_(q(t))(W(t)) has full zero debt. These statements use
 the COMPLETE prefix cap max(Q_i,P_i+H_i B_i), hence control every later
 deadline and Never, not just the two supported head actions. Finite prefixes
-applied to actual approximants of W place Y(t) in the same C. All prescribed
+applied to actual approximants of W(t) place Y(t) in the same C. All prescribed
 randomizations are independent owner hazards.
 
 Differentiating the active equations gives J q'_S(0)=diag(H_i)a_S, so q'=b.
@@ -979,41 +1031,56 @@ inverse bounds or convergence for an infinite head.
 For a zero marked entrance payoff, the extension just stated uses a negative
 coordinate of a^1 at a zero coordinate of w^1 instead of min w^1<0.
 
-### Exact control with all four owners already active in the tail
+### Exact enlargement beyond every finite one-owner insertion
 
-One compact example checks that the construction can change an actual
-continuation having four positive finite masses. It is a control, not new
-UE reward coverage. Put C0={1,2,3}. For nonempty A subset C0 set Z0(A)=1,-1,0
-according as |A|=1,2,3. For i in C0 set its own singleton0, participant
-nonsingleton reward -1, and passive rewards -2 on singletons and -1 on pairs.
-For A containing0 set Z0(A)=0; a core owner's reward is13/4 when absent,
-5 on {0,i}, and2 on every larger coalition containing0 and i. These rules
-specify the whole native table.
+This replaces the weaker one-zero control with an actual all-four-active
+tail having TWO zeros. It is not new UE reward coverage. Put C0={1,2,3}.
+For nonempty A subset C0, row0 is1,-4,12 according as |A|=1,2,3. Core own
+singletons are0 and off-own singletons are-2. Participant pair rewards are
+-3 for owner1 and-2 for owners2,3; passive pair rewards are0 for owner1
+and-1 for owners2,3. The full-core participant vector is(2,0,0).
+On coalitions containing0, row0 is0,2,-6,12 according as |A|=1,2,3,4.
+The other rows are specified by this table; "larger" means larger than the
+displayed singleton or pair while retaining the stated membership:
 
-A last period with all hazards1/2 gives w=(0,1,1,1), all N_i(W)=1/2, and
-U=B=e=w. For a core owner the Quit and Continue offers are respectively
-(5+2+2+2)/8-3/8=1 and13/8-5/8=1; row0's offers both vanish. Prefixing
-q=(0,1/3,1/3,1/3) gives
+| Recipient | Passive at{0} | Larger passive coalitions | At{0,i} | Larger participant coalitions |
+|---|---:|---:|---:|---:|
+|1|1|4/5|2|2/5|
+|2|-1|31/5|-1|6|
+|3|2|19/5|2|18/5|
 
-    U=B=e=(2/9,-5/9,-5/9,-5/9),
-    N=(1/2,1/3,1/3,1/3), nu=1/54.
+Every one of the sixty native rewards is now specified. The last-period root
+(1/2,1/3,1/3,1/3) over AllNever has both offers equal to w=(0,0,1,1), hence
 
-The head's core gap, against core opponent hazards x,y and own continuation
-u, is x+y-2xy-u(1-x)(1-y). Its active Jacobian has zero diagonal and all
-off-diagonal entries1, hence determinant2. Quiet0 is strict. For j=0,
-a_S=(9/4,9/4,9/4), b=(1/2,1/2,1/2), and L_0=13/4>0.
+    U(W)=B(W)=e(W)=w, N(W)=(1/2,2/3,2/3,2/3), nu(W)=4/27.
 
-The complete exact path is
+Prefix q=(0,1/2,1/2,1/2). Direct enumeration gives
 
-    w(t)=(0,1+9t/4,1+9t/4,1+9t/4),
-    q(t)=(0,z,z,z), z=(4+9t)/(12+9t),
-    nu(t)=32(1-t)/(12+9t)^3, 0<=t<4/11.
+    U=B=e=(3/8,-1,-1,-1), N=(1/2,1/3,1/3,1/3), nu=1/54.
 
-The inserted period's core gaps are(11/4)t-1<=0. Head quiet0 has Continue
-value3z(1-z)(1-2z)>0 and Quit0; core owners remain indifferent with negative
-payoffs. Thus all full caps are controlled along the path, with log Never
-derivative -13/4 at0. The table also has absorbing pure123 Nash; this does
-not provide a new game outside established UE producers.
+The active Jacobian has zero diagonal and unit off-diagonal, determinant2;
+quiet0 has Quit0 and Continue3/8. Both zero owners of W have Gamma=1 and
+joining reward2 against the other. Their last-atom obstruction excludes
+every nonempty finite insertion by either zero owner. Inserting either
+positive-payoff owner alone instead loses its own positive continuation and
+creates debt. Thus EVERY nonempty finite one-owner insertion is excluded.
+But owner0's geometric rate1/2 satisfies the zero-observer comparison.
+Its positive-observer excesses are1/2 and-1, so(BUFFER) gives an exact tail
+path at least for0<=t<=2/3:
+
+    w(t)=(0,t,1-2t,1+t), nu(W(t))=(1-t)4/27.
+
+Here a_S=(1,-2,1), H_i=1/4 and b=(-1/4,1/2,-1/4), so L_0=1>0. The head
+remains marked and quiet0 remains strict for small t. To verify the branch
+without a numerical root search, put x_i=q_i/(1-q_i). Its exact equations are
+
+    -x2-x3+2x2*x3=t, x1*x3=1-2t, x1*x2=1+t.
+
+Elimination leaves t*x1^2+(2-t)*x1-2+2t+4t^2=0, with regular branch x1=1
+at t=0. Its derivatives are x1'=-1,x2'=2,x3'=-1, yielding the stated b and
+log Never derivative-1. Every singleton column of this table has a negative
+off-own entry. Nevertheless pure123 is already absorbing Nash, so the
+example certifies stricter continuation coverage, not a new raw UE class.
 
 The theorem leaves singular heads, ineligible zero faces, unsuccessful quiet
 tie derivatives, nonpositive descent tests and infinite-head limits unresolved.
@@ -1184,6 +1251,273 @@ Never product to h; retaining it leaves the fixed-payoff descent problem.
 The zero-boundary alternative realizes an actual source, possibly infinite,
 whose absorbing repair remains open. Neither alternative closes Fin4.
 
+### Complete one-clock test and the two-zero face
+
+For any nonnegative zero-debt W with positive original Never, let S be its
+zero set and use the intervals I_j from Section11. If W ITSELF is a global
+marked least-Never source, every I_j must be empty: an eligible insertion
+keeps its owner's payoff0 and multiplies nu by1-t. This excludes a singleton
+zero set at that minimum. It does NOT apply directly to the inherited W
+above, which minimizes only on its exact payoff fibre; an insertion changes
+that payoff and requires the head compensation from Section11.
+
+If S={a,b}, both intervals are empty exactly when
+
+    Gamma_ab<0, J_ab>Gamma_ab,
+    Gamma_ba<0, J_ba>Gamma_ba,                       (TWO)
+
+where J_ij=Z_i({i,j}). Indeed min_(r in[0,1]) r J_ij=min(0,J_ij).
+This also classifies ALL proper prefixes supported on these two zero owners,
+not just one-clock insertions. Under(TWO), put
+c_ab=min(0,J_ab)-Gamma_ab>0 and define c_ba similarly. For arbitrary head
+finite masses f_a,f_b and first-date atom p_b(0), the through-W value of a
+is Gamma_ab f_b, whereas its first-date reply is J_ab p_b(0). Hence
+
+    B_a-T_a>=c_ab f_b,
+    d_a>=(1-f_a)c_ab f_b,                            (PAIR)
+
+and symmetrically for b. The second inequality uses the mixture of finite
+head responses and the response that continues through the entire head.
+At positive head Never masses, zero debt forces f_a=f_b=0. These inequalities
+pass to countable heads and compact head limits with ORIGINAL finite masses
+retained. Conversely, failure of(TWO) supplies a nonempty I_j and thus a
+compact insertion of every sufficiently small mass. No genericity is used.
+
+For three zeros the complete ONE-clock test remains elementary: intersect
+the lower bounds r>=Gamma_kj/J_kj for J_kj<0, upper bounds
+r<=Gamma_kj/J_kj for J_kj>0, and[0,1]; a row J_kj=0 requires Gamma_kj>=0.
+Empty intersections do not classify prefixes with several active owners.
+
+### The full linear clock relaxation has a finite certificate
+
+Let1<=|S|<=3, restrict Gamma and J to S, set their diagonals0, and put
+Delta=J-Gamma. The first-date feasibility test is
+
+    0<=p<=f, sum f=1, Gamma f-Jp>=0.                 (LP)
+
+It fails exactly when a positive normalized row lambda satisfies
+lambda Gamma<0 and lambda Delta>0 entrywise. Indeed, set x=f-p,y=p.
+The convex hull of the columns of Gamma and -Delta either meets the
+nonnegative orthant or is strictly separated from it by a nonzero
+nonnegative row. A small positive perturbation preserves the strict
+inequalities. This is the complete one-date alternative, not the complete
+clock test.
+
+For K>=1 define the compact finite domain
+
+    R_0>=0, sum R_0=1,
+    0<=p_n<=R_n, R_(n+1)=R_n-p_n for0<=n<K,
+
+and require Gamma R_n-Jp_n>=0 at every queried date. Its exact margin is
+
+    mu_K=min_domain max_(i in S,0<=n<K)(Jp_n-Gamma R_n)_i.
+
+The K-date test fails iff mu_K>0. Also mu_K<=M when rewards are bounded
+by M, since the domain permits p_n=0 throughout. The K=1 test is(LP).
+The ENTIRE hierarchy has the following complete mathematical alternative:
+
+    some finite K has mu_K>0;                       (FINITE)
+    exists r in[0,1], v>=0, sum v=1,
+                       (Gamma-r J)v>=0.            (RAY)
+
+Exactly one holds. Here is a proof for arbitrary real Gamma,J, without sign
+or irreducibility assumptions. Let C_n be the cone of states R admitting
+n monotone transitions R to R', where
+
+    0<=R'<=R, (Gamma-J)R+J R'>=0.
+
+Each C_n is a closed convex cone: witnesses for convergent initial states
+have all later coordinates bounded by the initial coordinates, so a
+subsequence supplies limiting witnesses. The cones decrease. If all finite
+tests pass, their normalized sections have nonempty compact intersection
+B, the normalized base of C_infty=intersection C_n. Every R in C_infty
+has a successor in C_infty, by intersecting the nested compact sets of
+first successors admitting n further transitions.
+
+If a nonzero R admits successor0, then(RAY) holds with r=1. Otherwise
+all successor masses over B are uniformly bounded away from0: their graph
+is compact and has no zero successor. Normalize each successor by its total
+mass. This defines on B a nonempty compact-valued correspondence with
+closed graph and convex values. Convexity follows by reweighting a convex
+combination before normalization. Kakutani gives a fixed point: some
+successor R'=sR has0<s<=1. Then r=1-s proves(RAY). Conversely a ray
+supplies R_n=(1-r)^n v, p_n=r R_n at every finite depth, including r=0
+and r=1 (with R_0=v and later states0 in the latter case).
+This proves the alternative. No uniform bound on K is asserted.
+
+(RAY) is a common direction in a LINEAR relaxation, not a stationary
+strategy theorem, a full-cap Nash producer, or a complementarity solution.
+The endpoint r=0 may represent diffuse finite mass; it does not provide an
+exact positive-rate countable clock. Contact of supported actions with the
+cap and nonlinear coalition effects remain additional constraints.
+
+### A failed finite test forces a uniform full-debt floor
+
+Assume mu=mu_K>0, w_i>=eta>0 outside S, and put
+
+    delta=min(1/2,mu/(6M),eta/(6M)),
+    kappa=eta*mu/[4(16M+eta)].
+
+For EVERY independent head R with original finite masses f_i and
+beta=sum_i f_i<=delta, including countable heads and compact head limits,
+
+    D(R*W)>=kappa beta>=kappa[1-product_i(1-f_i)].    (FLOOR)
+
+Here W is fixed, and positive-payoff owners may participate in the head.
+First suppose its support lies in S. Let p_j(n) be its date-n atom and
+F_j(n)=sum_(t>=n)p_j(t) its remaining ORIGINAL finite mass. The zero-row
+through-W response has value e_i(R), because w_i=0. At every physical date,
+
+    V_i(n)-e_i(R)=(Jp(n)-Gamma F(n))_i+error,
+    |error|<=3M beta^2.                             (EXP)
+
+To check this directly, condition on head choices and average the independent
+boundary law first. With exactly one finite opposing head clock j, the
+response difference is0 if its date is below n, J_ij-Gamma_ij at n, and
+-Gamma_ij above n. These are exactly the linear terms. With no opposing
+finite head clock, both expected values are0. Discrepancy occurs only when
+at least two opponents have finite head clocks. There are at most two such
+opponents in S; the discrepancy is at most6M and this event has probability
+at most sum_(j<l)f_j f_l<=beta^2/2. This proves(EXP).
+
+Normalizing F,p by beta gives a point in the K-date domain, so some complete
+reply has excess at least mu beta-3M beta^2. Write the prescribed payoff
+as the mixture of finite head responses and, with weight1-f_i, the response
+continuing through the head and playing W. Its latter value is
+T_i=e_i(R)+H_i(R)w_i, so d_i>=(1-f_i)(B_i-T_i) with B_i>=T_i.
+The maximizing row therefore gives
+
+    D>=(1-beta)(mu beta-3M beta^2).
+
+In general put g=sum_(i outside S)f_i. Each positive owner's through-W value
+is at least eta-2M beta, whereas every finite head reply is at most M beta.
+The same mixture gives D>=eta*g/2. Remove only these owners' HEAD clocks,
+retaining W. Coupled complete plays coincide unless a removed head choice
+was finite, an event of probability at most g. Every complete response,
+and the complete through-W response, changes by at most2Mg; taking a
+supremum gives the same cap bound. Apply(EXP) to the stripped head:
+
+    D>=(1-beta)[mu(beta-g)-3M(beta-g)^2-4Mg]
+      >=mu beta/4-(mu/4+4M)g.
+
+Combine this with D>=eta*g/2, using weight theta=eta/(16M+eta) on the
+last bound. The remaining g coefficient is
+eta(4M-mu/4)/(16M+eta)>=0, since mu<=M. This proves(FLOOR).
+For compact head limits extract the finitely many atoms before date K and
+retain f_i; then F_i(n)=f_i-sum_(t<n)p_i(t), including finite mass escaping
+every fixed date. All inequalities pass to the limit with original Never
+unchanged. Semantic composition uses finite truncations and retained boundary
+queries; it never executes W after infinitely many natural dates.
+
+Thus failure of(RAY) forbids arbitrarily small nonempty prefixes with
+D/beta tending to0. Feasibility of(RAY) is not a full-clock Nash sufficiency
+claim. Under(TWO), the first-date test already fails. Changing W by order
+beta can change the zero-row through values by order beta and cancel the
+floor; no bound for changing tails or unrestricted absorbing-debt gap follows.
+
+### A complete noncyclic sign family, with a nineteen-date control
+
+The test excludes all six NONCYCLIC mixed-column singleton sign patterns
+when their joining ratios have a common gap. Relabel their three owners so
+
+    Gamma=[[0,A,B],[C,0,-D],[-E,-F,0]], A,B,C,D,E,F>0.
+
+Put a=min_(Gamma_ij>0) J_ij/Gamma_ij and
+b=max(0,max_(Gamma_ij<0) J_ij/Gamma_ij). If a>b, then(RAY) is impossible.
+For r<=1/a, every negative-Gamma entry of Gamma-rJ is strictly negative.
+Its third row forces v_1=v_2=0, then its second row forces v_3=0.
+For r>1/a, every positive-Gamma entry is strictly negative: the first row
+forces v_2=v_3=0 and the second forces v_1=0. Both contradict normalization.
+Thus every member has a finite deadline obstruction and(FLOOR), regardless
+of higher-coalition rewards, whenever the stated continuation exists.
+This is a family of local continuation exclusions, not a UE theorem.
+
+For S={1,2,3}, fix
+
+    Gamma=[[0,1,1],[1,0,-1],[-1,-100,0]],
+    J=[[0,2,2],[2,0,-3/2],[-3/2,-150,0]].
+
+Every one-owner interval is empty: positive observers require r<=1/2,
+negative observers r>=2/3. Yet(LP) passes: f=(1,1,1)/3,p=(0,1,0)/3
+gives Gamma f-Jp=(0,0,49/3). Suppose nineteen dates passed. At any queried
+n=0,...,18 write R_n=(x,y,z), X=x+100y, Y=y+z. The inequalities give
+
+    p_2+p_3<=Y/2,
+    2p_1-(3/2)p_3<=x-z,
+    p_1+100p_2>=(2/3)X.
+
+The first two imply z<=4x+3y, hence Y<=4X. The second and p_3<=z give
+p_1<=x/2+z/4; combining with the third and p_2<=y gives
+x<=200y+3z/2, hence X<=300Y. Also X_(n+1)<=X_n/3 and
+Y_(n+1)>=Y_n/2. Normalization and X_0<=300Y_0 force Y_0>0, so
+
+    2^(-18)Y_0<=Y_18<=4X_18<=1200*3^(-18)Y_0,
+
+contradicting 3^18>1200*2^18. Therefore mu_19>0. The same strict finite
+margin persists under sufficiently small perturbations of Gamma,J. The
+other rewards enter only through M and the positive continuation buffer.
+This is a complete local prefix obstruction, not a new raw UE class.
+
+The continuation hypotheses are nonvacuous. Complete the table using a
+fourth owner0: for each i in S set all unspecified rewards to0 except
+Z_i(S minus{i})=-sum_(j in S)Gamma_ij and Z_i(S)=-sum_(j in S)J_ij.
+Set row0 to1 on every nonempty coalition except{0}, where it is0. The
+one-date root with all hazards1/2 has U=B=e=(7/8,0,0,0) and every original
+Never mass1/2. Its Quit and Continue numerators cancel in each core row;
+row0's offers are both7/8. Thus all four owners can be active in an ACTUAL
+continuation with this local rigidity. Increasing the EXISTING owner0 root
+from1/2 to1 keeps U=B=e fixed and reduces nu to0. The obstacle concerns
+prefixes; revising the existing law succeeds. No positive-gap or globally
+minimizing source is claimed for this table.
+
+### Moving the continuation can cancel the prefix floor
+
+Here is an ACTUAL finite control of that distinction. Label owners a,b,c,d.
+For every nonempty coalition A set Z_a(A)=1_(c in A)-1_(d in A), except
+Z_a({b})=-2 and Z_a({a,b})=-1. Set row b to0 except Z_b({a})=-2 and
+Z_b({a,b})=-1; set Z_c(A)=1_(d in A), Z_d(A)=1_(c in A). All own
+singletons are0. The last-period root(0,0,s,t) has U=B=e=(s-t,0,t,s).
+At s=t=1/2 this gives a(TWO) face W. For0<beta<1/3 replace its tail root
+by s=1/2+beta/(1-beta),t=1/2 and prefix a solo-b root beta. The complete
+Quit and Continue offers at that prefix are respectively
+
+    Q=(-beta,0,0,0), C=(-beta,0,(1-beta)/2,(1+beta)/2).
+
+Thus the actual two-period output has full zero debt and original Never
+product1/4-3beta/4, strictly below nu(W)=1/4. The changed tail converges
+to W in all annotations. This is a nonlocal-in-law marked descent despite
+the fixed-W floor, even with singular head comparisons; no neighborhood
+version of(FLOOR) is valid without further constraints. Pure{c,d} is already
+absorbing Nash, so this control adds no raw UE coverage.
+
+### Restrictions on a genuinely infinite visible head
+
+In the extracted root chain, every owner with w_i>0 is eventually quiet.
+Otherwise infinitely many active dates give U_i^t=Q_i(q^t), whose absolute
+value is at most M sum_j q_j^t->0, contradicting U_i^t->w_i>0. At a late
+cut the remaining actual visible suffix R_t has finite masses only on S,
+total mass tending to0, and exact semantic composition R_t*W=Y_t.
+
+If S is a singleton {j}, every nonzero late root has U_j^t=0 while all
+other payoffs are positive, so the specified boundary-stopping extraction
+has already stopped. More generally the late solo clock can be replaced
+by one root of its total mass: it preserves all first-coalition probabilities
+and original Never, and positive outsiders prefer the through-W response
+once that mass is at most min_(k!=j)w_k/(4M). This preserves U,B,e,N and
+gives a FINITE head representation over the SAME W. It does not imply an
+invertible active Jacobian; a solo root's own indifference is automatic.
+
+If(FINITE) holds, apply(FLOOR) to each sufficiently late visible suffix.
+Its exact zero debt forces beta=0, hence every later root is zero and the
+source at that cut is already W. The extraction therefore stops finitely.
+In particular this holds for every two-zero boundary satisfying(TWO).
+A genuinely nonstopping chain with some positive limiting payoff must
+therefore have two or three zeros and satisfy(RAY). This is a restriction
+on the limiting visible-head geometry, not an exclusion of such a face
+when it is reached after finitely many roots. It supplies no new root
+extraction through a zero face, and no regularity or descent sign for the
+remaining finite heads.
+
 ## Verification and remaining target
 
 The [exact geometry checker](../experiments/CODEX_COORDINATOR__ACTUAL_CONTINUATION_GEOMETRY_CHECK.py)
@@ -1210,19 +1544,25 @@ These checked ingredients do not already state the simultaneous exact-fibre
 conclusion proved here. No fresh Lean certification is claimed.
 
 The checker also verifies Section11's full continuation and head comparisons,
-active Jacobian and exact survival derivative. The general implicit-function,
-global-minimum and carrier arguments are mathematical proofs, not finite
-search conclusions. They have no fresh Lean certification.
-The new material has scoped independent reviews for
+active Jacobian, geometric-clock eligibility and exact survival derivative,
+and Section12's actual moving-tail control. The general timing classification,
+finite-chain/common-ray equivalence, implicit-function, global-minimum and carrier arguments
+are mathematical proofs, not finite search conclusions. They have no fresh
+Lean certification. The prior material has scoped independent reviews for
 [head-and-tail descent](../feedback/CODEX_COORDINATOR__BOUNDED_CROSSING_SELECTION__BY_DESCENT.md)
 and [same-source global comparisons](../feedback/CODEX_COORDINATOR__BOUNDED_CROSSING_SELECTION__BY_SOURCE_MINIMUM.md).
-Earlier review hashes retain their original scopes.
+The broadened timing, zero-face geometry and finite-stopping claims have
+[two scoped independent reviews](../feedback/CODEX_COORDINATOR__BOUNDED_CROSSING_SELECTION__BY_CLOCK_GEOMETRY.md).
+Earlier review hashes retain their original scopes, including the previous
+weaker control replaced by Section11's two-zero example.
 
 The live target remains GLOBAL marked least-Never extremality with full caps.
 Section11 supplies a source-consuming descent when its finite test passes;
 it does not supply a qualifying finite head, eligible tail direction or
 descent sign at every minimum. Section12 retains the actual global objective
-through one-owner variations and inherited tails. The original source may
-require an infinite head, and its finite exact-fibre approximants still have
-positive debt. A universal descent or another equilibrium construction is
-still needed. Fin4 remains open.
+through one-owner variations and inherited tails. A genuinely infinite head
+with a nonzero limiting payoff must end on two or three zeros satisfying(RAY).
+Finite heads can still reach the locally rigid faces, and their singularities
+and compensation signs remain unresolved. The original source's finite
+exact-fibre approximants still have positive debt. A universal descent or
+another equilibrium construction is still needed. Fin4 remains open.
