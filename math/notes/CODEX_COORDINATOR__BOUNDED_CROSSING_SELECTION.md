@@ -33,7 +33,11 @@ obstruction. No new raw reward class or complete Fin4 source branch is closed. S
 that positive root inertia excludes EVERY nonempty proper compact zero-debt head;
 a universal descent there must revise existing laws or construct an
 absorbing head directly. An actual infinite-tail construction gives local
-whole-law descent in the existing finite-exact incompleteness control.
+whole-law descent throughout the existing symmetric infinite-tail family;
+its scalar minima escape by asymmetric clocks. A separate exact control
+shows that positive inert sources can nevertheless be locally isolated
+among all countable-law equilibria, with a local debt floor. The global
+minimum hypothesis remains essential.
 
 ## 1. Closed actual domains replace arbitrary virtual boxes
 
@@ -1727,6 +1731,209 @@ finite-exact trap and the positive-inert prefix restriction. It supplies
 neither a producer for arbitrary sources nor a new UE reward class; the
 control's absorbing stationary equilibrium was already known.
 
+### The entire symmetric orbit escapes through actual asymmetric clocks
+
+The preceding construction extends past its first turning point: EVERY
+member with p_0 in[0,1/2] admits arbitrarily small total-variation changes
+to actual full Nash laws with smaller original Never. A scalar minimum of
+this family is a saddle when the core owners may use different clocks.
+This excludes this entire orbit family as local minima, not arbitrary
+sources or a further raw reward class.
+
+For a core vector q, write a=q_next(i), b=q_prev(i). The SAME table gives
+
+    Q_i(q)=4a-2b-ab,
+    z_i(q)=(2a-b-2ab)/[(1-a)(1-b)].
+
+The exact tail recurrence is Q(q_(n+1))=z(q_n). At a diagonal successor
+r=T(p), DQ has symmetric eigenvalue2(1-r) and transverse squared
+eigenvalue modulus r^2-2r+28. Here 0<=r<=1-sqrt(3)/2<1/7, so DQ is
+invertible. The implicit function theorem gives a vector map Psi near
+every diagonal orbit point. At zero, Psi(q)=q/2+O(||q||^2): ALL THREE
+modes contract, not just the symmetric one.
+
+For every0<p<1/2 an open neighborhood of p*one has positive summable
+Psi-orbits. To justify positivity at infinitely many dates, enter a small
+ball where ||Psi(q)||<=theta||q|| with theta<1/sqrt(2). Its analytic
+extension to a complex ball has the same bound after shrinking the ball.
+The successive differences of2^n Psi^n(q) are bounded by
+C(2theta^2)^n||q||^2, so these functions converge normally to A(q).
+Cauchy estimates give convergence through two derivatives on a smaller
+ball. On the positive diagonal, A has strictly positive coordinates,
+because T(x)=x/2+O(x^2) and its iterates are summable. Continuity gives
+A(q)>>0 nearby; the refined remainder
+Psi^n(q)=2^-n A(q)+O(4^-n) makes every late iterate positive. Continuity
+handles the finitely many earlier dates. The geometric estimates also
+give total-variation continuity of the complete stopping laws.
+
+Telescoping the exact recurrence prices EVERY core finite deadline and
+Never at Q_i(q_0). Observer Never still dominates every finite reply.
+Thus these nearby vector orbits are actual full Nash profiles. Their
+log Never F(q)=log product_(n,i)(1-q_(n,i)) is C2 and satisfies
+
+    F(q)=sum_i log(1-q_i)+F(Psi(q)).
+
+Put H(p)=sum_n -log(1-T^n(p)). At q=p*one, cyclic symmetry gives
+gradient F=g(p)*one, g=-H', and Hessian lambda(p) times the identity on
+the plane sum_i d_i=0. Write r=T(p) and d0=r^2-2r+28. Implicit
+differentiation gives, for every transverse d,
+
+    a(p)=||DPsi d||^2/||d||^2
+        =(9p^2-15p+7)/[(1-p)^6 d0]>0,
+    b(p)=sum_i D^2Psi_i[d,d]/||d||^2
+        =[3(1-2p)/(1-p)^4-a(p)]/[2(1-r)],
+    lambda(p)=-(1-p)^(-2)+a(p)lambda(r)+b(p)g(r).       (CURV)
+
+Indeed the transverse squared modulus of Dz is
+(9p^2-15p+7)/(1-p)^6; also
+sum_i D^2z_i[d,d]=3(1-2p)||d||^2/(1-p)^4 and
+sum_i D^2Q_i[v,v]=||v||^2 for transverse v. Dividing the second
+identity by DQ's symmetric eigenvalue gives b(p), including the
+gradient term in(CURV).
+
+For0<=p<=9/20, b(p)>0: using d0>=27 reduces its sign to
+
+    K(p)=74-309p+396p^2-162p^3>0.
+
+This polynomial decreases on[0,9/20] and K(9/20)=1511/4000.
+Every subsequent scalar orbit point lies below1/7, where T'>0 and g<0.
+Iterate(CURV); its factors a tend to1/4 and lambda is bounded near zero,
+so the remainder vanishes and every summand is negative. Hence
+lambda(p)<0 on0<p<=9/20. The transverse first derivative vanishes,
+so any nonzero transverse direction lowers Never to second order.
+
+For the remaining interval use
+
+    T'(p)=(1-3p)/[2(1-p)^3(1-T(p))],
+    H'(p)=1/(1-p)+T'(p)H'(T(p)).
+
+On[0,1/7], H'>=2: the constant2 is a subsolution, since
+1/(1-p)+2T'(p)-2>=p(1-5p+2p^2)/(1-p)^3>=0, and the iterated
+derivative remainder tends to zero. Therefore, on[9/20,1/2],
+
+    H'(p)<=1/(1-p)+2T'(p)
+          <=(p^2-5p+2)/(1-p)^3<0.
+
+Reducing p lowers Never there. At p=0, increasing p lowers Never;
+at p=1/2 the preceding one-sided construction applies. The scalar family
+does have an interior minimum, since its log-Never endpoint derivatives
+are -6 and6. Every scalar minimizer lies in(1/3,9/20), and the negative
+transverse curvature makes it a saddle. No uniqueness is needed.
+
+### Local whole-law descent nevertheless fails at other positive inert sources
+
+The global-source hypothesis cannot be omitted from a universal LOCAL
+descent theorem. Here is a positive root-inert full Nash source isolated
+even among arbitrary countable-law equilibria. Small approximate revisions
+also pay debt proportional to their Never release. This is a mechanism
+counterexample on an already solvable table, not a Fin4 counterexample.
+
+Use core owners0,1,2 cyclically and observer3. For a core recipient i,
+write j=i+1 and k=i-1 modulo3. Without3 in the coalition, set
+
+    Z_i({i})=0, Z_i({j})=2, Z_i({k})=-3,
+    Z_i({i,j})=20, Z_i({i,k})=-10,
+    Z_i({j,k})=100, Z_i({0,1,2})=0.
+
+On coalitions containing3, set Z_i(A)=0 if i is in A, and -1 otherwise.
+Set Z_3(A)=1/10 on nonempty core coalitions, Z_3({3})=0, and Z_3(A)=-1
+when3 joins some core owner. This specifies every reward; M=100.
+For the zero-diagonal singleton and joining matrices Gamma,J,
+
+    one^T Gamma<=-(9/10)one^T, one^T J>=0.             (SEP)
+
+In fact the core column sums are -9/10 and9 respectively, and the
+observer column sums are -3 and0.
+
+For ANY independent tail, let f_i be its original finite mass,
+beta=sum_i f_i, and p_i its atom at date0. Its Never offer e_i differs
+from sum_j Gamma_ij f_j only when at least two opponents have finite
+clocks. With k such opponents the difference is at most
+(k+1)M<=3M binom(k,2). The same argument compares its date0 Quit offer
+Q_i with sum_j J_ij p_j. Summing counts each opponent pair twice;
+p<=f and(SEP) give
+
+    sum_i(e_i-Q_i)<=-(9/10)beta+6M beta^2.
+
+The full cap B_i>=max(e_i,Q_i), and
+B_i-U_i>=(1-f_i)(B_i-e_i). Consequently, for beta<=1,
+
+    D>=(1-beta)[(9/10)beta-6M beta^2].                 (TAIL FLOOR)
+
+For beta<=rho=3/4000 this is at least(9/20)(1-beta)beta.
+The bound covers negative tail payoffs, every countable calendar, and
+compact annotation limits retaining ORIGINAL f_i. No clock-support
+assumption is used. In particular a zero-debt tail with beta<rho is empty.
+
+Now take the one-date core root p*=11/111 and observer Never. Its offers
+are Q(p)=10p(1-p), P(p)=-p+101p^2, so the source is full Nash with
+
+    w=11000/12321,
+    U=B=e=(w,w,w,(1/10)[1-(100/111)^3]),
+    N=(100/111,100/111,100/111,1).
+
+Every sufficiently close profile in marginal total variation has a proper
+first root with all core rates interior and conditional tail beta<rho.
+The exact ledger D(full)=h D(tail)+R(q;B(tail)) forces that tail to be
+empty at zero debt. The remaining observer is strictly quiet. The core
+indifference equations are
+
+    18x-7y-111xy=0, x=q_next(i), y=q_prev(i).
+
+They express x=7y/(18-111y), a strictly increasing map wherever a solution
+is possible. Its three-cycle must be constant, so the only nearby root is
+p*. This proves full-law isolation, including infinite-support revisions.
+It also holds in a retained-root compact cylinder with nearby root and
+conditional beta<rho. It does NOT assert isolation in the unanchored
+finite-dimensional(U,B,e,N) topology, which forgets the retained root.
+
+There is a stronger local error bound. Let d=max_(i<3)|q_i-p*| and
+r0=p*/2. For d,q_3<=r0 and beta<=rho, the zero-tail core comparison is
+F_i^0=18q_j-7q_k-111q_jq_k. Its linearization has coefficients7,-18,
+so max_i|F_i^0|>=11d-111d^2>=(11/2)d. The exact observer dependence is
+F_i=(1-q_3)F_i^0+q_3. Core mixing weights are at least r0, and the
+observer's Continue-minus-Quit gap is at least11r0/10. Thus
+
+    R(q;0)>=(r0/10)(d+q_3).
+
+Every tail cap has absolute value at most M beta, and root regret is
+1-Lipschitz in each cap coordinate. Hence
+D(full)>=(r0/10)(d+q_3)-4M beta. Meanwhile h>1/2 and(TAIL FLOOR) give
+D(full)>=(9/80)beta. A fixed positive weighted sum yields
+
+    D(full)>=c(d+q_3+beta), c>0.                       (LOCAL FLOOR)
+
+The sum of the marginal TV distances, and the absolute change of original
+joint Never, are at most3d+q_3+beta. Thus(LOCAL FLOOR) excludes even
+approximate local repairs with debt=o(Never release). The same annotation
+and Never bounds hold in the retained-root compact cylinder.
+
+At this source AllContinue is the ONLY Nash prefix. The observer strictly
+continues at every prefix root. Core comparisons are
+
+    F_w(x,y)=18x-7y-111xy-w(1-x)(1-y).
+
+Singleton support fails at -w. With two active owners one has x=0,y>0,
+giving F_w<0. A sure core owner forces its active successor's comparison
+F_w(x,1)=-7-93x<0, so full support must be proper. Its equations express
+x=[w+(7-w)y]/[(18+w)-(111+w)y], again strictly increasing; the derivative
+has positive numerator126+100w. All rates must agree. But
+
+    (11p-111p^2)/(1-p)^2<=121/400<w,
+    121(1-p)^2-400(11p-111p^2)=(211p-11)^2,
+
+excluding a symmetric nonzero root as well.
+
+The global competitor is explicit: stationary hazards(3/10,1/10,0,0)
+absorb surely and give payoff(2,-3,9,1/10). Active Quit and Continue
+offers agree at2,-3; quiet owner2 has Quit47/10<Continue9, and observer
+Quit-37/100<Continue1/10. Vanishing survival prices every complete
+response. Hence A_Z=0. Moreover(SEP) fails the residual singleton
+positive-direction screen. This example does not refute descent from a
+GENUINE global minimum or exclude another source case. It shows precisely
+why local whole-law flexibility cannot replace that hypothesis.
+
+
 ### Preserving a payoff fibre is insufficient without global source information
 
 There is a simple complete-carrier obstruction to a universal fixed-payoff
@@ -1785,7 +1992,9 @@ The checker also verifies Section11's full continuation and head comparisons,
 active Jacobian, geometric-clock eligibility and exact survival derivative,
 and Section12's actual moving-tail control. It reuses the retained
 finite-exact incompleteness fixture to verify Section13's infinite-tail
-recurrence, survival derivative and exact finite-truncation defects. The general timing classification,
+recurrence, survival derivative, exact finite-truncation defects and transverse
+curvature identities. It also checks the locally isolated source, its full
+root comparisons, tail-floor data and absorbing competitor. The general timing classification,
 finite-chain/common-ray equivalence, implicit-function, global-minimum and carrier arguments
 are mathematical proofs, not finite search conclusions. They have no fresh
 Lean certification. The prior material has scoped independent reviews for

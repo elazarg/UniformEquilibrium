@@ -334,3 +334,76 @@ never_value=passive+survival*(seam-tail_never**2*end_value)
 assert same(prescribed,core_value-((1-p)*tail_never)**3*end_value)
 assert same(never_value,core_value-((1-p)*tail_never)**2*end_value)
 print('PASS: actual infinite-tail whole-law descent, strict Never derivative, and exact truncation defects')
+
+# Section13: the full vector tail map removes every symmetric-orbit minimum.
+r=s.symbols('r', real=True)
+v=s.symbols('v:3')
+quit=s.Matrix([fixture['endpoints'](i,list(v)+[0])[1] for i in range(3)])
+seams=s.Matrix([(fixture['endpoints'](i,list(v)+[0])[1]
+                 -fixture['endpoints'](i,list(v)+[0])[0])
+                /fixture['endpoints'](i,list(v)+[0])[2] for i in range(3)])
+J=quit.jacobian(v).subs(dict.fromkeys(v,r))
+K=seams.jacobian(v).subs(dict.fromkeys(v,p))
+L=s.simplify(J.inv()*K)
+assert L.subs({p:0,r:0})==s.eye(3)/2
+curvature_a=(9*p**2-15*p+7)/((1-p)**6*(r**2-2*r+28))
+curvature_b=(3*(1-2*p)/(1-p)**4-curvature_a)/(2*(1-r))
+for direction in [s.Matrix([1,-1,0]),s.Matrix([1,1,-2])]:
+    tangent=L*direction
+    assert same(tangent.dot(tangent),curvature_a*direction.dot(direction))
+    zdd=s.Matrix([(direction.T*s.hessian(seams[i],v)*direction)[0]
+                  .subs(dict.fromkeys(v,p)) for i in range(3)])
+    Qdd=s.Matrix([(tangent.T*s.hessian(quit[i],v)*tangent)[0]
+                  for i in range(3)])
+    assert same(sum(J.inv()*(zdd-Qdd)),curvature_b*direction.dot(direction))
+margin=s.expand(81*(1-2*p)*(1-p)**2-(9*p**2-15*p+7))
+assert margin==74-309*p+396*p**2-162*p**3
+assert margin.subs(p,s.Rational(9,20))==s.Rational(1511,4000)
+assert s.diff(margin,p).subs(p,s.Rational(9,20))<0
+assert s.diff(margin,p,2).subs(p,s.Rational(9,20))>0
+assert s.Rational(9,20)**2-5*s.Rational(9,20)+2<0
+print('PASS: vector tail derivative, transverse curvature identities, and exact whole-orbit sign margins')
+
+# Section13: a different source is isolated among ALL nearby exact clock laws.
+def isolated_reward(i,A):
+    if i==3:
+        return s.Rational(1,10) if 3 not in A else s.Integer(-int(len(A)>1))
+    if 3 in A:return s.Integer(0 if i in A else -1)
+    j,k=(i+1)%3,(i-1)%3
+    table={frozenset({i}):0,frozenset({j}):2,frozenset({k}):-3,
+           frozenset({i,j}):20,frozenset({i,k}):-10,
+           frozenset({j,k}):100,frozenset({0,1,2}):0}
+    return s.Integer(table[frozenset(A)])
+
+assert all(isolated_reward(i,{i})==0 for i in range(4))
+G=s.Matrix(4,4,lambda i,j:isolated_reward(i,{j}))
+J=s.Matrix(4,4,lambda i,j:isolated_reward(i,{i,j}))
+assert [sum(G.col(j)) for j in range(4)]==[-s.Rational(9,10)]*3+[-3]
+assert [sum(J.col(j)) for j in range(4)]==[9,9,9,0]
+OP=[offers(i,isolated_reward) for i in range(4)]
+star=s.Rational(11,111)
+at_star=dict(zip(q,[star]*3+[0]))
+w=s.Rational(11000,12321)
+ws=[w]*3+[s.Rational(1,10)*(1-(1-star)**3)]
+assert all(OP[i][0].subs(at_star)==OP[i][1].subs(at_star)==w for i in range(3))
+assert OP[3][0].subs(at_star)<OP[3][1].subs(at_star)==ws[3]
+for i in range(3):
+    x,y=q[(i+1)%3],q[(i-1)%3]
+    F0=18*x-7*y-111*x*y
+    assert same(OP[i][0]-OP[i][1],(1-q[3])*F0+q[3])
+    core_gap=(OP[i][0]-OP[i][1]).subs(q[3],0)
+    assert s.diff(core_gap,x).subs(at_star)==7
+    assert s.diff(core_gap,y).subs(at_star)==-18
+assert same(121*(1-p)**2-400*(11*p-111*p**2),(211*p-11)**2)
+assert s.Rational(121,400)<w
+assert s.Rational(9,10)-600*s.Rational(3,4000)==s.Rational(9,20)
+# Known absorbing competitor: full Bellman comparisons, including quiet owners.
+stationary=dict(zip(q,[s.Rational(3,10),s.Rational(1,10),0,0]))
+target=[2,-3,9,s.Rational(1,10)]
+for i in range(4):
+    quit_offer=OP[i][0].subs(stationary)
+    H=s.prod(1-q[j] for j in range(4) if j!=i)
+    continue_offer=(OP[i][1]+H*target[i]).subs(stationary)
+    assert continue_offer==target[i]
+    assert quit_offer==target[i] if i<2 else quit_offer<target[i]
+print('PASS: all-law isolation control, local debt-floor data, root-inertia identities, and absorbing competitor')

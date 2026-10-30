@@ -138,3 +138,63 @@ orbit mechanism and head compensation are attributed. The construction
 does not use global minimum assumptions and does not produce the direction
 for arbitrary tables. No new UE reward class or universal descent is
 claimed; no unresolved objection remains in this extension's scope.
+
+## Full orbit descent and complete-law local isolation
+
+Reviewed final artifacts:
+
+- Canonical note SHA256
+  `a1f0f3067da0cbcd15dc2e0878e891d29fd306ba82d080c4d215c4a9570d61cc`.
+- Exact geometry checker SHA256
+  `3279ebc884f2bfb2fbb192d8467a58849fe8806ed17fc83c4bbbb32d826bdd17`.
+- Frontier note SHA256
+  `a9e97717ae6573ebce05515780dd5f7f928cce431cf4721d737c3a401fcbcc01`.
+
+The earlier reviews retain their original hashes and scopes. The new scope
+is Section13's two subsections beginning "The entire symmetric orbit" and
+"Local whole-law descent nevertheless fails", their checker additions and
+their introductory/frontier summaries. No Lean build was run.
+
+DESCENT_STABLE and DESCENT_SYMMETRY/REVIEW_ORBIT independently reviewed
+the full orbit proof; the latter also checked the final integrated artifacts.
+DESCENT_SYMMETRY checked the integration against the authored proof. All
+returned PASS. The vector map has derivative I/2 at zero, so all three
+modes contract. Normal holomorphic convergence of the rescaled iterates,
+followed by positivity of their limiting vector, justifies an OPEN family
+of actual positive summable clocks. Telescoping controls every deadline
+and Never; no finite-menu cap or formal signed tail is substituted.
+
+The implicit differentiation includes the gradient contribution to the
+transverse Hessian. The exact polynomial margin K(9/20)=1511/4000 makes
+that Hessian negative through9/20; the scalar derivative handles the
+remaining interval and one-sided endpoints. Thus EVERY symmetric orbit
+has local actual descent, including all its scalar Never minimizers.
+The result neither classifies all equilibria of that table nor produces
+descent at arbitrary globally selected sources.
+
+DESCENT_COLLAPSE independently reviewed DESCENT_GLOBAL's isolation
+construction; DESCENT_GLOBAL independently reviewed DESCENT_COLLAPSE's
+local error-bound strengthening. Both checked the final integrated
+subsection and summaries. The first-date comparison yields the tail floor
+for every countable law and compact annotation limit with ORIGINAL finite
+masses. In particular it allows negative tail payoffs; column separation
+alone without the joining comparison would not suffice. The full-cap debt
+ledger forces a nearby exact profile's tail to be empty. The remaining
+increasing-map equations give the unique core root, and the complete
+support census proves root inertia at its positive payoff.
+
+The local linear floor follows from the active Jacobian's max-norm bound,
+the observer's strict gap, and cap Lipschitz continuity combined with the
+tail floor. It bounds debt below by a positive constant times marginal
+total-variation distance, hence also by the released Never mass. This
+excludes small approximate repairs with debt of smaller order than their
+release. Its compact version retains the first root; isolation in the
+unanchored annotation topology is explicitly NOT claimed.
+
+The displayed stationary pair is absorbing full Nash. The table also
+fails the hard singleton positive-direction screen. Accordingly the
+control refutes local descent from positive root inertia alone, not
+descent from an actual global minimum under A_Z>0. The frontier preserves
+that distinction. All nine groups of the integrated exact checker pass;
+the analytic orbit and unrestricted-calendar arguments are proofs, not
+finite-search conclusions. No unresolved objection remains in this scope.

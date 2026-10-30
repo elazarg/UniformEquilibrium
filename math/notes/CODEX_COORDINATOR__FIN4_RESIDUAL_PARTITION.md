@@ -168,8 +168,15 @@ existing laws must be revised or an absorbing head constructed directly.
 An exact local whole-law descent does succeed in the existing finite-exact
 trap: reducing the old first hazard and adding a contracting infinite tail
 lowers Never while preserving every finite/Never response comparison.
-Its finite truncations have explicitly controlled positive debt. This
-constructive escape is not yet a universal source producer.
+Its finite truncations have explicitly controlled positive debt. Every
+member of this symmetric infinite-tail family admits actual local descent;
+its interior scalar minima are saddles under asymmetric clock changes.
+Conversely a separate positive inert source is isolated among ALL exact
+countable-law equilibria in total variation, and small approximate revisions
+pay debt proportional to their Never release. That table is solvable and
+fails the residual singleton screen, so the obstruction does not refute
+descent from a genuine global minimum. These controls delimit local
+whole-law methods; neither is a universal source producer.
 An exact full-carrier control also shows that preserving an arbitrary
 zero-debt payoff fibre cannot supply universal descent by itself.
 Neither the attained source nor that inherited fibre is universally repaired.
