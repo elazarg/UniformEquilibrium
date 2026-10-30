@@ -158,6 +158,15 @@ This classifies the linear relaxation and excludes local prefix repairs;
 it neither produces nonlinear Nash clocks nor excludes those faces when
 reached finitely. An actual finite control gives marked descent by changing
 the continuation at a face whose fixed-tail prefix directions all fail.
+Section13 also rules out a proposed universal shortcut: a strictly positive
+continuation with only the AllContinue Nash root admits NO nonempty proper
+compact zero-debt prefix. Its uniform bound D>=c h(1-h), with h the original
+head Never product, covers every timing law and compact limit. At a positive
+UNMARKED global minimum, A_Z>0 strengthens this to D>=kappa(1-h). This is
+a restriction on prefix repair, not another counterexample-class exclusion;
+existing laws must be revised or an absorbing head constructed directly.
+An exact full-carrier control also shows that preserving an arbitrary
+zero-debt payoff fibre cannot supply universal descent by itself.
 Neither the attained source nor that inherited fibre is universally repaired.
 A descent from every GLOBAL marked minimum remains open.
 

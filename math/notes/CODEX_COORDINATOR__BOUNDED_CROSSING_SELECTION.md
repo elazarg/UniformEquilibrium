@@ -29,7 +29,10 @@ proper two-zero prefixes and classifies the complete linear clock relaxation
 by a common matrix-pencil direction. Failure has a finite deadline certificate
 and forces the visible head to terminate finitely. An actual control shows
 why changing the tail escapes this local
-obstruction. No new raw reward class or complete Fin4 source branch is closed.
+obstruction. No new raw reward class or complete Fin4 source branch is closed. Section13 proves
+that positive root inertia excludes EVERY proper compact zero-debt head;
+a universal descent there must revise existing laws or construct an
+absorbing head directly.
 
 ## 1. Closed actual domains replace arbitrary virtual boxes
 
@@ -1518,6 +1521,159 @@ when it is reached after finitely many roots. It supplies no new root
 extraction through a zero face, and no regularity or descent sign for the
 remaining finite heads.
 
+## 13. Universal descent must go beyond proper compact prefixes
+
+The following closes a potential shortcut in the strictly positive source
+branch. It does not prove universal descent. Even arbitrary compact heads,
+with no calendar or support bound, cannot overcome positive root inertia
+while retaining a positive chance of reaching the old continuation.
+
+### An all-head bound from root inertia alone
+
+Let W in C have U=B=e=w with eta=min_i w_i>0, and let M>0 bound all native
+rewards. For a root q put ell(q)=sum_i q_i, h(q)=product_i(1-q_i), and
+
+    C_i(q;b)=P_i(q)+H_i(q)b_i,
+    R(q;b)=sum_i[max(Q_i(q),C_i(q;b))
+                       -q_i Q_i(q)-(1-q_i)C_i(q;b)].
+
+Assume AllContinue is the ONLY Nash root at w. Define
+
+    delta=eta/(16M),
+    gamma=min_(q in[0,1]^4, ell(q)>=delta) R(q;w)>0,
+    c=min(eta delta/2, gamma eta/(eta+16M))>0.
+
+Positivity of gamma follows from compactness and root uniqueness. For EVERY
+independent head P, finite, countable, or a compact limit of complete head
+annotations, with ORIGINAL head Never masses s_i and h=product_i s_i,
+
+    D(P*W)>=c h(1-h).                                (LOCK)
+
+Thus a zero-debt head has h=0 or h=1. At h=1 its finite masses vanish and
+P*W=W. Every nonempty zero-debt compact head must be fully absorbing.
+
+For the proof, first take a finite chronological word q^0,...,q^(L-1),
+with tail cap b^L=w. Its complete cap recursion and debt identity give
+
+    b_i^t=max(Q_i(q^t),P_i(q^t)+H_i(q^t)b_i^(t+1)),
+    D(P*W)=sum_(t<L) S_t R(q^t;b^(t+1)),
+    S_t=product_(u<t)h(q^u).
+
+The second argument of R is the NEXT FULL CAP, not the prescribed payoff.
+Using the latter would invalidate this identity at positive-debt suffixes.
+Every b coordinate stays in[-M,M]. If h>0, every S_t>=h; write
+E=sum_(t<L)R(q^t;b^(t+1)), so D(P*W)>=h E.
+
+A terminal suffix of total activity A<=2delta has Continue as the cap in
+all rows, Continue-minus-Quit gap at least eta/2, and
+
+    sum_suffix R >=(eta/2)A,
+    ||b_at_suffix_start-w||_infinity<=2M A.           (SUFFIX)
+
+Indeed |Q_i(q)|<=M ell(q) and |C_i(q;b)-b_i|<=2M ell(q).
+Backward induction keeps Continue at least eta-2M A and Quit at most
+2M delta, leaving a gap at least eta-6M delta>=eta/2. Its regret is then
+q_i(C_i-Q_i), proving both assertions in(SUFFIX).
+
+If E>=eta delta/2, then E>=c(1-h). Otherwise no terminal run of roots
+with individual activity below delta can accumulate delta activity: its
+shortest terminal subrun reaching that threshold would have activity below
+2delta and violate(SUFFIX). If every root is small, the entire head has
+activity A<delta, and E>=eta A/2>=eta(1-h)/2>=c(1-h).
+
+In the remaining case take the LAST root with ell(q^t)>=delta. Its later
+suffix has activity A<delta and, by(SUFFIX), A<=2E/eta. Hence
+||b^(t+1)-w||_infinity<=4M E/eta. Each individual root regret is
+1-Lipschitz in its own cap input, being the maximum of
+(1-q_i)(Q_i-C_i) and q_i(C_i-Q_i). Consequently
+
+    E>=R(q^t;b^(t+1))>=gamma-16M E/eta,
+
+which gives E>=gamma eta/(eta+16M)>=c. This proves(LOCK); h=0 needs only
+D>=0. No bound depends on the number of dates.
+
+Censoring an actual head's sufficiently late finite mass to its Never atom
+gives total-variation convergence, uniformly over every response. Semantic
+append to W uses the continuous complete-annotation map
+
+    U_i'=U_i(P)+h w_i,
+    B_i'=max(B_i(P),e_i(P)+H_i(P)w_i),
+    N_i'=s_i N_i(W).
+
+Since w>=0, retaining the head's Never query adds no spurious cap. Finite
+concatenations and approximants of W justify the map in C. The same formula
+passes(LOCK) to all compact head limits, retaining original s_i even when
+finite mass escapes every fixed date. At h=1, the response-uniform bound
+|U_i(P)|,|B_i(P)|,|e_i(P)|<=M sum_j(1-s_j) makes the head empty.
+There is no execution of W after infinitely many natural dates.
+
+### Application to the actual global source
+
+Now select a globally UNMARKED least-Never zero-debt point W. This selection
+is separate from Section12's marked minimum. Under A_Z>0 its Never product
+is positive by the absorbing repair inequality. Every nonzero Nash root at
+w would give a zero-debt carrier point with smaller Never. Therefore its
+strictly positive payoff branch has the root inertia required by(LOCK).
+Any head-only exact descent on that branch would already have to be fully
+absorbing; a proper compact intermediate cannot supply it.
+
+The positive absorbing gap strengthens the conclusion quantitatively. Put
+
+    h0=(A_Z/(28M))^4, kappa=min(A_Z/2,c h0)>0.
+
+Since A_Z<=8M, h0<1. When h<=h0, the repair inequality
+A_Z<=D(P*W)+14M[h nu(W)]^(1/4) gives D(P*W)>=A_Z/2. When h>=h0,
+(LOCK) applies. Thus every independent compact head satisfies
+
+    D(P*W)>=kappa(1-h).                              (GLOBAL LOCK)
+
+This uses the actual full caps and original Never product. It does not
+forbid a proof constructing an absorbing head and thereby contradicting
+A_Z>0, nor a proof revising W's existing laws. An arbitrary native absorbing
+profile is not automatically a valid head over W: a deviator's opponents
+may all continue through it, exposing the extra through-W response.
+
+The positive-buffer estimate is already used in Section12. The additional
+step here is the last-large-root argument, which gives a bound for ALL
+proper compact heads. The
+[global finite-block regret note](CODEX_COORDINATOR__GLOBAL_FINITE_BLOCK_REGRET_RATE.md)
+proves an absorption-relative bound at a different source: a positive
+original MAX-debt minimum with a lowered auxiliary continuation. That
+hypothesis does not hold for this native zero-debt W. The
+[finite exact incompleteness control](CODEX_GLOBAL_CREATIVE__FINITE_EXACT_NASH_INCOMPLETENESS.md)
+already supplies an actual positive inert W and an absorbing two-owner
+infinite head. It realizes both the proper-head exclusion and the possible
+h=0 endpoint; no additional reward table is needed.
+
+### Preserving a payoff fibre is insufficient without global source information
+
+There is a simple complete-carrier obstruction to a universal fixed-payoff
+repair without the positive-gap or global-ancestry hypothesis. Set
+Z_i(A)=1 if A contains an owner other than i, and0 otherwise. For every
+actual independent profile and every carrier limit,
+
+    B_i=e_i=1-product_(j!=i)N_j.
+
+Never attains this value, and no response can exceed the probability that
+an opponent has a finite clock. On a zero-debt fibre of payoff u this gives
+
+    nu^3=product_i(1-u_i).
+
+The joint Never mass is therefore FIXED and positive whenever all u_i<1.
+The actual solo0 profile of finite mass t in(0,1) has u=(0,t,t,t); its
+entire zero-debt fibre has N=(1-t,1,1,1). Yet the table has absorbing
+Nash profiles. Thus zero debt, actual realizability and a nonnegative zero
+face do not provide payoff-preserving descent. A universal argument must
+use the counterexample's additional global restrictions or change the
+payoff and compensate its ancestry. Neither statement above closes Fin4.
+
+Source check: `quittingContinuationBestResponseValue_rootThenContinuation_eq_max`
+(`UniformEquilibrium/Quitting/Root/TerminalDebtPrefix.lean`) and the definition
+`quittingTerminalSemanticPrefix`
+(`UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean`) were inspected
+for the complete cap recursion. Section13's bounds are ordinary proofs;
+no Lean command was run.
+
 ## Verification and remaining target
 
 The [exact geometry checker](../experiments/CODEX_COORDINATOR__ACTUAL_CONTINUATION_GEOMETRY_CHECK.py)
@@ -1553,6 +1709,7 @@ Lean certification. The prior material has scoped independent reviews for
 and [same-source global comparisons](../feedback/CODEX_COORDINATOR__BOUNDED_CROSSING_SELECTION__BY_SOURCE_MINIMUM.md).
 The broadened timing, zero-face geometry and finite-stopping claims have
 [two scoped independent reviews](../feedback/CODEX_COORDINATOR__BOUNDED_CROSSING_SELECTION__BY_CLOCK_GEOMETRY.md).
+Section13 has [two independent scoped reviews](../feedback/CODEX_COORDINATOR__BOUNDED_CROSSING_SELECTION__BY_UNIVERSAL_DESCENT.md).
 Earlier review hashes retain their original scopes, including the previous
 weaker control replaced by Section11's two-zero example.
 
