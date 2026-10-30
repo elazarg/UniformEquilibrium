@@ -288,3 +288,49 @@ assert [s.simplify(Q.subs(at_root)) for Q,P in OP]==want
 assert [s.simplify(P.subs(at_root)) for Q,P in OP]==want
 assert s.prod(1-x for x in at_root.values())==(1-root)/8
 print('PASS: nineteen-date obstruction, actual four-owner continuation, and payoff-preserving existing-law descent')
+
+# Section13: revise the existing inert source and add an exact infinite tail.
+# Reuse the canonical fixture and its checks instead of copying sixty rewards.
+from pathlib import Path
+from contextlib import redirect_stdout
+import io
+import runpy
+
+with redirect_stdout(io.StringIO()):
+    fixture=runpy.run_path(str(Path(__file__).with_name(
+        'CODEX_GLOBAL_CREATIVE__FINITE_EXACT_NASH_INCOMPLETENESS_CHECK.py')))
+p=s.symbols('p', nonnegative=True)
+core_value=2*p-p**2
+passive=p+p**2
+survival=(1-p)**2
+for i in range(3):
+    P,Q,H=fixture['endpoints'](i,[p,p,p,0])
+    assert same(P,passive) and same(Q,core_value) and same(H,survival)
+seam=p*(1-2*p)/(1-p)**2
+step=1-s.sqrt(1-seam)
+assert same(seam,p-p**3/(1-p)**2)
+assert same(2*step-step**2,seam)
+assert same(passive+survival*seam,core_value)
+assert s.Rational(1,2)>s.Rational(4,9)  # 1+sqrt(1/2)>5/3 gives T(p)<=3p/5.
+assert step.subs(p,0)==step.subs(p,s.Rational(1,2))==0
+assert s.diff(step,p).subs(p,0)==s.Rational(1,2)
+assert s.diff(step,p).subs(p,s.Rational(1,2))==-2
+tail_sum_slope=2/(1-s.Rational(1,2))
+log_never_slope=3*(2-tail_sum_slope)
+assert log_never_slope==-6
+assert s.Rational(1,8)*log_never_slope==-s.Rational(3,4)
+epsilon=s.symbols('epsilon', positive=True)
+assert same(core_value.subs(p,s.Rational(1,2)-epsilon),
+            s.Rational(3,4)-epsilon-epsilon**2)
+# Explicit interval 0<epsilon<=1/32: the first three survival factors suffice.
+assert same(((1-p)**2*(1-seam)).subs(p,s.Rational(1,2)-epsilon),
+            s.Rational(1,4)+3*epsilon**2)
+assert 2*(1-2*s.Rational(1,32))/(1+2*s.Rational(1,32))**2==s.Rational(480,289)>1
+assert s.Rational(1,5)>6*s.Rational(1,32)
+# Exact induction for the prescribed and Never truncation defects.
+tail_never,end_value=s.symbols('tail_never end_value', nonnegative=True)
+prescribed=p*core_value+(1-p)*(passive+survival*(seam-tail_never**3*end_value))
+never_value=passive+survival*(seam-tail_never**2*end_value)
+assert same(prescribed,core_value-((1-p)*tail_never)**3*end_value)
+assert same(never_value,core_value-((1-p)*tail_never)**2*end_value)
+print('PASS: actual infinite-tail whole-law descent, strict Never derivative, and exact truncation defects')

@@ -84,3 +84,57 @@ extends the existing positive-buffer method by the last-large-root argument.
 The frontier correctly reports a mechanism restriction, with no new raw
 UE class or universal Fin4 descent claimed. No unresolved objection remains
 within this review scope.
+
+## Constructive whole-law extension: independent review
+
+The same two reviewers independently checked the added subsection "A local
+whole-law descent beyond every finite exact Nash profile" and its status
+summaries against these final artifacts:
+
+- Canonical note SHA256
+  `7dfe62beee27f6411d222f90786f0a081edc3d0a48231fd08f9605b0feaee4db`.
+- Exact geometry checker SHA256
+  `6a9568989cf27c2bc0770db21b4d0e6982e5f7b5d494df89bf5f55f3738e530f`.
+- Frontier note SHA256
+  `c8de3d9e92af0705ea894a01c63419c382ac6e8ae3c577bf224863cb83d5bac7`.
+
+Both returned PASS. The prior review above retains its earlier artifact
+scope. The introduction now explicitly excludes NONEMPTY proper heads,
+preserving the empty-head case of the theorem.
+
+The existing GLOBAL_CREATIVE reward table gives exactly Q=2p-p^2,
+P=p+p^2 and H=(1-p)^2. The recurrence s(T(p))=(Q-P)/H and bound
+T(p)<=3p/5 are correct on[0,1/2]. Thus the constructed laws are actual
+natural-date laws with strictly positive literal Never, rather than only
+compact semantic limits. Telescoping the response values proves that every
+finite core deadline and Never pays s(p_0). The observer's Never response
+dominates all finite replies. The full Nash assertion is therefore valid.
+
+The uniform geometric estimate controls every summed quadratic remainder.
+With p_0=1/2-epsilon, the tail hazard sum is4epsilon+O(epsilon^2), yielding
+log nu=log(1/8)-6epsilon+O(epsilon^2) and nu'= -3/4 at zero. Total-variation
+distance tends to zero because both the old first-root change and new tail
+mass are O(epsilon). The independent finite-head review also supplied and
+checked the exact interval0<epsilon<=1/32: the first three survival factors
+already have product below1/2. The other reviewer checked that argument in
+the integrated note.
+
+The truncation formulas are exact: core cap s(p_0), prescribed shortfall
+N_L^3 s(p_L), Never shortfall N_L^2 s(p_L), and total debt3N_L^3 s(p_L).
+The observer still has zero debt. Hence the finite approximants have
+positive debt tending to zero, rather than being silently asserted exact.
+
+The finite-head reviewer independently rechecked the referenced complete
+root and finite-word census, including exclusion of sure roots against
+actual cap vectors with nonnegative observer cap. Thus the comparison is
+against ALL finite exact Nash laws, not a symmetric search. The retained
+checker reuses the existing reward fixture, runs its assertions and checks
+the new symbolic recurrence, derivative, interval and truncation identities.
+Both reviewers ran it successfully; all seven reported groups passed.
+
+This is a local change of the existing first root together with an infinite
+tail, so it does not contradict proper-prefix rigidity. The old expanding
+orbit mechanism and head compensation are attributed. The construction
+does not use global minimum assumptions and does not produce the direction
+for arbitrary tables. No new UE reward class or universal descent is
+claimed; no unresolved objection remains in this extension's scope.

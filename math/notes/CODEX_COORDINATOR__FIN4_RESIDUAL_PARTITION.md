@@ -165,6 +165,11 @@ head Never product, covers every timing law and compact limit. At a positive
 UNMARKED global minimum, A_Z>0 strengthens this to D>=kappa(1-h). This is
 a restriction on prefix repair, not another counterexample-class exclusion;
 existing laws must be revised or an absorbing head constructed directly.
+An exact local whole-law descent does succeed in the existing finite-exact
+trap: reducing the old first hazard and adding a contracting infinite tail
+lowers Never while preserving every finite/Never response comparison.
+Its finite truncations have explicitly controlled positive debt. This
+constructive escape is not yet a universal source producer.
 An exact full-carrier control also shows that preserving an arbitrary
 zero-debt payoff fibre cannot supply universal descent by itself.
 Neither the attained source nor that inherited fibre is universally repaired.

@@ -30,9 +30,10 @@ by a common matrix-pencil direction. Failure has a finite deadline certificate
 and forces the visible head to terminate finitely. An actual control shows
 why changing the tail escapes this local
 obstruction. No new raw reward class or complete Fin4 source branch is closed. Section13 proves
-that positive root inertia excludes EVERY proper compact zero-debt head;
+that positive root inertia excludes EVERY nonempty proper compact zero-debt head;
 a universal descent there must revise existing laws or construct an
-absorbing head directly.
+absorbing head directly. An actual infinite-tail construction gives local
+whole-law descent in the existing finite-exact incompleteness control.
 
 ## 1. Closed actual domains replace arbitrary virtual boxes
 
@@ -1645,6 +1646,87 @@ already supplies an actual positive inert W and an absorbing two-owner
 infinite head. It realizes both the proper-head exclusion and the possible
 h=0 endpoint; no additional reward table is needed.
 
+### A local whole-law descent beyond every finite exact Nash profile
+
+There is a constructive way past these restrictions in the EXISTING
+[finite exact incompleteness control](CODEX_GLOBAL_CREATIVE__FINITE_EXACT_NASH_INCOMPLETENESS.md).
+Use its core owners0,1,2 and quiet observer3, without changing the table.
+For a uniform core root p, its forced-Quit, passive and survival terms are
+
+    s(p)=Q(p)=2p-p^2, P(p)=p+p^2, H(p)=(1-p)^2,
+    z(p)=[Q(p)-P(p)]/H(p)=p(1-2p)/(1-p)^2.
+
+For0<=p<=1/2 define T(p)=1-sqrt(1-z(p)). Then s(T(p))=z(p), and
+z(p)=p-p^3/(1-p)^2 lies in[0,p]. Rationalizing the square root gives
+
+    0<=T(p)=z(p)/(1+sqrt(1-z(p)))<=3p/5.
+
+For p_0 in(0,1/2), set p_(n+1)=T(p_n). Each core owner independently
+uses these hazards on the natural dates; observer3 chooses Never. All
+hazards are positive and summable, so each core law has literal Never
+mass N=product_(n>=0)(1-p_n)>0. The indifference equations hold exactly:
+
+    P(p_n)+H(p_n)s(p_(n+1))=s(p_n).
+
+Let A_n=product_(t<n)(1-p_t)^2. A core owner's response at deadline n is
+sum_(t<n) A_t P(p_t)+A_n Q(p_n)=s(p_0), by telescoping. Its Never response
+has the same limit since A_n s(p_n)->0. Thus EVERY finite response and
+Never tie, not merely the supported replies. Observer3's Never response
+dominates every finite reply: joining changes reward1 to1/2, and quitting
+alone changes a future nonnegative payoff to0. Consequently the actual
+countable profile has
+
+    U=B=e=(s(p_0),s(p_0),s(p_0),1-N^3),
+    original Never=(N,N,N,1), nu=N^3.
+
+At p_0=1/2 the tail is empty, recovering the old positive inert source
+w=(3/4,3/4,3/4,7/8), nu=1/8. Put p_0=1/2-epsilon instead. Then
+p_1=2epsilon+O(epsilon^2). Near0, T(p)=p/2+O(p^2); the uniform geometric
+bound permits summing its quadratic remainders, giving
+
+    sum_(n>=0)T^n(p)=2p+O(p^2),
+    log product_(n>=0)(1-T^n(p))=-2p+O(p^2).
+
+It follows that
+
+    log nu(epsilon)=log(1/8)-6epsilon+O(epsilon^2),
+    nu(epsilon)=1/8-3epsilon/4+O(epsilon^2)<1/8
+
+for every sufficiently small positive epsilon. The core payoff is exactly
+3/4-epsilon-epsilon^2. The entire new finite tail mass and the first-root
+change are O(epsilon), so the complete independent laws converge to the
+old source in TOTAL VARIATION. This is a local revision of existing laws,
+not a proper prefixed head over the fixed source.
+
+Strict descent holds on the explicit interval0<epsilon<=1/32. Indeed
+(1-p_0)(1-p_1)=sqrt(1/4+3epsilon^2), while p_1>epsilon and
+p_1<=3/10 imply p_2>=p_1/5>6epsilon^2. The bound p_1>epsilon follows from
+p_1>=z(p_0)/2>=480epsilon/289. Since
+1-1/sqrt(1+12epsilon^2)<=6epsilon^2, the product of the FIRST THREE
+survival factors is already below1/2, and hence nu<1/8.
+
+Finite approximation is explicit. Truncate after L>=1 roots and write
+N_L=product_(n<L)(1-p_n). The core annotations are
+
+    B_i=s(p_0),
+    U_i=s(p_0)-N_L^3 s(p_L),
+    e_i=s(p_0)-N_L^2 s(p_L),
+    D=3N_L^3 s(p_L)>0, nu=N_L^3.
+
+The observer still has zero debt. For fixed small epsilon, these actual
+finite profiles have debt tending to0 and Never tending to a value below
+1/8. The positive truncation debt is essential: the old complete census
+allows only AllNever or the isolated half-hazard source as finite EXACT
+Nash profiles. The new path therefore uses a genuinely infinite tail.
+
+The geometric tail-orbit mechanism is related to
+[the canonical pivot proof, Section14](../exports/UNIVERSAL_CANONICAL_PIVOT_EXIT_REDUCTION.md),
+and revising a head together with its continuation is the mechanism of
+Section11. This calculation supplies an actual local escape from the
+finite-exact trap and the positive-inert prefix restriction. It supplies
+neither a producer for arbitrary sources nor a new UE reward class; the
+control's absorbing stationary equilibrium was already known.
+
 ### Preserving a payoff fibre is insufficient without global source information
 
 There is a simple complete-carrier obstruction to a universal fixed-payoff
@@ -1701,7 +1783,9 @@ conclusion proved here. No fresh Lean certification is claimed.
 
 The checker also verifies Section11's full continuation and head comparisons,
 active Jacobian, geometric-clock eligibility and exact survival derivative,
-and Section12's actual moving-tail control. The general timing classification,
+and Section12's actual moving-tail control. It reuses the retained
+finite-exact incompleteness fixture to verify Section13's infinite-tail
+recurrence, survival derivative and exact finite-truncation defects. The general timing classification,
 finite-chain/common-ray equivalence, implicit-function, global-minimum and carrier arguments
 are mathematical proofs, not finite search conclusions. They have no fresh
 Lean certification. The prior material has scoped independent reviews for
