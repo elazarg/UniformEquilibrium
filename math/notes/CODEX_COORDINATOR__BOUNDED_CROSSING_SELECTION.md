@@ -25,6 +25,15 @@ permit eliminating grand-coalition play, even approximately. Its example is
 already solved by a mixed sure-first root. The class itself remains open;
 this obstruction is not counted as additional UE coverage.
 
+The [complete complex-spectrum ray](../exports/COMPLETE_COMPLEX_SPECTRUM_RAY_UNIFORM_EQUILIBRIUM.md)
+is now covered for every delta>=0, using a finite periodic cover through7/5,
+a connected stationary curve through12, and an explicit unbounded stationary
+tail. This settles that entire specified family and a uniform raw neighborhood,
+not the arbitrary positive-collision class. Its
+[global review](../feedback/COMPLETE_COMPLEX_SPECTRUM_RAY_UNIFORM_EQUILIBRIUM__BY_GLOBAL_REVIEW.md)
+and [adversarial review](../feedback/COMPLETE_COMPLEX_SPECTRUM_RAY_UNIFORM_EQUILIBRIUM__BY_ADVERSARIAL_REVIEW.md)
+cover the exact frozen artifact, full deviations, and prior-coverage comparison.
+
 For the numerical core, write a=-K. The selected theorem covers all real a
 when p=0, and a<=0 or a>=1/2 when p>=0. The opposed-pair strip 0<a<1/2,p>0 permits pair12 with positive ambient
 index. Sections6–9 show that exact actual realizability and full zero debt do

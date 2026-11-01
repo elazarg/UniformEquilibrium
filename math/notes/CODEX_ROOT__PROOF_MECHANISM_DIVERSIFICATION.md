@@ -2,9 +2,13 @@
 
 Owner: CODEX_ROOT.
 
-Status: research diagnosis and experiment design, not a mathematical reduction
-or an export. No claim that the current proof route is necessary, exhausted,
-or the most promising. No new theorem or counterexample is established here.
+Status: research diagnosis with proved supporting results on finite-scale
+parameter covers and the cost of revealing future public randomness. These
+results do not eliminate a new UE class or decide Fin4. The next producer
+targets are row-wise global continuation and an absorbing controlled invariant
+set of actual Nash transitions. Their general completeness is not established.
+The supporting results have an
+[independent mathematical review](../feedback/CODEX_ROOT__CROSSFIELD_GLOBAL_METHODS__BY_REVIEW.md).
 
 ## Question
 
@@ -962,3 +966,223 @@ Next question: which untested global selection or existence mechanism yields
 an actual finite-menu reach improvement, a full-response low-regret profile,
 or a contradiction that does not invoke temporal compilation of the supplied
 best-response edges?
+
+## Row-wise continuation and a two-parameter next target
+
+The [complete complex-spectrum ray](../exports/COMPLETE_COMPLEX_SPECTRUM_RAY_UNIFORM_EQUILIBRIUM.md)
+is a concrete application of global continuation: different periodic words cover its compact region, and a
+connected curve of three-owner stationary equilibria covers the remaining
+finite interval before an explicit stationary tail takes over. Local roots
+alone are insufficient; the interval proofs retain their full incentive
+comparisons, and the stationary proof identifies roots at every seam.
+
+A useful next extension has two reward parameters affecting only rows0,1.
+Freeze their hazards q0=z0,q1=z1 and put h=(1-z0)(1-z1). For owner2, write
+its forced-Quit and passive offers as Q2(u)=Q0+u DeltaQ and
+P2(u)=P0+u DeltaP, where u=q3. Since H2=h(1-u), its stationary field
+F2=(1-H2)Q2-P2 is
+
+    F2=h DeltaQ u^2+[(1-h)DeltaQ+hQ0-DeltaP]u+(1-h)Q0-P0.
+
+It does not depend on q2. Similarly F3 is a quadratic in q2 alone. Thus the
+two opponent equations decouple into scalar quadratics, with at most four
+isolated proper root pairs. Identically zero polynomials and multiple roots
+must be retained as degeneracies; there is no universal four-root bound.
+Quiet, mixed and sure choices give nine support patterns in the complete
+two-owner complementarity problem.
+
+On any continuous proper branch where the relevant coefficients are nonzero,
+the two remaining stationarity equations recover the two reward parameters
+as a map of(z0,z1). A Poincare--Miranda boundary-sign argument could then cover
+a whole parameter rectangle, even when the recovery map folds. This is an
+explicit next producer question, not a proved arbitrary-game reduction:
+proper branches, boundary signs, and compatibility at branch changes still
+have to be produced from the reward data.
+
+
+## A finite-scale global alternative from real algebraic geometry
+
+This is a proved supporting procedure, not a UE decision algorithm or a new
+reward-class exclusion. Its useful feature is that neither a polynomial
+degree nor a calendar length must be fixed before the search. All statements
+below concern native reward tables with zero own singletons and Never payoff.
+
+For n players, a root q in [0,1]^n and continuation w, put
+h=product_i(1-q_i), a=1-h, H_i=product_(j!=i)(1-q_j). Let Q_i be the forced
+Quit offer, P_i the nonempty-opponent passive offer, C_i=P_i+H_i w_i, and
+
+    U_i=q_i Q_i+(1-q_i)C_i,
+    d_i=max(Q_i,C_i)-U_i.
+
+On K_b=[-b,b]^n, R(Z,epsilon,b) contains every triple(w,q,u) for which
+|u_i-U_i|<=epsilon a and d_i<=epsilon a for each i. An edge's charge is a.
+A finite budget bounds the sum of charges along EVERY finite path; shared
+vertices must literally agree. A potential satisfies P(w)>=a+P(u) on every
+edge. These are the definitions `IsQuittingFloorFreeRobustEdge` and
+`quittingFloorFreeRobustChargedRelation` in
+`UniformEquilibrium/Quitting/Projective/RobustChargedRelation.lean`.
+
+If native tables Z,Z' differ by at most delta in every entry, then
+
+    |U_i^Z-U_i^Z'|<=delta a,
+    |d_i^Z-d_i^Z'|<=2 delta a,
+    R(Z,epsilon,b) subset R(Z',epsilon+2delta,b).       (A)
+
+Indeed only nonempty prescribed coalitions affect the first difference.
+The identical own singletons mean that each of Q_i and C_i changes by at
+most delta(1-H_i). The function
+d_i=max((1-q_i)(Q_i-C_i),-q_i(Q_i-C_i)) is 1-Lipschitz in Q_i-C_i,
+and 1-H_i<=a. This also proves (A) at a=0. Fixing the own levels is essential.
+
+The existing theorem
+`exists_quittingRobustChargedRelation_rationalPotential_of_finiteBudget`
+in `UniformEquilibrium/Quitting/Projective/RobustChargedRelationPolynomialSeparator.lean`
+produces a rational polynomial potential for R(Z,epsilon/4,b) from finite
+budget for R(Z,epsilon,b+1), for bounded rewards and 0<epsilon<=1.
+It supplies the polynomial; its existence is not an added hypothesis below.
+
+### Uniformity at a fixed positive tolerance
+
+Let F be a compact bounded family of native tables, 0<eta<=1, and let
+A_eta be the tables in F with finite budget for R(Z,eta,b+1).
+There is one finite C such that every Z in A_eta has budget C for
+R(Z,eta/2,b+1). To prove this, take Z in closure(A_eta) and choose
+Z' in A_eta within eta/8. By (A), R(Z,3eta/4,b+1) has a finite budget C_Z.
+For every Y within eta/8 of Z, R(Y,eta/2,b+1) is contained in this relation.
+Extract a finite subcover of compact closure(A_eta) and take max C_Z.
+If A_eta is empty take C=0. No closedness or recognition algorithm for
+A_eta is assumed.
+
+There is also a finite catalogue of rational polynomials such that every
+Z in A_eta accepts one as a potential for R(Z,eta/16,b). At each Z in the
+same closure, finite budget at eta/2 on K_(b+1) gives a polynomial at eta/8
+on K_b. By (A), that SAME polynomial works at eta/16 for every Y within
+eta/32 of Z. Compactness again gives a finite catalogue. In particular its
+degree and rational coefficient height have uniform finite bounds. These
+bounds are existential; no numerical bound or lower bound on eta is proved.
+
+If F is semialgebraic, let S be F intersected with the union of the
+acceptance sets of this finite catalogue. Quantifier elimination makes S
+semialgebraic, and, writing A(t,c) for finite budget on R(Z,t,c),
+
+    F intersect A(eta,b+1) subset S subset F intersect A(eta/16,b).
+
+The two boxes differ. The second inclusion follows by telescoping a bounded
+polynomial on K_b, not by an assertion that the two budget problems coincide.
+
+### A terminating search for a finite cover
+
+Input: n is a natural number; M,b,eta,C are rational with b,C>0 and
+0<eta<=1; and F is given by a rational semialgebraic formula, with the
+promise that it is compact and consists of native tables bounded by M.
+There is an algorithm producing a finite cover of F by acceptance regions
+of the following two kinds:
+
+- a rational polynomial valid as a potential for R(Z,eta/16,b);
+- a rational finite path in R(Z,eta,b+1) whose total charge exceeds C.
+
+Enumerate all rational polynomials and all finite lists of rational boxed
+vertices and roots, interleaving the two enumerations fairly. Reject a path
+unless its rational charge exceeds C. For each remaining object compute its
+semialgebraic acceptance region. For a polynomial this universally quantifies
+boxed w,q,u and tests the edge implication; for a path it is a finite list
+of inequalities in the reward entries. Absolute values and maxima are finite
+Boolean combinations of polynomial inequalities. After each finite stage,
+quantifier elimination decides whether the accumulated regions cover F.
+
+Here is the termination proof. For each Z, consider R(Z,eta/2,b+1).
+If its budget is finite, the polynomial theorem gives a witness at eta/8
+on K_b, which is accepted at eta/16 throughout a neighborhood of Z by (A).
+If its budget is infinite, take a finite path with charge>C. A zero-charge
+edge has q=0 and u=w, so delete such edges. On each remaining edge, raising
+tolerance from eta/2 to 3eta/4 leaves strictly positive slack. There are
+finitely many edges. Joint continuity therefore permits simultaneous rational
+rounding of every vertex and root, preserving all inequalities and charge>C.
+Choose a shared path vertex once, not separately for its two incident edges.
+Rational points are dense even at the box boundary because b+1 is rational.
+The same rounded path is accepted at eta throughout a neighborhood of Z.
+These acceptance neighborhoods cover compact F, so finitely many objects
+suffice; the fair enumeration eventually finds them. The algorithm never
+needs to decide the finite-budget versus infinite-budget alternative.
+
+The labels need not be exclusive. A path label supplies only the requested
+tolerance and charge, not a single fixed UE target across all accuracies.
+A polynomial label supplies a native-box budget certificate. To infer an
+original-game counterexample through
+`quittingGame_not_exists_uniformEquilibriumPayoff_iff_noSureRoot_and_rationalPotential`
+in `UniformEquilibrium/Quitting/Projective/PolynomialForwardCertificateCharacterization.lean`,
+one must separately supply Fin4, normality, a positive original singleton,
+absence of the stated punishment-vector sure root, and the original box of
+radius rewardBound+2. Own-level translation shifts the box and may turn
+rational polynomial coefficients irrational. Use finite capacity and the
+packet characterization, or reapply the separator with its required box
+margin, rather than silently applying the rational-polynomial consumer.
+
+The systematic research question is therefore concrete: can these finite
+covers be produced economically on the surviving parameter families, and can
+one show that their polynomial side is empty at every accuracy? The procedure
+proves termination at a specified scale, not that the desired label wins.
+
+## Information relaxation: what may and may not be frozen
+
+An occupation measure on literal Nash edges and a public lottery over
+continuation values are different objects. In the former, each edge retains
+its own exact successor; a sufficiently absorbing path can be fixed as a
+deterministic calendar. In the latter, a root may be indifferent only against
+the MEAN successor. Revealing the lottery in advance then gives a deviator
+advance information about a future stopping reward.
+
+The exact one-node price is elementary. For one mixing owner, let
+Q=P+H mu, mu=E W, where W is the full cap of an exact continuation revealed
+only after surviving the root. Freezing W while retaining the root gives debt
+
+    H[(1-q)(mu-W)_+ + q(W-mu)_+].
+
+Its expectation is H E|W-mu|/2, independent of q. This is a Wasserstein-1
+dispersion cost. It concerns one root with exact continuations, not a proved
+infinite-tree error bound. A derandomization argument needs vanishing
+dispersion or a modified strategy, rather than a constant-factor prophet bound.
+
+Here is a complete strict-positive test. Use native own/Never0 and
+
+    Gamma=[0,-1,3,-1; -1,0,-1,3; 3,-1,0,-1; -1,3,-1,0].
+
+Every coordinate of every pair/triple reward is1/10, except increments
+Z_1(12)+=1, Z_0(23)+=2, Z_1(23)+=1; grand rewards are arbitrary.
+The pure tails12 and23 are Nash, with values
+a=(1/10,11/10,1/10,1/10) and b=(21/10,11/10,1/10,1/10).
+At root q=(1/2,1/2,0,0), a fair public choice of these tails after survival
+makes Q=C=1/20 for owners0,1, and Q=3/40<C=11/20 for owners2,3.
+Thus the public profile is exact Nash. Freezing EITHER tail creates debt1/4
+for owner0 and zero for everyone else. All deviations absorb by the second
+date, so adding arbitrary signed row offsets preserves this comparison.
+
+Put J_ii=0 and J_ij=Z_i({i,j}) for i!=j. Thus J=(E-I)/10+e_1 e_2^T,
+where E is the all-ones matrix. Both Gamma^-1 and (Gamma-J)^-1 are strictly
+positive. The former has diagonal
+2/15, opposite entries7/15, and other entries1/5. For the latter, put
+B=Gamma-(E-I)/10. Its inverse has diagonal
+(10/7+10/51-20/29)/4>0, opposite entries
+(10/7+10/51+20/29)/4>0, and cross entries110/357<1.
+Since Gamma-J=B-e_1 e_2^T, the Sherman-Morrison identity gives a strictly
+positive inverse. This example has pure sure exits and excludes no new UE
+class. It tests a proposed operation even inside the positive-inverse
+geometry; it does not refute selection of endpoint-compatible Nash paths.
+
+The external literature points to the same distinction.
+[Jenkinson--Li--Liao--Zhang (2025), Theorem3.3](https://arxiv.org/html/2503.18092v2)
+extracts paths from a supplied invariant measure for a compact closed
+multivalued dynamics, but does not supply positive absorption. The relevant
+path mechanism is already available in the conference's ergodic recurrence
+work; no additional UE coverage follows from this citation.
+[Ingalls--Sontag--Wang (2003), Theorem1](https://www.sontaglab.org/FTPDIR/relaxation-di-as-appeared.pdf)
+shadows a supplied convexified differential-inclusion trajectory over an
+infinite horizon. It permits a perturbed initial point and requires local
+Hausdorff-Lipschitz regularity unavailable at general root support changes.
+Neither theorem supplies the missing game-specific producer.
+
+The unresolved constructive target is a finite-amplitude controlled invariant
+set of ACTUAL Nash transitions. A legal transition must retain its
+continuation value and all full deviation comparisons. Certified parameter
+continuation and support-dependent interval boxes offer a concrete way to
+test this target without assuming a continuous global root selector.
