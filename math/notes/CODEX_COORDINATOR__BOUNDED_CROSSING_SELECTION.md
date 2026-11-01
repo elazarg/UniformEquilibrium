@@ -1963,6 +1963,31 @@ Source check: `quittingContinuationBestResponseValue_rootThenContinuation_eq_max
 for the complete cap recursion. Section13's bounds are ordinary proofs;
 no Lean command was run.
 
+## 14. A global unmarked source reduction
+
+The [global least-Never reduction](../exports/GLOBAL_LEAST_NEVER_SOURCE_REDUCTION.md)
+closes the formerly surviving THREE-ZERO case for the globally UNMARKED
+minimum of nu on full zero debt. After a small native generic perturbation
+and FRESH selection, a positive absorbing-gap table has exactly one of two
+source alternatives: mu=1 with only the AllNever zero-debt annotation, or
+0<mu<1 with EVERY minimizing payoff strictly positive in all four coordinates.
+The complete proof transfers the existing finite-word constructions to the
+same original Never objective and uses a three-owner complementarity-degree
+contradiction. The competitors may change payoff and its sign; this is where
+global unmarked minimality does work that a fixed payoff fibre cannot do.
+
+Under the additional explicit generic conditions, the AllNever alternative
+also requires EVERY matrix Gamma-tJ,0<=t<=1, to be R0 of degree1 and standard Q.
+Its exact proof controls the fourth owner's full response along an actual
+infinite orbit, and the packet gives pair data passing both endpoint tests
+but failing in the interior. The whole-pencil idea is reused; its actual
+AllNever-source implication is stated with all hypotheses.
+
+This selection differs from both the marked minimum in Sections11–12 and
+the positive pivot-debt minima. Their inherited zero faces are not eliminated
+by this theorem. The remaining unmarked task is to contradict the all-positive
+global minimum or the globally AllNever-only branch; neither is closed.
+
 ## Verification and remaining target
 
 The [exact geometry checker](../experiments/CODEX_COORDINATOR__ACTUAL_CONTINUATION_GEOMETRY_CHECK.py)
@@ -2006,7 +2031,7 @@ Section13 has [two independent scoped reviews](../feedback/CODEX_COORDINATOR__BO
 Earlier review hashes retain their original scopes, including the previous
 weaker control replaced by Section11's two-zero example.
 
-The live target remains GLOBAL marked least-Never extremality with full caps.
+The marked route still needs GLOBAL marked least-Never extremality with full caps.
 Section11 supplies a source-consuming descent when its finite test passes;
 it does not supply a qualifying finite head, eligible tail direction or
 descent sign at every minimum. Section12 retains the actual global objective
@@ -2015,4 +2040,5 @@ with a nonzero limiting payoff must end on two or three zeros satisfying(RAY).
 Finite heads can still reach the locally rigid faces, and their singularities
 and compensation signs remain unresolved. The original source's finite
 exact-fibre approximants still have positive debt. A universal descent or
-another equilibrium construction is still needed. Fin4 remains open.
+another equilibrium construction is still needed. Section14 gives the separate
+unmarked global reduction and its two remaining alternatives. Fin4 remains open.

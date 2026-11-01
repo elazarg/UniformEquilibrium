@@ -182,6 +182,20 @@ zero-debt payoff fibre cannot supply universal descent by itself.
 Neither the attained source nor that inherited fibre is universally repaired.
 A descent from every GLOBAL marked minimum remains open.
 
+A separate [global least-Never reduction](../exports/GLOBAL_LEAST_NEVER_SOURCE_REDUCTION.md)
+now excludes the entire THREE-ZERO payoff case at a globally UNMARKED
+least-original-Never point of the full zero-debt carrier, under the generic
+joining conditions. Every alleged counterexample supplies a native positive
+absorbing-gap table; perturb first and reselect its minimum. The resulting
+alternatives are mu=1 with only AllNever in the zero-debt carrier, or
+0<mu<1 with ALL minimizing payoff vectors strictly positive. Under the
+packet's additional genericity, the AllNever branch requires the entire
+four-owner pencil Gamma-tJ,0<=t<=1, to be R0 of degree1 and standard Q;
+checking only its endpoints is insufficient. Neither remaining alternative
+is solved. This closes a genuine global source mode, but does not eliminate
+zero faces of the different marked, partial-Nash or inherited-fibre sources
+used elsewhere in this partition.
+
 The domain has three distinct levels. The sixty raw rewards consist of four
 own-singleton levels, twelve off-own singleton comparisons Gamma, and
 forty-four higher-coalition rewards. Sections1–8 classify a conservative
