@@ -2006,6 +2006,27 @@ data passing the test, Section14 leaves only strictly positive global
 least-Never payoffs. The construction does not descend from such a minimum:
 its small clocks have Never near1. No arbitrary-game source branch is closed.
 
+## 16. Mixed supports exclude asymmetric AllNever sources beyond pair clocks
+
+The [mixed-support reduction](../exports/MIXED_SUPPORT_CLOCKS_EXCLUDE_ALLNEVER.md)
+uses construction-order supports23,02,013 and reverses them in physical play.
+Its raw algebraic test produces an actual independent full Nash clock with
+U=B=e and original joint Never in(0,1), for every finite higher-reward
+completion. At its inverse-positive asymmetric singleton matrix there is
+only one mutually negative pair. Two strict conditions on a fixed small-J
+direction activate the two missing hazard coefficients of an expanding
+pair/pair/triple mode; the signed orbit handles the full nonlinear rewards.
+
+The exact generic witness passes the entire pencil screen of Section14
+and fails all three complementary-pair tests of Section15. No proper literal
+response-invariant quotient exists, even after positive recipient scaling.
+Strict margins give an open pair-data region with arbitrary finite higher
+completions. This adds an AllNever-source exclusion beyond both earlier
+tests. It does not include J=0 under arbitrary completions, descend from an
+all-positive minimum, or prove UE for the original raised table. The packet
+has [two independent full reviews](../feedback/MIXED_SUPPORT_CLOCKS_EXCLUDE_ALLNEVER__BY_GLOBAL_REVIEW.md)
+and a standalone exact checker; no Lean certification is claimed.
+
 ## Verification and remaining target
 
 The [exact geometry checker](../experiments/CODEX_COORDINATOR__ACTUAL_CONTINUATION_GEOMETRY_CHECK.py)
@@ -2058,5 +2079,5 @@ with a nonzero limiting payoff must end on two or three zeros satisfying(RAY).
 Finite heads can still reach the locally rigid faces, and their singularities
 and compensation signs remain unresolved. The original source's finite
 exact-fibre approximants still have positive debt. A universal descent or
-another equilibrium construction is still needed. Sections14–15 give the separate
-unmarked reduction and a further AllNever exclusion. Fin4 remains open.
+another equilibrium construction is still needed. Sections14–16 give the separate
+unmarked reduction and successive AllNever exclusions. Fin4 remains open.

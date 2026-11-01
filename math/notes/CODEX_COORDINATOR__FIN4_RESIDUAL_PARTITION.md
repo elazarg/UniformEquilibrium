@@ -206,6 +206,16 @@ For generic positive-gap data in this region, only the strictly positive
 global minimum remains. Neither an absorbing profile nor descent from that
 positive minimum is supplied; arbitrary Fin4 remains open.
 
+The [mixed-support source reduction](../exports/MIXED_SUPPORT_CLOCKS_EXCLUDE_ALLNEVER.md)
+adds a further open pair-data region, with arbitrary finite higher rewards.
+Its pair/pair/triple construction works at an asymmetric singleton matrix
+without a negative perfect matching. An exact generic witness passes the
+entire pencil screen but fails every complementary-pair test; no proper
+literal response-invariant quotient exists, even after positive recipient
+scaling. The new clock still only excludes the AllNever source. Strictly
+positive global minima remain unresolved, as do AllNever data outside the
+produced regions; this is not an arbitrary-game branch closure.
+
 The domain has three distinct levels. The sixty raw rewards consist of four
 own-singleton levels, twelve off-own singleton comparisons Gamma, and
 forty-four higher-coalition rewards. Sections1–8 classify a conservative
