@@ -39,47 +39,92 @@ finite-horizon bound. They compared the retained stationary prose with the
 approved author proof; only headings, reproduction paths, and the clarification
 of the producer's scope changed. The checker bytes are identical.
 
-## Periodic band with an optional active player
+## Three periodic rectangles
+
+The common retained section "Three periodic regions with changing supports"
+has SHA256
+`46956179b058c88268b71ecf03f0bef44ba714af3e9335dd8b2715f8fa91239d`.
+It equals the reviewed common draft, SHA256
+`dc66947abdc5abf3b2d3e7374c7aa6004457b8595f6dbc9a7e3edd3f03921e48`,
+followed by one blank separator line. The three retained checker files are
+byte-identical to their independently rerun versions. Approvals concern the
+specified raw family, all unilateral behavioral deviations, arbitrary signed
+row offsets, and one fixed uniform-payoff target per game.
+
+### Corner
+
+Fresh reviewer: corner_final_review, with no construction contribution.
+FINAL PASS for delta in [0,1/500], epsilon in [0,1843/2500]. The independent
+full run of the [corner checker](../experiments/CODEX_COORDINATOR__TWO_ROW_CORNER_PERIODIC.py)
+accepted 255 closed cells and 251 rejected parents, exiting successfully in
+approximately 852 seconds. All four initial closed delta strips completed.
+Checker SHA256:
+`a7ca99c74294ff248292722745e46335b5460a4c0a0df7728bb8792b7e023a70`.
+
+The reviewer independently rebuilt all sixty rewards and the sixteen
+payoff/gap polynomials. The exact polynomial comparison, arithmetic audit
+and derivative checks included signed extensions. The proof audit checked
+actual-graph Newton existence, quiet-point/domain containment even on full-only
+branches, persistent-hazard bridge bounds, all six derivative directions,
+common-root injectivity, and complete-history continuous selection.
+The corner's final self-map bound holds for every counterfactual history;
+the reviewer checked it together with the exact recursive cover and geometric
+opponent absorption. Separate correspondence approval covers precisely the
+corner and common proof in the retained draft.
+
+### Upper
 
 Reviewer: positive_collision_potential_global. FINAL PASS for
-delta in [0,10^-5] and epsilon in [.34,.36]. The reviewer independently ran the
-entire retained [periodic checker](../experiments/CODEX_COORDINATOR__TWO_ROW_SUPPORT_BAND.py),
-SHA256 `b10ebdfa4a39592dedebdd28d03abc36c88ee307583ddf8547846b7ce105db29`.
-All twenty closed parameter cells passed. This band replaces the smaller
-support-change test; its duplicate checker is not retained.
-Retained section SHA256:
-`18b5983991e658ba8e18571cc69da0d58acd22065bf29b723b4755425597f124`.
+delta in [49/50,51/50], epsilon in [0,81/100]. The independent full run of the
+[upper checker](../experiments/CODEX_COORDINATOR__TWO_ROW_UPPER_PERIODIC.py)
+accepted 238 cells with 157 rejected parents and 502 attempts, matching the
+author's complete run. Checker SHA256:
+`3ff4fd8b598cb15078cf6055f8829c479e8dda9be8a43f4d72eb9fc9c557424f`.
 
-The audit checked implicit-root existence and uniqueness, the strict quiet
-and full-support shortcuts, and the negative Schur complement in mixed cells.
-The bridge contains both persistent root tubes, so the selected Nash branches
-agree at zero optional hazard. Local Lipschitz gluing validates the derivative
-hull. Intermediate signed bridge hazards are not interpreted as probabilities.
+The reviewer independently reconstructed the raw reward polynomials and
+audited graph residuals, point anchors, root-image intersections, gap
+recentering, support signs and the full period. This checker propagates
+stagewise derivative hulls of a locally Lipschitz selected graph; it does not
+claim globally smooth counterfactual histories. The proof's mean-value
+argument handles support seams without assuming that an exceptional line
+avoids the nonsmooth set.
 
-Point-orbit roots are explicitly included in the corresponding domain tubes.
-The six derivative columns retain both direct parameter effects and the
-initial moving-fibre slopes. The stagewise mean-value reset and final weighted
-return inequalities therefore apply to the same selected maps. Every cell
-checks contraction below 7/40, residual/radius below 2/5, and q0,q1>3/40000.
-The reviewer checked chronological order, actual terminal payoffs, all
-behavioral deviations, signed offsets, and the uniform-equilibrium consumer.
+### Middle
 
-The shared raw table and retained proof match the approved band. Different
-cells need not select the same cycle. The note was corrected to state only
-cellwise selectors allowing activation, without claiming a globally identified
-cycle through the band. The final correspondence check covered this wording
-and the shared raw-table reference.
+Reviewer: positive_collision_potential_global. FINAL PASS for
+delta in [99/1000,101/1000], epsilon in [0,93/125]. The independent full run
+of the [middle checker](../experiments/CODEX_COORDINATOR__TWO_ROW_MIDDLE_PERIODIC.py)
+accepted 78 cells with 38 rejected parents and 206 attempts in approximately
+194 seconds, matching the complete author run. Checker SHA256:
+`55af0e0c2d7f8bdf430aeab08af3a8e21c2d2635726f095f49bc2977493fdb83`.
+
+Exact extraction verified all forty adjacent initial epsilon intervals,
+including both closed calendar joins. Only [3467/5000,1389/2000] uses the
+period38 word; the other cells use period34. That bridge passes as one closed
+cell. The audit checked complete histories, all common-root links, and the
+selected-centre final estimate: possible central histories bound the anchor,
+while every smooth history contributes to the variation and contraction bounds.
+No continuity of calendar choice between parameter cells is required.
+
+The upper/middle reviewer separately approved their portions of the common
+retained draft against these exact checkers and complete proofs. Both reviewers
+checked physical chronology (the backward calendar is reversed), private
+independent hazards, Nash inequalities, fixed cyclic values, absorption under
+every unilateral replacement, signed offsets, and uniform finite-horizon
+convergence. The retained common draft incorporates no new acceptance rule.
 
 ## Outer region and assembly
 
-The literature and periodic-band reviewers independently checked the short
+The literature and periodic reviewers independently checked the short
 singleton contradiction against the exact bare-no-UE declaration and matrix
 definition cited in the note. It applies at epsilon=10201/5400 as well as
 above it and needs no sign condition on original own rewards.
 
 The overlaps 3/2<38/25 and 10201/5400<2 justify the stated containing region
-for unfinished parameters. The known ray and periodic band are additional
-covered subsets. No inventory-wide comparison or assertion that every point
+for unfinished parameters. The three periodic upper edges strictly exceed
+the affine stationary frontier on their respective delta intervals, closing
+every epsilon>=0 there. The known ray is an additional covered subset.
+No inventory-wide comparison or assertion that every point
 of the remaining region is uncovered is made. The result remains internal;
 it is not an export of the whole two-parameter family.
 

@@ -1,7 +1,8 @@
 # Two-row continuation in the four-player test family
 
 Owner: CODEX_ROOT. The stationary construction is by crossfield_global_algebra;
-the periodic construction is by crossfield_switched_control.
+the periodic constructions are by crossfield_switched_control,
+positive_collision_literature, and product_cover_fresh_review.
 
 Status: rigorous ordinary mathematics with exact computational certificates,
 not a new Lean result. These are internal steps toward covering one explicit
@@ -19,13 +20,14 @@ the stationary section below.
 | 0<=delta<=38/25, .737+.06delta<=epsilon<=2 | The stationary producer below; two independent full checks |
 | epsilon>=10201/5400, every delta>=0 | The singleton obstruction below |
 | epsilon=.04, every delta>=0 | [Complete complex-spectrum ray](../exports/COMPLETE_COMPLEX_SPECTRUM_RAY_UNIFORM_EQUILIBRIUM.md) |
-| 0<=delta<=10^-5, .34<=epsilon<=.36 | The periodic support-change band below; independent full check |
+| delta in [0,.002], [.099,.101], or [.98,1.02], every epsilon>=0 | The three periodic rectangles below, combined with the stationary and singleton results; independent full checks |
 
 Consequently any still-uncovered parameter of this family lies in
 
-    0<=delta<3/2,   0<=epsilon<.737+.06delta,
+    delta in (.002,.099) union (.101,.98) union (1.02,1.5),
+    0<=epsilon<.737+.06delta,
 
-with the known ray, band, and their established neighborhoods removed. This
+with the known ray and other established neighborhoods removed. This
 is a containing region for the unfinished work, not an exact description of
 all parameters without a known equilibrium. It is not a constraint on an
 arbitrary Fin4 counterexample. In particular no stationary nonexistence claim
@@ -33,9 +35,11 @@ is being made for the remaining region.
 
 The next question is whether actual periodic Nash continuation can cover this
 entire lower region, including every support change and parameter boundary.
-A contracting cycle at a sample point alone does not answer it. The band
-below supplies continuous legal selectors on cells where an optional player
-may activate. It does not identify one cycle across different cells.
+A contracting cycle at a sample point alone does not answer it. The rectangles
+below supply continuous legal selectors on cells where an optional player
+may activate. Different calendars can cover each other's weak support seams;
+the proof needs overlapping parameter coverage, not one cycle selected across
+all cells.
 
 ## A singleton obstruction outside the finite region
 
@@ -285,112 +289,207 @@ all stationary roots, or decide any of those remaining regions. The role of
 the computation is a finite exact proof of this one connected stationary
 producer; its discovery and floating candidates alone carry no conclusion.
 
-## Periodic continuation allowing a support change
+## Three periodic regions with changing supports
 
-**Claim.** For every delta in[0,10^-5] and epsilon in[.34,.36], the native reward
-table above has a64-period equilibrium with positive absorption against every
-unilateral behavioral deviation. Consequently it has a uniform equilibrium.
-Arbitrary fixed signed row offsets may be added to all rewards of each owner.
+Use the sixty native rewards already defined above. Every parameter in each
+closed rectangle below has an exact equilibrium for terminal absorption payoffs,
+and the same periodic profile and its terminal payoff vector give uniform
+eta-equilibria for every eta>0. All claims allow arbitrary fixed signed offsets
+added to every absorbing reward in each recipient row.
 
-### Period and common raw table
+| Region | Exact parameter rectangle | Backward support calendar | Period |
+| --- | --- | --- | --- |
+| Corner | [0,1/500] x [0,1843/2500] | 013^4, 012^60 | 64 |
+| Upper | [49/50,51/50] x [0,81/100] | 013^2, 012^2, 023^12 | 16 |
+| Middle | [99/1000,101/1000] x [0,93/125] | 013^2, 012^8, 023^p, p=24 or 28 | at most 38 |
 
-Use exactly the sixty rewards specified in the stationary section above.
+Every listed 012 phase allows owner 3 to enter, producing support 0123.
+Physical time reverses the displayed backward calendar. The middle calendar
+uses p=28 on epsilon in [3467/5000,1389/2000]; the other initial cells use p=24.
+Cell boundaries are included. Different cells may use different equilibria;
+their cyclic fixed points need not be identified across parameter cells.
 
-The backward support word is013^4 followed by012^60. At its first012 stage,
-owner3 may also quit. In physical time the order is59 ordinary012 stages,
-one012-or0123 stage, then four013 stages. The program chooses continuous Nash
-branches within each certified parameter cell; different cells need not select
-a single globally identified branch.
+Their upper edges exceed the affine stationary threshold .737+.06delta:
+the respective maximum thresholds are .73712, .7982 and .74306. Together
+with the stationary producer and singleton obstruction above, these rectangles
+therefore cover every epsilon>=0 for delta in the three displayed intervals.
 
-### Implicit roots and the support seam
+**Verification status.** All three frozen checkers have passed independent
+complete runs. These are ordinary mathematical certificates,
+not new Lean proofs or a closure of arbitrary Fin4.
 
-For continuation b let g_i=Q_i-P_i-H_i b_i, with Q the quit payoff, P the
-absorbing contribution when continuing, and H the probability all opponents
-continue. The program uses512-bit outward integer intervals. Floats merely
-propose rational root centers, inverse matrices and affine slopes.
+### Stage roots on continuation graphs
 
-For active set S, a rational preconditioner C and hazard rectangle X about qhat
-are accepted only if, on the entire input and hazard boxes,
+For independent hazards q, let Q_i be owner i's expected reward from quitting,
+P_i the absorbing contribution from nonempty opponent quitting sets when i
+continues, and H_i=product_(j!=i)(1-q_j). At continuation cap b put
 
-    |C g_S(qhat)|_i + sum_j |(I-C Dqg_S)_ij| r_j < r_i,
-    ||I-C Dqg_S||_infinity < .9.
+    g_i(q,b)=Q_i(q)-P_i(q)-H_i(q)b_i.
 
-Thus q -> q-Cg_S maps X strictly into itself and contracts. The second bound
-implies C and Dqg_S are invertible, so its unique fixed point is an implicit
-root, unique within X. Strict containment gives local C1 dependence. Interval
-Gaussian elimination on C Dqg_S encloses the inverse; every pivot is checked
-positive. The implicit derivative is -(Dqg_S)^-1 times the direct input
-derivative of g_S. No global uniqueness among all possible roots is assumed.
+An active mixed owner satisfies g_i=0; a quiet owner satisfies g_i<=0. The
+updated cap is Q_i on active coordinates and Q_i-g_i on quiet coordinates.
+All selected active hazards are strictly between zero and one. In particular
+the selected native updated caps are nonnegative, since all participant rewards
+in this raw family are nonnegative.
 
-At the optional-owner stage, a uniformly negative quiet gap selects012. A
-uniformly positive quiet gap and a physical full root select0123. Otherwise
-both the quiet root and a signed full root are certified. A third uniform
-Newton check solves the persistent012 equations with owner3's hazard y ranging
-between zero and the signed full root y*. Its uniqueness tube contains both
-persistent-root tubes. The reduced gap f(y)=g_3(psi(y),y) has derivative
+Each parameter cell uses the original convex six-dimensional latent box X:
+four initial-cap errors u_i with |u_i|<=r_i, and two parameter displacements
+of half-widths h_k. Its initial cap is c+V(p-p0)+u. The programs propagate
+continuation values, their six derivative columns, and a certified orbit at
+the exact centre (u,p-p0)=0.
 
-    f_y = D_y g_3 - D_x g_3 (D_x g_012)^-1 D_y g_012 < 0.
+For an active support S, fix rational qhat and a rational preconditioner C.
+The residual rho=Cg_S(qhat,b(x),p(x)) is enclosed both by ordinary interval
+evaluation and by its own certified centre value plus
+sum_j sup|partial_j rho| times the latent half-widths. Intersecting these
+enclosures preserves every residual on the continuation graph. Preconditioning
+occurs before absolute values. If a bridge hazard y varies independently, its
+whole interval remains in BOTH the centre residual and derivative evaluations;
+the estimate is uniform in y, with y held fixed during latent variation.
 
-Since f(y*)=0, f(0) and y* have the same sign. Choose the quiet branch for
-y*<=0 and the full branch for y*>0. These branches agree at y*=0 by tube
-uniqueness. The selector is continuous and piecewise C1; its derivative is
-bounded by the hull of the two branch derivatives. Intermediate signed bridge
-hazards need not be physical; the two selected branches have the required
-physical probabilities. All other stages have strict active-probability and
-quiet-gap checks.
+On a hazard box qhat+[-a,a], the programs enclose M=I-C D_qg_S and verify
 
-### Return certificate and finite cover
+    sup|rho_i| + sum_j sup|M_ij| a_j < a_i.
 
-In each cell, with parameter midpoint p0 and half-widths h, use the moving cap
-fiber c+V(p-p0)+E, where |E_i|<=r_i and
+They also check a contraction bound below 9/10, using the a-weighted maximum
+norm in the corner/middle programs and the ordinary maximum norm in the upper
+program. Banach gives a unique root for every original latent input on the
+graph, uniformly in any bridge hazard. Existence for unrelated cap/parameter
+combinations in the surrounding rectangular enclosure is not asserted.
 
-    r=(1/20000, 3/2000000, 1/1000000, 1/200).
+The Newton image is intersected with its original uniqueness box. Nonsingularity
+of the active Jacobian gives the local implicit derivative
+-(D_qg_S)^(-1) D_(b,p)g_S, which is multiplied by the incoming six-column
+derivative enclosure. A centre root must lie in its domain uniqueness tube;
+the quiet centre root is checked even when only the full mode is selected.
+Quiet gaps and updated caps are intersected with their own centre value plus
+the six mean-value radii. Thus every anchor refers to the same local root.
 
-Six derivative columns track four raw cap-error coordinates E_i and both reward
-parameters. They start as[I|V]. The reward parameters keep their own unit
-columns, so all direct parameter dependence remains in the stage chain rule.
-A parallel point computation encloses the orbit at the exact rational c,p0.
-Every point root tube is checked inside the corresponding full-domain
-uniqueness tube; the point and domain computations therefore use the same
-implicit branches. After each stage reset its value enclosure to the point
-orbit enclosure plus
+### Support seams and the two ways of propagating derivatives
 
-    sum_j sup|D_Ej U_i| r_j + sum_k sup|D_pk U_i| h_k.
+A strictly negative quiet gap selects 012. A strictly positive quiet gap and
+positive full hazard select 0123. Otherwise both the quiet root and a signed
+full root are certified. A persistent-owner bridge solves the 012 equations
+for every optional hazard y between zero and the signed full hazard y*.
+Its uniqueness tube contains both endpoint roots. The reduced optional gap has
 
-This is an inductive mean-value enclosure on the original convex input box.
-The locally Lipschitz seam selector obeys the same bound across its boundary.
-At return define
+    d/dy g_3(psi(y),y)
+      = D_y g_3 - D_x g_3 (D_x g_012)^(-1) D_y g_012 < 0.
 
-    L_i = sum_j sup|D_Ej F_i| r_j/r_i,
-    R_i = sup|F_p0(c)_i-c_i| + sum_k h_k sup|D_pk F_i-V_ik|.
+Since this gap vanishes at y*, the quiet gap and y* have the same sign.
+Select quiet for nonpositive gap and full for positive gap. At zero they agree
+by uniqueness. All other quiet inequalities and physical hazard bounds are
+checked. Signed hazards on unused counterfactual extensions are not strategies.
 
-The checker proves L_i+R_i/r_i<1, as well as the stronger global bounds
-L_i<7/40 and R_i/r_i<2/5. Hence the return maps every moving fiber into itself
-and contracts in its weighted infinity norm. Banach's theorem gives a periodic
-cap fixed point for each parameter in the cell.
+The upper checker propagates ONE locally Lipschitz selected continuation graph.
+At a seam it takes interval hulls of the two branch derivatives. Local implicit
+charts and the negative-Schur selector justify these derivative bounds almost
+everywhere. Their mean-value consequence on convex X follows from the standard
+W^(1,infinity) estimate, by mollification in the interior and continuity at the
+boundary. This does not integrate an ambient almost-everywhere bound along a
+possibly exceptional line. Point/domain root containment identifies its selected
+centre orbit at every stage. It has no complete-history compatibility test.
 
-The complete run certifies exactly the20 closed cells
+The corner and middle checkers instead retain separate smooth counterfactual
+histories on ALL of X, including where a history is not selected. Each keeps
+its own point orbit and derivative columns. At each phase, convex-hull tests
+||I-C D_qg_S||<1 identify same-support roots from different histories whenever
+their incoming caps agree. Every quiet chart is included, even from full-only
+histories. At mixed-mode phases the full uniqueness hull also contains the
+quiet endpoints with optional hazard zero. These tests need injectivity only;
+root existence was already proved on the individual history graphs.
 
-    [0,10^-5] times[k/1000,(k+1)/1000], k=340,...,359.
+Thus their selected return is a continuous finite selection of smooth returns
+F_h. It inherits any common Lipschitz bound: near a point continuity excludes
+branches with a different value there, and the remaining branches agree at that
+point and obey the bound. Continue along a segment in X. No convexity of the
+selected-history regions or finite number of switches is assumed.
 
-Their union is the claimed band, with no sampled-coverage assumption. Run
-`python math/experiments/CODEX_COORDINATOR__TWO_ROW_SUPPORT_BAND.py`
-from the repository root; it uses the Python standard library only
-and reads no external data. The author and an independent reviewer each ran all20 cells successfully.
-Do not use `python -O`: acceptance checks are assertions. The stated
-bounds are integer-interval assertions, not floating diagnostics.
+### Return contraction
 
-### Behavioral and uniform conclusion
+For a smooth history, or the upper selected graph with its derivative hulls, put
 
-At the cap fixed point, active owners are indifferent and quiet owners weakly
-prefer Continue. These Bellman inequalities cap arbitrary behavioral stopping
-deviations. The checker proves q0,q1>3/40000 at every phase on every selected
-branch. Therefore each owner's opponents absorb with a uniform geometric tail,
-even if that owner never quits. Iterating the Bellman inequalities leaves no
-terminal remainder; the same tail bounds finite-horizon average payoff errors
-and deviation gains uniformly as the horizon grows. Fixed signed row offsets
-add the same amount to every terminal payoff of that owner because every
-unilateral deviation absorbs almost surely. This proves the stated UE claim.
+    U_hi = sum_j r_j sup|D_uj F_hi|,
+    P_hi = sum_k h_k sup|D_pk F_hi - V_ik|.
+
+The corner requires |F_h(0)_i-c_i|+U_hi+P_hi<r_i for every history and row.
+The upper program checks the same inequality for its selected centre orbit and
+selected derivative enclosures. Both give a strict self-map and cap contraction
+on every affine fibre c+V(p-p0)+[-r,r].
+
+The middle program uses a sharper final anchor. It tracks all histories still
+possibly selected at the central point: a strictly negative central quiet gap
+retains quiet, a strictly positive gap retains full, and an unresolved sign
+retains both. Let C_i be the largest |F_h(0)_i-c_i| among these possible central
+histories. The exact final tests are
+
+    max_(h,i) U_hi/r_i < 1,
+    C_i + max_h(U_hi+P_hi) < r_i  for every i.
+
+Apply finite-selection Lipschitz gluing to F_h-V(p-p0), anchored at the actual
+selected centre value, to obtain the self-map bound. Holding parameters fixed
+gives cap contraction. This final tightening does not replace any history's
+own stage anchors. Banach now supplies cyclic Nash continuation equations for
+each parameter in the accepted cell.
+
+### Complete covers and reproduction
+
+The standalone checkers use the Python standard library, outward-rounded
+integer intervals with denominator 2^512, and no external candidate data.
+Floats only propose rational centres, slopes and inverse matrices; all mathematical
+acceptance is by exact interval inequalities. An exact vertex audit verifies the
+Horner payoff/gap formulas against the raw table: the polynomials are multiaffine
+in hazards and parameters and affine in the cap vector. Hazard/parameter vertices
+and the zero plus four cap basis vectors therefore suffice. Do not use python -O.
+
+The corner starts with four strips [n/2000,(n+1)/2000] x [0,1843/2500],
+n=0,1,2,3. On rejection it bisects delta when epsilon-width<delta-width/5,
+and epsilon otherwise. The upper starts with 81 slabs of full delta width and
+epsilon in [j/100,(j+1)/100], j=0,...,80; it bisects delta when delta-width
+is at least five times epsilon-width, and epsilon otherwise.
+
+The middle starts with full delta width and epsilon intervals [j/50,(j+1)/50],
+j=0,...,33, followed by [.68,.6934], [.6934,.6945], [.6945,.70], [.70,.72],
+[.72,.74], [.74,.744]. These decimals are exact rationals. Only [.6934,.6945]
+uses p=28. Rejections bisect delta when delta-width is at least twice epsilon-width,
+and epsilon otherwise. Both closed children must finish in every program.
+Depth, cell, attempt or time limits abort with failure; a partial cover cannot
+produce the final success marker. No cross-cell branch agreement is needed.
+
+Run these commands from the repository root. The complete-check counts are:
+
+| Region | Command | Final marker and current status |
+| --- | --- | --- |
+| Corner | `python math/experiments/CODEX_COORDINATOR__TWO_ROW_CORNER_PERIODIC.py` | `PASS_COMPLETE_CORNER`; independent full run accepts 255 cells and 251 rejected parents |
+| Upper | `python math/experiments/CODEX_COORDINATOR__TWO_ROW_UPPER_PERIODIC.py` | `PASS COMPLETE GRAPH BLOCK`; author and independent runs both accept 238 cells, 157 rejected parents, 502 attempts |
+| Middle | `python math/experiments/CODEX_COORDINATOR__TWO_ROW_MIDDLE_PERIODIC.py` | `PASS COMPLETE MIDDLE RECTANGLE`; author and independent runs both accept 78 cells, 38 rejected parents, 206 attempts |
+
+Frozen checker SHA256 values, in this order:
+
+    a7ca99c74294ff248292722745e46335b5460a4c0a0df7728bb8792b7e023a70
+    3ff4fd8b598cb15078cf6055f8829c479e8dda9be8a43f4d72eb9fc9c557424f
+    55af0e0c2d7f8bdf430aeab08af3a8e21c2d2635726f095f49bc2977493fdb83
+
+### Full behavioral and uniform conclusion
+
+At the cyclic fixed point, the stage Nash inequalities make continuation caps
+a supermartingale under every unilateral behavioral deviation and a martingale
+under prescribed play. Every selected phase retains at least two proper owners
+with strictly positive hazards; the corner and middle explicitly bound the
+relevant persistent hazards below by 10^-7. Finitely many strict interval checks
+give a positive lower bound beta for the upper block as well. After deleting
+any one deviator, an opponent retains this bound, so survival past t dates is
+at most (1-beta)^t uniformly over all unilateral history-dependent deviations.
+
+For each fixed game, rewards and caps are bounded. Truncation and the geometric
+tail therefore remove the terminal remainder in the Bellman inequalities and
+identify caps with actual terminal values. The expected preabsorption time is
+bounded, so finite-average payoffs approach terminal payoffs uniformly over all
+deviations. This proves the stated uniform equilibria with a fixed payoff target.
+Absorption remains certain under every deviation; signed recipient offsets
+therefore shift that owner's terminal reward by exactly the offset. The same
+tail argument proves the finite-horizon conclusion for every fixed choice of
+offsets, without claiming a uniform reward bound over unbounded offsets.
 
 ## Absorption cannot vanish along periodic Nash profiles
 

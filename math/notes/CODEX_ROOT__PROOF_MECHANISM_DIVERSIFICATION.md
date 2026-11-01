@@ -7,7 +7,7 @@ parameter covers and the cost of revealing future public randomness. A
 [global stationary producer with an arbitrary reward row](../exports/DOMINATED_ROW_ARBITRARY_ROW_STATIONARY_UNIFORM_EQUILIBRIUM.md)
 now closes an explicit unbounded raw class. Arbitrary Fin4 remains open.
 The [two-row continuation record](CODEX_ROOT__TWO_ROW_CONTINUATION.md)
-contains the current exact stationary region and a periodic construction
+contains the current exact stationary region and three periodic rectangles
 allowing support changes in the two-parameter test family, with
 [independent reviews](../feedback/CODEX_ROOT__TWO_ROW_CONTINUATION__BY_INDEPENDENT_REVIEWS.md).
 The next producer targets are row-wise global continuation and an absorbing
@@ -1021,11 +1021,13 @@ its compact exact checker; it is ordinary mathematics, not a new Lean result.
 
 In the two-crossing family, this also closes every delta>=3/2 and epsilon>=0.
 The [two-row continuation record](CODEX_ROOT__TWO_ROW_CONTINUATION.md)
-adds an exact stationary region above epsilon=.737+.06delta and a periodic
-band with a selector allowing a fourth player to become active. Together with
-the singleton obstruction at large epsilon, these place the remaining
-parameters inside 0<=delta<3/2, 0<=epsilon<.737+.06delta, with the already
-covered ray and periodic band removed. These are bounds for this particular
+adds an exact stationary region above epsilon=.737+.06delta and three periodic
+rectangles with selectors allowing a fourth player to become active. Combined
+with the singleton obstruction at large epsilon, these close every epsilon>=0
+when delta lies in [0,.002], [.099,.101], or [.98,1.02]. Any still-uncovered
+parameter lies below the affine frontier with delta in
+(.002,.099) union (.101,.98) union (1.02,1.5), after removing the known ray
+and other established neighborhoods. These are bounds for this particular
 family; they do not characterize arbitrary Fin4 counterexamples.
 The comparison with prior producers and the two independent full reviews
 are recorded with the export's feedback files. No absence of stationary
