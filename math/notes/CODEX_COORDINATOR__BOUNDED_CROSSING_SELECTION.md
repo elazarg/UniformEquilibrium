@@ -2027,6 +2027,31 @@ all-positive minimum, or prove UE for the original raised table. The packet
 has [two independent full reviews](../feedback/MIXED_SUPPORT_CLOCKS_EXCLUDE_ALLNEVER__BY_GLOBAL_REVIEW.md)
 and a standalone exact checker; no Lean certification is claimed.
 
+## 17. A negative participant box throughout the inverse-positive region
+
+The [negative-box theorem](../exports/NEGATIVE_PARTICIPANT_BOX_EXCLUDES_ALLNEVER.md)
+unifies the support selection over every hollow Gamma with nonzero
+off-diagonals, detGamma>0, Gamma^-1 strictly positive and a mutually negative
+pair. There is eta(Gamma)>0 such that EVERY participant matrix with
+-eta<J_ij<0, and EVERY finite higher completion, has an actual full Nash
+clock with original joint Never in(0,1). No first-hit genericity is required.
+
+A short negative-edge graph proof forces a negative perfect matching or
+the mixed architecture. Depending on which coordinate reaches zero first,
+the latter uses two pairs and a triple or one pair and two triples. Tied
+hits are covered by a continuous exact support selector and compact cone
+shooting, which constructs an actual compatible infinite tail chain.
+The participant box depends only on Gamma; the clock amplitude can depend
+on the completion and on arbitrarily unbalanced negative participant entries.
+
+An exact two-triple example passes the full pencil condition but fails
+every two-pair test and all24 relabelings of Section16's word. The packet
+also checks the two tied-boundary types and excludes a proper literal
+response quotient even after positive recipient scaling. It has
+[two independent full reviews](../feedback/NEGATIVE_PARTICIPANT_BOX_EXCLUDES_ALLNEVER__BY_GLOBAL_REVIEW.md).
+This is a broad AllNever-source exclusion, not an arbitrary-J theorem or
+descent from the strictly positive global minimum. No Lean check was run.
+
 ## Verification and remaining target
 
 The [exact geometry checker](../experiments/CODEX_COORDINATOR__ACTUAL_CONTINUATION_GEOMETRY_CHECK.py)
@@ -2079,5 +2104,5 @@ with a nonzero limiting payoff must end on two or three zeros satisfying(RAY).
 Finite heads can still reach the locally rigid faces, and their singularities
 and compensation signs remain unresolved. The original source's finite
 exact-fibre approximants still have positive debt. A universal descent or
-another equilibrium construction is still needed. Sections14–16 give the separate
+another equilibrium construction is still needed. Sections14–17 give the separate
 unmarked reduction and successive AllNever exclusions. Fin4 remains open.

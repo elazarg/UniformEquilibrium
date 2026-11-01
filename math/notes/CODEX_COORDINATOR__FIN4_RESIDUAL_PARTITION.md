@@ -216,6 +216,17 @@ scaling. The new clock still only excludes the AllNever source. Strictly
 positive global minima remain unresolved, as do AllNever data outside the
 produced regions; this is not an arbitrary-game branch closure.
 
+The [negative participant-box theorem](../exports/NEGATIVE_PARTICIPANT_BOX_EXCLUDES_ALLNEVER.md)
+now covers EVERY hollow Gamma with nonzero off-diagonals, positive determinant,
+strictly positive inverse and a mutually negative pair: all sufficiently
+small strictly negative participant matrices exclude AllNever, with arbitrary
+finite higher rewards. A graph proof selects the support architecture;
+continuous support selection and cone compactness close the tied-first-hit
+cases as well. The new two-triple example escapes all24 relabelings of the
+earlier mixed word. This closes that entire participant box on the stated
+singleton region. Arbitrary participant rewards and the all-positive global
+minimum remain open; no UE theorem for this entire region is asserted.
+
 The domain has three distinct levels. The sixty raw rewards consist of four
 own-singleton levels, twelve off-own singleton comparisons Gamma, and
 forty-four higher-coalition rewards. Sections1–8 classify a conservative
