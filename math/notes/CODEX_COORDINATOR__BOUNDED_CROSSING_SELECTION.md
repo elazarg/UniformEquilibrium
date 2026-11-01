@@ -2483,6 +2483,16 @@ sum, with eta<rho. Thus neither more ledgers nor a better positive matrix
 can cover such tables by this criterion. They need a different mechanism
 or an independent exit; they are not thereby UE counterexamples.
 
+Positivity does not force a simple exit. In the already proved
+[complex-spectrum periodic family](../exports/COMPLEX_SPECTRUM_PERIODIC_UNIFORM_EQUILIBRIUM.md),
+take delta=1/1000 and add a sufficiently small epsilon>0 to every coordinate
+of every proper nonsingleton reward. All ten such reward vectors are then
+strictly positive. The exact25-phase UE persists, as do the complete
+stationary, two-fixed-pair, sure-first and fourteen quiet-child exclusions
+proved there. The admissible epsilon radius is existential. Thus this
+uncovered geometric branch already contains games requiring mechanisms
+beyond those simple exits; positivity alone does not finish the reduction.
+
 The packet includes the complete rational checker and source correspondence.
 Its [two final independent reviews](../feedback/GLOBAL_PRODUCT_COVER_CONES_UNIFORM_EQUILIBRIUM__BY_GLOBAL_REVIEW.md)
 cover the complete proof, fixture, full-deviation and finite-horizon claims,
