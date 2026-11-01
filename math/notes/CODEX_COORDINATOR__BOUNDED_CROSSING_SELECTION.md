@@ -8,12 +8,14 @@ contains the closed-passive selected-root consumer. The arguments below retain
 its useful extensions without duplicating that proof or claiming another
 independent reward-class exclusion for the recovery example.
 
-The current global construction is in Section21: an explicit raw matrix
-region produces an actual infinite full Nash profile, without choosing a
-support word or assuming recurrence. Its original joint Never mass lies
-strictly between zero and one. An exact member escapes every order of the
-three previously tested finite templates. This excludes AllNever on that
-region; it does not eliminate positive global minima or settle Fin4.
+There are now two global constructions. Section21 produces an actual infinite
+full Nash profile with original joint Never strictly between zero and one,
+using pair data and arbitrary finite higher rewards. Section22 adds explicit
+conditions on the entire coalition table and forces Never to zero, producing
+absorbing approximate equilibria. The latter closes both source alternatives
+on an open raw region containing a game with a positive stationary regret
+floor and no sure-first root against any actual continuation. Arbitrary Fin4
+remains open.
 
 For the numerical core, write a=-K. The selected theorem covers all real a
 when p=0, and a<=0 or a>=1/2 when p>=0. The opposed-pair strip 0<a<1/2,p>0 permits pair12 with positive ambient
@@ -2363,6 +2365,60 @@ not prove absorption or exclude the remaining positive global minimum.
 checked the exact exported bytes, strategic-input production, unrestricted
 deviations, the actual-source adapter and the complete named finite tests.
 
+## 22. A signed coalition cone closes both source alternatives on a raw region
+
+The [global coalition-cone theorem](../exports/GLOBAL_COALITION_CONES_UNIFORM_EQUILIBRIUM.md)
+proves A_Z=0, rather than only mu<1. It uses the full reward table and applies
+to every finite number of players under its explicit inequalities. Put
+M=Gamma^-1>>0, lambda=one^T M and rho=min M_ij/lambda_j. For each nonempty
+coalition D define
+
+    a^D=M Z(D), t_D=sum a^D,
+    ell_i^D=0 if i in D, else Z_i(D)-Z_i(D+i), b^D=M ell^D.
+
+One sufficient raw region is
+
+    t_D>=0, a_i^D>=-t_D,
+    a_j^D<=(rho/8)t_D for j outside D,
+    sum b^D>=0, |b_i^D|<=[rho^2/(16n)]t_D.
+
+The theorem also gives the more general cone parameters. All strategic
+objects are produced from these inequalities. At an arbitrary Nash prefix,
+the transformed prescribed value and Quit slack obey exact identities
+x'=h x+A and M(U'-Q)=h x+B. The signed cone and a small normalized coordinate
+are globally invariant, including at large roots. The ratio (sum x)/nu grows
+by a uniform factor greater than one, so bounded payoffs force nu to zero.
+
+Start with a virtual terminal seed epsilon Gamma e_j and build finite Nash
+chains. Replacing its terminal value by literal Never costs O(epsilon) in
+the complete response cap, uniformly in chain length. Moving one remaining
+Never atom to a finite deadline then gives actual absorbing Nash debt tending
+to zero. Nonnegative original own-singleton shifts preserve these absorbing
+debts, and the terminal-all-errors consumer supplies one fixed UE payoff.
+No globally selected positive source is locally repaired or assumed realized.
+
+The exact witness uses the nonmatching inverse-positive matrix
+
+    Gamma=[0,-2,-5,4; -6,0,-4,6; 1,3,0,-5; 1,-1,4,0]
+
+and J=(1-10^-6)Gamma, with specified triple/grand corrections of size10^-24.
+It has a strictly positive full-regret infimum over all stationary profiles
+in the original table. Its only possible sole-sure root would require a
+continuation below -2*10^12, whereas every actual cap lies above -100.
+The complete support census excludes all other sure roots. Thus neither
+stationary approximations nor arbitrary sure-first punishment tails already
+cover this example. Exact tests also reject the applicable pair, child,
+product-low and weighted-ledger mechanisms described in the packet.
+
+The signed inequalities are strict at this witness, apart from structural
+identities, so the UE conclusion holds on an open neighborhood in the full
+original reward space. Both stationary and sure-first exclusions persist
+there. This is a new complete UE region, not a proof for arbitrary higher
+rewards. The remaining problem is to replace the global coalition-cone
+inequalities for tables outside this region. The
+[two full independent reviews](../feedback/GLOBAL_COALITION_CONES_UNIFORM_EQUILIBRIUM__BY_GLOBAL_REVIEW.md)
+check the final theorem, witness, unrestricted responses and coverage.
+
 ## Verification and remaining target
 
 The [exact geometry checker](../experiments/CODEX_COORDINATOR__ACTUAL_CONTINUATION_GEOMETRY_CHECK.py)
@@ -2415,5 +2471,7 @@ with a nonzero limiting payoff must end on two or three zeros satisfying(RAY).
 Finite heads can still reach the locally rigid faces, and their singularities
 and compensation signs remain unresolved. The original source's finite
 exact-fibre approximants still have positive debt. A universal descent or
-another equilibrium construction is still needed. Sections14–21 give the separate
-unmarked reduction and successive AllNever exclusions. Fin4 remains open.
+another equilibrium construction is still needed outside the solved raw regions.
+Sections14–21 give the separate unmarked reduction and successive AllNever
+exclusions. Section22 closes both alternatives under its global full-table
+inequalities. Fin4 remains open.

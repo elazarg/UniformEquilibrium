@@ -281,6 +281,20 @@ remaining AllNever matrices are open; the finite comparison does not exclude
 longer support words. Section21 of the continuation note records the frontier
 change and its two independent full reviews.
 
+The [global signed coalition-cone theorem](../exports/GLOBAL_COALITION_CONES_UNIFORM_EQUILIBRIUM.md)
+goes further when its explicit full-table inequalities hold: it proves
+absorbing native debt infimum zero, closing both the AllNever and positive
+global-minimum alternatives on that region. Every finite Nash prefix preserves
+a signed continuation cone, and (sum Gamma^-1 U)/original Never grows
+geometrically. Finite virtual terminal seeds, a uniform complete-response
+comparison and a one-atom absorbing repair produce the strategies. The exact
+Fin4 witness has a positive stationary regret floor and no sure-first Nash
+root against any actual tail; complete support and punishment comparisons
+are included. Strict inequalities give an open neighborhood in the original
+reward space with the same UE conclusion and both exclusions. The full-table
+conditions remain substantive; this does not extend Section21's arbitrary
+higher-completion theorem to UE or solve arbitrary Fin4.
+
 The domain has three distinct levels. The sixty raw rewards consist of four
 own-singleton levels, twelve off-own singleton comparisons Gamma, and
 forty-four higher-coalition rewards. Sections1–8 classify a conservative
