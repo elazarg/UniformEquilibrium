@@ -227,6 +227,24 @@ earlier mixed word. This closes that entire participant box on the stated
 singleton region. Arbitrary participant rewards and the all-positive global
 minimum remain open; no UE theorem for this entire region is asserted.
 
+The [local product-low global theorem](../exports/LOCAL_PRODUCT_LOW_EXCLUDES_ALLNEVER.md)
+now removes the participant smallness and singleton-matrix restrictions from
+that source exclusion: ALL strictly negative J exclude AllNever, at arbitrary
+magnitudes and with arbitrary finite higher rewards. More generally it suffices
+that every sufficiently small product hazard has an active nonpositive Quit
+offer. The proof combines the original compact debt gap with a signed maximum
+over an auxiliary finite-terminal carrier; no selected strategy is assumed.
+For generic J, this local condition is equivalent to failure of all eleven
+principal S-matrix tests x>=one, J_SS x>=one. Hence a surviving generic AllNever
+source must pass at least one of those tests, in addition to the whole-pencil
+restrictions. Weighted pair inequalities give a simpler sufficient subregion;
+an exact circulant separates it from the full eleven-test criterion. Singular
+pair data can depend on higher rewards, as an exact boundary example shows.
+This is a carrier source reduction, not a new UE theorem or an actual exact
+profile producer. Positive global minima remain unresolved, even in the
+strictly negative participant region. The next global task must address that
+branch or the principal-positive-direction part of the AllNever branch.
+
 The domain has three distinct levels. The sixty raw rewards consist of four
 own-singleton levels, twelve off-own singleton comparisons Gamma, and
 forty-four higher-coalition rewards. Sections1–8 classify a conservative

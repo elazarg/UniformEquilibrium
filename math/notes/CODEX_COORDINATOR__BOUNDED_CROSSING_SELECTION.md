@@ -2052,6 +2052,44 @@ response quotient even after positive recipient scaling. It has
 This is a broad AllNever-source exclusion, not an arbitrary-J theorem or
 descent from the strictly positive global minimum. No Lean check was run.
 
+## 18. A local participant rule now gives a global source exclusion
+
+The [local product-low theorem](../exports/LOCAL_PRODUCT_LOW_EXCLUDES_ALLNEVER.md)
+proves mu<1 whenever every sufficiently small nonzero product hazard has an
+active owner whose forced-Quit offer is nonpositive. This is a raw polynomial
+condition, with no genericity, singleton-matrix or strategic-witness premise.
+It holds whenever positive weights satisfy d_i J_ij+d_j J_ji<0 on every
+pair. Thus the ENTIRE strictly negative participant region is excluded from
+the AllNever branch, at arbitrary magnitudes and with arbitrary finite higher
+rewards. Section17's actual-profile construction retains its stronger
+representation conclusion on its smaller domain.
+
+The mechanism is global. Assuming mu=1 gives a signed functional strictly
+positive on singleton columns and a compact full-debt gap away from Never1.
+Small artificial terminal payoffs transfer uniformly to the original carrier.
+The gap therefore confines every zero-debt auxiliary prefix to small activity.
+Maximizing the signed payoff over auxiliary zero-debt points with a nonpositive
+coordinate then contradicts either a Nash root or an exhaustive zero-face
+macro. The proof bounds an entire word at once and permits arbitrarily long
+calendars and changing supports. This is not a bounded word search.
+
+For J with nonzero off-diagonals and nonzero principal determinants of sizes
+2,3,4, the local rule holds exactly when none of the eleven principal matrices
+has x>0 with J_SS x>0. Each test is the ordinary LP x>=one, J_SS x>=one.
+This complete generic classification strictly extends the weighted criterion.
+The packet gives an exact separating circulant and a singular boundary where
+the same J admits or fails the local rule as higher rewards change.
+
+Consequently a generic AllNever source must admit at least one principal
+positive direction as well as the earlier whole-pencil restrictions. Such a
+direction is only a necessary condition. The positive global minimum remains
+open, including for all-negative J; no entire UE-counterexample family is
+eliminated solely by removing its AllNever alternative. The result concerns
+the closed carrier and does not assert an actual exact Nash representative.
+It has [two independent full reviews](../feedback/LOCAL_PRODUCT_LOW_EXCLUDES_ALLNEVER__BY_GLOBAL_REVIEW.md),
+including explicit falsification attempts. The embedded exact boundary checks
+passed; no Lean check was run.
+
 ## Verification and remaining target
 
 The [exact geometry checker](../experiments/CODEX_COORDINATOR__ACTUAL_CONTINUATION_GEOMETRY_CHECK.py)
@@ -2104,5 +2142,5 @@ with a nonzero limiting payoff must end on two or three zeros satisfying(RAY).
 Finite heads can still reach the locally rigid faces, and their singularities
 and compensation signs remain unresolved. The original source's finite
 exact-fibre approximants still have positive debt. A universal descent or
-another equilibrium construction is still needed. Sections14–17 give the separate
+another equilibrium construction is still needed. Sections14–18 give the separate
 unmarked reduction and successive AllNever exclusions. Fin4 remains open.
