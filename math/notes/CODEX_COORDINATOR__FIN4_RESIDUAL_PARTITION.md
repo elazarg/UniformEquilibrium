@@ -253,6 +253,19 @@ multiple of Gamma. They are already inside the exported PAIR criterion;
 the new quadratic calculation makes that entire raw family explicit without
 another export. The nonmatching proportional family remains a concrete target.
 
+Section20 of that note further extends the global maximum argument: it is
+enough to have the local sign condition on proper supports, together with a
+common row lambda satisfying lambda Gamma>>0 and lambda(Gamma-J)>>0.
+Full-support roots would have a negative scalar input and cannot occur at
+the positive scalar maximum. For generic J this uses ten principal LPs plus
+one separator LP. If the proper-support condition holds, a surviving
+AllNever source must instead have a nonzero z>=0 with
+(Gamma-J Theta)z=0 for some diagonal0<=Theta<=I. An exact unbounded family
+satisfies the new theorem but fails full PL; one member also passes the
+whole scalar-pencil screen while failing all ordered PAIR tests. This is
+recorded as a reviewed extension in the existing note, with exact checks,
+without duplicating the frozen carrier proof in another export.
+
 The domain has three distinct levels. The sixty raw rewards consist of four
 own-singleton levels, twelve off-own singleton comparisons Gamma, and
 forty-four higher-coalition rewards. Sections1–8 classify a conservative

@@ -135,3 +135,37 @@ The reviewer recommended retaining only this compact algebra, since it gives
 an explicit family within the existing finite criterion rather than a new
 escape mechanism. The coordinator omitted the longer repeated clock proof
 and an additional untracked matrix extension. No separate export was created.
+
+## Separate two-review scope for the proper-support extension
+
+Both `global_carrier_review` and `global_export_review` independently approved
+the exact 167-line Section20 in the same coordinator notebook, from its
+heading through the blank line before the following heading. Its SHA-256 is
+
+`27750c700e13ea1e34ffc07d9c69acfc8d87993fa583652f8e094efab8361678`.
+
+The extension replaces full PL by proper-support PL and adds the raw common
+separator inequalities lambda Gamma>>0, lambda(Gamma-J)>>0. Both reviewers
+checked the decisive new step: every sufficiently small full-support proper
+Nash root has input w=(J-Gamma)q+O(|q|^2), contradicting the maximizing
+point's positive lambda w. All remaining roots and zero-face macros use
+at most three owners. The cutoff is chosen uniformly in a reward neighborhood
+before defining the compact gap. Downward perturbation preserves weak proper
+PL, while the strict separator margins persist by continuity even for signed
+lambda. The actual-source adapter and full-deviation semantics are unchanged.
+
+Both reviews also checked the ten-principal generic classification, Gordan's
+exact columnwise-kernel alternative, and the explicit unbounded family outside
+full PL. Each executed the final integrated exact checker: it certifies the
+whole R0 degree-one/Q pencil for the t=1/100 member and rejects all six ordered
+partitions of the frozen PAIR criterion. Simplicity, isolation of all expanding
+eigenvalues, and nonzero mixed guard signs are checked with exact arithmetic.
+Only that member is claimed to pass the entire pencil screen; the global
+exclusion itself holds for the full displayed family.
+
+Two wording clarifications were resolved before the final hash: the dual
+kernel has no assumed strategic realization, and the single-member pencil
+certificate is distinguished from the full family. No mathematical objection
+remains. These reviews cover a notebook proof extension, not new formalization
+or a new export. The frozen packet remains byte-for-byte unchanged, and the
+complete nonmatching proportional family and positive-source branch remain open.

@@ -2144,6 +2144,173 @@ checks a different part of the frontier while using an existing producer.
 The nonmatching proportional family is not settled by this calculation;
 the positive global minimum remains open throughout.
 
+## 20. Proper supports and a common separator give a further exclusion
+
+The [frozen local product-low proof](../exports/LOCAL_PRODUCT_LOW_EXCLUDES_ALLNEVER.md)
+has a further ordinary-mathematical extension. Use its native table, full
+carrier and notation. Suppose there is a real row lambda with
+
+    lambda Gamma >>0, lambda(Gamma-J)>>0,                         (SEP)
+
+and there is delta>0 such that every q>=0 with0<sum q<delta and at most
+three active owners has an active i with Q_i(q)<=0. Call this proper-support
+condition(PPL). Then mu<1. Lambda may have either sign. Higher rewards are
+arbitrary finite numbers. This extension does not supply an actual exact
+Nash representative or a UE conclusion.
+
+Here are all changes to the frozen proof. Under mu=1, Gamma is R0 and every
+column v has a negative entry. Rescale the supplied lambda so lambda Gamma
+is at least one. It gives the same signed whole-word drift and seed b v
+with lambda b v>0. First fix a small reward neighborhood preserving(SEP).
+The Taylor cutoff used below is uniform there; choose the activity cutoff
+below it and below the(PPL) radius before defining the original compact debt
+gap. That gap and uniform terminal transport give the same globally confined
+virtual zero-debt carrier.
+Maximize lambda U over its points with min U<=0, obtaining lambda w>0.
+
+The gap forces every Nash prefix to be proper and small. If all four
+owners are active, indifference implies
+
+    w_i=(Q_i(q)-P_i(q))/H_i(q),
+    w=(J-Gamma)q+O((sum q)^2),
+
+where P_i is the expected passive reward on nonempty opponent coalitions
+and H_i=product_(j!=i)(1-q_j). Condition(SEP) therefore forces lambda w<0
+for every sufficiently small such root, a contradiction. Every other
+nonzero root uses at most three owners; (PPL) places its output back in the
+maximizing set, where the whole-word drift gives the usual contradiction.
+
+The remaining zero-face argument is unchanged. Its three-zero macros keep
+the positive pivot quiet, and its only PL-dependent endpoint is a root
+supported on those three observers. Thus(PPL) supplies the endpoint sign
+there too. Finally perturb participant entries downward to impose joining
+genericity. This preserves(PPL) pointwise. Both strict separator margins
+persist by continuity, including for signed lambda; no monotonicity of the
+second margin is asserted. The uniform full-root Taylor estimate persists
+in this small neighborhood. This completes the extension without any
+genericity assumption on the original data.
+
+For generic J, (PPL) is exactly failure of the six pair and four triple
+S-matrix tests x>=one, J_SS x>=one. Here generic means nonzero off-diagonals
+and nonzero principal determinants only of sizes two and three. The frozen
+robustness proof applies verbatim to these ten supports: every limiting
+support stays proper, so it never uses the full determinant. The remainder
+bound |Q_i-(Jq)_i|<=C(sum q)(sum_(j!=i)q_j) gives the same sufficiency.
+Thus these ten LPs plus(SEP) are finite raw tests for another excluded
+AllNever region. They do not replace the stronger full-PL conclusion in
+cases where(SEP) fails.
+
+Condition(SEP) itself is the LP lambda Gamma>=one,
+lambda(Gamma-J)>=one in four unrestricted real variables. Gordan's strict
+alternative says infeasibility is equivalent to some u,v>=0, not both zero,
+with Gamma u+(Gamma-J)v=0. Set z=u+v and Theta_ii=v_i/z_i when z_i>0,
+zero otherwise. Equivalently there is z>=0, z!=0 and diagonal0<=Theta<=I
+such that
+
+    (Gamma-J Theta)z=0.                                         (COL)
+
+Conversely use u=(I-Theta)z, v=Theta z. Hence a surviving AllNever source
+under(PPL) must have this columnwise-weighted nonnegative kernel. It is a
+kernel certificate with no strategic realization assumed. The
+scalar whole-pencil restrictions alone do not imply it, as follows.
+
+### An exact unbounded family outside full PL
+
+Take
+
+    Gamma=[0,-2,-5,4; -6,0,-4,6; 1,3,0,-5; 1,-1,4,0],
+    D=diag(95,46,127,170), lambda=(95,46,127,170)/21.
+
+For t>0 let C(t) have zero diagonal, four entries C_i,i+1=2t+1/10 with
+indices modulo four, and all eight other off-diagonals -t. Put
+J(t)=D^-1 C(t)D. On every proper support the positive-edge graph is acyclic,
+so topological weights make its weighted reciprocal sums strictly negative.
+The frozen weighted-pair argument gives(PPL) for every finite completion.
+But J(t)D^-1 one=(1/10)D^-1 one>>0, so full PL fails for every t>0.
+Meanwhile lambda Gamma=one and lambda J(t)=(1/10)lambda<one, proving(SEP)
+for the entire unbounded family.
+
+Gamma has strictly positive inverse, determinant42, and only the negative
+reciprocal pair01. For t=1/100 every off-diagonal sign of Gamma-uJ stays
+fixed for0<=u<=1, and all size-two/three/four principal determinants remain
+nonzero. Hence the entire pencil is R0. At Gamma, inverse positivity forces
+any solution of the offset-minus-ones LCP to have full support; its unique
+root Gamma^-1 one has positive determinant index. Thus the R0 degree is
+one, and homotopy gives degree one and standard Q along the entire pencil.
+The following exact checker verifies the matrix facts, with same-sign
+Bernstein coefficients certifying nonvanishing throughout the interval.
+It also rejects all six ordered partitions in the frozen(PAIR) criterion:
+Sturm counts isolate every real expanding eigenvalue, and mixed nonzero
+signs in its eight guards rule out both orientations of its one-dimensional
+eigenspace. Thus this member survives the scalar pencil screen but is outside
+both full PL and the complete two-pair test, not merely its matching subclass.
+
+```python
+from itertools import combinations
+from math import comb
+import sympy as s
+
+G = s.Matrix([[0,-2,-5,4],[-6,0,-4,6],[1,3,0,-5],[1,-1,4,0]])
+D = s.diag(95,46,127,170)
+lam = s.ones(1,4)*D/21
+assert G.det() == 42 and all(z > 0 for z in G.inv())
+assert lam*G == s.ones(1,4)
+t, u = s.Rational(1,100), s.symbols('u')
+C = s.Matrix(4,4,lambda i,j: 0 if i==j else
+             (2*t+s.Rational(1,10) if (j-i)%4==1 else -t))
+J = D.inv()*C*D
+assert J*D.inv()*s.ones(4,1) == D.inv()*s.ones(4,1)/10
+assert lam*J == lam/10 and all(z > 0 for z in lam*(G-J))
+A = G-u*J
+assert all(G[i,j]*A[i,j].subs(u,1)>0 for i in range(4)
+           for j in range(4) if i!=j)
+for n in (2,3,4):
+    for S in combinations(range(4),n):
+        p = s.Poly(A.extract(S,S).det(),u)
+        d = p.degree()
+        b = [sum(p.nth(k)*s.Rational(comb(i,k),comb(d,k))
+                 for k in range(i+1)) for i in range(d+1)]
+        assert all(z*p.eval(0)>0 for z in b)
+print('Proper-support separator and whole-pencil witness verified.')
+
+L, x = J-G, s.symbols('x')
+for S,T,bounds in [([0,1],[2,3],(1138,1139)),
+                   ([0,2],[1,3],None),
+                   ([0,3],[1,2],(7282,7283))]:
+    for S,T in [(S,T),(T,S)]:
+        CS, CT = L.extract(S,S).inv(), L.extract(T,T).inv()
+        DS, DT = J.extract(S,S)*CS, J.extract(T,T)*CT
+        B, A = G.extract(T,S)*CS, G.extract(S,T)*CT
+        H = (DS+A*B).row_join(A).col_join((DT*B).row_join(DT))
+        f = s.Poly(H.charpoly(x).as_expr(),x)
+        assert s.gcd(f,f.diff()).degree()==0
+        if bounds is None:
+            assert f.count_roots(1,s.oo)==0
+            continue
+        lo, hi = (s.Rational(b,1000) for b in bounds)
+        assert f.count_roots(1,s.oo)==f.count_roots(lo,hi)==1
+        v = (x*s.eye(4)-H).adjugate()[:,0]
+        vs, vt = v[:2,0], v[2:,0]
+        z = B*vs+vt
+        tests = list(CS*vs)+list(CT*z)
+        tests += list(z-J.extract(T,S)*CS*vs)
+        tests += list(x*vs-J.extract(S,T)*CT*z)
+        signs = []
+        for e in tests:
+            p = s.Poly(e,x)
+            assert p.count_roots(lo,hi)==0 and p.eval(lo)!=0
+            signs.append(s.sign(p.eval(lo)))
+        assert 1 in signs and -1 in signs
+print('PAIR fails for every ordered pair partition.')
+```
+
+This strictly extends the local sign-rule method, with an unbounded source
+family and an exact member surviving the whole-pencil screen while failing PAIR.
+It does not claim failure of every other clock criterion. The proof reuses the frozen
+carrier and zero-face arguments, so this notebook retains the extension
+without duplicating them in another export. The positive global minimum
+and the other AllNever data remain open.
+
 ## Verification and remaining target
 
 The [exact geometry checker](../experiments/CODEX_COORDINATOR__ACTUAL_CONTINUATION_GEOMETRY_CHECK.py)
@@ -2196,5 +2363,5 @@ with a nonzero limiting payoff must end on two or three zeros satisfying(RAY).
 Finite heads can still reach the locally rigid faces, and their singularities
 and compensation signs remain unresolved. The original source's finite
 exact-fibre approximants still have positive debt. A universal descent or
-another equilibrium construction is still needed. Sections14–19 give the separate
+another equilibrium construction is still needed. Sections14–20 give the separate
 unmarked reduction and successive AllNever exclusions. Fin4 remains open.
