@@ -3,11 +3,12 @@
 Owner: CODEX_ROOT.
 
 Status: research diagnosis with proved supporting results on finite-scale
-parameter covers and the cost of revealing future public randomness. These
-results do not eliminate a new UE class or decide Fin4. The next producer
-targets are row-wise global continuation and an absorbing controlled invariant
-set of actual Nash transitions. Their general completeness is not established.
-The supporting results have an
+parameter covers and the cost of revealing future public randomness. A
+[global stationary producer with an arbitrary reward row](../exports/DOMINATED_ROW_ARBITRARY_ROW_STATIONARY_UNIFORM_EQUILIBRIUM.md)
+now closes an explicit unbounded raw class. Arbitrary Fin4 remains open.
+The next producer targets are row-wise global continuation and an absorbing
+controlled invariant set of actual Nash transitions. Their general
+completeness is not established. The earlier supporting results have an
 [independent mathematical review](../feedback/CODEX_ROOT__CROSSFIELD_GLOBAL_METHODS__BY_REVIEW.md).
 
 ## Question
@@ -998,6 +999,29 @@ a whole parameter rectangle, even when the recovery map folds. This is an
 explicit next producer question, not a proved arbitrary-game reduction:
 proper branches, boundary signs, and compatibility at branch changes still
 have to be produced from the reward data.
+
+### A global construction with an unrestricted fourth row
+
+The [dominated-row theorem](../exports/DOMINATED_ROW_ARBITRARY_ROW_STATIONARY_UNIFORM_EQUILIBRIUM.md)
+fixes two normalized recipient rows, allows the third to increase every
+participant reward and decrease every passive reward from a stated reference,
+and leaves the fourth row arbitrary. An exact finite certificate shows that
+on q2=7/50, best responses by players0,1 force player2's stationary field to
+be strictly positive. Brouwer on the cube q2>=7/50 then produces a full
+stationary equilibrium: its fixed point cannot remain on the artificial
+lower face. The fourth player's incentives enter the global map, so no
+bound on that player's rewards is needed. Every player retains absorbing
+opponents, which supplies full behavioral Nash, arbitrary signed offsets,
+and one fixed uniform payoff. The export contains the complete proof and
+its compact exact checker; it is ordinary mathematics, not a new Lean result.
+
+In the two-crossing family, this also closes every delta>=3/2 and epsilon>=0.
+The remaining work concerns smaller delta and changes of support in periodic
+profiles. Numerical cycles with an additional active player are useful
+candidates; they become coverage only after exact branch and return checks.
+The comparison with prior producers and the two independent full reviews
+are recorded with the export's feedback files. No absence of stationary
+equilibria or closure of arbitrary positive-collision games is asserted.
 
 
 ## A finite-scale global alternative from real algebraic geometry
