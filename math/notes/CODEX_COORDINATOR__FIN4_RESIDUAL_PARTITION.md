@@ -196,6 +196,16 @@ is solved. This closes a genuine global source mode, but does not eliminate
 zero faces of the different marked, partial-Nash or inherited-fibre sources
 used elsewhere in this partition.
 
+The [alternating-pair source reduction](../exports/ALTERNATING_PAIR_CLOCKS_EXCLUDE_ALLNEVER.md)
+adds a finite algebraic test whose success excludes AllNever even when the
+entire pencil condition holds. Strictly inverse-positive singleton matrices
+with a negative perfect matching pass for all sufficiently small participant-
+pair rewards, regardless of the finite higher rewards. The producer constructs
+actual independent summable clocks and controls every finite/Never reply.
+For generic positive-gap data in this region, only the strictly positive
+global minimum remains. Neither an absorbing profile nor descent from that
+positive minimum is supplied; arbitrary Fin4 remains open.
+
 The domain has three distinct levels. The sixty raw rewards consist of four
 own-singleton levels, twelve off-own singleton comparisons Gamma, and
 forty-four higher-coalition rewards. Sections1–8 classify a conservative

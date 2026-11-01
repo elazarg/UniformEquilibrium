@@ -1988,6 +1988,24 @@ the positive pivot-debt minima. Their inherited zero faces are not eliminated
 by this theorem. The remaining unmarked task is to contradict the all-positive
 global minimum or the globally AllNever-only branch; neither is closed.
 
+## 15. Alternating pairs exclude a further global AllNever region
+
+The [alternating-pair reduction](../exports/ALTERNATING_PAIR_CLOCKS_EXCLUDE_ALLNEVER.md)
+produces an ACTUAL infinite full Nash clock with original joint Never strictly
+between0 and1 from a finite algebraic test on Gamma,J. It thereby excludes
+the globally AllNever-only alternative. In particular, every strictly
+inverse-positive Gamma with a negative perfect matching passes the test for
+all sufficiently small participant-pair rewards J, with arbitrary finite
+higher rewards. Perron--Frobenius produces the expanding mode; strict quiet
+margins and a signed backward orbit produce the complete stopping laws.
+
+An exact generic pair table passes the entire R0/degree1 pencil condition
+in Section14 but is excluded from AllNever by this producer. Thus the new
+constraint is additional to that pencil screen. For generic positive-gap
+data passing the test, Section14 leaves only strictly positive global
+least-Never payoffs. The construction does not descend from such a minimum:
+its small clocks have Never near1. No arbitrary-game source branch is closed.
+
 ## Verification and remaining target
 
 The [exact geometry checker](../experiments/CODEX_COORDINATOR__ACTUAL_CONTINUATION_GEOMETRY_CHECK.py)
@@ -2040,5 +2058,5 @@ with a nonzero limiting payoff must end on two or three zeros satisfying(RAY).
 Finite heads can still reach the locally rigid faces, and their singularities
 and compensation signs remain unresolved. The original source's finite
 exact-fibre approximants still have positive debt. A universal descent or
-another equilibrium construction is still needed. Section14 gives the separate
-unmarked global reduction and its two remaining alternatives. Fin4 remains open.
+another equilibrium construction is still needed. Sections14–15 give the separate
+unmarked reduction and a further AllNever exclusion. Fin4 remains open.
