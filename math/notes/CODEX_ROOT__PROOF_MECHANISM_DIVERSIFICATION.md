@@ -6,6 +6,10 @@ Status: research diagnosis with proved supporting results on finite-scale
 parameter covers and the cost of revealing future public randomness. A
 [global stationary producer with an arbitrary reward row](../exports/DOMINATED_ROW_ARBITRARY_ROW_STATIONARY_UNIFORM_EQUILIBRIUM.md)
 now closes an explicit unbounded raw class. Arbitrary Fin4 remains open.
+The [two-row continuation record](CODEX_ROOT__TWO_ROW_CONTINUATION.md)
+contains the current exact stationary region and a periodic construction
+allowing support changes in the two-parameter test family, with
+[independent reviews](../feedback/CODEX_ROOT__TWO_ROW_CONTINUATION__BY_INDEPENDENT_REVIEWS.md).
 The next producer targets are row-wise global continuation and an absorbing
 controlled invariant set of actual Nash transitions. Their general
 completeness is not established. The earlier supporting results have an
@@ -1016,12 +1020,116 @@ and one fixed uniform payoff. The export contains the complete proof and
 its compact exact checker; it is ordinary mathematics, not a new Lean result.
 
 In the two-crossing family, this also closes every delta>=3/2 and epsilon>=0.
-The remaining work concerns smaller delta and changes of support in periodic
-profiles. Numerical cycles with an additional active player are useful
-candidates; they become coverage only after exact branch and return checks.
+The [two-row continuation record](CODEX_ROOT__TWO_ROW_CONTINUATION.md)
+adds an exact stationary region above epsilon=.737+.06delta and a periodic
+band with a selector allowing a fourth player to become active. Together with
+the singleton obstruction at large epsilon, these place the remaining
+parameters inside 0<=delta<3/2, 0<=epsilon<.737+.06delta, with the already
+covered ray and periodic band removed. These are bounds for this particular
+family; they do not characterize arbitrary Fin4 counterexamples.
 The comparison with prior producers and the two independent full reviews
 are recorded with the export's feedback files. No absence of stationary
 equilibria or closure of arbitrary positive-collision games is asserted.
+
+### A larger class from conditional averages
+
+The following analytic extension is proved ordinary mathematics, retained
+internally. It uses the reference B and the exact lower-face certificate in
+the dominated-row export above. No new numerical certificate is assumed.
+The construction is by product_cover_fresh_review, with the larger row2 cone
+and sole-quitter case supplied and checked during independent review.
+
+Write r_i(S)=s_i+W_i(S), W_i({i})=0, and set W_i(empty)=B_i(empty)=0.
+Let c=7/50 and O_i=N minus{i,2}. For each i=0,1 require some a_i>0 and
+real k_i such that, for every T subset O_i,
+
+    (1-c)W_i(T union{i})+cW_i(T union{i,2})
+      =a_i[(1-c)B_i(T union{i})+cB_i(T union{i,2})]+k_i,
+    (1-c)W_i(T)+cW_i(T union{2})
+      =a_i[(1-c)B_i(T)+cB_i(T union{2})]
+         +k_i[1-(1-c)1_(T empty)].
+
+For every nonempty opponent coalition T of player2, choose p_T<=0,d_T>=0
+and set
+
+    W_2(T)=B_2(T)+p_T,
+    W_2(T union{2})=B_2(T union{2})+p_T+d_T.
+
+Thus passive rewards decrease and the advantage from joining increases;
+participant rewards themselves may decrease without bound. Row3 is arbitrary.
+Require at least one of
+
+    s2>=0,    k0>-42a0/43,    k1>-21a1/86.                 (A)
+
+Every such raw table has a stationary exact terminal Nash profile and one
+fixed uniform-equilibrium payoff against all behavioral replacements. The
+same profile works at every accuracy. The own levels s0,s1,s3 are unrestricted;
+s2 is also unrestricted when either strict k inequality holds.
+
+To prove this, condition on player2's fixed hazard c. The averaging identities
+give, on that entire face and for i=0,1,
+
+    Q_i^W=a_i Q_i^B+k_i,
+    P_i^W=a_i P_i^B+k_i(1-H_i),     F_i^W=a_i F_i^B.
+
+Hence their endpoint conditions are exactly preserved. The larger row2 cone
+gives everywhere
+
+    F_2^W-F_2^B=sum_(T nonempty) Pr(T)[(1-H_2)d_T-H_2 p_T]>=0.
+
+The reference certificate therefore excludes q2=c at a fixed point of the
+clipped map on [0,1]^2 times[c,1] times[0,1]. Brouwer supplies q2>c and all
+four genuine endpoint conditions. Deleting any owner other than2 leaves an
+absorbing opponent. If q0=q1=q3=0, write t=q2. Directly from the empty-T
+averaging equations,
+
+    F_0^W/t=a0(27t/5+3/5)+k0(t/c-1),
+    F_1^W/t=a1(3t/20+27/20)+k1(t/c-1).
+
+These affine expressions are strictly positive at t=c. At t=1 they equal
+(42a0+43k0)/7 and(21a1+86k1)/14. Either strict k inequality rules out this
+axis by the quiet endpoint condition. In that case all opponent-deleted
+processes absorb geometrically, and the full Bellman and signed-offset
+argument in the export applies.
+
+Otherwise (A) gives s2>=0. On the remaining axis, every replacement by
+player2 pays s2 on eventual quitting and0 on Never, so its terminal payoff
+is at most s2. Its finite-horizon payoff is also at most s2; the prescribed
+geometric delay costs O(s2/(cN)). The other players still face geometric
+opponent absorption. This proves the terminal and uniform conclusions without
+asserting opponent absorption for a player2 deviation which never quits.
+
+The exact general consumer is
+`isUniformEquilibriumPayoff_of_stationaryEndpointCertificate` in
+`UniformEquilibrium/Quitting/Stationary/EndpointCompiler.lean`. Its boundary
+predicate `IsQuittingStationaryBoundaryAdmissible` reduces on this axis to
+max(0,s2)<=s2. This declaration, the boundary definition, and
+`isZeroAsymptoticNash_stationary_iff_boundary_of_fixedPoint_endpointNash`
+were inspected in the same file; no Lean command ran for this extension.
+
+Each modified row0,1 has exactly eight parameters: a,k and the six literal
+coordinates W_i(T),W_i(T union{i}) for nonempty T subset O_i. The averaging
+identities determine all remaining coordinates. Conversely a,k are uniquely
+recovered from W_i({2}),W_i({i,2}), since
+cB_i({i,2})-B_i({2})>0. The native dimension is8+8+14+14=44; the four own
+levels give48 dimensions in the60-dimensional raw space. These are coupled
+families, not48 independently variable reward entries, and this dimension
+does not measure the remaining counterexample set.
+
+For an explicit unbounded change, start at W=B and, for any t>0, add t to
+W_0(03),W_1(01) and subtract43t/7 from W_0(023),W_1(012). The averages are
+unchanged with a0=a1=1,k0=k1=0. Two rows now have negative native participant
+rewards, whereas the earlier dominated-row class permits that in at most
+one row, even after relabeling and positive recipient scaling. These are
+real preference changes away from the preserved face: against player0 alone
+quitting, player1's Quit-minus-Continue gap changes from-1 to t-1.
+
+This proves a strict enlargement of that raw class. A complete comparison
+against all other producers is unfinished, so it is not a separate export.
+The separate boundary condition cannot simply be omitted: with a0=a1=1,
+k0=-2,k1=-1, row2 unchanged, and W3({2})=1,W3({2,3})=0, the sole2 vector
+(0,0,1,0) satisfies every endpoint sign but is not terminal Nash if s2=-1.
+This tests the compiler boundary; it is not a no-UE example.
 
 
 ## A finite-scale global alternative from real algebraic geometry
