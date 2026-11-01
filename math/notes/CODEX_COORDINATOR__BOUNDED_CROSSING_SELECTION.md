@@ -1,12 +1,19 @@
-# Closed actual geometry and bounded recovery of positive crossings
+# Actual continuation geometry and global source reductions
 
 Owner: CODEX_COORDINATOR. Ordinary mathematics, not Lean checked.
-This is the canonical internal record for actual continuation geometry and
-bounded Nash-word recovery. The
+This is the canonical internal record for actual continuation geometry,
+Nash-word recovery and global least-Never source reductions. The
 [selected mixed-core theorem](../exports/PASSIVE_BOUND_TRIPLE_SELECTION_UNIFORM_EQUILIBRIUM.md)
 contains the closed-passive selected-root consumer. The arguments below retain
 its useful extensions without duplicating that proof or claiming another
 independent reward-class exclusion for the recovery example.
+
+The current global construction is in Section21: an explicit raw matrix
+region produces an actual infinite full Nash profile, without choosing a
+support word or assuming recurrence. Its original joint Never mass lies
+strictly between zero and one. An exact member escapes every order of the
+three previously tested finite templates. This excludes AllNever on that
+region; it does not eliminate positive global minima or settle Fin4.
 
 For the numerical core, write a=-K. The selected theorem covers all real a
 when p=0, and a<=0 or a>=1/2 when p>=0. The opposed-pair strip 0<a<1/2,p>0 permits pair12 with positive ambient
@@ -29,7 +36,8 @@ proper two-zero prefixes and classifies the complete linear clock relaxation
 by a common matrix-pencil direction. Failure has a finite deadline certificate
 and forces the visible head to terminate finitely. An actual control shows
 why changing the tail escapes this local
-obstruction. No new raw reward class or complete Fin4 source branch is closed. Section13 proves
+obstruction. These local comparisons close no new raw reward class or complete
+Fin4 source branch. Section13 proves
 that positive root inertia excludes EVERY nonempty proper compact zero-debt head;
 a universal descent there must revise existing laws or construct an
 absorbing head directly. An actual infinite-tail construction gives local
@@ -2311,6 +2319,50 @@ carrier and zero-face arguments, so this notebook retains the extension
 without duplicating them in another export. The positive global minimum
 and the other AllNever data remain open.
 
+## 21. A global expanding region produces an actual infinite Nash clock
+
+The [global expanding-region theorem](../exports/GLOBAL_EXPANDING_REGION_NASH_CLOCKS.md)
+uses only native singleton and participant matrices. Put
+
+    M=Gamma^-1, K=Gamma-J, T=M K,
+    rho=min_(i,j) M_ij/sum_l M_lj, tau=max_(i,j)|T_ij|.
+
+If M>>0, K^-1>>0, one^T T>=0 and tau<=rho^2/8, then EVERY finite
+higher-reward completion has an actual independent infinite Nash law with
+U=B=e and 0<nu<1. The conclusion persists on an open neighborhood in all
+participant entries. In particular every inverse-positive Gamma qualifies
+with J=Gamma(I-diag(beta_j)) and 0<beta_j<=rho^2/8; no matching-sign
+condition is needed. Signed, nondiagonal T is also permitted.
+
+The global mechanism is an invariant expanding region in transformed
+continuation coordinates y=Mw. Every homogeneous root expands sum y and
+keeps the smallest normalized coordinate strictly below its upper threshold. Positive
+inverse degree produces uniformly bounded small exact roots. A quadratic
+thickening y_i>=-L(sum y)^2 absorbs the nonlinear error without requiring
+positive exact coordinates or a continuous root selector. Prefixing from
+vanishing seeds until a fixed amplitude is reached, then reversing the
+finite chains and taking a diagonal limit, produces compatible chronological
+roots. Geometric tail bounds prove original Never positivity and the full
+finite/Never response inequalities. No infinite strategy is assumed as data.
+
+The exact matrix
+
+    Gamma=[0,-20,-5,40; -60,0,-4,60; 10,30,0,-50; 10,-10,4,0]
+
+with beta=(1/4096,1/11264,1/2048,1/30720) satisfies the theorem but fails
+all 6 PAIR, 24 PP3 and 12 P33 orders, across all 53 expanding real eigendirections.
+Its whole scalar pencil is inverse-positive of degree one, and its positive
+participant pair 03 violates even proper-support local product-lowness.
+The export contains the complete exact checker; no longer-word impossibility
+or failure of every existing UE producer is inferred.
+
+For an actual normalized counterexample, the native absorbing debt gap still
+implies mu>0. The produced law adds mu<1 on the displayed region. It does
+not prove absorption or exclude the remaining positive global minimum.
+[Two fresh full reviews](../feedback/GLOBAL_EXPANDING_REGION_NASH_CLOCKS__BY_GLOBAL_REVIEW.md)
+checked the exact exported bytes, strategic-input production, unrestricted
+deviations, the actual-source adapter and the complete named finite tests.
+
 ## Verification and remaining target
 
 The [exact geometry checker](../experiments/CODEX_COORDINATOR__ACTUAL_CONTINUATION_GEOMETRY_CHECK.py)
@@ -2363,5 +2415,5 @@ with a nonzero limiting payoff must end on two or three zeros satisfying(RAY).
 Finite heads can still reach the locally rigid faces, and their singularities
 and compensation signs remain unresolved. The original source's finite
 exact-fibre approximants still have positive debt. A universal descent or
-another equilibrium construction is still needed. Sections14–20 give the separate
+another equilibrium construction is still needed. Sections14–21 give the separate
 unmarked reduction and successive AllNever exclusions. Fin4 remains open.

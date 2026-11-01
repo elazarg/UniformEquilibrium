@@ -266,6 +266,21 @@ whole scalar-pencil screen while failing all ordered PAIR tests. This is
 recorded as a reviewed extension in the existing note, with exact checks,
 without duplicating the frozen carrier proof in another export.
 
+The [global expanding-region construction](../exports/GLOBAL_EXPANDING_REGION_NASH_CLOCKS.md)
+now produces actual infinite full Nash laws on an explicit matrix region,
+with U=B=e and original joint Never strictly between zero and one. It includes
+every inverse-positive Gamma with sufficiently small positive independent
+column deficits J=Gamma(I-diag(beta_j)), and permits signed nondiagonal
+transformed deficits. All finite higher rewards are arbitrary. Its proof
+builds compatible infinite clocks by reversing expanding finite chains;
+neither a support word nor a continuous root selector is assumed. An exact
+member fails all 6 PAIR, 24 PP3 and 12 P33 orders, passes the whole-pencil
+screen and fails proper-support product-lowness. This is a new AllNever
+exclusion with a global strategy producer. Positive global minima and the
+remaining AllNever matrices are open; the finite comparison does not exclude
+longer support words. Section21 of the continuation note records the frontier
+change and its two independent full reviews.
+
 The domain has three distinct levels. The sixty raw rewards consist of four
 own-singleton levels, twelve off-own singleton comparisons Gamma, and
 forty-four higher-coalition rewards. Sections1–8 classify a conservative
