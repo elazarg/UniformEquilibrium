@@ -317,6 +317,16 @@ matrix. Thus a universal argument still needs a different treatment of such
 coalitions, as well as the other tables failing the raw cover or cone tests.
 Section23 of the continuation note records this precise remaining boundary.
 
+[Section24 of that note](CODEX_COORDINATOR__BOUNDED_CROSSING_SELECTION.md)
+shows that even strictly positive proper collisions need not allow a
+grand-free approximation: an open family without any pure absorbing Nash
+requires a fixed positive grand probability in every sufficiently accurate
+equilibrium, over all behavioral profiles. A mixed sure-first root solves
+that family. This is a global obstruction to the proposed pure-grand-or-
+grand-free reduction, not closure of the positive-collision class or a new
+counterexample exclusion. The stronger sure-first-or-grand-free alternative
+and the hard positive-inverse source branches remain unresolved here.
+
 The domain has three distinct levels. The sixty raw rewards consist of four
 own-singleton levels, twelve off-own singleton comparisons Gamma, and
 forty-four higher-coalition rewards. Sections1–8 classify a conservative

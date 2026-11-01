@@ -19,6 +19,12 @@ the need for any common positive coalitionwise ledger and for a grand-reward
 coefficient bound. Its same target and profiles cover an unbounded lower-grand
 orthant. Proper-coalition geometry remains restrictive; arbitrary Fin4 is open.
 
+Section24 targets the entire positive-collision class and records a global
+obstruction to one proposed reduction: absence of pure-grand Nash does not
+permit eliminating grand-coalition play, even approximately. Its example is
+already solved by a mixed sure-first root. The class itself remains open;
+this obstruction is not counted as additional UE coverage.
+
 For the numerical core, write a=-K. The selected theorem covers all real a
 when p=0, and a<=0 or a>=1/2 when p>=0. The opposed-pair strip 0<a<1/2,p>0 permits pair12 with positive ambient
 index. Sections6–9 show that exact actual realizability and full zero debt do
@@ -2498,7 +2504,265 @@ Its [two final independent reviews](../feedback/GLOBAL_PRODUCT_COVER_CONES_UNIFO
 cover the complete proof, fixture, full-deviation and finite-horizon claims,
 and nonredundancy. This is ordinary mathematics, not a new Lean result.
 
+## 24. Positive collisions do not permit a universal grand-free reduction
+
+The target class has native own/live/Never zero, arbitrary off-own singleton
+comparisons, and coordinatewise nonnegative rewards on EVERY proper pair
+and triple; grand rewards are arbitrary finite numbers. Original own levels
+are nonnegative. This entire class remains open. No additional UE reward
+region is claimed in this section.
+
+The following proved obstruction concerns the complete behavioral strategy
+space. It rules out the proposed reduction "pure-grand Nash, or equilibrium
+approximations avoiding the grand coalition." Even strictly positive proper
+collision rewards do not validate that reduction. Its example has a known
+mixed sure-first equilibrium, so the stronger alternative "sure-first exit,
+or grand-free approximations" remains unrefuted here.
+
+### Statement and complete table
+
+Let I={0,1,2,3}, L>=2. Native own singleton and Never rewards are zero;
+every off-own singleton reward is -1. Every pair vector is zero except
+Z_1({2,3})=2. Every triple vector is one, and
+
+    Z(I)=(1/2,L,L,L).
+
+Thus every proper nonsingleton coordinate is nonnegative. Put
+r_i(D)=Z_i(D)+1 on nonempty coalitions and retain original live/Never0.
+For ANY actual independent first-Quit laws on Nat union {Never}, let D_r
+be the sum of the four unrestricted terminal deviation debts, and let G
+be the prescribed probability that the first quitting coalition is I.
+The caps include EVERY finite deadline and literal Never, equivalently every
+complete unilateral behavioral replacement.
+
+**Theorem.** For each L>=2 there are epsilon>0 and g>0 such that
+
+    D_r<=epsilon  ==>  G>g.                              (1)
+
+No absorption assumption, finite calendar, stationary form, support word,
+period bound, or exact Nash hypothesis is imposed. In particular the entire
+class of grand-free profiles has a positive original debt gap.
+
+There is no pure absorbing coalition Nash: singleton quitters invite an
+outsider; pairs invite an outsider at triple reward1 (at23 choose outsider0);
+triples012,013,023 invite the omitted player at grand reward L; owner1
+withdraws from123 to pair23 at2>1; owner0 withdraws from grand at1>1/2.
+Nevertheless at L=2 the single-date root
+
+    q=(1/2,2/3,1,1)
+
+is an exact absorbing Nash root over AllNever, with native payoff
+(2/3,3/2,7/6,7/6) and grand probability1/3. Owners0,1 are indifferent;
+owners2,3 have Quit-minus-Continue gap1. This is an explicit UE in the
+original game too. Hence (1) refutes a pure-grand-or-grand-free reduction;
+it does not refute a sure-first-or-grand-free reduction.
+
+### Root facts and compact margins
+
+Write Q_i(q) for forced-current Quit, P_i(q) for passive current reward,
+H_i=prod_(j!=i)(1-q_j), h=prod_i(1-q_i), and p4=prod_i q_i.
+Against the NEXT FULL CAP b put C_i=P_i+H_i b_i and
+
+    Rdef(q;b)=sum_i[max(Q_i,C_i)-q_i Q_i-(1-q_i)C_i].
+
+It is continuous and nonnegative, and vanishes exactly at Nash roots.
+Every participant reward is nonnegative, so every actual native full cap
+lies in[0,L]. Set K=(1,2,1,1). All native non-grand rewards are at most K
+coordinatewise.
+
+There is no Nash root with p4=0 and some q_i=1, at ANY nonnegative b.
+For singleton or pair supports, a sure quitter forces a second sure quitter,
+and an outsider blocks the resulting pure pair. On any triple other than123,
+an active nonsure owner facing a sure opponent has joining gain1; all active
+owners become sure and the omitted player joins. On123, ordinary owners2,3
+force each other sure; owner1 then withdraws since2>1. All used comparisons
+face an opposing sure quitter, so no continuation term enters this argument.
+
+If p4=0, Rdef=0 and 0<=b<=K, then max q_i<=1/2. At a singleton root t,
+a quiet cap-1 row requires b_i>=t/(1-t). At a pair root a,b, choose a quiet
+row i!=1; its guard requires b_i>=1/[(1-a)(1-b)]-1, so each hazard<=1/2.
+At a triple, every ordinary active row satisfies
+
+    b_i=1/[(1-q_j)(1-q_k)]-1.
+
+Every triple has two such ordinary active rows with cap upper bound1, and
+every active coordinate appears in one of their opponent sets. The only
+exceptional active row is owner1 on123; the two other rows suffice.
+
+These exact facts give TWO compactness margins, including small p4:
+there are a1,h1>0 such that, for 0<=b<=L one,
+
+    Rdef<=a1, p4<=a1  ==> h>=h1;                         (2)
+
+and there are a2,eta>0 such that
+
+    Rdef<=a2, p4<=a2, 0<=b<=K+eta one
+        ==> max q_i<=51/100.                            (3)
+
+Otherwise convergent sequences with the tolerances tending to zero give,
+respectively, a forbidden proper-support sure root or a proper-support root
+with a hazard>=51/100 and b<=K. For (2), first obtain a neighborhood of the
+compact zero-defect, p4=0 set on which h has a positive minimum. These
+arguments impose no correspondence selection or source realization.
+
+### Exact reward certificate, including the grand term
+
+Let R(q) be the prescribed one-stage native reward vector and let
+c=1/5, t=51/100, C=3L+14. On the ENTIRE cube[0,t]^4,
+
+    sum_i R_i(q) <= -c sum_i q_i + C p4(q).               (4)
+
+All expressions are multiaffine, so check the sixteen cube vertices.
+At a vertex with proper active support, the ratios -sum R/sum q are
+
+    support1:                         3;
+    support2={2,3}:                   3-4t;
+    other support2:                   3-3t;
+    support3 containing{2,3}:         (9-20t+7t^2)/3=6207/30000;
+    other support3:                   (9-18t+5t^2)/3.
+
+All exceed c. At the zero vertex both sides vanish. At the all-four vertex,
+
+    sum R(t one)=-12t(1-t)^3+2t^2(1-t)^2
+                    +16t^3(1-t)+(1/2+3L)t^4,
+    [sum R(t one)+4ct]/t^4
+          =3L+3477247/265302 < 3L+14=C.
+
+This proves (4) exactly, with no numerical optimization.
+
+### Actual-law bridge and compulsory-grand bound
+
+For a fixed actual profile write S_n for original joint survival before n,
+U^n,B^n,D_n for its conditional native payoff, full cap and sum debt, and
+G_n for its conditional future grand probability. Condition each marginal
+law separately on that owner's survival, retaining it whenever its marginal
+survival is positive. Complete only zero-marginal-survival own tails
+arbitrarily. A sure owner's own cap is independent of its own completion;
+every other owner's Continue coefficient contains that sure opponent's zero
+survival factor. Thus genuinely arbitrary completions have zero relevant
+coefficients, even before establishing positive joint next-stage survival.
+The completed tails remain actual laws with caps in[0,L]. At S_n>0,
+
+    D_n<=D_0/S_n,   G_n<=G/S_n,
+    D_n=h_n D_(n+1)+Rdef(q^n;B^(n+1)).                  (5)
+
+The first debt inequality follows by copying the prescribed law before n
+and then making a complete conditional deviation; the probability of reaching
+that event is S_n. The exact identity follows from the full cap recursion.
+Also, with delta=(0,L-2,L-1,L-1),
+
+    0<=B_i^n<=L,
+    U_i^n<=K_i+delta_i G_n,
+    B_i^n<=K_i+delta_i G_n+D_n,
+    sum_i U_i^n>=-D_n.                                 (6)
+
+Fix theta=c/[2(c+sum K)]=1/52. Choose d,g>0 sufficiently small that
+
+    d/theta, g/theta <= min(a1,a2),
+    (d+L g)/(theta h1) <= eta,
+    C g<=1/20.
+
+Suppose D_0<=d, G<=g and nu=lim S_n<theta. Let T be the first finite date
+with S_T<=theta. For n<T, (5) gives root defect<=d/theta and
+p4(q^n)<=G/S_n<=g/theta. First (2) gives h_n>=h1, so
+S_(n+1)>=theta h1 and (5)-(6) bound the NEXT full cap by
+K+(d+Lg)/(theta h1). Only NOW apply (3), obtaining q^n<=t one.
+This order prevents small prescribed reach from hiding a large off-path debt.
+
+Unroll actual prescribed payoffs to T and use (4):
+
+    sum U^0
+      <= -c sum_(n<T) S_n sum_i q_i^n
+             + C sum_(n<T) S_n p4(q^n) + S_T sum U^T
+      <= -c(1-S_T)+5S_T+C G
+      <= -1/10+C G <= -1/20.                            (7)
+
+Here sum q_i>=1-h, so the first sum dominates1-S_T. Grand events before T
+and after T are disjoint: their probabilities are sum_(n<T)S_n p4 and
+S_T G_T. The tail reward bonus is (sum delta)S_TG_T, and
+sum delta=3L-4<C, which justifies charging BOTH pieces by C G rather than
+discarding the tail grand events. Since B^0>=0, (7) forces D_0>=1/20.
+
+Finally, for EVERY actual profile the original/native debt relation is
+
+    D_r=D_Z+4nu.                                        (8)
+
+Indeed every finite pure deadline adds exactly1 to its payoff. Native own
+singleton0 makes finite deadlines approximate Never, so the native cap is
+the finite-deadline supremum. The original Never value is no greater than
+that supremum plus1. Therefore B_i^r=B_i^Z+1, whereas prescribed payoff
+adds1-nu, proving (8).
+
+Choose epsilon<=min(d,2theta,1/40). If D_r<=epsilon and G<=g, (8) gives
+D_Z<=d and nu<=epsilon/4<theta. Applying (7) gives D_Z>=1/20>epsilon,
+a contradiction. This proves (1) for all actual complete product laws.
+
+No late finite stopping mass was relabeled Never; no terminal truncation was
+assumed exactly Nash. The constants from compactness are existential finite-
+table constants; the reward certificate and displayed threshold are exact.
+
+### Strict positivity and an open neighborhood
+
+Changing each absorbing reward by at most xi changes each prescribed payoff
+and each full cap by at most xi, uniformly over ALL profiles and deviations.
+Thus |D_r-D_r'|<=8xi. If xi<epsilon/16, every perturbed profile with
+D_r'<=epsilon/2 still has G>g. All pure-coalition exclusions above have strict
+gains, so they too persist in a sufficiently small full reward neighborhood.
+
+For an explicit strict-positive center take L=2 and add xi>0 to EVERY
+coordinate of all six pair and four triple vectors, keeping singleton and
+grand vectors fixed. Choose xi<min(1,epsilon/16). Every proper collision
+coordinate is now positive. There is still a single-date absorbing Nash root:
+
+    q2=q3=1, q0=1/(2-xi), q1=1/(3/2+xi).
+
+Rows0,1 are indifferent; rows2,3 have joining gap
+1+xi(1-q0-q1)>0. The two mixed equations have nonzero cross derivatives,
+so this root persists on an open neighborhood as well. Therefore compulsory
+grand collision and absence of every pure absorbing coalition hold on an
+OPEN strict-positive-proper family that already has a mixed sure exit.
+This is a robust global guardrail, not a new UE class or the hard residual.
+
+### Exact scope and remaining global obligation
+
+The comparison includes every independent countable stopping law, every
+complete unilateral replacement, and profiles with positive Never mass.
+The positive grand-probability floor persists throughout an open reward
+neighborhood. It is stronger than excluding a finite schedule or one
+stationary support. It is nevertheless an obstruction on a solved table:
+the displayed mixed sure-first root supplies UE.
+
+Its singleton matrix has every off-diagonal entry-1. The negative aggregate
+prefix-reward mechanism used here cannot extend directly to the hard
+strictly inverse-positive singleton branch. Indeed if lambda>0 and
+lambda Gamma<0 coordinatewise, then Gamma inverse>0 would imply
+lambda=(lambda Gamma)Gamma inverse<0, a contradiction. Thus this proof
+does not eliminate a surviving positive-inverse counterexample class.
+
+The full-cap identity used above is
+`quittingContinuationBestResponseValue_rootThenContinuation_eq_max`
+(`UniformEquilibrium/Quitting/Root/TerminalDebtPrefix.lean`). The deadline
+limit underlying the row shift is
+`quittingTerminalPayoff_update_finiteTime_tendsto_of_profile`
+(`UniformEquilibrium/Quitting/Terminal/SingletonJointNeverDebt.lean`).
+Their source statements were inspected; no Lean command was run. The new
+compulsory-grand result is ordinary mathematics.
+
+Outside the solved regions, the global source reduction still leaves its
+AllNever-only alternative and its GENUINELY global least-Never zero-debt
+source with strictly positive U=B=e and only AllContinue as a Nash prefix.
+No proof here excludes either alternative throughout the positive-collision
+class. Closure needs those exclusions or an absorbing vanishing-debt
+construction by another global argument. This section is retained as
+a compact global guardrail, with no new export or counterexample claim.
+
 ## Verification and remaining target
+
+The complete Section24 proof has
+[two fresh independent reviews](../feedback/CODEX_COORDINATOR__POSITIVE_COLLISION_GRAND_BOUNDARY__BY_REVIEW.md)
+pinned to its exact bytes. Its root census, reward vertices, full conditional
+cap accounting and open strict-positive consequence were independently
+checked. It is an internal all-profile obstruction, not a new UE class.
 
 The [exact geometry checker](../experiments/CODEX_COORDINATOR__ACTUAL_CONTINUATION_GEOMETRY_CHECK.py)
 reconstructs full caps and Never masses and checks the source, crossing,
