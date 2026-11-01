@@ -110,3 +110,28 @@ review pins, all source paths, the inline exact checker, packet whitespace,
 and absence of conference or temporary-file dependencies. Review clarifications
 about activity, whole-word drift, and the native adapter are resolved in these
 exact bytes. Prior frozen exports remain unchanged.
+
+## Separate scoped review of the proportional matching corollary
+
+Reviewer `global_carrier_review` independently approved the exact 52-line
+Section19 of
+[`CODEX_COORDINATOR__BOUNDED_CROSSING_SELECTION.md`](../notes/CODEX_COORDINATOR__BOUNDED_CROSSING_SELECTION.md).
+The section, from its heading through the blank line before the following
+heading, has SHA-256:
+
+`0a5ee852532d98cddf1505524267440f78cb1c5c2297dbaabf307b1b0cc9ce4f`.
+
+This is a notebook corollary, outside the exported packet and its two-review
+scope. It shows that every proportional participant table J=alpha Gamma,
+alpha<1, passes the already-exported PAIR criterion when Gamma has strictly
+positive inverse and a negative perfect matching. The review checked the
+quadratic expanding mode, all four strict hazard/quiet vectors, eigenvalue
+simplicity and the full participant-neighborhood conclusion. Actual infinite
+full Nash profiles follow by invoking the frozen theorem, with arbitrary
+finite higher rewards. The PL-failure and whole-pencil comparisons were also
+checked. No unresolved objection remains.
+
+The reviewer recommended retaining only this compact algebra, since it gives
+an explicit family within the existing finite criterion rather than a new
+escape mechanism. The coordinator omitted the longer repeated clock proof
+and an additional untracked matrix extension. No separate export was created.

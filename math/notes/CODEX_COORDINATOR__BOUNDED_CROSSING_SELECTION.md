@@ -2090,6 +2090,60 @@ It has [two independent full reviews](../feedback/LOCAL_PRODUCT_LOW_EXCLUDES_ALL
 including explicit falsification attempts. The embedded exact boundary checks
 passed; no Lean check was run.
 
+## 19. Proportional participant rays inside the existing pair criterion
+
+The frozen [alternating-pair theorem](../exports/ALTERNATING_PAIR_CLOCKS_EXCLUDE_ALLNEVER.md)
+already covers the following complete raw family. Let Gamma^-1 be strictly
+positive and let S,T be two disjoint mutually negative pairs. Then EVERY
+J=alpha Gamma with alpha<1 passes its finite(PAIR) test, with arbitrary finite
+higher rewards. For each fixed alpha, a full open neighborhood in all twelve
+participant entries passes as well. This gives actual infinite full Nash
+profiles with 0<nu<1. It is a closed-form corollary of the existing criterion,
+so it does not warrant another export or a repeated clock proof.
+
+Here is the complete new algebra. Put C=Gamma_SS, E=Gamma_TT,
+A=-Gamma_ST E^-1 and B=-Gamma_TS C^-1. The frozen theorem's Perron argument
+produces r>1, v>>0, Bv>>0 with ABv=r v and r simple. Set
+
+    beta=1-alpha>0, k=alpha/beta>-1,
+    p(x)=(x+k)^2-(1+k)^2 r x.
+
+The larger root lambda satisfies lambda>max(1,k^2): p(1)<0 and, when k!=0,
+p(k^2)<0, whereas p grows positive at infinity. When k=0, lambda=r.
+Thus lambda+k>0. Put
+
+    c=k(1+k)/(lambda+k), d=1+k-c=(1+k)lambda/(lambda+k)>0,
+    V=(v,-c Bv).
+
+The two support derivatives are
+
+    A_S(w_S,w_T)=(-k w_S,w_T+(1+k)B w_S),
+    A_T(w_S,w_T)=(w_S+(1+k)A w_T,-k w_T).
+
+They send V to W=(-k v,d Bv) and then to lambda V. The two active
+hazard vectors and two quiet Continue-minus-Quit vectors in(PAIR) are
+
+    -beta^-1 C^-1 v, -beta^-1 E^-1(d Bv),
+    (1-c)Bv, ((lambda-k^2)/(1+k))v.
+
+All are strictly positive, since C,E have negative off-diagonals and
+1-c=(lambda-k^2)/(lambda+k)>0. These four inequalities invoke the frozen
+theorem directly, including its complete-response and actual-law conclusions.
+The return characteristic determinant is
+det((x+k)^2 I-(1+k)^2 x AB). Simplicity of r and of the scalar root makes
+lambda simple, so the strict tests persist on an open participant neighborhood.
+That neighborhood depends on Gamma and alpha; the clock amplitude may depend
+on the arbitrary finite higher rewards.
+
+For0<alpha<1, x=Gamma^-1 one>>0 gives Jx=alpha one>>0, so the local
+condition in Section18 fails. For alpha<0, either negative pair becomes a
+mutually positive participant pair, again violating that condition. Moreover
+Gamma-tJ=(1-alpha t)Gamma for0<=t<=1, so any R0, degree-one and standard-Q
+properties of Gamma persist along the whole pencil. This family therefore
+checks a different part of the frontier while using an existing producer.
+The nonmatching proportional family is not settled by this calculation;
+the positive global minimum remains open throughout.
+
 ## Verification and remaining target
 
 The [exact geometry checker](../experiments/CODEX_COORDINATOR__ACTUAL_CONTINUATION_GEOMETRY_CHECK.py)
@@ -2142,5 +2196,5 @@ with a nonzero limiting payoff must end on two or three zeros satisfying(RAY).
 Finite heads can still reach the locally rigid faces, and their singularities
 and compensation signs remain unresolved. The original source's finite
 exact-fibre approximants still have positive debt. A universal descent or
-another equilibrium construction is still needed. Sections14–18 give the separate
+another equilibrium construction is still needed. Sections14–19 give the separate
 unmarked reduction and successive AllNever exclusions. Fin4 remains open.

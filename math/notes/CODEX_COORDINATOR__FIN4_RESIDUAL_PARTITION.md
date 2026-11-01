@@ -245,6 +245,14 @@ profile producer. Positive global minima remain unresolved, even in the
 strictly negative participant region. The next global task must address that
 branch or the principal-positive-direction part of the AllNever branch.
 
+A [closed-form pair-criterion corollary](CODEX_COORDINATOR__BOUNDED_CROSSING_SELECTION.md)
+also covers every J=alpha Gamma, alpha<1, when Gamma has strictly positive
+inverse and a negative perfect matching. For0<alpha<1 these tables fail the
+local product-low condition, and their whole pencil is a positive scalar
+multiple of Gamma. They are already inside the exported PAIR criterion;
+the new quadratic calculation makes that entire raw family explicit without
+another export. The nonmatching proportional family remains a concrete target.
+
 The domain has three distinct levels. The sixty raw rewards consist of four
 own-singleton levels, twelve off-own singleton comparisons Gamma, and
 forty-four higher-coalition rewards. Sections1–8 classify a conservative
