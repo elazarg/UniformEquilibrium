@@ -295,6 +295,28 @@ reward space with the same UE conclusion and both exclusions. The full-table
 conditions remain substantive; this does not extend Section21's arbitrary
 higher-completion theorem to UE or solve arbitrary Fin4.
 
+The [global product-cover extension](../exports/GLOBAL_PRODUCT_COVER_CONES_UNIFORM_EQUILIBRIUM.md)
+allows the positive weight row to vary with the quitting probabilities while
+retaining one common size function. An exact open Fin4 region satisfies its
+finite two-row criterion even though NO positive row can satisfy every
+coalitionwise joining-loss inequality. Participant penalties select quiet
+Nash roots, so only proper-coalition coefficients need bounds. The resulting
+profiles avoid the grand coalition; the SAME fixed UE target, profiles and
+horizon thresholds work under arbitrary independent decreases of its four
+rewards. The witness's entire lower-grand orthant remains outside the common
+positive-ledger criterion and retains, separately at each fixed table, the
+complete stationary and sure-at-first-stage exclusions. Full response caps
+remain bounded because literal Never avoids the grand coalition; arbitrary
+prescribed tail payoffs need not remain bounded across this family.
+
+This is a strict additional reward region, with two independent full reviews,
+but it does not close a whole singleton template or actual-source case.
+Every proper nonzero coordinatewise nonnegative native reward vector defeats
+the extension's omitted-coordinate bound for EVERY positive coordinate
+matrix. Thus a universal argument still needs a different treatment of such
+coalitions, as well as the other tables failing the raw cover or cone tests.
+Section23 of the continuation note records this precise remaining boundary.
+
 The domain has three distinct levels. The sixty raw rewards consist of four
 own-singleton levels, twelve off-own singleton comparisons Gamma, and
 forty-four higher-coalition rewards. Sections1–8 classify a conservative

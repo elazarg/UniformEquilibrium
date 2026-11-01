@@ -8,14 +8,16 @@ contains the closed-passive selected-root consumer. The arguments below retain
 its useful extensions without duplicating that proof or claiming another
 independent reward-class exclusion for the recovery example.
 
-There are now two global constructions. Section21 produces an actual infinite
+Section21 produces an actual infinite
 full Nash profile with original joint Never strictly between zero and one,
 using pair data and arbitrary finite higher rewards. Section22 adds explicit
 conditions on the entire coalition table and forces Never to zero, producing
 absorbing approximate equilibria. The latter closes both source alternatives
 on an open raw region containing a game with a positive stationary regret
-floor and no sure-first root against any actual continuation. Arbitrary Fin4
-remains open.
+floor and no sure-first root against any actual continuation. Section23 removes
+the need for any common positive coalitionwise ledger and for a grand-reward
+coefficient bound. Its same target and profiles cover an unbounded lower-grand
+orthant. Proper-coalition geometry remains restrictive; arbitrary Fin4 is open.
 
 For the numerical core, write a=-K. The selected theorem covers all real a
 when p=0, and a<=0 or a>=1/2 when p>=0. The opposed-pair strip 0<a<1/2,p>0 permits pair12 with positive ambient
@@ -2419,6 +2421,73 @@ inequalities for tables outside this region. The
 [two full independent reviews](../feedback/GLOBAL_COALITION_CONES_UNIFORM_EQUILIBRIUM__BY_GLOBAL_REVIEW.md)
 check the final theorem, witness, unrestricted responses and coverage.
 
+## 23. A finite product cover replaces every common positive ledger
+
+The [global product-cover theorem](../exports/GLOBAL_PRODUCT_COVER_CONES_UNIFORM_EQUILIBRIUM.md)
+strictly broadens the absorbing producer. It permits any invertible strictly
+positive matrix P, a shared signed cone, and finitely many positive coefficient
+rows c. Instead of requiring a single positive reward row omega to satisfy
+omega ell^D>=0 for every coalition, it requires only that every independent
+product hazard admit some c with c dot B(q)>=0. All rows control the SAME
+size sum(PU), so changing the favorable row incurs no accumulated error.
+The transformed-loss bounds also need only coordinate upper bounds.
+
+A participant penalty selects a quiet Nash root at every continuation in
+the cone. If every hazard were positive, complementarity and the selected
+row would contradict the strictly positive penalty term. The all-sure
+vector is excluded by the codimension-one loss tests. Taking the penalty
+to zero preserves a zero hazard. Consequently the prescribed construction
+never uses the grand coalition, and no bound on its transformed reward is
+needed. The proof retains finite virtual terminals, geometric survival
+decay, full-response transport and a final solo absorbing repair.
+
+The raw product cover has an explicit finite two-row certificate. The
+potentially bad monomials form a coalition rectangle; in odds x,y the
+two relevant polynomials obey
+
+    max(1+xy-2x+y,1+xy+x-2y)>=(1+x)(1+y)/4.
+
+The exact Fin4 witness has joining losses satisfying
+
+    ell01+ell02+(C/E)ell03=-delta/(2lambda_2)e_2,
+
+with all three multipliers positive. Hence NO strictly positive scalar
+reward row can make every coalition loss nonnegative, regardless of the
+positive coordinate matrix chosen. Nevertheless the two-row product cover
+holds with strict margins. This separates the new region from the entire
+common-positive-ledger test, not merely one previous numerical choice.
+
+After own-level translation by1, the witness has a positive debt gap over
+the complete stationary cube. Every equilibrium with a sure quitter at its
+first stage is also excluded, against every actual behavioral continuation
+and every punishment selector formed from full response caps. The sole
+remaining sure-root candidate would require a cap below-100, whereas
+literal Never bounds every actual cap above that threshold. A sure stage
+late in the profile is allowed and is used by the construction.
+
+Keep the proper rewards fixed and lower the grand reward independently in
+all four coordinates by any finite nonnegative amounts. The SAME UE target,
+accuracy-dependent profiles and finite-horizon thresholds work everywhere
+in this unbounded family. Prescribed outcomes never contain all players;
+every deviation's reward only decreases. The no-common-ledger certificate
+persists, and stationary and sure-first exclusions hold for each fixed
+table. No uniform positive stationary gap over the entire orthant is claimed.
+The raw and separation margins also give an open neighborhood in all sixty
+original reward entries around the reference table.
+
+This leaves a specific geometric boundary. If any nonempty proper coalition
+has a nonzero coordinatewise nonnegative native reward vector, every positive
+P sends it to a vector whose omitted coordinates are at least rho times
+its sum. The theorem requires an omitted coordinate at most eta times that
+sum, with eta<rho. Thus neither more ledgers nor a better positive matrix
+can cover such tables by this criterion. They need a different mechanism
+or an independent exit; they are not thereby UE counterexamples.
+
+The packet includes the complete rational checker and source correspondence.
+Its [two final independent reviews](../feedback/GLOBAL_PRODUCT_COVER_CONES_UNIFORM_EQUILIBRIUM__BY_GLOBAL_REVIEW.md)
+cover the complete proof, fixture, full-deviation and finite-horizon claims,
+and nonredundancy. This is ordinary mathematics, not a new Lean result.
+
 ## Verification and remaining target
 
 The [exact geometry checker](../experiments/CODEX_COORDINATOR__ACTUAL_CONTINUATION_GEOMETRY_CHECK.py)
@@ -2473,5 +2542,7 @@ and compensation signs remain unresolved. The original source's finite
 exact-fibre approximants still have positive debt. A universal descent or
 another equilibrium construction is still needed outside the solved raw regions.
 Sections14–21 give the separate unmarked reduction and successive AllNever
-exclusions. Section22 closes both alternatives under its global full-table
-inequalities. Fin4 remains open.
+exclusions. Sections22–23 close both alternatives under their global raw
+inequalities. The product-cover extension removes the common-ledger and
+grand-coefficient restrictions but retains proper-coalition restrictions.
+Fin4 remains open.
