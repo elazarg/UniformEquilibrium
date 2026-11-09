@@ -1019,19 +1019,18 @@ opponents, which supplies full behavioral Nash, arbitrary signed offsets,
 and one fixed uniform payoff. The export contains the complete proof and
 its compact exact checker; it is ordinary mathematics, not a new Lean result.
 
-In the two-crossing family, this also closes every delta>=3/2 and epsilon>=0.
 The [two-row continuation record](CODEX_ROOT__TWO_ROW_CONTINUATION.md)
-adds an exact stationary region above epsilon=.737+.06delta and periodic
-regions with selectors allowing a fourth player to become active. Combined
-with the singleton and dominated-row results, these close every epsilon>=0
-when delta lies in [0,.002], [.099,.101], or [7/10,infinity). Any still-uncovered
-parameter lies below the affine frontier with delta in
-(.002,.099) union (.101,.7), after removing the known ray
-and other established neighborhoods. These are bounds for this particular
-family; they do not characterize arbitrary Fin4 counterexamples.
-The comparison with prior producers and the two independent full reviews
-are recorded with the export's feedback files. No absence of stationary
-equilibria or closure of arbitrary positive-collision games is asserted.
+now closes the entire explicit two-crossing family, for every delta,epsilon>=0
+and arbitrary fixed signed recipient-row offsets. Five completed periodic
+covers fill the region below the affine stationary frontier; the affine,
+singleton and dominated-row arguments cover the rest. At delta=1/8,
+epsilon=139/200, a separate exact proof excludes arbitrarily accurate
+stationary approximations when an own singleton is positive, while the Middle
+periodic construction supplies UE. The accompanying scope audit checks the
+complete applicable prior producer choices and records the limits of comparison
+with qualitative neighborhoods. This closes this family, not arbitrary Fin4
+or all positive-collision games. The remaining global question concerns
+selection at a positive minimum on the actual absorbing continuation carrier.
 
 ### A larger class from conditional averages
 

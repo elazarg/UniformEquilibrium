@@ -5,47 +5,47 @@ the periodic constructions are by crossfield_switched_control,
 positive_collision_literature, and product_cover_fresh_review.
 
 Status: rigorous ordinary mathematics with exact computational certificates,
-not a new Lean result. These are internal steps toward covering one explicit
-two-parameter family. Arbitrary Fin4 and the whole family remain open.
+not a new Lean result. The entire explicit two-parameter family is closed:
+every delta,epsilon>=0 has a uniform-equilibrium payoff, with arbitrary fixed
+signed recipient-row offsets. Arbitrary Fin4 remains open.
 
 ## Current coverage and next question
 
 All parameters below satisfy delta,epsilon>=0, and all claims allow arbitrary
 fixed signed offsets in the four reward rows. The raw table is specified in
-the stationary section below.
+the stationary section below. These closed regions cover the entire family.
 
 | Region | Justification |
 | --- | --- |
-| delta>=3/2, every epsilon>=0 | [Global dominated-row producer](../exports/DOMINATED_ROW_ARBITRARY_ROW_STATIONARY_UNIFORM_EQUILIBRIUM.md) |
-| 0<=delta<=38/25, .737+.06delta<=epsilon<=2 | The stationary producer below; two independent full checks |
+| delta>=3/2, every epsilon>=0 | [Global dominated-row producer](../exports/DOMINATED_ROW_ARBITRARY_ROW_STATIONARY_UNIFORM_EQUILIBRIUM.md), including its literal-family extension down to 3/2 |
+| 0<=delta<=38/25, .737+.06delta<=epsilon<=2 | The affine stationary producer below; two independent full checks |
 | epsilon>=10201/5400, every delta>=0 | The singleton obstruction below |
-| epsilon=.04, every delta>=0 | [Complete complex-spectrum ray](../exports/COMPLETE_COMPLEX_SPECTRUM_RAY_UNIFORM_EQUILIBRIUM.md) |
-| delta in [0,.002], [.099,.101], or [7/10,infinity), every epsilon>=0 | The periodic regions below, combined with the stationary, singleton and dominated-row results; execution and review scopes are recorded below |
+| 0<=delta<=3/2, 0<=epsilon<=.737+.06delta | The five completed periodic covers below, including their closed endpoints |
 
-Consequently any still-uncovered parameter of this family lies in
+The periodic cover contains 14065 accepted cells, obtained from 6935 initial
+rectangles with 7130 rejected parents. The individual kernels, execution
+pieces and independent review scopes are recorded below. These finite exact
+certificates prove pointwise existence throughout their regions; no single
+calendar or common strategy across different parameter cells is required.
+The whole-family conclusion is UE existence. The large-epsilon singleton
+argument does not assert a globally bounded-period exact terminal equilibrium.
 
-    delta in (.002,.099) union (.101,.7),
-    0<=epsilon<.737+.06delta,
+At the interior point (delta,epsilon)=(1/8,139/200), the exclusion below proves
+a positive terminal exploitability gap over all stationary profiles whenever
+at least one original own singleton is positive. The completed Middle cover
+supplies a periodic equilibrium there. This is a strict separation from every
+stationary approximation producer, not a behavioral-profile gap or a no-UE game.
 
-with the known ray and other established neighborhoods removed. This
-is a containing region for the unfinished work, not an exact description of
-all parameters without a known equilibrium. It is not a constraint on an
-arbitrary Fin4 counterexample. In particular no stationary nonexistence claim
-is being made for the remaining region.
+The [scope audit](../feedback/CODEX_ROOT__TWO_ROW_CONTINUATION__BY_SCOPE_AUDIT.md)
+checks the complete permitted choices of the applicable prior raw producers
+at this fixture. It also records the limits of comparison with earlier
+qualitative neighborhoods whose radii were not supplied.
 
-At the specific interior point (delta,epsilon)=(1/8,139/200), the exact
-exclusion below proves a positive terminal exploitability gap over all
-stationary profiles whenever at least one original own singleton is positive.
-It excludes stationary approximations as well as exact stationary Nash at
-that point; it is not an unrestricted behavioral exploitability gap.
-
-The next question is whether actual periodic Nash continuation can cover this
-entire lower region, including every support change and parameter boundary.
-A contracting cycle at a sample point alone does not answer it. The rectangles
-below supply continuous legal selectors on cells where an optional player
-may activate. Different calendars can cover each other's weak support seams;
-the proof needs overlapping parameter coverage, not one cycle selected across
-all cells.
+The next question lies beyond this family: can a positive global minimum of
+continuation debt on the actual absorbing carrier be contradicted by a global
+replacement? The existing obstruction to local descent and the failure of
+arbitrary source data to force a nonzero cap root remain relevant. Completing
+this explicit family does not supply that global selection argument.
 
 ## A singleton obstruction outside the finite region
 
@@ -307,27 +307,45 @@ added to every absorbing reward in each recipient row.
 | --- | --- | --- | --- |
 | Corner | [0,1/500] x [0,1843/2500] | 013^4, 012^60 | 64 |
 | Upper | delta in [7/10,6/5], 0<=epsilon<=737/1000+3delta/50+1/2000 | 013^2, 012^2, 023^12 | 16 |
-| Middle | [99/1000,101/1000] x [0,93/125] | 013^2, 012^8, 023^p, p=24 or 28 | at most 38 |
+| Middle | delta in [3/25,7/10], 0<=epsilon<=369/500+3delta/50 | 013^h, 012^n, 023^p, h in {1,2,3}, with (n,p) below | at most 33 |
+| Low | delta in [1/500,3/25], 0<=epsilon<=737/1000+3delta/50+1/10000 | 013^h, 012^n, 023^p, with the finite portfolios below | at most 64 |
 | High | delta in [6/5,3/2], 0<=epsilon<=737/1000+3delta/50+1/10000 | 013^2, 012^n, 023^p, n in {1,2}, p in {8,...,14} | at most 18 |
 
 Every listed 012 phase allows owner 3 to enter, producing support 0123.
-Physical time reverses the displayed backward calendar. The middle calendar
-uses p=28 on epsilon in [3467/5000,1389/2000]; the other initial cells use p=24.
+Physical time reverses the displayed backward calendar. Middle uses these six
+parameter bands, with h chosen from {1,2,3} separately for each accepted cell:
+
+| Closed delta band | (n,p) |
+| --- | --- |
+| [3/25,17/100] | (6,24) |
+| [17/100,1/4] | (5,24) |
+| [1/4,17/50] | (5,20) |
+| [17/50,23/50] | (4,16) |
+| [23/50,16/25] | (3,16) |
+| [16/25,7/10] | (2,14) |
+
+At a shared band endpoint either neighboring calendar family may be used.
 Cell boundaries are included. Different cells may use different equilibria;
 their cyclic fixed points need not be identified across parameter cells.
 
-The corner and middle upper edges exceed the maximum affine stationary
-thresholds .73712 and .74306 on their respective delta intervals. The upper
-and high regions exceed that threshold by at least 1/2000 and 1/10000.
-Together with the stationary producer and singleton obstruction above, they
-therefore cover every epsilon>=0 on each displayed delta interval. The upper,
-high and dominated-row results join to cover every delta>=7/10, epsilon>=0.
+The corner upper edge exceeds the maximum affine stationary threshold .73712
+on its delta interval. Low, middle, upper and high exceed that threshold by at least
+1/10000, 1/1000, 1/2000 and 1/10000, respectively. Together with the stationary producer
+and singleton obstruction above, they cover every epsilon>=0 on each displayed
+delta interval. The corner, low, middle, upper, high and dominated-row intervals join to
+cover every delta>=0, epsilon>=0. This whole-family conclusion is UE existence;
+the singleton argument does not construct an exact terminal Nash profile or
+a globally bounded-period producer.
 
-**Verification status.** Corner and middle have independent full reruns.
-Upper and high have complete author runs and independent mathematical,
-exact-algebra and coverage-driver audits; no second full run of those enlarged
-regions is claimed. These are ordinary mathematical certificates, not new
-Lean proofs or a closure of arbitrary Fin4.
+**Verification status.** All five covers are complete. Corner has an independent
+full rerun. Low and the enlarged middle, upper and high regions have complete
+author verification and independent
+mathematical, exact-algebra and coverage audits. Middle's verification consists
+of a preserved four-slab prefix and a completed suffix, whose correspondence
+and exact closed union are checked below. Low uses the completed range union
+and independently checked canonical-source correspondence below. No independent
+full rerun of Low or an enlarged region is claimed. These are ordinary mathematical certificates,
+not new Lean proofs or a closure of arbitrary Fin4.
 
 ### Stage roots on continuation graphs
 
@@ -363,7 +381,7 @@ On a hazard box qhat+[-a,a], the programs enclose M=I-C D_qg_S and verify
     sup|rho_i| + sum_j sup|M_ij| a_j < a_i.
 
 They also check a contraction bound below 9/10, using the a-weighted maximum
-norm in the corner/middle/high programs and the ordinary maximum norm in the upper
+norm in the corner/low/middle/high programs and the ordinary maximum norm in the upper
 program. Banach gives a unique root for every original latent input on the
 graph, uniformly in any bridge hazard. Existence for unrelated cap/parameter
 combinations in the surrounding rectangular enclosure is not asserted.
@@ -392,10 +410,12 @@ Select quiet for nonpositive gap and full for positive gap. At zero they agree
 by uniqueness. All other quiet inequalities and physical hazard bounds are
 checked. Signed hazards on unused counterfactual extensions are not strategies.
 
-The high checker permits signed persistent hazards in the unused quiet chart
+The low, middle, upper and high checkers permit signed persistent hazards
+in the unused quiet chart
 when its optional gap is strictly positive throughout the input graph and all
 four full-root hazards are proper. The selected root is then full everywhere.
-Quiet point containment and every common-link uniqueness test remain mandatory.
+Quiet point containment remains mandatory. The checkers using complete
+histories also retain every common-link uniqueness test.
 Mixed-mode graphs retain both physical persistent charts and all bridge,
 endpoint and negative-Schur checks. Only the unused extension is relaxed.
 
@@ -408,7 +428,7 @@ boundary. This does not integrate an ambient almost-everywhere bound along a
 possibly exceptional line. Point/domain root containment identifies its selected
 centre orbit at every stage. It has no complete-history compatibility test.
 
-The corner, middle and high checkers instead retain separate smooth counterfactual
+The corner, low, middle and high checkers instead retain separate smooth counterfactual
 histories on ALL of X, including where a history is not selected. Each keeps
 its own point orbit and derivative columns. At each phase, convex-hull tests
 ||I-C D_qg_S||<1 identify same-support roots from different histories whenever
@@ -435,7 +455,7 @@ The upper program checks the same inequality for its selected centre orbit and
 selected derivative enclosures. Both give a strict self-map and cap contraction
 on every affine fibre c+V(p-p0)+[-r,r].
 
-The middle and high programs use a sharper final anchor. It tracks all histories still
+The low, middle and high programs use a sharper final anchor. They track all histories still
 possibly selected at the central point: a strictly negative central quiet gap
 retains quiet, a strictly positive gap retains full, and an unresolved sign
 retains both. Let C_i be the largest |F_h(0)_i-c_i| among these possible central
@@ -458,10 +478,13 @@ Floats only propose rational centres, slopes and inverse matrices; all mathemati
 acceptance is by exact interval inequalities. An exact vertex audit verifies the
 Horner payoff/gap formulas against the raw table: the polynomials are multiaffine
 in hazards and parameters and affine in the cap vector. Hazard/parameter vertices
-and the zero plus four cap basis vectors therefore suffice. The high checker
-also compares every explicit hazard-Jacobian entry with exact raw-gap finite
-differences on that grid. Multiaffinity proves these derivative identities,
-which were also independently checked by symbolic expansion. Do not use python -O.
+and the zero plus four cap basis vectors therefore suffice. Low, middle and high
+also compare every explicit hazard-Jacobian entry with exact raw-gap finite
+differences on that grid. Multiaffinity proves these derivative identities;
+independent review also checked the formulas. Low and middle use private
+floating polynomial evaluators, calendar ranking and coordinate-radius adjustments to
+choose rational proposals; the exact evaluators and acceptance tests are
+unchanged by these accelerations. Do not use python -O.
 
 The corner starts with four strips [n/2000,(n+1)/2000] x [0,1843/2500],
 n=0,1,2,3. On rejection it bisects delta when epsilon-width<delta-width/5,
@@ -472,13 +495,35 @@ and epsilon otherwise. The upper starts with 25 closed delta slabs
 2000 initial rectangles. It bisects delta when delta-width is at least five
 times epsilon-width, and epsilon otherwise.
 
-The middle starts with full delta width and epsilon intervals [j/50,(j+1)/50],
-j=0,...,33, followed by [.68,.6934], [.6934,.6945], [.6945,.70], [.70,.72],
-[.72,.74], [.74,.744]. These decimals are exact rationals. Only [.6934,.6945]
-uses p=28. Rejections bisect delta when delta-width is at least twice epsilon-width,
-and epsilon otherwise. Both closed children must finish in every program.
-Depth, cell, attempt or time limits abort with failure; a partial cover cannot
-produce the final success marker. No cross-cell branch agreement is needed.
+Middle uses 58 closed delta slabs [j/100,(j+1)/100], j=12,...,69, with
+ceiling 369/500+(3/50)(j+1)/100. The first four delta slabs use epsilon
+intervals of width 1/100. On the remaining slabs, epsilon widths are 1/25 below
+8/25, 1/50 from 8/25 through 3/5, and 1/100 above 3/5, with the last interval
+clipped at the exact ceiling. The steps divide both scheduling boundaries
+exactly. This gives 300 initial rectangles in the prefix and 2099 in the suffix.
+At each cell, numerical active-Jacobian inverse norms and selected physical
+margins rank the three h choices. Proposed rational coordinate radii may be
+enlarged after a failed return test; every new proposal receives a fresh exact
+verification. Rejections bisect delta when its width is at least twice the
+epsilon width, and epsilon otherwise.
+
+Middle's recorded prefix is V7 on delta [3/25,4/25]: 353 accepted cells,
+53 rejected parents and 551 attempts. Its recorded V10 suffix, invoked with
+`--continue-16`, covers [4/25,7/10]: 3080 accepted cells, 981 rejected parents
+and 7317 attempts. V10 preserves V7's exact kernel and proposal functions and
+reproduces V7's initial mesh on the prefix. Its default command implements the
+whole combined cover. The four prefix `PASS_SLAB` markers and the suffix
+`PASS COMPLETE MIDDLE SEGMENT` marker therefore establish the full middle band:
+3433 accepted cells, 1034 rejected parents and 7868 reported attempts.
+An independent integrity audit matched the frozen source/proof/log hashes and
+checked the closed rectangle union on all 58 slabs, at every delta breakpoint
+and every elementary-strip midpoint (296 exact vertical probes). This audit
+checks the accepted-cell coverage and count consistency; it does not rerun the
+local interval inequalities or reconstruct individual failed attempts.
+
+Both closed children must finish in every program. Depth, cell, attempt or
+time limits abort with failure; a partial cover cannot produce a whole-region
+success marker. No cross-cell branch agreement is needed.
 
 The high starts with 30 closed delta tiles of width 1/100 from 6/5 to 3/2.
 Each has ceiling 737/1000+(3/50)delta_right+1/10000. Its epsilon intervals
@@ -488,28 +533,180 @@ calendar portfolio and tries its best three candidates, then uses the middle
 bisection rule on rejection. All acceptance remains exact; ranking can only
 omit candidates. Both children must complete and failure cannot issue success.
 
-Run these commands from the repository root. The complete-check counts are:
+Run these commands from the repository root. The recorded completion evidence is:
 
-| Region | Command | Final marker and current status |
+| Region | Command | Completion evidence |
 | --- | --- | --- |
 | Corner | `python math/experiments/CODEX_COORDINATOR__TWO_ROW_CORNER_PERIODIC.py` | `PASS_COMPLETE_CORNER`; independent full run accepts 255 cells and 251 rejected parents |
 | Upper | `python math/experiments/CODEX_COORDINATOR__TWO_ROW_UPPER_PERIODIC.py` | `PASS COMPLETE BROAD GRAPH COVER`; 2764 cells, 764 rejected parents, 4323 attempts; independent static/exact audit |
-| Middle | `python math/experiments/CODEX_COORDINATOR__TWO_ROW_MIDDLE_PERIODIC.py` | `PASS COMPLETE MIDDLE RECTANGLE`; author and independent runs both accept 78 cells, 38 rejected parents, 206 attempts |
+| Middle | `python math/experiments/CODEX_COORDINATOR__TWO_ROW_MIDDLE_PERIODIC.py` | preserved prefix plus completed suffix; 3433 cells, 1034 rejected parents, 7868 reported attempts; independent mathematical and exact-coverage audits |
 | High | `python math/experiments/CODEX_COORDINATOR__TWO_ROW_HIGH_PERIODIC.py` | `PASS COMPLETE HIGH REGION`; 2249 cells, 198 rejected parents, 6009 attempts; independent static/exact audit |
+| Low | seven range commands below | 5364 cells, 4883 rejected parents, 25094 calendar attempts; independent mathematical, correspondence and completion-ledger audits |
 
 Frozen checker SHA256 values, in this order:
 
     a7ca99c74294ff248292722745e46335b5460a4c0a0df7728bb8792b7e023a70
     ef2eec38bd2213f7368208e8e5a1af9334302f8ff73ecea199c2a377c3de37b5
-    55af0e0c2d7f8bdf430aeab08af3a8e21c2d2635726f095f49bc2977493fdb83
+    2eb5aa22e2f612bbdce35837aee77d1947862c45688e78b26dea86dc5ac8abf7
     5c02cd160f440388a6357e4d0b8756c36b6bffd403ed50c3412f420f178fe9eb
+    1e2fd801e32a4d060d39b1d1831fd1ba01de88299721f64dba34f73ce6de5e8f
+
+The preserved middle prefix used V7 source SHA256
+
+    4c4ba933fbe9d1035170fb12639cb5216b94d4a0cd25f24cfe4f80b5e763700c
+
+The middle hash in the five-checker list is the canonical V10 source. Its
+suffix log SHA256 is
+
+    9efd12e7994772574ea68cd1158c31256c896bed34be4fc0fd969b6a8b3b10f6
+
+The prefix/suffix distinction records the actual executions; the canonical
+source reproduces both schedules without external candidate or cell data.
+
+### Low delta: finite calendars and the closed range union
+
+This part targets
+
+    1/500 <= delta <= 3/25,
+    0 <= epsilon <= 737/1000+(3/50)delta+1/10000.
+
+Every retained run piece below has completed. The exact closed cover has
+5364 accepted leaves,4883 rejected parents and25094 calendar attempts.
+The log-only completion audit passes with5364-4883=481 initial rectangles.
+This specifies the Low additions to the common ordinary mathematical proof;
+it is not a Lean check or a new completed run of the consolidated source.
+
+The backward calendar is `013^h,012^n,023^p`; physical time reverses this
+order. Every012 phase allows optional owner3 through the common checked
+selector. The initial closed delta bands and primary `(n,p)` are exactly:
+
+| Band | Lower delta | Upper delta | n | p |
+| --- | --- | --- | --- | --- |
+| 0 | 2/25 | 3/25 | 8 | 24 |
+| 1 | 29/500 | 2/25 | 9 | 24 |
+| 2 | 1/25 | 29/500 | 12 | 24 |
+| 3 | 4/125 | 1/25 | 13 | 24 |
+| 4 | 3/125 | 4/125 | 16 | 24 |
+| 5 | 2/125 | 3/125 | 19 | 16 |
+| 6 | 21/2000 | 2/125 | 21 | 16 |
+| 7 | 1/125 | 21/2000 | 27 | 12 |
+| 8 | 3/500 | 1/125 | 30 | 12 |
+| 9 | 3/625 | 3/500 | 34 | 8 |
+| 10 | 1/250 | 3/625 | 39 | 8 |
+| 11 | 2/625 | 1/250 | 42 | 8 |
+| 12 | 1/500 | 2/625 | 48 | 8 |
+
+The canonical Low checker has two proposal modes; both use h=1,2,3,4.
+Baseline mode (`--baseline-proposals`) retains the original executed ranker:
+first score the four primary words, then, only when
+
+    du-dl < dc/20 and eu-el < 1/250,    dc=(dl+du)/2,
+
+score the neighbors `(n-1,p),(n+1,p),(n,p+4)` in that order for each h.
+Default V4 mode scores only the primary words when `ec=(el+eu)/2<3/5`.
+At `ec>=3/5`, for each h it instead scores the seven separate families
+
+    (n-2,p),(n-1,p),(n,p),(n+1,p),(n+2,p),(n,p-4),(n,p+4),
+
+skipping n<1 or p<0. These are separate neighbors, not a Cartesian
+expansion. The same caught scoring failures, reverse `(score,word)` sorting,
+and up-to-four ranked calendar attempts are retained. Both modes have the
+uniform period bound64, including the baseline mode used for band0.
+Mode selection changes only the ranker. Floating helpers, rational center
+and slope conversion, radius proposals/retries, the cache, and every exact
+acceptance condition are shared unchanged. A numerical score never accepts
+a parameter cell.
+
+For a band `[dl,du]`, initial epsilon edges are `j/50`, j=0,...,36, followed
+by `737/1000+(3/50)du+1/10000`. Thus there are37 closed initial rectangles
+per band and481 overall. This right-edge ceiling dominates the target
+sloped ceiling throughout its band. Rejection splits delta when
+`du-dl>=2dc(eu-el)` and epsilon otherwise; both closed children must finish.
+Finite induction on completed subdivisions proves each claimed rectangle.
+The closed adjacent delta bands then cover the desired delta interval.
+
+Apply the common periodic continuation proof unchanged: outward-rounded
+exact intervals, the raw-table/Jacobian identities, graph roots and their
+implicit derivatives, point/domain anchors, mixed-support bridges and Schur
+tests, complete-history uniqueness links, the selected-center return anchor,
+and final contraction/self-map tests. Low uses the strict-full rule already
+specified for High; it introduces no further acceptance relaxation. The
+Low checker's persistent-hazard lower bound10^-7 gives geometric absorption even
+after any unilateral behavioral deviation. The same Bellman and finite-
+average argument therefore supplies one fixed uniform payoff target for
+each accepted parameter pair and permits arbitrary fixed signed row offsets.
+
+The completed-range union uses these band scopes:
+
+| Band indices | Closed delta scope | Mode and interpreter |
+| --- | --- | --- |
+| 0 | [2/25,3/25] | baseline, CPython |
+| 1 | [29/500,2/25] | V4, CPython |
+| 2--3 | [4/125,29/500] | V4, PyPy |
+| 4--5 | [2/125,4/125] | V4, PyPy |
+| 6 | [21/2000,2/125] | V4, PyPy |
+| 7--10 | [1/250,21/2000] | V4, PyPy |
+| 11 | [2/625,1/250] | V4, PyPy |
+| 12 | [1/500,2/625] | V4, PyPy; two epsilon pieces |
+
+Band12 is split into its35 initial slices0--34, covering epsilon[0,7/10],
+and a separate hash-pinned wrapper for slices35--36, covering
+[7/10,18/25] and [18/25,184323/250000]. The wrapper calls the frozen V4
+polynomial audit and unchanged exact cover; its marker claims only those
+two slices. The union recovers precisely all37 initial band12 rectangles.
+Counters/time/extrema reset at the worker cut. The only numerical cache is
+a pure one-entry map keyed by the calendar and parameter center, so no
+mathematical constraint passes between the two epsilon pieces.
+
+The band indices partition0,...,12 and their closed delta scopes share the
+required endpoints. All listed pieces have completed, so their union
+establishes the full Low region; no agreement between strategies on shared
+boundaries is needed. Only finished bands or initial-slice prefixes are
+counted. Partial work beyond the retained stopping boundary is discarded.
+The source correspondence review identifies canonical baseline mode with
+the original band0 calls and canonical default mode with V4 calls within
+the same interpreter. The clean canonical full-band12 command reunites all37
+slice problems and their unchanged acceptance conditions, subject to its own
+resource budgets. No identical floating proposals across interpreters or
+fresh completed canonical rerun are claimed. An interrupted run or a
+partial-range marker never establishes the whole region.
+
+The independent completion-ledger audit passed; its exact scope and source
+correspondence are recorded in the retained independent-review feedback. Bands0--11 contribute4622/4178/21412 and band12
+contributes742/705/3682 in accepted-leaf/rejected-parent/calendar-attempt
+order. Band12's prefix contributes470/435/2275 and its suffix272/270/1407;
+their completed-tree differences are35 and2. A calendar attempt can include
+up to four complete exact radius trials; it is not a count of `verify` calls.
+
+
+Reproduction uses the canonical checker and the stated modes. The recorded
+runtime split is CPython3.12.14 for the first two commands and PyPy8.0.1
+(Python3.12.15) for the last five. In these commands replace PYTHON by the
+corresponding interpreter executable:
+
+    PYTHON math/experiments/CODEX_COORDINATOR__TWO_ROW_LOW_PERIODIC.py --baseline-proposals --band 0
+    PYTHON math/experiments/CODEX_COORDINATOR__TWO_ROW_LOW_PERIODIC.py --band 1
+    PYTHON math/experiments/CODEX_COORDINATOR__TWO_ROW_LOW_PERIODIC.py --start-band 2 --end-band 3
+    PYTHON math/experiments/CODEX_COORDINATOR__TWO_ROW_LOW_PERIODIC.py --start-band 4 --end-band 5
+    PYTHON math/experiments/CODEX_COORDINATOR__TWO_ROW_LOW_PERIODIC.py --band 6
+    PYTHON math/experiments/CODEX_COORDINATOR__TWO_ROW_LOW_PERIODIC.py --start-band 7 --end-band 10
+    PYTHON math/experiments/CODEX_COORDINATOR__TWO_ROW_LOW_PERIODIC.py --start-band 11 --end-band 12
+
+The checker uses only the Python standard library. Exact acceptance has the
+same mathematical meaning under both interpreters; floating proposals and
+therefore subdivision counts need not agree across interpreters. A replay
+with identical rational proposals on one accepted cell produced identical
+exact results, in addition to both interpreters passing the polynomial audit.
+No second full Low cover is claimed. The split commands keep each run within
+its resource budget; the default all-band invocation is not the recorded
+completed execution and can exhaust its 20000-calendar-attempt budget.
 
 ### Full behavioral and uniform conclusion
 
 At the cyclic fixed point, the stage Nash inequalities make continuation caps
 a supermartingale under every unilateral behavioral deviation and a martingale
 under prescribed play. Every selected phase retains at least two proper owners
-with strictly positive hazards; the corner, middle and high explicitly bound the
+with strictly positive hazards; the corner, low, middle and high explicitly bound the
 relevant persistent hazards below by 10^-7. For upper, a strictly positive
 integer lower endpoint is at least 2^-512, so beta=2^-512 works uniformly
 without retaining floating minimum diagnostics. After deleting

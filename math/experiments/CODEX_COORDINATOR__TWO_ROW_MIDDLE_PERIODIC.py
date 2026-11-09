@@ -1,6 +1,6 @@
-"""Exact graph certificates for two middle complex-spectrum words; period at most38.
-Target closed rectangle delta[99/1000,101/1000], epsilon[0,93/125].
-A completed full-cover run is required; partial/pilot runs prove only their cells.
+"""Exact complete-history certificates for a three-calendar middle portfolio.
+Target delta [.12,.7], epsilon [0,.738+.06delta], period at most 33.
+Only the final full-run success marker verifies the complete target cover.
 Standard library only. Floats propose; all acceptance uses exact intervals.
 """
 if not __debug__:raise RuntimeError('Assertions are required; do not use -O.')
@@ -246,9 +246,29 @@ def gaps(q,b,delta,eps):
 
 
 def qjac(q,b,d,e):
- qj=[Jet(x,[Iv(int(i==j))for j in range(N)])for i,x in enumerate(q)]
- g=gaps(qj,[Jet(x)for x in b],Jet(d),Jet(e))
- return[[x.d[j]for j in I]for x in g]
+ # Explicit hazard derivative of gaps(). Diagonals vanish because g_i is
+ # independent of q_i. The cap contribution is b_i prod_(k!=i,j)(1-q_k).
+ q0,q1,q2,q3=q
+ h0,h1,h2,h3=1-q0,1-q1,1-q2,1-q3
+ s01=h2*h3;s02=h1*h3;s03=h1*h2
+ s12=h0*h3;s13=h0*h2;s23=h0*h1
+ z=0*q0
+ a01=-1+q2*(-4+C_501_100*q3)+C_m1_100*q3+b[0]*s01
+ a02=6-4*q1+q3*(C_m701_100+C_501_100*q1)+b[0]*s02
+ a03=C_1_100+C_m1_100*q1+q2*(C_m701_100+C_501_100*q1)+b[0]*s03
+ a10=-1+q2*(C_m3_2+C_m11_10*q3)+C_8_5*q3+b[1]*s01
+ a12=C_3_2+C_m3_2*q0+q3*(C_m9_10+C_m11_10*q0)+b[1]*s12
+ a13=C_2_5+C_8_5*q0+q2*(C_m9_10+C_m11_10*q0)+b[1]*s13
+ t2=C_2_5-d+q3*(C_m12_5+d)
+ a20=d+q1*t2-d*q3+b[2]*s02
+ a21=C_3_5+C_7_5*q3+q0*t2+b[2]*s12
+ a23=-1+q0*(-d+q1*(C_m12_5+d))+C_7_5*q1+b[2]*s23
+ t3=C_m107_100-e+q2*(C_m93_100+e)
+ a30=C_7_100+C_193_100*q2+q1*t3+b[3]*s03
+ a31=e+q0*t3-e*q2+b[3]*s13
+ a32=-1+C_193_100*q0+q1*(-e+q0*(C_m93_100+e))+b[3]*s23
+ return [[z,a01,a02,a03],[a10,z,a12,a13],[a20,a21,z,a23],[a30,a31,a32,z]]
+
 
 def proposal(S,b,d,e,seed,fixed):
  bb=[float(mid(x))for x in b];dd=float(mid(d));ee=float(mid(e));q=[float(mid(x))for x in fixed]
@@ -311,8 +331,8 @@ def branch(S,b,d,e,seed,fixed=None,graph=None):
  inputs=[x.d for x in b]+[d.d,e.d];od=mm([x.d for x in out],inputs);gd=mm([x.d for x in g],inputs)
  return[Jet(x.v,z)for x,z in zip(out,od)],qb,[Jet(x.v,z)for x,z in zip(g,gd)],G,lip
 
-def center(d,e,n,p,prefer_pair=True):
- word=[[0,1,3]]*2+[[0,1,2]]*n+[[0,2,3]]*p
+def center(d,e,h,n,p,prefer_pair=True):
+ word=[[0,1,3]]*h+[[0,1,2]]*n+[[0,2,3]]*p
  c=[.0041188900253,.0001243482175,.0000419077556,.3690086159]
  for it in range(10):
   rows=[]
@@ -335,15 +355,17 @@ def alternatives(b,bp,d,e,dp,ep,seed,S,optional,widths):
   gq[i].v=Iv(max(gq[i].v.lo,rg.lo),min(gq[i].v.hi,rg.hi),True)
   assert gq[i].v.lo<=gq[i].v.hi
  if not optional or gq[3].v.hi<0:
-  assert all(qq[i].lo>0 and qq[i].hi<D for i in S)
-  assert all(gq[i].v.hi<0 for i in I if i not in S)
+  assert all(qq[i].lo>0 and qq[i].hi<D for i in S),('quiet physical',S,qq)
+  assert all(gq[i].v.hi<0 for i in I if i not in S),('quiet gaps',S,[gq[i].v for i in I if i not in S])
   modes=[(oq,op,qq,qp,'q')]
  else:
   of,qf,gf,Gf,lf=branch([0,1,2,3],b,d,e,seed,graph=graph);ofp,qfp,_,_,_=branch([0,1,2,3],bp,dp,ep,seed)
-  assert all(min(qq[i].lo,qf[i].lo)>0 and max(qq[i].hi,qf[i].hi)<D for i in S)
-  assert qf[3].hi<D
-  if gq[3].v.lo>0 and qf[3].lo>0:modes=[(of,ofp,qf,qfp,'f')]
+  assert qf[3].hi<D,('full optional upper',qf)
+  if gq[3].v.lo>0 and qf[3].lo>0:
+   assert all(qf[i].lo>0 and qf[i].hi<D for i in S),('strict full physical',qf)
+   modes=[(of,ofp,qf,qfp,'f')]
   else:
+   assert all(min(qq[i].lo,qf[i].lo)>0 and max(qq[i].hi,qf[i].hi)<D for i in S),('seam persistent physical',qq,qf)
    y=hull(Iv(0),qf[3]);fixed=[Iv(0)]*3+[y]
    bridge,Gb,ib,lb=rootbox(S,[x.v for x in b],d.v,e.v,seed,fixed,[hull(x,y)for x,y in zip(qq,qf)],graph=(b,d,e,*graph))
    assert all(bridge[i].lo<=qf[i].lo and qf[i].hi<=bridge[i].hi for i in S)
@@ -398,18 +420,18 @@ def audit_horner():
  print('PASS exact raw-table/Horner polynomial identities',flush=True)
 
 
-P0=24
-WORD=[[0,1,3]]*2+[[0,1,2]]*8+[[0,2,3]]*P0
+H0=2;N0=6;P0=24
+WORD=[[0,1,3]]*H0+[[0,1,2]]*N0+[[0,2,3]]*P0
 BASE=[F(1,10**5),F(1,10**4),F(1,10**6),F(1,10**5)]
 
 def candidate(dc,ec):
- c,rows=center(float(dc),float(ec),8,P0,False);v=[]
+ c,rows=center(float(dc),float(ec),H0,N0,P0,False);v=[]
  assert all(row[2]==S or(S==[0,1,2]and row[2]==[0,1,2,3])for row,S in zip(rows,WORD))
  for k in range(2):
   us=[]
   for sg in(-1,1):
    dd=float(dc)+sg*1e-7*(k==0);ee=float(ec)+sg*1e-7*(k==1)
-   us.append(center(dd,ee,8,P0,False)[0])
+   us.append(center(dd,ee,H0,N0,P0,False)[0])
   v.append([F(str((y-x)/2e-7))for x,y in zip(*us)])
  return[F(str(x))for x in c],list(zip(*v)),[row[0]for row in rows]
 
@@ -460,46 +482,150 @@ def verify(dl,du,el,eu,r=BASE,verbose=True):
  print('PASS',dl,du,el,eu,'histories',len(paths),'possible centre histories',len(selected),'stats',[(float(a),float(b))for a,b in stats],'persistent q>',float(F(minq,D)),'links',links,'maxlinklip',maxlinklip,flush=True)
  return stats,F(minq,D),len(paths),links,maxlinklip
 
+def setword(h,n,p):
+ global H0,N0,P0,WORD
+ H0=h;N0=n;P0=p;WORD=[[0,1,3]]*h+[[0,1,2]]*n+[[0,2,3]]*p
+
+
+
+def audit_qjac():
+ from itertools import product
+ for q0 in product((F(0),F(1)),repeat=4):
+  for d,e in product((F(0),F(1)),repeat=2):
+   for k in range(5):
+    b=[F(int(i==k))for i in I];actual=qjac(q0,b,d,e)
+    for j in I:
+     q=list(q0);q[j]=F(0);lo=raw_evaluate(q,b,d,e)[3]
+     q[j]=F(1);hi=raw_evaluate(q,b,d,e)[3]
+     assert [actual[i][j]for i in I]==[y-x for x,y in zip(lo,hi)]
+ print('PASS exact raw-table hazard-Jacobian identity',flush=True)
+
+def ranking(dc,ec,n,p):
+ ranked=[]
+ for h in (1,2,3):
+  try:
+   c,rows=center(float(dc),float(ec),h,n,p,False)
+   physical=min([q[i]for q,g,S,b,bo in rows for i in S]+[1-q[i]for q,g,S,b,bo in rows for i in S]+[-g[i]for q,g,S,b,bo in rows for i in I if i not in S])
+   if physical<=0:continue
+   invnorm=0.
+   for q,g,S,b,bo in rows:
+    gg,AA=float_gap_jac(q,b,float(dc),float(ec));C=float_inverse([[AA[i][j]for j in S]for i in S])
+    invnorm=max(invnorm,max(sum(abs(x)for x in row)for row in C))
+   score=invnorm*(1+.001/physical)
+   ranked.append((score,h,physical,invnorm))
+  except(AssertionError,ValueError,ZeroDivisionError,OverflowError):continue
+ return sorted(ranked)
+
 COUNT=FAILS=ATTEMPTS=0
 START=time.monotonic()
-def cover(dl,du,el,eu,depth=0):
- global COUNT,FAILS,ATTEMPTS
- scale=max((du-dl)/F(1,500),(eu-el)/F(1,100))
- result=None;reason=''
- for k in (1,4,16,64):
-  ATTEMPTS+=1
-  assert ATTEMPTS<=2000 and time.monotonic()-START<1800,('budget',ATTEMPTS,COUNT,dl,du,el,eu)
-  try:
-   import contextlib,io
-   with contextlib.redirect_stdout(io.StringIO()):result=verify(dl,du,el,eu,[k*scale*x for x in BASE],False)
-   break
-  except(AssertionError,ValueError,ZeroDivisionError,OverflowError)as ex:
-   reason=str(ex)
-   if not ('return failure' in reason):break
+SEARCH_BASE=[BASE[0],BASE[1],5*BASE[2],BASE[3]]
+
+def attempt(dl,du,el,eu,n,p):
+ global ATTEMPTS
+ import contextlib,io
+ scale=max((du-dl)/F(1,500),(eu-el)/F(1,100));rank=ranking((dl+du)/2,(el+eu)/2,n,p)
+ reasons=[]
+ for score,h,physical,invnorm in rank:
+  setword(h,n,p);r=[4*scale*x for x in SEARCH_BASE]
+  for k in range(3):
+   ATTEMPTS+=1
+   assert ATTEMPTS<100000 and time.monotonic()-START<14400,('budget',ATTEMPTS,COUNT)
+   try:
+    with contextlib.redirect_stdout(io.StringIO()):result=verify(dl,du,el,eu,r,False)
+    return result,(h,n,p),r,reasons
+   except(AssertionError,ValueError,ZeroDivisionError,OverflowError)as ex:
+    reason=ex.args[0] if ex.args else ''
+    reasons.append((h,str(reason)))
+    if isinstance(reason,tuple)and reason[0]=='selected return failure':
+     # Floating diagnostics only propose larger rational coordinate radii.
+     r=[rr*max(F(1),F(str(1.5*ratio)))for rr,ratio in zip(r,reason[3])]
+    else:break
+ return None,None,None,reasons
+
+def cover(dl,du,el,eu,n,p,depth=0):
+ global COUNT,FAILS
+ result,word,r,reasons=attempt(dl,du,el,eu,n,p)
  if result is not None:
   COUNT+=1
-  print('ACCEPT',COUNT,'fails',FAILS,'cell',*[float(x)for x in(dl,du,el,eu)],'histories',result[2],'maxL',float(max(z[0]for z in result[0])),'maxR',float(max(z[1]for z in result[0])),'seconds',int(time.monotonic()-START),flush=True)
+  print('ACCEPT',COUNT,'fails',FAILS,'cell',*[str(x)for x in(dl,du,el,eu)],'word',word,'histories',result[2],'maxL',float(max(z[0]for z in result[0])),'maxR',float(max(z[1]for z in result[0])),'seconds',int(time.monotonic()-START),flush=True)
   return
  FAILS+=1
- if depth>=24:raise AssertionError(('subdivision limit',dl,du,el,eu,reason))
+ print('REJECT',FAILS,'depth',depth,'cell',*[str(x)for x in(dl,du,el,eu)],'reasons',reasons,flush=True)
+ assert depth<24,('subdivision limit',dl,du,el,eu,reasons)
  if du-dl>=2*(eu-el):
-  dm=(dl+du)/2;cover(dl,dm,el,eu,depth+1);cover(dm,du,el,eu,depth+1)
+  dm=(dl+du)/2;cover(dl,dm,el,eu,n,p,depth+1);cover(dm,du,el,eu,n,p,depth+1)
  else:
-  em=(el+eu)/2;cover(dl,du,el,em,depth+1);cover(dl,du,em,eu,depth+1)
+  em=(el+eu)/2;cover(dl,du,el,em,n,p,depth+1);cover(dl,du,em,eu,n,p,depth+1)
 
-def setword(p):
- global P0,WORD
- P0=p;WORD=[[0,1,3]]*2+[[0,1,2]]*8+[[0,2,3]]*p
+def np_for(dl):
+ if dl<F('.17'):return 6,24
+ if dl<F('.25'):return 5,24
+ if dl<F('.34'):return 5,20
+ if dl<F('.46'):return 4,16
+ if dl<F('.64'):return 3,16
+ return 2,14
+
+# Candidate-only floating clones. None of these helpers accepts a certificate.
+from types import FunctionType
+_FLOAT_GLOBALS=dict(globals())
+for _name,_value in list(_FLOAT_GLOBALS.items()):
+ if _name.startswith('C_'):_FLOAT_GLOBALS[_name]=float(_value)
+_FLOAT_A=[[float(x)for x in row]for row in A]
+_FLOAT_DD={}
+for _S in ((0,1,3),(0,1,2),(0,2,3)):
+ for _a in _S:
+  _u,_v=[x for x in _S if x!=_a];_mask=(1<<_u)|(1<<_v)
+  _FLOAT_DD[_a,_u,_v]=float(Z[_a,_mask|(1<<_a)]-Z[_a,_mask])
+
+def _float_triple_fast(b,S,d,e):
+ i,j,k=S
+ def cf(a,u,v):
+  au=-d if(a,u)==(2,0)else(-e if(a,u)==(3,1)else _FLOAT_A[a][u])
+  av=-d if(a,v)==(2,0)else(-e if(a,v)==(3,1)else _FLOAT_A[a][v])
+  dd=_FLOAT_DD[a,min(u,v),max(u,v)]
+  return-b[a],b[a]-au,b[a]-av,dd+au+av-b[a]
+ ci,ai,bi,di=cf(i,j,k);cj,aj,bj,dj=cf(j,i,k);ck,ak,bk,dk=cf(k,i,j)
+ nx=[-cj,-bj];dx=[aj,dj];ny=[-ci,-bi];dy=[ai,di]
+ def mul2(a,b):return[a[0]*b[0],a[0]*b[1]+a[1]*b[0],a[1]*b[1]]
+ terms=[mul2(dx,dy),mul2(nx,dy),mul2(ny,dx),mul2(nx,ny)]
+ cc=[sum(t[l]*x for t,x in zip(terms,[ck,ak,bk,dk]))for l in range(3)]
+ from math import sqrt
+ zz=(-cc[1]+sqrt(cc[1]*cc[1]-4*cc[2]*cc[0]))/(2*cc[2]);q=[0.]*4
+ q[i]=(nx[0]+nx[1]*zz)/(dx[0]+dx[1]*zz);q[j]=(ny[0]+ny[1]*zz)/(dy[0]+dy[1]*zz);q[k]=zz
+ return q
+
+for _name in ('evaluate','gaps','float_gap_jac','float_newton','center'):
+ _original=_FLOAT_GLOBALS[_name]
+ _FLOAT_GLOBALS[_name]=FunctionType(_original.__code__,_FLOAT_GLOBALS,_name,_original.__defaults__)
+_FLOAT_GLOBALS['float_triple']=_float_triple_fast
+center=_FLOAT_GLOBALS['center']
+float_gap_jac=_FLOAT_GLOBALS['float_gap_jac']
+float_newton=_FLOAT_GLOBALS['float_newton']
 
 if __name__=='__main__':
- START=time.monotonic();audit_horner()
- setword(24)
- for j in range(34):cover(F(99,1000),F(101,1000),F(j,50),F(j+1,50))
- cover(F(99,1000),F(101,1000),F(17,25),F(3467,5000))
- setword(28)
- cover(F(99,1000),F(101,1000),F(3467,5000),F(1389,2000))
- setword(24)
- cover(F(99,1000),F(101,1000),F(1389,2000),F(7,10))
- for a,b in[(F(7,10),F(18,25)),(F(18,25),F(37,50)),(F(37,50),F(93,125))]:
-  cover(F(99,1000),F(101,1000),a,b)
- print('PASS COMPLETE MIDDLE RECTANGLE delta[.099,.101], epsilon[0,.744]',COUNT,FAILS,ATTEMPTS,'seconds',time.monotonic()-START,flush=True)
+ import hashlib
+ START=time.monotonic()
+ print('SOURCE_SHA256',hashlib.sha256(open(__file__,'rb').read()).hexdigest(),flush=True)
+ audit_horner();audit_qjac()
+ if '--pilot' in sys.argv:
+  passed=0;count=0
+  for dl in map(F,('.12','.2','.3','.4','.5','.6','.68')):
+   n,p=np_for(dl)
+   for el,eu in ((F(0),F('.01')),(F('.3'),F('.31')),(F('.68'),F('.69')),(F('.69'),F('.70')),(F('.70'),F('.71')),(F('.738')+F('.06')*dl-F('.01'),F('.738')+F('.06')*(dl+F('.01')))):
+    count+=1;res,word,r,reasons=attempt(dl,dl+F('.01'),el,eu,n,p);passed+=res is not None
+    print('PILOT',count,'PASS'if res is not None else'FAIL',*[str(x)for x in(dl,dl+F('.01'),el,eu)],'word',word,'reasons',reasons,flush=True)
+  print('PILOT_COMPLETE',passed,count,'attempts',ATTEMPTS,'seconds',time.monotonic()-START,flush=True)
+ else:
+  assert sys.argv[1:] in ([],['--continue-16']),'No undocumented run mode'
+  first=16 if sys.argv[1:]==['--continue-16']else 12
+  for j in range(first,70):
+   dl=F(j,100);du=F(j+1,100);top=F('.738')+F('.06')*du;n,p=np_for(dl)
+   el=F(0)
+   while el<top:
+    if j<16:step=F('.01')
+    elif el<F('.32'):step=F('.04')
+    elif el<F('.60'):step=F('.02')
+    else:step=F('.01')
+    eu=min(el+step,top);cover(dl,du,el,eu,n,p);el=eu
+   print('PASS_SLAB',dl,du,'epsilon 0 to',top,'cells',COUNT,'fails',FAILS,'attempts',ATTEMPTS,'seconds',time.monotonic()-START,flush=True)
+  print('PASS COMPLETE MIDDLE SEGMENT','delta',F(first,100),F(7,10),'epsilon[0,.738+.06delta]',COUNT,FAILS,ATTEMPTS,'seconds',time.monotonic()-START,flush=True)

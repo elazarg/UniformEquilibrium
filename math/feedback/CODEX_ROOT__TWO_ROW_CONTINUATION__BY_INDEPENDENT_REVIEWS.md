@@ -43,13 +43,14 @@ of the producer's scope changed. The checker bytes are identical.
 
 The common retained section "Periodic regions with changing supports"
 has SHA256
-`efc069349fe5d80a6be532614c5a81507e1b4c75329b3b3b78b69b74caa45f7c`.
-The corner and middle checkers are byte-identical to their independently
-rerun versions. The enlarged upper and high checkers each have a complete
-author execution and independent static/exact audits, not independent full
-reruns. The individual scopes are stated below. Approvals concern the
-specified raw family, all unilateral behavioral deviations, arbitrary signed
-row offsets, and one fixed uniform-payoff target per game.
+`788063df91cf1e3a3ea5deead7d25a299fba94b42183ec4278982579ca4edf1f`.
+The corner checker has an independent full rerun. Low and the enlarged
+middle, upper and high covers have complete author executions and independent
+mathematical, exact-algebra, source-correspondence and coverage audits, with
+the individual scopes stated below. No independent complete rerun of Low or
+an enlarged cover is claimed. Approvals concern the specified raw family,
+all unilateral behavioral deviations, arbitrary signed row offsets, and one
+fixed uniform-payoff target per game.
 
 ### Corner
 
@@ -107,28 +108,98 @@ of the consolidated proof with the final source and reviewed proof.
 
 ### Middle
 
-Reviewer: positive_collision_potential_global. FINAL PASS for
-delta in [99/1000,101/1000], epsilon in [0,93/125]. The independent full run
-of the [middle checker](../experiments/CODEX_COORDINATOR__TWO_ROW_MIDDLE_PERIODIC.py)
-accepted 78 cells with 38 rejected parents and 206 attempts in approximately
-194 seconds, matching the complete author run. Checker SHA256:
-`55af0e0c2d7f8bdf430aeab08af3a8e21c2d2635726f095f49bc2977493fdb83`.
+Reviewer: middle_cover/middle_audit. FINAL PASS for delta in [3/25,7/10],
+0<=epsilon<=369/500+3delta/50. The retained
+[middle checker](../experiments/CODEX_COORDINATOR__TWO_ROW_MIDDLE_PERIODIC.py)
+is byte-identical to frozen V10, SHA256
+`2eb5aa22e2f612bbdce35837aee77d1947862c45688e78b26dea86dc5ac8abf7`.
+The actual execution joins a completed V7 prefix on [3/25,4/25] with counts
+353 accepted/53 rejected/551 attempts and a completed V10 suffix on
+[4/25,7/10] with counts 3080/981/7317. Both source versions have identical
+acceptance and proposal functions; canonical V10 reproduces the prefix mesh.
+Together they give 3433 accepted cells,1034 rejected parents and7868 reported
+attempts. The default whole-cover command was not executed as one run.
 
-Exact extraction verified all forty adjacent initial epsilon intervals,
-including both closed calendar joins. Only [3467/5000,1389/2000] uses the
-period38 word; the other cells use period34. That bridge passes as one closed
-cell. The audit checked complete histories, all common-root links, and the
-selected-centre final estimate: possible central histories bound the anchor,
-while every smooth history contributes to the variation and contraction bounds.
-No continuity of calendar choice between parameter cells is required.
+The independent static review manually differentiated all twelve Jacobian
+entries, checked the exhaustive multiaffine vertex audit, private floating
+namespace isolation, complete-history kernel, strict-full rule, every anchor
+and common-root link, and the selected-centre final estimate. The six finite
+calendar families have period at most33. Ranking and radius updates only
+propose rational certificates; every attempt receives a fresh exact check.
 
-The middle reviewer separately approved its portion of the earlier common
-proof against this exact checker and complete proof. The mathematical text
-for this region is unchanged. The reviewers
-checked physical chronology (the backward calendar is reversed), private
-independent hazards, Nash inequalities, fixed cyclic values, absorption under
-every unilateral replacement, signed offsets, and uniform finite-horizon
-convergence.
+The completed integrity audit checked all58 slabs at296 exact vertical
+probes, reconstructed the accepted closed rectangle union, and matched
+completion counts and frozen source stamps. The 2399 initial rectangles
+split into300 prefix and2099 suffix rectangles, agreeing with leaf-minus-
+parent counts. It did not rerun the local interval inequalities or reconstruct
+individual failed attempts. The reviewer approved the completed prose against
+both executions, with the explicit condition that canonical Middle be replaced
+by the frozen V10 bytes. That promotion condition is now satisfied.
+
+The review also checked reversed chronology, private independent hazards,
+Nash inequalities, geometric absorption under every unilateral behavioral
+replacement, arbitrary fixed signed offsets and the fixed uniform target.
+This is independent mathematical and coverage review, not a full independent
+rerun of the enlarged Middle cover or a Lean check.
+
+### Low
+
+Reviewers: jacobian_speed and jacobian_speed/low_audit; additional canonical
+source correspondence by global_chain. The canonical
+[Low checker](../experiments/CODEX_COORDINATOR__TWO_ROW_LOW_PERIODIC.py)
+is retained without changing the reviewed bytes.
+
+The Low review passes for all thirteen closed delta bands covering
+`1/500 <= delta <= 3/25`, with
+`0 <= epsilon <= 737/1000 + (3/50)delta + 1/10000`.
+The completed exact cover has **5364 accepted cells, 4883 rejected parents,
+and 25094 calendar attempts**. The difference `5364 - 4883 = 481 = 13*37`
+accounts for every initial rectangle. Bands 0--11 contribute
+`4622/4178/21412`; band 12 contributes `742/705/3682`, in that count order.
+Band 12 has delta scope `[1/500,2/625]`: its completed initial slices 0--34
+cover epsilon `[0,7/10]` and contribute `470/435/2275`; separately completed
+slices 35--36 cover `[7/10,18/25]` and `[18/25,184323/250000]` and contribute
+`272/270/1407`. Their tree-count differences are 35 and 2, respectively.
+Only completed scopes are counted; later partial work is discarded.
+Calendar attempts may include up to four exact radius trials.
+
+The retained canonical checker has SHA256
+`1e2fd801e32a4d060d39b1d1831fd1ba01de88299721f64dba34f73ce6de5e8f`.
+Actual execution used original source SHA256
+`8e5e6d7936585511873533447c4bdfae26847ea92072127e2b0d8235ef3238ff`
+for baseline band 0 under CPython 3.12, and V4 source SHA256
+`548b998ecc42755fe79d02b5c2ec7bbbc30aa6bd6bc208805887a1b84a9d27f0`
+for band 1 under CPython 3.12 and bands 2--12 under PyPy 3.12-v8.0.1.
+The suffix wrapper, SHA256
+`1c9d6c9cbe71784de7311662bcd1a570bb7d9d7c08540a040c5cfed1fb914718`,
+pins V4, runs its unchanged polynomial audit, and calls unchanged `cover`
+only for those two slices; its scoped success marker was followed by exit 0.
+Canonical `--baseline-proposals` restores the original ranker; default mode
+retains V4.
+
+The mathematical review found no blocking objection in the exact thirteen-band
+partition, both calendar rankers and period bound 64, or the shared
+complete-history acceptance argument. The previously reviewed strict-full
+rule, graph and point/domain anchors, mixed-support bridges and Schur tests,
+common uniqueness links, and final contraction/self-map checks are retained.
+The Low persistent-hazard bound `10^-7` supports the shared absorption,
+Bellman and fixed-payoff uniform-equilibrium argument. Numerical calendars,
+centers and radii remain proposals subject to exact acceptance.
+
+Literal/AST source review and a finite audit of 1040 scoring traces checked
+canonical correspondence, including ties, caught failures, driver scopes and
+the unreachable private ranker binding. This preserves the corresponding
+mathematical calls within the same interpreter, subject to resource budgets;
+no cross-interpreter equality of floating proposals is asserted. An independent
+non-provisional ledger audit checked the source/wrapper hashes, startup
+identity stamps, exact rational endpoints and ceilings, cumulative counter
+differences, unique assigned scopes, per-band difference 37, and total
+difference 481. Its saved final output has SHA256
+`2d466721bf82c1f18c41e8380097489d5b5684f992c46ff197b0b508c80c10e5`;
+the independent completion review has SHA256
+`9570bc90a3482f34c796ee6d27db6d9785194c085b260721e42a452cb1d54600`.
+This independently verifies completion evidence; it is not a second full
+cover execution, a completed rerun of the canonical source, or a Lean proof.
 
 ### High
 
@@ -155,28 +226,57 @@ seams retain physical persistent charts, endpoint linkage and negative Schur
 checks. The audit also checked reversed chronology, opponent absorption,
 all behavioral deviations, arbitrary signed offsets and the fixed target.
 
-Upper_cover and global_chain separately checked the upper and high portions
-of the consolidated periodic proof. The retained section equals their common
-reviewed draft after replacing the upper-count placeholder by the completed
-counts and appending one separator newline. Global_chain checked that exact
-correspondence against the retained section hash above. The unchanged corner
-and middle arguments retain their earlier independent review scopes.
+Upper_cover and global_chain separately checked the Upper and High portions
+against their frozen sources. The common proof now also includes completed
+Middle and Low evidence. The region-specific arguments and their original
+review scopes are preserved; the fresh whole-family assembly review is
+recorded below against the final common-section hash.
 
-## Outer region and assembly
+## Outer region and whole-family assembly
 
-The literature and periodic reviewers independently checked the short
-singleton contradiction against the exact bare-no-UE declaration and matrix
-definition cited in the note. It applies at epsilon=10201/5400 as well as
-above it and needs no sign condition on original own rewards.
+The literature and periodic reviewers independently checked the singleton
+contradiction against the exact bare-no-UE declaration and matrix definition
+cited in the note. It applies at epsilon=10201/5400 as well as above it and
+needs no sign condition on original own rewards.
 
-The overlaps 3/2<38/25 and 10201/5400<2 justify the stated containing region
-for unfinished parameters. The periodic upper edges strictly exceed
-the affine stationary frontier on their respective delta intervals, closing
-every epsilon>=0 there. The upper, high and dominated-row intervals join to
-close every delta>=7/10 and epsilon>=0. The known ray is an additional covered subset.
-No inventory-wide comparison or assertion that every point
-of the remaining region is uncovered is made. The result remains internal;
-it is not an export of the whole two-parameter family.
+The five closed periodic bands join at delta=1/500,3/25,7/10,6/5,3/2.
+Their upper edges strictly exceed the affine stationary frontier on their
+respective intervals. The overlaps3/2<38/25 and10201/5400<2 complete the
+whole quadrant with the affine, singleton and dominated-row arguments.
+The total14065 accepted cells minus7130 rejected parents equals6935 initial
+rectangles. Attempt counters are not aggregated because their meanings differ.
+The resulting global conclusion is UE existence, not a globally bounded-period
+or exact-terminal-Nash construction: the singleton branch uses a contradiction.
+
+Fresh reviewer final_family_review approved the final literal whole-family
+assembly, and its separately tasked outer_assembly reviewer independently
+checked all sixty rewards, affine recovery, sure-owner identities, Bernstein
+coefficients and exact closed joins. The fresh reviewer reran the lightweight
+symbolic/raw-table and initial-driver audits for all five checkers, the final
+Low completion-ledger audit and the1040-trace canonical correspondence audit.
+It read the exact continuation/selection proof and attempted to falsify the
+graph-conditioning, signed-chart, common-root, finite-selection and
+exceptional-line steps. No unresolved mathematical objection remained.
+The final review SHA256 is
+`7b0ad9e6aa5153862b3f6158d08d1f00c383542fb300eb7ca5fd2b1f4c8ba8c2`;
+it binds the literal periodic-section hash above and the note SHA256
+`6399c3f337cac490f51b0666610555e8aa01072b9301dedf19911cec5487bfdb`.
+This is a final mathematical and correspondence review, not a new heavy cover
+rerun or Lean execution. Export admission is assessed separately.
+
+The separate [scope audit](CODEX_ROOT__TWO_ROW_CONTINUATION__BY_SCOPE_AUDIT.md)
+checks complete applicable raw-producer selection sets at the interior
+fixture, including nonstationary punishment and adaptive-ledger criteria.
+Its [standalone exact checker](../experiments/CODEX_COORDINATOR__TWO_ROW_SCOPE_CHECK.py)
+requires Python3 and SymPy; the coordinator reran it successfully with
+SymPy1.14.0. Source SHA256:
+`d5a2ed1e25f8b2d854001447c21711da8425eac26dd47e5a83fc5b87d2a2b892`.
+The review SHA256 is
+`48f89537cf6d9759766bff6d79c0a199f673a135e770b5708c21f7e31f9efe9e`;
+scope_audit/quiet_scope independently approved the final artifact correspondence.
+The review explicitly does not claim geometric disjointness from every earlier
+qualitative neighborhood without a supplied radius. No inspected prior proof
+supplies membership of this fixture or the completed entire family.
 
 ## Conditional-average extension of the raw class
 
