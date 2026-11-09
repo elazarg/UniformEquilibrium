@@ -1,13 +1,5 @@
 # Global context rigidity for guarded pair-star minima with a mixed pivot row
 
-**Reviewed internal theorem; export admission is not certified.** The proof
-allows mixed pivot rows and explicitly requires late pivot and quiet guards.
-Its matrix and one-owner screens are checked, but no complete reward-table
-witness has been certified to escape all applicable existing equilibrium
-producers. The zero higher-reward boundary example has an absorbing Nash
-equilibrium. The theorem therefore remains in this internal repair lane;
-it must not be reported as new certified Fin4 counterexample coverage.
-
 ## Exact raw hypotheses and conclusions
 
 There are four native quitting players I={0,1,2,3}. Each nonempty coalition
@@ -635,10 +627,32 @@ Take p=0 and
     J=[0,-12,-15/4,0; -6,0,-3,-2;
        15/2,-5,0,-3; 13/2,-4/5,0,0].
 
-Set all unlisted rewards to zero: singleton rewards are Gamma, the two
-participants' rewards in each pair are J, every nonparticipant pair reward
-is zero, and every triple or full-coalition reward is zero. This specifies
-the entire native table. In particular own singletons and AllNever pay zero.
+Use the following complete native table. A coalition mask is the sum of
+2^i over its owners; each row lists rewards to players0,1,2,3.
+
+| Mask | Reward vector |
+|---|---|
+|1|0,-2,2,2|
+|2|5,0,-1,-1|
+|3|-12,-6,-3,10|
+|4|-1,1,0,-1|
+|5|-15/4,0,15/2,0|
+|6|-10,-3,-5,-3|
+|7|-30,30,30,30|
+|8|-1,1,-1,0|
+|9|0,-3,10,13/2|
+|10|3,-2,0,-4/5|
+|11|-30,10,30,-1000|
+|12|-3,10,-3,0|
+|13|-3,-3,-3,0|
+|14|-3,10,3,3|
+|15|3,-30,-30,-30|
+
+Own singletons and AllNever pay zero. For original-game source comparisons
+use R_i(A)=1+Z_i(A), retaining zero live and Never rewards. This change
+preserves the literal singleton matrix, not arbitrary strategic payoffs.
+The construction below is in the native Z game. No positive absorbing gap
+or minimizing property is asserted for this explicit table.
 
 The literal singleton matrix has determinant6 and inverse
 
@@ -730,11 +744,11 @@ a positive absorbing gap. Those are distinct source inputs.
 
 For this SAME complete table, direct substitution in (Coeff) gives
 
-    C1(r)=(136r-6)/9,
+    C1(r)=(51r-4)/6,
     C2(r)=-(287r+78)/45,
-    C3(r)=-(245r+27)/39.
+    C3(r)=-(133r+9)/13.
 
-All are negative for 0<=r<3/68. The two orientation tests have S_12(0)-S_21(0)=-1028/387 and -1096/387,
+All are negative for 0<=r<4/51. The two orientation tests have S_12(0)-S_21(0)=-1028/387 and -1096/387,
 respectively. Both are nonzero.
 
 Thus the same table proves the nonidentity of every factor needed for
@@ -751,14 +765,14 @@ observer3 with J_32=0>Gamma_32=-1; sole owner3 is blocked by the pivot with
 J_03=0>Gamma_03=-1. These comparisons apply even if the sole owner's law has
 arbitrary countable support: absorption makes its finite mass1, and its
 initial atom is the only relevant variable in these particular deviations.
-This is a limited boundary check. The zero higher-reward completion above
-still has an absorbing all-four-sure equilibrium. No failure of all
-completion-dependent equilibrium producers has been certified.
+This is a limited boundary check. The additional rewards are specified
+literally; the construction asserts an actual guarded law, not an equilibrium
+existence result or a positive absorbing gap for that completed table.
 
 The leading construction and its invertible Jacobian persist for EVERY
 fixed finite choice of the other32 rewards: they enter only higher-order
 terms in the seven equations. The displayed C(r) formulas use the specified
-zero passive pair rewards; for other completions their r-slopes can change.
+passive pair rewards; for other completions their r-slopes can change.
 The A_i and both r=0 price tests remain unchanged.
 
 The construction can also meet the exact equality
@@ -906,6 +920,8 @@ print('PASS full fixed-r Ratio identity; detGamma=',G.det(),'Q=',qdirect)
 print('PASS weighted Never identity and coefficient simplification with six nonzero passive pair rewards.')
 
 """Exact source-screen and actual guarded-fixture checks for signed pivot rewards."""
+rows={1: '0 -2 2 2', 2: '5 0 -1 -1', 3: '-12 -6 -3 10', 4: '-1 1 0 -1', 5: '-15/4 0 15/2 0', 6: '-10 -3 -5 -3', 7: '-30 30 30 30', 8: '-1 1 -1 0', 9: '0 -3 10 13/2', 10: '3 -2 0 -4/5', 11: '-30 10 30 -1000', 12: '-3 10 -3 0', 13: '-3 -3 -3 0', 14: '-3 10 3 3', 15: '3 -30 -30 -30'}
+Z={A:list(map(s.Rational,row.split())) for A,row in rows.items()}
 from itertools import combinations, permutations
 import sympy as s
 G=s.Matrix([[0,5,-1,-1],[-2,0,1,1],[2,-1,0,-1],[2,-1,-1,0]])
@@ -956,8 +972,8 @@ J=s.Matrix([[0,-12,-s.Rational(15,4),0],[-6,0,-3,-2],
  [s.Rational(15,2),-5,0,-3],[s.Rational(13,2),-s.Rational(4,5),0,0]])
 w=B.T*s.ones(4,1);r=s.symbols('r')
 lam={i:1-G[i,0]/J[i,0] for i in (1,2,3)}
-C={i:s.factor(G[0,i]*lam[i]+J[0,i]*(1-lam[i])-r*sum(w[j]*(-G[j,0]+lam[i]*G[j,i]) for j in (1,2,3) if j!=i)) for i in (1,2,3)}
-expected_C={1:(136*r-6)/9,2:-(287*r+78)/45,3:-(245*r+27)/39}
+C={i:s.factor(G[0,i]*lam[i]+J[0,i]*(1-lam[i])-r*sum(w[j]*(-G[j,0]+lam[i]*G[j,i]+(1-lam[i])*Z[(1<<i)|1][j]) for j in (1,2,3) if j!=i)) for i in (1,2,3)}
+expected_C={1:(51*r-4)/6,2:-(287*r+78)/45,3:-(133*r+9)/13}
 assert all(s.simplify(C[i]-expected_C[i])==0 for i in (1,2,3))
 assert all(C[i].subs(r,0)<0 for i in (1,2,3))
 # Generic price test at the SAME table, both orientations.
@@ -987,7 +1003,7 @@ word=(1,2,3);av=[]
 for k,i in enumerate(word):
  z=s.zeros(4,1);z[0]=v[2*k];z[i]=v[2*k+1];av.append(z)
 assert G*sum(a,s.zeros(4,1))==(1-eta0)*E
-# Literal native pair-root Never recursion: every passive pair reward is zero.
+# Literal native pair-root recursions for the complete displayed table.
 e_after=v[6]*t*E;ends=[None]*3;quits=[None]*3
 for k in reversed(range(3)):
  i=word[k];qp=t*av[k][0];qi=t*av[k][i];e=s.zeros(4,1);Q=s.zeros(4,1)
@@ -995,8 +1011,8 @@ for k in reversed(range(3)):
  e[i]=G[i,0]*qp+(1-qp)*e_after[i];Q[i]=J[i,0]*qp
  for j in range(1,4):
   if j==i:continue
-  e[j]=G[j,0]*qp*(1-qi)+G[j,i]*qi*(1-qp)+(1-qp)*(1-qi)*e_after[j]
-  Q[j]=J[j,0]*qp*(1-qi)+J[j,i]*qi*(1-qp)
+  e[j]=G[j,0]*qp*(1-qi)+G[j,i]*qi*(1-qp)+Z[1|(1<<i)][j]*qp*qi+(1-qp)*(1-qi)*e_after[j]
+  Q[j]=J[j,0]*qp*(1-qi)+J[j,i]*qi*(1-qp)+Z[1|(1<<i)|(1<<j)][j]*qp*qi
  ends[k]=e;quits[k]=Q;e_after=e
 F=s.Matrix([*(ends[0]-t*E),*[quits[k][i]-ends[k][i] for k,i in enumerate(word)]])
 F=s.Matrix([s.cancel(z/t) for z in F]);F0=F.subs(t,0)

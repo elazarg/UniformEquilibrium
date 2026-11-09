@@ -1,347 +1,342 @@
-# Independent reviews of the mixed-pivot global context theorem
+# Independent review of mixed-pivot global context rigidity
 
-**Mathematical PASS; export admission NOT CERTIFIED.** The current
+**Mathematical PASS; export admission WITHDRAWN.** The
 [internal theorem](../revisit/ACTUAL_MINIMUM_GLOBAL_PAIR_STAR_RIGIDITY.md)
-permits a mixed pivot row and adds an explicit late pivot guard. A complete
-reward-dependent overlap certificate is still missing. No new UE reward-table
-class or additional certified counterexample coverage is claimed.
+is still valid at SHA256
+`fd25918270847c38eae4cb76a9c085a8212643a09fa60ad48cac580673c3842c`.
+Its complete boundary table is now solved by the
+[signed solo/triple producer](../exports/SIGNED_SOLO_TRIPLE_UNIFORM_EQUILIBRIUM.md).
+The general conditional theorem is not proved redundant, but this solved
+control no longer certifies its additional counterexample coverage. Retain
+the proof internally. The final review below includes the explicit admission
+withdrawal; the [source audit](SIGNED_SOLO_TRIPLE_UNIFORM_EQUILIBRIUM__SOURCE_AUDIT.md)
+records the new construction and the named prior producer comparisons.
 
-The earlier positive-pivot packet, SHA256
-`96d56acf1bbac9a46df5db6fa2eeade2d408464fe088939a61a8e7610db744a9`, had
-its coverage approval withdrawn: its singleton chamber is already degree0.
-The [source audit](../notes/CODEX_ROOT__PROOF_MECHANISM_DIVERSIFICATION.md#singleton-chamber-overlap-audit)
-gives the exact reason. The full earlier reviews remain in Git; the records
-below concern the corrected mathematical theorem.
+# Final independent review of signed-pivot global context rigidity
+
+Reviewer: FINAL_GLOBAL_REVIEW, 2026-11-09.
+
+## Verdict and exact bytes
+
+**CURRENT VERDICT: mathematical PASS retained; conditional export admission
+WITHDRAWN.** A subsequently proved exact two-phase absorbing equilibrium
+covers the completed witness table. The final reassessment below supersedes
+the admission affirmation recorded in the original review. I find no
+unresolved mathematical objection to the complete rigidity candidate itself. This is an ordinary mathematical review,
+not a Lean build, an arbitrary-game producer, or a claim that Fin4 is solved.
+
+The complete 1037-line candidate is
+`math/revisit/ACTUAL_MINIMUM_GLOBAL_PAIR_STAR_RIGIDITY.md`,
+SHA256 `fd25918270847c38eae4cb76a9c085a8212643a09fa60ad48cac580673c3842c`.
+The independent completion checker reviewed and executed is
+`math/experiments/FIN4_SIGNED_PIVOT_COMPLETION_CHECK.py`, SHA256
+`0b4c126ec0ec9001a5c6a82a2cdf8863984d0972174c4bb65df6ba0727c45f10`.
+The accompanying source audit is now superseded by the
+[signed solo/triple audit](SIGNED_SOLO_TRIPLE_UNIFORM_EQUILIBRIUM__SOURCE_AUDIT.md),
+which incorporates the exact new equilibrium and the prior producer screens.
+The admission reassessment below records the effect on this theorem.
+
+I read `AGENTS.md`, `math/AGENTS.md`, `math/GOAL.md`, `math/SOURCES.md`, and
+`math/exports/README.md`. No tracked file, Lean file, Git index, branch, or
+worktree was changed by this review.
+
+## The theorem actually reviewed
+
+The input is an actual independent complete-law profile with every original
+Never mass positive, all four full behavioral caps attained by Never, zero
+observer debts, and global minimality of the fixed objective d_p+r nu on a
+carrier containing every actual observer-optimal profile. Its eventual
+nonempty dates have exactly the pivot and one observer active. All three
+observer labels recur; every inactive-observer and pivot Quit comparison is
+strict at every sufficiently late nonempty date. The raw Ratio hypotheses
+are Gamma invertible, G_i nonzero, rho_i>1, and all c_ij>0 for distinct
+observers. The pivot row h and pivot participant rewards may have either
+sign. Earlier pivot contacts are allowed.
+
+At any fixed r with all three C_i(r) nonzero, such a minimum must eventually
+follow one directed three-cycle, and that cycle's explicit price matrix must
+be symmetric. For the stated open dense raw test, both orientations fail
+symmetry throughout a sufficiently small positive r interval chosen before
+source selection, so the entire specified mode is impossible there.
+
+The conclusion is about actual minimizing sources. It is not a theorem that
+all tables in Ratio have UE, that all actual laws have this calendar, or that
+an actual-law fixture is a minimizing source.
+
+## Review of the global mathematical mechanism
+
+1. **Complete semantics and finite splices.** The unique live history makes a
+   behavioral deviation a mixture of deadlines and Never, with no public
+   correlation. The root payoff, cap, Never-value, and survival recursions are
+   literal. Positive original Never makes every head survival positive,
+   gives summable hazards, and passes ALL-END and observer optimality to
+   conditional tails. It does not make those tails minima or their caps
+   nonnegative. The proof does not use either false implication. Empty-date
+   deletion preserves the attained cap because Never is retained.
+
+2. **Exact run chart.** I checked the geometric pivot atoms, first-coalition
+   probabilities, and cap equations directly. The reduced four-equation
+   endpoint constraint correctly uses the penultimate last-label cap in
+   place of a tiny final active derivative. Its kernel calculation is valid
+   for both ijki and ijkj. The positive lower bound on the relevant c-term
+   persists when theta approaches zero. For each actual finite run theta is
+   strictly positive, so the reduced constraint recovers the omitted exact
+   final cap. No infinite run is executed.
+
+3. **Uniformity across unbounded waiting.** The projective change of variables
+   gives an exactly linear map when the observer run mass g is zero. Its
+   arbitrary subproducts are bounded by the convex-combination/telescoping
+   coefficients, not by an unjustified product of one-step norm bounds. The
+   nonlinear remainder has the factor g, including its state derivatives.
+   The Duhamel and chain-rule bounds therefore use the summable observer
+   masses, not a potentially nonsummable sum of cap sizes. This yields the
+   needed uniform C2 convergence over arbitrary finite bridges. The fixed
+   neighborhood can be chosen smaller than the common analytic chart so
+   all bridge prefixes remain inside it.
+
+4. **Timing variation.** For a run of length at least two, moving weight
+   between its first and last observer atoms is a two-sided variation. The
+   exact factor (E_i/G_i)g is positive even when E_i and G_i are negative.
+   The bridge and endpoint correction preserve this factor; division by it
+   does not require it to dominate a squared tail scale. The resulting
+   derivative is -C_i(r)+o(1), with the penalty already fixed. Thus all late
+   runs are singleton whenever every C_i(r) is nonzero.
+
+5. **Constrained second variation.** The quadratic identity is formulated in
+   global absolute atoms, where closed total marginal tangents make the
+   quadratic joint-Never term vanish. The weighted Never-payoff correction
+   restores the penalty contribution on the cap-constrained curve. The
+   augmented objective has zero ambient differential at zero data, so its
+   Hessian does not acquire an omitted term from second-order cap-solving
+   controls or from the atom/hazard coordinate change. I checked the signs
+   of the ordered-pair terms and the coefficient identity involving K.
+
+6. **Sparse global control and context rigidity.** The memory remainder is
+   O(epsilon) uniformly, including arbitrarily many zero-control dates.
+   Compact accumulation contexts can be requested in any finite order,
+   since each selected neighborhood occurs infinitely often. This does not
+   assume bounded recurrence gaps. A closed observer-coordinate path leaves
+   only an O(epsilon) pivot residual; the later four-run correction has
+   O(epsilon) controls and O(epsilon^2) cost. Different contexts for one label
+   yield opposite-work out-and-back excursions; the setup and reverse setup
+   cancel with the same assigned contexts. Invertibility of c guarantees a
+   nonzero price-row difference. Rectangles then force price symmetry.
+
+7. **Exact eventual calendar.** Unique accumulation context for each label
+   implies the transition equation on every infinitely repeated edge. The
+   recurrent three-vertex graph is strongly connected. The branching
+   contradiction is valid for unequal as well as equal lambda values.
+   Consequently every vertex has one successor and the recurrent graph is a
+   directed three-cycle. There are finitely many other edges, each used only
+   finitely often, so the actual word is eventually that cycle. The proof
+   gives eventual exact periodicity, rather than only a periodic limit.
+
+8. **Transfer to an actual minimum.** Fixing the polygon, mesh, context
+   tolerance, and strictly negative work margin before moving the cut late
+   is essential and is done here. Only waiting distances then vary. The six
+   implicit endpoint equations have a uniformly invertible cap block and
+   scalar payoff/survival blocks tending to identity. Bridge C2 bounds give
+   convergence of their two-jets. Every chosen window is finite, so its
+   positive atoms and strict comparisons provide some two-sided feasible
+   interval; a uniform interval radius is unnecessary. Fixing every entrance
+   cap preserves the entire earlier head, including pivot ties. The whole
+   objective variation is multiplied by positive head joint survival. A
+   negative second derivative contradicts minimality on that finite curve.
+
+I specifically attempted to break steps 3, 6, and 8 with arbitrarily long
+waiting, very small selected masses, and earlier pivot contacts. The proof
+uses uniform derivative bounds but only pointwise feasibility radii, which
+is sufficient. I found no illicit exchange of an infinite calendar with a
+finite comparison or a requirement that tail minima be inherited.
+
+## Generic perturbation and exact fixture
+
+The genericity polynomial uses the three A numerators and squared skew
+numerators for both orientations. Its denominators do not vanish on Ratio.
+The displayed mixed-pivot example makes every factor nonzero. Therefore the
+polynomial is nonzero on the ambient raw coordinate space and its complement
+is dense in every open Ratio region. Taking the product over four pivot
+relabelings is legitimate: a product of nonzero real polynomials is nonzero.
+The new table is chosen first; then the common sufficiently small penalty
+interval; then the source. No minimizing law is transported through a reward
+perturbation. The absorbing-gap Lipschitz estimate is valid for full
+behavioral caps. The signed-to-native translation preserves debts on
+absorbing prescribed profiles only; native AllNever remains exact Nash.
+
+I reran the full embedded SymPy program. It reconstructs the first-outcome
+identity, the two nonzero orientation skews, all singleton-source matrix
+checks, and the actual three-date polynomial contact equations. It verifies
+the seven-equation Jacobian -60372/7 and all displayed strict leading gaps.
+The actual-law iteration follows from eta(t) in (1/3,2/3), summable hazards,
+matching boundary vectors, and vanishing continuation remainder. It works
+with arbitrary fixed finite values of the other 32 native rewards at a
+sufficiently small scale.
+
+For the SAME complete 15-row table the verified coefficients are
+C1=(51r-4)/6, C2=-(287r+78)/45, C3=-(133r+9)/13, so all are negative on
+0<=r<4/51. The pure123 actual fixture has no repeated runs; it therefore
+avoids the timing-only obstruction. Its pivot Never product gives
+r(t)=(30/7)t+O(t^2), so it can meet the old saturation equality at every
+sufficiently small penalty fixed in advance. The current theorem adds a
+restriction on that equality boundary. The fixture itself supplies neither
+minimality nor a positive absorbing gap.
+
+As a separate falsification attempt, I generated 20 fresh rational Ratio
+tables with asymmetric positive c entries, varying signs of G and h,
+arbitrary pivot participant rewards, and arbitrary passive pair rewards.
+For each I built closed tangents on a nine-date noncyclic word and checked
+the full fixed-r quadratic identity directly from independent first-outcome
+expansions. All passed. I also checked 640 reduced four-run Jacobians at all
+compact endpoint choices theta=0 or lambda; all were nonsingular. These are supporting falsification checks; the general proofs above do not
+follow merely from the finite samples.
+
+## Source overlap and conditional admission
+
+The old positive-h chamber was degree-zero and already excluded. The new
+literal matrix has determinant 6, strictly positive inverse, R0, and degree
+one. Its inverse-positive triples have strictly negative passive inverse
+rows; the signed-cycle prerequisite fails under all 24 roles. I inspected
+the precise relevant singleton declarations, including
+`finFour_singleton_r0Degree_eq_one_of_no_uniformPayoff`,
+`exists_uniformEquilibriumPayoff_of_nonnegative_singletonInverse`,
+`PassiveRowInverseCriterion.exists_uniformEquilibriumPayoff_of_raw_nonnegativeInverse_triple`,
+and `SignedFourCycleSingletonData`, in their files named by the packet.
+The positive determinant is essential: positive inverse alone is not the
+implemented UE criterion.
+
+The completion program independently terminates with all 80 stationary
+patterns excluded (2071 exact Bernstein nodes), all 65 sure-coordinate
+patterns excluded (294 nodes), and all 14 proper universal child quiet-lift
+selectors excluded by actual exact child profiles. I checked the necessary
+sign reductions: the sure-owner test uses the actual punishment lower bound
+L=(-10,-3,-3,-3), and nonsure owners facing a sure owner have H_i=0. Thus
+this comparison is not merely against stationary or Never punishment tails.
+The origin bound for stationary supports and the integer Bernstein splits
+are valid and leave no unresolved boxes.
+
+The same checker passes whole-weight dual obstructions, all 14 nondiscrete
+response partitions even with positive constant row scaling, all 15 marked
+invariance countercontrols within playerwise reward boxes, and the complete
+weak/closure role checks described by the source audit. I compared the
+critical return sign lists and the two surviving weak three-owner roles with
+the actual raw hypotheses in the scalar, two-pair reset, core-free,
+negative-value, and general three-owner return sources. The latter two roles
+fail respectively the physical rate x=-2 and the strict-negative pair of
+coefficients C=-14/1475, a0=-8759/2950 in required U0=C+lambda*a0>0.
+The zero J03 boundary is consequently handled by full source conditions,
+not a failed strict-sign screen alone. I also checked the all-coalition cap
+hypothesis of the calendar-polytope packet and the two nonpositive participant
+rows in the stated actual-marked-source neighborhood. The raw obstructions
+to those families are independent of virtual marked controls.
+
+The virtual marked controls are not claimed actual strategic continuations,
+and universal child-lift failure is not failure of a selector choosing one
+favorable child equilibrium. The audit does not prove absence of every
+conceivable equilibrium architecture. I affirm the named full-selection
+comparisons and their stated scope, not a universal-library negative claim.
+
+I also compared the accepted Never-mass saturation theorem and the retained
+general-Ratio saturation corollary. They impose an endogenous equality and,
+in their relevant formulations, exclude earlier pivot contacts. They do not
+supply this all-calendar context rigidity or exclude the equality-boundary
+actual geometry just constructed.
+
+**Why the exceptional conditional gate passes:** the remaining actual-source
+obligation admits arbitrary recurrent pair-star calendars, including the
+endogenous equality boundary. The new theorem derives an eventual exact
+three-cycle and explicit conservative-price equalities from minimality,
+using finite feasible comparisons it constructs. It then excludes this
+entire specified mode generically, on raw data that escape the audited
+existing producers. This is a substantive global restriction on the
+possible minimizing-source geometry, not a supplied improving-direction
+verifier, a finite-word census, or a restatement of an open repair oracle.
+The same completed table demonstrates actual guarded recurrent geometry
+and nonredundancy of the named raw-source tests; it is deliberately not
+promoted into an unrestricted counterexample.
+
+The strategic inputs not produced are explicit:
+
+- actual attainment of the observer-constrained global minimum, rather than
+  only a point of a compact semantic closure;
+- positive original Never masses and ALL-END for that actual minimizer;
+- selection of a pivot and raw table in Ratio;
+- eventual exact pair-star support with all three observer labels recurrent;
+- strict late inactive-observer comparisons AND strict late pivot comparisons.
+
+The general source theory has conditional alternatives providing some of
+these properties; it does not jointly supply this list for arbitrary games.
+A positive absorbing gap is likewise not supplied for the explicit fixture.
+The current export must therefore remain an **exceptional conditional
+source-mode theorem**. It must not be reported as a newly solved raw UE
+class, a completed source-to-UE chain, an unconditional eliminated source
+branch, or arbitrary Fin4 closure. Nonrealized sources, other sign chambers,
+mixed supports, quiet ties, and late pivot contacts remain outside the
+claimed conclusion. Within this scope, I affirm admission.
+
+## Semantic source inspection and handoff
+
+I inspected the cited behavioral/stopping-law payoff and cap equalities in
+`UniformEquilibrium/Quitting/Paths/StoppingLawOperationalDistance.lean`,
+`quittingTerminalSemanticPair_rootThenContinuation` in
+`UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean`, and
+`quittingContinuationBestResponseValue_rootThenContinuation_eq_max` in
+`UniformEquilibrium/Quitting/Root/TerminalDebtPrefix.lean`. I also inspected
+`nonempty_finFourSinglePivotNormalization_of_no_uniformPayoff` in
+`UniformEquilibrium/Diagnostics/Quitting/FinFourSinglePivotNormalization.lean`
+and the polynomial response identity source. This was static source
+inspection, not fresh Lean verification.
+
+The packet's proposed formalization order is appropriate: exact run maps and
+reduced chart, projective bridge estimates, constrained quadratic identity,
+sparse context controls and finite IFT transfer, then the finite recurrent
+transition graph and rational genericity tests. Its theorem shape does not
+smuggle the improving comparison into a strategic structure field.
+
+Final recommendation: promote only the exact reviewed theorem and retain the
+compact completion checker and source audit durably outside the frozen
+packet. Preserve all stated nonclaims in the accompanying status report.
 
 
-# Independent review of signed-pivot global context rigidity
+## Superseding admission reassessment: exact equilibrium at the witness
 
-Core mathematical verdict: **PASS**. The reviewed core is
-`ROOT/SIGNED_PIVOT_GLOBAL_PACKET.md`, initial complete-core draft SHA256
-`1d69f3bda265907aace0807fa7582f7fbcb1c01f7c2fa3a0921cd255c8bc7b6e`.
-Its boundary/checker placeholders were not yet final at that hash. Final-byte
-binding will be recorded below after the assembled replacement is frozen.
+The subsequent constructive attack supplies an exact periodic absorbing Nash
+profile for the SAME completed table. Let b be the smaller root of
 
-The repair allows arbitrary pivot singleton and participant rows while
-retaining c_ij>0 and rho_i>1. It explicitly requires all sufficiently late
-pivot and quiet comparisons to be strict. Neither positive conditional caps
-nor absence of earlier pivot contacts is assumed. The fixed-r conclusion
-requires all three C_i(r) nonzero and forces eventual directed three-cycle
-recurrence and symmetry of its explicit price matrix. Generic small-r data
-exclude that entire stated guarded actual-minimum mode.
+    175496570 b^2 - 12603641 b + 64295 = 0,
 
-## Core proof and uniformity
+isolated in (55265/10^7, 55267/10^7), and put
 
-The exact run formulas are unchanged algebraically when h or J_pi change
-sign. All positivity used in the run construction is actual supported atom
-positivity, rho_i>1, and c_ij>0. In particular E_i/G_i>0 follows from the
-actual positive pivot mass, even when E_i<0. Pivot guards now enter as
-explicit feasibility assumptions rather than as a consequence of singleton
-signs. Fixing all entrance caps preserves every earlier tied pivot deadline.
+    s=(-348 b^2-1080 b+35)/(2(-174 b^2+139 b+35)).
 
-The reduced four-run chart remains uniformly invertible over theta_i in
-[0,lambda_i], including long-run limits. Its kernel proof uses only the
-positive observer coefficients z_ij and invertibility of Gamma; it does
-not use a positive inverse column or h_i>0. Replacing the last cap equation
-by the penultimate active-coordinate equation is essential and valid.
+Alternate the root hazards (0,s,0,0) and (5/24,b,0,5/7). I independently
+recomputed both phase payoffs and every endpoint comparison from the literal
+15-row table. The four active comparison numerators reduce to zero modulo
+the displayed quadratic. Each of the four inactive comparison ratios is
+strictly negative by rational interval bounds on the isolating interval.
+All active hazards lie strictly between zero and one. Every player faces at
+least one opponent who acts with fixed positive probability per period, so
+opponents absorb almost surely under every complete deviation. The bounded
+continuation remainder therefore vanishes, and the exact local Nash
+comparisons imply full behavioral terminal Nash. They also justify the
+recipient-wise original reward shifts and the original uniform-payoff
+consumer. This is an exact construction, not merely a numerical lead.
 
-The projective conjugacy at g=0 is exact at nonzero small cap data, not only
-its derivative at the origin. In particular z_j^+=(z_j-f)/(1-f) gives
-sigma^+=theta sigma-(1-theta)tau_i; the pivot cap and the normalized payoff
-and survival coordinates are unchanged. Arbitrary linear subproducts have
-one common bound because their coefficients telescope to a convex weight
-sum. Analytic remainders are g times a uniformly bounded C3 map. Duhamel
-expansion and the second-derivative chain rule therefore give a C2 bridge
-error controlled by the total observer mass, independently of the number
-of intervening runs. Summable date hazards imply this mass tends to zero
-on late tails. No illicit summation of quiet cap sizes is used.
+The independent reconstruction is retained as
+`FINAL_GLOBAL_DYNAMIC_CHECK.py` beside this review. It ran successfully.
+In particular, the passive payoff of owner1 at the second phase is
+-2x+z-2xz, with Gamma13=+1; it vanishes at x=5/24, z=5/7. The previously
+suggested sign obstruction using Gamma13=-1 does not apply to this table.
 
-In the timing argument the exact small factor (E_i/G_i)g factors out before
-passing to zero data. Bridge derivatives and the correcting chart preserve
-this factor, so an unusually small active atom does not destroy uniformity.
-Every nonzero C_i forces late singleton runs, with all earlier cap contacts
-allowed. Negative and positive coefficients are treated alike here.
-
-The full fixed-r quadratic identity retains its observer temporal-area
-term and the factor 1+r w_p. The absolute-atom coordinate convention and
-zero total marginal tangents are necessary: joint Never has zero quadratic
-coefficient in those coordinates. The added fixed-cap combination cancels
-the ambient first derivative, which makes the constrained second derivative
-invariant under changing to hazards and solving second-order corrections.
-I independently reran the first-coalition expansion with mixed
-h=(5,-1,-1), nonstructured c and six arbitrary passive pair rewards. It gave
-area=-27/40 and Q(r)=-101(5042r+1435)/16800, agreeing exactly with the formula.
-
-The memory bound is uniform during arbitrary waits because every lambda_i
-is below one. A single inherited simplex sequence defines all recurrent
-contexts, while the physical tangent state starts at zero for every window.
-Thus any finite ordered list of desired recurrent contexts is realizable
-arbitrarily late. The setup and reverse-setup path costs cancel with the
-same context assignments; exchanging the two contexts on an out-and-back
-segment reverses its nonzero work. This proves context uniqueness without
-an assumed storage function. Rectangles force price symmetry.
-
-The recurrent graph argument is complete. A branching label makes both
-successor contexts equal with a positive coordinate at the branching label.
-They cannot transition to one another, so strong connectivity forces both
-return edges. Comparing those equations yields equal contraction factors
-and unequal point-mass injections, a contradiction. Every vertex therefore
-has one successor, and the actual eventual word is a directed three-cycle.
-Solving its recurrence gives exactly the displayed PriceMatrix contexts.
-
-The endpoint residual after a closed observer polygon is O(mesh), and its
-four-run correction has O(mesh) controls and O(mesh squared) cost. For the
-actual transfer the polygon, mesh, tolerance and strict negative margin are
-fixed before the window moves late; only uncontrolled waits vary. Every
-such wait has the uniform C2 bound. The six implicit equations have the
-four-cap inverse block and two scalar survival blocks bounded uniformly.
-Their two-jets converge, preserving the negative curvature. The feasible
-parameter interval may shrink with the actual window, which is harmless:
-a two-sided negative second derivative still contradicts a minimum.
-
-## Source adapter and genericity
-
-The source adapter is correctly limited to native positive absorbing gap.
-The checked single-pivot normalization supplies a signed no-UE table with
-own singleton vector e_m. Finite deadlines dominate Never because own
-singletons are nonnegative. The translation to native own zeros decreases
-the pivot cap by1 and its prescribed payoff by1-nu; all debts agree on
-absorbing laws. Thus the positive absorbing gap is preserved, although
-native AllNever remains exact Nash. The adapter does not supply Ratio,
-actual constrained attainment, the support word or either strict guard.
-
-The generic polynomial uses only24 raw singleton/participant coordinates;
-it is independent of the remaining32 native coordinates. Denominators do
-not vanish on Ratio. The degree1 mixed-row witness proves that this is a
-nonzero polynomial, so its complement is dense in every nonempty open
-Ratio/source-screen region. The four relabeled factors give one generic
-perturbation before pivot selection. The finite minimum of positive small-r
-thresholds over eligible pivots respects choosing r before every new source.
-No old profile is transported across a reward perturbation.
-
-## Genuine signed source screens and the sharpened actual boundary
-
-RAW's fixture section SHA256
-`ee3a901d6e28acfc706421f4117ee11e97b15d5e1b766af07e969589c7475982`
-and source-screen checker SHA256
-`73b510f5d74a405aebd92f177a0e33b18f7b0d761aa5ca7af2c145daf1ccc72c`
-were independently inspected and the checker passed. The determinant6,
-strictly positive full inverse, literal R0/degree1 argument, negative
-columns, mutually negative pair and all passive-child failures are exact.
-The signed-cycle screen checks all24 eligible orderings and correctly does
-not confuse an eligible signed cycle with an arbitrary negative cycle.
-The pointed normalized matrix lies in the existing residual template2.
-These are singleton-source screens, not a claim that every other reward
-producer fails for this completed table.
-
-The initial four-date fixture had repeated label1 across block seams and
-therefore already fell to the timing lemma. The sharper replacement is the
-three-date pure123 construction, supplied by root and independently checked
-from full polynomial root recursions in
-`FINITE/SIGNED_THREE_DATE_FIXTURE_CHECK.py`, SHA256
-`13ad3e34d2a59727218b920d1c850e999ec6e55f625496099dec76635d989acb`.
-The replacement prose is `FINITE/SIGNED_THREE_DATE_FIXTURE_REPLACEMENT.md`,
-SHA256 `ac48e1baeaa5a3e507e98c2f4448f3e97c32d888d8ace86fad7a7fca277a21f1`.
-The seven-equation Jacobian is -60372/7. Varying the contraction eta as
-well as six hazards is valid; eta(t)=1/2+O(t) stays in (1/3,2/3). Iterating
-t_next=t eta(t) gives matching boundaries and summable actual hazards.
-All strict pivot/quiet gaps hold, every run is singleton, and all C_i(r)
-are negative for 0<=r<3/68. Both exact price skew matrices are nonzero.
-This law is not asserted to be minimizing or to have positive absorbing gap.
-
-One can also calibrate the retained general-ratio saturation condition.
-The block's leading pivot mass is20/7. The contraction recursion gives
-sum_n t_n=2t+O(t^2), sum_n t_n^2=O(t^2), hence
-N_p(t)=1-(40/7)t+O(t^2). Since sum Gamma^-1 e_p=4/3, the continuous quantity
-r(t)=(3/4)(N_p(t)^(-1)-1)=(30/7)t+O(t^2) takes every sufficiently small
-positive value by the intermediate value theorem. For any such prechosen
-r, some t gives the exact old equality N_p=1/(1+4r/3). The global context
-obstruction still applies because all C are negative and the price matrices
-remain nonsymmetric. This comparison does not choose the theorem's penalty
-after its hypothetical minimizing source.
-
-## Conditional admission assessment: not certified
-
-Mathematical PASS does not presently justify export admission. The signed
-singleton matrix passes the named matrix screens, and the actual three-date
-construction avoids repeated-run timing and can meet Never-mass saturation.
-The initial completion had absorbing singleton-owner equilibria (solo1 and
-solo3), independently of its higher rewards. Root's revised J31=-4/5 and
-J03=0 now block every one-owner absorbing calendar while preserving the
-three-date geometry. However the specified zero higher-reward completion
-still has an all-four-sure equilibrium, correctly disclosed in the packet.
-Consequently the supplied complete boundary table does not demonstrate that
-the new theorem narrows data left by the applicable reward-dependent
-existence producers.
-
-I withdraw the provisional exceptional-admission affirmation. A replacement
-completion needs an exact complete overlap audit; blocking singleton supports
-alone is not enough. Until that exists, retain the repaired proof internally
-or under revisit. This is a gate limitation, not a mathematical flaw in the
-global context proof for arbitrary signed h and J_pi.
-
-The independently useful mathematical gain remains a global classification
-of every all-label recurrent guarded actual calendar, with no recurrence-gap
-bound: nonzero C forces a directed cycle and an explicit conservative price.
-Its finite variations and correctors are constructed rather than assumed.
-Whether that supplies a new surviving-counterexample restriction still
-requires the missing completion-dependent overlap certificate.
-
-The exact unproduced inputs remain: an actual observer-constrained global
-minimum, ALL-END, positive original Never, an eligible Ratio pivot,
-eventual pair-star support with all three labels recurrent, and sufficiently
-late strict pivot AND inactive-observer comparisons. The original-to-native
-adapter supplies a positive absorbing gap and allows generic reselection;
-it supplies none of those support/attainment hypotheses. No eliminated
-arbitrary source branch, new reward-table UE class, or completed source-to-UE
-chain is established here. Quiet or pivot contacts, mixed supports, other
-Ratio signs and nonrealized sources remain open. The old all-positive-pivot
-source-chamber admission is withdrawn in the separate overlap audit; the
-signed-pivot mathematical repair does not revive it.
-
-## Assembled signed-fixture recheck
-
-The assembled packet at SHA256
-`63b387b4dabdce1963de1835a39482d5174723c89a77ed8816ea9bb71326f81d`
-was read with the revised J31=-4/5 and J03=0. Its complete embedded checker
-was extracted and executed successfully. The same polynomial seven-equation
-Jacobian remains -60372/7. The new first-date quiet3 gap is -19/105 and the
-last pivot gap is -2. Its C3(r)=-(245r+27)/39 remains negative, and both
-price tests remain nonzero. The one-owner all-calendar comparison is exact:
-max(2-6q,15q/2-2)>=2/9, while the other three owners have blockers at least
-1/5,1,1. The explicit all-four-sure equilibrium of the zero higher completion
-is also correct. Arbitrary fixed remaining32 rewards enter the IFT and guard
-equations only at higher order; the leading actual construction persists
-with a sufficiently small scale. Passive pair rewards may change C's r
-slopes, as stated. These checks preserve mathematical PASS and do not remove
-the completion-dependent export gate limitation. Subsequent assembling
-edits do not inherit a final-byte binding automatically.
-
-# Independent mathematical review of the signed-pivot global packet
-
-Reviewed artifact: ROOT/SIGNED_PIVOT_GLOBAL_PACKET.md in this scratch root.
-SHA256: 9ebf726002ab89a41bcf78147feb248799eba68939efa54cf3be2dc2b20cce1e.
-
-Verdict: **PASS for the stated ordinary mathematical theorem and exact
-boundary calculations. Export admission / full reward-completion overlap:
-NOT CERTIFIED.** No Lean command or claim of formalization is involved.
-
-## Claim and exact strategic inputs
-
-The packet assumes an actual independent complete-law global minimum of
-d_p+r nu, positive original Never, ALL-END, zero observer debts, the raw
-positive cross-ratio chamber, eventual pair support p,i with all three
-labels recurrent, eventual strict inactive-observer comparisons, and eventual
-strict pivot comparisons. It proves that nonzero C_i force an eventual
-three-cycle with symmetric price matrix. Generic raw price data exclude this
-whole supplied mode. Earlier pivot contacts, arbitrary run lengths and
-arbitrary recurrence gaps are permitted.
-
-The actual minimum, raw chamber, eventual support, recurrence and both kinds
-of late strict guard are not produced from arbitrary games. The counterexample
-normalization supplies a native positive ABSORBING gap, not absence of native
-UE; native AllNever remains Nash. The packet states these distinctions.
-
-## Full proof audit
-
-1. The root identities price every deterministic deadline and Never, hence
-   all behavioral deviations by private-randomization disintegration.
-   Positive original Never supplies positive head survival and proper hazards.
-   ALL-END and observer optimality pass to actual conditional tails.
-2. The geometric pivot atoms within an observer run, the three first-coalition
-   probabilities, and the cap/payoff/Never maps are exact. The run parameters
-   admit a compact analytic extension including theta=0 without executing an
-   infinite run. The reduced final-cap equation removes the small-theta
-   denominator from the four-run correction.
-3. The four-run chart kernel proof is correct. Its decisive coefficients are
-   positive cross ratios times 1-theta; neither the pivot singleton row nor
-   its participant rewards need signs. Compactness gives a uniform inverse.
-4. In the projective coordinates the zero-observer-mass bridge maps are
-   exactly linear. Every subproduct has a common bound. The nonlinear
-   remainder has a factor equal to that run's observer mass; summability
-   supplies the claimed uniform C2 estimate over arbitrarily long bridges.
-   This estimate does not incorrectly assume summability of the tail caps.
-5. The timing derivative factors by the actual positive quantity
-   (E_i/G_i)g_i before normalization. Uniform bridge and correction estimates
-   therefore do not require this small quantity to dominate a square error.
-   Both moment directions are feasible at each finite actual window.
-6. The quadratic identity uses GLOBAL absolute atom tangents. The pivot debt,
-   weighted Never coefficient, fixed penalty and observer area terms have
-   the stated signs. The cap-multiplier correction cancels the zero-data
-   ambient gradient, so exact nonlinear cap correction does not introduce
-   an unaccounted second-order term. The embedded first-outcome checker passed.
-7. Memory tracking has uniform O(mesh) error. Any finite ordered list of
-   accumulation contexts can be sampled arbitrarily late. Reversing assigned
-   coordinate paths cancels their setup work. Distinct contexts or asymmetric
-   price rows therefore supply genuinely negative finite closed tangent loops;
-   endpoint correction has only quadratic mesh cost.
-8. The three-vertex recurrent graph proof is valid. Two successors force
-   equal context vectors; strong connectivity and the positive point-mass
-   update then contradict each other. Thus the eventual word is exactly one
-   orientation of the three-cycle. The displayed context formulas solve its
-   affine recurrence.
-9. The actual transfer fixes the finite control mesh and negative margin
-   before sending the comparison later. The number of controlled variables
-   stays fixed while waits vary. The uniform bridge two-jets and reduced
-   endpoint inverse supply an exact cap-preserving finite IFT curve. Its
-   supported hazards remain positive, all strict guards persist on an
-   instance-dependent two-sided interval, and literal continuation plus all
-   entrance caps preserve every earlier full-cap comparison.
-10. The generic polynomial is nonzero, and its product over the four pivot
-    relabelings is also nonzero. Perturbing the reward table before choosing
-    penalty/source is ordered correctly. Native absorbing exploitability is
-    2-Lipschitz in rewards. The own-singleton translation preserves regrets
-    on absorbing prescribed profiles, using finite-deadline caps; it does
-    not claim a positive native full terminal gap.
-
-The replacement of automatic pivot positivity by an EXPLICIT late pivot
-guard is essential. Pure late deadlines in a fixed law converge to that
-law's Never payoff, which may be negative. The repaired packet does not
-repeat that invalid inference.
-
-## Exact boundary and source checks
-
-The signed singleton matrix is R0 of degree1, has strictly positive inverse
-at the same pivot, contains a mutually negative pair, and fails the cited
-passive-child and signed Hamiltonian criteria under their complete finite
-selection sets. These facts were independently reconstructed; they are not
-borrowed from the earlier degree-zero example.
-
-The revised J_31=-4/5,J_03=0 three-date fixture has the stated seven-variable
-Jacobian -60372/7, all six positive leading hazards, and all strict gap
-vectors. Variable eta(t)=1/2+O(t) gives summable exact block concatenation
-with matching cap boundaries. It produces a pure123 calendar with no repeated
-run timing shortcut. The coefficients C_i(r) and both nonzero price skews
-match the checker. The one-owner deviation tests are valid for arbitrary
-absorbing one-owner laws, not only stationary hazards.
-
-The saturation-boundary calculation also checks: leading pivot mass per
-block is20/7; sum_n t_n=2t+O(t^2); therefore
-N_p(t)=1-(40/7)t+O(t^2) and r(t)=(30/7)t+O(t^2).
-Uniform convergence of the hazard products supplies continuity, and the
-intermediate value theorem realizes every sufficiently small fixed positive
-r. This is a nonminimal geometry control, as explicitly stated.
-
-I extracted and ran the entire embedded Python block from the reviewed
-bytes; all exact assertions passed. I also directly reconstructed the
-leading gap updates and the infinite-law concatenation argument.
-
-## Admission and overlap boundary
-
-The signed theorem has independently useful global mathematical content:
-arbitrary recurrent guarded calendars collapse to one cycle and explicit
-conservative-price identities, with all improving finite comparisons produced.
-It permits the endogenous saturation equality and earlier pivot contacts,
-which the earlier cap-moving mass-saturation conclusion does not eliminate.
-This is more than a supplied direction verifier or an assumed correction map.
-
-Nevertheless the supplied fixture is not a positive-gap table. Its zero
-higher-reward completion has an absorbing all-four-sure Nash equilibrium
-(and other easy absorbing profiles). Passing singleton-source screens and
-constructing a nonminimal actual law do not establish failure of all
-completion-dependent UE producers. That stronger overlap certification is
-not present here and is not inferred from the proof's validity.
-
-Accordingly this review supports retaining the repaired theorem internally
-or in revisit. It does NOT certify export admission, a new UE reward class,
-an eliminated arbitrary-game source branch, or a completed source-to-UE chain.
+Consequently I withdraw the earlier exceptional-admission affirmation. The
+prior named-producer exclusions can all remain true, while the newly found
+producer covers this witness and an open neighborhood once its strict raw
+criterion is established. The fixture no longer certifies that the global
+rigidity theorem operates on otherwise surviving counterexample territory.
+This discovery does NOT refute that theorem: its fixture was explicitly
+nonminimal and no positive absorbing gap was claimed. Nor does the new
+equilibrium prove that every signed Ratio table is already covered. It does
+remove the concrete nonoverlap evidence on which this admission case relied.
+Without a separate rigorous replacement for that evidence, retain the useful
+global proof internally. The root should not push it as a newly admitted
+export under this withdrawn review. The outstanding source-production and
+geometry hypotheses listed above remain outstanding.

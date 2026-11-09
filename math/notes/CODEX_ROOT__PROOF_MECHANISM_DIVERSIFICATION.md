@@ -27,12 +27,30 @@ The earlier positive-pivot pair-star and cyclic-contact packets do not add
 counterexample coverage: their singleton chamber is already excluded by the
 implemented degree criterion. They are internal repair targets, with the
 exact source-overlap audit below. Their finite-variation calculations may
-be valid without constituting additional progress on Fin4. The [reviewed repair](../revisit/ACTUAL_MINIMUM_GLOBAL_PAIR_STAR_RIGIDITY.md)
-allows a mixed pivot row and explicitly retains strict late pivot comparisons.
-Its global recurrence-to-cycle and price-symmetry proof passes mathematical
-review, but completion-dependent overlap is not certified. It remains
-internal; neither its degree1 matrix nor its actual guarded control alone
-establishes new counterexample coverage.
+be valid without constituting additional progress on Fin4. The generalized
+[global context theorem](../revisit/ACTUAL_MINIMUM_GLOBAL_PAIR_STAR_RIGIDITY.md)
+allows a mixed pivot row and explicitly requires strict late pivot and quiet
+comparisons. Any qualifying all-label recurrent actual minimum must become
+an exact directed three-cycle and satisfy explicit price-symmetry equations.
+The proof permits arbitrary recurrence gaps and preserves earlier pivot
+contacts. An open dense raw test makes both orientations impossible for every
+sufficiently small penalty chosen before source selection. The mathematics
+passes independent review, but its complete boundary table is now SOLVED;
+its additional coverage is not certified, so it remains internal.
+
+The [signed solo/triple producer](../exports/SIGNED_SOLO_TRIPLE_UNIFORM_EQUILIBRIUM.md)
+constructs the absorbing equilibrium that resolves this table. It generalizes
+the existing shared-owner return algebra by using exact signed comparisons
+in place of positive-continuation requirements. One linear solve and at most
+two quadratic roots produce the full two-phase law. The test completely
+classifies the stated nondegenerate proper solo/overlapping-triple architecture
+under all24 role assignments. A negative continuation in the exact example
+lies outside the earlier return criterion; the [complete source audit](../feedback/SIGNED_SOLO_TRIPLE_UNIFORM_EQUILIBRIUM__SOURCE_AUDIT.md)
+checks the named prior producers over their full relevant selections. All
+behavioral deviations are controlled by opponents-only absorption, yielding
+a fixed original uniform payoff. This is a new raw existence class, not
+merely another actual-law control or a stronger conclusion on a table already
+covered by those producers. General Fin4 remains open.
 
 The [generic three-date contact gap](../exports/GENERIC_THREE_DATE_OBSERVER_CONTACT_GAP.md)
 applies to every finite chain of three sufficiently small roots with at most
@@ -69,9 +87,9 @@ The earlier supporting results have an
 ## Singleton-chamber overlap audit
 
 This audit corrects a conjecture-facing admission error, not a claim that
-all the associated calculus is false. The main conclusions of the internal
+all the associated calculus is false. The main conclusions of the former positive-pivot
 [pair-star family](../revisit/ACTUAL_MINIMUM_GUARDED_PAIR_STAR_EXCLUSION.md),
-[global rigidity](../revisit/ACTUAL_MINIMUM_GLOBAL_PAIR_STAR_RIGIDITY.md),
+global rigidity,
 [positive timing](../revisit/ACTUAL_MINIMUM_POSITIVE_TIMING_PATCH_EXCLUSION.md),
 and [cyclic contact](../revisit/ACTUAL_MINIMUM_CYCLIC_PAIR_CONTACT_EXCLUSION.md)
 packets were counted against a source chamber already excluded by existing
