@@ -436,7 +436,7 @@ def audit_horner():
 
 # Complete-cover driver. A budget abort is a failure, never partial coverage.
 BASE=[F(2,100000),F(2,10000),F(2,100000),F(2,100000)]
-CELLS=0;FAILS=0;ATTEMPTS=0;START=0;NODE_LIMIT=3000;SECOND_LIMIT=1800
+CELLS=0;FAILS=0;ATTEMPTS=0;START=0;NODE_LIMIT=40000;SECOND_LIMIT=7200
 
 def visit(dl,du,el,eu,depth=0):
  global CELLS,FAILS,ATTEMPTS
@@ -461,7 +461,12 @@ def visit(dl,du,el,eu,depth=0):
 
 if __name__=='__main__':
  START=time.monotonic();audit_horner()
- for j in range(81):
-  visit(F(49,50),F(51,50),F(j,100),F(j+1,100))
-  print('EPSILON_SLAB_COMPLETE',F(j+1,100),'cells',CELLS,'seconds',time.monotonic()-START,flush=True)
- print('PASS COMPLETE GRAPH BLOCK delta[.98,1.02], epsilon[0,.81]',CELLS,'closed cells',FAILS,'failed parents',ATTEMPTS,'attempts','seconds',time.monotonic()-START,flush=True)
+ for i in range(25):
+  dl=F(7,10)+F(i,50);du=dl+F(1,50)
+  top=F(737,1000)+F(3,50)*du+F(1,2000)
+  j=0
+  while F(j,100)<top:
+   visit(dl,du,F(j,100),min(F(j+1,100),top))
+   j+=1
+  print('DELTA_SLAB_COMPLETE',dl,du,'epsilon_top',top,'initial_slabs',j,'cells',CELLS,'failed parents',FAILS,'attempts',ATTEMPTS,'seconds',time.monotonic()-START,flush=True)
+ print('PASS COMPLETE BROAD GRAPH COVER delta[.7,1.2], epsilon[0,.737+.06delta+.0005]',CELLS,'closed cells',FAILS,'failed parents',ATTEMPTS,'attempts','seconds',time.monotonic()-START,flush=True)

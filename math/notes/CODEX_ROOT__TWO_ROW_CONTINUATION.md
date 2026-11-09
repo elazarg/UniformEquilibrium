@@ -20,11 +20,11 @@ the stationary section below.
 | 0<=delta<=38/25, .737+.06delta<=epsilon<=2 | The stationary producer below; two independent full checks |
 | epsilon>=10201/5400, every delta>=0 | The singleton obstruction below |
 | epsilon=.04, every delta>=0 | [Complete complex-spectrum ray](../exports/COMPLETE_COMPLEX_SPECTRUM_RAY_UNIFORM_EQUILIBRIUM.md) |
-| delta in [0,.002], [.099,.101], or [.98,1.02], every epsilon>=0 | The three periodic rectangles below, combined with the stationary and singleton results; independent full checks |
+| delta in [0,.002], [.099,.101], or [7/10,infinity), every epsilon>=0 | The periodic regions below, combined with the stationary, singleton and dominated-row results; execution and review scopes are recorded below |
 
 Consequently any still-uncovered parameter of this family lies in
 
-    delta in (.002,.099) union (.101,.98) union (1.02,1.5),
+    delta in (.002,.099) union (.101,.7),
     0<=epsilon<.737+.06delta,
 
 with the known ray and other established neighborhoods removed. This
@@ -289,19 +289,20 @@ all stationary roots, or decide any of those remaining regions. The role of
 the computation is a finite exact proof of this one connected stationary
 producer; its discovery and floating candidates alone carry no conclusion.
 
-## Three periodic regions with changing supports
+## Periodic regions with changing supports
 
 Use the sixty native rewards already defined above. Every parameter in each
-closed rectangle below has an exact equilibrium for terminal absorption payoffs,
+closed parameter region below has an exact equilibrium for terminal absorption payoffs,
 and the same periodic profile and its terminal payoff vector give uniform
 eta-equilibria for every eta>0. All claims allow arbitrary fixed signed offsets
 added to every absorbing reward in each recipient row.
 
-| Region | Exact parameter rectangle | Backward support calendar | Period |
+| Region | Exact parameter region | Backward support calendar | Period |
 | --- | --- | --- | --- |
 | Corner | [0,1/500] x [0,1843/2500] | 013^4, 012^60 | 64 |
-| Upper | [49/50,51/50] x [0,81/100] | 013^2, 012^2, 023^12 | 16 |
+| Upper | delta in [7/10,6/5], 0<=epsilon<=737/1000+3delta/50+1/2000 | 013^2, 012^2, 023^12 | 16 |
 | Middle | [99/1000,101/1000] x [0,93/125] | 013^2, 012^8, 023^p, p=24 or 28 | at most 38 |
+| High | delta in [6/5,3/2], 0<=epsilon<=737/1000+3delta/50+1/10000 | 013^2, 012^n, 023^p, n in {1,2}, p in {8,...,14} | at most 18 |
 
 Every listed 012 phase allows owner 3 to enter, producing support 0123.
 Physical time reverses the displayed backward calendar. The middle calendar
@@ -309,14 +310,18 @@ uses p=28 on epsilon in [3467/5000,1389/2000]; the other initial cells use p=24.
 Cell boundaries are included. Different cells may use different equilibria;
 their cyclic fixed points need not be identified across parameter cells.
 
-Their upper edges exceed the affine stationary threshold .737+.06delta:
-the respective maximum thresholds are .73712, .7982 and .74306. Together
-with the stationary producer and singleton obstruction above, these rectangles
-therefore cover every epsilon>=0 for delta in the three displayed intervals.
+The corner and middle upper edges exceed the maximum affine stationary
+thresholds .73712 and .74306 on their respective delta intervals. The upper
+and high regions exceed that threshold by at least 1/2000 and 1/10000.
+Together with the stationary producer and singleton obstruction above, they
+therefore cover every epsilon>=0 on each displayed delta interval. The upper,
+high and dominated-row results join to cover every delta>=7/10, epsilon>=0.
 
-**Verification status.** All three frozen checkers have passed independent
-complete runs. These are ordinary mathematical certificates,
-not new Lean proofs or a closure of arbitrary Fin4.
+**Verification status.** Corner and middle have independent full reruns.
+Upper and high have complete author runs and independent mathematical,
+exact-algebra and coverage-driver audits; no second full run of those enlarged
+regions is claimed. These are ordinary mathematical certificates, not new
+Lean proofs or a closure of arbitrary Fin4.
 
 ### Stage roots on continuation graphs
 
@@ -352,7 +357,7 @@ On a hazard box qhat+[-a,a], the programs enclose M=I-C D_qg_S and verify
     sup|rho_i| + sum_j sup|M_ij| a_j < a_i.
 
 They also check a contraction bound below 9/10, using the a-weighted maximum
-norm in the corner/middle programs and the ordinary maximum norm in the upper
+norm in the corner/middle/high programs and the ordinary maximum norm in the upper
 program. Banach gives a unique root for every original latent input on the
 graph, uniformly in any bridge hazard. Existence for unrelated cap/parameter
 combinations in the surrounding rectangular enclosure is not asserted.
@@ -381,6 +386,13 @@ Select quiet for nonpositive gap and full for positive gap. At zero they agree
 by uniqueness. All other quiet inequalities and physical hazard bounds are
 checked. Signed hazards on unused counterfactual extensions are not strategies.
 
+The high checker permits signed persistent hazards in the unused quiet chart
+when its optional gap is strictly positive throughout the input graph and all
+four full-root hazards are proper. The selected root is then full everywhere.
+Quiet point containment and every common-link uniqueness test remain mandatory.
+Mixed-mode graphs retain both physical persistent charts and all bridge,
+endpoint and negative-Schur checks. Only the unused extension is relaxed.
+
 The upper checker propagates ONE locally Lipschitz selected continuation graph.
 At a seam it takes interval hulls of the two branch derivatives. Local implicit
 charts and the negative-Schur selector justify these derivative bounds almost
@@ -390,7 +402,7 @@ boundary. This does not integrate an ambient almost-everywhere bound along a
 possibly exceptional line. Point/domain root containment identifies its selected
 centre orbit at every stage. It has no complete-history compatibility test.
 
-The corner and middle checkers instead retain separate smooth counterfactual
+The corner, middle and high checkers instead retain separate smooth counterfactual
 histories on ALL of X, including where a history is not selected. Each keeps
 its own point orbit and derivative columns. At each phase, convex-hull tests
 ||I-C D_qg_S||<1 identify same-support roots from different histories whenever
@@ -417,7 +429,7 @@ The upper program checks the same inequality for its selected centre orbit and
 selected derivative enclosures. Both give a strict self-map and cap contraction
 on every affine fibre c+V(p-p0)+[-r,r].
 
-The middle program uses a sharper final anchor. It tracks all histories still
+The middle and high programs use a sharper final anchor. It tracks all histories still
 possibly selected at the central point: a strictly negative central quiet gap
 retains quiet, a strictly positive gap retains full, and an unresolved sign
 retains both. Let C_i be the largest |F_h(0)_i-c_i| among these possible central
@@ -440,13 +452,19 @@ Floats only propose rational centres, slopes and inverse matrices; all mathemati
 acceptance is by exact interval inequalities. An exact vertex audit verifies the
 Horner payoff/gap formulas against the raw table: the polynomials are multiaffine
 in hazards and parameters and affine in the cap vector. Hazard/parameter vertices
-and the zero plus four cap basis vectors therefore suffice. Do not use python -O.
+and the zero plus four cap basis vectors therefore suffice. The high checker
+also compares every explicit hazard-Jacobian entry with exact raw-gap finite
+differences on that grid. Multiaffinity proves these derivative identities,
+which were also independently checked by symbolic expansion. Do not use python -O.
 
 The corner starts with four strips [n/2000,(n+1)/2000] x [0,1843/2500],
 n=0,1,2,3. On rejection it bisects delta when epsilon-width<delta-width/5,
-and epsilon otherwise. The upper starts with 81 slabs of full delta width and
-epsilon in [j/100,(j+1)/100], j=0,...,80; it bisects delta when delta-width
-is at least five times epsilon-width, and epsilon otherwise.
+and epsilon otherwise. The upper starts with 25 closed delta slabs
+[j/50,(j+1)/50], j=35,...,59. Each has epsilon ceiling
+737/1000+(3/50)(j+1)/50+1/2000, partitioned into intervals of width at most
+1/100 with the final interval clipped exactly at the ceiling. These are
+2000 initial rectangles. It bisects delta when delta-width is at least five
+times epsilon-width, and epsilon otherwise.
 
 The middle starts with full delta width and epsilon intervals [j/50,(j+1)/50],
 j=0,...,33, followed by [.68,.6934], [.6934,.6945], [.6945,.70], [.70,.72],
@@ -456,28 +474,39 @@ and epsilon otherwise. Both closed children must finish in every program.
 Depth, cell, attempt or time limits abort with failure; a partial cover cannot
 produce the final success marker. No cross-cell branch agreement is needed.
 
+The high starts with 30 closed delta tiles of width 1/100 from 6/5 to 3/2.
+Each has ceiling 737/1000+(3/50)delta_right+1/10000. Its epsilon intervals
+have width 1/50 below 7/25 and 1/100 above it, ending at that exact ceiling:
+2051 initial rectangles in total. At each cell it numerically ranks the finite
+calendar portfolio and tries its best three candidates, then uses the middle
+bisection rule on rejection. All acceptance remains exact; ranking can only
+omit candidates. Both children must complete and failure cannot issue success.
+
 Run these commands from the repository root. The complete-check counts are:
 
 | Region | Command | Final marker and current status |
 | --- | --- | --- |
 | Corner | `python math/experiments/CODEX_COORDINATOR__TWO_ROW_CORNER_PERIODIC.py` | `PASS_COMPLETE_CORNER`; independent full run accepts 255 cells and 251 rejected parents |
-| Upper | `python math/experiments/CODEX_COORDINATOR__TWO_ROW_UPPER_PERIODIC.py` | `PASS COMPLETE GRAPH BLOCK`; author and independent runs both accept 238 cells, 157 rejected parents, 502 attempts |
+| Upper | `python math/experiments/CODEX_COORDINATOR__TWO_ROW_UPPER_PERIODIC.py` | `PASS COMPLETE BROAD GRAPH COVER`; 2764 cells, 764 rejected parents, 4323 attempts; independent static/exact audit |
 | Middle | `python math/experiments/CODEX_COORDINATOR__TWO_ROW_MIDDLE_PERIODIC.py` | `PASS COMPLETE MIDDLE RECTANGLE`; author and independent runs both accept 78 cells, 38 rejected parents, 206 attempts |
+| High | `python math/experiments/CODEX_COORDINATOR__TWO_ROW_HIGH_PERIODIC.py` | `PASS COMPLETE HIGH REGION`; 2249 cells, 198 rejected parents, 6009 attempts; independent static/exact audit |
 
 Frozen checker SHA256 values, in this order:
 
     a7ca99c74294ff248292722745e46335b5460a4c0a0df7728bb8792b7e023a70
-    3ff4fd8b598cb15078cf6055f8829c479e8dda9be8a43f4d72eb9fc9c557424f
+    ef2eec38bd2213f7368208e8e5a1af9334302f8ff73ecea199c2a377c3de37b5
     55af0e0c2d7f8bdf430aeab08af3a8e21c2d2635726f095f49bc2977493fdb83
+    5c02cd160f440388a6357e4d0b8756c36b6bffd403ed50c3412f420f178fe9eb
 
 ### Full behavioral and uniform conclusion
 
 At the cyclic fixed point, the stage Nash inequalities make continuation caps
 a supermartingale under every unilateral behavioral deviation and a martingale
 under prescribed play. Every selected phase retains at least two proper owners
-with strictly positive hazards; the corner and middle explicitly bound the
-relevant persistent hazards below by 10^-7. Finitely many strict interval checks
-give a positive lower bound beta for the upper block as well. After deleting
+with strictly positive hazards; the corner, middle and high explicitly bound the
+relevant persistent hazards below by 10^-7. For upper, a strictly positive
+integer lower endpoint is at least 2^-512, so beta=2^-512 works uniformly
+without retaining floating minimum diagnostics. After deleting
 any one deviator, an opponent retains this bound, so survival past t dates is
 at most (1-beta)^t uniformly over all unilateral history-dependent deviations.
 
@@ -490,6 +519,7 @@ Absorption remains certain under every deviation; signed recipient offsets
 therefore shift that owner's terminal reward by exactly the offset. The same
 tail argument proves the finite-horizon conclusion for every fixed choice of
 offsets, without claiming a uniform reward bound over unbounded offsets.
+
 
 ## Absorption cannot vanish along periodic Nash profiles
 

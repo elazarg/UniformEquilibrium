@@ -39,15 +39,15 @@ finite-horizon bound. They compared the retained stationary prose with the
 approved author proof; only headings, reproduction paths, and the clarification
 of the producer's scope changed. The checker bytes are identical.
 
-## Three periodic rectangles
+## Periodic regions
 
-The common retained section "Three periodic regions with changing supports"
+The common retained section "Periodic regions with changing supports"
 has SHA256
-`46956179b058c88268b71ecf03f0bef44ba714af3e9335dd8b2715f8fa91239d`.
-It equals the reviewed common draft, SHA256
-`dc66947abdc5abf3b2d3e7374c7aa6004457b8595f6dbc9a7e3edd3f03921e48`,
-followed by one blank separator line. The three retained checker files are
-byte-identical to their independently rerun versions. Approvals concern the
+`efc069349fe5d80a6be532614c5a81507e1b4c75329b3b3b78b69b74caa45f7c`.
+The corner and middle checkers are byte-identical to their independently
+rerun versions. The enlarged upper and high checkers each have a complete
+author execution and independent static/exact audits, not independent full
+reruns. The individual scopes are stated below. Approvals concern the
 specified raw family, all unilateral behavioral deviations, arbitrary signed
 row offsets, and one fixed uniform-payoff target per game.
 
@@ -74,20 +74,36 @@ corner and common proof in the retained draft.
 
 ### Upper
 
-Reviewer: positive_collision_potential_global. FINAL PASS for
-delta in [49/50,51/50], epsilon in [0,81/100]. The independent full run of the
+Reviewer: upper_cover/cover_audit. FINAL PASS for
+delta in [7/10,6/5], 0<=epsilon<=737/1000+3delta/50+1/2000. The completed
+author run of the
 [upper checker](../experiments/CODEX_COORDINATOR__TWO_ROW_UPPER_PERIODIC.py)
-accepted 238 cells with 157 rejected parents and 502 attempts, matching the
-author's complete run. Checker SHA256:
-`3ff4fd8b598cb15078cf6055f8829c479e8dda9be8a43f4d72eb9fc9c557424f`.
+accepted 2764 cells with 764 rejected parents and 4323 attempts, exiting
+successfully after all 25 slabs in approximately 3355 seconds. Checker SHA256:
+`ef2eec38bd2213f7368208e8e5a1af9334302f8ff73ecea199c2a377c3de37b5`.
 
-The reviewer independently reconstructed the raw reward polynomials and
-audited graph residuals, point anchors, root-image intersections, gap
-recentering, support signs and the full period. This checker propagates
+Independent AST and byte comparisons verified that all 28 function/class
+definitions and the entire acceptance prefix equal the earlier retained
+upper checker. That kernel was fully reviewed by
+positive_collision_potential_global, including an independent full run of
+its smaller cover. That earlier review reconstructed the raw reward
+polynomials and audited graph residuals, point anchors, root-image
+intersections, gap recentering and support signs. This checker propagates
 stagewise derivative hulls of a locally Lipschitz selected graph; it does not
 claim globally smooth counterfactual histories. The proof's mean-value
 argument handles support seams without assuming that an exceptional line
 avoids the nonsmooth set.
+
+The new independent review reconstructed the 2000 initial rectangles by exact
+rational arithmetic, checked both children of every recursive split and
+failure propagation, and parsed all 25 completed slab records. Each slab's
+leaf-minus-parent count equals its initial-cell count; globally 2764-764=2000.
+The source hash remained unchanged. Strictly positive dyadic lower endpoints
+give beta=2^-512 uniformly for persistent hazards. The reviewer checked this
+bound, full behavioral deviations, signed offsets and finite-horizon
+convergence. This was a static/exact audit plus completed-record inspection,
+not a second full execution. Upper_cover separately checked correspondence
+of the consolidated proof with the final source and reviewed proof.
 
 ### Middle
 
@@ -106,12 +122,45 @@ selected-centre final estimate: possible central histories bound the anchor,
 while every smooth history contributes to the variation and contraction bounds.
 No continuity of calendar choice between parameter cells is required.
 
-The upper/middle reviewer separately approved their portions of the common
-retained draft against these exact checkers and complete proofs. Both reviewers
+The middle reviewer separately approved its portion of the earlier common
+proof against this exact checker and complete proof. The mathematical text
+for this region is unchanged. The reviewers
 checked physical chronology (the backward calendar is reversed), private
 independent hazards, Nash inequalities, fixed cyclic values, absorption under
 every unilateral replacement, signed offsets, and uniform finite-horizon
-convergence. The retained common draft incorporates no new acceptance rule.
+convergence.
+
+### High
+
+Reviewer: global_chain. FINAL PASS for the certificate mechanism, exact algebra
+and complete driver of the
+[high checker](../experiments/CODEX_COORDINATOR__TWO_ROW_HIGH_PERIODIC.py),
+SHA256 `5c02cd160f440388a6357e4d0b8756c36b6bffd403ed50c3412f420f178fe9eb`.
+The author's unchanged full run subsequently completed delta in [6/5,3/2],
+0<=epsilon<=737/1000+3delta/50+1/10000, with 2249 accepted cells,
+198 rejected parents and 6009 exact attempts in approximately 2560 seconds.
+All 30 tiles completed, exit code was zero, and 2249-198=2051 equals the
+independently enumerated number of initial rectangles. This is one full run,
+not an independent full rerun. The maximum accepted period was 13; the proved
+calendar bound of 18 covers every offered word.
+
+The independent audit symbolically expanded all raw reward, gap and explicit
+hazard-Jacobian polynomials and checked every identity. It executed the exact
+initial-cover driver with certificate calls replaced by rectangle recording,
+then verified all closed joins and ceilings by rational arithmetic. It audited
+complete histories, common-root injectivity, selected-centre return estimates
+and the strict-full relaxation: only unused quiet charts can have signed
+persistent hazards; their anchors and common links remain mandatory. Mixed
+seams retain physical persistent charts, endpoint linkage and negative Schur
+checks. The audit also checked reversed chronology, opponent absorption,
+all behavioral deviations, arbitrary signed offsets and the fixed target.
+
+Upper_cover and global_chain separately checked the upper and high portions
+of the consolidated periodic proof. The retained section equals their common
+reviewed draft after replacing the upper-count placeholder by the completed
+counts and appending one separator newline. Global_chain checked that exact
+correspondence against the retained section hash above. The unchanged corner
+and middle arguments retain their earlier independent review scopes.
 
 ## Outer region and assembly
 
@@ -121,9 +170,10 @@ definition cited in the note. It applies at epsilon=10201/5400 as well as
 above it and needs no sign condition on original own rewards.
 
 The overlaps 3/2<38/25 and 10201/5400<2 justify the stated containing region
-for unfinished parameters. The three periodic upper edges strictly exceed
+for unfinished parameters. The periodic upper edges strictly exceed
 the affine stationary frontier on their respective delta intervals, closing
-every epsilon>=0 there. The known ray is an additional covered subset.
+every epsilon>=0 there. The upper, high and dominated-row intervals join to
+close every delta>=7/10 and epsilon>=0. The known ray is an additional covered subset.
 No inventory-wide comparison or assertion that every point
 of the remaining region is uncovered is made. The result remains internal;
 it is not an export of the whole two-parameter family.
