@@ -26,13 +26,13 @@ this removes the negative-G observer as the unique-zero positive-pivot
 endpoint. Actual minima, the positive-premium single-zero faces, and the
 higher-zero faces remain unresolved.
 
-The [two-zero reductions](../exports/TWO_ZERO_CONTINUATION_REDUCTIONS.md)
-now narrow both kinds of two-zero endpoint. If the pivot and one observer
-have zero caps, at least one of their directed pair rewards lies outside
-the closed segment between zero and its corresponding singleton reward.
-The new ten-root rule needs only the other two observer caps to be positive;
-it is uniform as both remaining caps approach zero from either sign. Its
-selection can be combined with the preceding incoming rules.
+The [signed two-zero reductions](../exports/SIGNED_TWO_ZERO_CONTINUATION_REDUCTION.md)
+sharpen the pivot/observer zero face: at least one directed pair reward is
+strictly above both zero and its singleton reward, or BOTH directed rewards
+are strictly below both. One monotone row now suffices for ten-root incoming
+compression; the other row may lie below its whole segment. The rule remains
+uniform as both unprotected caps approach zero from either sign. Its selection
+can be combined with the preceding incoming rules.
 
 For two zero OBSERVER caps, a different comparison preserves all three
 observer caps exactly. A diffuse pivot excursion and contracting negative-pair
@@ -40,18 +40,36 @@ reset give one rationally selected nonzero return and eight full-cap tests.
 Whenever the pivot cap decreases, its payoff weakly increases, and Never
 decreases, this defeats EVERY inherited head, including a binding pivot
 obstacle. A more general exact obstacle inequality is also available.
-An exact relatively open region passes the strict tests even though its
+The [positive-participant reset](../exports/TWO_ZERO_CONTINUATION_REDUCTIONS.md)
+has an exact relatively open region passing the strict tests even though its
 continuations admit no positive finite incoming word and an actual head pins
 the positive observer cap. This is a source-configuration exclusion, not a
 new UE reward-table class. The reset is a limit of finite prefixes, not an
 actual infinite block followed by another move.
 
+The signed reduction adds finite returns when BOTH observer pair participant
+rewards are nonpositive. A matching normalized pair uses one triple root
+after a produced diffuse pivot entry, including zero pair rewards. A second
+root removes the matching condition for independently variable shallow
+negative pair rewards and pivot-participant rewards. Four specified
+cross/triple rewards still vanish. The contact equation is a conic through
+the origin; rational parametrization and exceptional rays reduce all return
+and full-cap tests to complete one-variable sign selectors. The identity
+return case and the pivot's full maximum are retained. An exact unequal-pair
+example passes strict comparisons, but its literal game is already solved.
+The same tests allow a zero pivot cap, so successful comparisons also exclude
+three-zero endpoints whose only positive cap is the remaining observer's.
+This is a stronger selected-source exclusion, not new raw UE coverage or a
+closure of that entire three-zero face.
+
 The [incoming boundary controls](CODEX_ROOT__INCOMING_BOUNDARY_CONTROLS.md)
 show why the remaining cases need more than a bare carrier lemma. The
 positive-premium case can require arbitrarily long words across all incoming
-representations, while an open two-zero region contains nonrealized tuples
-with no positive finite incoming word at all. Both explicit games are solved;
-these are limits of the method, not positive-gap or minimizing examples.
+representations, while a two-zero-observer region contains nonrealized tuples
+with no positive finite incoming word at all. A general full-Nash obstruction
+also covers the BOTH-LOW pivot/observer face, with an exact inverse-positive
+degree1 example. The displayed games are solved; these are limits of finite
+incoming arguments, not positive-gap or minimizing examples.
 
 The supporting results preserve original Never coordinates, give an exact
 incoming root on a positive-pair subface, and identify the actual head's
@@ -71,13 +89,76 @@ curvature/rank argument at a degree1 no-child matrix imposes a conditional
 quiet-contact density bound. None supplies a new reward-table UE class or a
 completed reward-dependent overlap certificate.
 
-The next concrete question is how to handle the complement of the new return
-test: unavailable nonzero return, failed full-cap guards, or insufficient
-pivot improvement. The source still requires one fixed positive improvement
-in J_r. Vanishing observer errors are acceptable; a gain tending to zero with
-those errors is not sufficient. Iterating cap returns is a possible route to
-an equilibrium producer, but its input production and prior coverage remain
-unchecked and it is not part of the established result.
+The [periodic reset construction](CODEX_ROOT__PERIODIC_RESET_AND_STATIONARY_OVERLAP.md)
+now produces an actual uniform-equilibrium target from its raw tests without
+a continuation starter. Its additional reward-table coverage remains
+unestablished: natural large-reward candidates enter existing stationary
+classes. Repeating a single reset type also has an exact limitation, proved
+below: it cannot repair a missing cap-return parameter, and an affine
+invariant can prevent improvement even when a return exists. The remaining
+source still needs a fixed positive improvement in J_r; vanishing observer
+errors do not justify a gain that vanishes with those errors.
+
+## What repetition of the same reset can and cannot change
+
+Use the constants c_i,c_j,g_p,g_k,K_p,K_k of the positive-participant
+reset in the [two-zero reductions](../exports/TWO_ZERO_CONTINUATION_REDUCTIONS.md).
+Put C=c_i+c_j, D=c_i c_j, W=1+C. An admissible reset of amplitude
+t in (0,1) transforms the positive observer cap b and original Never by
+
+    b'=a(t)b+[1-a(t)] beta(t), nu'=a(t)nu,
+    a(t)=(1-t)/(1+Ct+Dt^2), beta(t)=(g_k+tK_k)/(W+Dt).
+
+For m nonzero resets, b_m=A_m b_0+sum w_s beta(t_s), where
+A_m=product a(t_s), w_s=(1-a(t_s)) product_(h>s)a(t_h)>0 and
+sum w_s=1-A_m. Thus an exact return b_m=b_0 makes b_0 a positive weighted
+average of beta(t_s). Since
+
+    beta'(t)=(WK_k-Dg_k)/(W+Dt)^2,
+
+beta is monotone or constant. A return therefore requires some t_star in
+(0,1) with beta(t_star)=b_0. If K_k-Db_0!=0, necessarily
+
+    t_star=(Wb_0-g_k)/(K_k-Db_0).
+
+If K_k=Db_0, an algebraic return parameter exists exactly when g_k=Wb_0.
+This proves that an
+unavailable return parameter cannot be repaired by any finite sequence of
+this same reset type. It does not prove that the single t_star passes its
+full-cap guards: a composite path can change the pivot cap before returning.
+
+For infinitely many resets with positive limiting Never, A_infinity>0 and
+the same expansion has weights
+w_s=(1-a(t_s))A_infinity/A_s>0, summing to1-A_infinity. All beta values
+lie strictly on the same side of b_0 if no interior return exists; their
+positive weighted average cannot be b_0. The other case A_infinity=0
+cannot descend in the subcritical source: any observer-feasible limit then
+has zero Never and J_r>=A>mu by the absorbing SUM-gap inequality. These
+claims concern compact limits of finite compositions, not play after an
+infinite calendar.
+
+There is a stronger exact invariant. Set V=U_p-r nu and assume
+Delta=WK_k-Dg_k!=0. Define
+
+    lambda=(WK_p-Dg_p)/Delta,
+    kappa=(K_k g_p-K_p g_k)/Delta, ell(b)=lambda b+kappa.
+
+The pivot value update is
+V'=a(t)V+[t g_p+t^2 K_p]/[1+Ct+Dt^2]. The two coefficient identities
+g_p-lambda g_k=W kappa and K_p-lambda K_k=D kappa yield
+
+    V'-ell(b')=a(t)[V-ell(b)].
+
+Therefore (V-ell(b))/nu is invariant whenever the full-cap guards make the
+operation admissible. A returning composition with survival factor rho has
+
+    V_new-V=(1-rho)[ell(b)-V].
+
+If V>=ell(b), no such return increases adjusted pivot value. In particular,
+if the inherited pivot obstacle equals its old cap, the head's pivot cap
+cannot decrease, and no returning composition of this type can improve the
+global objective. This is a limitation of one reset family, not a surviving
+counterexample class or an obstruction to a different reset.
 
 ## Model and inspected interfaces
 

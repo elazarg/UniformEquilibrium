@@ -2,11 +2,11 @@
 
 Owner: CODEX_ROOT. Independently reviewed ordinary mathematics; internal only.
 
-These two controls identify precise limits of the
+These controls identify precise limits of the
 [uniform incoming source reduction](../exports/PAIR_PREMIUM_MIXED_ENDPOINT_REDUCTION.md).
 A positive pair premium can force arbitrarily long finite incoming words,
 even for actual tuples. Two zero observer caps can forbid every nonzero finite
-incoming word on an open raw region. Both mechanisms coexist with the stated
+incoming word on an open raw region. These mechanisms coexist with the stated
 singleton residual tests. Each displayed completion nevertheless has an
 absorbing equilibrium, so neither is a global-minimum counterexample or a
 new restriction on UE reward tables.
@@ -18,9 +18,15 @@ pivot and reducing Never, so it remains valid through every inherited head.
 Its explicit completion preserves the no-finite-incoming obstruction below;
 the comparison itself is a compact limit of finite profiles. The remaining
 two-zero continuations still require further work. The Ratio-specific
-limitation of the first control is proved explicitly. Section and equation
+limitation of the first control is proved explicitly. A third control below covers the remaining BOTH-LOW pivot/observer face:
+a general full-Nash criterion forbids every nonzero incoming root, with an
+exact inverse-positive degree1 example. It confirms that global minimality
+is essential for that face. Section and equation
 numbers are local to each part. The [independent reviews](../feedback/CODEX_ROOT__INCOMING_BOUNDARY_CONTROLS__BY_INDEPENDENT_REVIEWS.md)
 record the exact scope and the original reviewed proof hashes.
+
+The [additional internal reviews](../feedback/CODEX_ROOT__RESET_AND_INCOMING_CONTROLS__BY_INDEPENDENT_REVIEWS.md)
+cover the general BOTH-LOW obstruction and exact fixture in Part III.
 
 ## I. Sharp finite incoming-length obstruction at a positive pair premium
 
@@ -571,3 +577,200 @@ Sources inspected: the [uniform incoming reduction](../exports/PAIR_PREMIUM_MIXE
 `CODEX_COORDINATOR__DIFFUSE_APPROXIMATION_ATOM_OBSTRUCTION.md`.
 The last excludes diffuse approximate FULL equilibria on the residual;
 the strictly positive pivot debt here prevents applying its adapter.
+
+
+## III. Both-low pair data can forbid every nonzero incoming word
+
+This is a carrier obstruction, not a positive-gap or minimizing example.
+The complete game below has an absorbing Nash profile.
+
+### Complete table and compact full-Nash point
+
+Players are 0,1,2,3, with pivot0. Own singleton and AllNever rewards vanish.
+The singleton matrix is
+
+    Gamma=[ 0, 3,-1,-1;
+            3, 0,-1,-1;
+           -1,-1, 0, 3;
+           -1,-1, 3, 0].                               (G)
+
+For rows0 and1, set every nonsingleton reward equal to -1, except
+
+    Z_0({0,1})=Z_1({0,1})=-3.
+
+For l=2,3, set every nonsingleton participant reward to0, set the passive
+reward Z_l({0,1})=100, and set every other nonsingleton passive reward to0.
+Together with (G), these rules specify the complete native table.
+
+Thus Gamma_01=Gamma_10=3 and J_01=J_10=-3<min(0,3): both rows lie strictly
+outside the monotone segment on its LOW side. Every forced-Quit offer of
+player2 or3 is nonpositive at every product root (in fact it is identically
+zero, since all their participant rewards including own singleton are0).
+
+Let H denote the full augmented actual-law closure (U,B,e,N), and let C impose
+zero debts for observers1,2,3. The following point belongs to H:
+
+    U=B=e=(0,0,62/147,32/21),
+    N=(6/7,6/7,1/2,1).                                 (X)
+
+It has zero debt for ALL FOUR players, positive original Never, and exactly
+the zero pivot and observer1 caps. Every literal product-root factorization
+X=Phi_q(T), T in H, has q=0 and T=X. Consequently every finite incoming word
+is entirely zero. This includes arbitrary compact tails, not just tails in
+the family used to produce (X).
+
+### Finite actual approximants and exact full-cap convergence
+
+Start with the one-date root q=(0,0,1/2,0), followed by AllNever. Its exact
+full cap and payoff vector is (-1/2,-1/2,0,3/2); it is Nash. Rows0,1 receive
+-1/2 from either forced Quit or prescribed Continue; player2 receives0 from
+every response; player3 prefers Continue at3/2 to Quit at0.
+
+Put x_0=1/6 and, for n>=1, define
+
+    x_n=x_(n-1)/(2+x_(n-1))=1/(7*2^n-1).
+
+Prefix the base, in chronological order, by pair roots with hazards
+(x_n,x_n,0,0),...,(x_1,x_1,0,0). Against a tail whose two active caps equal
+-3x_(m-1), each pair player's forced-Quit offer is -3x_m and its Continue
+cap is
+
+    3x_m-3(1-x_m)x_(m-1)=-3x_m.
+
+Thus both active players are exactly indifferent and their output cap and
+payoff are -3x_m. Their marginal survival through the n-root head is
+
+    a_n=product_(m=1)^n(1-x_m)=6*2^n/(7*2^n-1)
+       =(6/7)(1+x_n) ->6/7,
+    S_n=a_n^2.
+
+Let alpha_n be the probability that this head's first coalition is exactly
+{0} (equally, {1}), and c_n the probability of first coalition{0,1}.
+The pair payoff identity and total probability give
+
+    alpha_n-c_n=S_n/6-x_n,
+    2alpha_n+c_n=1-S_n,
+    c_n=[1-(4/3)S_n+2x_n]/3.                            (1)
+
+Consequently the exact outsiders' through-head Continue offers are
+
+    E_2=100c_n-2alpha_n
+       =(98+202x_n)/3-(1580/49)(1+x_n)^2,
+    E_3=E_2+(3/2)S_n.                                  (2)
+
+For n>=1, x_n lies in [0,1/13]. The quadratic E_2(x) in (2) is concave and
+has endpoint values
+
+    E_2(0)=62/147>0, E_2(1/13)=76/169>0.
+
+Hence every such E_2, and therefore E_3, is strictly positive. At every
+head root both outsiders have forced-Quit offer0. They therefore prefer
+Continue, and (2) gives their exact full caps and prescribed payoffs.
+Induction proves that every finite approximant is a full terminal Nash
+profile against every complete behavioral deviation. The max-cap recursion
+includes every later deadline and Never, not merely current deviations.
+
+All original Never masses are positive. Thus full Nash implies B=e by
+B-U>=N(B-e)>=0; the same equality also follows directly from the root maps.
+Taking n->infinity in these exact formulas gives the complete tuple (X):
+E_3 tends to62/147+(3/2)(36/49)=32/21. Original Never masses are
+(a_n,a_n,1/2,1). No escaping finite mass is relabeled Never.
+
+### A general no-incoming lemma on this face
+
+The following sufficient criterion proves the obstruction beyond the literal
+example. Let p,i,j,k be the four distinct players, and let X in H have
+
+    d_l(X)=0 for ALL FOUR l, N_l(X)>0,
+    B_p(X)=B_i(X)=0, B_j(X),B_k(X)>0.                  (L1)
+
+Require the raw conditions
+
+    Gamma_pi,Gamma_ip>0, J_pi,J_ip<0,
+    Z_l(S)<=0 whenever l in S, for l=j,k,
+    Gamma_lp,Gamma_li<=0 for l=j,k.                    (L2)
+
+Then every incoming literal root factorization of X is the zero root with
+the same tail X. Hence every finite incoming word is entirely zero and X is
+not actual. FULL Nash in (L1), including d_p=0, is essential to this proof;
+observer optimality alone does not justify the active-pivot argument below.
+
+Proof. Full Nash and positive original Never give B=e by
+B_l-U_l>=N_l(B_l-e_l)>=0. Any root factorization X=Phi_q(T) has proper roots
+and positive tail Never coordinates. All four zero debts and ALL-END pass
+to T. At the root every active player must attain its output cap.
+
+The outside forced-Quit offers are nonpositive by (L2), so their strictly
+positive caps force q_j=q_k=0. If both q_p,q_i are positive, the pivot's
+forced-Quit offer J_pi q_i is negative while its output cap is zero, which
+contradicts its active optimality. At most one pair owner acts.
+
+Suppose q_p>0 and q_i=0. After any finite sequence of solo-p incoming roots,
+let F be p's aggregate finite quitting mass in that prefix. The conditional
+full-Nash, ALL-END tuple has exact caps and Never coordinates
+
+    B_p=0, B_i=-Gamma_ip F/(1-F),
+    B_l=[B_l(X)-Gamma_lp F]/(1-F)>0 for l=j,k,
+    N_p=N_p(X)/(1-F), N_a=N_a(X) for a!=p.             (3)
+
+The outside caps stay positive because Gamma_lp<=0. Original Never forces
+F<=1-N_p(X)<1. After the hypothesized first root, F>=F_0=q_p>0.
+
+Every point of H has a first-root representation, by extracting first roots
+and actual conditional tails from actual approximants. Apply it at the
+current tuple (3). The negative i cap rules out the zero root. Positive
+outside caps again force q_j=q_k=0. The full-cap inequality B_i>=Q_i=J_ip q_p
+forces
+
+    q_p >= [Gamma_ip/(-J_ip)] F/(1-F)
+        >= [Gamma_ip/(-J_ip)] F_0/(1-F_0)=epsilon>0.   (4)
+
+Player p is therefore active and must attain its output cap0, so
+J_pi q_i=0 and q_i=0. The next root is solo-p and (3) propagates. If epsilon
+is at least1, properness already gives a contradiction. Otherwise repeated
+extraction gives arbitrarily many solo-p roots of hazard at least epsilon.
+Their product survival would tend to zero, while (3) forces it to stay at
+least N_p(X)>0. This contradiction excludes the initial solo-p root.
+The symmetric argument excludes a solo-i root.
+
+Thus q=0. A zero queried root fixes U,e,N and sends B to max(0,B), so is
+not an identity on arbitrary H points. Here B(X)=e(X)>=0 and every H point
+has B>=e. These facts force its tail to equal X. Induction proves the
+finite-word assertion. If X were actual, its first root and every subsequent
+one would be zero with unchanged conditional tuple. This would force N=one,
+inconsistent with B_j,B_k>0 in a native own-zero game. This proves the lemma.
+
+The literal point (X) satisfies every hypothesis: both pair cross singletons
+are3, both pair rewards are-3, all outsider participant rewards are zero,
+and all four outsider singleton rewards on pair owners are-1. In (3), its
+outside caps are (B_l(X)+F)/(1-F), so they in fact increase during the
+contradictory solo-owner extraction. This proof covers arbitrary compact
+tails, with no assumption about their particular calendars or reward support.
+
+### Matrix screens and exact scope
+
+The singleton matrix has
+
+    det Gamma=45,
+    Gamma^-1=(1/15)[2,7,3,3;7,2,3,3;3,3,2,7;3,3,7,2]>0.
+
+It is R0: if x>=0, w=Gamma x>=0, and x_l w_l=0, then any nonzero w would
+give x=Gamma^-1 w>0, forcing w=0, a contradiction. Thus w=0 and x=0.
+At offset -one, a complementary solution has w=Gamma x-one>=0, hence
+x=Gamma^-1(one+w)>0. Complementarity forces w=0, yielding the unique full
+solution x=Gamma^-1 one=one. Its determinant index is+1, so the R0 degree
+is1. Every singleton column has a negative entry and mutually negative pairs
+exist. Every principal triple has determinant6 and a negative inverse
+diagonal entry; hence there is no nonnegative-inverse triple child.
+
+Nevertheless the game has an absorbing Nash profile: player2 quits surely
+and everyone else continues. Players0,1 receive-1 and joining also pays-1;
+player3 receives3 and joining pays0; player2 receives its own0 and cannot
+gain by Never. Therefore the native absorbing SUM-debt gap is A=0. The point
+(X) is not a subcritical global minimum of d_0+r nu for r>0, since the
+absorbing zero-debt profile has objective0. No positive-gap example is claimed.
+
+This blocks a universal finite-incoming theorem covering BOTH-LOW under
+H/C/ALL-END/positive-Never/two-positive-cap hypotheses even with the stated
+singleton screens. A further source-specific argument must use global
+minimality, additional higher-reward structure, or a different operation.
