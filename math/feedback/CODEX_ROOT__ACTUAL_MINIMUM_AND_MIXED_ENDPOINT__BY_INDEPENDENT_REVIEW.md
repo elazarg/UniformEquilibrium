@@ -269,3 +269,77 @@ closure of conservative Raw cycles. It does not obstruct the generic
 perturbation theorem: exact conservativity is exceptional, and the example
 neither supplies an actual guarded minimizing source nor rules out other
 comparisons. Consolidation as an internal boundary is appropriate.
+
+# Final-byte review of the consolidated internal geometry sections
+
+Reviewer QUIET. Verdict: PASS as internal mathematics with the stated scope.
+
+Reviewed [the consolidated internal note](../notes/CODEX_ROOT__ACTUAL_MINIMUM_AND_MIXED_ENDPOINT.md).
+SHA256: `b27df42f44814dffc88353eddebe7fa4344220506384ee38c1265d4d51928cee`.
+Scope: from "Three pinned observer caps can freeze every late two-owner
+head outcome" through EOF, using the model and exact head-box formulas
+already stated earlier in the same note. No export admission is certified.
+
+The consolidation preserves the reviewed moment-rigidity proof. In
+particular it pins observer caps after F, at the entrance to H; it does not
+confuse these with the caps before F. The finite first-coalition formulas,
+nonzero 2-by-2 determinant, original Never coordinates, pivot-cap
+monotonicity and effective g'=g+(1-g)t identity all remain intact. The
+actual/countable-head interpretation uses finite truncation limits and
+never executes a continuation after an infinite date.
+
+The recurrent pivot-contact construction remains self-contained after the
+fixed-cap completion was omitted. I checked every printed supported hazard
+and all six newly printed quiet gaps against exact rational calculation.
+The full-period characteristic polynomial, eigenvector and coefficients
+agree with the contact recursions. The nonresonance argument gives a bounded
+coefficientwise inverse; analytic substitution is contracting on a small
+weighted l1 power-series ball. Summable hazards then produce actual laws
+with positive original Never, and the exact Continue recursion identifies
+the supplied caps and bounds all deadline/Never deviations. The text
+correctly distinguishes this actual Nash tail from a source global minimum.
+The four singleton stationary failures and all raw-neighborhood claims are
+unchanged and correct; no full-table overlap certification is asserted.
+
+I separately audited the arbitrary-length section rather than relying only
+on its earlier reviewer. The symbolic transfer computation reproduces the
+three diagonal entries and the entire printed determinant. Exact matrix
+multiplication reproduces T00=22/65, the three T0,observer entries, and all
+nine phase-specific endpoint-rank constants. The no-child singleton degree
+checker also passes. For nonzero frequencies the determinant is negative
+and a diagonal entry positive, giving exactly one negative eigenvalue.
+The normalized near-zero-frequency signs persist because P(1)=0, diagonal
+entries are even, and the real even 3-by-3 determinant starts at order at
+least four. This is a uniform frequency argument, not an extrapolation of
+finite computed inertias.
+
+The finite-support filter embeds a Toeplitz form into closed loops with two
+extra boundary periods. Its difference from the circulant has rank at most
+12, giving the stated m-15 lower bound. At small m where that bound is
+nonpositive it is automatic. The penalty symbol has the same vanishing and
+finite Laurent degree, so the table-dependent small-r choice is legitimate.
+The single-quiet rank proof removes fewer than m observer controls: each
+owner still has a free occurrence and one has two; their distinct pivot
+components produce endpoint rank4. This proves a nonzero polynomial minor
+for every mask, and Baire supplies simultaneous genericity for the
+countably many finite masks, without a uniform conditioning assertion.
+
+The actual-law consequence follows from the finite IFT and constrained
+Hessian at each fixed length. At zero data the objective gradient is
+cancelled by the cap multiplier r*(1^T Gamma^-1); active/quiet multipliers
+are zero. Full row rank makes these multipliers continuous as an actual
+tail tends to zero data. Thus the printed augmented Hessian is the correct
+limit on the exact cap/contact fibre. Fewer than m-15 quiet rows cannot
+remove all its negative directions. Omitted quiet and pivot gaps remain
+strict locally, and entrance-cap preservation preserves the earlier
+prefix comparisons. The density conclusion takes the late-tail limit for
+each fixed m first, then m to infinity; it does not assume uniform finite
+IFT constants in m.
+
+Checks run: the FACES exact pivot-tail checker, VARIATIONAL's exact transfer
+symbol script, QUIET's singleton degree gate checker, and an independent
+rational recomputation of all endpoint-rank constants. No Lean build or
+tracked edit was performed. The final file hash was unchanged after these
+checks. Remaining source realization, completion-dependent overlap,
+double quiet contacts, recurrent pivot ties and arbitrary support calendars
+are all explicitly left open; no new UE table class or Fin4 closure is implied.

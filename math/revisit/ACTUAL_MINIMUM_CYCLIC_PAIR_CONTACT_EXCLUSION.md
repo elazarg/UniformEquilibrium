@@ -1,5 +1,12 @@
 # Cyclic pair tails: all64 periodic contact modes excluded, with a nonperiodic contact-density bound
 
+**Internal repair target; not an accepted conjecture-facing export.** The
+singleton sign chamber in the main exclusion has R0 degree zero and is
+already excluded by the implemented singleton-degree criterion. The
+calculus below is retained for audit and possible generalization; its
+claims of new counterexample coverage are withdrawn. See the
+[source-overlap audit](../notes/CODEX_ROOT__PROOF_MECHANISM_DIVERSIFICATION.md#singleton-chamber-overlap-audit).
+
 This is an ordinary mathematical actual-source restriction with exact finite
 certificates. It does not solve Fin4 and is not Lean-checked. The periodic
 object in the first conclusion is the CONTACT calendar, not hazard amplitudes.

@@ -22,6 +22,14 @@ does not produce a compatible improvement for every endpoint. No new UE
 reward-table class is asserted. All results are ordinary mathematics, not
 new Lean checks.
 
+The added internal geometry results expose the remaining gap more precisely.
+Pinned observer caps can freeze all outcome moments of an entire two-owner
+head. Actual recurrent pivot contacts persist on an open raw set, so generic
+rank alone cannot produce the missing pivot guard. A separate arbitrary-length
+curvature/rank argument at a degree1 no-child matrix imposes a conditional
+quiet-contact density bound. None supplies a new reward-table UE class or a
+completed reward-dependent overlap certificate.
+
 The next concrete question is whether the full selected source admits a
 cap-compatible replacement with one fixed positive improvement in J_r.
 Vanishing observer errors are acceptable; a gain tending to zero with those
@@ -473,8 +481,9 @@ this lemma does not assert that every inherited endpoint satisfies it.
 
 ## Conservative exceptional cycles can have positive curvature on every closed tangent loop
 
-Internal mechanism boundary only. No actual global minimum, absorbing gap,
-or Fin4 counterexample is asserted. This explains why the [global rigidity theorem](../exports/ACTUAL_MINIMUM_GLOBAL_PAIR_STAR_RIGIDITY.md)'s
+Internal mechanism boundary only. Its positive-pivot singleton chamber is
+already degree zero and excluded by the existing source screen. No actual
+global minimum, absorbing gap, or Fin4 counterexample is asserted. This explains why the [global rigidity theorem](../revisit/ACTUAL_MINIMUM_GLOBAL_PAIR_STAR_RIGIDITY.md)'s
 generic exception should not be silently erased by a second-variation claim.
 
 Take p=0, G=(-1,1,1), and
@@ -561,3 +570,449 @@ Jp=[s.factor((A[i]-h[i]*la[i])/(1-la[i])) for i in range(3)]
 assert Jp==[-s.Rational(124909,1827),-s.Rational(91201,3654),-s.Rational(164954,1827)]
 print('PASS: conservative Raw price and strictly positive all-loop square coefficients.')
 ```
+
+## Three pinned observer caps can freeze every late two-owner head outcome
+
+Internal exact obstruction to a head-variation route. It does not close the
+nonrealized branch and is not proposed for export. Unlike the small-new-head
+bound, this concerns arbitrary replacements of the existing late head.
+
+Let Y=Phi_F(Phi_H(Q)) be an ALL-END global minimum source, where F is a
+finite actual prefix with positive survival, H is an actual positive-Never
+head using only pivot p and observer i, and Q has positive original Never,
+zero observer debts, ALL-END, and endpoint cap b_i=0. The remaining observers
+are j,k. Assume all three observers have some activity in F. Then the exact
+head-box theorem pins all three observer caps at the exit of F, equivalently
+at the entrance to H. Explicitly, each observer has a used finite F deadline
+whose value depends only on the fixed F laws. Observer optimality pins its
+global cap to that fixed deadline value. The original ALL-END identity
+B_l(global)=e_l(F)+H_l(F)B_l(after F), with H_l(F)>0, then pins the
+after-F cap. The exact head-box equality gives the same conclusion for every
+observer-feasible replacement, even if its pivot ceases to be END-optimal.
+
+Fix F and Q. Consider ANY alternative actual head H' using only p,i, with
+both marginal Never masses positive, such that Phi_F(Phi_H'(Q)) has zero
+observer debts. The heads may have countable supports and arbitrary ties.
+The head maps are limits of actual finite truncations with the original
+Never coordinates retained; no play after an infinite date is asserted.
+
+Write G=Gamma_ip!=0, rho=J_ip/G. Let f,g be the finite marginal masses of
+p,i in H'; let a,b,c be its first-coalition probabilities for {p},{i},{p,i}.
+Then a+b+c=f+g-fg. Set X=Phi_H'(Q).
+
+Zero observer debt passes through F to X. Positive marginal Never at X
+implies every observer is END-optimal, including at semantic carrier points
+by d_l>=N_l(B_l-e_l). Observer i's Never payoff is G f,
+while its prescribed payoff is G a+J_ip c, since U_i(Q)=b_i=0. Therefore
+
+ B_i(X)=G f,  a=f-rho c,
+ b=(1-f)g+(rho-1)c.                                      (1)
+
+For l in {j,k}, put
+
+ K_l=Z_l({p,i})-rho Gamma_lp+(rho-1)Gamma_li,
+ a_l=Gamma_li-b_l.
+
+The actual first-coalition expansion gives the exact observer caps
+
+ B_l(X)=b_l+f(Gamma_lp-b_l)+(1-f)g a_l+c K_l.              (2)
+
+These identities use only original finite masses and actual first-coalition
+probabilities. They do not assume geometric clocks or positive intermediate
+caps. In particular they apply to the canonical at-most-two-clock head.
+
+### Exact rigidity
+
+If
+
+ D=a_j K_k-a_k K_j !=0,                                  (3)
+
+every such observer-feasible replacement has exactly the same f,g,c as H.
+Indeed the pinned i cap first fixes f by (1). With t=(1-f)g, the two remaining
+pinned caps give the invertible linear system
+
+ [a_j K_j; a_k K_k] [t;c]
+   =[B_j(X)-b_j-f(Gamma_jp-b_j);
+     B_k(X)-b_k-f(Gamma_kp-b_k)].                         (4)
+
+Its right side is fixed by F and Q. Thus t,c, and hence g, are fixed.
+Equations(1) also fix a,b. The prescribed pivot payoff and its Never offer are
+
+ U_p(X)=Gamma_pi b+Z_p({p,i})c+(1-f)(1-g)U_p(Q),
+ e_p(X)=Gamma_pi g+(1-g)b_p.                              (5)
+
+They are fixed, as are every original Never coordinate and all observer
+payoffs/caps. The old X was pivot-END, so every replacement satisfies
+B_p(X)>=e_p(X)=B_p(X_old). The prefix map's pivot cap is monotone in that
+endpoint cap, while its prescribed payoff and Never mass are unchanged.
+Consequently
+
+ J_r(Phi_F(X))>=J_r(Y) for EVERY r>=0.                    (6)
+
+This is an exact global obstruction, not merely a first-order stationarity
+condition. Head changes can vary timing, support size, ties, geometric
+rates, and finite masses in their proposal; observer feasibility forces all
+payoff-relevant moments back to their original values.
+
+### One-clock specialization and limitation
+
+When b_p>0, the canonical late head may use only the pivot. Then g=c=0 and
+B_l(X)=b_l+f(Gamma_lp-b_l). Its clock rate does not affect the retained tuple.
+Any pinned observer cap with Gamma_lp!=b_l fixes f. If i is pinned, G!=0
+already supplies that condition.
+
+The assumption that F contains all three observers is substantive. It holds
+whenever all three occur in the whole actual head and the cut is chosen
+later than one occurrence of each. It is not supplied for every source.
+Condition(3) depends on the inherited endpoint caps b_j,b_k; no claim that a
+generic reward perturbation forces it for every endpoint is made.
+
+The useful conclusion is that, in this nondegenerate fully pinned case,
+replacing the entire late two-owner head while fixing F and Q cannot improve
+the objective at all. A successful global comparison must change the earlier
+finite prefix, change Q, leave the two-owner support, or reach a different
+cap stratum. The finite-prefix variation problem remains open.
+
+### Simultaneous endpoint solo-prefix does not bypass these pins
+
+Let Q_t be the literal solo-i prefix of Q with hazard t, assuming it is
+observer-feasible (in particular this holds for small t when b_p>0 and
+the other two observer caps are positive). Replace H simultaneously by an
+arbitrary observer-feasible two-owner H' before Q_t, keeping F fixed.
+Write f,g,c for H'. The retained composition has the same first-coalition
+accounting as a two-owner head before Q with effective masses
+
+ f_eff=f,  g_eff=g+(1-g)t,  c_eff=c.                       (7)
+
+Indeed an i exit from the added root occurs only after both head owners
+chose Never, increasing the solo-i first-coalition probability by
+(1-f)(1-g)t. Observer i still has endpoint payoff/cap0, so(1)--(5) apply
+with g_eff in place of g. No actual realization of the composed infinite
+head is needed for these semantic identities; finite truncation comparisons
+supply the retained tuple. Under(3), pinned caps fix f_eff,g_eff,c_eff.
+Hence the pivot objective again cannot decrease.
+
+If the old late head is pivot-only, its effective g is0. For any t>0,
+g_eff=g+(1-g)t>0 for every admissible g>=0, so no such simultaneous
+replacement is observer-feasible through F at all. Thus the tempting
+endpoint solo-zero descent cannot be rescued merely by readjusting the
+canonical late head. The preceding finite prefix itself must change.
+
+## Actual recurrent pivot contact survives local genericity
+
+This is an internal boundary for a proposed pivot-guard producer, not a
+Fin4 exclusion or counterexample. It uses a degree-one singleton matrix
+with strictly positive inverse, negative passive-deletion rows, and no
+singleton stationary absorbing equilibrium. Other stationary supports and
+all implemented full-table UE consumers have not been excluded. No positive
+absorbing gap or global source minimum is asserted.
+
+The conclusion is stronger than a tangent example: there is an actual
+positive-Never, ALL-END Nash tail with cyclic pair supports 01,02,03, every
+pivot comparison tied, and every inactive observer comparison strict.
+The construction persists in an open neighborhood of its24 raw rewards.
+All fixed finite values of the other32 rewards are allowed, with a smaller
+tail parameter when needed.
+
+### Explicit raw data and bounded source screens
+
+Use native own-singleton zero and
+
+    Gamma=[0,5,-1,-1; -2,0,1,1; 2,-1,0,-1; 2,-1,-1,0],
+    J=[0,-12,-15/4,-13/4; -6,0,2,5/2;
+       15/2,1,0,-11/10; 13/2,1,-1/2,0].
+
+Here Gamma_ij is the reward to i when only j quits, and J_ij is the
+reward to i when exactly i,j quit. Gamma has determinant6 and a strictly
+positive inverse. Every principal of size at least two is nonsingular,
+every column has a negative entry, and the sole complementary root at
+offset minus the all-ones vector has full support and positive index.
+Thus Gamma is R0 of degree one. Every omitted-player row multiplied by
+the corresponding triple inverse is strictly negative; hence the simple
+passive-triple inheritance test does not apply.
+
+A singleton stationary absorber j with hazard q requires
+Gamma_ij>=J_ij q for every i!=j and0<q<=1. All four owners fail: owner0
+would need q>=1/3 and q<=4/15; owner1 faces Gamma_21<0<J_21; owner2
+would need q>=2; owner3 needs q>=10/11 and q<=2/5. These tests are strict
+and therefore survive small raw perturbation. They are bounded screens,
+not a claim that this complete table has no known UE.
+
+For comparison with the signed-pivot timing calculation, put
+lambda_i=1-Gamma_i0/J_i0. They are2/3,11/15,9/13, and
+
+    C_i=Gamma_0i lambda_i+J_0i(1-lambda_i)
+       =(-2/3,-26/15,-22/13).
+
+Thus all three timing coefficients are negative. Recurrent pivot ties
+are compatible even with that strict sign choice.
+
+### Exact analytic contact dynamics
+
+Let E be a supplied four-dimensional Never-cap vector at one date whose
+support is{0,i}. Impose both active contacts by setting
+
+    q_0=E_i/J_i0,  q_i=E_0/J_0i,  q_j=0 otherwise.             (1)
+
+The two active Quit offers are exactly E_0,E_i. Let A_j(q) be the immediate
+absorbing payoff to a continuing player j, and
+H_j(q)=product_(k!=j)(1-q_k). Define the rational map
+
+    Phi_i(E)_j=[E_j-A_j(q)]/H_j(q).                          (2)
+
+This is analytic near0 for every fixed finite completion of the table.
+Its derivative is
+
+    T_i=I-Gamma[:,0] e_i^T/J_i0-Gamma[:,i] e_0^T/J_0i.       (3)
+
+The three-date map F=Phi_3 Phi_2 Phi_1 has derivative T=T_3T_2T_1 with
+
+    det(zI-T)=(z-1)^2(65z-22)(260z-187)/16900.
+
+Set rho=187/260 and
+
+    v=(-1,-1360/5913,7561/5913,6337/5913).
+
+Then Tv=rho v. At the three successive linear phases, the supported hazard
+pairs (pivot,observer) are
+
+    (680/17739,1/12),
+    (18241/106434,17/45),
+    (1185019/6918210,187/585).
+
+Every supported hazard is positive. At phases1,2,3, respectively, the two
+quiet gaps E_j-(Jq)_j, with observers ordered increasingly, are
+
+    (21473/23652, 52451/70956),
+    (10591/88695, 40783/266085),
+    (278443/6918210, 12716/1330425).
+
+All are strictly positive, so these inequalities hold on a cone around the ray.
+
+The pivot scalar recurrence on any tied pair date is particularly simple:
+
+    E_0^next=E_0(1-Gamma_0i/J_0i)/(1-E_0/J_0i).             (4)
+
+Here its three linear factors are17/12,11/15,9/13, with product rho<1.
+Hence a blanket expansion argument cannot forbid the tied calendar.
+
+### Actual realization, including the convergence argument
+
+There is a real analytic curve E(t)=tv+O(t^2), defined for sufficiently
+small |t|, satisfying
+
+    F(E(t))=E(rho t).                                      (5)
+
+For completeness this follows without assuming an actual tail. Write
+F(x)=Tx+N(x), N=O(|x|^2), and E(t)=tv+h(t), with h having no constant or
+linear term. Its equation is
+
+    h(rho t)-T h(t)=N(tv+h(t)).                             (6)
+
+For every integer n>=2 the matrix rho^n I-T is invertible. Its possible
+eigenvalues are1,rho,22/65: the first two are immediate exclusions, and
+rho^n cannot equal22/65 because its reduced numerator has a prime17
+factor while22/65 does not. Moreover the inverse norms are uniformly
+bounded in n, since rho^n tends to0 and T is invertible. On the Banach
+space of absolutely convergent vector power series on a sufficiently
+small disk, with zero constant and linear terms, the coefficientwise
+inverse of the left side of(6) is therefore bounded. The right side has
+Lipschitz constant O(disk radius) on the ball |h|=O(radius^2). The
+contraction theorem proves(5), including convergent coefficients. Real
+coefficients give a real curve. The same proof works in a small raw
+neighborhood: rho remains a simple positive eigenvalue, the finitely many
+potential resonances stay separated, and the remaining powers approach0
+uniformly. The strict hazard and quiet-gap signs also persist.
+
+Start a tail at E(t), t>0 small. Apply(1),(2) successively for labels1,2,3,
+then repeat from E(rho t), E(rho^2 t), and so on. All supported hazards are
+positive and less than1, all quiet hazards are zero, and the total sum of
+hazards is finite, since every cycle has size O(rho^n t). Thus the hazard
+sequence defines independent complete laws with positive original Never
+mass for every player. The supplied E vectors tend to0. Iterating(2) and
+using bounded convergence therefore identifies them with the actual
+conditional Never payoffs of these laws.
+
+At every date both active players are tied and every inactive player has
+Quit offer strictly below its supplied Never value. Iterating the exact
+Continue recursion bounds every deterministic finite deadline by E; the
+actual Never reply attains E. Private randomized deviations are mixtures
+of such deadlines and Never, so the unrestricted cap is exactly E.
+The prescribed laws use only tied finite dates and Never, hence each
+prescribed payoff also equals E. This proves ALL-END and Nash optimality
+for all four players, not just observer optimality. In particular the
+pivot debt is zero throughout this tail.
+
+This actual construction is a boundary for a generic contact-rank claim.
+It does not make the resulting profile a minimum of d_0+r nu, nor show
+that an actual positive-gap source can possess this particular tail.
+
+
+## Arbitrary-length curvature and regularity at a no-child point
+
+Independently reviewed internal theorem. It concerns finite variations of
+a supplied actual minimum, not an arbitrary-game producer. Completion-dependent
+overlap has not been certified; this result is not an accepted export.
+The degree-zero chamber is not used. Double quiet contacts and pivot contacts
+remain outside the regularity conclusion.
+
+Use pivot0 and
+
+    Gamma=[[0,1,2,-1],[-1,0,-1,2],[1,-1,0,1],[1,1,-1,0]],
+    rho=(3,15/4,13/4), J_i0=rho_i Gamma_i0, J_0i=-1.
+
+This matrix has determinant11, inverse column0=(1,4,5,3)/11, degree1,
+and no inverse-positive principal triple. These singleton screens alone
+do not certify failure of completion-dependent equilibrium producers. Quiet-participant rewards J_ji (i,j observers,
+i!=j) do not enter the active-contact dynamics or the zero-penalty Hessian.
+
+### Exact periodic transfer symbol
+
+At date k with label i, let x_k be the remaining signed atom vector and u_k
+the observer atom tangent. Fixed entrance/final caps give x_0=x_N=0. The
+active observer contact and state update are
+
+    a_k=Gamma_i x_k/(rho_i Gamma_i0),
+    x_(k+1)=A_i x_k-u_k e_i,
+    A_i=I-e_0 Gamma_i/(rho_i Gamma_i0).
+
+For a cyclic123 period, T=A_3 A_2 A_1 has observer block identity and
+
+    T_00=a=22/65, T_0,obs=(-8/65,9/65,2/13).
+
+Let X_n be the three observer state coordinates at period entrance, with
+u_(i,n)=X_(i,n)-X_(i,n+1). A harmonic z^n input gives
+
+    p(z)=sum_i [T_0i+B_i0(1-z)] X_i(z)/(z-a),
+    B_1=-A_3 A_2 e_1, B_2=-A_3 e_2, B_3=-e_3.
+
+All subsequent within-period states follow the displayed updates. On a
+closed loop the zero-penalty pivot-debt quadratic is exactly
+
+    D=sum_k a_k[Gamma_0 x_k-J_0i u_k].
+
+Form its Hermitian symbol S(z) by substituting the harmonic states and
+symmetrizing the real quadratic. Put P(z)=|z-a|^2 S(z). It is a Hermitian
+Laurent polynomial of degree at most2. Direct expansion of the displayed
+rational transfer formulas gives
+
+    P_11=116(2-z-z^-1)/4225,
+    P_22=87(2-z-z^-1)/845,
+    P_33=29(2-z-z^-1)/195,
+
+    det P=(z-1)^4(22z-65)^2(65z-22)^2
+             *(24336z^2-55465z+24336)/(12217860281250 z^5).
+
+For |z|=1,z!=1, the determinant is strictly negative: its nontrivial last
+factor is 24336(z+z^-1)-55465<=48672-55465<0, while the other factors have
+positive real product after the displayed powers of z are removed. A positive
+diagonal entry rules out three negative eigenvalues. Hence S has EXACTLY
+one negative and two positive eigenvalues at every nonzero frequency.
+
+The signature persists in one raw neighborhood, uniformly in frequency.
+For real coefficient data, P(1)=0; diagonal entries are even in frequency
+and therefore divisible by 2-z-z^-1. The real even determinant is O(theta^3)
+and hence O(theta^4), so is divisible by (2-z-z^-1)^2. The normalized diagonal
+and determinant functions extend continuously across z=1. Their strict
+signs at the reference point and compactness of the circle supply a single
+parameter neighborhood retaining the signature. This avoids length-by-length
+continuity and does not extrapolate finite LDL tests.
+
+### A finite-loop index bound with an absolute boundary loss
+
+Choose a real three-vector sequence Y supported on periods1,...,L. Set
+X=(shift-a)Y. The numerator formula for p then makes p finitely supported
+too. Both x and p vanish at periods-1 and L+1, so these sequences embed
+injectively into closed active-contact loops on m=L+2 periods.
+
+Their quadratic is the L-block Toeplitz form of P. Compare it with the
+L-block circulant of the same degree2 Laurent polynomial. The difference
+is supported on the first and last two block coordinates, so has rank<=12.
+The circulant has one negative direction at each nontrivial Fourier mode
+and none at mode1: its negative index is L-1. Real Fourier conjugate pairs
+have their usual doubled real dimension. Thus the closed-loop debt form on
+N=3m dates has negative index at least
+
+    L-1-12=m-15.
+
+The constant is a boundary allowance, not a new finite-window optimization.
+The same argument gives the asymptotic lower density1/3 for all lengths.
+Cyclic changes of phase give unitarily congruent harmonic forms and the
+same conclusion, or may be handled by removing at most two boundary dates.
+
+For a fixed finite assignment of the other rewards, the fixed-penalty
+augmented Hessian has the same construction for all sufficiently small r.
+Indeed, in absolute atoms it is D+r sum_i w_i P_i^(2), where
+w^T=1^T Gamma^-1 and P_i^(2) is the quadratic Never payoff. Explicitly
+
+    P_i^(2)=sum_k sum_(j<l; j,l!=i)
+      [-Gamma_il v_jk x_lk-Gamma_ij v_lk x_jk+Z_i({j,l})v_jk v_lk].
+
+There is at most one pivot factor per term, so clearing z-a still gives
+Laurent degree<=2. At z=1 observer atoms vanish and the pivot atoms sum to
+zero over the period; thus this symbol also vanishes at1. The same normalized
+continuity proof gives one table-dependent r0>0 and one raw neighborhood,
+independent of m. Joint Never has zero quadratic coefficient on closed
+absolute-atom loops. Its cap-multiplier correction is exactly the displayed
+r-weighted Never term. No uniform bound on other rewards is asserted.
+
+### Produced rank for all single-quiet masks below density1/3
+
+Take N=3m, m>=2, in any phase. Let S be ANY quiet-contact slot set with
+at most one slot at each date and |S|<=m-1. The complete rows consisting of
+four entrance caps, N active observer contacts, and the |S| quiet contacts
+are generically independent in the six quiet-participant coordinates.
+
+Proof: set all six quiet-participant J_ji=T and let T tend to infinity.
+After dividing a quiet row by T its leading row is precisely u_k. It
+suffices to prove the endpoint map has rank4 after all these u_k are pinned.
+Each of the three phases has m occurrences; fewer than m are removed in
+total, so at least one free occurrence remains in each phase, and some phase
+has two free occurrences. For a control of owner i with ell full periods
+remaining, its endpoint observer component is-e_i and its pivot component is
+
+    -T_0i/(1-a)+a^ell C_i,  C_i=B_i0+T_0i/(1-a).
+
+For phase123 the constants are
+
+    C=(-176/2795,-55/559,10/43).
+
+For phases231 and312 they are respectively
+
+    (-16/129,-110/1677,20/129),
+    (-176/1935,-55/387,44/387).
+
+All are nonzero. Two free controls of the same phase have distinct pivot
+components because 0<a<1. Their difference gives a nonzero pivot-only
+endpoint vector. One control of each observer then supplies the other
+three independent directions. This proves endpoint rank4, hence the full
+augmented rank. The relevant leading determinant is nonzero, so a polynomial
+minor in the quiet rewards is nonzero, rather than an assumed rank oracle.
+
+These C_i inequalities persist in one neighborhood of the active data,
+uniformly in m. For every such active table, every finite single-quiet mask
+therefore has a nonzero minor polynomial in the quiet rewards. By the Baire
+theorem, a dense intersection of their open nonzero loci supplies simultaneous
+full rank for ALL lengths and all these masks, in any prescribed quiet-reward
+open box. There is no finite uniform condition-number claim.
+
+### Conditional actual-law consequence and remaining obstruction
+
+At such generic raw data, an ACTUAL positive-Never ALL-END observer-optimal
+global minimum with an eventual cyclic123 pair tail and eventual pivot
+strictness cannot have arbitrarily late N=3m windows with at most m-16 quiet
+contacts and at most one quiet contact per date. The negative-index bound
+survives restriction by fewer than m-15 independent quiet rows. Full row rank
+gives an exact finite IFT fibre preserving all those contacts and all entrance
+caps. Strict omitted gaps and positive supported hazards persist locally.
+For each fixed finite N the actual tail tends to the zero-data reference;
+the augmented-objective cancellation transfers its negative Hessian to the
+actual cap-preserving fibre, contradicting minimality.
+
+Thus, if every sufficiently late date has at most one quiet contact, the
+lower asymptotic quiet-contact density is at least1/3 per date. This uses one
+single raw/penalty neighborhood and a produced countably generic rank set,
+not a different neighborhood for each length. Arbitrary double-quiet slots,
+late pivot ties, other support words, source realization, and production of
+this singleton/raw chamber from arbitrary games remain unresolved. No
+unrestricted Fin4 closure or new reward-table UE theorem is claimed.

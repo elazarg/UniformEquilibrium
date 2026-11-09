@@ -1,7 +1,15 @@
 # Independent reviews of cyclic pair-contact exclusion
 
+**Coverage approval withdrawn after source audit.** The earlier reviews
+checked the calculus but missed the singleton-degree overlap. Their
+mathematical checks do not establish new Fin4 coverage. The
+[source-overlap audit](../notes/CODEX_ROOT__PROOF_MECHANISM_DIVERSIFICATION.md#singleton-chamber-overlap-audit)
+gives the exact source adapter and degree calculation; the preserved proof
+is now an internal repair target. The earlier hashes identify the originally
+reviewed bytes, before this lifecycle correction.
+
 These final reviews cover the exact bytes of
-[the proof packet](../exports/ACTUAL_MINIMUM_CYCLIC_PAIR_CONTACT_EXCLUSION.md).
+[the proof packet](../revisit/ACTUAL_MINIMUM_CYCLIC_PAIR_CONTACT_EXCLUSION.md).
 The component authorship and independent checks are disclosed below.
 Conditional admission does not assert actual source attainment or Fin4 closure.
 

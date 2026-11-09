@@ -23,23 +23,16 @@ small-penalty bound may depend on the full table. The proof uses finite
 multiplier gluing, an exact preserved symplectic form, and a summable-observation
 argument. It includes actual full-support laws demonstrating that global
 minimality is the essential obstruction.
-The [global pair-star rigidity theorem](../exports/ACTUAL_MINIMUM_GLOBAL_PAIR_STAR_RIGIDITY.md)
-excludes the entire recurrent guarded pair-star actual-minimum mode after
-generic reward selection in the explicit ratio/sign chamber. At a fixed
-penalty with all C_i(r) nonzero, any such minimum would have to become a
-directed three-cycle with a symmetric explicit price matrix. Both exceptional
-price conditions can be avoided before selecting the penalty and source.
-For structured stars the stronger exact necessary condition is C(r)=0,
-including the formerly surviving all-negative coefficients. The proof uses
-arbitrarily spaced occurrences in the original calendar; it assumes no
-periodic word. Actual attainment, the raw chamber and quiet guards remain
-inputs. This is not a new unrestricted UE table class.
-
-The [positive-timing patch theorem](../exports/ACTUAL_MINIMUM_POSITIVE_TIMING_PATCH_EXCLUSION.md)
-retains a distinct local consequence: one positive coefficient excludes
-sufficiently late controlling pair segments even when supports and ties
-outside the segment are arbitrary. Intervening runs may be arbitrarily long
-and numerous. Neither theorem assumes a pivot-contact or Never-mass bound.
+The earlier positive-pivot pair-star and cyclic-contact packets do not add
+counterexample coverage: their singleton chamber is already excluded by the
+implemented degree criterion. They are internal repair targets, with the
+exact source-overlap audit below. Their finite-variation calculations may
+be valid without constituting additional progress on Fin4. The [reviewed repair](../revisit/ACTUAL_MINIMUM_GLOBAL_PAIR_STAR_RIGIDITY.md)
+allows a mixed pivot row and explicitly retains strict late pivot comparisons.
+Its global recurrence-to-cycle and price-symmetry proof passes mathematical
+review, but completion-dependent overlap is not certified. It remains
+internal; neither its degree1 matrix nor its actual guarded control alone
+establishes new counterexample coverage.
 
 The [generic three-date contact gap](../exports/GENERIC_THREE_DATE_OBSERVER_CONTACT_GAP.md)
 applies to every finite chain of three sufficiently small roots with at most
@@ -52,19 +45,16 @@ minimizing assumption. The native absorbing gap survives the perturbation;
 source selection must then be repeated at the perturbed table. This gives
 one strict comparison per sparse triple, not a fully guarded calendar.
 
-The [cyclic pair-contact theorem](../exports/ACTUAL_MINIMUM_CYCLIC_PAIR_CONTACT_EXCLUSION.md)
-excludes all64 repeating contact patterns near its explicit raw table, with
-arbitrary actual hazard amplitudes. Its negative-curvature certificates also
-exclude nonperiodic contact patterns contained in the certified sets. Every
-late nine-date cyclic pair window must have at least three quiet contacts,
-even when contact patterns switch arbitrarily. This does not close all
-nonperiodic switching or all pair-support words.
-
-Denser nonperiodic partial ties, mixed-support transitions, finite active
-calendars, other raw sign regions, and nonrealized sources remain unresolved.
-Exceptional conservative three-cycles can have positive curvature on every
-closed tangent loop; the [exact internal boundary](CODEX_ROOT__ACTUAL_MINIMUM_AND_MIXED_ENDPOINT.md)
-explains why generic selection cannot simply be dropped from that mechanism.
+Actual minima with mixed supports or partial ties, finite active calendars,
+and nonrealized sources remain unresolved. The full-support and generic
+three-date results above are not restricted to the rejected singleton chamber.
+The [actual-minimum note](CODEX_ROOT__ACTUAL_MINIMUM_AND_MIXED_ENDPOINT.md)
+now proves that recurrent pivot ties persist in actual laws on an open raw
+region, even after the singleton stationary exits fail. This refutes generic
+pivot-guard production from those tests alone. Its separate no-child curvature
+argument supplies an arbitrary-length conditional quiet-contact density bound;
+full completion-dependent overlap remains unaudited. The older conservative
+positive-pivot example is only calculus on an already excluded chamber.
 The mixed
 endpoint minimizes an explicit pivot obstacle objective on the cap constraints
 imposed by its actual head. Under a stated nonnegative-kernel condition,
@@ -75,6 +65,100 @@ controlled invariant set of actual Nash transitions remains a separate
 constructive target. Neither route is complete.
 The earlier supporting results have an
 [independent mathematical review](../feedback/CODEX_ROOT__CROSSFIELD_GLOBAL_METHODS__BY_REVIEW.md).
+
+## Singleton-chamber overlap audit
+
+This audit corrects a conjecture-facing admission error, not a claim that
+all the associated calculus is false. The main conclusions of the internal
+[pair-star family](../revisit/ACTUAL_MINIMUM_GUARDED_PAIR_STAR_EXCLUSION.md),
+[global rigidity](../revisit/ACTUAL_MINIMUM_GLOBAL_PAIR_STAR_RIGIDITY.md),
+[positive timing](../revisit/ACTUAL_MINIMUM_POSITIVE_TIMING_PATCH_EXCLUSION.md),
+and [cyclic contact](../revisit/ACTUAL_MINIMUM_CYCLIC_PAIR_CONTACT_EXCLUSION.md)
+packets were counted against a source chamber already excluded by existing
+mathematics. Their coverage approvals are withdrawn. The general-ratio
+saturation corollary in the first packet has broader scope and is retained
+for separate use; the rejection does not identify an error in that corollary.
+
+The exact source declarations inspected are
+`finFour_singleton_r0Degree_eq_one_of_no_uniformPayoff` in
+`UniformEquilibrium/Diagnostics/Quitting/FinFourSingletonDegreeCriterion.lean`,
+`exists_uniformEquilibriumPayoff_of_r0Degree_ne_one` in
+`UniformEquilibrium/Quitting/Classification/LCP/SingletonDegreeCriterion.lean`,
+and `quittingSingletonMatrix_sub_payoff` in
+`UniformEquilibrium/Quitting/Classification/LCP/QuittingRewardAdapter.lean`.
+The literal singleton matrix is Gamma_ij=R_i({j})-R_i({i}), with the
+recipient as row; neither negation nor transposition occurs. These were
+static source checks, not a fresh Lean build.
+
+The same degree restriction applies to a native own-zero table Z with
+positive absorbing SUM-debt infimum A. If M>=1 bounds its rewards and nu
+is original joint Never, moving one owner's Never mass to a finite date gives
+
+    A <= D_Z+14 M nu^(1/4).
+
+Adding1 to every nonempty terminal reward, while retaining zero AllNever,
+gives R=Z+1 and D_R=D_Z+4nu. Finite deadlines dominate Never in both games,
+so this identity concerns full behavioral caps. For
+c=(A/(28M))^4, either D_Z>=A/2 or nu>=c. Thus D_R>=min(A/2,4c)>0.
+The terminal gap characterization makes R an original no-UE table. Its
+singleton matrix is exactly Gamma, so the checked source theorem forces
+Gamma to be R0 of degree1. This is a source adapter, not a claim that adding
+terminal constants preserves equilibria with AllNever fixed.
+
+Here is a short complete obstruction for the chamber used by those packets.
+Write p=0, h_i=Gamma_0i>0, G_i=Gamma_i0!=0, and
+Gamma_ij/G_i<0 for distinct observers. If the number of negative G_i is
+zero, two, or three, respectively the pivot column, the sole positive-G
+observer's column, or every observer column is nonnegative. A nonnegative
+hollow column gives a nonzero homogeneous complementary root, violating R0.
+
+If exactly one G_a is negative, let b,c be the other observers. The entire
+literal sign chamber is R0. Indeed, for x>=0, Gamma x>=0 and
+x_i(Gamma x)_i=0, x_0>0 forces all observer coordinates zero through the
+positive pivot row; row a is then negative. With x_0=0, x_a>0 forces
+x_b=x_c=0 through row a, making row b negative. If x_0=x_a=0,
+nonnegativity of rows b,c forces x_b=x_c=0. Thus no nonzero homogeneous
+root exists. Linear interpolation within this sign chamber preserves R0,
+and homotopy invariance of the complementarity degree reduces its degree
+to that of
+
+    Gamma_old=[0,1,1,1;-2,0,1,1;2,-1,0,-1;2,-1,-1,0].
+
+For offset minus-ones this matrix has no complementary root. If x_0>0,
+row0 gives x_1+x_2+x_3=1, while row1 requires
+2x_0<=x_2+x_3-1=-x_1, a contradiction. If x_0=0, row2's residual is
+-x_1-x_3-1<0. Its degree is therefore0, and so is that of the whole sign
+chamber. The argument includes singular full matrices and needs no
+participant or higher reward assumptions. Every original table in this
+chamber has UE by the existing R0/degree source theorem and its
+contrapositive. No native positive absorbing-gap source can enter it.
+
+A broader source filter follows directly from the established ten-template
+[residual singleton partition](CODEX_COORDINATOR__FIN4_RESIDUAL_PARTITION.md):
+EVERY strict inverse-column pivot of a native positive-gap source has a
+mixed singleton row. To see the generic case, normalize at
+v=Gamma^-1 e_p>0 to H=[0,c;-r,B], where c dot 1=1 and r=B1.
+If c>0, templates1--4 have an eligible pair with
+D_ij=c_i r_j/B_ji+c_j r_i/B_ij>0, contrary to degree1. Templates5,6,9,10
+force c1<0 by the negative-column condition; template7 forces c3<0.
+In template8, B^-1>0 and c B^-1>0 trigger the already available passive
+triple exit. The ten cases are exhaustive. Nonnegative c with zeros is
+excluded by arbitrarily small generic perturbation making it positive:
+the absorbing SUM-debt infimum is8-Lipschitz in rewards and the strict
+inverse column persists. Finally Gamma_p v=1 forces a positive row entry.
+This is a useful distilled source filter, not additional reward coverage
+beyond the existing matrix exits.
+
+The broader full-support and generic three-date packets survive this
+particular audit. The former allows arbitrary eligible invertible Gamma,
+including degree1 examples; the latter excludes one algebraic zero set in
+all raw24 coordinates and hence intersects every open residual chamber.
+A future pair-star extension must use a mixed pivot row and either control
+pivot contacts or explicitly require their absence. Positive Never and
+ALL-END do not imply nonnegative conditional caps: two owners with atoms
+m*2^(-t-1), passive singleton payoff-1 and pair payoff-2 have every finite
+deadline and Never worth-m. This exact control prevents an invalid shortcut
+when replacing the old automatic pivot-strictness argument.
 
 ## Question
 

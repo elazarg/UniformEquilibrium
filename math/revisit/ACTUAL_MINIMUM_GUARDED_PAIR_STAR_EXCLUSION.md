@@ -1,5 +1,15 @@
 # Actual minima exclude an eventual guarded pair-star mode in an open reward region
 
+**Internal repair target; not an accepted conjecture-facing export.** The
+singleton sign chamber in the main exclusion has R0 degree zero and is
+already excluded by the implemented singleton-degree criterion. The
+calculus below is retained for audit and possible generalization; its
+claims of new counterexample coverage are withdrawn. See the
+[source-overlap audit](../notes/CODEX_ROOT__PROOF_MECHANISM_DIVERSIFICATION.md#singleton-chamber-overlap-audit).
+
+The separate general-ratio saturation corollary has broader singleton
+scope; it is retained as useful mathematics, pending a separate handoff.
+
 This is an ordinary mathematical proof of an actual-source case exclusion.
 It does not prove the four-player quitting-game UE conjecture and is not
 a Lean-checked theorem.

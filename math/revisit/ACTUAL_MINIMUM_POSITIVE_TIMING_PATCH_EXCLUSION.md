@@ -1,5 +1,12 @@
 # A positive timing coefficient excludes guarded pair-star patches in global minima
 
+**Internal repair target; not an accepted conjecture-facing export.** The
+singleton sign chamber in the main exclusion has R0 degree zero and is
+already excluded by the implemented singleton-degree criterion. The
+calculus below is retained for audit and possible generalization; its
+claims of new counterexample coverage are withdrawn. See the
+[source-overlap audit](../notes/CODEX_ROOT__PROOF_MECHANISM_DIVERSIFICATION.md#singleton-chamber-overlap-audit).
+
 ## Exact statement
 
 There are four players I={0,1,2,3}. A native quitting table assigns a finite

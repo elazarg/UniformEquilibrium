@@ -1,4 +1,12 @@
-# Global context rigidity excludes the generic guarded pair-star mode
+# Global context rigidity for guarded pair-star minima with a mixed pivot row
+
+**Reviewed internal theorem; export admission is not certified.** The proof
+allows mixed pivot rows and explicitly requires late pivot and quiet guards.
+Its matrix and one-owner screens are checked, but no complete reward-table
+witness has been certified to escape all applicable existing equilibrium
+producers. The zero higher-reward boundary example has an absorbing Nash
+equilibrium. The theorem therefore remains in this internal repair lane;
+it must not be reported as new certified Fin4 counterexample coverage.
 
 ## Exact raw hypotheses and conclusions
 
@@ -16,8 +24,10 @@ Fix a pivot p; the other three players are observers. Write
 Assume the explicit raw conditions
 
  Gamma invertible; G_i!=0; rho_i=J_ip/G_i>1;
- c_ij=-Gamma_ij/G_i>0 for distinct observers i,j, c_ii=0;
- h_i>0>J_pi for each observer i.                          (Raw)
+ c_ij=-Gamma_ij/G_i>0 for distinct observers i,j, c_ii=0.    (Ratio)
+
+The pivot singleton row h and pivot participant rewards J_pi are arbitrary
+finite real numbers. No positivity assumption is imposed on that row.
 
 Put lambda_i=1-1/rho_i, w^T=1^T Gamma^-1, and
 
@@ -52,7 +62,10 @@ Never mass for every player, is ALL-END and observer-optimal, and globally
 minimizes d_p+r nu among all actual observer-optimal profiles, or on a larger
 feasible carrier containing them. Suppose that, after deleting empty dates,
 its tail eventually consists of pair dates p,i; all three observer labels
-recur; and every inactive observer comparison is eventually strict.
+recur; every inactive observer comparison is eventually strict; and the pivot
+Quit-versus-END comparison is eventually strict at every nonempty date.
+Earlier pivot contacts are allowed. The late pivot guard is an explicit
+source-mode hypothesis, not inferred from ALL-END or positive Never.
 
 **Fixed-penalty global reduction.** If all C_i(r)!=0, the eventual observer
 word is a directed three-cycle, and the matrix (PriceMatrix) for that
@@ -60,19 +73,14 @@ orientation is symmetric. Periodicity is a conclusion, not a supplied
 calendar hypothesis. No bound on recurrence gaps or original run lengths
 is assumed.
 
-**Complete structured coefficient restriction.** If, more specifically,
-there are c0,b_i>0 with c_ij=b_j/2 and h_i=c0 b_i, then every such minimum
-satisfies C_i(r)=0 for ALL observers. This includes zero-coefficient labels
-with arbitrarily long runs; the penalty is fixed before seeing the source.
-
-**Generic Raw exclusion.** Impose the following additional explicit test:
+**Generic Ratio exclusion.** Impose the following additional explicit test:
 
  every A_i!=0; neither orientation's S(0) is symmetric.    (Generic)
 
 There is r0>0, determined by the table before source selection, such that
-for every 0<r<r0 the entire stated recurrent guarded Raw mode is impossible.
+for every 0<r<r0 the entire stated recurrent guarded Ratio mode is impossible.
 Condition (Generic) is an open dense condition in the24 singleton and
-participant-pair coordinates on Raw. The other32 native rewards are free.
+participant-pair coordinates on Ratio. The other32 native rewards are free.
 A supplied positive absorbing exploitability gap survives an arbitrarily
 small perturbation into (Generic), with all source objects selected afresh.
 
@@ -83,11 +91,12 @@ entire recurrent calendar. Arbitrarily sparse occurrences of each label
 can be used as controls. Their limiting pivot memories either produce a
 negative finite closed variation, or force a unique context for each label;
 that rigidity forces a directed three-cycle and explicit price equalities.
-The structured result removes the entire nonzero coefficient vector, rather
-than only positive timing coefficients.
+The pivot row may have both signs, as required by surviving strict-pivot
+singleton configurations. The proof preserves earlier pivot cap contacts
+by fixing every entrance cap of its finite comparison.
 
 Actual observer-constrained attainment, ALL-END, positive original Never,
-the pivot/raw chamber, eventual pair support, recurrence and quiet guards
+the ratio chamber, eventual pair support, recurrence and both pivot and quiet guards
 remain inputs. The theorem does not produce them from every game. It is a
 conditional restriction on actual minimizing sources, not a new unrestricted
 UE reward-table class or a solution of Fin4. Mixed-support bridges, quiet
@@ -125,25 +134,17 @@ deadline set is a subset of the old one, while Never still attains the old
 cap by ALL-END. Thus B and the minimizing objective are preserved. Infinitely
 many nonempty dates can again be indexed by the natural numbers.
 
-Pivot strictness on late pair dates holds even with arbitrary future
-support. Write m_j for observer j's conditional remaining finite marginal
-mass, M=sum_j m_j, gamma=min_j Gamma_pj>0, and
-R=max_S |Z_p(S)| over nonempty observer coalitions. Independence gives
-probability at least M-M^2 that exactly one observer ever quits. Every such
-outcome pays the Never pivot at least gamma. A simultaneous first coalition
-with two or more observers has probability at most
-sum_(j<k)m_j m_k<=M^2/2. All other singleton outcomes also pay positively, so
-
- e_p >= gamma M-(gamma+R/2)M^2.
-
-Since M tends to zero, e_p>0 at every sufficiently late cut with M>0.
-At a pair date p,i, M>0 and the pivot Quit offer is J_pi q_i<0. Thus every
-late pair-date pivot comparison is automatically strict. Earlier pivot
-contacts will be preserved exactly by fixing every entrance cap.
+At every late comparison window the pivot guard is supplied explicitly. It
+cannot be inferred from positive original Never or ALL-END: a fixed law's
+late deadlines converge to its Never payoff, which can be negative. The
+comparison fixes every entrance cap and its literal continuation, so earlier
+pivot contacts impose no further obstruction. Every modified window is
+finite; its finitely many strict pivot and quiet inequalities persist on a
+sufficiently small two-sided parameter interval.
 
 ## Exact pair-run laws
 
-Use the ratios in (Raw). Consider a finite maximal run of L dates
+Use the ratios in (Ratio). Consider a finite maximal run of L dates
 whose active owners are p,i. Let E be its entrance Never vector and b its
 continuation vector. The pivot's conditional absolute atoms alpha_t within
 this run satisfy the active observer's tied pure-deadline equations
@@ -517,7 +518,7 @@ Coordinate i implies lambda_j=lambda_k; then the unequal point-mass
 injections contradict equality. Thus every vertex has one successor.
 Strong connectivity on three vertices forces one directed three-cycle.
 After the last exceptional transition, the actual word is that periodic
-cycle. This proves the stated general Raw reduction.
+cycle. This proves the stated general Ratio reduction.
 
 Solving (Transition) on the resulting cycle gives precisely the contexts
 in (PriceMatrix). The necessary conservative conditions are its three
@@ -551,54 +552,24 @@ preserve ALL-END and observer optimality. Earlier ties are preserved.
 A strictly negative second derivative contradicts global minimality.
 Thus an actual minimum must satisfy the periodic/conservative conclusion.
 
-## Structured consequence, including zero coefficients
-
-Suppose c_ij=b_j/2 and Gamma_pi=c b_i with c,b_i>0. Put y_i=b_i x_i and
-U_i=b_i u_i. The observer area term in (Q) cancels because
-Gamma_pi c_ij=c b_i b_j/2 is symmetric in i,j. The cost is
-
- Q_r=sum_i d_i sum_t a_p(t)U_i(t),
- d_i=-rho_i C_i(r)/b_i.
-
-In these coordinates c_i has zero own coordinate and all other coordinates
-1/2. Price rows are k_i(e_i-pi^i), with k_i=d_i/(2rho_i).
-If all costs are nonzero, symmetry on the eventual cycle gives
-
- k1 lambda3(1-lambda2)=k2(1-lambda1),
- k2 lambda1(1-lambda3)=k3(1-lambda2),
- k3 lambda2(1-lambda1)=k1(1-lambda3).
-
-Multiplying forces lambda1 lambda2 lambda3=1, impossible. Thus there is
-negative curvature whenever all C_i(r) are nonzero.
-
-If some but not all costs vanish, collapse maximal runs. Timing makes the
-nonzero-cost runs singleton; a zero-cost run may have any finite length,
-with theta<=lambda_max. Its exact memory update is
-pi^+=theta pi+(1-theta)e_i and
-z^+=theta z+[theta(1-pi_i)/2]U. Its stage cost is zero. The same tracking,
-context-selection, and conservative-price proof applies. Nonzero-cost
-labels have unique contexts; zero-cost price rows are zero. Symmetry forces
-pi_j^i=0 whenever i has nonzero cost and j has zero cost.
-
-The recurrent transition graph is strongly connected. It has an infinitely
-recurring edge from some zero-cost label j to a nonzero-cost label i. That
-edge injects at least 1-lambda_max into coordinate j of the next memory,
-contradicting pi_j^i=0. Therefore a recurrent guarded structured minimum
-must have C_i(r)=0 for ALL three observers, exactly at the fixed penalty.
-
-## Generic Raw selection before the penalty and source
+## Generic Ratio selection before the penalty and source
 
 At r=0, every A_i and every antisymmetric entry of either orientation's
 matrix S is a rational function of the24 singleton/participant-pair reward
-coordinates. Its denominators are nonzero on Raw. Clear these denominators.
+coordinates. Its denominators are nonzero on Ratio. Clear these denominators.
 The product of the three A_i numerators and, for each orientation, the sum
 of squares of its three antisymmetry numerators is a polynomial P.
 
-P is not identically zero: the structured table
-Gamma=[0,1,1,1;-2,0,1,1;2,-1,0,-1;2,-1,-1,0],
-rho=(2,3,4), J_pi=(-2,-3,-4) has A_i=-1/rho_i, and the structured consequence rules out
-symmetry for either orientation. Hence P!=0 is dense in every open Raw
-region, including one with a strictly positive inverse pivot column.
+P is not identically zero. The explicit table below has
+
+ Gamma=[0,5,-1,-1;-2,0,1,1;2,-1,0,-1;2,-1,-1,0],
+ rho=(3,15/4,13/4), J_pi=(-12,-15/4,0).
+
+Then A=(-2/3,-26/15,-9/13), and S_12(0)-S_21(0) is -1028/387 for
+orientation123 and -1096/387 for orientation132. Both are nonzero. Hence
+P!=0 is dense in every open Ratio region, including every nonempty open
+region satisfying additional strict singleton-source screens. The witness
+has degree1 and fails every passive triple test, as checked below.
 If the fresh source may select the pivot, take the product of this polynomial
 under the four pivot relabelings. Each factor is nonzero by relabeling the
 same witness, so their product is nonzero. This is one generic perturbation
@@ -608,9 +579,9 @@ For a fixed perturbed table with P!=0, C_i(r) and both antisymmetry vectors
 are affine in r, and their values at r=0 are nonzero. Choose r0>0 so that
 these finitely many strict nonvanishing conditions hold for every 0<r<r0.
 This choice is made BEFORE selecting a new source. At every such r, the
-entire recurrent guarded Raw mode is impossible by the preceding proof.
+entire recurrent guarded Ratio mode is impossible by the preceding proof.
 When the pivot will be selected afresh, take the minimum of these thresholds
-for the finitely many pivots satisfying Raw at the fixed new table. The
+for the finitely many pivots satisfying Ratio at the fixed new table. The
 penalty bound is then chosen uniformly before that selection as well.
 
 For completeness, define the native absorbing gap
@@ -625,7 +596,7 @@ suprema changes every cap by at most delta. Taking maxima and infima gives
  |g(Z)-g(Z')|<=2delta.
 
 Thus any supplied g(Z)>0 survives a raw24-coordinate perturbation of norm
-less than g(Z)/4 into (Generic), also preserving any required open Raw or
+less than g(Z)/4 into (Generic), also preserving any required open Ratio or
 strict inverse-column conditions. Other rewards and own singletons stay
 fixed. Fix this new table first, choose 0<r<r0 and any further source-required
 upper bound, and only then select all source objects afresh. No old law or
@@ -648,51 +619,158 @@ translation, so B_m^Z=B_m^R-1. Prescribed payoff loses1-nu, yielding
 All debts therefore agree on absorbing prescribed profiles, so g(Z)>=delta/4.
 This native table is not asserted to lack UE: AllNever is exact Nash.
 The obstruction preserved is only its positive absorbing gap. The adapter
-does not force Raw, actual attainment, the guarded support, or recurrence.
+does not force Ratio, actual attainment, the guarded support, or recurrence.
 Those remain separate source inputs.
 
-## One actual guarded construction
+## Singleton-source and actual-law boundary checks
 
-The assumed support and strict comparisons are realizable; local contact
-feasibility alone does not give the exclusion. Take p=0 and
+The following one rational table demonstrates that (Ratio), (Generic), and
+the guarded recurrent actual-law geometry coexist with the surviving
+singleton-source tests. It is not claimed to have a positive absorbing gap
+or to supply a global observer-constrained minimum.
 
- Gamma=[0,1,1,1; -2,0,1,1; 2,-1,0,-1; 2,-1,-1,0],
- J=[0,-3,-15/4,-13/4; -6,0,-3,-2; 15/2,-5,0,-3; 13/2,-3,0,0],
+Take p=0 and
 
-with other rewards zero. The Raw inequalities hold, det Gamma=6 and
-Gamma^-1 e_p=(1/3,1/3,1/3,1/3). Take contraction eta=1/3,
-E=(6,-12,21/2,21/2), observer word1,2,3,1, and leading hazards
+    Gamma=[0,5,-1,-1; -2,0,1,1; 2,-1,0,-1; 2,-1,-1,0],
+    J=[0,-12,-15/4,0; -6,0,-3,-2;
+       15/2,-5,0,-3; 13/2,-4/5,0,0].
 
- a_0=(2,1,0,0), a_1=(1,0,1,0),
- a_2=(1,0,0,1), a_3=(1,1,0,0).
+Set all unlisted rewards to zero: singleton rewards are Gamma, the two
+participants' rewards in each pair are J, every nonparticipant pair reward
+is zero, and every triple or full-coalition reward is zero. This specifies
+the entire native table. In particular own singletons and AllNever pay zero.
 
-Then Gamma sum a=(1-eta)E. The8-by8 Jacobian imposing four entrance caps
-and four active-observer contacts has determinant1728, with columns ordered
-by date and owner, entrance rows first. The leading Quit-minus-END vectors are
+The literal singleton matrix has determinant6 and inverse
 
- (-9,0,-1/2,-1/2), (-35/4,-1,0,-1),
- (-29/4,-1,-1,0), (-6,0,-2,-1).
+    Gamma^-1=[1/3,7/6,5/6,5/6;
+              1/3,2/3,1/3,1/3;
+              1/3,5/3,4/3,1/3;
+              1/3,5/3,1/3,4/3].
 
-The finite inverse theorem gives an exact four-date block q(t)=t a+O(t^2)
-with entrance caps tE, terminal caps eta tE, exact active-observer contacts
-and strict quiet/pivot comparisons. Concatenate q(h eta^n) for sufficiently
-small h>0. Hazards are proper and summable, so every original Never mass
-is positive. Assigned caps match and tend to zero; telescoping (Root)
-identifies them with the actual law's Never offers. Every deadline is at
-most END and every supported observer response is tied, including Never.
-Thus the resulting actual profile is ALL-END and observer-optimal, with all
-three labels recurring and strict quiet/pivot comparisons. Its negative
-conditional observer cap is allowed by the native model.
+Thus the SAME pivot0 has a strict positive inverse column (1,1,1,1)/3.
+Every entry of the inverse is positive. This proves R0 directly: if
+x>=0, w=Gamma x>=0 and x_i w_i=0, then w!=0 would imply
+x=Gamma^-1 w>0 and hence w=0, a contradiction; w=0 implies x=0.
+At LCP offset -1 the same argument makes every root fully supported,
+with unique root Gamma^-1 1 and index sign(det Gamma)=+1. Hence its
+R0 degree is1. Every column has a negative entry, and the pair23 is mutually
+negative. Thus neither a nonnegative singleton-column exit nor a
+test requiring absence of a mutually negative pair applies. The full inverse
+test with negative determinant does not apply because det Gamma=6>0.
 
-The coefficients are
-C_1(r)=(8r-3)/9, C_2(r)=(41r-12)/45, C_3(r)=(35r-12)/39.
-All are negative for 0<=r<12/41, and they never vanish simultaneously.
-The structured consequence proves that this actual guarded profile cannot
-be a global minimum at any r>=0. In particular its small-penalty region is
-excluded without any positive timing coefficient.
-No positive absorbing gap, global minimum or counterexample is claimed for
-this construction. It is used solely to verify nonvacuity of the support
-and response hypotheses.
+Every principal triple T is invertible. If o is the omitted player, the
+block-inverse formula gives
+
+    Gamma_oT Gamma_TT^-1=-(Gamma^-1)_oT/(Gamma^-1)_oo<0.
+
+Only triples012 and013 have nonnegative inverse; for each their outside
+row above is (-1/4,-5/4,-1/4). Therefore every passive-child exit requiring
+both nonnegative child inverse and nonnegative outside inverse row fails.
+The signed four-cycle input requires each successor edge to be negative
+and its reverse edge positive. Its eligible directed row edges here are
+exactly 0->2, 0->3, 1->0, 2->1, 3->1. Players2 and3 have the same unique
+eligible successor1, so no Hamiltonian cycle of eligible edges exists,
+under any of the24 relabelings. This does not assert absence of a cycle
+using a mutually negative edge.
+
+These are singleton-source screens, not a certification that no other
+absorbing equilibrium producer applies to a completed table.
+
+Here G=(-2,2,2), c_ij=1/2 for i!=j, and
+
+    rho=(3,15/4,13/4), lambda=(2/3,11/15,9/13).
+
+Define E=(6,-52/7,52/7,52/7), eta0=1/2, and the three-date observer word
+W=(1,2,3). The leading hazard vectors are
+
+    a0=(26/21,1,0,0), a1=(50/63,0,1,0),
+    a2=(52/63,0,0,1).
+
+They satisfy Gamma sum_k a_k=(1-eta0)E. For small t>0 prescribe the
+continuation Never vector eta tE, and vary the six active hazards q_k=t x_k
+AND the scalar contraction eta. Impose entrance Never vector tE and the
+three active-observer equalities Q_i=e_i. Dividing these seven exact
+polynomial equations by t extends them analytically to t=0. At t=0 their
+solution is x_k=a_k, eta=eta0. In the date-by-date pivot/observer order,
+followed by eta, the four entrance rows and three contact rows are
+
+    eta E+Gamma sum_k x_k-E,
+    (J x_k)_i-(eta E+Gamma sum_(l>=k)x_l)_i, i=W_k.
+
+Their seven-by-seven Jacobian determinant is -60372/7. The implicit-function
+theorem therefore gives exact q_k(t)=t a_k+O(t^2) and
+eta(t)=1/2+O(t), with the specified entrance and continuation vectors and
+all active observer contacts. All six active hazards are positive and below1
+for small t, and the other hazards remain zero. The leading Quit-minus-END
+vectors at the three dates are
+
+    (-18,0,-22/7,-19/105),
+    (-19/4,-59/21,0,-50/63),
+    (-2,-163/63,-74/63,0).
+
+Thus every pivot and inactive-observer comparison is strictly guarded.
+The pivot's Never caps at those dates are t(6,1,2)+O(t^2), verified directly;
+other owners' caps can be negative.
+
+Fix t0>0 sufficiently small and define t_(n+1)=t_n eta(t_n). Continuity
+allows 1/3<eta(t)<2/3 throughout that neighborhood, so every t_n>0 and
+sum_n t_n is finite. Concatenate the exact blocks q(t_n). Their boundary
+Never vectors match because t_n eta(t_n)E=t_(n+1)E. The hazards are summable,
+so the infinite word defines actual independent complete laws with all
+original Never masses positive. Iterating the exact payoff recursion and
+using t_n E->0 identifies the prescribed boundary vectors with the actual
+Never payoffs. The same limiting recursion, strict inequalities and active
+contacts prove ALL-END and observer optimality.
+
+The resulting run word is exactly123123..., with every run of length one.
+Thus this boundary control avoids the repeated-run timing obstruction while
+retaining the stated all-negative C range and nonconservative price matrices.
+It is not a global observer-constrained minimum and is not asserted to have
+a positive absorbing gap. Those are distinct source inputs.
+
+For this SAME complete table, direct substitution in (Coeff) gives
+
+    C1(r)=(136r-6)/9,
+    C2(r)=-(287r+78)/45,
+    C3(r)=-(245r+27)/39.
+
+All are negative for 0<=r<3/68. The two orientation tests have S_12(0)-S_21(0)=-1028/387 and -1096/387,
+respectively. Both are nonzero.
+
+Thus the same table proves the nonidentity of every factor needed for
+(Generic). It also shows that positive timing coefficients cannot be
+assumed in the guarded recurrent geometry: the global context conclusion
+excludes minimizing status even in its all-negative-coefficient range.
+
+The revised participant rewards rule out every absorbing ONE-OWNER calendar,
+not only stationary single-owner play. For sole owner0, its date0 quit atom q
+must satisfy q>=1/3 from observer1 and q<=4/15 from observer2. More directly,
+max(2-6q,(15/2)q-2)>=2/9 for q in[0,1]. For sole owner1, observer3's date0
+Quit payoff is at least-4/5 while Never is-1. Sole owner2 is blocked by
+observer3 with J_32=0>Gamma_32=-1; sole owner3 is blocked by the pivot with
+J_03=0>Gamma_03=-1. These comparisons apply even if the sole owner's law has
+arbitrary countable support: absorption makes its finite mass1, and its
+initial atom is the only relevant variable in these particular deviations.
+This is a limited boundary check. The zero higher-reward completion above
+still has an absorbing all-four-sure equilibrium. No failure of all
+completion-dependent equilibrium producers has been certified.
+
+The leading construction and its invertible Jacobian persist for EVERY
+fixed finite choice of the other32 rewards: they enter only higher-order
+terms in the seven equations. The displayed C(r) formulas use the specified
+zero passive pair rewards; for other completions their r-slopes can change.
+The A_i and both r=0 price tests remain unchanged.
+
+The construction can also meet the exact equality
+N_p=1/(1+r S), S=sum_i(Gamma^-1 e_p)_i=4/3. Its original pivot Never mass
+is N_p(t)=1-(40/7)t+O(t^2), since sum_n t_n=2t+O(t^2) and the leading
+pivot mass per block is20/7. Therefore
+r(t)=(N_p(t)^(-1)-1)/S=(30/7)t+O(t^2). Uniform convergence of the hazard
+product makes this continuous. For every sufficiently small r>0 fixed
+in advance, the intermediate value theorem supplies a t giving the exact
+mass equality, with all three C_i(r)<0 and both price tests nonsymmetric.
+This is an actual nonminimal geometry control on the equality boundary,
+not a selection of the hypothetical minimizing source.
 
 ## Source correspondence and Lean handoff
 
@@ -735,6 +813,18 @@ The terminal-gap equivalence is
 These exact statements provide the signed-to-native source adapter; they
 do not formalize the new contact, memory, or conservative-price argument.
 
+The singleton screens above compare the exact declarations
+`finFour_singleton_r0Degree_eq_one_of_no_uniformPayoff` in
+[FinFourSingletonDegreeCriterion.lean](../../UniformEquilibrium/Diagnostics/Quitting/FinFourSingletonDegreeCriterion.lean),
+`exists_uniformEquilibriumPayoff_of_nonnegative_singletonInverse` in
+[NonnegativeInverseCriterion.lean](../../UniformEquilibrium/Quitting/Classification/LCP/NonnegativeInverseCriterion.lean),
+and `PassiveRowInverseCriterion.exists_uniformEquilibriumPayoff_of_raw_nonnegativeInverse_triple`
+in [RawPassiveRowInverseCriterion.lean](../../UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/RawPassiveRowInverseCriterion.lean).
+The signed-cycle input is `SignedFourCycleSingletonData` in
+[SignedFourCycleRewardAdapter.lean](../../UniformEquilibrium/Quitting/Cycles/SignedFourCycleRewardAdapter.lean).
+These are specific singleton-based sufficient criteria. Failure of them
+is not failure of every producer using participant or higher rewards.
+
 For formalization, retain the existing complete-law and full-cap semantics.
 First formalize the exact run maps, compact reduced four-run inverse, and
 finite actual-law splice. Prove the projective C2 bridge estimate using
@@ -747,24 +837,25 @@ oracle as a strategic structure field.
 
 This is ordinary mathematics awaiting formalization. It supplies neither
 actual-source selection nor arbitrary Fin4 closure. Nonrealized sources,
-quiet ties, mixed supports and tables outside Raw remain separate cases.
+late pivot contacts, quiet ties, mixed supports and tables outside Ratio
+remain separate cases.
 
 ## Complete exact checks
 
 Save the following Python3 program and run it with SymPy. It reconstructs
 all matrices and first-outcome terms from the included rational data. It
-checks the full fixed-r identity on an asymmetric Raw table with six nonzero
+checks the full fixed-r identity on an asymmetric Ratio table with six nonzero
 passive pair rewards, both orientation-genericity witnesses, and the actual
 guarded construction's contact Jacobian and strict leading inequalities.
 The algebraic check table is not claimed to be a minimizing source.
 No numerical rank, eigenvalue, or stored matrix payload is used.
 
 ```python
-"""Independent exact first-outcome check of the fixed-r Raw loop identity."""
+"""Independent exact first-outcome check of the fixed-r Ratio loop identity."""
 import sympy as s
 from itertools import combinations
 c=s.Matrix([[0,3,s.Rational(1,5)],[5,0,s.Rational(1,2)],[2,3,0]])
-h=s.Matrix([5,1,s.Rational(1,2)]); gs=[-1,1,1]
+h=s.Matrix([5,-1,-1]); gs=[-1,1,1]
 rho={1:s.Rational(3,2),2:s.Rational(4,3),3:s.Rational(2)}
 G=s.zeros(4);J=s.zeros(4)
 for i in (1,2,3):
@@ -809,52 +900,122 @@ assert s.factor(qdirect-qformula)==0
 L={i:sum(w[j]*reward_pair(j,0,i) for j in range(4))-1 for i in (1,2,3)}
 assert s.factor((w.T*P)[0]-w[0]*D[0]-sum(L[i]*E[i] for i in (1,2,3)))==0
 assert all(s.factor(L[i]-w[0]*rho[i]*A[i]-rho[i]*(w.T*K[i])[0])==0 for i in (1,2,3))
-assert all(z>0 for z in G.inv()[:,0])
-print('PASS full fixed-r Raw identity; detGamma=',G.det(),'Q=',qdirect)
+# This first example checks the identity only; no inverse-sign premise is used.
+assert G.det()!=0
+print('PASS full fixed-r Ratio identity; detGamma=',G.det(),'Q=',qdirect)
 print('PASS weighted Never identity and coefficient simplification with six nonzero passive pair rewards.')
 
-# Exact witness that both orientation-conservativity polynomials are nonzero.
-c=s.Matrix([[0,s.Rational(1,2),s.Rational(1,2)],[s.Rational(1,2),0,s.Rational(1,2)],[s.Rational(1,2),s.Rational(1,2),0]])
-rhos=[s.Integer(2),s.Integer(3),s.Integer(4)];lams=[1-1/z for z in rhos];As=[-1/z for z in rhos]
-for order in [(0,1,2),(0,2,1)]:
- # Solve the exact three phase-memory fixed point, then construct all rows.
- p=s.Matrix(s.symbols('p0:3'));pn=p
- for i in order:pn=lams[i]*pn+(1-lams[i])*s.eye(3)[:,i]
- sol=s.solve(list(pn-p),list(p),dict=True)[0];pn=p.subs(sol);S=s.zeros(3)
- for i in order:
-  vv=(pn.T*c)
-  for j in range(3):S[i,j]=As[i]*(c[i,j]-vv[j])+c[j,i]
-  pn=lams[i]*pn+(1-lams[i])*s.eye(3)[:,i]
- skew=S-S.T
- assert skew!=s.zeros(3)
- print('orientation',order,'skew=',skew)
-print('PASS nonzero genericity witness in both orientations.')
+"""Exact source-screen and actual guarded-fixture checks for signed pivot rewards."""
+from itertools import combinations, permutations
+import sympy as s
+G=s.Matrix([[0,5,-1,-1],[-2,0,1,1],[2,-1,0,-1],[2,-1,-1,0]])
+B=s.Matrix([[s.Rational(1,3),s.Rational(7,6),s.Rational(5,6),s.Rational(5,6)],
+ [s.Rational(1,3),s.Rational(2,3),s.Rational(1,3),s.Rational(1,3)],
+ [s.Rational(1,3),s.Rational(5,3),s.Rational(4,3),s.Rational(1,3)],
+ [s.Rational(1,3),s.Rational(5,3),s.Rational(1,3),s.Rational(4,3)]])
+assert G.det()==6 and G*B==s.eye(4) and B*G==s.eye(4)
+assert all(z>0 for z in B)
+assert all(any(G[i,j]<0 for i in range(4)) for j in range(4))
+assert G[2,3]<0 and G[3,2]<0
+# Strict positive inverse implies R0; at negative-one offset only full support survives.
+roots=[]
+for size in range(2,5):
+ for S in combinations(range(4),size):
+  T=G.extract(S,S);assert T.det()!=0
+  xx=T.inv()*s.ones(size,1)
+  if not all(z>0 for z in xx):continue
+  x=s.zeros(4,1)
+  for i,z in zip(S,xx):x[i]=z
+  rr=G*x-s.ones(4,1)
+  if all(rr[i]>=0 for i in range(4) if i not in S):
+   assert all(rr[i]>0 for i in range(4) if i not in S)
+   roots.append((S,s.sign(T.det())))
+assert roots==[((0,1,2,3),1)]
+positive_children=[]
+for omitted in range(4):
+ S=[i for i in range(4) if i!=omitted];T=G.extract(S,S);Ti=T.inv()
+ outside=G.extract([omitted],S)*Ti
+ assert all(z<0 for z in outside)
+ if all(z>=0 for z in Ti):positive_children.append(tuple(S))
+assert set(positive_children)=={(0,1,2),(0,1,3)}
+eligible={(i,j) for i in range(4) for j in range(4) if G[i,j]<0<G[j,i]}
+assert eligible=={(0,2),(0,3),(1,0),(2,1),(3,1)}
+assert all(not all((order[k],order[(k+1)%4]) in eligible for k in range(4))
+           for order in permutations(range(4)))
+# Point at the SAME carrying pivot0; normalize columns by G^-1 e0.
+order=[2,3,1];H=G/3;Bo=H.extract(order,order)
+assert Bo==s.Matrix([[0,-1,-1],[-1,0,-1],[1,1,0]])/3
+ro=Bo*s.ones(3,1);ho=H.extract([0],order)
+assert ro==s.Matrix([-2,-2,2])/3 and ho==s.Matrix([[-1,-1,5]])/3
+D01=ho[0]*ro[1]/Bo[1,0]+ho[1]*ro[0]/Bo[0,1]
+assert D01==-s.Rational(4,3)
+print('PASS: det6, strict inverse, R0/degree1 census, negative pair, all passive-child exits fail.')
+print('PASS: signed-cycle input fails all24 relabelings; pointed residual template2 has D12=-4/3.')
 
-# Actual guarded construction: coefficients, contact Jacobian, strict leading gaps.
-G=s.Matrix([[0,1,1,1],[-2,0,1,1],[2,-1,0,-1],[2,-1,-1,0]])
-J=s.Matrix([[0,-3,-s.Rational(15,4),-s.Rational(13,4)],[-6,0,-3,-2],[s.Rational(15,2),-5,0,-3],[s.Rational(13,2),-3,0,0]])
-w=G.inv().T*s.ones(4,1)
-assert G.det()==6 and G.inv()[:,0]==s.ones(4,1)/3
+J=s.Matrix([[0,-12,-s.Rational(15,4),0],[-6,0,-3,-2],
+ [s.Rational(15,2),-5,0,-3],[s.Rational(13,2),-s.Rational(4,5),0,0]])
+w=B.T*s.ones(4,1);r=s.symbols('r')
 lam={i:1-G[i,0]/J[i,0] for i in (1,2,3)}
 C={i:s.factor(G[0,i]*lam[i]+J[0,i]*(1-lam[i])-r*sum(w[j]*(-G[j,0]+lam[i]*G[j,i]) for j in (1,2,3) if j!=i)) for i in (1,2,3)}
-expected_C={1:(8*r-3)/9,2:(41*r-12)/45,3:(35*r-12)/39}
+expected_C={1:(136*r-6)/9,2:-(287*r+78)/45,3:-(245*r+27)/39}
 assert all(s.simplify(C[i]-expected_C[i])==0 for i in (1,2,3))
-roots=[s.solve(C[i],r)[0] for i in (1,2,3)]
 assert all(C[i].subs(r,0)<0 for i in (1,2,3))
-assert len(set(roots))==3 and min(roots)==s.Rational(12,41)
-# One actual construction: contact Jacobian and all leading gaps.
-rho=s.Rational(1,3); E=s.Matrix([6,-12,s.Rational(21,2),s.Rational(21,2)])
-word=(1,2,3,1); aa=[s.Matrix(a) for a in ((2,1,0,0),(1,0,1,0),(1,0,0,1),(1,1,0,0))]
-assert G*sum(aa,s.zeros(4,1))==(1-rho)*E
-v=s.Matrix(s.symbols('v0:8')); av=[]
-for k,i in enumerate(word):
-    a=s.zeros(4,1); a[0]=v[2*k]; a[i]=v[2*k+1]; av.append(a)
-Ev=[rho*E+G*sum(av[k:],s.zeros(4,1)) for k in range(4)]
-F=s.Matrix([*Ev[0],*[(J*av[k])[i]-Ev[k][i] for k,i in enumerate(word)]])
-assert F.jacobian(v).det()==1728
-expected=[(-9,0,-s.Rational(1,2),-s.Rational(1,2)),(-s.Rational(35,4),-1,0,-1),(-s.Rational(29,4),-1,-1,0),(-6,0,-2,-1)]
-for k in range(4):
-    assert J*aa[k]-(rho*E+G*sum(aa[k:],s.zeros(4,1)))==s.Matrix(expected[k])
+# Generic price test at the SAME table, both orientations.
+c=s.Matrix(3,3,lambda i,j:0 if i==j else s.Rational(1,2));h=[G[0,i] for i in (1,2,3)]
+for order in [(0,1,2),(0,2,1)]:
+ p=s.Matrix(s.symbols('p0:3'));pn=p
+ for i in order:pn=lam[i+1]*pn+(1-lam[i+1])*s.eye(3)[:,i]
+ pn=p.subs(s.solve(list(pn-p),list(p),dict=True)[0]);S=s.zeros(3)
+ for i in order:
+  v=pn.T*c
+  for j in range(3):S[i,j]=C[i+1].subs(r,0)*(c[i,j]-v[j])+h[j]*c[j,i]
+  pn=lam[i+1]*pn+(1-lam[i+1])*s.eye(3)[:,i]
+ skew=S-S.T;assert skew!=s.zeros(3)
+ print('orientation',order,'exact skew',skew)
+print('PASS: both generic orientation tests at signed-pivot degree1 fixture.')
 
-print('PASS actual guarded construction, all contact data, and coefficient signs.')
+"""Exact three-date signed-pivot fixture: full polynomial equations and IFT jet."""
+import sympy as s
+G=s.Matrix([[0,5,-1,-1],[-2,0,1,1],[2,-1,0,-1],[2,-1,-1,0]])
+J=s.Matrix([[0,-12,-s.Rational(15,4),0],[-6,0,-3,-2],
+ [s.Rational(15,2),-5,0,-3],[s.Rational(13,2),-s.Rational(4,5),0,0]])
+E=s.Matrix([6,-s.Rational(52,7),s.Rational(52,7),s.Rational(52,7)])
+a=[s.Matrix([s.Rational(26,21),1,0,0]),s.Matrix([s.Rational(50,63),0,1,0]),
+   s.Matrix([s.Rational(52,63),0,0,1])]
+eta0=s.Rational(1,2);t=s.symbols('t');v=s.Matrix(s.symbols('v:7'))
+word=(1,2,3);av=[]
+for k,i in enumerate(word):
+ z=s.zeros(4,1);z[0]=v[2*k];z[i]=v[2*k+1];av.append(z)
+assert G*sum(a,s.zeros(4,1))==(1-eta0)*E
+# Literal native pair-root Never recursion: every passive pair reward is zero.
+e_after=v[6]*t*E;ends=[None]*3;quits=[None]*3
+for k in reversed(range(3)):
+ i=word[k];qp=t*av[k][0];qi=t*av[k][i];e=s.zeros(4,1);Q=s.zeros(4,1)
+ e[0]=G[0,i]*qi+(1-qi)*e_after[0];Q[0]=J[0,i]*qi
+ e[i]=G[i,0]*qp+(1-qp)*e_after[i];Q[i]=J[i,0]*qp
+ for j in range(1,4):
+  if j==i:continue
+  e[j]=G[j,0]*qp*(1-qi)+G[j,i]*qi*(1-qp)+(1-qp)*(1-qi)*e_after[j]
+  Q[j]=J[j,0]*qp*(1-qi)+J[j,i]*qi*(1-qp)
+ ends[k]=e;quits[k]=Q;e_after=e
+F=s.Matrix([*(ends[0]-t*E),*[quits[k][i]-ends[k][i] for k,i in enumerate(word)]])
+F=s.Matrix([s.cancel(z/t) for z in F]);F0=F.subs(t,0)
+leading=s.Matrix([*(v[6]*E+G*sum(av,s.zeros(4,1))-E),
+ *[(J*av[k])[i]-(v[6]*E+G*sum(av[k:],s.zeros(4,1)))[i] for k,i in enumerate(word)]])
+assert s.simplify(F0-leading)==s.zeros(7,1)
+sub={v[6]:eta0}
+for k,i in enumerate(word):sub[v[2*k]]=a[k][0];sub[v[2*k+1]]=a[k][i]
+assert F0.subs(sub)==s.zeros(7,1)
+assert F0.jacobian(v).det()==-s.Rational(60372,7)
+expected=[[-18,0,-s.Rational(22,7),-s.Rational(19,105)],
+ [-s.Rational(19,4),-s.Rational(59,21),0,-s.Rational(50,63)],
+ [-2,-s.Rational(163,63),-s.Rational(74,63),0]]
+for k,i in enumerate(word):
+ gap=s.Matrix([s.cancel(z/t).subs(t,0).subs(sub) for z in quits[k]-ends[k]])
+ assert gap==s.Matrix(expected[k])
+ assert all(gap[j]<0 for j in range(4) if j!=i)
+assert [s.cancel(ends[k][0]/t).subs(t,0).subs(sub) for k in range(3)]==[6,1,2]
+print('PASS full exact polynomial pair recursions, analytic division, seven-equation Jacobian -60372/7.')
+print('PASS positive three-date leading hazards, all strict inactive/pivot gaps, pivot caps 6,1,2.')
+print('The same table now has an actual guarded pure123 run calendar via variable-contraction IFT.')
 ```
