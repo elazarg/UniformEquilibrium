@@ -33,6 +33,12 @@ all parameters without a known equilibrium. It is not a constraint on an
 arbitrary Fin4 counterexample. In particular no stationary nonexistence claim
 is being made for the remaining region.
 
+At the specific interior point (delta,epsilon)=(1/8,139/200), the exact
+exclusion below proves a positive terminal exploitability gap over all
+stationary profiles whenever at least one original own singleton is positive.
+It excludes stationary approximations as well as exact stationary Nash at
+that point; it is not an unrestricted behavioral exploitability gap.
+
 The next question is whether actual periodic Nash continuation can cover this
 entire lower region, including every support change and parameter boundary.
 A contracting cycle at a sample point alone does not answer it. The rectangles
@@ -520,6 +526,180 @@ therefore shift that owner's terminal reward by exactly the offset. The same
 tail argument proves the finite-horizon conclusion for every fixed choice of
 offsets, without claiming a uniform reward bound over unbounded offsets.
 
+
+## No exact stationary equilibrium at an interior parameter
+
+Fix the native table specified above at delta=1/8, epsilon=139/200.
+Let original absorbing rewards be r_i(S)=s_i+Z_i(S), with arbitrary fixed
+signed s_i, live/Never payoff zero, and at least one s_i>0. This game has
+a strictly positive lower bound on terminal exploitability over ALL
+stationary profiles. In particular it has neither an exact stationary
+terminal Nash equilibrium nor stationary terminal approximate Nash profiles
+at every positive accuracy. This is an ordinary mathematical exclusion,
+not a Lean theorem or a counterexample to uniform-equilibrium existence.
+It does not exclude periodic strategies or a punishment construction using
+a different continuation.
+
+### Necessary stationary conditions
+
+For a stationary hazard vector q, put a=1-product_i(1-q_i). If q is nonzero,
+the prescribed profile absorbs almost surely, and its native payoff is
+
+    u_i=[q_i Q_i+(1-q_i)P_i]/a.
+
+The original payoff is s_i+u_i. Each deviation at just the first date followed
+by the prescribed stationary strategy also absorbs almost surely. Thus the
+signed offsets cancel from its comparison. The forced Quit-minus-Continue
+gap is
+
+    g_i=Q_i-P_i-H_i u_i=F_i/a,
+    F_i=(1-H_i)Q_i-P_i.
+
+Exact Nash therefore requires F_i<=0 at q_i=0, F_i=0 at 0<q_i<1,
+and F_i>=0 at q_i=1. These are necessary conditions even if a more general
+deviation can improve. The zero vector is not Nash: a player with s_i>0
+can quit alone immediately instead of receiving the Never payoff zero.
+
+### A punctured neighborhood of zero is impossible
+
+Let t=sum_i q_i. All native rewards have absolute value at most6, own
+singleton rewards are zero, and the singleton matrix is
+
+    Gamma=[0,101/100,-3/5,-9/1000;
+           101/100,0,-27/20,-1/25;
+           -9/80,-3/50,0,101/100;
+           -7/1000,-1251/2000,101/100,0].
+
+Exact rational inversion verifies that K=Gamma^-1 has every entry>1/125
+and every row and column sum<5. Write
+
+    F=-Gamma q+E.
+
+For each i, |Q_i|<=6t and 1-H_i<=t. The difference between a singleton
+opponent's exact probability and q_j is at most q_j sum_(k!=i,j)q_k.
+The probability of at least two quitting opponents is at most
+sum_(j<k,j,k!=i)q_j q_k<=t^2/2. Consequently
+
+    |P_i-(Gamma q)_i|<=9t^2,    |E_i|<=15t^2.
+
+Suppose 0<t<1/50000 and the stationary conditions hold. All q_i<1, so
+f=-F>=0 and q_i f_i=0. The identity q=Kf+KE holds. If f is nonzero,
+choose an index i with f_i>0, hence q_i=0. Positivity of K and its row
+bound give
+
+    ||f||_1/125 <= (Kf)_i = -(KE)_i <=75t^2.
+
+The same resulting inequality ||f||_1<=9375t^2 holds when f=0.
+Using the column bound on K and ||E||_1<=60t^2 now gives
+
+    t<=5||f||_1+300t^2<=47175t^2,
+
+contradicting 0<t<1/50000. No limiting-root assumption is used.
+
+### Exact exclusion on the remaining cube
+
+The checker starts with all 3^4 status vectors. Status0 fixes q_i=0,
+status1 fixes q_i=1, and status2 allows q_i in the closed interval[0,1]
+while imposing the necessary equality F_i=0 for a proper mixed owner.
+Using closed boxes overcovers each proper-support stratum and preserves
+every boundary. Each box is discharged in one of three ways:
+
+1. Its maximum sum of hazards is strictly below1/50000; use the preceding
+   argument for nonzero hazards, and the positive-own-singleton test at zero.
+2. An outward interval for some F_i violates the required sign or equality.
+3. An exact interval Newton image excludes a simultaneous zero of the
+   status2 equations.
+
+For the third test, fix the endpoint coordinates, let x denote the free
+coordinates, and let x0 be their exact box center. The code encloses the
+Jacobian J of the selected F coordinates throughout the box by automatic
+differentiation of the audited polynomial. Any rational matrix C is allowed.
+Every zero x in the box must lie in
+
+    x0-C F(x0)+(I-C J(box))(box-x0).
+
+This follows from the mean-value integral on the convex box. A coordinate
+of this outward enclosure disjoint from its box interval proves that there
+is no zero. A floating inverse only proposes C, which is converted to exact
+rationals; no inverse accuracy, nonsingularity, or floating sign test is
+needed for soundness. Failure to obtain a proposal merely omits this test.
+
+If none of the three tests succeeds, the longest free interval is replaced
+by both closed midpoint children. Every initial status box must finish.
+Time and node budgets abort with failure; success is printed only after
+the stack is empty. The leaf-minus-split identity must equal81. No raw leaf
+payload is needed to reproduce the certificate.
+
+The standalone checker imports the hash-pinned retained high periodic
+checker only for its audited raw polynomials, exact interval arithmetic,
+automatic derivatives and numerical inverse proposal. It reruns the exact
+raw/Horner/Jacobian identity audit and independently verifies the rational
+origin constants before the cube cover. It uses the Python standard library
+and must be run without optimization flags that disable assertions.
+
+The complete run visited12199 boxes:2757 sign exclusions,3367 Newton
+exclusions,16 origin boxes and6059 splits. Thus2757+3367+16-6059=81.
+It exited successfully in approximately57 seconds. The checker's SHA256 is
+`cab19c289b1fa748463e6ac841b0e0cb78cd21d981c7247b4453896b062e204c`.
+Reproduce from the repository root:
+
+    python math/experiments/CODEX_COORDINATOR__TWO_ROW_STATIONARY_EXCLUSION.py
+
+No partial execution establishes the exclusion.
+
+### A positive gap for every stationary profile
+
+The exclusion also rules out stationary approximation at arbitrarily small
+terminal Nash error, even though terminal values are discontinuous at q=0.
+Fix the four signed offsets and suppose, for contradiction, that stationary
+profiles q^n have terminal exploitability at most eta_n, with eta_n tending
+to zero. Compactness gives a subsequence converging to q*. If q* is nonzero,
+the prescribed payoff and the one-date deviation comparisons above are
+continuous near q*. Their limiting endpoint Nash conditions contradict the
+exact cube exclusion. Hence q*=0.
+
+The zero profile itself has exploitability at least max_i s_i>0, so we may
+assume all q^n are nonzero. Set t_n=sum_i q_i^n and, after another subsequence,
+q^n/t_n tending to v>=0 with sum_i v_i=1. Since a(q^n)=t_n+O(t_n^2),
+P_i(q^n)=(Gamma q^n)_i+O(t_n^2), and Q_i(q^n)=O(t_n), the native prescribed
+payoff u_i(q^n) tends to y_i=(Gamma v)_i. Immediate Quit has native payoff
+Q_i(q^n) tending to zero. The approximate Nash inequalities therefore give
+y>=0. Invertibility implies y is nonzero; K>0 then gives v=Ky>0 in every
+coordinate. In particular 0<v_i<1 for every i.
+
+Now let i deviate to Never. For all sufficiently large n, at least one
+opponent has positive hazard, so this deviation absorbs almost surely and
+its original payoff is
+
+    s_i + P_i(q^n)/(1-H_i(q^n)).
+
+Its native part tends to y_i/(1-v_i). Approximate Nash consequently gives
+
+    y_i >= y_i/(1-v_i).
+
+Together with y_i>=0 and 0<v_i<1 this forces y_i=0 for every i, a
+contradiction. Therefore the infimum of terminal exploitability over
+stationary profiles is strictly positive for each fixed offset choice.
+No uniform constant over unbounded offsets is claimed.
+
+This also prevents stationary profiles from realizing uniform equilibria
+at arbitrarily small errors: for any fixed stationary profile and any fixed
+behavioral deviation, bounded finite-average payoffs converge to their
+terminal/Never payoffs as the horizon tends to infinity. Thus uniform
+finite-horizon Nash inequalities for that profile imply the corresponding
+terminal approximate Nash inequalities. The argument is about stationary
+profiles, not arbitrary behavioral profiles.
+
+### Scope of the producer comparison
+
+For each fixed offset choice with at least one s_i>0, every theorem that
+produces exact stationary terminal Nash or stationary terminal approximations
+at every accuracy fails to apply at this fixture,
+regardless of its existential choices or an unspecified large-reward threshold. This includes stationary constructions
+with arbitrary recipient/coalition choices; it is stronger than testing one
+selected root or comparing stated parameter ranges. It does not exclude a
+producer whose approximate profiles are nonstationary, a periodic producer,
+or a punishment-tail equilibrium. Those require their own comparisons.
 
 ## Absorption cannot vanish along periodic Nash profiles
 

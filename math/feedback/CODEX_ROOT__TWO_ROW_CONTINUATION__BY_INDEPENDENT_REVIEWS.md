@@ -207,6 +207,49 @@ all relabelings and positive recipient scalings. The endpoint-only boundary
 counterexample is valid but is not a no-UE game. The full comparison with
 other producers remains unfinished; only internal retention is approved.
 
+## Stationary exploitability gap at an interior point
+
+Reviewers: upper_cover and upper_cover/cover_audit, independently of the
+construction. Both approve the proof, including the compactness argument
+for a positive stationary exploitability gap. The reviewed literal proof has
+SHA256 `7e097bda0c4e4f58f61fef0813f138e91e99d878521afe0ed4345eb93add7950`;
+the retained section "No exact stationary equilibrium at an interior
+parameter" appends one separator newline and has SHA256
+`2547b0484a3454df57db9560a2c4b7beb1e7b760a9a913345ce0f7e269025f54`.
+The [exact checker](../experiments/CODEX_COORDINATOR__TWO_ROW_STATIONARY_EXCLUSION.py)
+is byte-identical to the independently rerun source, SHA256
+`cab19c289b1fa748463e6ac841b0e0cb78cd21d981c7247b4453896b062e204c`.
+
+Scope: delta=1/8, epsilon=139/200, arbitrary fixed signed recipient offsets,
+with at least one strictly positive original own singleton. That sign
+condition is essential: with all own singletons nonpositive, AllContinue
+is terminal Nash. No behavioral-profile gap or failure of UE is asserted.
+
+The fresh static review independently inverted Gamma over the rationals and
+checked its entry, row-sum and column-sum bounds. It verified the
+near-origin error bounds and complementarity argument, all 81 endpoint/proper
+status boxes, strict interval sign exclusions, and the mean-value zero
+exclusion with arbitrary rational preconditioners. It checked that failed
+floating proposals cannot accept a box, both closed split children are
+retained, and incomplete runs cannot print success.
+
+Upper_cover independently executed the full checker, including the imported
+raw/Horner/Jacobian identity audit and the exact origin audit. The run exited
+successfully in approximately58 seconds with exactly the author's counts:
+12199 visited boxes,2757 sign exclusions,3367 Newton exclusions,16 origin
+leaves and6059 splits. The leaf-minus-split identity is81. The source was
+unchanged throughout both executions. This is an independent complete rerun.
+
+Both reviewers separately checked the stationary-approximation limit.
+At a nonzero hazard limit the one-date deviation inequalities imply the
+excluded endpoint conditions. At zero, immediate Quit and Never comparisons,
+together with the strictly positive inverse, contradict the normalized
+hazard limit. Signed offsets cancel only in comparisons where absorption is
+certain. The fixed-profile terminal limit of finite-average inequalities
+justifies the stationary uniform-horizon consequence without assuming a
+uniform absorption rate along the sequence. The final comparison paragraph
+explicitly repeats the positive-own-singleton hypothesis. No Lean command ran.
+
 ## Periodic absorption bounds
 
 Reviewer: positive_collision_potential_global. FINAL PASS for the section
