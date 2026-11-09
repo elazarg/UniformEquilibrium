@@ -26,6 +26,13 @@ this removes the negative-G observer as the unique-zero positive-pivot
 endpoint. Actual minima, the positive-premium single-zero faces, and the
 higher-zero faces remain unresolved.
 
+The [incoming boundary controls](CODEX_ROOT__INCOMING_BOUNDARY_CONTROLS.md)
+show why the remaining cases need more than a bare carrier lemma. The
+positive-premium case can require arbitrarily long words across all incoming
+representations, while an open two-zero region contains nonrealized tuples
+with no positive finite incoming word at all. Both explicit games are solved;
+these are limits of the method, not positive-gap or minimizing examples.
+
 The supporting results preserve original Never coordinates, give an exact
 incoming root on a positive-pair subface, and identify the actual head's
 precise constraints on every replacement endpoint. An observer active in
