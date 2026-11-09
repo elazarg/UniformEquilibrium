@@ -26,6 +26,26 @@ this removes the negative-G observer as the unique-zero positive-pivot
 endpoint. Actual minima, the positive-premium single-zero faces, and the
 higher-zero faces remain unresolved.
 
+The [two-zero reductions](../exports/TWO_ZERO_CONTINUATION_REDUCTIONS.md)
+now narrow both kinds of two-zero endpoint. If the pivot and one observer
+have zero caps, at least one of their directed pair rewards lies outside
+the closed segment between zero and its corresponding singleton reward.
+The new ten-root rule needs only the other two observer caps to be positive;
+it is uniform as both remaining caps approach zero from either sign. Its
+selection can be combined with the preceding incoming rules.
+
+For two zero OBSERVER caps, a different comparison preserves all three
+observer caps exactly. A diffuse pivot excursion and contracting negative-pair
+reset give one rationally selected nonzero return and eight full-cap tests.
+Whenever the pivot cap decreases, its payoff weakly increases, and Never
+decreases, this defeats EVERY inherited head, including a binding pivot
+obstacle. A more general exact obstacle inequality is also available.
+An exact relatively open region passes the strict tests even though its
+continuations admit no positive finite incoming word and an actual head pins
+the positive observer cap. This is a source-configuration exclusion, not a
+new UE reward-table class. The reset is a limit of finite prefixes, not an
+actual infinite block followed by another move.
+
 The [incoming boundary controls](CODEX_ROOT__INCOMING_BOUNDARY_CONTROLS.md)
 show why the remaining cases need more than a bare carrier lemma. The
 positive-premium case can require arbitrarily long words across all incoming
@@ -51,10 +71,13 @@ curvature/rank argument at a degree1 no-child matrix imposes a conditional
 quiet-contact density bound. None supplies a new reward-table UE class or a
 completed reward-dependent overlap certificate.
 
-The next concrete question is whether the full selected source admits a
-cap-compatible replacement with one fixed positive improvement in J_r.
-Vanishing observer errors are acceptable; a gain tending to zero with those
-errors is not sufficient.
+The next concrete question is how to handle the complement of the new return
+test: unavailable nonzero return, failed full-cap guards, or insufficient
+pivot improvement. The source still requires one fixed positive improvement
+in J_r. Vanishing observer errors are acceptable; a gain tending to zero with
+those errors is not sufficient. Iterating cap returns is a possible route to
+an equilibrium producer, but its input production and prior coverage remain
+unchecked and it is not part of the established result.
 
 ## Model and inspected interfaces
 

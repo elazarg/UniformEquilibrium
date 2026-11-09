@@ -11,10 +11,15 @@ singleton residual tests. Each displayed completion nevertheless has an
 absorbing equilibrium, so neither is a global-minimum counterexample or a
 new restriction on UE reward tables.
 
-The next source argument must use global minimality, additional residual
-signs, or a different comparison. The Ratio-specific limitation of the first
-control is proved explicitly. Section and equation numbers are local to each
-part. The [independent reviews](../feedback/CODEX_ROOT__INCOMING_BOUNDARY_CONTROLS__BY_INDEPENDENT_REVIEWS.md)
+The [two-zero continuation reductions](../exports/TWO_ZERO_CONTINUATION_REDUCTIONS.md)
+now supply such a global comparison on a nonempty part of the second geometry.
+A nonlinear reset returns every observer cap exactly while improving the
+pivot and reducing Never, so it remains valid through every inherited head.
+Its explicit completion preserves the no-finite-incoming obstruction below;
+the comparison itself is a compact limit of finite profiles. The remaining
+two-zero continuations still require further work. The Ratio-specific
+limitation of the first control is proved explicitly. Section and equation
+numbers are local to each part. The [independent reviews](../feedback/CODEX_ROOT__INCOMING_BOUNDARY_CONTROLS__BY_INDEPENDENT_REVIEWS.md)
 record the exact scope and the original reviewed proof hashes.
 
 ## I. Sharp finite incoming-length obstruction at a positive pair premium
