@@ -23,11 +23,16 @@ small-penalty bound may depend on the full table. The proof uses finite
 multiplier gluing, an exact preserved symplectic form, and a summable-observation
 argument. It includes actual full-support laws demonstrating that global
 minimality is the essential obstruction.
-The [unbounded pair-run theorem](CODEX_ROOT__UNBOUNDED_PAIR_RUN_SATURATION.md)
-also extends saturation beyond fixed physical windows in its stated ratio
-chamber. This supporting result remains internal. Sparse infinitely active
-calendars, finite active calendars, tables outside the proved neighborhoods,
-and nonrealized sources remain unresolved.
+The [guarded pair-star exclusion](../exports/ACTUAL_MINIMUM_GUARDED_PAIR_STAR_EXCLUSION.md)
+closes a second actual-minimum support mode near an entire structured star
+family. Exact timing variations remove arbitrarily long runs; a finite global
+calendar argument selects negative-curvature windows for every positive
+parameter triple. The theorem allows earlier pivot contacts and mass equality,
+and includes the broader ratio-chamber saturation corollary. All38 other native
+rewards are arbitrary finite numbers. Its remaining strategic restriction is
+strict inactive-observer comparisons and recurrence of all three observers.
+Other sparse tails, inactive-player ties, finite active calendars, tables
+outside the proved neighborhoods, and nonrealized sources remain unresolved.
 The mixed endpoint still needs an improvement compatible with its actual
 head. An absorbing controlled invariant set of actual Nash transitions
 remains a separate constructive target. Neither route is complete.
