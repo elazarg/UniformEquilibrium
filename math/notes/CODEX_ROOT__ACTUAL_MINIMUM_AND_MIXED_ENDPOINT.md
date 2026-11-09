@@ -12,6 +12,20 @@ positive-Never head and an inherited mixed endpoint. The endpoint has
 nonnegative caps, at least one zero observer cap, and at least one positive
 cap. It is not itself a global minimum. Neither source case is closed here.
 
+The [uniform pair-premium reduction](../exports/PAIR_PREMIUM_MIXED_ENDPOINT_REDUCTION.md)
+sharpens the second alternative. The incoming head and endpoint can be selected
+so that the endpoint has either at least two zero caps, or exactly one zero
+observer cap i with J_ip>max(0,Gamma_ip). Here Gamma_ip=Z_i({p}) and
+J_ip=Z_i({p,i}); the strict condition requires both a positive participant
+reward and a positive joining increment. The new incoming word has at most
+eight roots and a positive activity bound uniform as B_i approaches zero from
+either sign. Its source proof produces ALL-END and positive original Never
+from the native absorbing gap and a strict inverse column. No endpoint
+minimality or continuation after an infinite calendar is assumed. In Ratio,
+this removes the negative-G observer as the unique-zero positive-pivot
+endpoint. Actual minima, the positive-premium single-zero faces, and the
+higher-zero faces remain unresolved.
+
 The supporting results preserve original Never coordinates, give an exact
 incoming root on a positive-pair subface, and identify the actual head's
 precise constraints on every replacement endpoint. An observer active in

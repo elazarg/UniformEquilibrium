@@ -63,8 +63,15 @@ minimizing assumption. The native absorbing gap survives the perturbation;
 source selection must then be repeated at the perturbed table. This gives
 one strict comparison per sparse triple, not a fully guarded calendar.
 
-Actual minima with mixed supports or partial ties, finite active calendars,
-and nonrealized sources remain unresolved. The full-support and generic
+Actual minima with mixed supports or partial ties and finite active calendars
+remain unresolved. The [uniform pair-premium incoming reduction](../exports/PAIR_PREMIUM_MIXED_ENDPOINT_REDUCTION.md)
+strictly narrows the nonrealized source: its selected mixed endpoint has either
+at least two zero caps, or a unique zero observer i with
+J_ip>max(0,Gamma_ip). A uniform at-most-eight-root incoming construction handles
+B_i approaching zero from either sign. The whole minimum, head and endpoint
+construction is supplied from the native positive absorbing gap and strict
+inverse column; this is a source reduction, not a new reward-table UE class.
+The remaining endpoint faces are still open. The full-support and generic
 three-date results above are not restricted to the rejected singleton chamber.
 The [actual-minimum note](CODEX_ROOT__ACTUAL_MINIMUM_AND_MIXED_ENDPOINT.md)
 now proves that recurrent pivot ties persist in actual laws on an open raw
