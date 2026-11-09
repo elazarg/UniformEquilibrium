@@ -14,6 +14,20 @@ For arbitrary tables, the current source work concerns
 The [Never-mass saturation theorem](../exports/ACTUAL_MINIMUM_NEVER_MASS_SATURATION.md)
 restricts actual minima through full-support windows and a classified set of
 guarded sparse patterns. It supplies no new UE reward-table class.
+The [eventual-full-support exclusion](../exports/ACTUAL_MINIMUM_EVENTUAL_FULL_SUPPORT_EXCLUSION.md)
+goes beyond saturation near every eligible structured pair J=Gamma D with
+distinct diagonal entries of D in (0,1/2). It excludes this actual-minimum
+support mode even at mass equality and with earlier pivot cap contacts.
+All32 other native reward coordinates are arbitrary finite numbers; the
+small-penalty bound may depend on the full table. The proof uses finite
+multiplier gluing, an exact preserved symplectic form, and a summable-observation
+argument. It includes actual full-support laws demonstrating that global
+minimality is the essential obstruction.
+The [unbounded pair-run theorem](CODEX_ROOT__UNBOUNDED_PAIR_RUN_SATURATION.md)
+also extends saturation beyond fixed physical windows in its stated ratio
+chamber. This supporting result remains internal. Sparse infinitely active
+calendars, finite active calendars, tables outside the proved neighborhoods,
+and nonrealized sources remain unresolved.
 The mixed endpoint still needs an improvement compatible with its actual
 head. An absorbing controlled invariant set of actual Nash transitions
 remains a separate constructive target. Neither route is complete.
