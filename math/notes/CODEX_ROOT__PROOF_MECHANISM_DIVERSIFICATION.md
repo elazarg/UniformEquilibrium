@@ -23,19 +23,36 @@ small-penalty bound may depend on the full table. The proof uses finite
 multiplier gluing, an exact preserved symplectic form, and a summable-observation
 argument. It includes actual full-support laws demonstrating that global
 minimality is the essential obstruction.
-The [guarded pair-star exclusion](../exports/ACTUAL_MINIMUM_GUARDED_PAIR_STAR_EXCLUSION.md)
-closes a second actual-minimum support mode near an entire structured star
-family. Exact timing variations remove arbitrarily long runs; a finite global
-calendar argument selects negative-curvature windows for every positive
-parameter triple. The theorem allows earlier pivot contacts and mass equality,
-and includes the broader ratio-chamber saturation corollary. All38 other native
-rewards are arbitrary finite numbers. Its remaining strategic restriction is
-strict inactive-observer comparisons and recurrence of all three observers.
-Other sparse tails, inactive-player ties, finite active calendars, tables
-outside the proved neighborhoods, and nonrealized sources remain unresolved.
-The mixed endpoint still needs an improvement compatible with its actual
-head. An absorbing controlled invariant set of actual Nash transitions
-remains a separate constructive target. Neither route is complete.
+The [positive-timing patch exclusion](../exports/ACTUAL_MINIMUM_POSITIVE_TIMING_PATCH_EXCLUSION.md)
+extends the [structured guarded pair-star result](../exports/ACTUAL_MINIMUM_GUARDED_PAIR_STAR_EXCLUSION.md)
+to an entire explicit ratio/sign chamber and every fixed penalty r>=0.
+One positive coefficient C_i(r) excludes sufficiently late guarded pair
+segments containing three runs of observer i and a later four-run correction
+window. The intervening runs may be arbitrarily long and numerous; supports
+and ties outside the segment are unrestricted. An eventual guarded pair-star
+minimum with all three observers recurrent must therefore have C_i(r)<=0
+for every observer. This is a source restriction, not a new UE table class.
+
+The [generic three-date contact gap](../exports/GENERIC_THREE_DATE_OBSERVER_CONTACT_GAP.md)
+applies to every finite chain of three sufficiently small roots with at most
+two active players per date, including nonrealized semantic chains. After a
+dense open raw reward selection, at least one observer's Quit-versus-Continue
+gap is bounded below in absolute value by a constant times the largest
+hazard. On an observer-optimal chain this produces a strict inactive-observer
+comparison. All216 pair words are covered, with no pivot-in-support or
+minimizing assumption. The native absorbing gap survives the perturbation;
+source selection must then be repeated at the perturbed table. This gives
+one strict comparison per sparse triple, not a fully guarded calendar.
+
+Partial ties, mixed-support transitions, finite active calendars, the remaining
+coefficient/sign regions, and nonrealized sources remain unresolved. The mixed
+endpoint minimizes an explicit pivot obstacle objective on the cap constraints
+imposed by its actual head. Under a stated nonnegative-kernel condition,
+every small additional head has activity bounded by its induced observer
+error, so vanishing errors cannot buy a fixed improvement. A global comparison
+must overcome these constraints or change the old head. An absorbing
+controlled invariant set of actual Nash transitions remains a separate
+constructive target. Neither route is complete.
 The earlier supporting results have an
 [independent mathematical review](../feedback/CODEX_ROOT__CROSSFIELD_GLOBAL_METHODS__BY_REVIEW.md).
 

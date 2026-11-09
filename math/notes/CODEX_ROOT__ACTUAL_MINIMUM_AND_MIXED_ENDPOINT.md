@@ -12,11 +12,15 @@ positive-Never head and an inherited mixed endpoint. The endpoint has
 nonnegative caps, at least one zero observer cap, and at least one positive
 cap. It is not itself a global minimum. Neither source case is closed here.
 
-The supporting results below concern exactly one zero-cap observer. They
-extend the existing head representation to its original Never coordinates
-and give an exact incoming root on a positive-pair subface. The latter does
-not yet pass through an infinite actual head. No new UE reward-table class
-is asserted. All results are ordinary mathematics, not new Lean checks.
+The supporting results preserve original Never coordinates, give an exact
+incoming root on a positive-pair subface, and identify the actual head's
+precise constraints on every replacement endpoint. An observer active in
+the head pins its endpoint cap; an inactive observer imposes a lower bound.
+The inherited endpoint is a global minimum of an explicit obstacle objective
+on this cap box. This supplies a valid fixed-gain comparison criterion, but
+does not produce a compatible improvement for every endpoint. No new UE
+reward-table class is asserted. All results are ordinary mathematics, not
+new Lean checks.
 
 The next concrete question is whether the full selected source admits a
 cap-compatible replacement with one fixed positive improvement in J_r.
@@ -219,6 +223,250 @@ nonrealization remains in the head. That does not contradict the actual-
 head source theorem. A valid new selection must preserve its realization
 requirement or supply a separate global improvement consumer.
 
-The useful conclusions retained here are augmented head preservation and
-the exact positive-pair incoming root. The uniform-gain composition or
-realization step is still missing.
+The cap-box result below identifies exactly which endpoint replacements
+compose to observer-feasible carrier points and retain a fixed improvement.
+Producing such a replacement, or changing the head to release its pinned
+caps, remains open.
+
+## Exact global endpoint optimization induced by an actual head
+
+### Source and notation
+
+Use native own-singleton and AllNever rewards zero, bounded in absolute
+value by M>=1. Independent complete stopping laws and all behavioral
+replacements have the payoff/cap meanings stated in
+quittingStoppingLawExpectedPayoff and quittingStoppingLawReplacementPayoffCap
+(UniformEquilibrium/Quitting/Paths/StoppingLawOperationalDistance.lean).
+The literal prefix and complete max-cap recursions inspected were
+quittingTerminalSemanticPair_rootThenContinuation
+(UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean) and
+quittingContinuationBestResponseValue_rootThenContinuation_eq_max
+(UniformEquilibrium/Quitting/Root/TerminalDebtPrefix.lean).
+
+Let H be the compact augmented actual-law carrier (U,B,e,N), C its zero
+observer-debt subset, and nu=product N. Fix r>0 and a global minimum
+Y in C of J_r=d_p+r nu, with value mu>0. Suppose the given source supplies
+
+ Y=Phi_P(Q), Q in C, N_i(P)>0, N_i(Q)>0, B(Q)=e(Q)>=0,
+ B(Y)=e(Y), delta=B_p(Y)-mu>0,
+
+where P is an ACTUAL complete-law head. Phi_P is the retained-query head
+map, not execution of Q after an infinite time. Write
+
+ n_i=N_i(P), h_i=product_(j!=i)n_j, s=product_i n_i,
+ a_i=[B_i(P)-e_i(P)]/h_i, A={i!=p:n_i<1}.
+
+Every a_i>=0: finite deadlines against an actual native head tend to its
+Never payoff, so B_i(P)>=e_i(P).
+
+### Exact preimage of observer feasibility
+
+For every R in H the head map has
+
+ U_i(Phi_P R)=U_i(P)+s U_i(R),
+ B_i(Phi_P R)=max(B_i(P),e_i(P)+h_i B_i(R)),
+ N_i(Phi_P R)=n_i N_i(R).                                  (H1)
+
+These maps send H into H. To construct approximants, truncate P at a large
+finite date, insert an empty query date, and append actual approximants to R.
+The remaining finite head mass tends to zero; the uniform replacement-payoff
+coupling bound controls full caps. The resulting augmented tuples tend to
+(H1), preserving ORIGINAL Never coordinates n_i N_i(R). This comparison
+construction does not assert an actual infinite-head concatenation.
+
+For an observer i in A, some finite P_i atom has positive mass. Writing
+alpha_t for its finite head atoms and V_t for their deadline values gives
+
+ U_i(Y)=sum_t alpha_t V_t+n_i[e_i(P)+h_i U_i(Q)].
+
+Every term is bounded by B_i(Y), including the bracket, because Q is
+observer-optimal. Equality forces every positive-weight head deadline and
+the bracket to attain B_i(Y). This remains valid when Y is nonrealized.
+Each finite head deadline value is independent of Q.
+Thus B_i(P)=B_i(Y)=e_i(P)+h_i B_i(Q), so
+
+ a_i=B_i(Q),  U_i(P)=e_i(P)+(1-n_i)h_i a_i.                 (H2)
+
+For i notin A, U_i(P)=e_i(P), and source ALL-END gives a_i<=B_i(Q).
+Using (H1)--(H2), with b_i=B_i(R) and d_i=d_i(R), gives the exact debts
+
+ d_i(Phi_P R)/h_i
+   =max(a_i,b_i)-(1-n_i)a_i-n_i b_i+n_i d_i  (i in A),
+   =max(a_i,b_i)-b_i+d_i                    (i notin A).    (H3)
+
+In the first row, the cap term is (1-n_i)(b_i-a_i) if b_i>=a_i,
+and n_i(a_i-b_i) if b_i<=a_i. All terms are nonnegative, and n_i>0.
+Therefore
+
+ Phi_P(R) in C iff R in C and
+ B_i(R)=a_i for i in A,
+ B_i(R)>=a_i for i notin A, i!=p.                         (H4)
+
+This is an exact equivalence over the whole carrier, not a sufficient
+component-preserving condition. An observer who ever quits in the head
+FREEZES its endpoint cap. An observer who always waits imposes only a lower
+bound, which may be strict at Q.
+
+### The endpoint is a genuine minimum of an explicit obstacle objective
+
+Define the compact cap box C_P by the right side of (H4), and put
+
+ F_P(R)=max(a_p,B_p(R))/n_p-U_p(R)+r nu(R).                 (H5)
+
+The full source objective is exactly
+
+ J_r(Phi_P R)=e_p(P)-U_p(P)+s F_P(R).                      (H6)
+
+Consequently Q is a GLOBAL minimum of F_P on C_P. All data in C_P and F_P
+are produced by the actual head P. Since source Y is ALL-END, B_p(Q)>=a_p.
+The pivot cap is amplified by 1/n_p; even below a finite head cap it is
+replaced by the fixed obstacle a_p. Neither modification can be dropped.
+
+### A global head-activity collar
+
+Put f=1-n_p, H_p=product_(i!=p)n_i, epsilon=1-H_p. For f>0 let W be the
+pivot's expected head reward conditional on its finite head draw. If all
+observers draw head Never, its outcome is its own singleton and pays zero.
+Independence therefore gives |W|<=M epsilon. The conditional head-Never
+branch followed by Q has pivot payoff B_p(Y)-H_p d_p(Q). Hence
+
+ mu=f[B_p(Y)-W]+n_p H_p J_r(Q).                           (H7)
+
+Since Q in C, global minimality gives J_r(Q)>=mu. Rearranging (H7) yields
+
+ f delta <= epsilon [f M+n_p mu],
+ epsilon >= f delta/[f M+n_p mu]  when f>0.               (H8)
+
+In particular, a nonempty head containing ONLY pivot activity is impossible
+at this global source. This uses the strict GLOBAL margin delta, so it is
+not contradicted by actual-head/nonrealizable-composite controls that fail
+minimization. For f=0 the assertion is vacuous. The bound does not remove
+finite observer activity in an otherwise infinite pivot head.
+
+### Exact whole-source consumer for a one-zero solo prefix
+
+Assume Q has exactly one zero-cap observer i and B_p(Q)>0; the other two
+observer caps are positive. Set b_j=B_j(Q), z=J_r(Q)>=mu>0 and L=Gamma_pi.
+For sufficiently small t>0, prefix Q by the literal solo-i root of hazard t.
+Call the result Q_t. Observer i is indifferent at zero, and every other
+owner strictly prefers Continue for small t. Thus Q_t lies in C and is
+ALL-END, with
+
+ B_i(Q_t)=0,
+ B_j(Q_t)=b_j+t(Gamma_ji-b_j) for j!=i,
+ U_p(Q_t)=U_p(Q)+t(L-U_p(Q)), nu(Q_t)=(1-t)nu(Q).
+
+It belongs to the head box C_P for all sufficiently small t>0 EXACTLY when
+
+ Gamma_ji=b_j for every positive-cap observer j in A;
+ Gamma_ji>=b_j for every positive-cap observer j notin A with b_j=a_j.
+                                                               (H9)
+
+Strict lower-bound coordinates impose no condition for sufficiently small t.
+The zero observer coordinate remains zero automatically. This failure is
+quantitative, not removable by taking actual approximants: for a positive-cap
+observer j put Delta_j=Gamma_ji-b_j. Its exact whole-source debt is
+
+ h_j t [(1-n_j)(Delta_j)^+ + n_j(-Delta_j)^+]    if j in A,
+ h_j t (-Delta_j)^+                            if j notin A, b_j=a_j,
+ 0                                            if j notin A, b_j>a_j,
+                                                               (H9a)
+
+for all sufficiently small t. Therefore, if (H9) fails, some fixed c>0
+satisfies max_observer d_j(Phi_P(Q_t))>=c t. Any such solo-prefix sequence
+with observer errors tending to zero must have t tending to zero, and its
+whole-source objective improvement also tends to zero by continuity.
+It cannot meet the fixed-positive-gain source requirement. This is an exact
+obstruction at the genuine minimizing source, not a nonglobal control.
+
+Let Delta=L-b_p.
+The exact small-t change in (H5) is t D, where
+
+ D=(1/n_p-1)Delta-z                    if b_p>a_p,
+ D=max(0,Delta)/n_p-Delta-z             if b_p=a_p.         (H10)
+
+Thus (H9) and D<0 contradict global minimality. Choose any fixed admissible
+small t. Equations (H4)--(H6) give a carrier point with J_r=mu+s t D<mu;
+its actual approximants have observer debts tending to zero and objective
+gain tending to -s t D>0. In particular, all sufficiently late approximants
+have gain at least -s t D/2. This meets the fixed-gain source requirement.
+There is no post-omega execution or vanishing-gain substitution.
+
+For example, b_p>a_p and L<=b_p imply D<=-z<0. At the obstacle b_p=a_p,
+the interval b_p-z<L<=b_p still gives D<0. In general the exact condition
+is (H10). A local decrease J_r(Q_t)=(1-t)z alone does not suffice: the head
+may freeze a changing observer cap or amplify the changed pivot cap.
+
+With an empty head, n_p=1, a=0, A empty, and positive b_p, (H9) is automatic
+and D=-z. Hence a GLOBAL selected minimum itself cannot have exactly one
+zero observer cap. An inherited one-zero endpoint remains possible only
+because a genuine head imposes the additional box/obstacle restrictions.
+
+### Remaining gap
+
+The theorem does not produce a direction satisfying (H9)--(H10) for every
+inherited endpoint, nor a replacement of the head that changes these rigid
+cap constraints. If a positive-cap observer quits in the head, (H9) can
+fail outright, even though the endpoint solo prefix is a strict descent.
+The useful new datum is the exact constrained global extremality (H5), not
+an assertion that the endpoint minimizes its old J_r.
+
+## Uniform obstruction to small repairs with a fully pinned head
+
+Use native own-zero rewards bounded by M>=1, pivot p, and the compact
+augmented actual-law carrier. Let Q be observer-optimal, ALL-END, with all
+caps b_i>=0 and positive original Never. Let an actual head P satisfy
+Y=Phi_P(Q), with Y observer-optimal, N_p(P)>0, and 0<N_i(P)<1 for observers.
+Thus all three observer endpoint caps are pinned by the old head. Write
+Z={i!=p:b_i=0}, K={p} union Z, and A_ik=Gamma_ik-b_i for i!=p,k in K.
+Assume ker(A) intersects the nonnegative orthant only at0.
+
+There are beta0,C>0 such that every actual independent head R with marginal
+finite masses f_i=1-N_i(R), beta=sum_i f_i<=beta0, satisfies
+
+ beta <= C epsilon,  epsilon=max_(i!=p) d_i(Phi_P(Phi_R(Q))).       (S1)
+
+The heads may have arbitrary countable supports, atoms or coincidences.
+Phi_R is the retained-query semantic head map; no post-infinite play is
+asserted. For every fixed r>=0 the absolute change of the whole-source
+objective d_p+r nu is at most (4M+r) beta. Consequently such small heads
+cannot yield a fixed positive gain while their observer errors tend to0.
+
+Proof. Set W=Phi_R(Q), n_i=N_i(P), h_i=product_(j!=i)n_j. The exact old-head
+debt identity, obtained by subtracting its prescribed payoff from its
+max-cap formula, is
+
+ d_i(Phi_P W)/h_i=(1-n_i)(B_i(W)-b_i)^+
+                    +n_i(b_i-B_i(W))^+ +n_i d_i(W).
+
+Every term is nonnegative. Since 0<n_i<1, this bounds both
+|B_i(W)-b_i| and d_i(W) by C0 epsilon for every observer.
+Let T_i=e_i(R)+H_i(R)b_i be the through-head response value. A finite head
+deadline has absolute payoff at most M beta: absent another finite head
+draw it produces the owner's singleton0. Also |T_i-b_i|<=2M beta.
+Decomposing the prescribed law into finite draws and its Never draw gives
+
+ d_i(W)>=(1-f_i)(B_i(W)-T_i),
+ d_i(W)>=f_i(T_i-M beta).
+
+For every positive-cap observer, beta sufficiently small makes
+T_i-M beta>=b_i/2, hence f_i<=C1 epsilon. The first inequality, beta<=1/2,
+and the cap bound give |T_i-b_i|<=C2 epsilon for all observers.
+
+Uniformly over the whole head calendar, independence gives
+e_i(R)=sum_(j!=i)Gamma_ij f_j+O(M beta^2) and
+H_i(R)=1-sum_(j!=i)f_j+O(beta^2): all discrepancies require at least two
+opponents to have finite head draws. Therefore
+T_i-b_i=sum_(j!=i)(Gamma_ij-b_i)f_j+O(M beta^2).
+Discarding the O(epsilon) masses of positive-cap observers yields
+|A f_K|<=C3(epsilon+beta^2). Compactness of the nonnegative unit simplex
+and the kernel assumption give |A x|>=c|x| for x>=0. Thus
+beta<=C4(epsilon+beta^2), and decreasing beta0 absorbs the quadratic term,
+proving(S1). These estimates also pass to limits retaining the original f.
+
+Finally |U(W)-U(Q)|,|B(W)-B(Q)|<=2M beta and |nu(W)-nu(Q)|<=beta;
+nonnegative b prevents the retained head cap from introducing a fixed jump.
+The old head map is nonexpansive in each payoff/cap coordinate and multiplies
+nu by at most1, proving the objective bound. No global minimizing property
+was used. For |Z|<=2, full column rank of A is a sufficient open condition;
+this lemma does not assert that every inherited endpoint satisfies it.
