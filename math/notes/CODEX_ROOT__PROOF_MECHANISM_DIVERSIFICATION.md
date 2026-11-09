@@ -6,13 +6,18 @@ Status: research diagnosis with proved supporting results on finite-scale
 parameter covers and the cost of revealing future public randomness. A
 [global stationary producer with an arbitrary reward row](../exports/DOMINATED_ROW_ARBITRARY_ROW_STATIONARY_UNIFORM_EQUILIBRIUM.md)
 now closes an explicit unbounded raw class. Arbitrary Fin4 remains open.
-The [two-row continuation record](CODEX_ROOT__TWO_ROW_CONTINUATION.md)
-contains the current exact stationary region and three periodic rectangles
-allowing support changes in the two-parameter test family, with
-[independent reviews](../feedback/CODEX_ROOT__TWO_ROW_CONTINUATION__BY_INDEPENDENT_REVIEWS.md).
-The next producer targets are row-wise global continuation and an absorbing
-controlled invariant set of actual Nash transitions. Their general
-completeness is not established. The earlier supporting results have an
+The [complete two-crossing family theorem](../exports/COMPLETE_TWO_CROSSING_FAMILY_UNIFORM_EQUILIBRIUM.md)
+closes the entire two-parameter test family; its regional exact constructions
+remain in the [two-row continuation record](CODEX_ROOT__TWO_ROW_CONTINUATION.md).
+For arbitrary tables, the current source work concerns
+[actual minima and inherited mixed endpoints](CODEX_ROOT__ACTUAL_MINIMUM_AND_MIXED_ENDPOINT.md).
+The [Never-mass saturation theorem](../exports/ACTUAL_MINIMUM_NEVER_MASS_SATURATION.md)
+restricts actual minima through full-support windows and a classified set of
+guarded sparse patterns. It supplies no new UE reward-table class.
+The mixed endpoint still needs an improvement compatible with its actual
+head. An absorbing controlled invariant set of actual Nash transitions
+remains a separate constructive target. Neither route is complete.
+The earlier supporting results have an
 [independent mathematical review](../feedback/CODEX_ROOT__CROSSFIELD_GLOBAL_METHODS__BY_REVIEW.md).
 
 ## Question
