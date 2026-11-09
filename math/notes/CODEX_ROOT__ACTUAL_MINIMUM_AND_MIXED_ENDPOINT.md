@@ -470,3 +470,94 @@ The old head map is nonexpansive in each payoff/cap coordinate and multiplies
 nu by at most1, proving the objective bound. No global minimizing property
 was used. For |Z|<=2, full column rank of A is a sufficient open condition;
 this lemma does not assert that every inherited endpoint satisfies it.
+
+## Conservative exceptional cycles can have positive curvature on every closed tangent loop
+
+Internal mechanism boundary only. No actual global minimum, absorbing gap,
+or Fin4 counterexample is asserted. This explains why the [global rigidity theorem](../exports/ACTUAL_MINIMUM_GLOBAL_PAIR_STAR_RIGIDITY.md)'s
+generic exception should not be silently erased by a second-variation claim.
+
+Take p=0, G=(-1,1,1), and
+
+ c=[0,3/2,1/2; 5/2,0,3; 3/4,5/4,0],
+ h=(1,1/3,7), lambda=(1/8,1/3,1/2), rho_i=1/(1-lambda_i).
+
+Set Gamma_ip=G_i, Gamma_pi=h_i, Gamma_ij=-G_i c_ij, and
+J_ip=rho_i G_i. Choose pivot participant pairs
+
+ J_p=(-124909/1827,-91201/3654,-164954/1827).
+
+Then all Raw conditions hold. Since c^-1 1=(22,50,8)/79>0, the inverse pivot
+column is strictly positive. At penalty r=0 the three coefficients are
+
+ A=(-15581/261,-90592/5481,-152165/3654)<0.
+
+For the periodic observer word123123..., compute its periodic pivot memories
+pi^i and v^i=sum_j pi_j^i c_j as defined in that theorem. The resulting price
+matrix S is exactly symmetric. Its diagonal memory values are
+
+ R=(v_1^1,v_2^2,v_3^3)=(58/47,267/188,103/47)>0.
+
+Write k_i=-A_i>0 and z=x_p-v^i dot y before a phase-i date. Exactly
+
+ z_next=lambda_i z+lambda_i R_i u_i.
+
+The full quadratic supply at that date is (S y)_i u_i+k_i z u_i.
+Because S is symmetric, a closed observer path has
+
+ sum (S y)_i u_i=(1/2)sum S_ii u_i^2
+                         =(1/2)sum k_i R_i u_i^2.
+
+Thus each residual contribution becomes the scalar difference of squares
+
+ k_i z u_i+(k_i R_i/2)u_i^2
+       =[k_i/(2R_i)](z_next^2/lambda_i^2-z^2).
+
+For a complete closed state loop, z starts and ends at zero. Therefore
+
+ Q_0=(1/2)sum_t b_(phase t) z_t^2,
+ b_i=k_(i-1)/(R_(i-1)lambda_(i-1)^2)-k_i/R_i,
+
+where predecessor labels are cyclic. Here the exact three coefficients are
+
+ b_1=301610233/10914498>0,
+ b_2=130899543584/42439383>0,
+ b_3=2871940781/33496218>0.
+
+Consequently EVERY nonzero finite closed contact tangent loop along this
+periodic word has strictly positive Q_0. Indeed equality forces all z_t=0,
+then the scalar recurrence forces every u_i=0 and every pivot tangent0.
+This concerns the full multilabel fibre, not only a fixed short window.
+
+The other reward entries may be set arbitrarily for this algebraic boundary:
+zero-penalty curvature uses only the displayed singleton and participant
+pair data. Their choices may create absorbing exits or prevent actual quiet
+feasibility; none of those strategic questions is resolved by this example.
+Generic reward perturbation remains available in the positive-gap argument,
+so this obstruction does not weaken the generic theorem.
+
+Exact reproducer:
+
+```python
+import sympy as s
+c=s.Matrix([[0,s.Rational(3,2),s.Rational(1,2)],
+ [s.Rational(5,2),0,3],[s.Rational(3,4),s.Rational(5,4),0]])
+h=s.Matrix([1,s.Rational(1,3),7]);la=[s.Rational(1,8),s.Rational(1,3),s.Rational(1,2)]
+A=s.Matrix([-s.Rational(15581,261),-s.Rational(90592,5481),-s.Rational(152165,3654)])
+p=s.Matrix(s.symbols('p0:3'));pn=p
+for i in range(3):pn=la[i]*pn+(1-la[i])*s.eye(3)[:,i]
+pn=p.subs(s.solve(list(pn-p),list(p),dict=True)[0]);S=s.zeros(3);R=[]
+for i in range(3):
+ v=pn.T*c;R.append(v[i])
+ for j in range(3):S[i,j]=A[i]*(c[i,j]-v[j])+h[j]*c[j,i]
+ pn=la[i]*pn+(1-la[i])*s.eye(3)[:,i]
+assert S==S.T
+assert c.inv()*s.ones(3,1)==s.Matrix([22,50,8])/79
+energy=[-A[i]/R[i] for i in range(3)]
+b=[s.factor(energy[(i-1)%3]/la[(i-1)%3]**2-energy[i]) for i in range(3)]
+assert b==[s.Rational(301610233,10914498),s.Rational(130899543584,42439383),s.Rational(2871940781,33496218)]
+assert all(z>0 for z in b)
+Jp=[s.factor((A[i]-h[i]*la[i])/(1-la[i])) for i in range(3)]
+assert Jp==[-s.Rational(124909,1827),-s.Rational(91201,3654),-s.Rational(164954,1827)]
+print('PASS: conservative Raw price and strictly positive all-loop square coefficients.')
+```

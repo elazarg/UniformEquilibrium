@@ -212,3 +212,60 @@ The final whole-note SHA256 is
 the new section hash, including its heading, is
 `e0d94e41c921b6aa997b824dc0376b260e72724f2d13676e0c904701918c77cc`.
 The preceding reviewed H1--H10 section is unchanged. Consolidation PASS.
+
+
+# Conservative exceptional-cycle boundary
+
+The independently reviewed proof below is retained as the final section of
+the same root note. Only its heading and internal reference wording changed
+on consolidation. It is a boundary for a curvature mechanism, not an actual
+minimizer, an absorbing-gap example, or a counterexample game.
+
+# Independent review: conservative positive-curvature boundary
+
+Reviewer: nonrealized_global. Verdict: PASS as an internal mechanism boundary.
+No export, actual-minimum, absorbing-gap, or UE claim is supported by this
+example.
+
+Reviewed `RAW/CONSERVATIVE_PERIODIC_POSITIVE_CURVATURE_BOUNDARY.md`, SHA256
+`d3b15561f6a35fa302edcdfd822af7344fe652e09e7e182a24048bbc3401cbb7`.
+The embedded exact reproducer was inspected and executed successfully.
+
+All Raw signs hold. I independently reconstructed Gamma, finding
+
+ det Gamma=71/12,
+ Gamma^-1 e_0=(237/284,33/142,75/142,6/71)>0.
+
+The three rho_i exceed1, all pivot singleton rewards are positive, and all
+pivot participant-pair rewards are negative. The stated A, periodic memory
+diagonal R, symmetric S, and positive b coefficients are exact.
+
+For every finite contiguous segment of the periodic123 calendar, initialize
+the auxiliary memory at the appropriate periodic phase. A complete state
+loop begins with x_p=y=0 and ends with x_p=y=0, so z=x_p-v dot y is zero at
+both endpoints, even when the segment length is not a multiple of3.
+
+Symmetry gives
+sum(Sy)_i u_i=(1/2)sum S_ii u_i^2
+because y_next=y-u_i e_i. Since S_ii=k_i R_i, the stated scalar square
+identity follows exactly from z_next=lambda_i(z+R_i u_i). Summing cancels
+all boundary terms. Each interior z_t^2 has coefficient
+k_previous/(R_previous lambda_previous^2)-k_current/R_current=b_phase.
+The signs in this telescoping formula are correct.
+
+Since all b_i>0, equality forces every interior z_t=0. The endpoint values
+also vanish, so the scalar recurrence forces every observer control to be
+zero. Starting from zero, this forces every observer and pivot state and
+pivot atom tangent to vanish. Thus every nonzero closed tangent loop has
+strictly positive quadratic cost, for arbitrary finite length. This is not
+a conclusion extrapolated from a bounded word search.
+
+As a separate exact check, I reconstructed the physical eight-date state
+recurrence, imposed full state closure via its rational nullspace, and
+verified that its quadratic supply equals the asserted weighted square sum.
+
+The example therefore blocks an attempted universal negative-curvature
+closure of conservative Raw cycles. It does not obstruct the generic
+perturbation theorem: exact conservativity is exceptional, and the example
+neither supplies an actual guarded minimizing source nor rules out other
+comparisons. Consolidation as an internal boundary is appropriate.

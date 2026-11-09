@@ -23,15 +23,23 @@ small-penalty bound may depend on the full table. The proof uses finite
 multiplier gluing, an exact preserved symplectic form, and a summable-observation
 argument. It includes actual full-support laws demonstrating that global
 minimality is the essential obstruction.
-The [positive-timing patch exclusion](../exports/ACTUAL_MINIMUM_POSITIVE_TIMING_PATCH_EXCLUSION.md)
-extends the [structured guarded pair-star result](../exports/ACTUAL_MINIMUM_GUARDED_PAIR_STAR_EXCLUSION.md)
-to an entire explicit ratio/sign chamber and every fixed penalty r>=0.
-One positive coefficient C_i(r) excludes sufficiently late guarded pair
-segments containing three runs of observer i and a later four-run correction
-window. The intervening runs may be arbitrarily long and numerous; supports
-and ties outside the segment are unrestricted. An eventual guarded pair-star
-minimum with all three observers recurrent must therefore have C_i(r)<=0
-for every observer. This is a source restriction, not a new UE table class.
+The [global pair-star rigidity theorem](../exports/ACTUAL_MINIMUM_GLOBAL_PAIR_STAR_RIGIDITY.md)
+excludes the entire recurrent guarded pair-star actual-minimum mode after
+generic reward selection in the explicit ratio/sign chamber. At a fixed
+penalty with all C_i(r) nonzero, any such minimum would have to become a
+directed three-cycle with a symmetric explicit price matrix. Both exceptional
+price conditions can be avoided before selecting the penalty and source.
+For structured stars the stronger exact necessary condition is C(r)=0,
+including the formerly surviving all-negative coefficients. The proof uses
+arbitrarily spaced occurrences in the original calendar; it assumes no
+periodic word. Actual attainment, the raw chamber and quiet guards remain
+inputs. This is not a new unrestricted UE table class.
+
+The [positive-timing patch theorem](../exports/ACTUAL_MINIMUM_POSITIVE_TIMING_PATCH_EXCLUSION.md)
+retains a distinct local consequence: one positive coefficient excludes
+sufficiently late controlling pair segments even when supports and ties
+outside the segment are arbitrary. Intervening runs may be arbitrarily long
+and numerous. Neither theorem assumes a pivot-contact or Never-mass bound.
 
 The [generic three-date contact gap](../exports/GENERIC_THREE_DATE_OBSERVER_CONTACT_GAP.md)
 applies to every finite chain of three sufficiently small roots with at most
@@ -44,8 +52,20 @@ minimizing assumption. The native absorbing gap survives the perturbation;
 source selection must then be repeated at the perturbed table. This gives
 one strict comparison per sparse triple, not a fully guarded calendar.
 
-Partial ties, mixed-support transitions, finite active calendars, the remaining
-coefficient/sign regions, and nonrealized sources remain unresolved. The mixed
+The [cyclic pair-contact theorem](../exports/ACTUAL_MINIMUM_CYCLIC_PAIR_CONTACT_EXCLUSION.md)
+excludes all64 repeating contact patterns near its explicit raw table, with
+arbitrary actual hazard amplitudes. Its negative-curvature certificates also
+exclude nonperiodic contact patterns contained in the certified sets. Every
+late nine-date cyclic pair window must have at least three quiet contacts,
+even when contact patterns switch arbitrarily. This does not close all
+nonperiodic switching or all pair-support words.
+
+Denser nonperiodic partial ties, mixed-support transitions, finite active
+calendars, other raw sign regions, and nonrealized sources remain unresolved.
+Exceptional conservative three-cycles can have positive curvature on every
+closed tangent loop; the [exact internal boundary](CODEX_ROOT__ACTUAL_MINIMUM_AND_MIXED_ENDPOINT.md)
+explains why generic selection cannot simply be dropped from that mechanism.
+The mixed
 endpoint minimizes an explicit pivot obstacle objective on the cap constraints
 imposed by its actual head. Under a stated nonnegative-kernel condition,
 every small additional head has activity bounded by its induced observer
