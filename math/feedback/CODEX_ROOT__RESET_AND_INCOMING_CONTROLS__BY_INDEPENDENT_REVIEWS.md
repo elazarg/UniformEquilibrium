@@ -1,7 +1,7 @@
 # Independent review of reset and incoming method controls
 
-These are internal mathematical results, not additional export admissions
-or new UE reward-table classes. No Lean checks are claimed.
+These reviews distinguish internal mathematical controls from the explicitly
+identified export admissions below. No Lean checks are claimed.
 
 ## Periodic reset producer and overlap audit
 
@@ -326,3 +326,58 @@ the new source-support lemmas are not duplicated as additional exports.
 The mathematically correct overlapping-triple clock construction was withheld
 because the earlier arbitrary-WORD criterion already covers its entire family.
 All 126 previously frozen export Markdown files remain byte-identical.
+
+## Supportwise orientation without a mandatory payoff ledger
+
+Reviewed packet:
+[Supportwise negative orientation on positive Quit regions](../exports/SUPPORTWISE_NEGATIVE_ORIENTATION_UNIFORM_EQUILIBRIUM.md).
+Exact final SHA256:
+`fb38cc7d945117b6ec15ad6c4cfaf3558fa0d30830dc0578ef648e2e8368ecef`
+(535 lines).
+
+FRONTIER_ADVERSARY and GLOBAL_MINIMUM_NEXT independently gave mathematical
+PASS and export-eligibility PASS on these exact final bytes. Both checked the
+complete proof and its strict whole-table coverage evidence. No unproduced
+strategic input, conditional-export exception or unresolved objection remains.
+An earlier draft depended on other conference packets and was rejected at
+the self-containment gate. The final artifact contains the required proof and
+all exact stationary and raw-selection calculations; all15 cited Lean source
+paths are tracked. Placement preserved all127 existing export hashes.
+
+The gain is the independent supportwise combination of Low, Charge and
+conditional Orientation without a mandatory H ledger. Conditional triple
+orientation itself is existing mathematics and is not claimed as new.
+The reviewers checked the zero-column argument at one-sure boundaries,
+two-sure equilibrium exit, dense-source full ambient degree argument,
+weak-pair assignment restriction, fixed-target selected-return consumer and
+native absorbing-debt bridge. The exact coefficient certificate permits
+positive active Quit premiums where unconditional determinant positivity fails.
+
+The whole-game witness fails Low and every positively scaled Charge choice
+on012, while its full support passes Charge. Its strict negative pair-vector
+identity defeats EVERY nonnegative payoff ledger, including all marked,
+finite-family, support-filtered and positive-matrix choices. Both reviewers
+independently recomputed the determinant, table coefficients, all stationary
+support exclusions and R0 limit argument. The complete persistent-base,
+child, core, phase, return and other raw selections stated in the artifact
+were checked, including their role and scaling choices. No unspecified local
+neighborhood or arbitrary nonstationary architecture is asserted exhausted.
+
+## Actual positive continuation with only the zero outgoing root
+
+Reviewed section “An actual positive Nash payoff can have no nonzero outgoing
+Nash root” through EOF in
+[the source geometry note](../notes/CODEX_ROOT__ACTUAL_MINIMUM_AND_MIXED_ENDPOINT.md).
+Exact section SHA256:
+`f23d254286fbe62ec44db40d38d7ad739bd7ddb8f59786859f0180812bcbbb18`.
+OPPOSED_GLOBAL gave independent mathematical PASS on the curated bytes.
+
+The reviewer reran the embedded standard-library integer certificate:
+311 nodes,156 leaves,maximum depth20, with exact multiaffine bounds covering
+the whole hazard cube. Fraction arithmetic independently verified all three
+actual full-Nash endpoint calculations, the inverse-positive singleton matrix,
+joining genericity, higher-support lowness and sole opposed positive pair.
+The positive continuation has no nonzero outgoing Nash root, but an explicitly
+different earlier branch halves Never. Thus it is not a global minimum.
+This is retained only as an internal method control; it adds no UE class or
+counterexample and does not replace the least-Never source hypothesis.

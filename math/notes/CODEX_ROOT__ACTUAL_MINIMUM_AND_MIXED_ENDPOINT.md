@@ -104,18 +104,21 @@ extraction excludes every head confined to a product-low triple, with an
 exact finite linear test for that condition. AllNever limits, the remaining
 triple and full entry supports, and pairs failing these tests remain open.
 
-A global class is now closed by
+A global class is closed by
 [supportwise product lowness or charges](../exports/SUPPORTWISE_LOW_OR_CHARGE_UNIFORM_EQUILIBRIUM.md).
-Every support of size three or four may independently pass either its
-product-low test or its boxed-charge test; every mutually positive participant
-pair must have same-sign joining gaps, including equality. A generic-root
-index argument supplies the selected-return consumer directly, without an
-actual-head, clock or literal two-player-core hypothesis. The result also
-proves native absorbing debt infimum zero. Its exact full-core example has
-a positive gap over all stationary profiles and fails the audited earlier
-raw selections. Thus a counterexample with nonnegative own rewards must
-have an opposite-sign positive pair, or a larger support failing BOTH tests.
-This is a new raw UE class; the remaining disjunction is still open.
+The extension by [supportwise orientation](../exports/SUPPORTWISE_NEGATIVE_ORIENTATION_UNIFORM_EQUILIBRIUM.md)
+also permits a larger support whose odds-map determinant has the negative
+ambient index sign wherever all active Quit premiums are positive. This
+removes the mandatory payoff ledger from earlier orientation methods.
+Each support independently chooses Low, Charge or Orientation; strict
+same-sign positive pairs are allowed. Weak pair products are allowed when
+the zero pair is contained in no support assigned Orientation. The native
+absorbing debt conclusion is retained. An exact full-core table requires
+the new alternative and has a positive gap over all stationary profiles,
+while failing the audited earlier raw selections. Thus, on the strict
+same-sign pair branch, a counterexample must have a larger support failing
+ALL THREE tests. Opposed pairs and the uncovered weak orientation boundary
+remain. These are new raw UE classes, not full Fin4 closure.
 
 The [incoming boundary controls](CODEX_ROOT__INCOMING_BOUNDARY_CONTROLS.md)
 show why the remaining cases need more than a bare carrier lemma. The
@@ -1975,3 +1978,105 @@ The surviving entry cases are positive-participant pairs not satisfying
 HIGH, HIGH pairs failing at least one transfer test, and triple or full
 entry supports. Entire two-owner heads still require HIGH by the preceding
 head-regret theorem. AllNever limits remain a separate open branch.
+
+## An actual positive Nash payoff can have no nonzero outgoing Nash root
+
+This exact internal control explains why actual realizability alone does not
+supply the missing global argument. It is not a counterexample to UE or to
+least-Never minimality. Own singleton, live and Never rewards are zero;
+randomization is private and independent. The complete finite native table
+is encoded by coalition bit masks in the runnable certificate below.
+
+Its singleton matrix has strictly positive inverse
+[2,7,3,3;7,2,3,3;3,3,2,7;3,3,7,2]/15. The sole mutual-positive participant
+pair is01, with joining gaps(-2,1). All participant rewards of owners2,3
+are nonpositive, so every support of size at least three is product-low.
+Every joining difference is nonzero and the four triple principal joining
+determinants are(9,-17,-42,-28). Thus the table lies in the inverse-positive,
+joining-generic, higher-product-low, sole-opposed-pair branch.
+
+At literal zero continuation, q=(1/2,0,1/2,1/2) has
+
+    Q=(-2,-1/4,-3,-3), C=X=(-2,17/8,-3,-3).
+
+Playing this one date then AllNever is actual full-law Nash, with
+U=B=X and original Never1/8. Prefix it by q=(17/25,1/2,0,0). Then
+
+    Q=(1/2,68/25,-76/25,-68/25),
+    C=Y=(1/2,68/25,291/50,291/50)>0.
+
+The exact cap update B'_i=max(Q_i,P_i+H_i B_i) proves full Nash for the
+actual two-date profile, with U=B=Y and original Never1/50. This is stronger
+than membership in a closed payoff carrier.
+
+Nevertheless, Y's annotated root game has ONLY AllContinue. For each i the
+gap g_i(q)=Q_i(q)-C_i(Y,q) is multiaffine. On a rectangle it is bounded by
+its vertex values. A rectangle contains no Nash root if some coordinate has
+positive lower hazard and strictly negative gap throughout, or upper hazard
+below one and strictly positive gap throughout. If all four gaps are
+strictly negative, only q=0 can be Nash. The following standard-library
+Python program certifies the entire cube by these exact rules. Vertex values
+are integers with a common positive scale; dyadic rectangle bounds are exact.
+It terminates with311 nodes,156 leaves and maximum depth20. Every discarded
+rectangle uses a strict Nash contradiction, and g(0)=-Y<0 proves q=0 is a root.
+
+```python
+from fractions import Fraction as F
+from itertools import product
+
+# Complete native table: coalition bit mask -> four recipient rewards.
+r = {1:(0,3,-1,-1), 2:(3,0,-1,-1), 4:(-1,-1,0,3), 8:(-1,-1,3,0),
+     3:(1,4,20,20), 5:(-4,4,-4,-14), 9:(0,4,-14,-4), 6:(-5,0,-2,-5),
+     10:(-5,-4,-5,0), 12:(-6,4,-4,-4), 7:(-4,-4,-4,-5),
+     11:(-4,-4,-5,-4), 13:(-4,4,-4,-4), 14:(-5,-104,-4,-4),
+     15:(-10,110,-104,-104)}
+vertices = list(product((0, 1), repeat=4))
+y50 = (25, 136, 291, 291)
+initial = [[] for _ in range(4)]
+for q in vertices:
+    for i in range(4):
+        mask = sum(q[j] << j for j in range(4) if j != i)
+        initial[i].append(50*r[mask | (1 << i)][i]
+                          - (50*r[mask][i] if mask else y50[i]))
+stack = [(initial, (F(0),)*4, (F(1),)*4, 0)]
+nodes = leaves = maximum_depth = 0
+while stack:
+    values, lo, hi, depth = stack.pop()
+    nodes += 1
+    maximum_depth = max(maximum_depth, depth)
+    low = [min(row) for row in values]
+    high = [max(row) for row in values]
+    if (all(v < 0 for v in high)
+        or any((lo[i] > 0 and high[i] < 0)
+               or (hi[i] < 1 and low[i] > 0) for i in range(4))):
+        leaves += 1
+        continue
+    assert depth < 100, 'Unresolved rectangle'
+    axis = max(range(4), key=lambda i: hi[i]-lo[i])
+    bit = 1 << (3-axis)
+    left = [[2*v for v in row] for row in values]
+    right = [[2*v for v in row] for row in values]
+    for i in range(4):
+        for k in range(16):
+            if not (k & bit):
+                midpoint = values[i][k] + values[i][k | bit]
+                left[i][k | bit] = right[i][k] = midpoint
+    lhi, rlo = list(hi), list(lo)
+    lhi[axis] = rlo[axis] = (lo[axis]+hi[axis])/2
+    stack.append((right, tuple(rlo), hi, depth+1))
+    stack.append((left, lo, tuple(lhi), depth+1))
+assert (nodes, leaves, maximum_depth) == (311, 156, 20)
+print('Certified: AllContinue is the unique root.', nodes, leaves, maximum_depth)
+```
+
+The global qualification is explicit. At X a DIFFERENT pair prefix
+q=(0,3/4,17/25,0) has
+
+    Q=(-62/25,0,-3/2,-68/25),
+    C=(-54/25,0,-3/2,-63/25).
+
+It too is full-law Nash, now with Never1/100<1/50. Thus Y is not least-Never:
+one must change an earlier branch to improve it. A general proof may need
+such changes to the actual head. The existing global minimum hypothesis
+cannot be replaced by actual membership plus the search for a next Nash root.
+No absence of arbitrary behavioral comparisons is asserted.
