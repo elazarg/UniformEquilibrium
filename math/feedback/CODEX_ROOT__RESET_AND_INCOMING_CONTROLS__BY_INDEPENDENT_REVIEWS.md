@@ -223,7 +223,7 @@ curation of “Two-owner source heads require both participant premiums”
 through EOF in
 [the source geometry note](../notes/CODEX_ROOT__ACTUAL_MINIMUM_AND_MIXED_ENDPOINT.md).
 Exact section SHA256:
-`9c29219a7c63faede333888fce09b2a01358f5aea88be3e0468f53e04fb4f3d9`.
+`3bdcce916e719299c90d42889fc482bf94e42860d8e8dc341c62640eb5a534c1`.
 Mathematical PASS with no unresolved objection.
 
 The positive source-cap bound is derived from the existing joining-generic
@@ -238,4 +238,23 @@ This differs from the earlier incoming pair-premium reduction: it constrains
 both directions of the actual head pair and permits multiple endpoint zeros.
 It is retained as an internal source-support restriction, not a new raw UE
 class or an additional self-contained export producer. The AllNever branch,
-larger heads and pairs with both premiums remain open.
+larger heads and pairs not excluded by the following quiet-row test remain
+open.
+
+The final subsection, “A quiet-joining test excludes further surviving
+pairs”, has SHA256
+`85fa6908e07315a6371231430cf59988eba3e19d41637ef4b4a026369d12aa6b`.
+SOURCE_ADVERSARY_14 and ACTUAL_MINIMUM_GLOBAL independently reviewed the
+proof and curated bytes. Uniform finite-deadline bounds put both active
+payoffs strictly below their pair participant rewards at the least-Never
+limit, even when the head laws and calendars vary. The explicit proper
+pair root then lowers original Never whenever both quiet rows satisfy the
+bilinear rectangle test. Every owner's full cap is priced. No limiting
+actual head or endpoint-return assumption is used.
+
+The allowed positive triple joining increments are not covered by the
+immediate sure-pair test. The exact induced-owner interfaces also require
+a nonempty sure base and additional owner/outsider conditions; this proper
+pair root is not itself their input. Separation from all larger-support
+stationary and induced-Nash producers remains unproved, so this is an
+internal source-mode exclusion, not a new raw-table UE class or export.

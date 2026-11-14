@@ -97,8 +97,9 @@ strictly below1, any selected source head with at most two active owners
 must have exactly two, and BOTH directed participant rewards of that pair
 must exceed both zero and their singleton rewards. The bilinear head-regret
 bound below proves this for arbitrary calendars, even when neither owner
-is the global pivot. AllNever limits, larger heads and pairs with both
-premiums remain open.
+is the global pivot. A further explicit test on the two quiet players'
+joining incentives excludes some pairs even when both premiums hold.
+AllNever limits, larger heads and pairs failing that test remain open.
 
 The [incoming boundary controls](CODEX_ROOT__INCOMING_BOUNDARY_CONTROLS.md)
 show why the remaining cases need more than a bare carrier lemma. The
@@ -1740,3 +1741,68 @@ points are then AllNever; inherited near-Nash endpoints also approach
 AllNever by the general source collar. This theorem leaves that branch open.
 It also leaves heads with at least three active owners and two-owner heads
 whose two directed participant premiums both satisfy(T).
+
+### A quiet-joining test excludes further surviving pairs
+
+Continue under the preceding source hypotheses, now with both inequalities
+in(T). Put rho_h=(J-A)/J>0 and rho_k=(K-D)/K>0. For each quiet owner l
+outside {h,k}, define
+
+    ell_lh=Z_l({l,h})-Gamma_lh,
+    ell_lk=Z_l({l,k})-Gamma_lk,
+    T_l=Z_l({l,h,k})-Z_l({h,k}).
+
+If BOTH quiet rows satisfy
+
+    ell_lh<=0, ell_lk<=0,
+    rho_h ell_lh+rho_k ell_lk+T_l<=0,                  (13)
+
+then this head pair is also impossible at all sufficiently small r.
+The positive triple joining increment T_l is allowed when the two negative
+singleton joining increments compensate it. This is a source-head exclusion;
+no new raw-table UE class or separation from every existing producer is claimed.
+
+Here is a proof that allows the actual head to vary arbitrarily with r.
+At a used finite k head deadline, its offer is
+D Pr(T_h<t)+K Pr(T_h=t)<=K f, and equals y. Thus f>=epsilon/K.
+Every finite h deadline is similarly bounded above by Jg. Averaging its
+deficit and using the original Never coordinates gives
+
+    y<=K f<=K[1-N_h(Y_r)],
+    f(x-Jg)<=delta_h<=r alpha,
+    x<=J[1-N_k(Y_r)]+K r alpha/epsilon.               (14)
+
+No limiting actual head is extracted. Every cluster Y* of these global
+minima is a full-Nash least-Never point. Write w=U(Y*)=B(Y*)=e(Y*).
+Each original Never coordinate is at least alpha, so (14) gives
+
+    0<w_k<=K(1-alpha)<K, 0<w_h<=J(1-alpha)<J.          (15)
+
+Prefix Y* by one independent product root with only h,k active, of odds
+
+    z=q_h/(1-q_h)=w_k/(K-D),
+    v=q_k/(1-q_k)=w_h/(J-A).                          (16)
+
+Both participants are exactly indifferent: J q_k=A q_k+(1-q_k)w_h,
+and likewise for k. For a quiet owner the full Quit-minus-Continue offer is
+
+    (1-q_h)(1-q_k)[ell_lh z+ell_lk v+T_l zv-w_l].     (17)
+
+If both brackets were nonpositive, the root would be Nash against w.
+The full-cap prefix map would then produce another full-Nash carrier point
+with original Never (1-q_h)(1-q_k)alpha<alpha, a contradiction. Hence every
+surviving pair must have at least one quiet row with
+
+    ell_lh z+ell_lk v+T_l zv>w_l>0.                    (18)
+
+But (15) places (z,v) inside [0,1/rho_k] x [0,1/rho_h]. The bilinear part
+of(18) has four corner values
+
+    0, ell_lh/rho_k, ell_lk/rho_h,
+    [rho_h ell_lh+rho_k ell_lk+T_l]/(rho_h rho_k).
+
+Condition(13) makes all four nonpositive, hence the entire bilinear function
+nonpositive on the rectangle. This contradicts(18). The comparison uses a
+legal carrier prefix, with actual approximants if needed; it assumes neither
+realization of Y* nor a continuation after an infinite calendar. The original
+source Never coordinates supply the strict bounds in(15).
