@@ -266,3 +266,63 @@ is unproved, so these are internal source restrictions, not an additional
 raw UE class or standalone export. AllNever limits, larger incoming
 supports and pair entries failing the tests remain open. No Lean check
 was run and no frozen export was changed.
+
+## Supportwise low-or-charge closure and exact new-class witness
+
+Reviewed frozen packet:
+[Supportwise low rewards or charges with same-sign pair exceptions](../exports/SUPPORTWISE_LOW_OR_CHARGE_UNIFORM_EQUILIBRIUM.md).
+Exact final SHA256:
+`030f4825c1b570284dd25f6e944be63c014a81e2a1fd080cc05d2adcd8ea4ea7`
+(646 lines).
+
+SOURCE_ADVERSARY_14 and GLOBAL_DUALITY independently gave full mathematical
+PASS and positive export-gate recommendations on these exact bytes. Main
+proof author ACTUAL_MINIMUM_GLOBAL also checked curation. No mathematical,
+source-production, or applicable raw-admission objection remains. The packet
+is ordinary mathematics; no new Lean declaration or build is asserted.
+
+The proof unifies per-support product lowness with the existing boxed-charge
+alternative, allowing same-sign pair exceptions. The reviewers checked the
+whole-cube charge identity, partly-sure and all-sure boundaries, a common
+strict reward box, the nonzero inactive-gap polynomial coefficient, finite
+negative-index sum, dense-source approximation, weak passive perturbations,
+and the exact implemented selected-return consumer. A sufficiently SMALL
+positive row raise preserves the charge margin and gives native absorbing
+debt zero; the reviewers checked the full-cap shift and actual Never repair.
+Every strategic object is produced. No conditional-export exception is used.
+
+The complete sixty-reward table supplies the strict coverage evidence.
+Its triple and full-support certificates, sole positive pair, full premium
+core, Farkas obstruction to EVERY nonnegative H ledger, and all H/J values
+were independently recomputed. The stationary audit exhausts all pure,
+sure, proper-pair, triple and full supports. Its normalized zero-hazard
+argument also excludes vanishing-regret stationary sequences and reward
+closure. The strict sure-owner cascade exhausts every persistent-base
+induced-Nash and punishment-floor selection, not just stationary repetition.
+
+The nonperiodic audit includes all simultaneous and support-filtered ledger
+weights, coordinate matrices and product covers, all charge constants under
+positive row scaling, all ordered anchor sets/blocks/weights, all fourteen
+proper child selections for universal quiet-lift debt bounds, and the
+potential and triple-inverse criteria described in the packet. A separate
+reviewer checked this audit's exact arithmetic. The periodic audit exhausts
+all pair partitions and proof-weight choices for the stated sign-based
+producers, their explicit templates and specified boxes, and the broader
+three-owner return selector. The latter has only one compatible role
+assignment, whose mandatory hazard is exactly 350/201>1. Independent phase
+review used exact statements read by the primary reviewers and relayed after
+that reviewer's command environment became unavailable; no unsupported
+filesystem-inspection claim is made.
+
+The negative-friendly common-premium family was checked separately: its
+passive threshold need not be negative, so the valid exclusion uses forced
+normalization and incompatible premiums (2,1,-1,-1). Unspecified local
+neighborhood radii and conditional consumers supplied with a specially
+chosen strategic witness are expressly outside the separation claim.
+No absence of every possible nonstationary architecture is asserted.
+
+Only this unified packet is promoted. Its product-low-only special case and
+the new source-support lemmas are not duplicated as additional exports.
+The mathematically correct overlapping-triple clock construction was withheld
+because the earlier arbitrary-WORD criterion already covers its entire family.
+All 126 previously frozen export Markdown files remain byte-identical.

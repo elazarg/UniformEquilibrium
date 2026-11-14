@@ -104,6 +104,19 @@ extraction excludes every head confined to a product-low triple, with an
 exact finite linear test for that condition. AllNever limits, the remaining
 triple and full entry supports, and pairs failing these tests remain open.
 
+A global class is now closed by
+[supportwise product lowness or charges](../exports/SUPPORTWISE_LOW_OR_CHARGE_UNIFORM_EQUILIBRIUM.md).
+Every support of size three or four may independently pass either its
+product-low test or its boxed-charge test; every mutually positive participant
+pair must have same-sign joining gaps, including equality. A generic-root
+index argument supplies the selected-return consumer directly, without an
+actual-head, clock or literal two-player-core hypothesis. The result also
+proves native absorbing debt infimum zero. Its exact full-core example has
+a positive gap over all stationary profiles and fails the audited earlier
+raw selections. Thus a counterexample with nonnegative own rewards must
+have an opposite-sign positive pair, or a larger support failing BOTH tests.
+This is a new raw UE class; the remaining disjunction is still open.
+
 The [incoming boundary controls](CODEX_ROOT__INCOMING_BOUNDARY_CONTROLS.md)
 show why the remaining cases need more than a bare carrier lemma. The
 positive-premium case can require arbitrarily long words across all incoming
