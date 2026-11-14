@@ -216,45 +216,53 @@ finite and infinite returns, and approximate returns with a fixed positive
 gain. The game has absorbing Nash, so the result blocks the stated method
 implication rather than a positive-gap source.
 
-## Both participant premiums are necessary in a two-owner source head
+## Source-head support and pair-entry restrictions
 
-SOURCE_ADVERSARY_14 independently reviewed the complete proof and final
-curation of “Two-owner source heads require both participant premiums”
-through EOF in
+SOURCE_ADVERSARY_14 independently reviewed “Two-owner source heads require
+both participant premiums” in
 [the source geometry note](../notes/CODEX_ROOT__ACTUAL_MINIMUM_AND_MIXED_ENDPOINT.md).
-Exact section SHA256:
-`3bdcce916e719299c90d42889fc482bf94e42860d8e8dc341c62640eb5a534c1`.
+Its unchanged 161-line proof has SHA256
+`9c29219a7c63faede333888fce09b2a01358f5aea88be3e0468f53e04fb4f3d9`;
+including the following separator gives the current 162-line section SHA256
+`f1d30e39d6cc4b4961662451da9f30f12bfe1a9753f451e07be42b13a8d7b79f`.
 Mathematical PASS with no unresolved objection.
 
-The positive source-cap bound is derived from the existing joining-generic
-least-Never theorem on its 0<alpha<1 branch. The proof prices every finite
-head action and obtains a bilinear regret floor whenever one participant
-reward fails its strict premium. It covers arbitrary calendars and ties,
-endpoint caps tending to zero, observer-only head pairs, and one-owner
-heads. No limiting actual-head realization is assumed. The other owner's
-zero debt is essential to the moment identities.
+The positive source-cap bound follows from the existing joining-generic
+least-Never theorem on its 0<alpha<1 branch. Pricing every finite head
+action gives a bilinear regret floor whenever either participant reward
+fails its strict premium. Arbitrary calendars, ties, vanishing endpoint
+caps, observer-only pairs and one-owner heads are included. No limiting
+actual head is assumed; the other owner's zero debt is essential.
 
-This differs from the earlier incoming pair-premium reduction: it constrains
-both directions of the actual head pair and permits multiple endpoint zeros.
-It is retained as an internal source-support restriction, not a new raw UE
-class or an additional self-contained export producer. The AllNever branch,
-larger heads and pairs not excluded by the following quiet-row test remain
-open.
+The section “An actual head supplies an incoming positive-payoff Nash root”
+is 118 lines, SHA256
+`c8f05d99e562928226f33644e5ca196f9d576eca4f7612847eee30d540c35f50`.
+SOURCE_ADVERSARY_14 and GLOBAL_DUALITY's independent review agent checked
+the exact curated proof and gave mathematical PASS. The first observer
+date has nonvanishing activity, while earlier pivot-only mass is O(r).
+Original Never keeps the extracted root proper, nonnegative debt makes
+its carrier tail full Nash, and ALL-END controls full caps when the earlier
+prefix is deleted. Every active owner has a strictly positive Quit offer.
+The tail need not be positive or globally minimal. The finite triple
+alternative includes zero weights, equality cases and sure-root limits.
 
-The final subsection, “A quiet-joining test excludes further surviving
-pairs”, has SHA256
-`85fa6908e07315a6371231430cf59988eba3e19d41637ef4b4a026369d12aa6b`.
-SOURCE_ADVERSARY_14 and ACTUAL_MINIMUM_GLOBAL independently reviewed the
-proof and curated bytes. Uniform finite-deadline bounds put both active
-payoffs strictly below their pair participant rewards at the least-Never
-limit, even when the head laws and calendars vary. The explicit proper
-pair root then lowers original Never whenever both quiet rows satisfy the
-bilinear rectangle test. Every owner's full cap is priced. No limiting
-actual head or endpoint-return assumption is used.
+The final section, “A complete raw guard-transfer test excludes pair
+entries”, is 99 lines, SHA256
+`7d28f3e117e4e5ca46e25e397ae5047e7b00dccf654d83b682a10eb43fd56b07`.
+SOURCE_ADVERSARY_14 independently checked its exact bytes; contributor
+ACTUAL_MINIMUM_GLOBAL also checked curation and source compatibility.
+Mathematical PASS. The extracted root supplies incoming quiet guards.
+The finite half-line test transfers them to a proper outgoing pair root,
+contradicting least original Never. It includes the earlier quiet rectangle
+as F<=0 and the coefficient cone as lambda=0. Both endpoint signs and all
+zero-coordinate cases in the arithmetic alternative were checked.
 
-The allowed positive triple joining increments are not covered by the
-immediate sure-pair test. The exact induced-owner interfaces also require
-a nonempty sure base and additional owner/outsider conditions; this proper
-pair root is not itself their input. Separation from all larger-support
-stationary and induced-Nash producers remains unproved, so this is an
-internal source-mode exclusion, not a new raw-table UE class or export.
+The pair test also applies when other owners act later in the head, but
+then BOTH-HIGH is an explicit hypothesis. Positive incoming pair rewards
+alone do not imply it. Completeness concerns the stated formal-cap transfer
+implication; failure does not produce an actual source. Some subregions
+already have stationary exits. Separation from all whole-game UE producers
+is unproved, so these are internal source restrictions, not an additional
+raw UE class or standalone export. AllNever limits, larger incoming
+supports and pair entries failing the tests remain open. No Lean check
+was run and no frozen export was changed.

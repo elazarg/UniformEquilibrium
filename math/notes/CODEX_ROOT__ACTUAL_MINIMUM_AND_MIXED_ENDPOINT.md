@@ -97,9 +97,12 @@ strictly below1, any selected source head with at most two active owners
 must have exactly two, and BOTH directed participant rewards of that pair
 must exceed both zero and their singleton rewards. The bilinear head-regret
 bound below proves this for arbitrary calendars, even when neither owner
-is the global pivot. A further explicit test on the two quiet players'
-joining incentives excludes some pairs even when both premiums hold.
-AllNever limits, larger heads and pairs failing that test remain open.
+is the global pivot. The two quiet-player tests are now subsumed by one
+complete arithmetic guard-transfer criterion, which also excludes qualifying
+pair entries followed by arbitrary later head activity. A separate first-root
+extraction excludes every head confined to a product-low triple, with an
+exact finite linear test for that condition. AllNever limits, the remaining
+triple and full entry supports, and pairs failing these tests remain open.
 
 The [incoming boundary controls](CODEX_ROOT__INCOMING_BOUNDARY_CONTROLS.md)
 show why the remaining cases need more than a bare carrier lemma. The
@@ -1742,67 +1745,220 @@ AllNever by the general source collar. This theorem leaves that branch open.
 It also leaves heads with at least three active owners and two-owner heads
 whose two directed participant premiums both satisfy(T).
 
-### A quiet-joining test excludes further surviving pairs
+## An actual head supplies an incoming positive-payoff Nash root
 
-Continue under the preceding source hypotheses, now with both inequalities
-in(T). Put rho_h=(J-A)/J>0 and rho_k=(K-D)/K>0. For each quiet owner l
-outside {h,k}, define
+Continue with the macroscopic source of the preceding section: native
+own-singletons and AllNever are zero, 0<alpha=min_E nu<1, joining-genericity
+supplies positive caps at every alpha-minimizer, and Y_r minimizes
+J_r=d_p+r nu on C_p. The canonical actual-head factorization has
 
-    ell_lh=Z_l({l,h})-Gamma_lh,
-    ell_lk=Z_l({l,k})-Gamma_lk,
-    T_l=Z_l({l,h,k})-Z_l({h,k}).
+    Y_r=Phi_(P_r)(Q_r), Y_r,Q_r ALL-END, Q_r in C_p,
+    N(P_r),N(Q_r)>0, B(Q_r)>=0,
+    some observer cap of Q_r is zero.
 
-If BOTH quiet rows satisfy
+Fix an owner set S containing every finite head draw. If such heads occur
+at arbitrarily small r, there are a full-Nash carrier point X, an
+all-positive alpha-minimizer Y, and a proper nonzero product root q supported
+in S with
 
-    ell_lh<=0, ell_lk<=0,
-    rho_h ell_lh+rho_k ell_lk+T_l<=0,                  (13)
+    Y=Phi_q(X), Q_i(q)=B_i(Y)>0 for every active i.       (19)
 
-then this head pair is also impossible at all sufficiently small r.
-The positive triple joining increment T_l is allowed when the two negative
-singleton joining increments compensate it. This is a source-head exclusion;
-no new raw-table UE class or separation from every existing producer is claimed.
+The notation Q_i(q) means the literal forced-Quit offer. The tail X need
+not be a minimum, and its quiet or active payoff coordinates need not all
+be positive. All four players' full caps remain part of the conclusion.
 
-Here is a proof that allows the actual head to vary arbitrarily with r.
-At a used finite k head deadline, its offer is
-D Pr(T_h<t)+K Pr(T_h=t)<=K f, and equals y. Thus f>=epsilon/K.
-Every finite h deadline is similarly bounded above by Jg. Averaging its
-deficit and using the original Never coordinates gives
+### Producing the first root without a limiting head law
 
-    y<=K f<=K[1-N_h(Y_r)],
-    f(x-Jg)<=delta_h<=r alpha,
-    x<=J[1-N_k(Y_r)]+K r alpha/epsilon.               (14)
+The preceding source argument gives d_p(Y_r)<=r alpha, nu(Y_r)->alpha,
+and a uniform lower bound epsilon>0 for all source caps x_i=B_i(Y_r).
+For the absolute finite head atoms, define
 
-No limiting actual head is extracted. Every cluster Y* of these global
-minima is a full-Nash least-Never point. Write w=U(Y*)=B(Y*)=e(Y*).
-Each original Never coordinate is at least alpha, so (14) gives
+    delta_i=sum_t P_(r,i)(t)[x_i-V_i(P_r;t)]>=0.
 
-    0<w_k<=K(1-alpha)<K, 0<w_h<=J(1-alpha)<J.          (15)
+ALL-END gives d_i(Y_r)=delta_i+nu(P_r)d_i(Q_r). Thus observer head regrets
+vanish and delta_p<=r alpha. Every finite action is priced by its full
+original deadline value, including prior absorption.
 
-Prefix Y* by one independent product root with only h,k active, of odds
+A pivot-only head of finite mass f has delta_p=f x_p. A zero endpoint
+observer l would have x_l=Gamma_lp f, hence f>=epsilon/M. This contradicts
+delta_p<=r alpha for small r. An empty head also cannot turn a zero endpoint
+observer cap positive. There is therefore a first finite date T at which
+some observer k has a positive head atom.
 
-    z=q_h/(1-q_h)=w_k/(K-D),
-    v=q_k/(1-q_k)=w_h/(J-A).                          (16)
+Before T only the pivot acts. Its total earlier absolute mass f_0 satisfies
+f_0<=r alpha/epsilon, since every such finite deadline pays zero. At T,
+let q_r be the actual conditional root. The used k deadline gives
 
-Both participants are exactly indifferent: J q_k=A q_k+(1-q_k)w_h,
-and likewise for k. For a quiet owner the full Quit-minus-Continue offer is
+    x_k=Gamma_kp f_0+(1-f_0)Q_k(q_r)>=epsilon.
 
-    (1-q_h)(1-q_k)[ell_lh z+ell_lk v+T_l zv-w_l].     (17)
+For small r, Q_k(q_r)>=epsilon/2. Its own singleton is zero, so
 
-If both brackets were nonpositive, the root would be Nash against w.
-The full-cap prefix map would then produce another full-Nash carrier point
-with original Never (1-q_h)(1-q_k)alpha<alpha, a contradiction. Hence every
-surviving pair must have at least one quiet row with
+    sum_j q_(r,j)>=epsilon/(2M).                       (20)
 
-    ell_lh z+ell_lk v+T_l zv>w_l>0.                    (18)
+Let X_r be the remaining conditional actual head after T grafted to Q_r.
+Positive survival and nonnegative root debts imply X_r in C_p and
 
-But (15) places (z,v) inside [0,1/rho_k] x [0,1/rho_h]. The bilinear part
-of(18) has four corner values
+    d_p(X_r)<=r alpha/nu(Y_r),
+    1-q_(r,i)>=N_i(Y_r)>=nu(Y_r).
 
-    0, ell_lh/rho_k, ell_lk/rho_h,
-    [rho_h ell_lh+rho_k ell_lk+T_l]/(rho_h rho_k).
+The retained head map puts X_r in the compact carrier. ALL-END passes
+through this positive-survival cut: B_i(Y_r)=e_i(Y_r), B_i(X_r)>=e_i(X_r),
+and the through-cap term force B_i(X_r)=e_i(X_r). Extract limits q and X.
+The root remains proper, (20) makes it nonzero, and X has zero full debt.
 
-Condition(13) makes all four nonpositive, hence the entire bilinear function
-nonpositive on the rectangle. This contradicts(18). The comparison uses a
-legal carrier prefix, with actual approximants if needed; it assumes neither
-realization of Y* nor a continuation after an infinite calendar. The original
-source Never coordinates supply the strict bounds in(15).
+Deleting the prefix before T changes U,e,N by O(M f_0). It changes caps
+by the same order: deleted finite queries have size O(M f_0), while the
+positive source cap bound prevents them from binding. Equivalently END
+identifies the caps with the continuous Never offers on both sides of the
+cut. Thus Phi_(q_r)(X_r) tends to the same least-Never limit Y as Y_r.
+The exact root debt identity makes q Nash at X. Every active owner then
+has Q_i(q)=B_i(Y)>0. This proves(19). A singleton root cannot have this
+property, so its support has at least two owners. No whole head converges
+and no clock is executed after an infinite calendar.
+
+### A finite classification of forbidden three-owner head supports
+
+Call a restricted owner set S product-low if every nonzero independent
+product root supported in S has an active owner whose forced-Quit offer
+is nonpositive. This is the existing native product-low predicate. By(19),
+any such S is excluded as a head support at all sufficiently small r.
+The full four-player game need not be product-low.
+
+For |S|=3 set J_ij=Z_i({i,j}) and T_i=Z_i(S). A pair support {i,j} fails
+product-lowness exactly when J_ij>0 and J_ji>0. These require participant
+positivity, not the stronger HIGH conditions for an entire two-owner head.
+For full triple support, positive odds x_i and reciprocal odds y_i=1/x_i
+make all three Quit offers positive exactly when
+
+    y_i>0, J_ij y_k+J_ik y_j+T_i>0, {i,j,k}=S.         (21)
+
+This is a strict linear feasibility problem. Its exact alternative is
+
+    w_i>=0, sum_i w_i=1,
+    w_i J_ij+w_j J_ji<=0 for every pair {i,j},
+    sum_i w_i T_i<=0.                                (22)
+
+Weights may vanish. For completeness, write(21) as Ky+T>0, where K_ii=0
+and K_ij=J_ik. Strict feasibility with y>=0 can be perturbed to y>0.
+If T+K R_+^3 misses the open positive orthant, finite-dimensional separation
+gives nonzero w>=0 with wK<=0 and wT<=0. The k column of wK is exactly
+the weighted ij pair. Normalization gives(22); conversely its weighted sum
+precludes(21). Sure coordinates do not add a missing case: any root with
+strictly positive active offers can be perturbed inward while retaining
+those offers and its support.
+
+Consequently a triple S is product-low if and only if no pair has both
+participant rewards positive AND(22) is feasible. This completely tests
+which triples are excluded by this particular support obstruction. Failure
+only permits the support; it produces no source or counterexample.
+
+The existing predicates inspected are HasProductLowQuittingPremium in
+UniformEquilibrium/Quitting/Classification/ProductLowQuittingPremium.lean
+and IsSupportwiseQuittingPremiumWeightCertificate in
+UniformEquilibrium/Quitting/Classification/SupportwiseQuittingPremiumBalanceAt.lean.
+The weighted root identity is
+weighted_quittingRootQuitPremium_sum_nonpos_of_certificate in
+UniformEquilibrium/Quitting/Classification/SupportwiseQuittingPremium.lean.
+The new application is the actual-head producer(19). Global product-low
+UE and the weighted identity are reused, not claimed anew. Four-owner
+heads and triples failing the finite test remain open.
+
+## A complete raw guard-transfer test excludes pair entries
+
+Use any incoming root(19) whose support is exactly {h,k}. Impose explicitly
+
+    A=Gamma_hk, D=Gamma_kh, J=Z_h({h,k}), K=Z_k({h,k}),
+    J>max(0,A), K>max(0,D), rho_h=(J-A)/J, rho_k=(K-D)/K. (23)
+
+An incoming root alone supplies J,K>0; it does NOT supply the HIGH
+inequalities against A,D. Those follow separately for an entire two-owner
+head, but are explicit raw assumptions here when other owners act later.
+
+For each quiet l outside {h,k}, define
+
+    G_h=Gamma_lh, G_k=Gamma_lk, H_l=Z_l({h,k}),
+    L_h=Z_l({l,h})-G_h, L_k=Z_l({l,k})-G_k,
+    T_l=Z_l({l,h,k})-H_l,
+    F=(L_h/rho_k, L_k/rho_h,
+                  L_h/rho_k+L_k/rho_h+T_l/(rho_h rho_k)),
+    C=(G_h+L_h(1-1/rho_k), G_k+L_k(1-1/rho_h),
+             H_l-L_h/rho_k-L_k/rho_h+T_l(1-1/(rho_h rho_k))).
+
+The complete raw test for this quiet row is
+
+    F<=0 coordinatewise, OR
+    some lambda>=0 has C-lambda F>=0 coordinatewise.   (24)
+
+It is a finite arithmetic test. When F has a positive coordinate, require
+C_i>=0 at every zero F_i and compute
+
+    lower=max(0,max_(F_i<0) C_i/F_i),
+    upper=min_(F_i>0) C_i/F_i.
+
+The negative-index maximum is omitted when empty. The row passes exactly
+when lower<=upper, with lambda=lower. If BOTH quiet rows pass, the incoming
+pair is impossible. This includes qualifying first-observer pair entries
+even when three or four owners act later in the head.
+
+### One incoming comparison and one outgoing root
+
+Write w=B(Y)=U(Y)=e(Y), x=w_h and y=w_k. Incoming active indifference gives
+x=J q_k and y=K q_h, so 0<x<J and 0<y<K. Its quiet Quit offer is
+
+    I_l=[Z_l({l,h})y(J-x)+Z_l({l,k})x(K-y)
+                                  +Z_l({l,h,k})xy]/(JK).
+
+Full Nash gives w_l>=I_l and the least-Never source gives w_l>0. Prefix Y
+by a NEW pair root with odds y/(K-D) for h and x/(J-A) for k. Both owners
+are exactly indifferent. The quiet owner prefers Continue precisely when
+w_l>=O_l, where
+
+    O_l=L_h y/(K-D)+L_k x/(J-A)+T_l xy/((J-A)(K-D)).
+
+Set u=x/J, v=y/K, X=(J-x)/x>0 and Z=(K-y)/y>0. Direct expansion gives
+
+    O_l/(uv)=F dot(X,Z,1),
+    (I_l-O_l)/(uv)=C dot(X,Z,1).                       (25)
+
+If F<=0, then O_l<=0<w_l. Otherwise(24) gives I_l-O_l>=lambda O_l:
+when O_l>0, I_l>=O_l; when O_l<=0, positivity of w_l suffices. Thus both
+quiet guards hold. The new root is Nash at Y and lowers original Never
+strictly below alpha, a contradiction. The actual finite-root maps preserve
+the carrier and its full caps; no realization of Y is assumed.
+
+### What the finite test classifies completely
+
+For a fixed quiet row, (24) is necessary and sufficient for the formal
+implication: for every 0<x<J,0<y<K and w>0, w>=I_l implies w>=O_l.
+Failure is equivalent by(25) to z>0 with F dot z>0 and C dot z<0;
+scale its third coordinate to1 and choose
+w=[O_l+max(0,I_l)]/2. This w is positive and lies between I_l and O_l.
+
+If F<=0 such a vector cannot exist. Otherwise some positive-F coordinate
+exists. A negative C on a positive-F coordinate gives a failing axis;
+a negative C at zero F can be mixed with a small positive-F axis. After
+these cases are excluded, all positive-F ratios C_i/F_i are nonnegative.
+If lower>upper, choose F_i<0<F_j with C_i/F_i>C_j/F_j. The vector
+F_j e_i-F_i e_j has F-product zero and C-product negative. Perturb toward
+the positive-F axis, then toward all-ones, to obtain both strict signs
+with every coordinate positive. This exhausts failure of the interval
+test. The converse follows from C-lambda F>=0. Equality boundaries are
+included. A failing arithmetic implication does not realize a source.
+
+The former quiet rectangle is exactly F<=0; the coefficient cone C>=0
+is lambda=0. The unified test strictly extends both: with A=D=-1,J=K=1,
+a quiet row (G_h,G_k,H_l,L_h,L_k,T_l)=(1/2,-1,-7/2,-2,4,8) has
+F=(-1,2,3) and C=F/2. Both former tests fail but lambda=1/2 passes.
+This is arithmetic separation, not a positive-gap example.
+
+For C>=0 in both quiet rows, A>0 already gives an absorbing stationary
+Nash profile with only k quitting at hazard A/J; its quiet guards are
+exactly C's second coordinates. A=0 instead gives the existing vanishing
+solo-hazard construction. The D>=0 cases are symmetric. That overlap
+argument does not apply automatically to lambda>0. No separation from
+all existing whole-game UE producers is claimed here.
+
+The surviving entry cases are positive-participant pairs not satisfying
+HIGH, HIGH pairs failing at least one transfer test, and triple or full
+entry supports. Entire two-owner heads still require HIGH by the preceding
+head-regret theorem. AllNever limits remain a separate open branch.
