@@ -845,3 +845,94 @@ observer payoff vector, not a positive-gap source or a minimum on the full
 observer-feasible carrier. Changes to the head and unpinned observer payoffs
 remain available. A successful global argument must exploit that freedom or
 the positive-gap premise; componentwise endpoint domination alone is false.
+
+## IV. A global anchor hull does not preserve state-dependent guards
+
+This is an exact obstruction to convexifying reset fixed points while
+forgetting the state at which each control is feasible. It does not claim
+that every guarded control method fails. Use roles p=0,k=1,i=2,j=3 and
+
+    Gamma=[0,5,-1,-1; -2,0,1,1; 2,-1,0,-1; 2,-1,-1,0].
+
+All nonsingleton rewards are zero except
+
+    Z_2(02)=Z_3(03)=8, Z_2(23)=Z_3(23)=-4,
+    Z_1(03)=38/5, Z_1(02)=-5,
+    Z_0(23)=20, Z_1(23)=Z_1(123)=1521/10,
+    Z_0(01)=-512, Z_1(01)=2, Z_2(12)=Z_3(13)=-8.
+
+The two switch types in the
+[source geometry note](CODEX_ROOT__ACTUAL_MINIMUM_AND_MIXED_ENDPOINT.md)
+have d_i=d_j=s_i=s_j=0, H_+=60 and H_-=-3. Their exact cap/value anchors
+and common contraction factor are
+
+    beta_h(t)=2/5+2H_h t/[15(5+6t)],
+    phi(t)=-4/5-8t/[15(5+6t)],
+    a(t)=3(1-t)/[(1+3t)(3+8t)], 0<a(t)<1,
+    b'=a(t)b+(1-a(t))beta_h(t),
+    V'=a(t)V+(1-a(t))phi(t).                         (6)
+
+Every complete control must satisfy the diffuse-entry guard
+(1-t)b-2t>=0, hence t<=b/(b+2). For any state 0<b<=1 this gives t<=1/3.
+The positive anchor is increasing in t, so every feasible step there has
+
+    beta_+(t)<=82/105<1, beta_-(t)<2/5<1.            (7)
+
+The outer k Quit offer is zero, so a feasible output has b'>=0. After any
+first nontrivial step from b=1, (6) gives b'<1. Every subsequent feasible
+step stays below max(b',82/105)<1; state0 permits no further positive entry.
+Thus no finite nontrivial feasible word returns1. The same uniform bound
+after its first step excludes every convergent infinite composition. Adding
+diffuse corrections does not help this family: those move b toward2/5 and
+preserve the same strict upper bound.
+
+This also excludes varying-word limits with a fixed positive gain. If A is
+the word's total contraction, all its feasible anchors are at most82/105,
+whereas all value anchors are at most-4/5. For the input V_0 below,
+
+    1-b_out >= (1-A)(1-82/105),
+    V_out-V_0 <= (1-A)(-4/5-V_0).
+
+Thus b_out approaching1 forces the possible value gain to tend to zero,
+even when the word and its length vary. Diffuse corrections satisfy the
+same anchor bounds.
+
+Yet at the physically valid parameter t=3/4 the two anchor points are
+
+    (98/95,-16/19), (7/19,-16/19).
+
+Their segment contains (1,-16/19). The input b=1 can be an ACTUAL finite
+ALL-END observer-optimal profile with adjusted value far below -16/19.
+Start with one root of odds (1/10,0,1/5,1/5) over AllNever. Direct full-cap
+enumeration gives
+
+    U=(25/99,4,0,0), B=e=(5/18,4,0,0),
+    N=(10/11,1,5/6,5/6).
+
+Both zero observers' Quit and Continue offers vanish. The k Quit offer is
+1571/396<4; the pivot Quit offer is zero. Now prefix the literal root of
+hazards (1/2,2/3,0,0). The zero observers' Continue offers are zero and
+their Quit offers are -4/3. Both k offers equal1. The pivot Continue offer
+is185/54 and its Quit offer is -1024/3. Consequently
+
+    U=(-100361/594,1,0,0), B=e=(185/54,1,0,0),
+    N=(5/11,1/3,5/6,5/6).
+
+Its V=U_p-r nu is below -16/19 for every r>0. Therefore the global anchor
+hull admits a strict cap-return/value improvement that no admissible word
+from this actual input can realize.
+
+The displayed hull controls are themselves feasible at another actual
+state, not fictitious formulas. A single root of odds (1,0,2,2) over AllNever
+has zero observer caps i,j, k cap171/5 and pivot cap76/9, with positive
+original Never and ALL-END. More generally the k Continue-minus-Quit
+numerator at odds (z,0,2z,2z) is (26/5)z^2>0. At b=171/5, both t=3/4
+switches pass all k guards; the stricter type only requires b>=12.
+Feasibility somewhere in the state space therefore cannot replace
+feasibility along the proposed control word.
+
+The literal game is solved by absorbing Nash coalition {1,2,3}: k's
+payoff1521/10 equals its departure payoff, and the other players have zero
+payoffs and zero relevant alternatives. The absorbing gap is zero. This
+blocks the stated global convex-hull implication, not a positive-gap source
+or the Fin4 conjecture.

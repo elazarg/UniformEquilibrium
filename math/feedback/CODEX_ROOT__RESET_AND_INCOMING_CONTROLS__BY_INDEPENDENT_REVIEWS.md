@@ -93,7 +93,9 @@ positive-gap global source or the Fin4 conjecture.
 
 ACTUAL_MINIMUM_GLOBAL independently reviewed the final curated subsections
 below, having authored neither result. Mathematical PASS with no unresolved
-objection. The hashes cover each named heading through the end of its file.
+objection. The stationary hash covers its named heading through EOF. The
+conservation hash covers its named heading through the end of that subsection,
+excluding the separator newline before the subsequently added Part IV.
 
 - “A constant-sum completion blocks global fixed-payoff replacements” in
   [incoming boundary controls](../notes/CODEX_ROOT__INCOMING_BOUNDARY_CONTROLS.md):
@@ -122,8 +124,8 @@ addition is counted as a new UE class or additional export.
 
 ## Balanced two-type return and exact composition classification
 
-Reviewed section: “Two reset types can return a cap that neither returns
-alone” through the end of
+Original reviewed section: “Two reset types can return a cap that neither
+returns alone” through the then-end of
 [the source geometry note](../notes/CODEX_ROOT__ACTUAL_MINIMUM_AND_MIXED_ENDPOINT.md).
 Exact section SHA256:
 `2345ea753e866ec50e4f949ccb09abc2ff40a5800e42c03206b1ace989c2371c`.
@@ -150,7 +152,7 @@ it can still compensate for a nonpositive adjusted-value gain; the note
 correctly restricts the no-descent conclusion to zero pivot cap or an
 obstacle hiding every cap decrease.
 
-The produced carrier source is not asserted to be an actual-profile tuple.
+The produced carrier point is not asserted to be an actual-profile tuple.
 Its preparation and return quadratics, rational isolating intervals,
 ALL-END preparation, every quiet guard and the fixed payoff gain greater
 than1/4000 were independently checked. The literal game has absorbing Nash
@@ -159,3 +161,81 @@ under the explicit balanced-cap and value hypotheses. Actual global minima
 have V=B_p-mu>=0, so this negative-value criterion does not close that
 alternative. No claim of completeness for arbitrary other controllers is
 made.
+
+SOURCE_ADVERSARY_14 independently checked the corrected current scope at
+section SHA256 `eacce71d00ac2b0678c40a902096b6c9cd91b6c205460e8a75d6fe00597b2584`.
+Its scope runs from the same heading to immediately before “Small penalties
+rule out the complete outward-switch ceiling selector”. The strict-value
+case is already covered by a diffuse prefix alone. More decisively, the
+general inherited source bound removes both V<-4/5 and V=-4/5 at sufficiently
+small penalties. The composition classification is valid internal geometry;
+neither negative-value region is new surviving-source coverage.
+
+## The inherited source bound and the complete outward-selector limitation
+
+Reviewed section: “Small penalties rule out the complete outward-switch
+ceiling selector” through immediately before “Two-owner source heads require
+both participant premiums” in
+[the source geometry note](../notes/CODEX_ROOT__ACTUAL_MINIMUM_AND_MIXED_ENDPOINT.md).
+Exact section SHA256:
+`7efd0e666e5f2dd91beac00186200958f7d0f53b80d16e2d255f7ac9773ae5c7`.
+
+SOURCE_ADVERSARY_14 supplied independent mathematical review of the full
+proof and the final curated bytes; GLOBAL_DUALITY, the proof's author,
+checked curation as well. No unresolved mathematical objection remains.
+The arbitrary-head identity gives J_r(Q)<=C r without assuming endpoint
+minimality. Positive-gap compactness then forces every passing correction
+to tend to the identity: a nontrivial limiting controller would repeat the
+same full-Nash annotations while original Never tends to zero. Uniform
+expansion forces g_p=0; a stationary comparison excludes g_k>=0, while
+g_k<0 gives the wrong outward sign. Vanishing controller parameters are
+included. Coupled cap/payoff comparisons and arbitrary head changes are not.
+
+The proposed outward-excursion export was withdrawn before commit. Its
+mathematical formulas and guard-gap example are correct, but the earlier
+gate approval missed the small-penalty overlap. Both independent gate
+reviewers withdrew approval. The complete selector adds no remaining-source
+coverage. Only its concise internal limitation, exact method-control
+fixture and extension of the existing checker are retained. No earlier
+frozen export was changed.
+
+## State-dependent guards invalidate a global anchor-hull test
+
+GLOBAL_DUALITY independently reviewed Part IV through EOF of
+[incoming boundary controls](../notes/CODEX_ROOT__INCOMING_BOUNDARY_CONTROLS.md),
+exact SHA256 `62800e56a4475b42001c9f7f3881c2b1b08afa77d15a1b7887f4c2f331986695`.
+Mathematical PASS, including the quantitative varying-word limit bound.
+SOURCE_ADVERSARY_14 also checked the curated construction, but originated
+part of its barrier argument and is not counted as a nonauthor reviewer.
+
+The actual finite-law tuples, full caps, original Never, both high-state
+controls and hull weights were independently recomputed. A global convex
+hull includes an improving return, while every control feasible along a
+word from the displayed input has cap anchor at most82/105. This excludes
+finite and infinite returns, and approximate returns with a fixed positive
+gain. The game has absorbing Nash, so the result blocks the stated method
+implication rather than a positive-gap source.
+
+## Both participant premiums are necessary in a two-owner source head
+
+SOURCE_ADVERSARY_14 independently reviewed the complete proof and final
+curation of “Two-owner source heads require both participant premiums”
+through EOF in
+[the source geometry note](../notes/CODEX_ROOT__ACTUAL_MINIMUM_AND_MIXED_ENDPOINT.md).
+Exact section SHA256:
+`9c29219a7c63faede333888fce09b2a01358f5aea88be3e0468f53e04fb4f3d9`.
+Mathematical PASS with no unresolved objection.
+
+The positive source-cap bound is derived from the existing joining-generic
+least-Never theorem on its 0<alpha<1 branch. The proof prices every finite
+head action and obtains a bilinear regret floor whenever one participant
+reward fails its strict premium. It covers arbitrary calendars and ties,
+endpoint caps tending to zero, observer-only head pairs, and one-owner
+heads. No limiting actual-head realization is assumed. The other owner's
+zero debt is essential to the moment identities.
+
+This differs from the earlier incoming pair-premium reduction: it constrains
+both directions of the actual head pair and permits multiple endpoint zeros.
+It is retained as an internal source-support restriction, not a new raw UE
+class or an additional self-contained export producer. The AllNever branch,
+larger heads and pairs with both premiums remain open.

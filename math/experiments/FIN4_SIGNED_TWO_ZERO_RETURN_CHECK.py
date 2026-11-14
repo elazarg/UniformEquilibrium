@@ -7,6 +7,9 @@ search over arbitrary tables or controllers. The literal game has absorbing
 Nash (checked below), so it is not a positive-gap or new UE-class witness.
 Proofs: SIGNED_TWO_ZERO_CONTINUATION_REDUCTION.md and
 NONPOSITIVE_PAIR_BOUNDARY_RESET_REDUCTION.md in the export queue.
+The final guard-gap example is an internal method control described in
+math/notes/CODEX_ROOT__ACTUAL_MINIMUM_AND_MIXED_ENDPOINT.md. It is excluded
+from small-penalty selected sources by the general bound there.
 """
 import sympy as s
 R=s.Rational
@@ -172,6 +175,65 @@ def check_deep_nonzero_cross_fixture():
     pure = root([F(0), F(1), F(1), F(1)], all_never)
     assert pure[0] == pure[1] == [0, 0, 0, 0] and prod(pure[3]) == 0
     print('PASS deep/nonzero-cross source, full-cap reset, strict gain, Never, and absorbing Nash.')
+
+    # Reuse the full coalition and diffuse maps for the disconnected-guard fixture.
+    reward = {mask: [F(0)] * 4 for mask in range(1, 16)}
+    for j in range(4):
+        reward[1 << j] = [F(gamma[i][j]) for i in range(4)]
+    b = F(40951, 790951)
+    entries = [(5, 2, 8), (9, 3, 8), (12, 2, -8), (12, 3, -10),
+               (3, 0, -512), (3, 1, 1), (6, 2, -8), (10, 3, -8),
+               (9, 1, -1000), (10, 1, (2247 * b - 1) / 8),
+               (11, 1, -1000 - 140625 * b)]
+    for mask, player, value in entries:
+        reward[mask][player] = F(value)
+    source = root([f, 2 * f / (1 + f), F(0), F(0)], q0)
+    u, cap, end, never = source
+    assert cap == end == [F(4657205, 6655216), b, 0, 0]
+    assert u[0] == F(-10886684947367, 5263949750416)
+
+    def excursion(t):
+        entry = diffuse([1, 0, 0, 0], 1 - t, source)
+        z, y, v = t / 3, 8 * t / 3, 8 * t / (3 + t)
+        inner = root([z / (1 + z), F(0), F(0), y / (1 + y)], entry)
+        out = root([F(0), F(0), v / (1 + v), F(0)], inner)
+        return entry, inner, out
+
+    t0 = F(4131441, 1569983902)
+    assert F(1, 500) < t0 < F(1, 250)
+    _, bad_inner, bad_out = excursion(t0)
+    assert bad_inner[1][1] > bad_inner[0][1]
+    assert bad_out[0][1] == b and bad_out[1][1] > b
+    assert 6 - 15 * b > 0 and 16 - 18 * b > 0  # Other orientation never returns.
+
+    t = F(1, 200)
+    entry, inner, out = excursion(t)
+    assert entry[1][1] == F(6567347, 158190200) > 0
+    assert all(inner[0][i] == inner[1][i] == inner[2][i] for i in (1, 2, 3))
+    assert all(out[0][i] == out[1][i] == out[2][i] for i in (1, 2, 3))
+    x = out[1][1]
+    assert x == F(1523528233, 36608376084) and 0 < x < b < F(2, 5)
+    assert out[1][2:] == [0, 0] and out[1][0] == out[2][0] < cap[0]
+    assert out[1][0] == F(67292453077, 102676672448) > 0
+    rho = (b - F(2, 5)) / (x - F(2, 5))
+    assert rho == F(63739871748, 65599111003) and 0 < rho < 1
+    assert F(2, 5) + rho * (x - F(2, 5)) == b
+    gain = -F(4, 5) + rho * (out[0][0] + F(4, 5)) - u[0]
+    assert gain == F(16611716006668623, 218288126566470824) > F(3, 40)
+    assert rho * prod(out[3]) / prod(never) == F(61661756925, 65599111003) < 1
+    # For the corrective clock the full pivot cap is max(0,-1+(out_cap+1)*rho^(4/5));
+    # 0<rho<1 and out_cap>=0 prove it is <=out_cap<old_cap exactly.
+    fp = b / (b + 3)
+    pin = [fp, 2 * fp / (1 + fp), F(0), F(0)]
+    old_head = root(pin, source)
+    direct_clock = diffuse([1, 0, 2, 2], F(1, 2), source)
+    changed_head = root(pin, direct_clock)
+    assert all(old_head[0][i] == old_head[1][i] for i in (1, 2, 3))
+    assert changed_head[1][1] - changed_head[0][1] == (
+        (1 - fp) * pin[1] * (direct_clock[1][1] - b)) > 0
+    pure = root([F(0), F(1), F(1), F(1)], all_never)
+    assert pure[0] == pure[1] == [0, 0, 0, 0]
+    print('PASS guard gap, outward correction, >3/40 gain, active-head pin, and Nash boundary.')
 
 
 check_deep_nonzero_cross_fixture()

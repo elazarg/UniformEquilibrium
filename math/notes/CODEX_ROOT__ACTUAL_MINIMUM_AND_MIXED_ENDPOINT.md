@@ -75,11 +75,30 @@ If that observer never acts in the actual head, a lower-bound inequality
 replaces exact return. The head's pivot obstacle is retained in every case.
 This removes the contact-production gap on the stated raw region; it does
 not prove that the return/improvement tests succeed at every selected source.
-The final section below supplies a further composite return on a balanced
-cap face: two distinct reset types return the pinned cap even though neither
-type admits any nonzero return by itself. An exact affine identity classifies
-the value gain of every finite returning composition at the critical value.
-The balance and value inequalities remain explicit source restrictions.
+The source bound below substantially limits the relevance of these tests:
+for every selected actual head, the inherited endpoint satisfies
+J_r(Q)=B_p(Q)-U_p(Q)+r nu(Q)<=C r, with C fixed by the reward bound and
+positive absorbing gap. Thus every fixed negative adjusted-value region,
+including the balanced value -4/5, is already absent at small penalties.
+The two-type identity below still classifies returning compositions, but
+its negative-value examples do not narrow the surviving source.
+
+An outward excursion followed by a diffuse cap correction can pass where
+the designated single-reset returns fail. Nevertheless, the complete
+fixed-table selector requiring both pivot-cap weakfall and adjusted-value
+gain is impossible at all sufficiently small penalties. The proof below
+covers parameters tending to zero as well as fixed excursions. This retires
+that selector as a route to the remaining source; it does not exclude
+coupled objective improvements or changes to the actual head.
+
+A separate global restriction now survives that audit. On the generic
+branch where the least original Never product among full-Nash points is
+strictly below1, any selected source head with at most two active owners
+must have exactly two, and BOTH directed participant rewards of that pair
+must exceed both zero and their singleton rewards. The bilinear head-regret
+bound below proves this for arbitrary calendars, even when neither owner
+is the global pivot. AllNever limits, larger heads and pairs with both
+premiums remain open.
 
 The [incoming boundary controls](CODEX_ROOT__INCOMING_BOUNDARY_CONTROLS.md)
 show why the remaining cases need more than a bare carrier lemma. The
@@ -1170,6 +1189,15 @@ unrestricted Fin4 closure or new reward-table UE theorem is claimed.
 ## Two reset types can return a cap that neither returns alone
 
 This is ordinary mathematics on the inherited two-zero-observer face.
+Its strict-value exclusion overlaps direct diffuse correction. At
+b=2/5, rates (1,0,2,2) preserve all observer caps and give
+V(T)=-4/5+exp(-5T)(V+4/5), while the pivot cap becomes
+max(0,-1+(b_p+1)exp(-4T))<=b_p. Thus V<-4/5 is already excluded through
+every compatible head by that block alone. At V=-4/5, the diffuse adjusted
+value stays fixed, while the two-type slope classification can give gain
+even when a pivot-cap drop is hidden. The general source bound below already
+excludes BOTH value regions at sufficiently small penalties. This is useful
+controller geometry, not additional surviving-source coverage.
 The [boundary reset reduction](../exports/NONPOSITIVE_PAIR_BOUNDARY_RESET_REDUCTION.md)
 supplies the compact carrier, literal roots, diffuse entry and actual-head
 consumer. For composition, require only observer U_l=B_l=e_l, zero i/j
@@ -1328,8 +1356,387 @@ Neither individual switch admits any nonzero return to the balanced cap.
 The literal game has absorbing Nash coalition {1,2,3}: every payoff and
 every joining/departure alternative there is zero. Its absorbing gap is
 zero. The example proves nonempty produced carrier geometry and the need
-for distinct reset types; it is not a positive-gap witness or new UE class.
-The balanced-cap and value conditions remain genuine restrictions on the
-selected source. General returns away from this balance remain open. At an actual global
-minimum V=B_p-mu>=0, so this negative-V criterion concerns inherited
-endpoints and does not directly close the actual-minimum alternative.
+for distinct types within these single-switch return tests; its strict-value
+improvement is also supplied by the direct diffuse block described above.
+It is not a positive-gap witness or new UE class.
+At an actual global minimum V=B_p-mu>=0. At an inherited endpoint the bound
+below gives V>=-C r, which also rules out this entire fixed negative-value
+region for small r. The example is not a selected-source witness.
+
+## Small penalties rule out the complete outward-switch ceiling selector
+
+This is a limitation of the displayed controller family. It rules out its
+use on selected sources for every sufficiently small penalty in a fixed
+positive-gap game. It does not prove a new UE class or rule out a comparison
+in which the pivot cap and adjusted payoff improve only in combination.
+
+### The inherited source bound
+
+Use the native four-player model, reward bound M>=1, absorbing SUM-debt gap
+Delta>0, and augmented carrier H of actual independent complete laws with
+full response caps and ORIGINAL Never. On H one has
+
+    Delta<=sum_l d_l+14M nu^(1/4).                         (1)
+
+Let Y=Phi_P(Q) be a selected ALL-END global minimum of J_r=d_p+r nu on the
+observer-optimal carrier, with 0<r<Delta, value mu<=r, and actual head P.
+Write q=B_p(Q)>=0, u=U_p(Q), V=u-r nu(Q), s=product N_l(P), and
+h_p=product_(l!=p)N_l(P). ALL-END and the retained head map give
+
+    mu=delta_P+s(q-V),
+    delta_P=e_p(P)-U_p(P)+(h_p-s)q>=0.                    (2)
+
+For the sign, every finite head pivot deadline is at most
+B_p(Y)=e_p(P)+h_p q. Averaging those deadlines and the pivot's head-Never
+draw gives U_p(P)<=e_p(P)+(h_p-s)q. This proves (2), including infinite
+actual heads; no endpoint minimum is assumed.
+
+The source bound nu(Y)>=((Delta-r)/(14M))^4 and nu(Y)=s nu(Q)<=s imply
+
+    0<=q-V<=r/((Delta-r)/(14M))^4.                         (3)
+
+In particular, for r<=Delta/2 this is q-V<=C r with the fixed constant
+C=(28M/Delta)^4. Fixed strictly negative V regions are already absent at
+sufficiently small penalties. The guard-gap fixture below, whose u is fixed below -2, lies in such a
+region.
+
+### The complete displayed switch selector
+
+Fix ONE finite raw reward table, Delta>0, and a constant C<infinity. Use
+distinct roles p,i,j,k and raw data
+
+    Gamma_ip=A>0, Gamma_jp=B>0,
+    Gamma_ij=-a<0, Gamma_ji=-b_m<0,
+    M_i=A m_i, M_j=B m_j, m_i,m_j>1,
+    Z_i(ij)=-c_i<=0, Z_j(ij)=-c_j<=0.
+
+All other rewards are arbitrary finite numbers. Set
+
+    h=(1,B/b_m,A/a,0) in order p,i,j,k, W=sum h>1,
+    g_p=(Gamma h)_p, g_k=(Gamma h)_k,
+    b_*=g_k/W, V_*=g_p/W.
+
+A type-i switch has z>0, m=m_j,
+
+    t=(m-1)z, y=A m z/(a-Z_i(pj)z),
+    v=M_j z/[b_m(1+z)],
+    alpha=(1-t)/[(1+z)(1+y)(1+v)].                        (4)
+
+It is the diffuse solo-p entry of mass t, the literal p/j root of odds z,y,
+and the literal solo-i root of odds v. Type j is symmetric. Impose all
+physical and observer full-cap guards from the literal root maps in the
+[boundary reset reduction](../exports/NONPOSITIVE_PAIR_BOUNDARY_RESET_REDUCTION.md). Thus each
+switch sends Q to an observer-optimal X with i/j cap zero and k cap x>0.
+
+Suppose Q is ALL-END, observer-optimal, with zero i/j caps, k cap b>0,
+pivot cap q>=0, all original Never positive, and
+
+    J_r(Q)=q-U_p(Q)+r nu(Q)<=C r.                         (5)
+
+The componentwise correction tests require
+
+    (b-b_*)(x-b)>0,
+    rho=(b-b_*)/(x-b_*) in (0,1),
+    B_p(X)<=q, g_p<=(W-1)q,
+    V(R)>V(Q),                                          (6)
+
+where R is the independent diffuse clock of rates h and duration
+-log(rho)/W prefixed to X, and V(Z)=U_p(Z)-r nu(Z).
+This returns all observer payoffs/caps exactly, has B_p(R)<=q, and satisfies
+
+    V(R)=rho V(X)+(1-rho)V_*,
+    nu(R)=rho alpha nu(Q).                               (7)
+
+THEOREM. There exists r_*>0, depending on the fixed table and C, such that
+no Q and no parameter in either switch path satisfy (5)--(6) for 0<r<r_*.
+For the selected ALL-END source, the optional head ceiling
+max(a_p,q) equals q, so it does not escape this theorem.
+
+### Near-Nash returns must converge to the identity controller
+
+Suppose contrariwise there is a passing sequence r_n->0. Pass to one fixed
+orientation. By (6)--(7),
+
+    J_r(R)<J_r(Q)<=C r.
+
+Both Q and R are observer-optimal. Estimate (1) therefore bounds both of
+their joint original Never probabilities below by a fixed kappa>0 for all
+large n. Since nu(Q)<=1,
+
+    beta_n=alpha_n rho_n=nu(R_n)/nu(Q_n)>=kappa.
+
+Consequently alpha_n,rho_n>=kappa. Formula (4) bounds t away from 1 and
+bounds every nonnegative root odds coordinate. Extract Q_n->Q^*, all root
+parameters, and rho_n->rho^*>=kappa. The corrected clock duration stays
+finite. The rational denominators stay nonzero: if z has a positive limit,
+the bounded positive y forces its denominator positive; if z->0 that
+denominator tends to a>0.
+
+Literal root maps and full diffuse maps, including their maxima, are
+continuous in these bounded parameters. At zero duration use the retained
+zero query, which is a valid literal map. Thus the limiting fixed controller
+Psi sends Q^* to R^*. Both limits have all-player debt zero and positive
+original Never. Also B_p(R^*)<=q^*, while adjusted-value gain gives
+U_p(R^*)>=U_p(Q^*)=q^*. Hence their pivot payoff/cap agree; every observer
+payoff/cap already agrees by exact return. Positive Never and zero debt give
+END, so the entire U/B/e tuples agree.
+
+If beta^*<1, repeat the SAME limiting controller. Its payoff/cap maps depend
+only on U/B/e, not on original Never. Every iterate therefore keeps that
+all-player Nash tuple and multiplies joint Never by beta^*. A compact limit
+has zero debt and zero joint Never, contradicting (1). Hence every such
+subsequential limit has beta^*=1. It follows that
+
+    alpha_n->1, rho_n->1, t_n->0, z_n->0.                 (8)
+
+This argument does not assume realization of Q^* or execution after an
+infinite calendar: each iterate is a valid carrier map, followed by one
+compact limit.
+
+### The small-switch expansion forces a zero pivot drift
+
+Let m denote the opposite observer's fixed pivot multiplier for the chosen
+orientation. Direct expansion of the literal roots at z=0 gives, uniformly
+over bounded source tuples,
+
+    alpha=1-mWz+O(z^2),
+    U_p(X)=alpha U_p(Q)+m g_p z+O(z^2),
+    x=b+m z(g_k-Wb)+O(z^2).                              (9)
+
+For example, y=(A/a)mz+O(z^2) and v=(B/b_m)mz+O(z^2). Pivot-participant
+and cross/triple rewards enter prescribed pivot payoff only at order z^2;
+the first-order singleton contribution is m g_p z. Since nu(X)=alpha nu(Q),
+the middle expansion also holds with U_p replaced by V.
+
+Equations (7)--(9) give
+
+    V(R)-V(Q)
+      =[rho mWz+(1-rho)](V_*-V(Q))+O(z^2).                (10)
+
+The bracket is at least a fixed positive multiple of z by (8). Positive
+gain therefore implies limsup V(Q_n)<=V_*. By (5), q_n-V(Q_n)->0.
+On a convergent subsequence of q_n, the cap ceiling and q_n>=0 give
+
+    max(0,g_p/(W-1)) <= q^* <= g_p/W.                    (11)
+
+If g_p>0 the left side strictly exceeds the right; if g_p<0 the right is
+negative. Thus necessarily g_p=0 and q^*=0.
+
+### The remaining boundary has the wrong outward direction
+
+When g_p=0, the rate vector h has singleton drift zero for all three active
+owners p,i,j and drift g_k for the quiet owner k. If g_k>=0, use the actual
+stationary absorbing profile with hazards epsilon h_l, for epsilon small.
+For an active player, the passive reward numerator is O(epsilon^2), forced Quit is
+O(epsilon), and both deleted and joint absorption probabilities have positive
+linear terms. Its prescribed payoff and full cap are O(epsilon), so its
+debt is O(epsilon). For k, the Never payoff is g_k/W+O(epsilon), while its
+forced-Quit offer is O(epsilon); its debt tends to zero as well. Full
+stationary caps are the maximum of the first Quit offer and Never, since
+all deadline offers form a monotone geometric sequence. Joint Never is zero.
+The absorbing SUM debt tends to zero, contradicting Delta>0.
+
+Therefore g_k<0. Since b_n>0 and b_*=g_k/W<0, the outward condition in (6)
+requires x_n>b_n. But (9), uniformly over b_n>=0, gives
+
+    x_n-b_n <= m g_k z_n+O(z_n^2)<0
+
+for all sufficiently large n. This final contradiction proves the theorem.
+
+### A guard-gap example and its precise scope
+
+The [existing exact checker](../experiments/FIN4_SIGNED_TWO_ZERO_RETURN_CHECK.py)
+contains a complete rational reward table and full-coalition calculations
+for a useful distinction between controllers. Starting from the same
+diffuse preparation as the boundary reset reduction, it has
+
+    b=40951/790951, q=4657205/6655216,
+    u=-10886684947367/5263949750416.
+
+The only nonzero return of one switch is
+t0=4131441/1569983902, strictly between1/500 and1/250. Its k guard has
+numerator b(1-500t)(1-250t), so it fails there. The other orientation has
+no return. At t=1/200 the guard holds again, and the output satisfies
+
+    0<x=1523528233/36608376084<b<2/5.
+
+Diffuse rates (1,0,2,2) in player order p,k,i,j return the cap with
+rho=63739871748/65599111003. Pivot cap strictly falls and payoff rises by
+16611716006668623/218288126566470824>3/40. Original Never also falls, so
+adjusted payoff rises for every r>0. An actual compatible head uses
+pivot hazard f=b/(b+3) and k hazard2f/(1+f). Its active k pins the old
+cap, so a diffuse-only cap change does not preserve its optimality.
+
+Thus disconnected guard domains matter when selecting a controller. But
+the input is a carrier point, not a selected minimum. Its fixed negative
+value is absent from the small-penalty source by (3), and the literal table
+has absorbing Nash coalition {1,2,3}. The general theorem above is stronger
+than this example-specific overlap: every parameter of both displayed
+switches fails the componentwise selector at sufficiently small r.
+
+Arbitrary excursions, other diffuse rate vectors, reward tables varying
+with r, and changes to the actual head are outside this impossibility
+theorem. The unresolved objective is the full inherited comparison (H5),
+or its analogue after changing the head.
+
+## Two-owner source heads require both participant premiums
+
+This is an ordinary mathematical exclusion of an entire inherited-head
+support mode in the macroscopic least-Never branch. It is independent of
+the endpoint-return constructions above.
+
+### Statement and global source
+
+Use native own-singleton and AllNever zero rewards, bounded in absolute value
+by M>=1, compact augmented actual-law carrier H, and full-Nash subset E={U=B}.
+Put alpha=min_(X in E)nu(X). Assume 0<alpha<1 and that the table is
+JOINING-GENERIC: all twelve off-diagonal entries of J-Gamma and its four
+principal triple determinants are nonzero. [the global least-Never source reduction](../exports/GLOBAL_LEAST_NEVER_SOURCE_REDUCTION.md)
+then supplies that EVERY alpha-minimizer has strictly positive payoff/cap
+coordinates. The proof below uses this conclusion and the unequal-pair
+entries explicitly.
+
+Fix the global pivot p. Let Y_r minimize J_r=d_p+r nu on
+C_p={d_l=0 for l!=p}. Consider any produced factorization
+
+    Y_r=Phi_(P_r)(Q_r), Y_r,Q_r ALL-END, Q_r in C_p,
+    N(P_r),N(Q_r)>0, B(Q_r)>=0,
+    some observer cap of Q_r is zero,
+
+where P_r is an ACTUAL independent head. These are the canonical selected
+source properties; Q_r is not assumed minimizing. The strict inverse pivot
+column and positive absorbing gap supply them in the [boundary reset source theorem](../exports/NONPOSITIVE_PAIR_BOUNDARY_RESET_REDUCTION.md).
+
+For all sufficiently small r>0, a head with finite activity by at most TWO
+owners must have exactly two active owners h,k and satisfy
+
+    Z_h({h,k})>max(0,Gamma_hk),
+    Z_k({h,k})>max(0,Gamma_kh).                         (T)
+
+The pair need not contain p. Choose its labels so k!=p, hence k is an exact
+observer. Beyond the positive-cap collar below, the head calculation uses
+joining-genericity only to exclude equality of a positive singleton
+coefficient and its participant reward; the strict
+inequality failures are excluded by the finite debt floor proved below.
+All calendars and ties are unrestricted; no head limit or guard slack is
+assumed. The zero endpoint observer may be one of the two head owners.
+
+### The uniform positive-cap collar is produced
+
+A point of E attaining alpha lies in C_p and has J_r=r alpha. Thus
+
+    mu_r<=r alpha, d_p(Y_r)<=r alpha, nu(Y_r)<=alpha.   (1)
+
+Every cluster of Y_r as r decreases to zero belongs to E and, by(1), has
+Never product alpha. It belongs to the compact set of alpha-minimizers.
+Their caps are strictly positive. Compactness therefore gives epsilon>0
+such that all sufficiently small-r selected minima satisfy
+
+    min_l B_l(Y_r)>=epsilon.                          (2)
+
+This holds uniformly over every choice of minimum. No actual realization
+of a limiting minimum is used. It is a collar on the WHOLE global source,
+not a hypothesis imposed on the inherited endpoint.
+
+### Exact two-owner moment ledger
+
+Suppress r. Let f,g be the finite head masses of h,k and n=1-f,m=1-g.
+Let q=B_h(Q)>=0, b=B_k(Q)>=0, and define
+
+    A=Gamma_hk, D=Gamma_kh,
+    J=Z_h({h,k}), K=Z_k({h,k}),
+    x=B_h(Y)=Ag+mq, y=B_k(Y)=Df+nb.
+
+Let W,C0,L0 be the absolute probabilities that BOTH head draws are finite
+and respectively h<k, h=k, or k<h. Then fg=W+C0+L0, and the first singleton
+probabilities are mf+W for h and ng+L0 for k.
+
+The expected deficit of h's finite head draws from its global cap is
+
+    delta_h=fm q+A W+(A-J)C0
+           =sum_t P_h(t)[x-V_h(P;t)]>=0.              (3)
+
+It obeys delta_h<=d_h(Y)<=d_p(Y)<=r alpha, since the through-head continuation
+debt is nonnegative. This is also valid if h is an observer, when delta_h=0.
+Observer k has exact head regret zero, giving TWO useful identities:
+
+    0=g n b+D L0+(D-K)C0,
+    g y=D W+K C0.                                    (4)
+
+These follow by first-coalition accounting and U_k(Y)=B_k(Y). They do not
+assume positive endpoint caps, finite head support, or specific ordering.
+Every used head action is priced by the full global cap.
+
+Let l be any observer with B_l(Q)=0. ALL-END and the actual head map give
+B_l(Y)=e_l(P), including if l equals h or k. Bounded rewards imply
+
+    epsilon<=B_l(Y)<=M(f+g).                          (5)
+
+Also (4) gives, whenever g>0,
+
+    epsilon<=y<=M f.                                 (6)
+
+If g=0, then x=q and delta_h=f x. Equations(2),(5) imply
+
+    delta_h>=epsilon^2/M.                            (7)
+
+Thus the one-owner cases are already impossible when r is sufficiently small.
+
+### A bilinear debt floor excludes every deficient premium
+
+Assume g>0 and put Kstar=max(D,K,0). A used finite k head deadline attains
+y. Such a response is D times a cumulative h mass plus K times its same-date
+atom, so y<=Kstar f. Therefore Kstar>0. Equation(4) also gives
+
+    y<=Kstar f, g y<=Kstar(W+C0).                     (8)
+
+If J<=0 and A<=0, every finite h head response is nonpositive, and
+
+    delta_h>=f x>=xy/Kstar.                           (9)
+
+If J<=0 and A>0, (3),(8), and q>=0 instead give
+
+ delta_h>=fmq+A(W+C0)
+          >=(y/Kstar)(mq+Ag)=xy/Kstar.                (10)
+
+Finally, if 0<J<A, put rho=1-J/A in(0,1). All terms of(3) are nonnegative,
+and the same calculation gives
+
+    delta_h>=rho[fmq+A(W+C0)]>=rho xy/Kstar.           (11)
+
+Thus every deficient h premium, other than J=A>0, creates a fixed positive
+bilinear debt floor. This is stronger than an infinitesimal obstruction and
+does not require a zero endpoint cap. When g=0 use the one-owner bound(7).
+
+For the other owner, suppose D<=0 and K<=0. Every finite k head deadline
+pays at most zero, contradicting y>=epsilon if g>0. Suppose D>0 and K<D.
+For g>0 the first identity(4) forces b=L0=C0=0, hence W=fg and y=Df.
+Every finite h draw then quits before any finite k draw and pays zero.
+Consequently the exact floor is
+
+    delta_h=f x=xy/D.                                (12)
+
+Again g=0 uses(7). These cases exclude the symmetric deficient premiums.
+
+Since x,y>=epsilon and delta_h<=r alpha, (9)--(12) contradict every listed
+failure for all sufficiently small r. Joining-genericity excludes the only
+unhandled equalities J=A>0 and K=D>0. This proves(T). The number of head pairs
+is finite, so one small-r threshold works for all of them.
+
+For example, Gamma_hk=5, Gamma_kh=-2, J=-512, K=1 give the particularly
+simple necessary inequality B_h(Y)B_k(Y)<=delta_h<=r alpha. Such heads cannot
+persist in the macroscopic positive-cap branch. No endpoint value sign is
+involved.
+
+### Scope and remaining branch
+
+The proof uses a genuine global source collar and an exact positive head
+regret floor. It changes no endpoint, assumes no return controller, and does
+not require a convergent sequence of actual heads. In particular it covers
+q or b tending to zero and arbitrary finite-contact degeneracy.
+
+If alpha=1, the positive-cap collar is unavailable. All full-Nash carrier
+points are then AllNever; inherited near-Nash endpoints also approach
+AllNever by the general source collar. This theorem leaves that branch open.
+It also leaves heads with at least three active owners and two-owner heads
+whose two directed participant premiums both satisfy(T).
