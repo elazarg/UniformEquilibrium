@@ -120,6 +120,19 @@ same-sign pair branch, a counterexample must have a larger support failing
 ALL THREE tests. Opposed pairs and the uncovered weak orientation boundary
 remain. These are new raw UE classes, not full Fin4 closure.
 
+[Pair–triple index cancellation](../exports/PAIRED_SUPPORT_INDEX_CANCELLATION_UNIFORM_EQUILIBRIUM.md)
+now goes beyond individual negative indices. A finite test of at most twelve
+coefficients allows a positive-index triple root to cancel with its pair
+face or another triple root. The quiet player's comparison is retained
+through a nondecreasing tilted offer. Several such groups may be combined
+when their assigned pairs are distinct. The exact separating game has a
+positive-index bad root strictly inside its passive box and above every
+individual punishment floor, and still excludes all stationary profiles and
+the audited earlier raw choices. Thus a strict same-sign counterexample
+must fail every assignment combining Low, Charge, Orientation and the new
+pair–triple test. Shared-anchor configurations are not covered by counting
+the same pair twice; full-support and opposed-pair obligations remain.
+
 The [incoming boundary controls](CODEX_ROOT__INCOMING_BOUNDARY_CONTROLS.md)
 show why the remaining cases need more than a bare carrier lemma. The
 positive-premium case can require arbitrarily long words across all incoming

@@ -381,3 +381,48 @@ The positive continuation has no nonzero outgoing Nash root, but an explicitly
 different earlier branch halves Never. Thus it is not a global minimum.
 This is retained only as an internal method control; it adds no UE class or
 counterexample and does not replace the least-Never source hypothesis.
+
+## Pair–triple cancellation with positive-index roots
+
+Reviewed packet:
+[Pair–triple index cancellation for uniform equilibrium](../exports/PAIRED_SUPPORT_INDEX_CANCELLATION_UNIFORM_EQUILIBRIUM.md).
+Exact final SHA256:
+`884a81d85bd3661e72b03c139f254097d40bf436ac08feb5095012c6133f0b4f`
+(658 lines).
+
+FRONTIER_ADVERSARY and GLOBAL_MINIMUM_NEXT independently gave mathematical
+PASS and coverage/export PASS on these exact bytes. There are no unresolved
+objections or unproduced strategic inputs. The result is a general finite
+raw-reward producer, not only a parameter family or a full Fin4 solution.
+Both reviewers checked all14 tracked Lean paths and packet self-containment;
+no Lean command was run. All128 previous export files remain unchanged.
+The staged whitespace check reports one extra blank line at the frozen
+packet's EOF. Its exact reviewed bytes were preserved; no other whitespace
+finding remains.
+
+The reviewers verified the initial positive-Quit fibers from the raw sign
+conditions, the at-most-twelve coefficient test affine in a nonnegative tilt,
+all sure boundaries, proper-root genericity, the exact Schur-complement sign,
+and the crossing count including the pair face. Nonstrict monotonicity and
+identically constant fibers are handled. Distinct assigned pairs prevent
+counting one negative index twice. The global degree argument and native
+absorbing-debt consumer include every behavioral replacement and one fixed
+uniform target. Positive-index triple roots are genuinely permitted.
+
+The strengthened witness keeps all singleton and pair rewards fixed while
+changing one passive triple reward and its corresponding grand reward.
+Both reviewers reconstructed the table and recomputed its twelve coefficients,
+strict positive-index bad root, all endpoints, interior passive-box placement
+and exact coordinate punishment values. Its proper stationary supports and
+sure boundaries are excluded explicitly; all79 nonzero coefficients of the
+full stationary obstruction are positive, and R0 excludes stationary limits.
+The full previous raw-selection audit, including all role and scaling choices
+stated in the packet, passes. The positive-index witness defeats the prior
+individual-Orientation alternative as well as Low and Charge on012.
+
+An earlier example lay outside a passive-coordinate bound and admitted a
+different elementary producer proof. That proof was new, rather than an
+existing raw admission; it did not invalidate the earlier orientation export.
+The stronger witness in this packet removes the coordinate-bound shortcut.
+Its passive-domain membership is not claimed to be a joint actual-continuation
+realization. Shared-anchor and general full-support extensions remain open.
