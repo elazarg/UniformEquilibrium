@@ -75,6 +75,11 @@ If that observer never acts in the actual head, a lower-bound inequality
 replaces exact return. The head's pivot obstacle is retained in every case.
 This removes the contact-production gap on the stated raw region; it does
 not prove that the return/improvement tests succeed at every selected source.
+The final section below supplies a further composite return on a balanced
+cap face: two distinct reset types return the pinned cap even though neither
+type admits any nonzero return by itself. An exact affine identity classifies
+the value gain of every finite returning composition at the critical value.
+The balance and value inequalities remain explicit source restrictions.
 
 The [incoming boundary controls](CODEX_ROOT__INCOMING_BOUNDARY_CONTROLS.md)
 show why the remaining cases need more than a bare carrier lemma. The
@@ -1161,3 +1166,170 @@ not a different neighborhood for each length. Arbitrary double-quiet slots,
 late pivot ties, other support words, source realization, and production of
 this singleton/raw chamber from arbitrary games remain unresolved. No
 unrestricted Fin4 closure or new reward-table UE theorem is claimed.
+
+## Two reset types can return a cap that neither returns alone
+
+This is ordinary mathematics on the inherited two-zero-observer face.
+The [boundary reset reduction](../exports/NONPOSITIVE_PAIR_BOUNDARY_RESET_REDUCTION.md)
+supplies the compact carrier, literal roots, diffuse entry and actual-head
+consumer. For composition, require only observer U_l=B_l=e_l, zero i/j
+caps, B_k=b>0, B_p=b_p>=0 and positive original Never. The pivot Never
+offer may be below its cap: a first reset can lose pivot END, and no later
+step assumes it again. A diffuse solo-p entry preserves B_p and e_p
+separately while multiplying U_p and N_p by1-t.
+
+Use roles p=0,k=1,i=2,j=3 and
+
+    Gamma=[0,5,-1,-1; -2,0,1,1; 2,-1,0,-1; 2,-1,-1,0].
+
+Require Z_i(pi)=Z_j(pj)=8, Z_i(ij)=-c_i, Z_j(ij)=-c_j with c_i,c_j>1,
+and Z_p(pi)=Z_p(pj)=0. All other higher rewards are arbitrary finite data.
+Write
+
+    d_i=Z_i(pj), d_j=Z_j(pi), s_i=Z_i(pij), s_j=Z_j(pij),
+    K_i=Z_k(pj), K_j=Z_k(pi), H_h=5K_h+3d_h+22.
+
+Assume H_i H_j<0 and label the types so H_+>0>H_-. For type i, use diffuse
+entry mass t and the inner p,j odds z=t/3, y=8t/(3-d_i t), then outer
+solo-i odds v=8t/(3+t). The i Continue offer is zero; its Quit guard is
+3(1-c_i)+(s_i-d_i)t<=0. The j cap is v and the outer root returns it
+to zero. Type j exchanges i and j. Both zero-observer guards hold strictly
+near zero. Every k entry/Continue value tends to b>0, while each new Quit
+offer tends to zero, so all k guards also hold strictly near zero.
+
+### Exact affine maps and composability
+
+Define
+
+    R_d(t)=(1+3t)(3+(8-d)t),
+    a_d(t)=(1-t)(3-dt)/R_d(t),
+    beta_h(t)=2/5+2H_h t/[15(5+(6-d_h)t)],
+    phi_h(t)=-4/5-2(d_h+4)t/[15(5+(6-d_h)t)].
+
+On the physical domain with all full-cap guards, 0<a_d(t)<1 and
+
+    b'=a b+(1-a)beta_h, u'=a u+(1-a)phi_h, nu'=a nu,
+    b_p'=max(0,(b_p+1)/[(1+y)(1+v)]-1)<=b_p.           (R1)
+
+These follow by substituting the two literal root maps. Both pivot Quit
+offers are zero; the nested Continue caps reduce exactly to the displayed
+maximum. It preserves b_p>=0, so the next diffuse entry and reset are legal
+without pivot END. For fixed r>0, V=u-r nu obeys the same affine map as u.
+Put b_*=2/5 and V_*=-4/5. No individual type has any nonzero return to b_*
+on its physical domain, since beta_h-b_* has the strict sign of H_h.
+
+### A produced two-type return and its global consumer
+
+Suppose the input has b=b_* and either
+
+    V<V_*, or V=V_* with lambda_+>lambda_-,
+    lambda_h=-(d_h+4)/H_h.                            (R2)
+
+For a sufficiently small positive dyadic t define
+
+    A_t=3H_+ t^2, B_t=-H_+(3+d_-)t^2,
+    C_t=H_+ d_- t^2+H_- R_{d_+}(t)<0,
+    s=2A_t/[sqrt(B_t^2-4A_t C_t)-B_t]>0.              (R3)
+
+This is the unique positive root of A_t+B_t s+C_t s^2=0. Moreover
+s/t tends to sqrt(H_+/(-H_-)), so s=O(t). Apply type+ at t, then type-
+at s. Their exact k-return equation is
+
+    H_+ t^2(1-s)(3-d_-s)+H_- s^2 R_{d_+}(t)=0,        (R4)
+
+which is (R3). Thus the final k payoff/cap returns to b_* exactly.
+
+To produce admissible parameters, enumerate t=2^{-n}, discard C_t>=0,
+then compute s and test 0<t,s<1, all displayed positive denominators, both zero-observer
+guards, and both entry/k full-cap guards at both resets. In the strict
+case of (R2), also test min(phi_+(t),phi_-(s))>V. All tests hold eventually
+because t,s tend to zero, the intermediate k cap tends to b_*>0 and both
+phi values tend to V_*. Hence the exact-real selection terminates. Effective
+execution requires an appropriate representation of the real inputs.
+
+In the strict case, V' is an affine combination of V and two numbers
+strictly above V, so V'>V. The equality case follows from (R5) below.
+The pivot cap weakly falls, all three observer payoffs/caps return, and
+original Never strictly falls. Through every compatible actual head P,
+the objective J_r decreases by at least product_l N_l(P) times V'-V>0.
+This retains the inherited pivot obstacle. The selected parameters and gain
+are fixed for the source; no vanishing-gain limit or endpoint minimality is
+used. The input need not be an actual-profile tuple.
+
+### Complete value classification of returning finite compositions
+
+The exact identity phi_h-V_*=lambda_h(beta_h-b_*) holds for both types.
+For any nontrivial finite admissible composition returning b to b_*, let
+A be the product of its contraction factors and w_h its positive affine
+weights, summing to1-A. The positive and negative beta deviations cancel.
+If T is the sum of w_h(beta_h-b_*) over positive-type steps, then T>0 and
+
+    V_final-V=(1-A)(V_*-V)+(lambda_+-lambda_-)T.       (R5)
+
+A return must use both types. At V=V_*, gain, equality or loss is therefore
+determined exactly by the sign of lambda_+-lambda_-, independently of
+order, amplitudes and finite length. If b_p=0, its cap stays zero, so a
+nonpositive sign forbids strict descent by this entire returning two-type
+architecture. The same holds if the inherited pivot obstacle hides every
+cap decrease. This is a global architecture classification, not only a
+first-order condition. When V<V_*, small two-type returns always improve,
+whatever the two slopes. A simple improving equality case is d_+,d_-<=-4
+with at least one strict inequality.
+
+### An exact produced balanced carrier point
+
+For a nonempty example, keep the hard Gamma and set all nonsingleton entries
+to zero except
+
+    Z_2(02)=Z_3(03)=8, Z_2(23)=-8, Z_3(23)=-10,
+    Z_0(01)=-512, Z_1(01)=1, Z_2(12)=Z_3(13)=-8,
+    Z_1(02)=-10, Z_1(03)=1000.
+
+Thus d_i=d_j=s_i=s_j=0, H_+=5022, H_-=-28. The two diffuse blocks and
+p/k head in the boundary reduction's Section7 produce the same initial
+ALL-END carrier point: these changed higher rewards vanish in the diffuse
+limits and do not enter that literal head. Its coordinates are
+
+    b_p0=4657205/6655216, b_0=40951/790951,
+    u_0=-10886684947367/5263949750416<-2,
+    N=(337500/790951,187500/415951,81/200,81/200).
+
+Let D=2/5-b_0. The unique positive root theta of
+
+    (8*5022/15)theta^2+3D theta-3D=0
+
+lies in (39/2000,49/2500). Apply type+ once at theta. Equation (R1) gives
+k cap2/5 exactly. Entry E>0 follows from b_0>1/20 and theta<49/2500.
+The inner k Continue numerator (1-theta)b_0+(8000/9)theta^2 exceeds its
+Quit numerator theta/3; the outer Quit offer is zero. Direct substitution
+gives final pivot cap>1/2 with both Continue branches positive, so pivot
+END is preserved. The survival factor exceeds4/5 and phi<-4/5, giving
+u<-3/2. This produces an ALL-END carrier point Q with b=b_*, positive
+original Never and the strict value condition in (R2) for every r>0.
+It does not assert that Q is realized by an actual profile.
+
+Now take t=1/10000 and the positive root s of
+
+    7533/50000000-(7533/50000000)s
+                    -(262648771/3125000)s^2=0.
+
+Exact endpoint tests give 13/10000<s<67/50000. Both entries are below1/500.
+The first k output is in (2/5,2/5+1/100000). At the second reset the inner
+k Continue numerator (1-s)b_1-(80/9)s^2 exceeds399/1000, while its Quit
+numerator is s/3. The other k guards are strictly positive as well. The
+quadratic gives exact final return to2/5. Both pivot fixed points exceed-1,
+so u<-3/2 gives payoff gain>(1-A)/2. Finally
+
+    1-a_+(1/10000)=4t(5+6t)/R_0(t)>1/2000,
+
+and the gain exceeds1/4000. Pivot cap and Never both strictly fall here.
+Neither individual switch admits any nonzero return to the balanced cap.
+
+The literal game has absorbing Nash coalition {1,2,3}: every payoff and
+every joining/departure alternative there is zero. Its absorbing gap is
+zero. The example proves nonempty produced carrier geometry and the need
+for distinct reset types; it is not a positive-gap witness or new UE class.
+The balanced-cap and value conditions remain genuine restrictions on the
+selected source. General returns away from this balance remain open. At an actual global
+minimum V=B_p-mu>=0, so this negative-V criterion concerns inherited
+endpoints and does not directly close the actual-minimum alternative.

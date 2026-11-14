@@ -119,3 +119,43 @@ conditions control every behavioral deviation and the uniform-horizon
 payoff. This retires the proposed large two-price ray as new coverage;
 it gives no threshold for a specific finite table. Neither internal
 addition is counted as a new UE class or additional export.
+
+## Balanced two-type return and exact composition classification
+
+Reviewed section: “Two reset types can return a cap that neither returns
+alone” through the end of
+[the source geometry note](../notes/CODEX_ROOT__ACTUAL_MINIMUM_AND_MIXED_ENDPOINT.md).
+Exact section SHA256:
+`2345ea753e866ec50e4f949ccb09abc2ff40a5800e42c03206b1ace989c2371c`.
+
+ACTUAL_MINIMUM_GLOBAL and SOURCE_ADVERSARY_14 independently reviewed the
+complete construction and its curated statement. Mathematical PASS with
+no unresolved objection. This is internal mathematical retention, not an
+additional export-gate admission or a new raw UE existence class.
+
+The exact affine cap/payoff/Never maps were independently derived from
+complete coalition rewards. The nested pivot maxima collapse to (R1)
+without assuming pivot END, so a second reset is legal after the first
+loses that property. The pivot cap stays nonnegative and weakly falls.
+Observer END and all full-cap guards hold at each produced step.
+
+Opposite H signs forbid a nonzero balanced return by either type or its
+same-type repetitions. The quadratic (R3)--(R4) nevertheless produces a
+two-type return. Its unique positive root is O(t); the dyadic selector
+terminates, checking C_t<0 before evaluating the radical. The exact-real
+representation caveat is explicit. Returning finite compositions satisfy
+(R5), giving the claimed complete adjusted-value classification at the
+balanced value. When a pivot-cap decrease is visible through the head,
+it can still compensate for a nonpositive adjusted-value gain; the note
+correctly restricts the no-descent conclusion to zero pivot cap or an
+obstacle hiding every cap decrease.
+
+The produced carrier source is not asserted to be an actual-profile tuple.
+Its preparation and return quadratics, rational isolating intervals,
+ALL-END preparation, every quiet guard and the fixed payoff gain greater
+than1/4000 were independently checked. The literal game has absorbing Nash
+and zero gap. The consumer applies through every compatible actual head
+under the explicit balanced-cap and value hypotheses. Actual global minima
+have V=B_p-mu>=0, so this negative-value criterion does not close that
+alternative. No claim of completeness for arbitrary other controllers is
+made.
