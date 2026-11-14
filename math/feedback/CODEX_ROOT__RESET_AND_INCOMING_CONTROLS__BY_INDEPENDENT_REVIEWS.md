@@ -6,7 +6,8 @@ or new UE reward-table classes. No Lean checks are claimed.
 ## Periodic reset producer and overlap audit
 
 Canonical note: [periodic reset and stationary overlap](../notes/CODEX_ROOT__PERIODIC_RESET_AND_STATIONARY_OVERLAP.md).
-Current complete-file SHA256: `15b804c0f321ff47323f45b84400471260f8c5c8519fa706eab742f76372bda9`.
+Reviewed periodic-construction and initial-overlap version SHA256:
+`15b804c0f321ff47323f45b84400471260f8c5c8519fa706eab742f76372bda9`.
 
 TWO_ZERO_GLOBAL independently reviewed the full periodic construction, its
 raw criterion, and its two-entry stationary diagnostic. The reviewed source
@@ -61,7 +62,8 @@ source comparisons.
 
 ## Both-low no-incoming obstruction
 
-Canonical Part III: [incoming boundary controls](../notes/CODEX_ROOT__INCOMING_BOUNDARY_CONTROLS.md).
+Reviewed Part III before the constant-sum subsection:
+[incoming boundary controls](../notes/CODEX_ROOT__INCOMING_BOUNDARY_CONTROLS.md).
 Exact part SHA256: `30afc6fffac6fdab26042e931ec8fba7af782e29cd0834912b5608bcec26f4ad`.
 The mathematical body equals the reviewed source after heading demotion;
 TWO_ZERO_POSITIVE_PAIR checked that copy. TWO_ZERO_DIFFUSE independently
@@ -86,3 +88,34 @@ positive inverse, R0 degree1 and triple screens were independently checked.
 The displayed game has an absorbing sole-quitter Nash and A=0. It therefore
 blocks a bare finite-incoming extension in the BOTH-LOW region, not the
 positive-gap global source or the Fin4 conjecture.
+
+## Global conservation and the complete two-price stationary ray
+
+ACTUAL_MINIMUM_GLOBAL independently reviewed the final curated subsections
+below, having authored neither result. Mathematical PASS with no unresolved
+objection. The hashes cover each named heading through the end of its file.
+
+- “A constant-sum completion blocks global fixed-payoff replacements” in
+  [incoming boundary controls](../notes/CODEX_ROOT__INCOMING_BOUNDARY_CONTROLS.md):
+  `20e39ff5170f1237024af3ab02bc67898b0614b37ddb47816f2b39e24c72b23c`.
+- “The opposite-sign two-price ray, including its critical ratio” in
+  [periodic reset and stationary overlap](../notes/CODEX_ROOT__PERIODIC_RESET_AND_STATIONARY_OVERLAP.md):
+  `605bae41fd578fef02af45ad4688b38a374d97a2e65c30cf1f4517b03d4613d0`.
+
+The conservation review checked the complete table, every coalition's
+total reward, actual full-cap approximants, inherited no-incoming criterion,
+global identity and both obstacle inequalities. The displayed actual head
+has the claimed constraints and even B_0>J_r with J_r<r. Its game still has
+absorbing Nash and zero absorbing gap. The obstruction applies to arbitrary
+carrier replacements on the fixed-observer-payoff slice, not to all source
+changes or positive-gap minima.
+
+The stationary review independently verified the sign of the stopping
+inequality, both leading zeros, Jacobian determinants -6 and -4, and the
+critical Schur complement 3/2. The critical scalar complementarity switch
+works uniformly over bounded completion boxes. At least three active
+players ensure geometric opponents-only absorption, so exact endpoint
+conditions control every behavioral deviation and the uniform-horizon
+payoff. This retires the proposed large two-price ray as new coverage;
+it gives no threshold for a specific finite table. Neither internal
+addition is counted as a new UE class or additional export.

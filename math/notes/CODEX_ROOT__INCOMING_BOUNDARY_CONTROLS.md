@@ -774,3 +774,74 @@ This blocks a universal finite-incoming theorem covering BOTH-LOW under
 H/C/ALL-END/positive-Never/two-positive-cap hypotheses even with the stated
 singleton screens. A further source-specific argument must use global
 minimality, additional higher-reward structure, or a different operation.
+
+### A constant-sum completion blocks global fixed-payoff replacements
+
+This strengthens the method obstruction beyond incoming words. Retain (G),
+but use the following complete nonsingleton vectors in player order0,1,2,3:
+
+    01:   (-3,-3,50,-43)
+    02:   (-1,-1,0,3)       03:   (-1,-1,3,0)
+    12:   (-1,-1,0,3)       13:   (-1,-1,3,0)
+    23:   (1/2,1/2,0,0)
+    012:  (-1,-1,0,3)       013:  (-1,-1,3,0)
+    023:  (-1,2,0,0)        123:  (2,-1,0,0)
+    0123: (1/2,1/2,0,0).
+
+Every nonempty coalition now pays total1. Every participant reward of
+players2,3 remains zero. The same base and pair-root approximants give the
+same x_n,a_n,S_n,c_n,alpha_n and active caps -3x_n. The outside Continue
+offers become
+
+    E_2=50c_n-2alpha_n=16-(65/3)S_n+34x_n,
+    E_3=-43c_n-2alpha_n+(3/2)S_n=-15+(127/6)S_n-28x_n.
+
+As functions of x in [0,1/13], with S=(36/49)(1+x)^2, E_2 is concave
+and has endpoint values4/49 and2/13. The derivative of E_3 is positive
+and E_3(0)=27/49. Thus both caps stay positive. All outsider forced-Quit
+offers are zero, so these are full caps, and every approximant is full Nash.
+The limit is
+
+    U(Q)=B(Q)=e(Q)=(0,0,4/49,27/49),
+    N(Q)=(6/7,6/7,1/2,1), nu0=nu(Q)=18/49.
+
+The preceding no-incoming lemma applies to this complete table as well.
+Its singleton screens are unchanged. In addition, constant total absorption
+reward gives the global identity
+
+    sum_l U_l(R)=1-nu(R)                              (5)
+
+for every actual profile and, by continuity, every R in H. This prices all
+independent complete laws; no bounded controller assumption is involved.
+
+If R preserves all three observer payoffs and has B_0(R)<=0, U_0(R)>=0,
+then U_0(R)<=B_0(R) forces both to zero. Equation(5) forces nu(R)=nu0.
+Therefore no such replacement can strictly decrease original Never.
+
+More strongly, for r>0 and 0<a<=1/(1+r), Q globally minimizes
+
+    F_a(R)=max(0,B_0(R))/a-U_0(R)+r nu(R)
+
+over the entire fixed-observer-payoff slice of H. Equation(5) gives
+U_0(R)=nu0-nu(R). If nu(R)<=nu0, use B_0>=U_0 to obtain
+
+    F_a(R)-r nu0 >= (1/a-1-r)(nu0-nu(R)) >=0.
+
+If nu(R)>=nu0, drop the nonnegative maximum to obtain
+
+    F_a(R)-r nu0 >= (1+r)(nu(R)-nu0) >=0.
+
+The obstacle parameters arise from an actual head: a solo-0 root of hazard
+f followed by a solo-1 root of hazard g has pivot survival a=1-f and pivot
+obstacle zero. Take f=g=1/100 and r=1/200. Observer1 is indifferent at its
+own root; the outsiders' through-caps remain positive and their Quit offers
+are zero. Thus the graft is observer-optimal and the above minimum blocks
+every exact observer-payoff/cap return through this head. This whole graft
+even satisfies B_0=3g>J_r and J_r=3fg+r(1-f)(1-g)nu0<r.
+
+The literal game still has absorbing Nash when player2 quits surely, so its
+absorbing gap is zero. This is a global obstruction to preserving the whole
+observer payoff vector, not a positive-gap source or a minimum on the full
+observer-feasible carrier. Changes to the head and unpinned observer payoffs
+remain available. A successful global argument must exploit that freedom or
+the positive-gap premise; componentwise endpoint domination alone is false.

@@ -1,11 +1,12 @@
-"""Exact unequal-premium two-root source comparison, with all behavioral caps.
+"""Exact shallow and deep nonpositive-pair returns, with all behavioral caps.
 
 Run: python math/experiments/FIN4_SIGNED_TWO_ZERO_RETURN_CHECK.py
 Requires SymPy. The complete fixed reward table is below. Exact polynomial
 identities and Bernstein coefficients certify the example; this is not a
 search over arbitrary tables or controllers. The literal game has absorbing
 Nash (checked below), so it is not a positive-gap or new UE-class witness.
-The corresponding proof is in SIGNED_TWO_ZERO_CONTINUATION_REDUCTION.md.
+Proofs: SIGNED_TWO_ZERO_CONTINUATION_REDUCTION.md and
+NONPOSITIVE_PAIR_BOUNDARY_RESET_REDUCTION.md in the export queue.
 """
 import sympy as s
 R=s.Rational
@@ -83,3 +84,94 @@ print('Unique return root within the rational interval',lo,hi)
 pure_u,pure_e,pure_q,_=root([0,1,1,1],[0]*4,[0]*4,[1]*4)
 assert all(pure_u[i]==max(pure_e[i],pure_q[i]) for i in range(4))
 print('PASS both-root contacts, exact return, full guards, strict dominance, and solved-game boundary.')
+
+
+def check_deep_nonzero_cross_fixture():
+    """Check the deep-pair fixture independently by coalition enumeration."""
+    from fractions import Fraction as F
+    from math import prod
+
+    gamma = [[0, 5, -1, -1], [-2, 0, 1, 1], [2, -1, 0, -1], [2, -1, -1, 0]]
+    reward = {mask: [F(0)] * 4 for mask in range(1, 16)}
+    for j in range(4):
+        reward[1 << j] = [F(gamma[i][j]) for i in range(4)]
+    entries = [(5, 2, 8), (9, 3, 8), (12, 2, -8), (12, 3, -10),
+               (12, 0, 1000), (12, 1, -1000), (3, 0, -512), (3, 1, 1),
+               (6, 2, -8), (10, 3, -8), (9, 1, -1000), (9, 2, 100),
+               (13, 2, 200), (5, 3, -300), (13, 3, 400)]
+    for mask, player, value in entries:
+        reward[mask][player] = F(value)
+
+    def root(q, tail):
+        """Enumerate opponent coalitions; retain the full response maximum."""
+        assert all(0 <= hazard <= 1 for hazard in q)
+        u, cap, end, never = tail
+        passive, quit, survival = [], [], []
+        for i in range(4):
+            pp = qq = F(0)
+            for mask in range(16):
+                if mask & (1 << i):
+                    continue
+                mass = prod(q[j] if mask & (1 << j) else 1 - q[j]
+                            for j in range(4) if j != i)
+                pp += mass * (reward[mask][i] if mask else 0)
+                qq += mass * reward[mask | (1 << i)][i]
+            passive.append(pp)
+            quit.append(qq)
+            survival.append(prod(1 - q[j] for j in range(4) if j != i))
+        joint = prod(1 - x for x in q)
+        return ([q[i] * quit[i] + (1 - q[i]) * passive[i] + joint * u[i]
+                 for i in range(4)],
+                [max(quit[i], passive[i] + survival[i] * cap[i]) for i in range(4)],
+                [passive[i] + survival[i] * end[i] for i in range(4)],
+                [(1 - q[i]) * never[i] for i in range(4)])
+
+    def diffuse(rates, base_survival, tail):
+        """Exact equal-hazard-block limit, including both head-query endpoints."""
+        u, cap, end, never = tail
+        total = sum(rates)
+        drift = [sum(gamma[i][j] * rates[j] for j in range(4)) for i in range(4)]
+        joint = base_survival ** total
+        surv = [base_survival ** (total - rates[i]) for i in range(4)]
+        passive = [F(drift[i], total - rates[i]) * (1 - surv[i])
+                   if total != rates[i] else F(0) for i in range(4)]
+        return ([F(drift[i], total) * (1 - joint) + joint * u[i] for i in range(4)],
+                [max(F(0), passive[i], passive[i] + surv[i] * cap[i]) for i in range(4)],
+                [passive[i] + surv[i] * end[i] for i in range(4)],
+                [base_survival ** rates[i] * never[i] for i in range(4)])
+
+    all_never = ([F(0)] * 4, [F(0)] * 4, [F(0)] * 4, [F(1)] * 4)
+    q0 = diffuse([1, 0, 2, 2], F(9, 10),
+                 diffuse([1, 1, 1, 1], F(1, 2), all_never))
+    assert q0[0] == [F(2802569, 32000000), F(40951, 250000), 0, 0]
+    assert q0[1] == q0[2] == [F(3683, 16000), F(40951, 250000), 0, 0]
+    assert q0[3] == [F(9, 20), F(1, 2), F(81, 200), F(81, 200)]
+    f = q0[1][1] / (q0[1][1] + 3)
+    source = root([f, 2 * f / (1 + f), F(0), F(0)], q0)
+    u, cap, end, never = source
+    assert cap == end == [F(4657205, 6655216), F(40951, 790951), 0, 0]
+    assert u == [F(-10886684947367, 5263949750416), cap[1], 0, 0]
+    assert never == [F(337500, 790951), F(187500, 415951), F(81, 200), F(81, 200)]
+    t = (15 * cap[1] - 6) / (-1984 + 282 * cap[1])
+    assert t == F(4131441, 1557698602) and 0 < t < 1
+    entry = diffuse([1, 0, 0, 0], 1 - t, source)
+    assert entry[0] == [(1 - t) * u[0], (1 - t) * cap[1] - 2 * t, 2 * t, 2 * t]
+    assert entry[1] == entry[2] == [cap[0], *entry[0][1:]] and entry[1][1] > 0
+    assert entry[3] == [(1 - t) * never[0], *never[1:]]
+    z, y, v = t / 3, 8 * t / (3 - 100 * t), 8 * t / (3 + t)
+    assert z > 0 and y > 0 and v > 0
+    inner = root([z / (1 + z), F(0), F(0), y / (1 + y)], entry)
+    assert all(inner[0][i] == inner[1][i] == inner[2][i] for i in (1, 2, 3))
+    assert inner[1][2:] == [0, v] and inner[1][0] == inner[2][0] > 0
+    output = root([F(0), F(0), v / (1 + v), F(0)], inner)
+    assert all(output[0][i] == output[1][i] == output[2][i] == cap[i] for i in (1, 2, 3))
+    assert output[1][0] == output[2][0] > 0 and output[1][0] < cap[0]
+    assert output[0][0] > u[0] and all(x > 0 for x in output[3])
+    assert prod(output[3]) == (1 - t) * prod(never) / ((1 + z) * (1 + y) * (1 + v))
+    assert prod(output[3]) < prod(never)
+    pure = root([F(0), F(1), F(1), F(1)], all_never)
+    assert pure[0] == pure[1] == [0, 0, 0, 0] and prod(pure[3]) == 0
+    print('PASS deep/nonzero-cross source, full-cap reset, strict gain, Never, and absorbing Nash.')
+
+
+check_deep_nonzero_cross_fixture()

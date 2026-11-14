@@ -62,6 +62,20 @@ three-zero endpoints whose only positive cap is the remaining observer's.
 This is a stronger selected-source exclusion, not new raw UE coverage or a
 closure of that entire three-zero face.
 
+The [nonpositive-pair boundary reduction](../exports/NONPOSITIVE_PAIR_BOUNDARY_RESET_REDUCTION.md)
+now produces contacts for every nonpositive pair depth, with all four
+cross/triple entries arbitrary, when each pivot-participant reward exceeds
+its positive singleton reward. A finite rational case split uses at most two
+roots after diffuse pivot entry. All observer deviation guards hold
+automatically near the original endpoint; both zero observer caps return
+exactly. The remaining positive observer cap need not return. Its exact
+return and the pivot comparison have complete finite sign selectors, with
+an exact passing deep-pair example outside the earlier zero-cross charts.
+If that observer never acts in the actual head, a lower-bound inequality
+replaces exact return. The head's pivot obstacle is retained in every case.
+This removes the contact-production gap on the stated raw region; it does
+not prove that the return/improvement tests succeed at every selected source.
+
 The [incoming boundary controls](CODEX_ROOT__INCOMING_BOUNDARY_CONTROLS.md)
 show why the remaining cases need more than a bare carrier lemma. The
 positive-premium case can require arbitrarily long words across all incoming
@@ -70,6 +84,12 @@ with no positive finite incoming word at all. A general full-Nash obstruction
 also covers the BOTH-LOW pivot/observer face, with an exact inverse-positive
 degree1 example. The displayed games are solved; these are limits of finite
 incoming arguments, not positive-gap or minimizing examples.
+Its constant-sum completion also blocks every global replacement preserving
+all observer payoffs: conservation forces the original Never product to stay
+fixed under componentwise pivot improvement. A stronger inherited-obstacle
+minimum holds on that entire slice. This obstruction therefore survives
+arbitrary changes of complete laws, but still has absorbing gap zero and
+does not obstruct changes to the head or to unpinned observer payoffs.
 
 The supporting results preserve original Never coordinates, give an exact
 incoming root on a positive-pair subface, and identify the actual head's

@@ -227,3 +227,55 @@ must be checked before claiming a new unbounded reward family here. The
 400/-100/+1 fixture is already solved by absorbing Nash and is not a
 separating example. No tested completion is presently certified outside all
 relevant existing producers. Fin4 and unrestricted two-zero closure remain open.
+
+### The opposite-sign two-price ray, including its critical ratio
+
+For the same hard Gamma, set Z_0(23)=rho L+d_0 and Z_1(23)=-L+d_1,
+where rho>0 is fixed and every other nonsingleton entry and d is in a fixed
+bounded box. All sufficiently large L admit an exact absorbing stationary
+Nash profile. This includes arbitrary bounded values for the four observer
+cross/triple entries. The threshold may depend on rho and the box; this says
+nothing about a specified finite value such as L=1000.
+
+Put t=1/L and q=t z. With Q_i forced Quit, P_i passive absorption and H_i
+opponent survival, define F_i=[P_i-(1-H_i)Q_i]/t. The exact stationary
+conditions are F_i>=0 and z_i F_i=0. The polynomial F extends to t=0 with
+
+    F(0,z)=Gamma z+(rho,-1,0,0)^T z_2 z_3.
+
+For 0<rho<2 its positive zero is
+
+    z_0=3(7-2rho)/[2(5-rho)^2], z_1=3(2-rho)/(5-rho)^2,
+    z_2=z_3=3/(5-rho).
+
+The full Jacobian determinant is -det Gamma=-6, so IFT gives full support.
+For rho>2 use support S={0,2,3}, with
+
+    z=(1/rho,0,2/rho,2/rho), F_1=2(rho-2)/rho^2>0.
+
+Its active Jacobian determinant is -4; IFT preserves the quiet inequality.
+At rho=2, the limiting zero z*=(1/2,0,1,1) has one inactive equality and
+full Jacobian
+
+    D=[0,5,1,1; -2,0,0,0; 2,-1,0,-1; 2,-1,-1,0].
+
+Here det D_SS=-4 and the omitted row's Schur complement is
+D_11-D_1S D_SS^-1 D_S1=3/2>0. Solve the three active rows by IFT with
+s=z_1 as parameter. The remaining function g_t(s) is strictly increasing
+near zero. If g_t(0)>=0, choose s=0. Otherwise choose its unique small
+positive zero: a fixed small positive s has g_t(s)>0 for all sufficiently
+small t. This gives exact complementarity in both cases. The construction
+is uniform on the bounded completion box because all leading data are
+independent of its coordinates and the remainders are uniformly controlled.
+
+At least three hazards are positive. In each row, the stationary Continue
+value P_i/(1-H_i) is at least Q_i, with equality when the owner acts. The
+scalar stopping bound prices every finite deadline and Never. Opponents
+absorb geometrically against every unilateral strategy, giving terminal
+Nash and the uniform-horizon conclusion for the same payoff and profile.
+
+This retires the whole fixed-ratio large-price ray as a proposed new class
+for these continuation methods. It is not literally an instance of the
+signed passive-coalition theorem, whose large direction has a nonzero chosen
+coordinate in every row. The explicit stationary equations above supply
+the overlap audit, including the critical support switch.
