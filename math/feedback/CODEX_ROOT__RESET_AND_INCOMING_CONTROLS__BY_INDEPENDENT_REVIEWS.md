@@ -1290,3 +1290,159 @@ Its one wording objection was corrected before approval: the local theorem
 requires all-END and positive original Never. That review covers only the
 new frontier scope, credits and class-preserving normalization; it neither
 reopens the frozen packet nor approves speculative later extensions.
+
+## Complete actual bounded-contact exclusion
+
+Final artifact:
+[actual bounded-contact exclusion](../exports/ACTUAL_BOUNDED_CONTACT_EXCLUSION.md),
+all483 lines, SHA256
+`c3849e750941241d6635c159c92dab97ee0f33c900fd6503ef2b3cbcfe2c4526`.
+FAMILY_GENERALIZATION and ROOT developed the common cone multiplier,
+fixed-price bounds, exact two-clock timing and LP/two-form mechanisms.
+The old full-cap transport, strict-column/all-END source and ordered
+mixed-law limits are reused and credited. The intermediate contact-surplus,
+three-persistent/cycle and longer timing-index stages are subsumed; their
+proof copies and separate partial frontiers are not retained.
+
+TWO wholly noncontributing whole reviewers independently read the final
+assembled proof and gave mathematical PASS plus affirmative PASS on all
+EIGHT export criteria. OPPOSED_013's final review-record SHA256 is
+`98292de3a5a1d5cb97a9bd7ee58bf96d0220937e934b983602e82d882b3c1c68`.
+FRESH_GLOBAL_REVIEW's record SHA256 is
+`19bcd469ad3af9ab3bab771bfcc87fb111feb82cf00b5fc637106e0de0a96623`.
+Their earlier component reviews were not substituted for these final
+whole-assembly/source/significance gates. The final lifecycle-only opening
+cleanup was checked against the exact final bytes; no mathematical change
+or unresolved objection remains.
+
+Both checked the actual global-SUM/all-END case, row-raise correspondence,
+explicit4^3 price selection BEFORE t/source, smaller-epsilon inequalities,
+original-Never floor, full infinite-response cap envelope and one COMMON
+cone-KKT multiplier. They checked the direct a_h=theta_h gamma_h/N_h bound,
+both inverse-column directions and uniform reciprocal-price separation.
+The two-clock proof fixes finite masses and has zero tie-probability
+derivative under legal finite PMF/hazard changes, uses EXACT original
+outside Never factors and
+subtracts only the two persistent-column equalities. No tail minimum or
+infinite-law variation is hidden in that argument.
+
+For three or four persistent owners, both checked all quadratic-path LP
+signs and normality, the point/segment rank bound from Gamma invertibility,
+the self-contained Dines rotation proof even for a nonclosed joint range,
+and existence of ONE PSD multiplier on the critical subspace. Five finite
+negative directions contradict its codimension of at most4. No regular
+END-level manifold, uniform singular value or limiting-kernel assumption is
+used. Exact timing, signed-law, negative-block and three-form boundary
+checks passed. The raw genericity is ONLY nonzero off-diagonal Gamma;
+no2x2/3x3 minor gate survives in the completed consumer.
+
+The source-case/conditional-value gate is explicit: an ACTUAL all-END global
+minimum is the given case, not an attained law produced by compactness.
+Both reviews affirm the completed class exclusion as independent value
+beyond the prior full-four PRICE/observer/marked-source results. The old
+universal source permits the same smaller fixed price box. Unbounded
+contacts can be unused replies and need not represent prescribed activity
+or distinct kernels. No actual-attainment, unbounded-contact or UE consumer
+is claimed. Source statements were statically inspected; no new Lean build
+or certification was performed.
+
+## Compact first joint contact without actual attainment
+
+Final artifact:
+[compact first-joint-contact reduction](../exports/COMPACT_MINIMUM_FIRST_JOINT_CONTACT_REDUCTION.md),
+all327 lines, SHA256
+`56d91ecc1fa2a97d0437eb93d36009494209b1fe24a0b6048f787ebc77d1b1dd`.
+OPPOSED_013 and ROOT developed the compact prefix/stripping derivation and
+contact ray. Two noncontributing whole reviewers read the exact final bytes,
+attempted falsification and gave affirmative PASS on all eight export gates:
+COMPACT_CONTACT_REVIEW, record SHA256
+`c7158d635604d7aef12712ca737357672f387f83b8a68170798bdd409cc1b706`,
+and FRESH_GLOBAL_REVIEW, record SHA256
+`c8c0d911405b2dea876b5c5a1fc1949584e3cc232aa3a9659b67507da19430ab`.
+No correction or unresolved objection remains.
+
+Both checked the exact small-row excess/collar induction, uniform cumulative
+activity charge, strict Continue cap equality and preservation of the same
+entire native(U,B,e,N) despite escaping cut dates. They checked the full
+raised-carrier correspondence, existing four-player quadratic cap margins,
+proper joint compact-prefix extraction, genuine absorbing endpoint, finite
+affine cap-contact ray and secondary ORIGINAL-nu contradiction. Arbitrary
+stripped rows use unconditional cap/payoff identities, not a Nash-specific
+debt theorem. Exact finite-law and rational charge tests passed.
+
+The old strict cap margins, early-collision/solo ledger and all-END source
+are credited. The new source restriction aligns a current finite joint
+query with native END at the selected SAME compact minimum without assuming
+an actual calendar, source cube, common debt vector, Nash row or minimum
+suffix. Both reviews affirm the stated conditional-source significance:
+the nonempty all-END global-minimum subset is explicit and supplied by the
+old universal reduction; it is not a new raw-table UE criterion. The suffix
+may remain nonrealized, and its paid-contact consumer remains open.
+
+## Complete low nonnegative four-row source exclusion
+
+Final artifact:
+[low nonnegative four-row exclusion](../exports/OPPOSED_PAIR_LOW_NONNEGATIVE_FOUR_ROW_EXCLUSION.md),
+all1218 lines, SHA256
+`bd5526db9ebe2b33621fccedd6b322e93ca79628309e0c1c2bd9ade329beb4ce`.
+OPPOSED_GUARDS, OPPOSED_013, FRESH_TRIPLE_REVIEWER and ROOT developed and
+assembled the new geometry, original-source budget, actual return account,
+finite-nine adapter and exact interval classifier. GLOBAL_VIABILITY's earlier
+budget involvement was independent review, not proof authorship.
+
+Two wholly fresh final whole mathematical/eight-item gates gave PASS with
+no unresolved objection: GLOBAL_VIABILITY, review-record SHA256
+`dfe9aa5a3b77441b4cefea54aa1865b7ccc836df14a109f210f201d3cf6f0c0d`,
+and LOW_FOUR_REVIEW, record SHA256
+`70e3d97e699de0b203781d96be591d3b6ca85f956a60374a9f469c89f8bcb5ef`.
+Each read the full final source-to-consumer proof and independently ran all
+FOUR printed standalone programs. No generated coefficient or leaf payload
+is retained. The program SHA256 values, in printed order, are
+`f617edc8bf1707d51871310443044c71a62cc91ddd7b79eb4d6e916ca864c0d8`,
+`10a2a24438d4e60ec3a0cfb93117972c2c5a03bc32e16cb5484bc34b68d64987`,
+`c50befe8b69fea729b5326601497022afbef41453ddd0c98efc13639d1e84e67`,
+`94f023a20bfd95d1e3fb486e4935842f772f4cf41097c96be0d439a0212f6e11`.
+The exact classifier exhausted35087 nodes, with13932 ratio leaves,
+1916 earlier-gain8 closures,95 gain5 closures and1601 cone exclusions;
+pending and unresolved counts are BOTH zero. Its common ratio-numerator
+lower bound is131510252969/140737488355328>0. Both full reviewers reproduced
+that result. All other polynomial and exact V=0 boundary tests passed.
+
+The full chain retains the ORIGINAL native m, original all-bad AB/Cfloor,
+all actual four-player caps and every Never factor. It produces every new
+tail sign, stationary bracket, physical support, eight-row account and ninth
+full01 comparison. The new comparison strictly absorbs ALL NINE old rows.
+No continuation is declared minimizing, no recurring cone is assumed and
+no stationary upper plane is extrapolated. A singleton-annihilation wording
+was scoped correctly to0,1,3 before promotion; all programs were unchanged.
+The final explicit Lean handoff was independently checked at the final hash.
+
+Both source/significance gates distinguish this completed actual mode from
+the old first-triple bound V<3(E-F), which did not exclude0<=V<E-F. The
+four-row factorization is an explicit case of the established incoming
+classification, not a supplied successful replacement. The new result is
+not UE for the entire31-free-entry reward family. Negative V, the remaining
+medium four-row range, negative-owner2 sources and arbitrary Fin4 remain
+open. No new Lean verification is claimed.
+
+## Final consolidated frontier scope
+
+FRESH_GLOBAL_REVIEW gave a separate read-only scoped PASS on the new MAP
+blocks at SHA256
+`d42d2ef320f82d05edf93780f51dba155f82589be2dba0a2670d137a7e8a784b`,
+METHOD Sections16--18 at SHA256
+`b0a649ceac75b0162f2314d457c303ba725f08f78cf84d0766baaf6a057f447b`,
+and the preceding consolidated feedback at SHA256
+`df6ab967d5f297311fccd87e427c69e53c68ad72b36c1ec27cf18db7276090d0`.
+Its three wording objections were resolved: timing transfers have zero
+FIRST tie derivative; original Never is retained when CUT DATES escape;
+the source-case table uses the stronger completed bounded-contact prices.
+The remaining gaps, unused-contact qualification, compact-suffix/nonNash
+boundary, native-m/full-SUM distinction and partial raw-family V range
+were all checked. No unreviewed first03 assertion was included.
+
+The reviewer independently rehashed all138 prior exports with zero
+mismatches and checked the three new packet hashes above. Intermediate
+proof copies were retired in favor of the complete export. This scoped
+review does not replace any of the six whole packet reviews and claims
+no additional UE class, actual attainment or Lean certification.

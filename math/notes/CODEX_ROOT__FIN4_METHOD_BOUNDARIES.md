@@ -1350,3 +1350,115 @@ preserve these support and contact-tail classes. The actual-source
 hypothesis is explicit: compactness does not supply a realizing calendar.
 Nonrealized minima and the remaining contact consumers remain open. A root
 degree or finite positive-prefix height is not a substitute for either.
+
+
+## 16. Every actual bounded-contact source case is excluded
+
+The [complete actual bounded-contact exclusion](../exports/ACTUAL_BOUNDED_CONTACT_EXCLUSION.md)
+unifies the finite contact-incidence arguments. After avoiding only the
+singleton zero hyperplanes and selecting the native table afresh, it
+constructs ONE fixed positive price vector before t and before any minimum.
+Every ACTUAL all-END global minimum at every sufficiently small raise then
+has UNBOUNDED finite cap-contact dates. No2x2/3x3 minor gate, simultaneous
+support date, regular endpoint map or tail minimum is assumed.
+
+The old universal strict inverse-column/all-END source provides the raw
+matrix and source case. The new finite4^3 price grid and smaller cheap
+weight produce a common cone-KKT bound Gamma^T r>=rho one, with equality
+on persistent columns. Positive inverse-column directions bound the
+possibly signed r and keep every effective price close to the selected
+price. No reciprocal pair can balance at those effective prices.
+
+All persistent-support cases are consumed at the same prices. With at most
+one persistent owner, every sufficiently late query of that owner already
+attains Never, so contacts cannot be bounded. With exactly two, legal
+finite-atom transfers have zero first derivatives of both finite masses
+and tie probability while varying the first-quitter race. The common KKT
+timing coefficient and two
+persistent-column equalities force the forbidden reciprocal balance.
+
+With at least three persistent owners, the finite normal-multiplier set
+has dimension at most4-|S|<=1. Quadratic legal paths and a finite LP dual
+give a point/segment quadratic alternative. A self-contained two-form
+convexity argument supplies ONE normal multiplier whose Hessian is PSD
+on the critical subspace. Five interleaved pair blocks give five negative
+directions, exceeding its codimension of at most4. This uses neither a
+constraint-kernel convergence claim nor an unproduced constant-rank map.
+The exact three-form counterexample explains why the two-clock case needs
+its separate timing proof.
+
+The intermediate contact-surplus and three-persistent/cycle-only stages
+are subsumed and are not retained as duplicate proofs. Their useful price,
+cone and timing mechanisms are reproduced in the completed export. The
+older exact PRICE identity for arbitrary invertible matrices retains its
+distinct same-table, no-singleton-genericity scope.
+
+The all-END ACTUAL global minimum remains an explicit source case, not an
+attainment theorem. Unbounded contacts can be unused finite replies and
+need not coincide with prescribed atoms or distinct payoff kernels.
+Thus this class exclusion does not give a UE. The remaining consumer must
+handle those contacts and, separately, the genuine possibly nonrealized
+suffix of the compact normal form. Inserting empty dates is not generally
+cap-preserving when a conditional native END is negative.
+
+
+## 17. The first joint contact does not require an actual calendar
+
+The [compact first-joint-contact reduction](../exports/COMPACT_MINIMUM_FIRST_JOINT_CONTACT_REDUCTION.md)
+extends the first-head normal form to the full actual closure. At the fixed
+raised full-SUM minimum, choose least ORIGINAL nu among the compact all-END
+minima. A proper first product row with at least two positive hazards and
+a native current-Quit/END contact is produced at that SAME source, even
+when neither the whole source nor its suffix has an actual calendar.
+
+The strict cap margins give a uniform activity charge. A sufficiently tiny
+leading row has every cap on its Continue branch; deleting it lowers the
+full-debt excess by a fixed multiple of its activity. The TOTAL deleted
+activity in a realizing sequence tends to zero, irrespective of the number
+of dates. Thus reindexing the first macro row preserves the same entire
+(U,B,e,N), retaining original Never when the cut dates escape. The old early
+collision/solo ledger is credited rather than counted as a new class.
+
+The new step is an exact finite-prefix ray on C. If all four current Quit
+queries are strict, increase one existing hazard with its genuine compact
+suffix fixed. The all-END objective is affine and constant until a contact
+or a sure-Quit endpoint. The weighted absorbing gap excludes that endpoint;
+a proper contact would strictly lower original nu, contradicting the
+secondary selection. No infinite prefix is executed, and the suffix is
+not assumed minimizing or realized. The prescribed row is not asserted Nash.
+
+Every owner is paid in the original raised game. Native Never attains its
+native cap, while raised literal Never is strictly below the raised cap;
+it is not identified with a late finite query. The finite paid-contact
+consumer is now the common target for actual and nonrealized minima.
+Actual-calendar assumptions remain essential to the separate persistent
+support/Hessian arguments. This normal form alone neither supplies that
+calendar nor closes the contact consumer.
+
+
+## 18. The entire low nonnegative four-row mode is excluded
+
+The [finite-nine-row consumer](../exports/OPPOSED_PAIR_LOW_NONNEGATIVE_FOUR_ROW_EXCLUSION.md)
+closes0<=V<E-F at the genuine tail of the actual01,03,01,013 head in the
+fixed opposed family. The original selected native m, full four-player
+caps and original Never factors are retained. No tail is declared
+minimizing or all-bad.
+
+The original AB/Cfloor produces sharper hazard bounds and a global outsider
+budget. This forces positive owner2 caps through the eight-row word
+01,03,01,013,013,03,01,013. The exact finite classifier proves the last
+source ratio, which forces the ninth013 row, its stationary bracket and
+FULL01 comparison. That comparison strictly reduces Never across ALL NINE
+old rows. The endpoint V=0 is included. Every phase support and required
+bracket is produced; a small recurring cone is never assumed indefinitely.
+
+Both independent whole mathematical/export reviews executed all four printed
+standalone programs. The interval proof exhausts35087 exact nodes with
+zero pending or unresolved boxes, using outward dyadic arithmetic and
+necessary source contractions. No generated coefficient or leaf payload
+is retained. The full proof is in the export, rather than duplicated here.
+
+The remaining raw-family targets are negative-V immediate tails, four-row
+V<0 or E-F<=V<3(E-F), and the surviving negative-owner2 chamber. The new
+actual full-SUM contact theorems concern a DIFFERENT minimum from native m;
+no continuation or counterfixture is transferred between those objectives.

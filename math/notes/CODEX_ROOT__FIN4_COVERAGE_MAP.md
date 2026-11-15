@@ -248,6 +248,31 @@ for theta in K and0<t<t0, has all four NATIVE END caps active and all
 original Never marginals bounded away from0. Its universal all-END consumer
 remains open. This is a different minimizing objective from native m.
 
+The [compact first-joint-contact reduction](../exports/COMPACT_MINIMUM_FIRST_JOINT_CONTACT_REDUCTION.md)
+now gives a common finite head for BOTH actual and nonrealized minima.
+Choose a compact all-END full-SUM minimum with least ORIGINAL nu among
+those minima. At this SAME source X it produces
+
+    X=prefix(q,Y), Y in C, B(Y)=e(Y), N_i(Y)>0,
+    q in[0,1)^4 with at least two positive coordinates,
+    Q_i^Z(q)=B_i^Z(X)=e_i^Z(X) for some owner i.
+
+The current finite query is paid in the ORIGINAL raised game, and the row
+is the first prescribed joint stage. The source X need not have an actual
+calendar. A uniformly charged deletion of tiny leading rows in actual
+realizers preserves the entire SAME(U,B,e,N), then a finite affine prefix
+ray forces contact by secondary original-Never minimality. The old strict
+cap margins and early-collision mechanism are credited and reproduced as
+needed; the new consumer is the exact compact contact ray.
+
+The row is NOT asserted Nash, and Y is neither assumed minimizing nor
+actually realized. Native Never is a maximizing response; raised literal
+Never remains strictly below the raised cap. This removes actual attainment
+as a prerequisite for the finite first-contact normal form, not for its
+suffix or the actual-calendar Hessian arguments below. The universal
+remaining target is to consume this finite paid contact with its genuine
+compact suffix and the same original full-SUM objective.
+
 The [actual minimum contact/support reduction](../exports/ACTUAL_MINIMUM_CONTACT_AND_SUPPORT_REDUCTION.md)
 now supplies a complete necessary condition for ACTUAL minima of this
 original full-SUM problem. Write rho=t sum theta_i. Choose ONE theta in
@@ -276,13 +301,14 @@ content is this same-table contact alignment and the support/price
 obstruction. The modifications preserve each owner's bounded/unbounded
 support status and the bounded/unbounded status of its contact dates.
 
-After this fixed price/source selection, the remaining cases are:
+With the stronger complete bounded-contact price choice below, the
+remaining cases are:
 
 | Disjoint minimum case | Necessary surviving geometry | Open consumer |
 | --- | --- | --- |
-| Nonrealized compact minimum | No actual complete law realizes the selected tuple | Actual approximation or a source-faithful comparison through this limit |
-| Actual, some owner has bounded finite support | A paid first-stage joint atom and finite cap contact can be selected in the same support/contact-tail class | Consume the contact with the original full-SUM objective |
-| Actual, all four finite supports unbounded | At least one owner has unbounded finite cap-contact dates; the same first-stage normal form is available | A global consumer for recurring contacts |
+| Nonrealized compact minimum | The finite joint cap-contact head is produced, but no actual complete law realizes the whole selected tuple | Consume the head through its retained compact suffix |
+| Actual, some owner has bounded finite support | Finite cap-contact dates are unbounded; a paid first-stage joint atom/contact can also be selected | Consume the unbounded contacts with the original full-SUM objective |
+| Actual, all four finite supports unbounded | Finite cap-contact dates are unbounded; the same first-stage normal form is available | A global consumer for these contacts |
 
 This is a source-case partition, not three raw reward classes or an actual
 attainment theorem. For the additional raw condition that Gamma has no
@@ -291,6 +317,30 @@ original Never has a finite cap contact:
 otherwise at least two owners persist and their entire singleton block
 must be zero. The nongeneric contact selector above does not need that
 condition. Nonrealized minima and all stated contact consumers remain open.
+
+The [complete actual bounded-contact exclusion](../exports/ACTUAL_BOUNDED_CONTACT_EXCLUSION.md)
+now rules out the ENTIRE bounded-contact case at one fixed produced price
+vector. Avoid only the singleton zero hyperplanes, select the table afresh,
+then choose the prices BEFORE t and before every minimum. Every ACTUAL
+all-END global minimum at all sufficiently small raises has UNBOUNDED
+finite cap-contact dates, regardless of its persistent-owner count.
+
+The proof produces one common cone-KKT multiplier using late positive and
+one-sided zero controls. The strict inverse column keeps every effective
+price close to the chosen price and forbids reciprocal balances. With two
+persistent owners an exact timing derivative forces such a balance. With
+three or four, the multiplier set is a point or segment; finite LP duality
+and a two-quadratic-form alternative produce a normal PSD multiplier,
+contradicted by five negative directions against codimension at most4.
+No2x2/3x3 minor, constant-rank or simultaneous-support hypothesis remains.
+This subsumes the intermediate incidence-size and two-persistent stages;
+they are not separate outstanding cases or exports.
+
+Unbounded contacts may be unused replies, including repeated equivalent
+late queries, and do not imply infinitely many prescribed atoms or UE.
+The universal remaining target is still the finite paid contact with its
+genuine compact suffix; actual contact sets and suffix realization are
+not replaced by a convenient calendar or equilibrium.
 
 The thirteen endpoint zero faces are a conditional refinement of this
 program, not thirteen additional universal reward classes. An inherited
@@ -451,8 +501,24 @@ the four-row history. In the immediate0<=V<E-F sector the original
 source bounds force T>0 and one more actual013 row; a full01 replacement
 then absorbs ALL three retained rows. Thus the immediate nonnegative-V
 mode is completely excluded. No separate quiet2 guard or minimizing-tail
-hypothesis is supplied. The negative-V immediate and bounded-V four-row
-sectors remain open.
+hypothesis is supplied.
+
+The [low nonnegative four-row consumer](../exports/OPPOSED_PAIR_LOW_NONNEGATIVE_FOUR_ROW_EXCLUSION.md)
+now also excludes the ENTIRE four-row sector0<=V<E-F, including V=0.
+The original global budget forces positive owner2 caps through the actual
+word01,03,01,013,013,03,01,013. A complete exact interval classifier then
+produces the final ratio needed for a ninth actual013 row. Its full01
+replacement strictly reduces Never across ALL NINE old rows, contradicting
+the ORIGINAL m. Every bracket, quiet comparison, tail sign and account is
+produced; no continuation inherits a minimum or an unproved recurring cone.
+The1218-line proof is self-contained, and both whole independent reviews
+reproduced all four printed programs, including35087 exact nodes with zero
+pending or unresolved boxes. The programs regenerate their certificates;
+no coefficient or interval-leaf payload is retained.
+
+The four-row source therefore has V<0 OR E-F<=V<3(E-F). Those sectors and
+the negative-V immediate history remain open. This is a complete source-mode
+exclusion, not UE for the whole31-free-entry reward family.
 
 There is also an explicit zero2 source cone removed in the
 [method note](CODEX_ROOT__FIN4_METHOD_BOUNDARIES.md), Section9. In the second
@@ -518,8 +584,8 @@ additional game or source exclusion; a genuine tail/full-game change is
 needed there.
 
 The remaining targets on this family are precisely the negative-V immediate
-history, the V<3(E-F) four-row history and the surviving negative-owner2
-chamber.
+history, the four-row sectors V<0 or E-F<=V<3(E-F), and the surviving
+negative-owner2 chamber.
 Other opposed-pair reward tables, arbitrary-source sign chambers,
 nonnegative minimum sources outside this reduction's domain and both
 universal capstones remain open.
