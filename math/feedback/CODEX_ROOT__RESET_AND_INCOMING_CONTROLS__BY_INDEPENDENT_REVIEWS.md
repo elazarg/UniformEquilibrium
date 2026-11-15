@@ -667,3 +667,41 @@ counterexample. The new cap restrictions are necessary first-action
 conditions, not additional UE-class claims. The larger-T family remains
 the next source-geometry target. Earlier proof copies and unresolved T=0
 wording are replaced by references to the frozen interval theorem.
+
+## Exhaustive coverage and completion map
+
+Reviewed artifact: [Fin4 coverage map](../notes/CODEX_ROOT__FIN4_COVERAGE_MAP.md).
+Final SHA256:
+`bf1af0ef402641d0ed22341e4dcf0638577c591f87b5bd209579ec3515c48668`.
+This is a research map and ordinary mathematical bookkeeping, not a new
+export, solved residual arm, or Lean verification.
+
+MAP_UNIVERSAL_REDUCTIONS independently checked the universal native
+56-coordinate reduction, same-profile row-raise identity, absorbing-gap
+equivalence, 8-Lipschitz bound and generic boundary closure. MAP_SOURCE_BRANCHES
+checked the disjoint N0/N-/Nb partition, including a table with both negative
+and boundary m-minimizers, and separation of the alpha, m, atlas and marked
+sources. MAP_RAW_COVERAGE checked the five explicitly quantified native
+admissions, all eleven graph shapes and eligibility counts, and the four
+first-failure residual arms. The unique-anchor proof covers empty edge and
+required-triple sets as well. All three reviews gave mathematical and scope
+PASS on the exact final bytes, with no unresolved objection in their scopes.
+
+MAP_CHECKED_ATLAS independently checked the two universal capstone definitions
+and conditional completion theorem, the escape/return inner dispatches,
+normalized whole versus endpoint-target equality, and declared-graph scope.
+It also approved the stale-status corrections in the directed-knowledge note
+(SHA256 `461b01ee8fe20fb8237a0c6801db632389f4bb08aeaf3c8fbefd8d2e9856a280`)
+and SCC ledger
+(SHA256 `7a9665cba1e96f5c878ed5eb12cd402ce3fbeb143f36034cbb5264dfec7322b2`).
+No fresh Lean build is claimed.
+
+The review corrected two precision issues: no overlap of realized source
+modes is asserted, and generic nonvanishing applies only off the identically
+zero matrix diagonals. CODEX_ROOT checked the final arguments and all review
+scopes. Exact finite enumeration of the64 labelled pair graphs independently
+confirmed the11 shapes and one-edge-triple counts. Documentation and local
+link checks passed; all132 existing export Markdown files remained unchanged.
+The five-mechanism queue is explicitly conservative: other solved games may
+remain queued until their raw criteria are added. It does not claim a full
+registry of every export or a numerical percentage of Fin4 completed.

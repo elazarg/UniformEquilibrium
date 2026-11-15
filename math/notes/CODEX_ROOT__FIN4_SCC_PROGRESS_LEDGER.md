@@ -2,8 +2,6 @@
 
 Maintainer: `CODEX_ROOT`
 
-Last updated: 2026-09-05
-
 ## Purpose
 
 This is the canonical plain-text progress map for the four-player quitting-game
@@ -19,6 +17,8 @@ Every hypothetical Fin4 counterexample enters one of two terminal components
 on one retained source chronology. These are structural outputs, not
 uniform-equilibrium consumers. The detailed source and theorem inventory remains in
 `CODEX_ROOT__FIN4_PRODUCER_ATLAS_DIRECTED_KNOWLEDGE.md`.
+The [coverage map](CODEX_ROOT__FIN4_COVERAGE_MAP.md) gives a separate,
+conservative reward-class partition and precise universal completion tests.
 
 ## What an SCC means here
 
@@ -100,11 +100,12 @@ Therefore no fairness or rank-reset argument is needed.
 - Terminal live SCCs: 2 (`uniformEscape`, `minimumReturn`)
 - Former entrance SCCs eliminated before this graph: 1 (same-stage
   monodromy, representing two old leaf tags)
-- Unclassified recurrent SCCs outside the declared graph: 0, by the exhaustive
-  entrance and dispatch theorem
+- Unclassified outputs of the declared entrance and dispatch: 0
 
 This is an exact finite roadmap count.  It is not a percentage-complete claim:
-both terminal SCCs remain mathematically open.
+both terminal SCCs remain mathematically open. The count classifies the
+declared normal-form graph, not every underlying continuation dynamic or
+every finer source-regeneration cycle.
 
 ## Current research compression beyond the declared graph
 
