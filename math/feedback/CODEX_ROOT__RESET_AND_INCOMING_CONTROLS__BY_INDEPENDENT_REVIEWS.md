@@ -477,3 +477,97 @@ the other used the old paired test. That example is not promoted. The final
 small table also avoids the earlier passive-domain-only coverage shortcut.
 Only the unified new theorem is exported; its planar lemma, numeric searches,
 intermediate examples and supporting certificates are not separate exports.
+
+## Payoff-domain orientation and the first-action outer set
+
+Reviewed packet:
+[Uniform equilibrium from payoff-domain orientation](../exports/PAYOFF_DOMAIN_ORIENTATION_UNIFORM_EQUILIBRIUM.md).
+Exact final SHA256:
+`574320cd8c19c4246822281324d106a525285e13ce23287ac91307778aca52cd`
+(829 lines).
+
+FRONTIER_ADVERSARY and TRIPLE_INDEX independently gave complete mathematical
+PASS and coverage/export-gate PASS on these exact bytes. CODEX_ROOT also
+checked the complete proof, both contained exact programs and all five
+tracked Lean source paths. No unresolved objection, unproduced strategic
+input or conditional-export exception remains. No Lean command was run.
+All130 previous export Markdown files remain byte-identical.
+
+The reviewers checked the finite-player local zero-set induction for
+arbitrary product words, the actual-closure minimum and Never repair,
+and the localization that removes prefix invariance from an open source
+domain. Falsification attempts addressed virtual seeds leaving the domain,
+recursive extensions leaving the original ball, splicing closure points,
+loss of original survival, cap/payoff confusion, singular orientation
+strata and unbounded odds. The proof retains the full behavioral caps,
+uniform Lipschitz estimates and strict survival slack needed in each case.
+
+The raw hull adapter proves the entire C>=6/7 family, including the exact
+boundary. The literal C=6 table supplies strict separation from all the
+audited earlier selections, including every parameter, role and recipient
+scale in the cooperative-edge producer. The stationary obstruction has141
+positive coefficients. The second raw adapter uses a compact first-action
+outer set containing every zero-debt actual-closure payoff, including
+limits of approximate profiles. Its14/25-passive family for6<=C<=20 fails
+the hull test but has a uniform open neighborhood excluding the full high
+source image. Both reviewers reran the contained33-box integer certificate;
+an independent direct evaluation of all16,896 endpoint vertices also passed.
+The uniform maximum-debt margin is9/30800. These calculations require no
+numerical optimization or untracked input.
+
+The universal source restriction keeps its two cases: a strict-negative
+actual-closure minimizer already has no good root; a nonnegative boundary
+minimizer is approached by bad strict-negative sources. Nonnegativity of
+the minimizer is not assumed in the first case. Actual boundary membership
+without a positive global minimizing Never value is not claimed sufficient.
+The held tilted-edge draft's demonstrated C=6 coverage is included here;
+that draft is not exported separately. Arbitrary Fin4 remains open.
+
+## Actual boundary membership does not imply a good-root neighborhood
+
+Reviewed section: “An actual zero-debt boundary need not admit a good-root
+neighborhood” in
+[the source geometry note](../notes/CODEX_ROOT__ACTUAL_MINIMUM_AND_MIXED_ENDPOINT.md).
+Exact section SHA256:
+`316db199f6c04d2ccf5c6b4468ca16bf4602b8bf2d6c1f07e21deab113dc2fa5`
+(132 lines, ending before the next section).
+
+PASSIVE_FLOOR_OVERLAP independently gave complete mathematical PASS on
+these exact bytes, and CODEX_ROOT checked the formulas and complete Nash
+support census. The review reconstructed all60 symbolic table entries,
+the fixed inverse-positive R0 singleton matrix of degree1, the unique bad
+root at every sufficiently small negative diagonal annotation, its positive
+successor and index, and the explicit absorbing stationary equilibrium.
+The concrete rational specialization also passes its stated error range.
+No unresolved objection remains. This is internal method control, not an
+export or a new UE reward-table class: the stationary equilibrium already
+solves every table in the family.
+
+The actual AllNever annotation has U=B=0 and Never1, but bad sources
+accumulate there despite the harder singleton-matrix hypotheses. Its
+global least-Never value is0. This refutes replacing positive GLOBAL
+minimum information by actual boundary membership or tangent index; it
+does not refute the open-domain consumer or a genuine positive-minimum
+comparison. Only the generalized family is retained, replacing its earlier
+isolated example.
+
+## The first-action orientation test has an exact parameter limit
+
+Reviewed section: “The first-action orientation criterion does not extend
+to every C>=6” in
+[the source geometry note](../notes/CODEX_ROOT__ACTUAL_MINIMUM_AND_MIXED_ENDPOINT.md).
+Exact section SHA256:
+`7e2ac3fe9813ff4e532dc696ebf7a032567bdebf402cdf06b59a4bdaa4dea502`
+(56 lines, through the end of the note).
+
+TRIPLE_INDEX independently gave mathematical PASS on these exact curated
+bytes. It evaluated the frozen export's Section7 table at C=40 and checked
+its equality with the independently verified literal table. The review
+recomputed the positive Quit numerators, positive full determinant via the
+Schur bounds, exact N1 head inequalities, and positive hull weights. The
+standalone exact reconstruction also passed under CODEX_ROOT. No objection
+remains. This is internal method control: the6<=C<=20 theorem cannot be
+extended to every C>=6 using the same nonpositive-orientation criterion.
+No actual zero-debt realization of the C=40 source or UE counterexample
+is claimed. The concise proof retains the unique obstruction without
+duplicating the full table and verifier already used for independent audit.

@@ -148,9 +148,36 @@ Its positive-index full-support annotation is an actual full behavioral
 deviation-cap vector of an absorbing two-date profile. It cannot be a
 prescribed payoff vector, as an exact reward-hull inequality shows. Thus
 the example tests actual cap geometry while preserving the distinction
-between caps, payoffs and a zero-debt least-Never source. Games failing the
-capture or outer-edge tests, multiple positive pairs, opposed joining pairs
-and the unrestricted global minimum remain unresolved.
+between caps, payoffs and a zero-debt least-Never source.
+
+[Payoff-domain orientation](../exports/PAYOFF_DOMAIN_ORIENTATION_UNIFORM_EQUILIBRIUM.md)
+now restricts the index test to joint payoff geometry relevant to zero-debt
+actual-closure points. A compact invariant payoff domain or an open
+neighborhood of those points suffices; caps need not belong to that domain.
+The raw adapters use the reward hull and a smaller first-action set N1,
+whose containment proof includes limits of approximate profiles. Weak
+nonpositive orientation suffices, including singular support maps, and
+every sure root is already a good exit. Arbitrary finite product words
+produce the local comparisons; they need not be exact Nash words.
+
+The complete finite-player theorem gives native absorbing debt zero and
+one original uniform target. Its four-player hull application covers every
+C>=6/7 in the literal family, including a C=6 table outside all the audited
+earlier raw admissions and every cooperative-edge parameter choice. A
+second family, with pair02 passive rewards14/25 and6<=C<=20, fails the
+hull test but passes the first-action adapter. A finite exact certificate
+excludes its entire full-support source image from a uniform neighborhood
+of N1. These are complete reward-table classes, not supplied continuations.
+
+For any native positive absorbing gap, a least-Never actual-closure point
+among zero-debt points with nonpositive payoff minimum lies in the closure
+of strict-negative annotations having no good Nash root. If its payoff
+minimum is negative, it is itself such a bad source. If the minimum is zero,
+it is a nonnegative boundary point with only good AllContinue and bad
+sources arbitrarily nearby. Its positive GLOBAL minimizing Never value
+must be retained. The exact control below shows why arbitrary actual
+boundary membership cannot replace that information. General games failing
+both raw adapters and the unrestricted global comparison remain open.
 
 The [incoming boundary controls](CODEX_ROOT__INCOMING_BOUNDARY_CONTROLS.md)
 show why the remaining cases need more than a bare carrier lemma. The
@@ -2112,3 +2139,193 @@ one must change an earlier branch to improve it. A general proof may need
 such changes to the actual head. The existing global minimum hypothesis
 cannot be replaced by actual membership plus the search for a next Nash root.
 No absence of arbitrary behavioral comparisons is asserted.
+
+## An actual zero-debt boundary need not admit a good-root neighborhood
+
+This exact family lies in the inverse-positive singleton-matrix branch.
+Each table has an absorbing stationary equilibrium, yet actual AllNever0
+has only the auxiliary AllContinue root and is approached by annotations
+whose UNIQUE Nash root has every successor positive. Actual boundary
+membership and tangent index do not imply a good-root neighborhood. This
+is ordinary mathematics and a method obstruction, not new UE coverage.
+
+Native own-singleton, live and Never rewards are zero. In player order
+0,1,2,3, fix Gamma_ij=Z_i({j}) and parameters satisfying
+
+    Gamma=[0 -1 3 -1; -1 0 -1 3; 3 -1 0 -1; -1 3 -1 0],
+    0<a<b<3, c>max(a,1), sigma=a+b-c in(0,1),
+    T=-(33+7sigma)/4.
+
+Define d by cyclic relabelings of its first row(0,-a,-b,c). On a pair ij,
+owner i gets J_ij=Gamma_ij+d_ij: its first recipient row is
+J01=-1-a,J02=3-b,J03=c-1. Every nonparticipant pair or triple entry is T+1;
+every participant triple and every grand entry is T. Together with Gamma
+this specifies ALL60 reward coordinates. Every higher joining coefficient
+is-1. Each d-column has one positive entry, at owner h+1 modulo4 for column
+h, and every reciprocal pair has a negative entry.
+
+The fixed singleton matrix has determinant45 and strictly positive inverse
+
+    Gamma^(-1)=(1/15)*[2 3 7 3; 3 2 3 7; 7 3 2 3; 3 7 3 2].
+
+It is R0: all principal blocks of size at least two are nonsingular
+(pair determinants-1 or-9, triple determinants6), and a nonzero singleton
+homogeneous complementarity solution violates a negative off-support entry.
+For Gamma*x-1>=0, x>=0, x_i*(Gamma*x-1)_i=0, full support has the unique
+solution x=1; cross pairs require negative x, matched pairs violate a quiet
+inequality, and each triple has an active row with two negative entries.
+Thus its R0 degree is+1, the sign of det Gamma.
+
+For proper hazards, use odds(x,y,z,t). The exact indifference maps are
+
+    Phi0=-a*y-b*z+c*t-yz-yt-zt-yzt,
+    Phi1=c*x-a*z-b*t-xz-xt-zt-xzt,
+    Phi2=-b*x+c*y-a*t-xy-xt-yt-xyt,
+    Phi3=-a*x-b*y+c*z-xy-xz-yz-xyz.
+
+At annotation v the endpoint gap is H_i(Phi_i-v_i), with H_i opponents'
+Continue probability. Active proper owners require Phi_i=v_i and quiet
+owners Phi_i<=v_i. A root is good if it has a sure quitter or a nonpositive successor.
+
+There is NO sure Nash root at ANY annotation. With at least three sure
+owners, each faces at least two sure opponents and has joining difference
+-1. With two sure owners, one has a negative joining entry toward the
+other; its gap is a convex combination of that entry and higher joins-1.
+With exactly one sure owner h, all other owners except h+1 modulo4 have
+strictly negative conditional gaps and must be quiet. Owner h+1 then
+faces only h, has gap c>0, and must be sure too. These comparisons face a
+sure opponent, so are annotation-independent.
+
+At v=0 no proper pair can have both active equations zero. In every triple,
+one active owner has its positive joining opponent outside the support,
+so its entire Phi is strictly negative. On full support,
+
+    sum Phi_i=-sigma*(x+y+z+t)-2(xy+xz+xt+yz+yt+zt)
+                 -(xyz+xyt+xzt+yzt)<0.
+
+A nonzero singleton support h makes owner h+1 modulo4 strictly prefer Quit.
+Thus AllContinue is the ONLY Nash root at0. Native AllNever is an actual
+full-behavior Nash profile with U=B=0 and original Never nu=1: every
+unilateral deadline or Never gives the deviator0.
+
+Now put v=-epsilon*1 for sufficiently small epsilon>0. AllContinue is not
+Nash, and a proper singleton's active equation0=-epsilon is impossible.
+Sure roots were already excluded. A pair with a positive joining entry
+cannot solve both negative active equations. The remaining pairs are02
+and13. On02, x=z=epsilon/b, but quiet owner1 has
+Phi1=(c-a)epsilon/b-epsilon^2/b^2>-epsilon for small epsilon;13 is its
+cyclic relabeling. Every triple is a cyclic relabeling of012, where
+
+    a*y+b*z+yz=epsilon,       x(c-z)=a*z-epsilon.
+
+Here z<epsilon/b; since a<b, the right side is negative, while the left
+side is positive once epsilon<bc. Thus no triple is Nash.
+For full support, the sum identity bounds every odds by4epsilon/sigma.
+Subtract opposite active equations to obtain
+
+    (x-z)(b+y+t+yt)=(a+c)(y-t),
+    (y-t)(b+x+z+xz)=-(a+c)(x-z).
+
+Their positive factors force x=z,y=t. The remaining equality factors as
+(x-y)[-(b+c-a)+x+y+xy]=0. Since b+c-a>0, the sum bound excludes the
+second factor for small epsilon. Thus there is exactly ONE full root:
+all odds equal the unique positive u satisfying
+
+    sigma*u+3u^2+u^3=epsilon,       0<u<epsilon/sigma.
+
+The polynomial is strictly increasing, and this profile satisfies every
+active equality. Its common forced-Quit numerator is
+
+    R=u[(1-sigma)+T*(3u+u^2)]>0
+
+for small epsilon, since1-sigma>0. Every successor is R/(1+u)^3>0.
+This exhausts ALL Nash supports, so every root at each sufficiently small
+negative annotation is bad. With h=2u+u^2, the Jacobian eigenvalues are
+-sigma-3h,-(b+c-a)+h,b+h+i(a+c),b+h-i(a+c). Hence
+
+    det D Phi=(sigma+3h)(b+c-a-h)[(b+h)^2+(a+c)^2]>0
+
+for small epsilon. The unique root has ambient index+1. Moreover
+u/epsilon->1/sigma and successor/epsilon->(1-sigma)/sigma: tangent index
+allows this bad-root accumulation even with Gamma^(-1)>0 and R0 degree1.
+
+For a completely rational instance take(a,b,c)=(1/2,1,5/4), sigma=1/4,
+T=-139/16,T+1=-123/16. ALL preceding conclusions hold for0<epsilon<=1/1000:
+the sum bound gives each odds<16epsilon<=2/125<1/20, hence
+x+y+xy<41/400<7/4; the diagonal root has u<4epsilon<=1/250 and
+(139/16)(3u+u^2)<104389/1000000<3/4. Its determinant is
+(1/4+3h)(7/4-h)[(1+h)^2+49/16]>0, since h<501/62500.
+
+Nevertheless repeat q_i=1/2 at every date. Each owner has H_i=1/8 and
+
+    Q_i=[1-sigma+4T]/8=-(4+sigma),
+    P_i=[1+4(T+1)]/8=-7(4+sigma)/8,
+    P_i+H_i*Q_i=Q_i.
+
+Opponent survival contracts by1/8, so these equalities cap EVERY complete
+unilateral behavior law. This exact absorbing stationary Nash profile has
+payoff-(4+sigma)*1; geometric absorption supplies its uniform equilibrium.
+For the rational instance Q=-17/4 and P=-119/32. Every nonnegative
+recipient-row raise preserves this equilibrium: opponents still absorb
+surely under every replacement, and terminal values shift equally.
+The native absorbing-debt infimum and global least-Never value among
+zero-debt points with nonpositive payoff minimum are0. Actual AllNever has
+nu=1 and is NOT that minimum. This does not refute the open-domain consumer
+or an argument retaining a positive GLOBAL minimum and its propagated constraints.
+
+## The first-action orientation criterion does not extend to every C>=6
+
+Use the complete14/25-passive table in Section7 of
+[payoff-domain orientation](../exports/PAYOFF_DOMAIN_ORIENTATION_UNIFORM_EQUILIBRIUM.md),
+now evaluating its literal reward formula at C=40. This is an internal
+limit of that raw criterion, not an additional existence theorem.
+The exact reward floors are m=(-11,-41,-11,-41). Put
+
+    a=4001/1000,
+    s=[-9/10+2a-(11/25)a^2]/[40a^2-4-a/5]
+      =1461989/15887996000,
+    (x,y,z,t)=(a,s,a,s), D=2+20s+s^2.
+
+Here0<s<1/10000 and the source annotation is
+
+    u=Phi=(s/10-aD,-9/10,-aD,-9/10).
+
+Both anchor coordinates lie in(-8011/1000,-8). Its Quit numerators satisfy
+
+    R1=R3=a(a-4)-s(1+a)^2>0,
+    R2=a-(2+20a)s-(10+11a)s^2>0, R0=R2+s/10>0.
+
+For an exact determinant test set
+
+    A=1+11a/25-s/10+40as, B=A-4,
+    k=(10+s)a, K=40a^2-4-a/5.
+
+Order anchor rows and variables first. Their Jacobian block has determinant
+-D^2. The remaining Schur complement S satisfies
+
+    D S=[[4-k(A+B), D K-A+11B/10-k(A+B)],
+         [D K-4-k(A+B), 11A/10-B-k(A+B)]].
+
+Direct rational bounds give2<A<3,-2<B<-1,0<A+B<2,k<42,D>2,K>635.
+Each diagonal entry of D S has absolute value below100; both off-diagonal
+entries exceed1000. Thus det(D S)<0 and det D(Phi)=-det(D S)>0.
+
+Nevertheless the first-action hazards q=(0,9/10,0,9/10) give
+
+    Q=(-8271/1000,-9/10,-207/25,-9/10),
+    P+mH=(-839/100,-7/5,-839/100,-7/5).
+
+They obey Q<=u, q_i(u_i-Q_i)=0 and P+mH<=u. For reward-hull membership,
+put lambda=-u2/10, mu=s/30, kappa=(9/10-lambda-mu)/19 and assign
+Never,{2},{1,3},{0,1,2},{0,2,3} the respective weights
+
+    1-lambda-mu, mu, lambda-kappa, kappa/2, kappa/2.
+
+They are positive and sum to1. Their anchor mean is
+(-10lambda+3mu,-10lambda)=(u0,u2); both free means equal
+-lambda-mu-19kappa=-9/10. Thus u lies in both the exact N1 and the
+reward hull, has all active Quit numerators positive, and has positive
+full-support index. Every open neighborhood of N1 therefore fails the
+nonpositive-orientation test at C=40. The verified6<=C<=20 theorem is
+unaffected. No actual joint payoff/cap realization U=B=u, positive
+absorbing gap, or counterexample to UE is asserted.
