@@ -252,9 +252,44 @@ larger-coalition rewards and source geometry. These are four research targets,
 not four nearly finished lemmas. They can be intersected with `N0/N-/Nb`;
 no independence or nonemptiness of the intersections is asserted.
 
+The entire `R_S` arm has a sharper restriction. If012 and023 share anchor02,
+their(F1) certificates force T1=Z1(012)>0, T3=Z3(023)>0 and both directed
+participant entries on01,03,12,23 nonpositive. Only the single-edge and
+matching graphs remain. Full Low fails at large anchor odds and small
+central odds; full Charge fails because its middle coefficient at02 is
+T1+T3>0. Thus full **Orientation is the only remaining full-support gate**
+on this arm. Under A_Z>0, both anchors must additionally receive positive
+joining pressure from a central owner; otherwise pure anchor Quit is
+absorbing Nash. The [complete proof and exact index countermodel](CODEX_ROOT__FIN4_METHOD_BOUNDARIES.md)
+also show why both triple certificates plus full Orientation cannot alone
+give a nonpositive joint bundle index. Good anchor-dropout faces must be
+controlled. No entire `R_S` closure is inferred.
+
 The cyclic T>1/4 family is a regression test within this map, not the whole
 frontier. Current source restrictions and its larger-T hull obstruction are
 in the [cyclic frontier note](CODEX_ROOT__CYCLIC_TWO_MATCHING_FRONTIER.md).
+
+## Parallel attack priorities
+
+The following targets are alternative routes and refinements, not additional
+disjoint cases to add to the counts above. A result moves the frontier only
+when its complete consumer or strict coverage change is proved.
+
+| Target | Established boundary | Next mathematical output needed |
+| --- | --- | --- |
+| Both source capstones | Their common pure-pair normalization is already available. A sure pair gives zero joint and deleted reach to its later tail; that tail's escape floor is not reached charge | A renewable whole-source return or contradiction, retaining the original entrance or an explicit adapter |
+| Native positive-source branch | For each alpha<s<m, compactness gives kappa_s=min_{E,nu<=s} min U>0. Existing positive-buffer extraction produces a finite exact Nash head crossing s, retaining(U,B,e,N) | Control as s approaches m, where kappa_s may vanish, followed by compatible joint head/tail revision at a zero face |
+| `R_S` | Only single-edge/matching graphs and the full Orientation gate survive; naive shared-index cancellation is false | Prove positive bundle excess forces a good root on a sure or anchor-dropout face under the complete all-bad/source hypotheses |
+| `R_F` / `R_T` matrix test region | An explicit open singleton-matrix region passes R0/degree/Q pencil tests but has a uniform activity bound for arbitrary homogeneous switching, including unbounded phase counts and signed states when row factors stay bounded | A genuine nonlinear or finite-amplitude mechanism, or a valid actual-source budget beyond the homogeneous state space |
+| `R_O` | Pointwise selection and convexified calendar geometry can miss independent-law constraints; no complete opposed-join closure has been obtained | A global selected-source comparison using the joint independent laws and full deviation caps |
+
+The fixed-s finite crossing is a consolidation of Section12 of
+[bounded crossing](CODEX_COORDINATOR__BOUNDED_CROSSING_SELECTION.md), not a
+new source branch closure. The activity bound and shared-index obstruction
+are proved in the [method-boundary note](CODEX_ROOT__FIN4_METHOD_BOUNDARIES.md).
+They rule out proposed proof steps; they do not exclude those reward tables
+as counterexamples. The two universal source capstones and all four full
+residual-arm targets remain open.
 
 ## Rules for closing a case
 

@@ -705,3 +705,50 @@ link checks passed; all132 existing export Markdown files remained unchanged.
 The five-mechanism queue is explicitly conservative: other solved games may
 remain queued until their raw criteria are added. It does not claim a full
 registry of every export or a numerical percentage of Fin4 completed.
+
+## Parallel attacks: global method budgets and shared-anchor restrictions
+
+Canonical artifact:
+[method boundaries](../notes/CODEX_ROOT__FIN4_METHOD_BOUNDARIES.md), SHA256
+`3dc227e50159c73b7283c25de5bd337abc87777f4cc33c9149dc392c7ebba740`.
+The [updated coverage map](../notes/CODEX_ROOT__FIN4_COVERAGE_MAP.md) has SHA256
+`c366c88209dd1abb98e625361293b495bc0eb2541290c8b9b293e183b84a963d`.
+These are internal research records; no new export or full reward-class
+closure is claimed.
+
+Six parallel attacks addressed escape, return, global AllNever, shared-anchor,
+opposed-join and native source geometry. MAP_UNIVERSAL_REDUCTIONS developed
+the homogeneous obstruction, MAP_SOURCE_BRANCHES supplied simplifying and
+polyhedral witness arguments, and ATTACK_OPPOSED independently found an
+activity bound. CODEX_ROOT extended the argument to signed states; the
+universal-reductions author supplied the complete open-region support proof.
+MAP_RAW_COVERAGE produced the whole shared-arm restrictions and exact
+joint-index falsifier. CODEX_ROOT curated the complete canonical proof.
+
+ATTACK_GLOBAL_GEOMETRY freshly reviewed the entire final artifact, including
+all fifteen signed supports, all singleton phases and weak comparisons,
+the one-way halfspace transition, terminal negative-potential correction,
+infinite-path summability and vanishing-seed bound. MAP_CHECKED_ATLAS
+independently checked the final activity proof and signed extension, and
+reconstructed the shared fixture's joining maps, determinant, F3 polynomial,
+quadratic isolation, strict quiet comparisons and indices. Both reviews gave
+mathematical and scope PASS on the exact final bytes, with no objection.
+The author's source-correspondence check is recorded separately from these
+fresh reviews; contributing authors' checks do not replace independence.
+
+The new budget excludes arbitrary finite or infinite homogeneous switching
+on its explicit matrix region, including signed states with bounded row
+factors. It proves no actual-source or nonlinear budget. Row-proportional
+participant data are not open in the full pair-data space. Compact-limit
+source regeneration and nonlinear crossings remain outside the theorem.
+The shared fixture has good exits and A_Z=0: its bundle index+1 refutes
+unconditional double spending, not a statement using full all-bad/source
+hypotheses or the rectangle theorem's extra conditions.
+
+The independently checked positive-slab finite-head calculation was traced
+back to the existing countable-head mechanism in the bounded-crossing note.
+Likewise the proposed cross-tail common normalization already occurs in the
+directed atlas record. Neither is packaged as a new class reduction. The
+map keeps the live target at the vanishing-payoff/zero-face seam, rather than
+counting these rediscoveries. Documentation, whitespace and local-link checks
+passed. All132 existing export Markdown files remain byte-identical.
