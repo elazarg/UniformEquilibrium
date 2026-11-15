@@ -248,6 +248,50 @@ for theta in K and0<t<t0, has all four NATIVE END caps active and all
 original Never marginals bounded away from0. Its universal all-END consumer
 remains open. This is a different minimizing objective from native m.
 
+The [actual minimum contact/support reduction](../exports/ACTUAL_MINIMUM_CONTACT_AND_SUPPORT_REDUCTION.md)
+now supplies a complete necessary condition for ACTUAL minima of this
+original full-SUM problem. Write rho=t sum theta_i. Choose ONE theta in
+the old box before t and before any source. For every sufficiently small
+t, an actual all-END minimum cannot have all four finite stopping supports
+unbounded while its finite cap-contact dates are bounded. The proof uses
+eight late hazards, an exact END-level manifold and its tangent Hessian;
+it forces the identity
+
+    (theta_i+rho s_i)Gamma_ij=(theta_j+rho s_j)Gamma_ji,
+    s_i=sum_j(Gamma inverse)_ji.
+
+One fixed price chosen in the open box makes this impossible for all small
+t. This uses only Gamma invertibility, already universally available at
+the SAME native table. No new raw-table genericity, joining-rank or
+simultaneous-support hypothesis is needed for this exclusion.
+
+If an original minimum is actual, a finite modification also selects a
+minimum with a finite cap contact. The strict floor needed is
+mu<min(theta_i)A_Z, supplied by choosing t small. Repeated finite contact-time
+descent aligns the earliest contact with the first prescribed stage, which
+has at least two positive own atoms. It may be reindexed to date0. Every
+owner's ORIGINAL raised debt is positive. Existing four-player quadratic
+cap margins and the old solo-first collision ledger are reused; the new
+content is this same-table contact alignment and the support/price
+obstruction. The modifications preserve each owner's bounded/unbounded
+support status and the bounded/unbounded status of its contact dates.
+
+After this fixed price/source selection, the remaining cases are:
+
+| Disjoint minimum case | Necessary surviving geometry | Open consumer |
+| --- | --- | --- |
+| Nonrealized compact minimum | No actual complete law realizes the selected tuple | Actual approximation or a source-faithful comparison through this limit |
+| Actual, some owner has bounded finite support | A paid first-stage joint atom and finite cap contact can be selected in the same support/contact-tail class | Consume the contact with the original full-SUM objective |
+| Actual, all four finite supports unbounded | At least one owner has unbounded finite cap-contact dates; the same first-stage normal form is available | A global consumer for recurring contacts |
+
+This is a source-case partition, not three raw reward classes or an actual
+attainment theorem. For the additional raw condition that Gamma has no
+reciprocal zero pair, EVERY actual all-END local minimum with positive
+original Never has a finite cap contact:
+otherwise at least two owners persist and their entire singleton block
+must be zero. The nongeneric contact selector above does not need that
+condition. Nonrealized minima and all stated contact consumers remain open.
+
 The thirteen endpoint zero faces are a conditional refinement of this
 program, not thirteen additional universal reward classes. An inherited
 endpoint must improve the whole head's constrained obstacle objective,

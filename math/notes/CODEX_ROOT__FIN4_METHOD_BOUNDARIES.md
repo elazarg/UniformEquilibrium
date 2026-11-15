@@ -1300,3 +1300,53 @@ for k<=0 an immediate V<0 consumer must involve owner2, change the genuine
 tail or use a longer controlled return. Extrapolating two stationary upper
 planes outside their bracketing interval does not produce that change.
 No algebraic jackpot limit is asserted to be an actual E source.
+
+
+## 15. Actual full-SUM minima require contact or support geometry
+
+The complete [contact/support reduction](../exports/ACTUAL_MINIMUM_CONTACT_AND_SUPPORT_REDUCTION.md)
+applies to the actual-calendar case of the universal all-END SUM minimum.
+Its objective is
+
+    F=sum_i theta_i(B_i^Z-U_i^Z)+rho nu,
+    rho=t sum_i theta_i.
+
+It is not the observer-constrained pivot minimum or the native restricted
+m. Finite small hazard changes are legitimate competitors without an
+observer-debt repair. At a fully slack finite response menu, all END caps
+remain active in an open finite-control rectangle: earlier queries have
+finitely many strict gaps, and every later gap transports by positive
+opponent survival. The exact bilinear mixed term and late stationarity
+then force reciprocal singleton zeros between persistent owners. No
+reciprocal zero pair therefore excludes the entire actual no-contact case.
+
+Finite cap contacts need not be prescribed actions. With their dates
+bounded and all four owners persistent, eight late controls in order
+01230123 give max(fixed contact offer,END) cap geometry. Compact multipliers,
+the exact END-level manifold and the positive semidefinite tangent Hessian
+force
+
+    (theta_i+rho s_i)Gamma_ij=(theta_j+rho s_j)Gamma_ji,
+    s_i=sum_j(Gamma inverse)_ji.
+
+For ANY supplied positive weight box with interior, one fixed theta can be
+chosen before rho to violate this identity for every sufficiently small
+rho. Gamma invertibility suffices; the universal old all-END box permits
+this price choice at the SAME native positive-gap table. A generic
+singleton-cycle condition is unnecessary.
+
+The actual global minimum case also has a finite-event producer. Increase
+one existing hazard until the first new finite cap contact. Its full-SUM
+objective stays affine and constant while caps remain END; the absorbing
+endpoint is excluded by mu<min(theta_i)A_Z. A finite earliest-contact-time
+descent then aligns a contact with the first prescribed joint atom. The
+positive quadratic cap margins and solo-first collision ledger already
+exist; no common debt vector or special cube table is imported.
+
+Consequently actual sources may be selected with a paid date0 contact and
+at least two owner atoms. The support/price theorem leaves bounded finite
+support for some owner OR unbounded contact dates. The finite modifications
+preserve these support and contact-tail classes. The actual-source
+hypothesis is explicit: compactness does not supply a realizing calendar.
+Nonrealized minima and the remaining contact consumers remain open. A root
+degree or finite positive-prefix height is not a substitute for either.

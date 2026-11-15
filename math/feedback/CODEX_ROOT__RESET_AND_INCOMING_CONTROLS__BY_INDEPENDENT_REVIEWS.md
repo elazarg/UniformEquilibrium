@@ -1214,3 +1214,79 @@ The final scoped living-document review is recorded separately at SHA256
 adapters, proof-copy fidelity and the distinction between source reductions
 and still-open whole branches. All previously frozen exports stay unchanged;
 the new packet is promoted byte-identically after both whole gate approvals.
+
+## Actual full-SUM minimum contact and support reduction
+
+Final artifact:
+[actual contact/support reduction](../exports/ACTUAL_MINIMUM_CONTACT_AND_SUPPORT_REDUCTION.md),
+all616 lines, SHA256
+`b2d92a52349e86f4798a6a04a986282a5eed6aaf88a61041c76245780cef7f56`.
+The final byte-identical candidate passed TWO wholly fresh full mathematical
+and eight-item export gates before promotion. Neither review is an approval
+of a full Fin4 solution or of actual attainment of a compact minimum.
+
+GLOBAL_VIABILITY supplied the ordered late mixed-law proof, the actual
+minimum finite-contact reduction and the earliest-contact normal form.
+FAMILY_GENERALIZATION supplied the one-hazard selector and the eight-control
+END-level Hessian proof, then generalized its necessary condition to the
+exact price identity with only Gamma invertibility. ROOT independently
+checked these mechanisms and assembled the self-contained packet. Their
+author/component checks are not counted as independent whole gate reviews.
+
+FRESH_GLOBAL_REVIEW read all final616 lines and gave FULL PASS, including
+the explicit conditional-value justification and all eight export criteria.
+Its complete review-record SHA256 is
+`61b85179107af0318e8d06354bb39de4f96ec7692c1016e6ba1a40a147192448`.
+OPPOSED_013 independently read the same final bytes, checked the complete
+mathematics and gave affirmative PASS on all eight criteria. Its record
+SHA256 is
+`7c366592d7079fa7daa4e05f6538b25ef29266642653cbedfc53e7cac0da9bf0`.
+Both were noncontributing to this global proof, attempted falsification,
+found no unresolved objection and requested no change to the final bytes.
+
+The two whole reviews independently checked the different-owner and
+same-owner signed-law limits, full-response max-cap neighborhood, finite
+multiplier separation, exact END-level manifold, tangent Hessian
+positivity, limiting-kernel projection and eight-control swap identities.
+They checked that the price is fixed ONCE in the old open box before the
+raise and before any minimum, and that its discrepancy excludes the exact
+price identity uniformly for every sufficiently small raise. No singleton
+genericity, positive inverse-column sign, simultaneous support date or
+joining-control rank is imported into that identity.
+
+They also checked the one-hazard finite-contact selector against the
+weighted absorbing floor mu<min(theta_i)A_Z, its genuine absorbing endpoint,
+strict original-Never reduction, finite earliest-contact-time descent,
+same-table first prescribed joint stage and date0 reindexing. The exact
+checked four-player quadratic cap-margin declaration has precisely the
+original full-SUM minimum hypotheses required here. The old solo-first
+collision ledger and cap margins are explicitly reused, not counted as new.
+The exact Fraction boundary program and tracked source references pass.
+
+The source/significance gate is deliberately limited. Actual all-END
+minimum realization is an EXPLICIT case hypothesis, not a witness produced
+by this packet. Both reviews affirm the conditional exception's independent
+value: the new necessary conditions strictly remove the fully slack actual
+mode and the all-four-persistent/bounded-contact actual mode, while a
+finite comparison selects an aligned paid contact at the same fixed table.
+No supplied improving tail, root selector or favorable rate is assumed.
+The universal native strict inverse-column/all-END box producer is old;
+its actual-case consumer is the new result. Observer-constrained pivot
+minima and marked-clock/common-debt source theorems do not imply it.
+
+The remaining source cases stay explicit: a nonrealized compact minimum,
+an actual minimum with bounded finite support for some owner, or recurring
+finite cap contacts when all owners persist. A first contact alone is not
+an admissible return, a whole-minimum improvement or a UE construction.
+The positive-price construction does not prove a calendar realizing a
+semantic source. No new Lean declaration or certification is claimed.
+
+FRESH_GLOBAL_REVIEW also gave a separate scoped PASS on the new living-map
+block at SHA256
+`6112a17c89e4f50f9511a997fa01b91ebbf31efab22b3e1a05e3148d0f4a8f13`
+and METHOD Section15 at SHA256
+`99543b253fa607a5551470f4708098f1eff87ec5051abc7d6350c73c75bd1d95`.
+Its one wording objection was corrected before approval: the local theorem
+requires all-END and positive original Never. That review covers only the
+new frontier scope, credits and class-preserving normalization; it neither
+reopens the frozen packet nor approves speculative later extensions.
