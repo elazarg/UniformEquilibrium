@@ -426,3 +426,54 @@ existing raw admission; it did not invalidate the earlier orientation export.
 The stronger witness in this packet removes the coordinate-bound shortcut.
 Its passive-domain membership is not claimed to be a joint actual-continuation
 realization. Shared-anchor and general full-support extensions remain open.
+
+## Shared-anchor rectangle degree and actual deviation caps
+
+Reviewed packet:
+[Shared-anchor rectangle degree for uniform equilibrium](../exports/SHARED_ANCHOR_RECTANGLE_UNIFORM_EQUILIBRIUM.md).
+Exact final SHA256:
+`1f1daaa4f067c428a085e28f258164fbd01599ffb7e34902b0c49a297f0f0c8c`
+(837 lines).
+
+FRONTIER_ADVERSARY and GLOBAL_MINIMUM_NEXT independently gave complete
+mathematical PASS and coverage/export-gate PASS on these exact bytes.
+No unresolved objection, unproduced strategic input or conditional-export
+exception remains. Seven cited Lean source paths are tracked; no Lean
+command was run. Pre-placement whitespace and self-containment checks pass.
+All129 earlier export Markdown files remain byte-identical.
+
+The raw producer counts one pair, both adjacent triples and full support
+together. Cooperative comparisons on the outer right/top edges bound the
+whole rectangle index, allowing arbitrary regular full-support index signs.
+The reviewers checked upper-face crossing accounting, constant-shift boundary
+regularization, full active-map genericity, exact support/sure exclusions,
+the shared-source capture split and the remaining one-axis scalar case.
+The pair index is never counted twice. The existing selected-return and
+terminal consumers produce the original fixed uniform target and native
+absorbing debt zero.
+
+The complete separating game supplies every raw test by exact coefficient
+certificates. Its positive-index full root defeats the earlier full-support
+Low, Charge and individual-Orientation choices under every positive recipient
+scaling, including the previous distinct-anchor assembly. All stationary
+supports and stationary limits are excluded. Both reviewers reran the
+embedded standard-library certificate: twenty multiplier terms give140
+positive integer coefficients. All applicable role/weight selections stated
+in the packet were checked, including every signed solo/triple role and the
+broader return selector's next-hazard obstruction. A separate supporting
+review also checked all14 nontrivial response-invariant quotients.
+
+The source lies inside passive bounds and above punishment floors. An exact
+quintic IVT construction realizes it as the FULL behavioral deviation-cap
+vector of an absorbing two-date profile; every cap endpoint, rational bracket
+and strict Quit comparison was independently recomputed. A reward-hull
+inequality proves that it is not a prescribed payoff vector. The packet
+explicitly distinguishes actual caps, prescribed payoffs and a zero-debt
+least-Never source; it makes no minimum-source closure claim.
+
+An earlier large-scale example was rejected after complete scaling review
+found an old admission: one triple became charged under row scaling while
+the other used the old paired test. That example is not promoted. The final
+small table also avoids the earlier passive-domain-only coverage shortcut.
+Only the unified new theorem is exported; its planar lemma, numeric searches,
+intermediate examples and supporting certificates are not separate exports.

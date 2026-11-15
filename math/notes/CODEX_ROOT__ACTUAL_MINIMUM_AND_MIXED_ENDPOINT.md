@@ -133,6 +133,25 @@ must fail every assignment combining Low, Charge, Orientation and the new
 pair–triple test. Shared-anchor configurations are not covered by counting
 the same pair twice; full-support and opposed-pair obligations remain.
 
+[Shared-anchor rectangle degree](../exports/SHARED_ANCHOR_RECTANGLE_UNIFORM_EQUILIBRIUM.md)
+now counts one pair, both adjacent triples and full support together. Explicit
+reward tests provide capture and cooperative comparisons on two outer edges.
+The degree bound permits either local index sign at full support and avoids
+spending the pair index twice. Its exact separating table defeats the earlier
+full-support Low, Charge and Orientation choices under every positive
+recipient scaling. All stationary supports and stationary limits are
+excluded, including a twenty-term polynomial certificate for full support.
+The theorem produces selected return, original UE and native absorbing debt
+zero. No new Lean check is asserted.
+
+Its positive-index full-support annotation is an actual full behavioral
+deviation-cap vector of an absorbing two-date profile. It cannot be a
+prescribed payoff vector, as an exact reward-hull inequality shows. Thus
+the example tests actual cap geometry while preserving the distinction
+between caps, payoffs and a zero-debt least-Never source. Games failing the
+capture or outer-edge tests, multiple positive pairs, opposed joining pairs
+and the unrestricted global minimum remain unresolved.
+
 The [incoming boundary controls](CODEX_ROOT__INCOMING_BOUNDARY_CONTROLS.md)
 show why the remaining cases need more than a bare carrier lemma. The
 positive-premium case can require arbitrarily long words across all incoming
