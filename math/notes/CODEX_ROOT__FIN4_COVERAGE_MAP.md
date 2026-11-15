@@ -583,6 +583,27 @@ cannot improve original Never. This is a proof-method boundary, not an
 additional game or source exclusion; a genuine tail/full-game change is
 needed there.
 
+A different full-SUM source on this SAME fixed family now has an exact
+first-head producer; see Section19 of the
+[method note](CODEX_ROOT__FIN4_METHOD_BOUNDARIES.md). Fix the recipient
+weights before t, choose a least-original-Never full-SUM minimum, and take
+any compact first-contact factorization. For every sufficiently small t,
+its first row is EXACTLY(p,0,0,s), with p,s bounded positive and proper,
+and both0 and3 are current cap contacts. The genuine compact tail has
+B0<0 and B3>0. The proof produces a genericity-free positive alpha-source
+collar from Section11, bounds both bad FIRST hazards by O(t), and removes
+them exactly by a two-contact deformation with strictly positive objective
+derivatives. It neither asserts N1=N2=1 nor controls later bad-owner quits.
+
+The row is Nash in the auxiliary game whose continuation values are the
+TAIL CAPS B(Y), not its prescribed payoffs U(Y). It minimizes joint survival
+among ALL such cap-Nash roots over that genuine tail: every alternative
+scales both the original full-SUM objective and original Never by its
+Continue factor. This supplies a whole-source comparison without giving Y
+a native-m minimum. The remaining task is to consume this exact first03
+head through its genuine compact negative0/positive3 tail. This full-SUM
+reduction does not close or replace the distinct native-m cases below.
+
 The remaining targets on this family are precisely the negative-V immediate
 history, the four-row sectors V<0 or E-F<=V<3(E-F), and the surviving
 negative-owner2 chamber.

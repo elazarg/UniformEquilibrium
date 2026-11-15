@@ -1446,3 +1446,46 @@ mismatches and checked the three new packet hashes above. Intermediate
 proof copies were retired in favor of the complete export. This scoped
 review does not replace any of the six whole packet reviews and claims
 no additional UE class, actual attainment or Lean certification.
+
+## Fixed-family first03 full-SUM source reduction
+
+METHOD Section19 retains the complete OPPOSED_GUARDS/ROOT first03 producer,
+author SHA256
+`01256541b9286fb3fa2bfa8ff61e312d7fc2b388a23f897a5ea2d2edf8c13351`.
+The proof body is copied with heading releveling and durable source links;
+the already explicit distinction between cap-Nash and prescribed-payoff
+Nash is spelled out at the main conclusion. The FULL fixed13 data remain
+premises, including the alpha-collar and optional no-owner2 identities.
+
+Two noncontributing reviewers gave full mathematical PASS on those final
+bytes: COMPACT_CONTACT_REVIEW, record SHA256
+`bd06195439397aa9868db74d7ac322c19e1cb93c2b7321251665e409fee0a265`,
+and LOW_FOUR_REVIEW, record SHA256
+`d5534bd448bcbb7b1bdb5fac538d0bbf1c3393bbcbee3beddfc77aef5010495c`.
+They checked the fixed weight box before t/source, genericity-free alpha
+collar from Section11, uniform bounds over ALL contact factorizations,
+singleton-contact incidence, both good hazards and exact contacts, the
+decoupled two-contact surfaces and positive derivative eliminating both
+bad FIRST hazards. Exact Fraction/dual-number surface tests and cap-Nash
+contraction identities passed. No correction or unresolved mathematical
+objection remains. The final source-scope wording was checked explicitly.
+
+The result produces exactly a first03 row and a genuine compact tail with
+negative0 and positive3 caps at every sufficiently small fixed-price source.
+It also produces minimum survival among ALL auxiliary cap-Nash roots over
+that tail, using h-scaling of the SAME original full-SUM debt and Never.
+The auxiliary continuation is B(Y), not U(Y). Neither an actual tail law,
+native-m minimum, all-bad tail property, N1=N2=1 nor later bad-owner
+inactivity is inferred. This is a complete source reduction, not a full
+fixed-family UE proof or an additional export gate. Its exact-head consumer
+remains open, separately from the native-m cases.
+
+COMPACT_CONTACT_REVIEW additionally gave a scoped curation PASS on MAP
+SHA256 `261388c0b6ba1f69b4d757388b51ad10290d557fc0e0183051c31395fb7a1ce8`,
+METHOD SHA256 `f0f1b74f3b59f2f65cbe40386993ad1f25a47f20c2ee4de4e0224d27d2458b2f`,
+and this section's preceding feedback SHA256
+`c1ff1eb7fc1d83b34ed8704dea4a638a3c6f3a55769a01fef675c9321193aaf6`.
+Its scoped review-record SHA256 is
+`9a12eb3b946eefd0e0e8549c109d0bdf1367d4d57174dc150ac607314892ec26`.
+It verified proof-copy fidelity, source qualifications and both full review
+hashes. It does not promote this internal theorem to an export or UE claim.

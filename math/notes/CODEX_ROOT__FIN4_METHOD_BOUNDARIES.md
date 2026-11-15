@@ -1462,3 +1462,258 @@ The remaining raw-family targets are negative-V immediate tails, four-row
 V<0 or E-F<=V<3(E-F), and the surviving negative-owner2 chamber. The new
 actual full-SUM contact theorems concern a DIFFERENT minimum from native m;
 no continuation or counterfixture is transferred between those objectives.
+
+
+## 19. The fixed family's full-SUM source has exactly a first03 row
+
+This is a complete compact-source reduction for the full fixed13 family of
+[negative-source dispatch](../exports/OPPOSED_PAIR_NEGATIVE_SOURCE_DISPATCH.md).
+It concerns the ORIGINAL raised full-SUM objective, not the native m minimum.
+The first-row statement and every source hypothesis were independently
+reviewed. It is retained as one internal theorem, not another UE class or
+export. The following proof retains all fixed entries and the original N.
+
+### Source and precise conclusion
+
+Use the native four-owner compact carrier C of (U,B,e,N), native own-singleton
+and literal Never rewards zero, and the full independent complete-law response
+caps B. Put d_i=B_i-U_i, D=sum d_i, nu=product N_i and E=C intersect{D=0}.
+Assume the native absorbing gap A>0, and put alpha=min_E nu. Retain the
+fixed13 opposed-pair family: its singleton matrix is
+
+    [0,-2,-5,4; -6,0,-4,6; 1,3,0,-5; 1,-1,4,0],
+
+all participant rewards of owners1,2 are nonpositive, and in particular
+Z0(03)=3,Z3(03)=2. We retain the full fixed13 data throughout. Its other
+entries enter the alpha-collar producer and the optional q2=0 identities;
+the final two-contact deformation uses the displayed0/3 data and
+participant signs.
+
+Fix ONE theta>0 from the old all-END weight box, BEFORE t. For every
+sufficiently small t>0 let rho=t sum theta_i and
+
+    F_t(X)=sum theta_i d_i(X)+rho nu(X), mu_t=min_C F_t.
+
+The old source theorem makes every minimum all-END with positive Never.
+Choose X_t among its minima with least ORIGINAL nu. The compact contact
+producer gives X_t=prefix(q,Y), Y in C all-END, q proper and joint, and
+at least one current native contact Q_i(q)=B_i(X_t).
+
+Then for ALL sufficiently small t, EVERY such displayed contact factorization
+has
+
+    q=(p,0,0,s), 0<p,s<1,
+    Q0=B0(X_t), Q3=B3(X_t),
+    B0(Y)=-s/(1-s)<0, B3(Y)=p/(1-p)>0.             (03)
+
+Both p,s and their Continue probabilities are uniformly bounded away from
+zero. This is a produced first-row normal form; q is NOT asserted Nash
+against the prescribed continuation U(Y).
+
+The needed strict positivity of EVERY alpha-minimizer is produced below
+for the literal fixed family, without genericity or perturbation of its31
+free rewards. The proof more generally applies to any fixed native table
+having this alpha-cap property, the two nonpositive participant owners and
+the displayed0/3 singleton and participant entries.
+
+### The alpha-cap collar is produced in this literal raw family
+
+The already established raw criterion in Section11 above
+has two conclusions for this family: m<1 and EVERY restricted-m minimizer
+has some strictly negative payoff coordinate. It uses the exhaustive proper
+zero-set solo covers, the all-zero two-copy comparison, and an actual
+negative clock. Its exact clock data are S=013,t=1/2,v=(39,25,15),
+det L_SS=-8, (Gamma_SS-J_SS/2)v=0, J_SS v=(20,-288,28); the outside2
+residual is at least39 by participant2 signs. In particular that actual
+negative clock belongs to E and has nu<1. Hence alpha<=m<1. All these
+facts hold for every finite free completion of the fixed13 family.
+
+Every global alpha-minimizer X is nonnegative, with no genericity needed.
+Indeed, if some U_i(X)<0, AllContinue is not a Nash root over its payoff
+annotation. Finite-game Nash existence supplies a nonzero root q. The
+full-cap Nash-prefix identity keeps prefix(q,X) in E. A sure component
+would contradict A>0 by the repair bound, and a proper nonzero root
+strictly lowers its positive ORIGINAL nu below alpha. Either case is
+impossible. Thus U(X)>=0.
+
+If any coordinate of an alpha-minimizer were zero, that point would be
+eligible for the restricted minimum m. Since alpha<=m always, it would
+give m=alpha and itself be a NONNEGATIVE m-minimizer, contradicting the
+raw criterion. Every alpha-minimizer is therefore strictly positive, and
+its caps equal its payoffs. This completes the genericity-free production
+needed below, keeping alpha and m distinct throughout.
+
+### Two general compact contact lemmas
+
+Write g_i=e_i(X)-Q_i(q)>=0, H_i=product_(j!=i)(1-q_j), h=product(1-q_j).
+Because Y and X are all-END, their exact full-cap prefix identities give
+
+    d_i(X)=h d_i(Y)+q_i g_i,
+    F_t(X)=h F_t(Y)+sum theta_i q_i g_i.           (1)
+
+Here nu(X)=h nu(Y), with ORIGINAL Never throughout. In particular F_t(Y)
+is at least the same global minimum; it is not asserted equal to mu_t.
+
+At a positive raised full-SUM minimum the existing quadratic margin theorem
+gives theta_i B_i(X)>=mu_t+eta_t, eta_t>0. If every active j had Q_j<=0,
+then (1) and F_t(Y)>=mu_t would imply
+
+    mu_t(1-h)>=sum theta_i q_i g_i
+                  >=(mu_t+eta_t)sum q_i>mu_t(1-h),
+
+a contradiction. Therefore some active prescribed owner has Q_j>0. In this
+family that owner is0 or3, since Q1,Q2<=0 for EVERY product row.
+
+Also, every positive prescribed column must affect some current contact gap.
+Indeed, if q_j>0 and all contact gaps have derivative0 in q_j, these gaps,
+being affine in q_j, stay exactly zero under a small two-sided variation.
+Every noncontact gap stays positive. The source therefore stays all-END.
+Its F_t is affine in this one hazard, so global minimality forces it constant.
+Increasing q_j strictly lowers nu, violating the selected least-nu property.
+In particular a SINGLE current contact i forces q_i=0, because its own gap
+does not depend on its own hazard. No dual atom at the contact is inferred.
+
+As a useful exact consequence, if q2=0 then Q0=-q1+3q3,Q3=2q0-2q1.
+The positive active Q above forces BOTH q0,q3>0. Since contacts can only
+belong to0,3, the singleton rule forces BOTH contacts. Consequently
+
+    q2=0 implies contact set{0,3}, q0,q3>0,
+    q1<min(q0,3q3).
+
+### Uniform native source collar as t decreases
+
+An alpha-minimizer is a competitor of value rho alpha. Thus
+
+    mu_t<=rho alpha, D(X_t)<=rho alpha/min theta_i, nu(X_t)<=alpha. (2)
+
+The repair bound A<=D+14M nu^(1/4) gives alpha>0. Every cluster of X_t as
+t decreases to0 belongs to E; by (2) it has Never product alpha. Compactness
+and strict positivity at EVERY alpha-minimizer therefore produce kappa>0
+and t0>0 such that
+
+    B_i(X_t)>=kappa for ALL i, 0<t<t0.             (3)
+
+This is uniform over all selected minima and their head factorizations.
+Also nu(X_t)->alpha. Since nu(X_t)=h nu(Y)<=h<=1-q_i, after shrinking t0,
+
+    h>=alpha/2, 1-q_i>=alpha/2, N_i(Y)>=alpha/2.    (4)
+
+By (1), g1,g2>=kappa and Q1,Q2<=0 give
+
+    q1,q2=O(t), F_t(Y)<=mu_t/h=O(t),
+    sum theta_i q_i g_i<=mu_t=O(t).                (5)
+
+All constants depend only on the fixed table and fixed theta. In particular
+there is no division by the vanishing raised cap-margin eta_t.
+
+### Both good hazards and both contacts are uniformly present
+
+At least one current contact belongs to0 or3, since (3) and Q1,Q2<=0
+exclude bad contacts. Suppose along a sequence t->0 it is0. At q1=q2=0,
+Q0=3q3; bounded polynomial coefficients and (5) give
+
+    kappa<=Q0=3q3+O(t),
+
+so q3 is bounded below. Equation(5) then gives g3=O(t), and hence
+
+    Q3=B3(X_t)-g3>=kappa-O(t), Q3=2q0+O(t).
+
+Thus q0 is bounded below as well. If the initial contact is3 the same
+argument starts with q0 and then gives q3. This compact subsequence argument
+produces ONE uniform lower bound epsilon>0 for BOTH good hazards, regardless
+of which initial contact was supplied. Together with(4), p=q0,s=q3 lie in
+[epsilon,1-alpha/2].
+
+There cannot now be just one contact: singleton0 would force q0=0, and
+singleton3 would force q3=0 by the incidence lemma. Thus EXACTLY0 and3
+contact for every sufficiently small t. Their gaps are zero, not merely O(t).
+
+### Exact two-contact deformation removes every bad hazard
+
+Fix such a source and its compact suffix Y. Set V=B0(Y)=e0(Y),
+F=B3(Y)=e3(Y), and z=(q1,q2). With z=0 the two gaps are
+
+    g0=V+(1-V)s, g3=F-(1+F)p.                    (6)
+
+For general z, g0 is independent of p and affine in s, while g3 is
+independent of s and affine in p. Their coefficients and their first
+derivatives in z are uniformly bounded polynomials in the compact data.
+At a sequence of sources with z->0 and both contacts, limits in (6) give
+
+    V=-s/(1-s)<0, F=p/(1-p)>0.
+
+Thus the coefficients in s,p tend respectively to1-V>=1 and -1-F<=-1.
+Uniformly at all small-t sources, their absolute values are at least1/2.
+The two contact equations consequently solve separately as explicit ratios
+of affine polynomial coefficients:
+
+    s=s(z), p=p(z),                               (7)
+
+with all first z derivatives uniformly bounded. Their current values lie
+strictly inside the product cube with the uniform margins above. Small
+one-sided decreases of any positive bad coordinate are therefore legal,
+keep both good contacts, and keep g1,g2>=kappa/2. Hence the entire changed
+prefix remains all-END over the SAME Y in the SAME compact carrier.
+
+On this exact two-contact surface (1) reduces to
+
+    F_t(z)=h(z)F_t(Y)+theta1 z1 g1(z)+theta2 z2 g2(z).
+
+For j=1,2, its derivative at the source is
+
+    partial_j F_t=theta_j g_j+F_t(Y)partial_j h
+                 +sum_(i=1,2)theta_i q_i partial_j g_i
+                =theta_j g_j+O(t)>0.             (8)
+
+The error is uniform by(5),(7); the positive leading term is at least
+theta_j kappa. If q_j>0, decreasing just that bad coordinate slightly
+STRICTLY lowers the original full-SUM objective, contradicting its global
+minimum. Therefore q1=q2=0 exactly. Equations(6) now prove(03).
+
+All comparisons use finite-prefix maps on actual-tuple closures. No actual
+calendar, source dual law, Nash first row, minimizing suffix, native-m
+minimality, or compact suffix played after an infinite prefix is used.
+
+### Dependencies and remaining research target
+
+There is one further exact whole-source consequence. Let r be ANY finite-game
+Nash root over the genuine tail CAP annotation b=B(Y), and write h_r for its
+joint Continue probability. This annotation is not its prescribed payoff.
+Nevertheless the full-cap ledger gives
+
+    d_i(prefix(r,Y))=h_r d_i(Y),
+    F_t(prefix(r,Y))=h_r F_t(Y).                  (9)
+
+Indeed, set C_i=P_i(r)+H_i(r)b_i and B'_i=max(Q_i,C_i). The general ledger
+is q_i(B'_i-Q_i)+(1-q_i)(B'_i-C_i)+h_r d_i(Y); the first two terms vanish
+by the finite-game Nash conditions, including boundary hazards. A sure row
+would make(9) zero and contradict mu_t>0, so every such r is proper. Properness
+also gives C_i>=Q_i for every owner, and hence its prefix is all-END.
+Original global minimality and the produced03 contact row therefore give
+
+    h_r>=h_03 for EVERY Nash root r over B(Y).     (10)
+
+The actual source head is a MOST ABSORBING cap-Nash root of its genuine
+compact tail. This is a comparison supplied by the original full-SUM minimum;
+it does not give Y a native-m minimum or an all-bad-root property.
+
+The exact fixed-weight all-END source is
+[strict-column/all-END theorem](../exports/FIN4_STRICT_INVERSE_COLUMN_AND_ALL_END_MINIMUM_REDUCTION.md), PartII. The compact
+contact producer is [compact first-contact theorem](../exports/COMPACT_MINIMUM_FIRST_JOINT_CONTACT_REDUCTION.md). The
+genericity-free fixed-family alpha-cap producer above uses the already
+reviewed raw criterion in Section11 above; its
+actual clock uses [global least-Never reduction](../exports/GLOBAL_LEAST_NEVER_SOURCE_REDUCTION.md), Sections7 and9.
+The margin input is `positive_minimum_fourPlayer_allOwner_quadraticMargins`
+in `UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`.
+The full-cap and payoff prefix declarations inspected are
+`quittingContinuationBestResponseValue_rootThenContinuation_eq_max`,
+`quittingTerminalDeviationDebt_rootThenContinuation_eq` in
+`UniformEquilibrium/Quitting/Root/TerminalDebtPrefix.lean`, and
+`quittingTerminalPayoff_rootThenContinuation_eq` in
+`UniformEquilibrium/ProofView/Concepts/Stochastic/Models/Quitting/RootContinuation.lean`.
+
+The first03 geometry is proved above. It is not a full counterexample-class
+exclusion: the compact tail has negative0 and positive3 cap, and its own
+minimization or any native-m property remains unavailable. The concrete
+next question is whether the exact two-owner source head can be consumed
+against this genuine tail, using the ORIGINAL source F_t and Never.
