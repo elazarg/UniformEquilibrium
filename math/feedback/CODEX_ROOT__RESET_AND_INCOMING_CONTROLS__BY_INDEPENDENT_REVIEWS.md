@@ -903,3 +903,80 @@ The [coverage map](../notes/CODEX_ROOT__FIN4_COVERAGE_MAP.md), SHA256
 records the two source cases and the exact unconsumed exits, keeping the
 two universal capstones and four full raw arms open. No percentage of
 Fin4 completion is inferred from these restricted results.
+
+## Whole-head revision consumes every inherited zero1 exit
+
+Frozen packet:
+[whole-head triple entry](../exports/OPPOSED_PAIR_WHOLE_HEAD_TRIPLE_ENTRY.md),
+SHA256 `57d6b534cfd29ec500c667659eb358f981685f84ecbc86bd8f81b93ce3ed2fca`.
+This strictly strengthens the actual source dispatch: the first negative
+source case must reach013 in finite time. Its former finite zero1 exit is
+now impossible for EVERY length of the preceding alternating pair head.
+Neither the resulting013 continuation nor the second source case is closed.
+
+OPPOSED_GUARDS developed the whole-Never derivative, produced endpoint
+compression guards and the full source reconstruction. GLOBAL_VIABILITY
+proved the strict quiet margins and six-cycle exclusion. CODEX_ROOT proved
+the seven-cycle suffix bound and assembled one complete stdlib-only
+rational coefficient certificate and the canonical packet. OPPOSED_013
+supplied the exact actual one-cycle boundary, and the cofinal source proof
+and charged ledger from the accepted dispatch are reproduced as needed.
+Their authorship and earlier FAMILY_GENERALIZATION ledger contribution
+are not counted as fresh whole-packet review.
+
+UNIVERSAL_BOUNDARY and SHARED_SINGLE_EDGE, wholly noncontributing to this
+packet's mathematics, independently reviewed all681 final lines and gave
+mathematical PASS plus affirmative export-gate assessments at the exact
+frozen bytes. Both extracted and ran the printed code, checked all104
+exact Bernstein signs and the interior subdivision endpoints, and derived
+the polynomial-to-actual-head correspondence independently. The coefficient
+checker has no data inputs, generated payload, numerical roots, CAS or
+external package dependency. It is ordinary exact arithmetic, not Lean.
+
+The reviews cover raw inputs, positive original Never, produced all-bad
+source bounds, actual cofinal moving cuts, owner2 positivity at EVERY cut,
+all proper-head normalizations, the suffix argument without inherited
+all-bad assumptions, quiet strictness, and the derivative of the WHOLE
+source objective. At the produced strict last singleton row the entire
+finite head is re-solved, giving actual E comparisons with a negative
+whole payoff and original Never below the ORIGINAL minimum. No endpoint
+minimum, favorable derivative or finite search bound is supplied as data.
+No objection remains. Separate contributing author checks by OPPOSED_GUARDS
+and GLOBAL_VIABILITY confirm faithful curation of their scopes.
+
+Both independent reviews recomputed the boundary's complete geometric
+full caps, three literal Nash rows, original Never, all-bad root census
+and exact whole-head derivative. The example shows opposite endpoint and
+whole-Never variation directions; it is nonminimal and already has pure3
+absorbing Nash. It does not satisfy A_Z>0 and earns no UE-class credit.
+The packet was promoted byte-identically after both gate approvals.
+
+## Remaining source cones and frontier bookkeeping
+
+Canonical [method note](../notes/CODEX_ROOT__FIN4_METHOD_BOUNDARIES.md), SHA256
+`03591b79ebf03bdb8d12a2940b23a5b8e9efb5d312cb6fff4a52a2e6dc8ff707`.
+New Sections9--10 retain two complete ordinary source comparisons internally.
+
+FAMILY_GENERALIZATION proved the zero2 source-cone consumer. It follows
+actual moving dates and uses c<=D to protect owner3 after cumulative
+compression; the weaker initial-row check is explicitly insufficient.
+UNIVERSAL_BOUNDARY and OPPOSED_013 freshly checked the complete author proof.
+OPPOSED_013 proved the immediate01,013 replacement; FAMILY_GENERALIZATION
+supplied its stronger exact weak quiet2 comparison. UNIVERSAL_BOUNDARY
+freshly checked both final curated sections, including all comparisons,
+the strict whole two-row survival inequality and the source adapters.
+These checks do not credit a whole caseII or013 closure, arbitrary earlier
+pair words, or any additional UE reward class.
+
+The old stationary mechanism forces Z2(23)>-5 on the positive-gap domain;
+boundary fixtures violating that inequality remain hypothesis tests only.
+The shared-anchor hull-ordering candidate stays in scratch: a numerical
+stationary audit rejected the prospective separator, and no exact new-coverage
+witness was established. No new UE-coverage claim or redundant family export
+is made from that line.
+
+The final [coverage map](../notes/CODEX_ROOT__FIN4_COVERAGE_MAP.md), SHA256
+`80af0546e737750ce55888bb3487a91d6d6d8a0c62444de194a2bb12a19d5c8a`,
+distinguishes the hypothetical zero-ending head bound from the unbounded
+length before a surviving013, and records both source-cone guards exactly.
+All four full raw arms and both universal capstones remain open.

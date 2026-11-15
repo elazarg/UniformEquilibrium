@@ -778,3 +778,160 @@ security and compactness alone cannot supply the additional global comparison
 needed under A_Z>0; nor do they imply original Never tends to1. No attained
 law, positive-gap game, global least-Never property, or extra Q/degree/pencil
 hypothesis is supplied by the example.
+
+
+## 9. A zero2 minimum-source cone has a complete cofinal consumer
+
+Use the raw opposed family and actual(U,B,e,N) carrier in the
+[whole-head source theorem](../exports/OPPOSED_PAIR_WHOLE_HEAD_TRIPLE_ENTRY.md).
+Let X minimize original joint Never over E with min U<=0 under A_Z>0.
+Its negative-owner2 case has
+
+    U(X)=(-A,B,0,D),A,B,D>0,
+    A<1/4,D>5A/(1-4A),B>6(D-A).
+
+The all-bad03-root argument produces these inequalities at X, not its
+continuations. Write k=-Z0(02),c=Z3(23). Suppose
+
+    Z2(02)<0,Z2(23)<0,Z2(023)<0,                 (ST2)
+    k>0,c<=D,4A/k<D<(62-10k)A/(3k).            (ZC2)
+
+Then this entire selected-source region is impossible. It is not a new UE
+reward class, a statement about every zero2 source, or a closure of caseII.
+The scalar cone is nonempty, e.g.k=1,A=1/100,D=1/10,B=1,c=0; this does
+not assert existence of a selected source there.
+
+Combining the upper D bound with D>5A/(1-4A) yields
+k<62(1-4A)/(25-40A)<62/25<5. The incoming rule(IN) forces q1=0 and
+q2>0. Since its active Q2=0, (ST2) forces q0=q3=0. The singleton2
+hazard s is proper because sure2 would give payoff1=-4. Its genuine E tail is
+
+    w=((-A+5s)/(1-s),(B+4s)/(1-s),0,(D-4s)/(1-s)).
+
+The head inequalities say ks>=A,cs<=D. The latter is strict because
+c<=D,s<1,D>0. If ks>A, all quiet gaps are strict; increasing s slightly
+at fixed tail retains Nash and a negative0 payoff while decreasing positive
+original Never. Original m-minimality therefore gives s=A/k. Consequently
+w0,w1,w3>0 and
+
+    S1=w1+3w3-2w0>0,S2=5w0/3-w3/2>0.
+
+The second follows exactly from(ZC2). For the first,
+(1-s)S1=B+3D+(2k-18)s>9D-(18+4k)s>(18-4k)s>0.
+
+Here is the full cofinal pure2 argument; a prescribed compression is not
+silently used as a Nash identity. Given any such w in E, choose M bounding
+rewards, kappa=min(w0,w1,w3)>0 and delta>0 small enough to preserve all
+three positive buffers under at most4delta prior absorption, with
+4delta<w3/2,18delta<S1/2 and2c_+delta<kappa/16. Choose epsilon>0 with
+4M epsilon<kappa/16. Along actual approximants of debt D_n->0 stop at
+the first date when unconditional finite mass2 reaches delta or q0 or q3
+reaches epsilon; provisionally also stop at cumulative non2 mass delta.
+Prior survival is>1-4delta>1/2 and positive buffers stay>=kappa/2.
+The reached-debt sum bounds all accumulated q1 by O(D_n), because Q1<=0.
+Before the intended stop q2<=delta/(1-delta)<=2delta, and
+
+    Q0<=2M(q1+q3),Q3<=c_+q2+2M(q0+q1).
+
+These are below kappa/4, so the same reached-debt sum bounds accumulated
+q0,q3 by O(D_n). The provisional stop cannot occur first, since its last
+stage satisfies those same bounds. At the selected date q1->0. The date
+must be finite: otherwise all non2 finite mass is O(D_n) and payoff0 is
+at most O(D_n), since singleton2 pays it-5, contradicting w0>0.
+
+A subsequential moving-cut E source W therefore has predate pure2 mass
+beta in[0,delta], with
+
+    W=((w0+5beta)/(1-beta),(w1+4beta)/(1-beta),0,
+       (w3-4beta)/(1-beta)),
+    S1(W)=(S1-18beta)/(1-beta)>0,
+    S2(W)=(S2+31beta/3)/(1-beta)>0.
+
+Original Never conditions by the same Continue factor; no escaped finite
+mass is renamed Never. At W, positive1 forces q1=0. If q2>0, (ST2)
+forces q0=q3=0. Otherwise a nonzero0/3 row must be proper03, with hazards
+W3/2,W0/3. Its genuine E tail has negative0 and positive1,2 by the guard
+sums, contradicting that tail's own incoming rule. Thus the macro-row is
+pure2 (or AllContinue), and proper since sure2 would give payoff1=-4.
+The large0/3 stopping alternative disappears, so cumulative pure2 mass
+through this date is g>=delta>0. It gives a genuine E tail Y with
+
+    w_i=g Gamma_i2+(1-g)U_i(Y),
+    N2(w)=(1-g)N2(Y),Nj(w)=Nj(Y) for j!=2.
+
+This relation is ONLY prescribed payoff and original Never. Combining with
+the initial s gives G=s+(1-s)g>s and the SAME U(X),N(X). Now the compressed
+row is Nash at Y: owner2 endpoints are0, Q0=-kG<-A, Q1=Z1(12)G<=0<B,
+and Q3=cG<D because c<=D,G<1. All quiet gaps are strict. Increasing G
+slightly therefore gives an E whole source with negative payoff0 and lower
+original Never, contradicting m. No minimum was assigned to w,W or Y.
+
+The c<=D check matters: c<=4,D>4s alone would protect only the initial
+quiet3 gap, not its comparison after cumulative compression. Outside this
+cone, the zero2 and strict-negative2 cases remain open.
+
+One old stationary filter must be enforced throughout this family:
+A_Z>0 implies Z2(23)>-5. Otherwise pure3 is absorbing Nash: owners0,1
+prefer passive4,6 to joining3,-1, and2 prefers passive-5 to joiningZ2(23).
+This is existing stationary coverage, with no new-class credit. In particular
+the earlier geometric23 boundary fixtures with Z2(23)=-10 do not lie in
+the genuine positive-gap domain.
+
+
+## 10. One explicit replacement consumes an immediate013 tail region
+
+Continue on the same opposed raw family at an original negative m-source
+u=(-A,-B,C,D), all parameters positive, with B<6(A-D),C>5A+4AD-D.
+Suppose the first01 row is immediately followed by013 hazards(a,b,0,c).
+Let its genuine E tail have payoff(V,-E,T,F). Then a>b>0,c>0 are proper,
+
+    E=(a+7c)/[(1-a)(1-c)], F=(a-b)/[(1-a)(1-b)]>0.
+
+This immediate exit is impossible whenever
+
+    V>=E-F,
+    T+(1-Z2(02))E+(3-Z2(12))V+(4-Z2(012))EV>=0. (EX)
+
+These are complete raw/source comparisons, not a supplied replacement
+profile. The conclusion retains the ORIGINAL two-row head and minimum.
+First F<=a/(1-a), so E-F>=c(a+7)/[(1-a)(1-c)]>=7c/(1-c)>0.
+At the actual tail use the explicit01 root with odds(E,V). Its active
+outputs are -V/(1+V),-7E/(1+E), both negative. Quiet3 Continue-minus-Quit
+has sign F-E+V>=0. Quiet2's FULL comparison numerator is exactly the
+second expression in(EX): its Continue numerator is T+E+3V+4EV and
+Quit numerator is Z2(02)E+Z2(12)V+Z2(012)EV. Thus this is a full Nash
+prefix of the genuine E tail. Owner2 output need not be positive; negative
+active outputs already qualify for the original m comparison. Its joint
+original Never is nu(Y)/[(1+E)(1+V)]. Both weak boundary equalities in(EX)
+are allowed.
+
+It remains to compare with the ENTIRE old head. The013 output w has
+w0=-b+3c,w1=-7a-c,w3=2a-2b. The upstream01 row has odds(-w1,w0), so
+the old joint Continue multiplier is
+
+    H=(1-a)(1-b)(1-c)/[(1+7a+c)(1-b+3c)].
+
+Its quiet3 slack gives
+(1-B/7)(1-A)(w0+w1+w3)=2A+D-2B/7>0 by the original all-bad bound.
+Hence 5a+3b<2c; since a>b, both a,b<2c/5. Using
+E>=7c/(1-c) and E-F>=7c/(1-c),
+
+    H(1+E)(1+E-F)
+      >(1-2c/5)^2(1+6c)^2/[(1-c)(1+19c/5)(1+3c)]>1.
+
+The last numerator-minus-denominator identity is
+9c(16c^3-43c²+61c+15)/25>0 for0<c<1. Thus(EX) gives
+1/[(1+E)(1+V)]<H. The new E point has negative payoffs and strictly
+smaller original Never than X, contradicting m. No tail minimum, alternate
+013 root or off-root Nash homotopy was assumed.
+
+The tail tests permit T<0. For instance V=1,T=-5/2,0<F<E<1/40 satisfy
+both tests strictly for all the permitted nonpositive participant2 entries;
+the second expression is at least1/2+5E>0. This checks the scalar region,
+not realization of a source. The proof imposes no value on Z2(23) and remains valid with
+the necessary hard-residual constraint Z2(23)>-5. It consumes only the
+immediate01,013 case: arbitrary earlier pair cycles, V<E-F, and failure
+of the full quiet2 test remain open. The general two-root fiber and its
+off-root quiet contact are not silently asserted to be actual E paths.
+This explicit comparison is retained internally; no additional UE reward
+class or full013 closure is claimed.
