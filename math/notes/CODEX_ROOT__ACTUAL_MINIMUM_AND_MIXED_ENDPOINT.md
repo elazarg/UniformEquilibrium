@@ -176,17 +176,26 @@ minimum is negative, it is itself such a bad source. If the minimum is zero,
 it is a nonnegative boundary point with only good AllContinue and bad
 sources arbitrarily nearby. Its positive GLOBAL minimizing Never value
 must be retained. The exact control below shows why arbitrary actual
-boundary membership cannot replace that information. General games failing
-both raw adapters and the unrestricted global comparison remain open.
+boundary membership cannot replace that information. Neither raw adapter
+settles the unrestricted global comparison.
 
-The [cyclic two-matching target](CODEX_ROOT__CYCLIC_TWO_MATCHING_FRONTIER.md)
-isolates a small explicit family beyond those local tests. Every original
-table in it has a strict gap over all stationary profiles, and every
-nontrivial exact finite-period equilibrium must contain a triple phase.
-The complete arbitrary-period exclusion covers all calendars whose active
-supports have size at most two. The old-admission audit is partial;
-absorbing native debt zero and original UE remain unresolved. This is a
-concrete construction target, not a counterexample or an additional export.
+[Cyclic favorite-pair equilibrium](../exports/CYCLIC_FAVORITE_PAIRS_UNIFORM_EQUILIBRIUM.md)
+now closes the explicit two-favorite family for every0<=T<=1/4, including
+T=0 outside all the audited earlier explicit raw admissions. It replaces
+bad triple roots by feasible opposite pairs at the same annotation, then
+bad opposite pairs by good triple or adjacent-pair roots. All sources in
+the invariant reward hull are covered, including positive-index triple
+roots that defeat both earlier payoff-domain orientation tests. The
+actual compact-domain consumer gives absorbing native debt zero and one
+original uniform target; no favorable continuation is assumed.
+
+The stationary gap and exact-periodic support-at-most-two obstruction
+still hold for every fixed T>=0. The
+[remaining cyclic frontier](CODEX_ROOT__CYCLIC_TWO_MATCHING_FRONTIER.md)
+records the larger-T question. For T>=6 an exact three-root hull source
+defeats whole-hull selection, but first-action cap constraints exclude
+that source. Coupled negative-cap bounds and continuation compatibility,+rather than a bare bad hull annotation, are the next restrictions to use.
+No unrestricted exploitability gap or arbitrary Fin4 closure is asserted.
 
 The [incoming boundary controls](CODEX_ROOT__INCOMING_BOUNDARY_CONTROLS.md)
 show why the remaining cases need more than a bare carrier lemma. The

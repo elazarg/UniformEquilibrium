@@ -598,27 +598,72 @@ compactness; closed cube witnesses give compactness of the finite outer
 kernels themselves. This distinction is explicit. No new numerical
 certificate or search payload is retained, and the frozen export is unchanged.
 
-## Cyclic two-matching construction target
+## Cyclic favorite-pair interval closure
 
-Reviewed research note:
-[Cyclic two-matching games](../notes/CODEX_ROOT__CYCLIC_TWO_MATCHING_FRONTIER.md).
+Reviewed packet:
+[Uniform equilibrium for cyclic favorite-pair games](../exports/CYCLIC_FAVORITE_PAIRS_UNIFORM_EQUILIBRIUM.md).
 Exact final SHA256:
-`9e463a6c0140d27aa1097e0b027f449c82bad7f281a0b0f304f8e9d5d322f282`
-(271 lines).
+`9ce20434910cccc9276006af8499f9538a0aacd77d19570267e978e072b1f88f`
+(672 lines).
 
-OPPOSED_GLOBAL independently gave complete mathematical PASS on these
-exact bytes; CODEX_ROOT checked the entire assembled proof. The underlying
-stationary calculation also had separate complete reviews by OPPOSED_GLOBAL
-and FRONTIER_ADVERSARY. The review checked all60 rewards, bad-source census,
-all stationary supports and limits, the74-coefficient identity in17 cyclic
-terms, and the complete arbitrary finite-period exclusion of supports of
-size at most two. Idle phases, unequal hazards, all singleton and adjacent
-pair cases, and favorite-pair alternation are covered. No objection remains.
+TRIPLE_INDEX and QUARTER_EXPORT_ADVERSARY independently gave COMPLETE
+mathematical and coverage/export-gate PASS on these exact bytes. CODEX_ROOT
+checked the entire proof, the source correspondence and the exact polynomial
+bounds. No unresolved objection, unproduced strategic input or conditional
+exception remains. Fourteen cited Lean paths are tracked and all declaration
+names resolve. No Lean command was run. All131 earlier export Markdown
+files remain byte-identical.
 
-The partial old-admission arithmetic and failure of both frozen payoff-domain
-criteria were checked as stated. An earlier unsupported inference from
-nonnegative coalition sums to an old ledger admission was removed: the
-relevant old theorems also require proper-support lowness or orientation,
-which fail here. No complete old-coverage census or unrestricted behavioral
-gap is claimed. The note remains an unresolved construction target; no new
-UE class or export is admitted. Numerical controller failures are omitted.
+The theorem closes every0<=T<=1/4, including T=0 despite a strict original
+stationary gap. Bad triples produce Nash opposite pairs using both quiet
+payoff positivity and the source sum; bad pairs produce good triple or
+adjacent-pair replacements by an explicit continuous fiber. All root supports
+and endpoint ties are covered. Falsification attempts checked B-positivity
+without circularity, the y=1/4 case split, T=1/4, source coordinates-3/2,
+the exact endpoint d=g(2B), and the distinction between a quiet Nash
+comparison and a positive quiet payoff.
+
+The complete compact-domain proof retains actual prescribed payoffs, all
+behavioral caps and original Never, and produces the arbitrary finite product
+words used in its zero-set induction. Both reviewers separately audited
+closure splicing, seed realization, uniform Lipschitz bounds and the repair
+constant14M. Thus the packet supplies the complete raw-table-to-UE chain,
+with one uniform target fixed before accuracy.
+
+The coverage inventory checks all130 preceding mathematical exports and the
+applicable implemented classes. It treats all finite roles and continuous
+weights, scales, marks, pair assignments, child subsets, persistent free
+sets and punishment caps. An earlier inference from nonnegative whole-payoff
+sums alone was rejected: the relevant old criteria also require proper
+lowness or orientation. Those premises fail. Conditional supplied-certificate
+compilers and unspecified larger neighborhoods are not declared impossible;
+they are not automatic raw admissions. Strict new coverage at T=0 passes.
+
+The all-T stationary and support-at-most-two periodic proofs are retained
+in the export. The research frontier note is curated around the remaining
+larger-T actual-source geometry, instead of copying these exported proofs.
+Only the complete quarter-interval theorem is newly exported: narrower
+T=0 and1/100 drafts, tangent and index variants, and numerical searches
+are not separate packets. Arbitrary Fin4 remains open.
+
+## Remaining cyclic source geometry
+
+Reviewed note:
+[Cyclic favorite-pair frontier](../notes/CODEX_ROOT__CYCLIC_TWO_MATCHING_FRONTIER.md).
+Exact final SHA256:
+`af3cfc250a56729bc6a4c46f512735ed0338f0e3fba86c2f564a4964f9bb7ab7`
+(161 lines).
+
+OPPOSED_GLOBAL independently gave complete mathematical and scope PASS on
+these exact curated bytes. CODEX_ROOT checked the entire argument. The
+review covers the complete three-root hull obstruction for every T>=6,
+the unconditional Never floor and opposite-cap product bound9/64,
+the monotone forced-Quit relaxation for T>=1/4, its fixed-point equality
+witness and necessary discriminant inequality, and the actual positive-Never
+closure statement. No profile realizing a closure point is assumed.
+
+The all-bad hull source is outside N1, so it is not an actual zero-debt
+counterexample. The new cap restrictions are necessary first-action
+conditions, not additional UE-class claims. The larger-T family remains
+the next source-geometry target. Earlier proof copies and unresolved T=0
+wording are replaced by references to the frozen interval theorem.
