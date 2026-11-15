@@ -1092,3 +1092,125 @@ partition for strict-negative2 and all literal zero-coefficient boundaries,
 plus the surviving zero2 cases outside the enlarged cone. Incoming candidate
 equations alone are not E producers or consumers. All other full raw arms
 and both universal source capstones remain open.
+
+## Arbitrary-table proper-zero reduction and actual local repair
+
+Canonical packet:
+[negative-dual/actual-repair reduction](../exports/NONNEGATIVE_MINIMUM_SOURCE_PENCIL_REDUCTION.md),
+SHA256 `4494ada571b5aa60ac1afe2eae52f8ceef8dfb88808aaa2a2eff5992a7931e12`.
+All922 final lines are ordinary mathematics. No Lean command was run and
+no new L/A/C seal is claimed.
+
+The result applies to arbitrary native Fin4 tables. Every proper nonnegative
+ORIGINAL restricted-m source has a strict negative left singleton dual.
+Under joining genericity its principal joining pencil is R0 of degree ZERO,
+with pointwise negative duals throughout. This removes the entire
+semipositive proper-zero singleton-block mode, retaining every weak and
+zero singleton entry in the unqualified core theorem.
+
+The new raw actual-data producer uses degree excision to supply small
+nonzero Nash roots, then iterates finite prefixes to an eligible E endpoint
+with original Never gain at least eta nu/(12M). The endpoint is produced
+through actual approximants and compact limits, not a reverse infinite
+calendar or a supplied favorable tail. Under A_Z>0,m<1 and joining
+genericity, the positive part P_m of the E sublevel is compact with one
+positive payoff buffer THROUGH m. A complete cofinal moving-cut argument
+then supplies a finite augmented-carrier Nash head reaching eligibility at
+m or crossing above m, with an explicit uniform bound. Nonzero Nash-prefix
+chains in the positive sublevel also have finite height before root inertia.
+
+GLOBAL_VIABILITY developed the proper-zero source/pencil proof and tracked
+zero/negative endpoint eligibility for the original restricted m. ROOT
+independently checked the weak-case matrix count and assembled the complete
+self-contained clock/degree handoff. SHARED_SINGLE_EDGE produced the raw
+local repair, its quantitative Never gain and the uniform-sublevel/crossing
+consumer; ROOT and GLOBAL_VIABILITY checked these arguments. The finite
+positive-prefix height and uniform original-N collar were incorporated in
+the same packet. These contributions are distinct from the whole-packet
+independent reviews below.
+
+Existing finite-word/clock producers are credited to the frozen
+[global least-Never source reduction](../exports/GLOBAL_LEAST_NEVER_SOURCE_REDUCTION.md).
+That packet proves its degree-one conclusion at the unrestricted alpha
+minimum; it does not supply the new restricted-m consumer, principal
+negative dual, degree-zero repair or uniform kappa_m. Its finite-word and
+expanding-clock arguments are reproduced in full as needed for
+self-containment. The old solo-cover/negative-clock consumer in METHOD
+Section11 is also credited rather than re-exported as a new producer.
+
+FRESH_GLOBAL_REVIEW and FRESH_TRIPLE_REVIEWER were wholly noncontributing
+to the packet's proofs and examples. Each read ALL922 final lines, attempted
+to falsify every new source/degree/repair/crossing claim, independently
+checked the exact boundary data and ran the printed standard-library
+program. Both gave FULL mathematical PASS and affirmative eight-item
+export/significance/overlap gate PASS at the exact hash above, with no
+unresolved objection. Their final review-record SHA256 values are
+`43a99aa30ed8e597bb34956a808bdece6467f4f8b8f80b661089fc19ff9e0853`
+and
+`86d80a0d125d189ca9646c2581e47db8f3ac812fd1e713215e1b3bee95055f5d`.
+The earlier component reviews were not substituted for these final reviews.
+
+The gate identifies the actual parent mode and its strict reduction.
+The selected source is produced by compactness under the positive native
+absorbing gap; no law attaining C is assumed. The conditional crossing
+consumer starts at a GIVEN positive E point with nu<=m, whose existence
+is not proved again by that consumer. Its completed independent value is
+the new uniform sublevel, actual cofinal producer and finite bound, along
+with the unconditional proper-zero reduction and raw local repair.
+No exceptional supplied-certificate admission, new UE reward class or
+unrestricted strategy-class completeness claim is made.
+
+The reviews verify full-real-sphere coercivity, nonnegative homotopy zeros,
+local index/excision, both endpoint signs of each old comparison word,
+non-simple expanding-mode Green bounds, full behavioral quiet conditions,
+localization throughout finite/infinite repair, padded finite two-copy
+renewal, original-N summability, the finite-height maximal-chain quantifier,
+and every source genericity/positive-gap qualification. They distinguish
+carrier head preservation of(U,B,e,N) from stronger literal source-atlas
+chronology. Both exact actual fixtures are already absorbing-Nash-covered;
+they verify nonvacuity and semantics and earn no UE-class credit. The
+pointwise/common-pencil-dual counterexample is algebraic only.
+
+The bounded source audit reuses the existing MathUE ambient degree and
+nonnegative-inverse interfaces. The full singleton matrix degree ONE
+already follows from the implemented original no-UE theorem; it is not
+the degree-zero principal source pencil. More strongly, the accepted
+[strict inverse-column/all-END packet](../exports/FIN4_STRICT_INVERSE_COLUMN_AND_ALL_END_MINIMUM_REDUCTION.md),
+SHA256 `185570b1c7c76773391327380ecc019e4bc2e612e3acbe7ac1a29615b2825beb`,
+already produces a strict inverse column and the fixed-box all-END SUM
+minimum at EVERY fixed native A_Z>0 table. Both reviewers read its exact
+statement and Part II: its paid original SUM objective is different from
+restricted native m, and it supplies none of the new repair or kappa_m
+claims. The new packet does not count those old global adapters as new work.
+
+## Living frontier and fixed-family consumers
+
+Final [coverage map](../notes/CODEX_ROOT__FIN4_COVERAGE_MAP.md), SHA256
+`0e2d7e92003b6fb70b93f821fa584edd88d6b636ffea15035e482651ec71bde2`.
+Final [method note](../notes/CODEX_ROOT__FIN4_METHOD_BOUNDARIES.md), SHA256
+`ec22c52e153b6693a612b0bcef6889180fa29a9e5842a7ead44ac8a1e856e85d`.
+The stale conditional strict-inverse-column wording is corrected: that
+matrix adapter and the all-END minimum producer were already universal.
+The native m<1 uniform buffer now replaces the former s-up-to-m
+degeneration target. The universal all-END consumer, finite-amplitude jumps
+above m, m=1 and the negative-source consumers remain open; the two older
+source-preserving atlas capstones remain open too.
+
+METHOD Section13 retains FAMILY_GENERALIZATION's two complete initial23
+consumers: the source budget inequality and the actual zero1-return
+whole-head variation. FRESH_TRIPLE_REVIEWER independently checked every
+step at author SHA256
+`feda56828fbf9627da54fd769e0ea825e0889aa0a035344f109ee67a8256d035`;
+its review record has SHA256
+`9bb29d825fca15a126a81e9f380baf0201b9215171f7a08394b99acc9efda093`.
+The final proof bodies are identical after heading releveling. Section14
+retains OPPOSED_013's exact k<=0 two-layer child-root obstruction, checked
+freshly by FAMILY_GENERALIZATION at author SHA256
+`fe75e5912f0dc1054c48c14a6aabbdb56fa3e6f03369076e6fc474b1614ead13`.
+It is a method boundary, not new source or UE coverage.
+
+The final scoped living-document review is recorded separately at SHA256
+1d9d9e96051c2ed131fb0c0c4779ea3e43bc76e1b3b251b6eb051de06f92457d. It checks final qualifications, known global
+adapters, proof-copy fidelity and the distinction between source reductions
+and still-open whole branches. All previously frozen exports stay unchanged;
+the new packet is promoted byte-identically after both whole gate approvals.

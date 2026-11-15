@@ -1044,3 +1044,259 @@ rho=2 is simple, as det(Gamma_SS-t J_SS)=-2(2t-1)(11t^2-21t+6).
 All other rewards remain arbitrary finite; no exact triple identities are
 needed for this source-branch exclusion. The fixed-family negative-source
 dispatch and first013 analysis still have their own stronger hypotheses.
+
+
+## 12. The proper-zero source seam has an actual repair
+
+The canonical [negative-dual/actual-repair proof](../exports/NONNEGATIVE_MINIMUM_SOURCE_PENCIL_REDUCTION.md)
+applies to arbitrary native Fin4 tables. A proper nonnegative ORIGINAL-m
+source has a strict negative left singleton certificate on its zero set;
+under joining genericity its principal joining pencil has degree0.
+These raw conditions produce nonzero small Nash roots by degree excision,
+then an actual positive-to-zero repair by iterated finite prefixing and
+compact limits. It retains original Never and supplies an explicit gain.
+
+For A_Z>0,m<1 and the stated joining genericity, the positive part P_m of
+the native E sublevel is compact with one kappa_m>0 THROUGH m. A given
+point in P_m has a uniformly bounded macroscopic actual head reaching
+eligibility at m or crossing above m. This supersedes a possible vanishing
+kappa_s at s-up-to-m; finite-amplitude jumps above m and m=1 remain open.
+The positive sublevel has finite nonzero-Nash-prefix height too. None of
+these carrier conclusions identifies the stronger literal source atlas
+fields or completes its two universal consumers. The complete proof is
+retained only in the packet, not duplicated here.
+
+
+## 13. Two initial23 modes have original-source consumers
+
+Continue on the fixed opposed raw family of Sections9--10, using complete
+independent stopping laws, full caps and the original(U,B,e,N) carrier.
+Let X minimize original joint Never over E with min U<=0 under A_Z>0,
+and suppose its initial dispatch is
+
+    U(X)=(-A,B,-C,D), A,B,C,D>0,
+    A<1/4,D>5A/(1-4A),B>6(D-A),
+    C<D(1-4A)-5A.                               (II)
+
+These inequalities are produced at the ORIGINAL selected source only.
+Every genuine tail used below is in E, but no tail is called minimizing.
+
+### Closed entire incoming23 regime
+
+Put w=-Z2(23), c=Z3(23), K=Z1(23). Suppose the FIRST actual incoming
+support is23. Then0<w<5,c>D, and its hazards are
+
+    q=(0,0,s,t), s=D/c in(0,1),t=C/w in(0,1).
+
+**Theorem.** If0<c<4, then necessarily
+
+    (4+6c)w<c max(6,K+4).                       (BUDGET)
+
+Hence the entire initial23 branch is impossible on the RAW regime
+0<c<4,(4+6c)w>=c max(6,K+4), for every free completion. In particular,
+if K<=2 it is excluded whenever w>=3c/(2+3c). This is a complete selected
+source-branch exclusion, not a new UE class or closure of all caseII.
+The weak boundary equality in the excluded raw comparison is included.
+
+### Exact full-source proof
+
+First A_Z>0 forces Z2(23)>-5. Otherwise pure3 Quit, everyone else Never,
+is absorbing Nash: recipients0,1 prefer passive4,6 to joining3,-1,
+recipient2 prefers passive-5 to joining Z2(23), and3 gets own0. This old
+stationary exclusion receives no new coverage credit. Participant2 signs
+therefore give0<=w<5, and active2 with negative payoff forcesw>0.
+Positive original Never makes the incoming23 row proper, so s,t<1.
+Its active cap equations are-C=-wt,D=cs, giving the displayed hazards.
+
+Extract the genuine E tailY behind this PROPER actual row. Fixed passive
+singletons and active equalities give exactly
+
+    Y2=(5-w)t/(1-t)>0,
+    Y3=(c-4)s/(1-s)<0.
+
+NecessarilyY1<=0. Indeed ifY1>0, its own incoming rule suppresses1
+because all its participant rewards are nonpositive, and positiveY2
+similarly suppresses2. The forced-Quit offer of3 on that face is2q0>=0,
+contradicting Q3<=Y3<0. This checks ALL subsequent incoming supports,
+not an assumed pure continuation; no original minimum is transferred.
+
+The full original-head prescribed identity, with h=(1-s)(1-t)>0, is
+
+    B=P1+hY1<=P1=-4s+6t+(K-2)st.
+
+Let M=max(K-2,0). Thus B<=-4s+(6+M)t. On the ORIGINAL selected source,
+(II) gives C<D and
+
+    A<(D-C)/(5+4D)<(D-C)/5,
+    B>6(D-A)>(24/5)D+(6/5)C.
+
+Substitute D=cs,C=wt. We obtain
+
+    (4+24c/5)s<[6+M-6w/5]t.
+
+The bracket is strictly positive because0<w<5. Also C<D gives
+t<cs/w. Substitution and division by positives,w yield
+
+    (4+24c/5)w<c(6+M-6w/5),
+    (4+6c)w<c(6+M)=c max(6,K+4),
+
+which is(BUDGET). Every constraint used at X remains at X; the only tail
+fact is actual E feasibility, and the FULL original23 head is retained.
+
+### A complete zero1-return sector: whole-head variation
+
+The following is a second, genuine original-m consumer, beyond(BUDGET).
+Keep initial23,0<c<4,0<w<5 and suppose its genuine tail is
+
+    Y=(V,0,T,-F), V>=0,T>0,F>0.                 (RETURN)
+
+**Theorem.** This selected source is impossible if the RAW comparisons
+
+    Z0(02)<=-5, Z0(023)<=Z0(23),
+    w>=8c/(c+3)                               (RETURN-RAW)
+
+hold. This closes the entire indicated source/parameter sector, including
+V=0 and equality in each raw comparison. It does not presume Y is minimal.
+
+Write u=4-c>0,v=5-w>0,alpha=-Z0(02)>=5,
+xi=Z0(23)-Z0(023)>=0. The original23 indifferences equivalently give
+
+    s=F/(u+F), t=T/(v+T).
+
+At Y, positive2 forces its next incoming q2=0. Negative3 forcesq1>0,
+and zero1 with activeq1 gives0=Q1=-7q0-q3. Thus that next row is pure1,
+with hazardr>0, and its quiet3 condition is2r>=F. It is proper: original
+Never is positive, and alternativelyr=1 would give V=-2<0. Extract its
+genuine E tailZ; Z1=0 because its prescribed pure1 prefix has own payoff0.
+
+Hold Z fixed and increase r slightly. Its new outputY(r) remains E.
+Owner1 stays indifferent0. Quiet0 is initially strict since its gap is
+V+r>0; quiet2 is strict sinceT>0 andQ2<=0. For quiet3, the gap2r-F(r)
+is initially nonnegative, and the fixed-Z identities give
+
+    (1-r)V'(r)=-2-V,
+    (1-r)T'(r)=3-T, (1-r)F'(r)=1-F,
+    (1-r)(2r-F(r))'=1+F-2r.
+
+At a binding quiet3 conditionF=2r the last expression equals1. Therefore
+a sufficiently small one-sided increase ofr preserves every full root
+deviation inequality. Strict signT,F>0 also persists by continuity.
+
+Reconstruct the ORIGINAL23 root aboveY(r) using
+s(r)=F(r)/(u+F(r)),t(r)=T(r)/(v+T(r)). These are proper and enforce both
+active indifferences. Original quiet1 is strict: B>0 whereasQ1<=0.
+Original quiet0 is also strict. Indeed its full gap divided by the23
+joint survivalh=(1-s)(1-t), in oddsx=F/u,y=T/v, is exactly
+
+    (U0-Q0)/h=V+(alpha-5)x+y+xi xy>0.
+
+Thus all original-head root Nash inequalities persist under the same
+small increase, even whenV=0 or a raw comparison binds. The recomposed
+whole source stays eligible for the original minimum since its owner2
+payoff is-wt(r)<0. This step uses the whole23-plus-pure1 head, not a
+minimum atY orZ.
+
+The resulting ORIGINAL joint Never is
+
+    nu(r)=(1-r)nu(Z) u/(u+F(r)) v/(v+T(r)).
+
+Its exact logarithmic derivative, scaled by1-r, is
+
+    L=-1-(1-F)/(u+F)-(3-T)/(v+T)
+     =-(u+1)/(u+F)+(T-3)/(v+T)
+     =-(5-c)/(4-c)(1-s)+t-3/(5-w)(1-t).
+
+The ORIGINAL dispatch has C<D, so wt<cs. Substitute the strict bound
+t<cs/w intoL, whose t coefficient is positive. The resulting affine
+function of s has positive slope, ands<1. Consequently
+
+    L<[c(8-w)-3w]/[(5-w)w]<=0,
+
+where the last inequality is exactlyw>=8c/(c+3). The strictness survives
+equality in the raw bound. Hence increasingr strictly reduces the WHOLE
+Never fromm, contradicting its original minimizing property. No tail
+minimum or prescribed finite-time tail realizer was used.
+
+The source split still retains c=4, where the genuine tail3 is zero,
+and c>4, where it is positive. Strict-negative1 after the23 head can
+enter a13 run with E_next=7E/(1-E), but positive2 can be lost through an
+unrestricted passive13 reward before that run's core exit. Its inherited
+tail is not an initial all-bad minimum. No whole23 or caseII closure is
+inferred from a finite13 run or a favorable supplied insertion.
+
+
+## 14. Negative immediate tails require a genuine global change
+
+### Exact scope
+
+Suppose the source has immediate01 then013, the latter with hazards
+(a,b,0,c), and genuine E tail Y=(V,-E,T,F). The proved source bounds give
+0<b<a<1,0<c<1,E>F>0, and the surviving case has V<0. Write k=Z0(13).
+Restrict this lemma to the entire k<=0 sector. All statements below concern
+the THREE-PLAYER auxiliary game on owners0,1,3 with owner2 held quiet.
+Additional full-game roots involving owner2 are not ruled out.
+
+### The current013 root is the only core Nash root at Y
+
+Eliminating hazards0,1 from the three proper active equalities gives the
+quadratic for hazard z at3,
+
+    A z²+B z+C=0,
+    A=k(E+7F+7)-E-7F-14+7V,
+    B=-Ek+Fk-8F-6V-8, C=E-F-V.
+
+Here A<0 and C>0, so exactly one root is positive. The actual c is that
+root; its other two hazards are uniquely determined. Hence no alternate
+positive proper013 root exists, independent of the free passive2 entries.
+Proper01 or13 would require positive input0 or negative input3 respectively;
+proper singletons require a zero input, absent here. AllContinue fails.
+
+The only other possible proper support03 fails its owner1 quiet test.
+Indeed its threshold is V<=-(E-F)/(7+8F). For the actual013 data,
+(7+8F)V+E-F is positive. A direct factorization proves this: its numerator,
+after multiplying by the positive denominator
+(1-a)(1-b)^2(1-c), is minus b times
+
+    k c[(a-b)(7b+1)+7(1-b)^2]
+      -8[(1-b)^2+b(a-b)]
+      -c[14(1-a)(1-b)+8(a-b)]<0.
+
+Sure roots are impossible. Sure3 makes1 Continue, then0 Continue, then3
+Continue because F>0. Sure0 with1 not sure forces3 Quit, reducing to that
+case. Sure1 gives owner0 gap1+(1-k)q3>0, forcing0 sure, but owner1 then
+has strictly negative gap-1-7q3. This exhausts the sure supports. Thus
+current013 is the UNIQUE full child Nash root at Y.
+
+### Upstream01 is most absorbing among all core roots at its input
+
+The current triple produces
+
+    w=(3c-b,-7a-c,2a-2b),
+    w0>0,w1<0,w3>0,S=w0+w1+w3>0.
+
+The upstream01 row has odds(-w1,w0), survival
+h01=1/[(1-w1)(1+w0)]. All proper competing core roots must be013:
+03 requires negative input0,13 requires negative input3,singletons need a
+zero input, and AllContinue fails at negative1. The same sure-root census
+applies. Let a competing013 root have odds(x,y,z), so x=y+w3,
+-w1=x+7z+8xz, and w0=y-z+(2-k)yz. Since z>0,
+
+    y<-w1-w3<w0, hence (2-k)y>1.
+
+Let Dtr=(1+x)(1+y)(1+z), D01=(1-w1)(1+w0). Exact expansion gives
+
+    (Dtr-D01)/z
+      =z(8x+7)[1-(2-k)y]+k y(1+x)
+                               -9xy-6x-8y-5<0.
+
+Thus every competing013 root has STRICTLY LARGER survival than01.
+Consequently two-layer core rerooting at this same genuine Y cannot lower
+the old whole01->013 survival. This is a complete local-root obstruction,
+not an actual positive-gap counterexample or a proof that no global
+replacement exists. It makes no assumption that Y is minimizing.
+
+The scope is an entire proof-method boundary, not a new source exclusion:
+for k<=0 an immediate V<0 consumer must involve owner2, change the genuine
+tail or use a longer controlled return. Extrapolating two stationary upper
+planes outside their bracketing interval does not produce that change.
+No algebraic jackpot limit is asserted to be an actual E source.

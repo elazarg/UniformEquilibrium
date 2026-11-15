@@ -62,6 +62,19 @@ own singleton vector e_p. Subtracting those recipient rows gives A_Z>0;
 conversely Z+e_p converts any native positive gap into a counterexample.
 Normalization does not transport a previously chosen source or chronology.
 
+The FULL anchored singleton matrix of every native A_Z>0 table is already
+R0 of degree1: apply
+`finFour_singleton_r0Degree_eq_one_of_no_uniformPayoff`
+(`UniformEquilibrium/Diagnostics/Quitting/FinFourSingletonDegreeCriterion.lean`)
+to a restored-pivot table. Recipient-row invariance is
+`quittingSingletonMatrix_sub_payoff`
+(`UniformEquilibrium/Quitting/Classification/LCP/QuittingRewardAdapter.lean`).
+The accepted [strict-column/all-END reduction](../exports/FIN4_STRICT_INVERSE_COLUMN_AND_ALL_END_MINIMUM_REDUCTION.md)
+also already proves det Gamma>0 and SOME strictly positive inverse column
+for the SAME native table, without perturbation. These are universal matrix
+constraints, not restrictions confined to the AllNever source alternative.
+The full JOINING pencil condition below still has its stated source scope.
+
 Exact ingredients are
 `exists_finFour_no_uniformPayoff_iff_exists_singlePivot`
 (`UniformEquilibrium/Diagnostics/Quitting/FinFourSinglePivotNormalization.lean`),
@@ -148,7 +161,7 @@ Gamma_ij=Z_i({j}), J_ij=Z_i({i,j}), with diagonals zero.
 | Disjoint branch | Forced source geometry | Status / sufficient contradiction |
 | --- | --- | --- |
 | `N0`: alpha=1 | E consists only of AllNever; m=1, U=0 | Open. A neighborhood good-root theorem near the nonpositive payoff boundary suffices; a good root at 0 alone does not |
-| `N-`: alpha<1, delta_m<0 | Every alpha-source is strictly positive; alpha<m<=1. Select an m-source with a negative coordinate; EVERY root there is proper with strictly positive successor coordinates | Open. A good root at that selected source, or a valid comparison lowering m, suffices |
+| `N-`: alpha<1, delta_m<0 | Every alpha-source is strictly positive; alpha<m<1. Select an m-source with a negative coordinate; EVERY root there is proper with strictly positive successor coordinates | Open. A good root at that selected source, or a valid comparison lowering m, suffices |
 | `Nb`: alpha<1, delta_m=0 | Every alpha-source is strictly positive; alpha<m<=1. Every m-source has nonnegative payoff with a zero coordinate; its only good root is AllContinue, and strict-negative all-bad annotations accumulate there | Open. Local good-root control at all nearby strict-negative annotations, or a finite-word comparison lowering m, suffices |
 
 This is genuinely disjoint even if one table has both negative and boundary
@@ -157,6 +170,49 @@ follows from the global least-Never dichotomy and delta_m<=0. The strict
 inequality alpha<m follows from compact attainment: equality would give an
 alpha-minimizer with a nonpositive coordinate. The alpha- and m-sources are
 generally DIFFERENT points. Nearby bad annotations need not be actual payoffs.
+
+The [negative-dual/actual-repair reduction](../exports/NONNEGATIVE_MINIMUM_SOURCE_PENCIL_REDUCTION.md)
+now narrows the proper nonnegative m-sources for ARBITRARY native tables.
+Their zero set T has size2 or3 and admits y>0 with y^T Gamma_T<0.
+Under the existing joining genericity, every matrix Gamma_T-tJ_T,
+0<=t<=1, has its own strict negative left certificate and degree0.
+This principal-pencil fact is distinct from the full Gamma degree1 above.
+The old solo-cover/negative-clock criterion remains a sufficient broader
+source consumer on its stated raw family; the new theorem excludes the
+entire semipositive proper-zero singleton-block case without that cover.
+
+More importantly, the new degree-produced repair turns nearby positive E
+points into eligible E points with STRICTLY lower ORIGINAL Never. If
+eta=min_(i in T)U_i>0, the produced gain is at least eta nu/(12M).
+At a proper selected source this gives a quantitative local lower bound
+nu>=m/(1-eta/(12M)) for nearby positive E points. No payoff-fibre minimum
+is substituted for the original m.
+
+For the ENTIRE m<1 generic branch, put
+
+    P_m={X in E:nu(X)<=m,U(X)>>0},
+    beta=(A_Z/(14M))^4>0.
+
+P_m is compact and, when nonempty, has ONE positive buffer
+kappa_m=min_(P_m)min U>0 through level m itself. All-zero E at nu<=m is
+excluded by finite two-copy renewal; proper zero limits are excluded by the
+actual repair. This removes the former kappa_s->0 seam as s approaches m.
+A given positive source with nu0<=m has an actual augmented-carrier Nash
+head reaching either eligibility at nu=m or nu>m in at most
+
+    1+floor(log(m/nu0)/[-log(1-kappa_m/(64M))])
+
+retained macroscopic cuts. Replacing nu0 by beta makes the bound uniform
+on P_m. The same positive sublevel is closed under auxiliary Nash prefixes
+and has finite nonzero-prefix height before root inertia. These results
+do not identify that carrier head with the stronger literal source data of
+the two atlas capstones, produce a finite-calendar representation of E,
+or consume a finite-amplitude jump above m.
+
+Every strict-negative m-source has m<1, since nu=1 forces U=0. In `Nb`,
+m<1 now has the same compact positive sublevel; m=1 retains the AllNever
+endpoint degeneration. The new uniform bound does not resolve either
+branch's finite-amplitude joint-return consumer. `N0` remains open too.
 
 There is a raw security filter on these cases. If for each i some a_i>0
 satisfies Z_i(T+i)+a_i Z_i(T)>=0 at every nonempty opponent coalition T,
@@ -183,13 +239,20 @@ Under the further genericity in Section9 of the
 `N0` requires EVERY matrix Gamma-tJ, 0<=t<=1, to be R0, standard Q and of
 degree1. A crossing excludes `N0` only; passing the pencil settles no branch.
 
-The marked actual/mixed endpoint program additionally assumes a positive
-inverse column Gamma^(-1)e_p>0. Its thirteen endpoint zero faces are a
-conditional refinement, not thirteen additional universal reward classes.
-An inherited endpoint must improve the whole head's constrained obstacle
-objective, not just its own debt. Its exact objective and observer constraints
-are retained in the
-[actual-minimum note](CODEX_ROOT__ACTUAL_MINIMUM_AND_MIXED_ENDPOINT.md).
+The marked actual/mixed endpoint program now has a UNIVERSAL matrix
+adapter: the strict positive inverse column is already produced by the
+[strict-column/all-END reduction](../exports/FIN4_STRICT_INVERSE_COLUMN_AND_ALL_END_MINIMUM_REDUCTION.md).
+That reduction also supplies one fixed positive recipient-weight box K
+and t0>0 such that EVERY original SUM-debt minimum at theta_i[Z_i+t],
+for theta in K and0<t<t0, has all four NATIVE END caps active and all
+original Never marginals bounded away from0. Its universal all-END consumer
+remains open. This is a different minimizing objective from native m.
+
+The thirteen endpoint zero faces are a conditional refinement of this
+program, not thirteen additional universal reward classes. An inherited
+endpoint must improve the whole head's constrained obstacle objective,
+not just its own debt. The exact objective and observer constraints are
+retained in the [actual-minimum note](CODEX_ROOT__ACTUAL_MINIMUM_AND_MIXED_ENDPOINT.md).
 
 ## Reward-class work queue
 
@@ -387,6 +450,29 @@ the source generic. This is an exhaustive incoming classification, not a
 consumer for those three strict-negative2 modes or their zero boundaries.
 Every candidate still needs the full quiet comparisons and actual E access.
 
+For initial23, put c=Z3(23),w=-Z2(23),K=Z1(23). On0<c<4 its genuine
+tail has positive2 and negative3, forcing its payoff1 to be nonpositive.
+The ORIGINAL source budget then gives the new necessary inequality
+
+    (4+6c)w<c max(6,K+4).
+
+The entire reverse weak-inequality regime is closed; for K<=2 this includes
+w>=3c/(2+3c). A separate whole-head consumer handles a zero1 return
+Y=(V,0,T,-F), V>=0,T,F>0: it closes that sector if Z0(02)<=-5,
+Z0(023)<=Z0(23), and w>=8c/(c+3). It varies the forced actual pure1 row
+and reconstructs the original23, lowering ORIGINAL m through every stated
+equality boundary. Complete proofs are in the
+[method note](CODEX_ROOT__FIN4_METHOD_BOUNDARIES.md), Section13. The c=4
+face, strict-negative1 reset, and other02/023 branches remain open.
+
+The same method note's Section14 proves a precise obstruction on the
+negative-V immediate branch when k=Z0(13)<=0: at the genuine tail its
+current013 is the unique child Nash root, and upstream01 is more absorbing
+than every competing child root. Two-layer rerooting with owner2 quiet
+cannot improve original Never. This is a proof-method boundary, not an
+additional game or source exclusion; a genuine tail/full-game change is
+needed there.
+
 The remaining targets on this family are precisely the negative-V immediate
 history, the V<3(E-F) four-row history and the surviving negative-owner2
 chamber.
@@ -408,14 +494,16 @@ when its complete consumer or strict coverage change is proved.
 | Target | Established boundary | Next mathematical output needed |
 | --- | --- | --- |
 | Both source capstones | Their common pure-pair normalization is already available. A sure pair gives zero joint and deleted reach to its later tail; that tail's escape floor is not reached charge | A renewable whole-source return or contradiction, retaining the original entrance or an explicit adapter |
-| Native positive-source branch | For each alpha<s<m, compactness gives kappa_s=min_{E,nu<=s} min U>0. Existing positive-buffer extraction produces a finite exact Nash head crossing s, retaining(U,B,e,N) | Control as s approaches m, where kappa_s may vanish, followed by compatible joint head/tail revision at a zero face |
+| Native positive-source branch | On the generic m<1 branch, P_m is compact with one kappa_m>0. Actual cofinal extraction crosses m or reaches eligibility at m in uniformly bounded macroscopic cuts; nonzero Nash-prefix chains inside P_m have finite height | Consume finite-amplitude jumps above m and compatible whole-head/tail returns; separately address the m=1 AllNever endpoint |
+| Universal all-END minimum source | A strict inverse column and fixed weight box already produce all four active native END caps at EVERY small-raise original SUM minimum, with uniform original Never collar | An unrestricted all-END consumer or renewable whole-source descent; its objective cannot be replaced by native m |
 | `R_S` | Only single-edge/matching graphs and full Orientation survive. Both shapes have all-bad boxed examples already solved by the hull theorem; the single-edge example has no full root | Use actual payoff/cap geometry or additional no-UE hypotheses beyond those raw gates for both shapes |
 | `R_F` / `R_T` matrix test region | An explicit open singleton-matrix region passes R0/degree/Q pencil tests but has a uniform activity bound for arbitrary homogeneous switching, including unbounded phase counts and signed states when row factors stay bounded | A genuine nonlinear or finite-amplitude mechanism, or a valid actual-source budget beyond the homogeneous state space |
-| `R_O` | On the studied raw family every selected source is negative. Case1 has exactly two first013 histories, whose genuine tails satisfy V<0 or V<3(E-F), with no extra quiet2 guard. The immediate nonnegative-V mode and a larger zero2 cone are excluded | Consume the negative-V immediate and bounded-V four-row sectors and surviving negative-owner2 sources; extend the actual-source mechanisms to broader raw regions |
+| `R_O` | On the studied raw family every selected source is negative. Case1 has exactly two first013 histories, whose genuine tails satisfy V<0 or V<3(E-F), with no extra quiet2 guard. The immediate nonnegative-V mode, larger zero2 cone and initial23 budget/zero1-return sectors are excluded | Consume the negative-V immediate and bounded-V four-row sectors and surviving negative-owner2 sources; core rerooting alone is insufficient on k<=0 |
 
-The fixed-s finite crossing is a consolidation of Section12 of
-[bounded crossing](CODEX_COORDINATOR__BOUNDED_CROSSING_SELECTION.md), not a
-new source branch closure. The activity bound and shared-index obstruction
+The fixed-s crossing was already in Section12 of
+[bounded crossing](CODEX_COORDINATOR__BOUNDED_CROSSING_SELECTION.md). The new
+actual repair extends its uniform buffer THROUGH m on the generic m<1
+branch; it leaves the finite-amplitude endpoint consumer open. The activity bound and shared-index obstruction
 are proved in the [method-boundary note](CODEX_ROOT__FIN4_METHOD_BOUNDARIES.md).
 They rule out proposed proof steps; they do not exclude those reward tables
 as counterexamples. The two universal source capstones and all four full
