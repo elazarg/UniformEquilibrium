@@ -980,3 +980,115 @@ The final [coverage map](../notes/CODEX_ROOT__FIN4_COVERAGE_MAP.md), SHA256
 distinguishes the hypothetical zero-ending head bound from the unbounded
 length before a surviving013, and records both source-cone guards exactly.
 All four full raw arms and both universal capstones remain open.
+
+## First-triple normal form and whole three-row consumption
+
+Canonical packet:
+[first-triple normal form](../exports/OPPOSED_PAIR_FIRST_TRIPLE_NORMAL_FORM.md),
+SHA256 `5a3e841ddb6810232adf263e8a331fe8cf4b69ff7372a2885550dcfa74806d20`.
+Ordinary mathematics only; no Lean command or new verification seal.
+
+The packet classifies EVERY finite genuine first013 configuration in the
+selected caseI mode. Its only histories are01,013 and01,03,01,013. At the
+genuine tail Y=(V,-E,T,F), E>F>0, their necessary bounds are respectively
+V<0 and V<3(E-F). A first013 entrance with negative0 and every other
+preceding alternating word are excluded. This is a strict actual-mode
+reduction, not a new raw reward-table UE class or a full opposed-arm closure.
+
+The actual finite-entry producer and positive2 ledger are already proved
+in the frozen whole-head triple-entry packet, SHA256
+`57d6b534cfd29ec500c667659eb358f981685f84ecbc86bd8f81b93ce3ed2fca`.
+Its exact hypotheses coincide with the new classified mode. The new packet
+does not repackage that producer or assert finite entry independently.
+The living map composes the two proofs; the new packet's own theorem is
+self-contained as a universal classification of the established actual
+mode. Both reviewers affirm this named-live-obligation gate, rather than
+admitting an exceptional theorem about a favorable supplied certificate.
+
+OPPOSED_GUARDS produced the first-triple suffix certificates and four-row
+absorption inequality. CODEX_ROOT supplied an independent three-cycle suffix
+certificate and the elementary whole-three-row survival bound. OPPOSED_013
+produced the two stationary child families and affine passive-reward bound.
+FAMILY_GENERALIZATION produced the low-V positive2 step and assembled the
+complete immediate nonnegative-V consumer; ROOT, OPPOSED_013 and
+OPPOSED_GUARDS independently reconstructed its additional actual triple and
+whole-head replacement. These are contributing checks, not the independent
+whole-packet export reviews below.
+
+For V>=E-F, the stationary failure conditions produce the explicit01
+replacement's quiet2 comparison. For an immediate0<=V<E-F tail, stronger
+ORIGINAL source bounds produce T>0 and force another genuine013. The same
+stationary families bracket its actual hazard too. A full01 replacement at
+its genuine tail then has negative active payoffs and lowers ORIGINAL Never
+against ALL three old rows. The new comparison uses no S>=0 hypothesis at
+that additional triple and no minimizing property of either tail. Together
+these arguments consume EVERY immediate V>=0, including V=0. The four-row
+proof consumes V>=3(E-F) against its entire original history.
+
+FRESH_TRIPLE_REVIEWER and SHARED_SINGLE_EDGE, wholly noncontributing to these
+proofs and constructions, each read ALL1135 final lines and independently
+gave full mathematical PASS and affirmative export-gate/significance PASS
+against the exact final hash above. Both rechecked the strengthened
+three-row argument, attempted to falsify it at V=0 and weak quiet margins,
+and ran all THREE printed standard-library programs. Their final review
+records have SHA256 6524103179c23d5cf2aa63e0540466e2784eead4a3cc59419df2596171e9bd91 and 06f847951a4ec2593eb22c59cc6896f71811ef669605a4f9d108b4a78aafa03a.
+No unresolved objection remains. Approval does not transfer from the earlier
+weaker candidate: both whole reviews cover the final strengthened bytes.
+
+The printed programs verify60 exact classification signs,248 positive
+rational tensor coefficients, both original Nash-head boundary cores and
+the new V=0 three-row replacement core. Both reviewers independently audited
+the stationary bracketing, the full passive comparisons, actual incoming
+support extraction and original-source objective. The exact four-row core
+shows coefficient1 fails although3 succeeds; every auxiliary-core example
+is explicitly distinguished from an actual carrier point, a selected
+minimum or a positive-gap game. The packet uses no generated coefficient
+payload, external input file, CAS, sampled root decision or numerical proof.
+Its four named prefix declarations and tracked source files were checked.
+
+The byte-identical packet is promoted only after both final approvals.
+All previously frozen exports remain unchanged. No whole caseI, whole
+reward family, universal source capstone or Fin4 closure is claimed.
+
+## Unified nonnegative-source elimination and remaining-case map
+
+Canonical [method note](../notes/CODEX_ROOT__FIN4_METHOD_BOUNDARIES.md),
+SHA256 `e3812542fbb17612b02ec634dc6018fec50a3c786cfcc548e7076777e0212eb6`.
+Section10 retains only the new packet's role and its exact remaining sectors;
+the former weaker immediate proof is superseded rather than duplicated.
+
+Section9 enlarges the zero2 consumer's guard to c<=D OR c<4. Its new
+full-source lemma excludes U1>0,U2=0,U3<0 when c>=0 and the three relevant
+participant2 entries are strictly negative. This protects quiet3 after the
+ENTIRE cumulative compression, rather than only at the initial row. The
+c=4 boundary is expressly retained unless the old c<=D branch applies.
+FAMILY_GENERALIZATION freshly checked this ROOT enlargement and its complete
+curation; its original cone authorship is distinguished from that fresh
+extension review. The exact Section9 substring has SHA256
+`968f3450f936795e1eb5275e71dcac75f6b6fb1b8ea599b4065bdff1f21ee2b0`.
+
+Section11 unifies exact/diffuse solo comparisons, the old expanding-clock
+producer and the old two-copy argument into a RAW criterion. It eliminates
+ALL nonnegative selected-m sources whenever the finite zero-set cover and
+one negative expanding clock hold. A rational child013 mode instantiates
+it on the studied family; all original restricted-m comparisons retain an
+eligible zero or negative payoff. The criterion persists beyond its exact
+higher-entry family. No new clock producer or UE reward-class coverage is
+credited. The general criterion and rational simplification had contributions
+from ROOT, OPPOSED_013 and GLOBAL_VIABILITY. FRESH_TRIPLE_REVIEWER gave a
+separate wholly noncontributing mathematical PASS for ALL final Section11
+bytes, substring SHA256
+`12f9d5717b9214baa124bcf6bc25a8ce915242f2c4254ed795556f810053f4fe`;
+its review record has SHA256
+`21b3dce8d8a9ccea378b30f9d00e34ad5d25a0cf39018593c6877fc6e9582440`.
+
+Final [coverage map](../notes/CODEX_ROOT__FIN4_COVERAGE_MAP.md), SHA256
+`ef6c1075908a76e8a11442b03c3d31a9d64d3302d94433287c2ae7306e810d6f`.
+GLOBAL_VIABILITY checked the final living-document composition and scope,
+separately from the two whole-packet proof reviews. On the studied family,
+every selected source is negative. CaseI has the negative-V immediate or
+bounded-V four-row history; caseII has the exhaustive02/23/023 support
+partition for strict-negative2 and all literal zero-coefficient boundaries,
+plus the surviving zero2 cases outside the enlarged cone. Incoming candidate
+equations alone are not E producers or consumers. All other full raw arms
+and both universal source capstones remain open.

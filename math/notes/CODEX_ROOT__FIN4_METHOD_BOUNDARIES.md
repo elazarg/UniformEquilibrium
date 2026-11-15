@@ -794,7 +794,7 @@ The all-bad03-root argument produces these inequalities at X, not its
 continuations. Write k=-Z0(02),c=Z3(23). Suppose
 
     Z2(02)<0,Z2(23)<0,Z2(023)<0,                 (ST2)
-    k>0,c<=D,4A/k<D<(62-10k)A/(3k).            (ZC2)
+    k>0,(c<=D OR c<4),4A/k<D<(62-10k)A/(3k).    (ZC2)
 
 Then this entire selected-source region is impossible. It is not a new UE
 reward class, a statement about every zero2 source, or a closure of caseII.
@@ -808,8 +808,18 @@ hazard s is proper because sure2 would give payoff1=-4. Its genuine E tail is
 
     w=((-A+5s)/(1-s),(B+4s)/(1-s),0,(D-4s)/(1-s)).
 
-The head inequalities say ks>=A,cs<=D. The latter is strict because
-c<=D,s<1,D>0. If ks>A, all quiet gaps are strict; increasing s slightly
+The head inequalities say ks>=A,cs<=D. The latter is strict on the
+whole union in(ZC2). For c<=D this uses s<1,D>0. For the new part
+0<D<c<4, equality would give a genuine tail with positive1, zero2 and
+negative3, which is impossible by the following full-source lemma.
+
+If c>=0, no E point can have U1>0,U2=0,U3<0 under(ST2). Its incoming
+row has q1=0 because Q1<=0. If q2=0, then Q3=2q0>=0, contradicting
+Q3<=U3<0. If q2>0, active Q2=0 and(ST2) force q0=q3=0, so instead
+Q3=cq2>=0, the same contradiction. This uses every incoming support,
+not an assumed pure2 continuation. At initial saturation cs=D with
+0<D<c<4, the actual tail has w1>0,w2=0 and
+w3=D(c-4)/(c-D)<0, exactly the forbidden source. If ks>A, all quiet gaps are strict; increasing s slightly
 at fixed tail retains Nash and a negative0 payoff while decreasing positive
 original Never. Original m-minimality therefore gives s=A/k. Consequently
 w0,w1,w3>0 and
@@ -862,13 +872,17 @@ through this date is g>=delta>0. It gives a genuine E tail Y with
 This relation is ONLY prescribed payoff and original Never. Combining with
 the initial s gives G=s+(1-s)g>s and the SAME U(X),N(X). Now the compressed
 row is Nash at Y: owner2 endpoints are0, Q0=-kG<-A, Q1=Z1(12)G<=0<B,
-and Q3=cG<D because c<=D,G<1. All quiet gaps are strict. Increasing G
+and Q3=cG<D throughout the union. For c<=D this is immediate. For
+0<D<c<4, if cG>=D the genuine tail instead has
+Y1=(B+4G)/(1-G)>0,Y2=0,Y3=(D-4G)/(1-G)<0, forbidden by the same
+full-source lemma. Thus all quiet gaps are strict. Increasing G
 slightly therefore gives an E whole source with negative payoff0 and lower
 original Never, contradicting m. No minimum was assigned to w,W or Y.
 
-The c<=D check matters: c<=4,D>4s alone would protect only the initial
-quiet3 gap, not its comparison after cumulative compression. Outside this
-cone, the zero2 and strict-negative2 cases remain open.
+The strict c<4 extension uses feasibility of the GENUINE final source
+to protect quiet3 after cumulative compression, not merely the initial
+D>4s comparison. It does not add c=4 unless the old c<=D branch applies.
+Outside this union cone, zero2 and strict-negative2 remain open.
 
 One old stationary filter must be enforced throughout this family:
 A_Z>0 implies Z2(23)>-5. Otherwise pure3 is absorbing Nash: owners0,1
@@ -878,60 +892,155 @@ the earlier geometric23 boundary fixtures with Z2(23)=-10 do not lie in
 the genuine positive-gap domain.
 
 
-## 10. One explicit replacement consumes an immediate013 tail region
+## 10. First013 has two histories and an automatic quiet2 comparison
 
-Continue on the same opposed raw family at an original negative m-source
-u=(-A,-B,C,D), all parameters positive, with B<6(A-D),C>5A+4AD-D.
-Suppose the first01 row is immediately followed by013 hazards(a,b,0,c).
-Let its genuine E tail have payoff(V,-E,T,F). Then a>b>0,c>0 are proper,
+The [first-triple normal form](../exports/OPPOSED_PAIR_FIRST_TRIPLE_NORMAL_FORM.md)
+classifies EVERY finite first013 entry in the selected caseI mode. Together
+with the existing whole-head finite-entry producer, the only histories are
+01,013 and01,03,01,013. Their genuine tail Y=(V,-E,T,F) has E>F>0 and
+must satisfy respectively V<0 and V<3(E-F). No extra quiet2 guard remains.
 
-    E=(a+7c)/[(1-a)(1-c)], F=(a-b)/[(1-a)(1-b)]>0.
+The mechanism uses two produced stationary013 child roots to bound the
+free passive entries Z2(13),Z2(013) by affine interpolation at the ACTUAL
+triple hazard. Under A_Z>0 this makes the explicit01 replacement's quiet2
+comparison automatic whenever V>=E-F. In the remaining immediate sector
+0<=V<E-F, stronger ORIGINAL all-bad bounds force T>0 and a third genuine013.
+The same stationary families supply the passive bound there; a full01 row
+at its actual tail absorbs the ENTIRE three-row history. Thus EVERY
+immediate V>=0 is excluded, including V=0. The four-row absorption
+proof derives its small hazard domain from ORIGINAL all-bad bounds and
+uses exact rational coefficient certificates. It does not assign those
+bounds or a minimum to any tail. A finite exact Nash-head core shows why
+the two-row coefficient1 cannot simply replace3 in the four-row comparison;
+it is no actual selected-source or positive-gap witness.
 
-This immediate exit is impossible whenever
+This supersedes the earlier immediate013 consumer requiring a supplied
+quiet2 inequality. The canonical complete proof is retained only in the
+packet. The immediate V<0 and four-row V<3(E-F) sectors are not consumed;
+this does not close caseI, the whole raw opposed family or arbitrary Fin4.
 
-    V>=E-F,
-    T+(1-Z2(02))E+(3-Z2(12))V+(4-Z2(012))EV>=0. (EX)
+## 11. A raw criterion excludes nonnegative selected sources
 
-These are complete raw/source comparisons, not a supplied replacement
-profile. The conclusion retains the ORIGINAL two-row head and minimum.
-First F<=a/(1-a), so E-F>=c(a+7)/[(1-a)(1-c)]>=7c/(1-c)>0.
-At the actual tail use the explicit01 root with odds(E,V). Its active
-outputs are -V/(1+V),-7E/(1+E), both negative. Quiet3 Continue-minus-Quit
-has sign F-E+V>=0. Quiet2's FULL comparison numerator is exactly the
-second expression in(EX): its Continue numerator is T+E+3V+4EV and
-Quit numerator is Z2(02)E+Z2(12)V+Z2(012)EV. Thus this is a full Nash
-prefix of the genuine E tail. Owner2 output need not be positive; negative
-active outputs already qualify for the original m comparison. Its joint
-original Never is nu(Y)/[(1+E)(1+V)]. Both weak boundary equalities in(EX)
-are allowed.
+For any native quitting table on a nonempty finite player set I put
+Gamma_ij=Z_i({j}),
+J_ij=Z_i({i,j}) off the zero diagonals and L=J-Gamma. Use full behavioral
+caps, actual closure E={U=B}, original Never nu, positive absorbing gap
+A_Z>0 and m=min{nu(X):X in E,min U(X)<=0}. The following RAW conditions
+force EVERY m-minimizer to have a negative payoff coordinate:
 
-It remains to compare with the ENTIRE old head. The013 output w has
-w0=-b+3c,w1=-7a-c,w3=2a-2b. The upstream01 row has odds(-w1,w0), so
-the old joint Continue multiplier is
+* For every nonempty proper zero set T there is a mover j in T such that
+  either Gamma_ij>=0 for all i in T minus{j}, or Gamma_ij>=J_ij for all
+  those i. These are respectively diffuse and exact solo covers.
+* There are S subset I, t in(0,1),v_S>0 with L_SS invertible,
+  (Gamma_SS-t J_SS)v_S=0, and (Gamma_kS-t J_kS)v_S>0 for every k outside S.
+  Some active coordinate also satisfies (J_SS v_S)_i<0.
 
-    H=(1-a)(1-b)(1-c)/[(1+7a+c)(1-b+3c)].
+These conditions concern singleton and participant-pair data; passive-pair
+and higher rewards are arbitrary finite numbers. The proof below uses
+old finite-prefix and expanding-clock mechanisms, with no new UE-class
+claim or universal capstone. The fixed opposed family satisfies this
+criterion, so its nonnegative selected-source modes are all absent.
 
-Its quiet3 slack gives
-(1-B/7)(1-A)(w0+w1+w3)=2A+D-2B/7>0 by the original all-bad bound.
-Hence 5a+3b<2c; since a>b, both a,b<2c/5. Using
-E>=7c/(1-c) and E-F>=7c/(1-c),
+### Exact and diffuse finite solo comparisons
 
-    H(1+E)(1+E-F)
-      >(1-2c/5)^2(1+6c)^2/[(1-c)(1+19c/5)(1+3c)]>1.
+Suppose u>=0 is an E source with at least one zero and one positive
+coordinate. For a diffuse-cover mover j prepend N solo-j dates of
+unconditional mass f/N, where f>0 is fixed and small. Conditional hazards
+are at most f/[N(1-f)]. Apply these finite words to actual approximants,
+then take a compact limit as approximation error and maximum atom vanish.
+Owner j has payoff and cap0. Each zero observer i has prescribed payoff
+f Gamma_ij>=0. An internal deadline gets at most this value plus M f/N:
+joining can change only its current atom. Continuing into the tail gives
+that prescribed value, so all zero-observer debts vanish. Positive outsiders
+have fixed tail buffers and remain on Continue for sufficiently small f.
+The E limit still has payoff j=0 and ORIGINAL Never (1-f)nu<nu.
+No infinite prefix followed by a tail is executed.
 
-The last numerator-minus-denominator identity is
-9c(16c^3-43c²+61c+15)/25>0 for0<c<1. Thus(EX) gives
-1/[(1+E)(1+V)]<H. The new E point has negative payoffs and strictly
-smaller original Never than X, contradicting m. No tail minimum, alternate
-013 root or off-root Nash homotopy was assumed.
+For an exact-cover mover j, one small solo-j row is already full Nash:
+zero observers compare f Gamma_ij>=f J_ij, the mover stays exactly0,
+and positive outsiders remain quiet. Both comparisons preserve a zero
+payoff and therefore compare against the ORIGINAL RESTRICTED minimum m.
 
-The tail tests permit T<0. For instance V=1,T=-5/2,0<F<E<1/40 satisfy
-both tests strictly for all the permitted nonpositive participant2 entries;
-the second expression is at least1/2+5E>0. This checks the scalar region,
-not realization of a source. The proof imposes no value on Z2(23) and remains valid with
-the necessary hard-residual constraint Z2(23)>-5. It consumes only the
-immediate01,013 case: arbitrary earlier pair cycles, V<E-F, and failure
-of the full quiet2 test remain open. The general two-root fiber and its
-off-root quiet contact are not silently asserted to be actual E paths.
-This explicit comparison is retained internally; no additional UE reward
-class or full013 closure is claimed.
+The fixed opposed family has the following exhaustive proper-zero-set cover:
+
+| T | mover j | comparison |
+| --- | ---: | --- |
+| one owner | that owner | small exact solo |
+| 01 | 0 | Gamma10=-6>J10=-7 |
+| 02 | 0 | diffuse, Gamma20=1>0 |
+| 03 | 3 | diffuse, Gamma03=4>0 |
+| 12 | 1 | diffuse, Gamma21=3>0 |
+| 13 | 3 | diffuse, Gamma13=6>0 |
+| 23 | 2 | diffuse, Gamma32=4>0 |
+| 012 | 0 | Gamma10=-6>-7; Gamma20=1>J20 |
+| 013 | 3 | Gamma03=4>3; Gamma13=6>-1 |
+| 023 | 0 | diffuse, Gamma20=Gamma30=1>0 |
+| 123 | 1 | Gamma21=3>J21; Gamma31=-1>-2 |
+
+The owner2 participant signs supply J20,J21<=0. Diffuse comparison on23
+needs no bound on the free J32; replacing it by an exact single-date
+comparison would be wrong.
+
+### An actual negative clock gives m<1
+
+The raw clock conditions imply L_SS^(-1)J_SS v=v/(1-t), with
+rho=1/(1-t)>1. The existing positive backward-orbit construction from
+[global least-Never reduction](../exports/GLOBAL_LEAST_NEVER_SOURCE_REDUCTION.md),
+Sections7 and9, gives proper positive hazards
+
+    q_n=epsilon rho^n v+O(epsilon^2 sigma^n), n<=0,
+    rho<sigma<rho^2, chronological order q0,q_-1,q_-2,... .
+
+Its active finite replies and Never telescope to Q(q0). The virtual terminal
+annotations tend to0, so this is an ACTUAL full-cap Nash clock with original
+Never strictly between0 and1, not a profile played after an infinite prefix.
+For each outside owner k, Never minus current Quit at suffix n is
+
+    (epsilon rho^n/t)(Gamma_kS-t J_kS)v+O(epsilon^2 sigma^n)>0
+
+uniformly in n for small epsilon. All earlier common absorption cancels,
+and mixtures price every complete reply. The negative active J-row gives
+a strictly negative actual payoff for small epsilon. Thus this clock is
+eligible for the ORIGINAL m and proves m<=nu_clock<1 directly.
+No different global minimum is substituted for m.
+
+The fixed opposed family has a wholly rational clock on S=013:
+
+    det(J_SS-Gamma_SS)=-8,
+    t=1/2, v=(39,25,15), (Gamma_SS-J_SS/2)v=0,
+    J_SS v=(20,-288,28).
+
+For its outside owner2,
+
+    (Gamma_2S-J_2S/2)v
+       =39-(39J20+25J21+15J23)/2>=39>0,
+
+by the participant2 signs. All free higher rewards affect only the bounded
+quadratic errors and the small amplitude chosen for the given finite table.
+The endpoint payoff1 is negative; in the exact fixed family it is
+Q1(q0)=-7(q0)_0-(q0)_3<0. This credits the existing expanding-clock
+producer, not another stationary or clock existence class.
+
+### All-zero sources and the generalization beyond the fixed family
+
+At u=0, the resulting0<m<1 permits two independent copies of finite actual
+approximants. With an unused separator date the exact formulas are
+
+    U_i(P*P)=(1+nu(P))U_i(P),
+    B_i(P*P)=max(B_i(P),e_i(P)+H_i(P)B_i(P)),
+    N_i(P*P)=N_i(P)^2, H_i(P)=product_(j!=i)N_j(P).
+
+Finite approximants follow by moving late finite mass to Never, uniformly
+in full replies. At the limit B=U=0 and e<=B=0, so concatenation is in E
+with payoff0 and Never m^2<m. This is the old two-copy argument, applied
+to the SAME nonpositive-payoff minimum. Together with the proper-zero-set
+comparisons it proves the raw criterion.
+
+If the chosen off-diagonal cover comparisons and outside clock residuals
+are strict and the expanding eigenvalue is simple, these RAW conditions
+persist on an open neighborhood of the singleton/participant-pair data.
+That applies here: the displayed cover is strict and the rational mode
+rho=2 is simple, as det(Gamma_SS-t J_SS)=-2(2t-1)(11t^2-21t+6).
+All other rewards remain arbitrary finite; no exact triple identities are
+needed for this source-branch exclusion. The fixed-family negative-source
+dispatch and first013 analysis still have their own stronger hypotheses.
