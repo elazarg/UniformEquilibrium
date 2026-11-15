@@ -2329,3 +2329,106 @@ full-support index. Every open neighborhood of N1 therefore fails the
 nonpositive-orientation test at C=40. The verified6<=C<=20 theorem is
 unaffected. No actual joint payoff/cap realization U=B=u, positive
 absorbing gap, or counterexample to UE is asserted.
+
+## Stronger continuation kernels and their terminal boundary condition
+
+The preceding C=40 obstruction concerns the reward-floor N1 defined in the
+export. Stronger necessary source conditions are available. Use the native
+prefix notation Q_i,P_i,H_i,h,F_q from
+[payoff-domain orientation](../exports/PAYOFF_DOMAIN_ORIENTATION_UNIFORM_EQUILIBRIUM.md).
+Let H be the reward hull and C the closure of actual triples(U,B,nu).
+All unilateral caps below price complete behavioral replacements.
+
+First put c_i=min_{S containing i}Z_i(S). Immediate Quit has payoff at
+least c_i against every opponent profile, so every actual cap B_i>=c_i.
+Applying this bound to the actual continuation cap gives, without any
+Never hypothesis,
+
+    B_i>=P_i+H_i c_i,
+    P_i+H_i c_i-U_i<=d_i,       c_i-U_i<=d_i.
+
+Consequently the first-action kernel may use the participant floor c_i
+in place of the all-reward floor. This bounds caps, not arbitrary
+positive-debt prescribed continuation payoffs. In the14/25-passive family,
+c=(-11,-4,-11,-4) independently of C, much higher than its free-row
+all-reward floors. The earlier weak-kernel obstruction does not refute
+this refinement. Its successful C=40 checks add no UE class, since that
+table already has an older cooperative-edge admission.
+
+There is also a JOINT continuation restriction. Fix beta>0 and define
+
+    C_beta={(u,u,nu) in C:nu>=beta}.
+
+Every such state has a first-action witness whose tail is again in C_beta.
+Indeed approximate by actual profiles. Their first survival h>=nu and
+the exact debt decomposition give d_head,i>=h*d_tail,i. Thus the tail
+debts vanish. Extract first hazards and bounded tail data; their limits
+satisfy h>=nu>=beta, nu=h*nu_tail and nu_tail>=nu. Since every
+1-q_i>=h>=beta, Continue has positive probability and must attain the
+common zero-debt value. Hence the extracted tail payoff w satisfies
+
+    u_i=P_i+H_i w_i,       Q_i<=u_i,
+    q_i(u_i-Q_i)=0,        (w,w,nu_tail) in C_beta.       (K)
+
+No exact-profile realization of either closure point is asserted.
+Starting from K+_0=H, use the first three conditions of(K), replacing its
+actual-tail membership by w in K+_k, to define K+_(k+1). These sets are
+nested, compact by closed witnesses in the hazard cube, and contain the
+payoff projection of C_beta at every depth. Their intersection also
+contains it. The same holds after adding h>=beta. Compactness of the
+ACTUAL source family uses a fixed positive beta; its union over beta>0
+need not be closed.
+
+To identify the remaining boundary issue, consider the weaker operator
+
+    T(K)={F_q(w):w in K, q is Nash at annotation w},
+    K_0=H, K_(k+1)=T(K_k), K_infinity=intersection_k K_k.
+
+The strong operator in(K) is contained in T. Compactness of the root
+fibers shows that K_infinity consists exactly of annotations admitting
+infinite Nash chains u_t=F_(q_t)(u_(t+1)) entirely in H. For such a chain
+write nu=product_t h_t. Its maximum recursion bounds every finite
+deadline response by u_0. These deadline payoffs converge to native Never:
+if an opponent quits at a finite date, sufficiently late deadlines give
+the same outcome; if all opponents Never, own late Quit and Never both
+give zero. Bounded convergence therefore bounds every behavioral
+replacement by u_0 as well.
+
+If nu=0, telescoping yields actual U=u_0, so the calendar is actual
+absorbing Nash. If nu>0, hazards are summable and
+||u_t-u_(t+1)||<=2M(1-h_t), so u_t converges to ell in H. Since
+u_t>=Q(q_t) and q_t tends to0, ell>=0. Telescoping now gives
+
+    actual native U=u_0-nu*ell.
+
+The same calendar is subgame-perfect Nash for the modified game whose
+Never payoff is ell. Finite deadlines are bounded as above; continuing
+forever in the maximum recursion prices the opponent-Never residual
+ell_i exactly. If some early tail has zero survival, the same choice of
+ell still realizes it; if every tail has zero survival, choose ell=0.
+Conversely every subgame-perfect profile with such an ell has conditional
+payoffs in H and produces a Nash chain. Thus K_infinity is exactly the
+union of SUBGAME-PERFECT payoff sets for these nonnegative-Never games.
+
+It does not equal the arbitrary global Nash payoff set. For a complete
+Fin4 example let player3 be dummy and k=|S intersect{1,2}|. Owner0 gets0
+if k=0, gets-2 if k=1 and0 belongs to S, gets-1 if k=1 and0 is absent,
+and gets-10 if k=2. Owners1,2 get-1 if both belong to S and0 otherwise;
+owner3 always gets0. Play(1,3/4,0,0), then the off-path threat(0,1,1,0).
+This is global Nash with payoff(-3/2,0,0,0): owner0's delayed responses
+give-13/4, owner1 always gets0, and owner2 gets0 by waiting and-3/4 by
+quitting immediately. In any bounded Nash chain the enforcers' Never
+payoffs0 force their labels nonnegative. As Q1=-q2 and Q2=-q1, both
+cannot act at one date. Owner0's Never payoff is consequently at least-1,
+so every chain label has u0>=-1. The displayed global Nash payoff is
+outside K_infinity; its off-path threat is not credible.
+
+Finally, carrying original labels rho_t=h_t*rho_(t+1) in[beta,1] does
+not repair the issue. They increase to rho_infinity and the literal
+calendar has joint Never rho_0/rho_infinity. Realizing both its payoff
+label and original Never label therefore requires ell=0 AND
+rho_infinity=1. The actual-closure adapter produces the strong chain,
+but compact extraction need not preserve these terminal conditions.
+These are useful necessary source restrictions and an exact limitation
+of finite viability tests, not an unrestricted equilibrium producer or
+additional reward-table coverage.

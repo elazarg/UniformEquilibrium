@@ -558,7 +558,7 @@ to every C>=6” in
 [the source geometry note](../notes/CODEX_ROOT__ACTUAL_MINIMUM_AND_MIXED_ENDPOINT.md).
 Exact section SHA256:
 `7e2ac3fe9813ff4e532dc696ebf7a032567bdebf402cdf06b59a4bdaa4dea502`
-(56 lines, through the end of the note).
+(56 lines, ending before the next section).
 
 TRIPLE_INDEX independently gave mathematical PASS on these exact curated
 bytes. It evaluated the frozen export's Section7 table at C=40 and checked
@@ -571,3 +571,29 @@ extended to every C>=6 using the same nonpositive-orientation criterion.
 No actual zero-debt realization of the C=40 source or UE counterexample
 is claimed. The concise proof retains the unique obstruction without
 duplicating the full table and verifier already used for independent audit.
+
+## Stronger continuation kernels and terminal boundary credit
+
+Reviewed section: “Stronger continuation kernels and their terminal boundary
+condition” in
+[the source geometry note](../notes/CODEX_ROOT__ACTUAL_MINIMUM_AND_MIXED_ENDPOINT.md).
+Exact section SHA256:
+`f6ad5da72d17968c84a4efe83074328b848ae79f4c3fea96d7d43deb1a1fe21f`
+(102 lines, through the end of the note).
+
+TRIPLE_INDEX independently gave complete mathematical PASS on these exact
+curated bytes. OPPOSED_GLOBAL separately reviewed the full source theorem
+and its converse counterexample before curation. The review checked the
+unconditional participant-minimum cap floor, common zero-debt continuation
+extraction at positive original Never, compact finite refinements, and
+the weak infinite kernel's exact interpretation as subgame-perfect Nash
+payoffs with a nonnegative terminal Never bonus. It also checked the
+global Nash payoff outside that kernel and both terminal conditions needed
+to realize original payoff and Never labels. No objection remains.
+
+The stronger source restrictions and the infinite-kernel interpretation
+are internal general mathematics. No new reward-table class or unrestricted
+producer is claimed. Fixed positive Never is used in actual-source
+compactness; closed cube witnesses give compactness of the finite outer
+kernels themselves. This distinction is explicit. No new numerical
+certificate or search payload is retained, and the frozen export is unchanged.
