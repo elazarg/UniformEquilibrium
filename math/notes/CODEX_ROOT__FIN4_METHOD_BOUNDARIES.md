@@ -7,9 +7,10 @@ Maintainer: `CODEX_ROOT`. Ordinary mathematics, not a new Lean verification.
 The rigorous method boundaries below guide the parallel attack in the
 [coverage map](CODEX_ROOT__FIN4_COVERAGE_MAP.md). Neither closes a reward
 class or a Fin4 capstone. The first controls arbitrary finite and infinite
-homogeneous paths, beyond a bounded search for expanding words. The second
-shows why two pair–triple certificates cannot spend their shared pair index
-twice, even with the old full-support orientation premise.
+homogeneous paths, beyond a bounded search for expanding words. The shared-anchor calculations
+show why two pair–triple certificates cannot spend their shared pair index
+twice, even with the old full-support orientation premise. Both surviving
+participant-graph shapes admit boxed countermodels.
 
 The later sections add an actual boundary-source constraint from stationary
 security and a sound shared-anchor criterion whose additional coverage beyond
@@ -623,3 +624,157 @@ An o(1) Never change can improve the objective only by o(r). Thus this
 normalization does not turn local head corrections into the missing global
 move. Nor are minima at different prices successor-linked sources. A
 chronological construction preserving those fields remains unproduced.
+
+
+## 7. A single positive pair also defeats the boxed selector
+
+The single-edge arm does not force a good boxed face or a missing full-root
+cancellation. Here is a second exact countermodel, complementary to the
+matching model in Section3. Put T=4/3 and use the complete native table:
+
+| S | Z0 | Z1 | Z2 | Z3 |
+| --- | ---: | ---: | ---: | ---: |
+| 0 | 0 | -1 | 3 | -1 |
+| 1 | -1 | 0 | -1 | 3 |
+| 2 | 3 | -1 | 0 | -1 |
+| 3 | -1 | -1/100 | -1 | 0 |
+| 01 | -2 | -3/4 | 7/3 | 0 |
+| 02 | 2 | 7/3 | 2 | 7/3 |
+| 03 | -3/4 | 0 | 7/3 | -2 |
+| 12 | 7/3 | -2 | -3/4 | 0 |
+| 13 | -2 | -101/100 | -2 | 2 |
+| 23 | 7/3 | 0 | -2 | -3/4 |
+| 012 | 4/3 | 4/3 | 4/3 | 0 |
+| 013 | -1 | -1 | 7/3 | -1 |
+| 023 | 4/3 | 0 | 4/3 | 4/3 |
+| 123 | 7/3 | -1 | -1 | -1 |
+| 0123 | 4/3 | -1 | 4/3 | -1 |
+
+The sole positive participant pair is02. In proper odds(x,y,z,t), joining
+polynomials are
+
+    Phi0=-y-z+t/4-yz+yt-zt-yzt,
+    Phi1=x/4-z-t-xz-xt-zt-xzt,
+    Phi2=y/4-x-t-xy+yt-xt-xyt,
+    Phi3=-x-y+z/4-xy-xz-yz-xyz.
+
+Both anchors have positive incoming pressure1/4. The unused triples013,123
+are Low. The two anchored triples012,023 satisfy all full pair–triple
+premises with K=3/2,lambda=0. For012 the active/quiet polynomials are
+f=x/4-z-xz,g=Phi3. With x=K+u, the cleared F3 polynomial is
+
+    (1+y)(1+z)[(1+y)u+(K-1/4)y+K-3/2]>=0.
+
+The023 certificate is the rotation by two. The F1–F2 data are
+alpha=beta=gamma=-1,eta=1/4,B0=B2=-1,J02=J20=2,
+J01=-2,J21=J10=-3/4,J12=-2,T1=4/3; these give all signs and thresholds.
+
+Full high-Quit implies x,z>3/2 and0<y,t<4/3. Indeed
+R1=(T-t)xz-3x/4-2z-t(x+z+101/100)>0 gives t<T,x>3/2,z>9/16.
+Then R3=(T-y)xz-2x-3z/4+y(2-x-z)>0 gives y<T,z>3/2.
+For u=x-3/2,v=z-3/2 the exact determinant expansion is
+
+    -det D Phi=P00+u A(y,t)+v A(t,y)+u² B(y,t)+v² B(t,y)
+                     +uv C+(u²v+uv²)D+u²v² E,
+    A=25/64[48t²y²+148t²y+94t²+148ty²+380ty+223t
+                                    +118y²+271y+150],
+    B=5/16(1+y)[28t²y+34t²+62ty+71t+42y+45],
+    C=5/16[112t²y²+256t²y+141t²+256ty²+576ty+314t
+                                    +141y²+314y+170],
+    D=(1+y)(1+t)(44ty+47t+47y+50)/4,E=3(1+y)²(1+t)²,
+    P00=125/256[-16t²y²+48t²y+68t²+48ty²+200ty
+                                    +180t+68y²+180y+125].
+
+Every coefficient is positive except the first monomial of P00, which
+combines with48t²y to give16t²y(3-y)>0. This proves GLOBAL Orientation.
+
+At v=(-5)^4 every root is proper. Sure0 forces2 and3 Continue, then1
+Quit, making0 prefer Continue; sure2 rotates this. Sure1 forces3 and0
+Continue, then2 Quit; sure3 rotates this. AllContinue and singletons fail.
+Adjacent pairs have opposite joining signs. Pair13 would have odds5,5 but
+its quiet0 joining offer85/4 violates its comparison. Pair02 has odds5,5,
+active outputs5/3, strict quiet joining offers-115/4 and positive quiet
+Continue numerators130/3. Its index is-1.
+
+The unique012 triple is determined by
+x=(5+y/4)/(1+y),z=(5-y)/(1+y),101y²+177y-380=0.
+Its positive root lies in(5/4,63/50), with47/20<x<12/5 and33/20<z<5/3.
+These give all active Quit numerators positive (central one>43/400),
+strict quiet joining offer Phi3<-5 and quiet Continue numerator
+-x+3y-z+(7/3)xz-5>19/400+3y. The anchor functions strictly decrease,
+so f'>0, giving regular index+1. Rotation gives023, whose quiet1 numerator
+is>19/400-63/5000=349/10000>0. Both triples are bad.
+For013 the owner3 equation gives x+y+xy=5 and owner1 gives
+t=(5+x/4)/(1+x), but Phi0=-y+t(1/4+y)>-5;123 rotates this contradiction.
+Full equations imply x=z=a,y=t=b by subtracting opposite rows. Eliminating
+a yields64b^4-36b^3+116b²-133b+380=0, impossible: it equals
+b²(64b²-36b+6)+(110b²-133b+380), with both quadratics positive.
+Thus exactly three roots exist, all bad, total index-1+1+1=1.
+
+The table is already solved by old hull Orientation: H has coordinate
+floor-2, so high012 anchor equations force x,z<=2, while central positive
+Quit would require T>3/(4z)+2/x>=11/8>4/3. The rotated triple is identical;
+other triples are Low, pair02 has negative index, and full Orientation was
+proved above. The singleton determinant-1821/100 makes H full-dimensional.
+For original Z+one, M=4 and the annotation(-4)^4 lies in every box[-B,B]^4
+with B>4. This is a boxed-selector obstruction in the single-edge shape,
+not an actual source, a new UE class, or a counterexample to a theorem
+additionally excluding all old S5 games. Both graph shapes require actual
+source geometry or additional global input.
+
+## 8. Strict-security two-zero sources can be unattained
+
+The nonattainment permitted in Section4 genuinely occurs even with R0,
+joining genericity and positive inverse pivot columns. Take
+
+    Gamma=[0,-1,2,-1;-1,0,-1,2;2,-1,0,1;-1,2,1,0].
+
+Every nonsingleton participant reward is1 and every passive reward3, except
+Z2(23)=3/2,Z3(23)=3/4,Z0(023)=2,Z2(023)=7/2,Z3(023)=5/4.
+All strict security tests hold at a_i=1/2. Gamma has determinant20 and
+inverse(1/10)[-2,-3,4,1;-3,-2,1,4;4,1,2,3;1,4,3,2], so columns2,3
+are positive. Principal pair determinants are(-1,-4,-1,-1,-4,-1), triples
+(4,4,-4,-4); every column has a negative entry. This proves R0 by supports.
+All off-diagonal joining entries are nonzero and principal triple joining
+determinants are(-8,-8,-1/2,-1/2).
+
+Above AllNever, row(1/2,0,1/2,1/2) is exact Nash and ALL-END with
+U=B=e=(1,3/2,3/2,3/4),N=(1/2,1,1/2,1/2). Its three active Quit offers
+equal their Continue offers; quiet1 has Quit7/8<3/2.
+Given tail caps(x,y,w2,w3), prepend01 hazards q0=y/(2+y),q1=x/(2+x).
+Their active caps become x'=x/(2+x),y'=y/(2+y). For outsiders,
+
+    P2=2q0-q1+2q0q1,P3=-q0+2q1+2q0q1,
+    H2=H3=(1-q0)(1-q1),Q2=Q3=q0+q1-q0q1.
+
+After n such prepended rows, writing r=2^n, the exact caps are
+
+    b0=1/(2r-1),b1=3/(5r-3),
+    b2=(11r²-7r-1)/[(2r-1)(5r-3)],
+    b3=(13r²-8r-2)/[2(2r-1)(5r-3)].
+
+Direct substitution proves these recurrences from the base values.
+For n>=1 the quiet gaps are respectively
+(11r²-18r+8)/[(2r-1)(5r-3)] and
+(13r²-30r+16)/[2(2r-1)(5r-3)], both positive for r>=2.
+Thus every finite profile is exact Nash against all behavioral deviations,
+and its cap equals its Never response. Its ORIGINAL Never vector is
+
+    N=(r/(5r-3),r/(2r-1),1/2,1/2),
+
+by telescoping the Continue products. The augmented tuples converge to
+
+    U=B=e=(0,0,11/10,13/20),N=(1/5,1/2,1/2,1/2),nu=1/40.
+
+For each fixed date, the first finitely many hazards tend to0; the final023
+row moves to date n. Finite mass escapes dates, while original Never stays
+as displayed. The compact tuple is unattained: a realized cap0=0 would,
+by strict security, force all its opponents to Never, contradicting N.
+
+This supplies a strengthened boundary regression, not a stronger existence
+theorem. The game has an absorbing Nash sure pair01: its participants get1
+versus passive-1, and outsiders get3 versus joining1. Thus A_Z=0. Strict
+security and compactness alone cannot supply the additional global comparison
+needed under A_Z>0; nor do they imply original Never tends to1. No attained
+law, positive-gap game, global least-Never property, or extra Q/degree/pencil
+hypothesis is supplied by the example.

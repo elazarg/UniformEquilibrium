@@ -825,3 +825,81 @@ continuations; it supplies no chronological reconstruction. The source and
 atlas reviewers also checked the map's unique incoming-row formula and
 the surviving013 and failed-sign-guard cases. No all-arm closure is inferred
 from these restricted source calculations.
+
+## Negative-source dispatch and finite actual pair escape
+
+Frozen packet:
+[opposed-pair negative-source dispatch](../exports/OPPOSED_PAIR_NEGATIVE_SOURCE_DISPATCH.md),
+SHA256 `eb1906d16b17a7c07b28a2cafbe505b11a48dc2af16a154eb7e6de2e75ed02a6`.
+This is a new ordinary-mathematical source reduction on the preceding
+thirteen-entry reward family, not a new Lean declaration or UE reward class.
+
+OPPOSED_013 developed the moving-date zero1 consumption and the exact
+nonminimal boundary example. CODEX_ROOT supplied the initial all-bad
+comparison and curated the packet; FAMILY_GENERALIZATION independently
+derived the exhaustive source signs and saturation. OPPOSED_GUARDS developed
+the nonlinear alternating-pair ledger and finite-exit proof;
+FAMILY_GENERALIZATION supplied the intermediate-cut positivity repair.
+The cofinal argument applies the existing positive-observer charge/compress
+mechanism to this concrete source; no new general compression mechanism
+is claimed.
+
+UNIVERSAL_BOUNDARY and SHARED_SINGLE_EDGE, neither a contributor to these
+proofs, independently checked all466 final lines and gave mathematical
+PASS plus affirmative export-gate assessments at the exact frozen hash.
+Both checked the complete raw-input-to-conclusion chain, including
+A_Z>0 to positive original Never, compact minimum selection and its
+automatically produced all-bad property. All strategic inputs are produced;
+no actual source realizer, fixed-date tightness, minimizing tail or supplied
+root is assumed. Their reviews cover the cofinal reached-debt bootstrap,
+moving cut, original-Never transport, strict compressed-head descent,
+complete two-chamber dispatch, nonlinear charged ledger, intermediate AND
+endpoint outsider positivity, survival-floor/ratio contradiction, and
+exhaustive finite013/zero1 exits. No objection remains.
+
+GLOBAL_VIABILITY separately gave fresh mathematical PASS on the cofinal
+proof, exact nonminimal boundary fixture and final curated ledger. Its
+alternative compact-calendar argument is distinguished from the packet's
+actual-approximant proof. OPPOSED_013 and OPPOSED_GUARDS checked final author
+correspondence in separate, explicitly contributing scopes.
+
+The exact boundary fixture is an ACTUAL positive-Never, all-bad zero1 Nash
+source which fails the minimum premise. Its table is already solved by an
+explicit absorbing stationary Nash profile. This tests the need for source
+minimality; it is neither a positive-gap table nor additional UE coverage.
+The whole source theorem excludes the initial zero1 face, but later zero1
+tails in its finite-exit conclusion are not minimizing and remain open.
+The negative-owner2 case, later013 exits, nonnegative source branches and
+all four full raw residual arms also remain open. The packet was promoted
+byte-identically after both whole-packet gate approvals.
+
+## Stronger internal boundaries for both surviving graph shapes
+
+Final canonical [method note](../notes/CODEX_ROOT__FIN4_METHOD_BOUNDARIES.md),
+SHA256 `ec8768f6267777ee8ff81fc8503aad27eb808d3c287f4448d01bf06fbe285fc6`.
+The existing Sections1--6 proof bodies are preserved; new Sections7--8
+retain two exact internal countermodels without export or UE-class credit.
+
+SHARED_SINGLE_EDGE supplied the sole-positive-pair three-root boxed
+countermodel, satisfying both full triple certificates, full global
+Orientation, unused-triple Low and incoming pressure, yet having no sure
+or full root. UNIVERSAL_BOUNDARY independently checked its complete table,
+determinant expansion and root census. The game is already hull/S5-covered;
+the bad annotation is outside its reward hull. Both single-edge and matching
+raw gates therefore need actual source geometry or further global input.
+
+UNIVERSAL_BOUNDARY supplied the strict-security, R0, joining-generic two-zero
+unattained source with positive inverse pivot columns and original Never
+product1/40. SHARED_SINGLE_EDGE independently checked all exact Nash
+approximants, cap recurrences, Never products and nonattainment. Its table
+already has an absorbing sure-pair Nash profile. It sharpens the boundary
+test for strict security and compactness, without claiming a counterexample
+under a positive absorbing gap. Each author checked the other's curated
+copy in its independent scope; OPPOSED_GUARDS freshly reviewed both new
+sections independently of either construction.
+
+The [coverage map](../notes/CODEX_ROOT__FIN4_COVERAGE_MAP.md), SHA256
+`eb3b3f00b227eabe2e6a31af1820dd379054dad58276c727de5ea3cb762f567a`,
+records the two source cases and the exact unconsumed exits, keeping the
+two universal capstones and four full raw arms open. No percentage of
+Fin4 completion is inferred from these restricted results.

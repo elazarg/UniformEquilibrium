@@ -167,8 +167,12 @@ every ACTUAL ALL-END profile with a zero cap is AllNever. Other zero-cap
 ALL-END endpoints must be unattained. Two zero caps force every owner's
 finite stopping probabilities before any fixed date to vanish along
 realizing sequences; original Never may still be below1. The
-[proof and scope](CODEX_ROOT__FIN4_METHOD_BOUNDARIES.md) retain this remaining
-compact-limit seam. These are source filters, not a new UE game class.
+[proof and exact boundary test](CODEX_ROOT__FIN4_METHOD_BOUNDARIES.md) include
+a joining-generic strict-security table with positive inverse pivot columns:
+actual exact Nash tuples converge to an unattained two-zero source with
+original Never1/40. The table is already absorbing-Nash-covered. Thus the
+compact-limit seam is real, while its consumption under a positive absorbing
+gap remains open. These are source filters, not a new UE game class.
 
 Here a good root q is an auxiliary Nash root with some q_i=1 or with a
 successor payoff coordinate <=0. The precise source comparison and the open
@@ -274,8 +278,12 @@ on this arm. Under A_Z>0, both anchors must additionally receive positive
 joining pressure from a central owner; otherwise pure anchor Quit is
 absorbing Nash. The [complete proof and exact index countermodel](CODEX_ROOT__FIN4_METHOD_BOUNDARIES.md)
 also show why both triple certificates plus full Orientation cannot alone
-give a nonpositive joint bundle index. Good anchor-dropout faces must be
-controlled. No entire `R_S` closure is inferred.
+give a nonpositive joint bundle index. The single-edge shape also admits an
+exact three-root all-bad boxed countermodel, with no full root, under all
+these raw gates. That game too is
+already hull-covered, and its bad annotation lies outside the reward hull.
+Thus both shapes need actual source geometry or further global input; neither
+can be closed by those raw gates alone. No entire `R_S` closure is inferred.
 
 An actual continuation case of `R_O` has now been removed: the
 [opposed-pair source exclusion](../exports/OPPOSED_PAIR_FULL_CAP_SOURCE_EXCLUSION.md)
@@ -295,11 +303,33 @@ u=(-A,-B,C,D), A,B,C,D>0, has a UNIQUE first incoming row:
 
 These formulas follow from the immediate-Quit inequalities and active
 equalities; a computed row outside the hazard cube excludes the source.
-The exported region lies in the01 branch and then forces03. The013
-branch, nonpositive outsider continuation caps, and failures of the tail
-sign guards remain. Other sign chambers and other opposed-pair reward tables
-remain open as well.
-No entire `R_O` or raw reward-table class is closed by this result.
+The open-region theorem lies in the01 branch and then forces03.
+For unrestricted E sources the013 branch genuinely survives: a permitted
+completion has an exact positive-Never013 Nash source. It cannot be removed
+by source feasibility alone.
+
+The stronger [negative-source dispatch](../exports/OPPOSED_PAIR_NEGATIVE_SOURCE_DISPATCH.md)
+uses the SELECTED negative least-Never source under A_Z>0. Its all-bad root
+condition is produced from minimality, rather than assumed at an arbitrary
+continuation. It leaves exactly these two source cases:
+
+* u=(-A,-B,C,D), A,B,C,D>0, with B<6(A-D),C>5A+4AD-D. The first actual
+  row is uniquely01; the initial013 branch is excluded.
+* u=(-A,B,-C,D), A,B,D>0,C>=0, with A<1/4,D>5A/(1-4A).
+
+The initial zero1 face is completely excluded by a cofinal moving-date
+argument; the zero2 face remains in the second case. In the first case a
+nonlinear charged ledger keeps owner2 positive through every01/03 pair cut
+and rules out infinite pair alternation. A surviving path therefore reaches
+013 or an inherited zero1 tail after finitely many cuts. That tail need not
+be minimizing, so the initial zero1 theorem cannot simply be applied again.
+An exact actual positive-Never all-bad zero1 source in the packet proves why
+minimality matters; its game is already stationary-covered.
+
+The remaining source targets on this family are the second case and the
+finite013/zero1 exits in the first case, with their whole incoming heads.
+Other sign chambers of arbitrary sources and other opposed-pair reward tables
+remain open. Neither theorem closes a whole `R_O` or raw reward-table class.
 
 The cyclic T>1/4 family is a regression test within this map, not the whole
 frontier. Current source restrictions and its larger-T hull obstruction are
@@ -315,9 +345,9 @@ when its complete consumer or strict coverage change is proved.
 | --- | --- | --- |
 | Both source capstones | Their common pure-pair normalization is already available. A sure pair gives zero joint and deleted reach to its later tail; that tail's escape floor is not reached charge | A renewable whole-source return or contradiction, retaining the original entrance or an explicit adapter |
 | Native positive-source branch | For each alpha<s<m, compactness gives kappa_s=min_{E,nu<=s} min U>0. Existing positive-buffer extraction produces a finite exact Nash head crossing s, retaining(U,B,e,N) | Control as s approaches m, where kappa_s may vanish, followed by compatible joint head/tail revision at a zero face |
-| `R_S` | Only single-edge/matching graphs and full Orientation survive. In the matching shape, the raw gates alone admit a seven-root all-bad boxed example, already solved by the hull theorem | Single edge: force a good face or missing full-root cancellation. Matching: use actual source geometry or additional no-UE hypotheses beyond those raw gates |
+| `R_S` | Only single-edge/matching graphs and full Orientation survive. Both shapes have all-bad boxed examples already solved by the hull theorem; the single-edge example has no full root | Use actual payoff/cap geometry or additional no-UE hypotheses beyond those raw gates for both shapes |
 | `R_F` / `R_T` matrix test region | An explicit open singleton-matrix region passes R0/degree/Q pencil tests but has a uniform activity bound for arbitrary homogeneous switching, including unbounded phase counts and signed states when row factors stay bounded | A genuine nonlinear or finite-amplitude mechanism, or a valid actual-source budget beyond the homogeneous state space |
-| `R_O` | One complete open source region is excluded by two forced actual continuation rows; first-action and pointwise good-root tests do not exclude it | Extend the actual-cut classification to the013 branch and remaining sign guards, then to other opposed-pair tables |
+| `R_O` | An open actual-source region is excluded. On the same raw family, negative least-Never sources have two entry cases; initial zero1 is excluded and pair chains have finite013/zero1 exits | Consume those later exits with the whole head, or close the negative-owner2 case; then extend beyond this reward family |
 
 The fixed-s finite crossing is a consolidation of Section12 of
 [bounded crossing](CODEX_COORDINATOR__BOUNDED_CROSSING_SELECTION.md), not a
@@ -330,9 +360,9 @@ residual-arm targets remain open.
 The reciprocal shared-anchor tilt criterion is sound, but its prospective
 separating families admitted mixed stationary equilibria, including the
 entire last parameter strip. It is retained internally in the method note
-with no new coverage credit. The opposed-source packet is the new actual
-configuration exclusion, not another renamed normalization or controller
-obstruction.
+with no new coverage credit. The opposed-source packets provide actual
+configuration exclusions and a finite continuation-path reduction. The single-edge and strict-security
+countermodels sharpen proof boundaries, with no additional UE-class credit.
 
 The marked price normalization also fixes the scale of the missing move.
 For mu_p(r)=min_{C, d_i=0(i!=p)}(d_p+r nu), compactness gives
