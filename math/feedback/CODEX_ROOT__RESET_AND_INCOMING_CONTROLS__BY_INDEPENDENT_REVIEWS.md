@@ -752,3 +752,76 @@ directed atlas record. Neither is packaged as a new class reduction. The
 map keeps the live target at the vanishing-payoff/zero-face seam, rather than
 counting these rediscoveries. Documentation, whitespace and local-link checks
 passed. All132 existing export Markdown files remain byte-identical.
+
+## Actual opposed-pair sources: two forced continuation cuts
+
+Frozen packet:
+[opposed-pair full-cap source exclusion](../exports/OPPOSED_PAIR_FULL_CAP_SOURCE_EXCLUSION.md),
+SHA256 `1684591c7ddba291b36604114a70770f55b8265ed002144c7360c5ff9c5ac13c`.
+ATTACK_OPPOSED developed the forced-row argument; ATTACK_GLOBAL_GEOMETRY
+supplied the extension to zero original joint Never. CODEX_ROOT curated the
+self-contained packet. MAP_SOURCE_BRANCHES contributed its additional
+all-bad completion test. These contributing checks are distinguished from
+the two fresh whole-packet reviews below.
+
+MAP_UNIVERSAL_REDUCTIONS independently reviewed the exact final bytes before
+their byte-identical promotion. MAP_CHECKED_ATLAS independently reviewed
+the final frozen path and bytes. Both gave mathematical PASS and an
+affirmative export-gate assessment, with no unresolved objection. Their
+reviews checked actual incoming-source extraction before any properness
+assumption, both forced proper cuts, full behavioral response caps, all
+thirteen fixed and31 free nonsingleton coordinates, the exact K2\\K3 ray,
+the unique all-bad-root completion, compact regret floors and sup-norm
+reward/source stability. Every strategic input is produced from actual
+approximants; no source realizer, minimum-preserving tail, supplied root
+or positive Never premise is assumed. ATTACK_OPPOSED separately checked
+author-to-packet correspondence at the final hash.
+
+The affirmative gate is for an open actual-source/payoff-region exclusion,
+including zero original Never, rather than a new UE reward-table class.
+The exact depth separation and all-bad completion test establish that the
+cut is stronger than the first-action and pointwise root screens at the
+displayed sources. Local stability permits all56 native reward coordinates
+to vary near each excluded interior source pair; it gives no radius uniform
+over unbounded completions. Neither the full opposed-pair arm nor the whole
+game-wide gap is closed. Both universal capstones and all four full raw
+residual arms remain open. The packet cites tracked Lean declarations for
+its existing prefix identities; its new theorem is ordinary mathematics,
+not a new Lean verification.
+
+## Curated source constraints and failed global mechanisms
+
+Final canonical artifacts:
+[method boundaries](../notes/CODEX_ROOT__FIN4_METHOD_BOUNDARIES.md), SHA256
+`899edd129c1b3a9638c6f3ce61bf26b295512368eff8c6be8eec211847e4d1c2`,
+and [coverage map](../notes/CODEX_ROOT__FIN4_COVERAGE_MAP.md), SHA256
+`8943053955844f0b88068153078787fcdd04a3f505c1d9037a9e0eee12b4f9c9`.
+
+MAP_RAW_COVERAGE supplied the stronger seven-root all-bad boxed countermodel
+now replacing the weaker shared fixture in the living method note. It
+satisfies the complete raw pair/triple gates and positive pressure, and
+has a strict stationary gap. MAP_UNIVERSAL_REDUCTIONS independently checked
+the whole countermodel, including that stationary-gap proof, against final
+Section3. ATTACK_GLOBAL_GEOMETRY freshly checked the remaining boxed
+calculations. The game is already covered by the old hull/S5 consumer:
+the countermodel limits a boxed selection argument and earns no additional
+UE-class credit. It does not falsify an argument additionally excluding
+all S5 games or an actual-source theorem.
+
+ATTACK_GLOBAL_GEOMETRY and MAP_SOURCE_BRANCHES independently checked final
+Sections4--5: the strict-security actual-source restrictions and reciprocal
+shared-anchor tilt argument. The security mechanism is credited to the
+existing deadline-withdrawal LP and payoff declarations, with the native
+translation stated separately. Two vanishing caps force escape from every
+fixed finite date, not convergence of original Never masses to one.
+The reciprocal-tilt proof is retained internally: proposed witnesses,
+including the entire final parameter strip, were already stationary-covered.
+It is neither exported nor counted as an additional excluded reward class.
+
+MAP_SOURCE_BRANCHES independently checked the final Section6 price-scale
+budget, whose scaling argument ATTACK_GLOBAL_GEOMETRY contributed. Its
+dyadic summability concerns different penalty prices, not successive
+continuations; it supplies no chronological reconstruction. The source and
+atlas reviewers also checked the map's unique incoming-row formula and
+the surviving013 and failed-sign-guard cases. No all-arm closure is inferred
+from these restricted source calculations.

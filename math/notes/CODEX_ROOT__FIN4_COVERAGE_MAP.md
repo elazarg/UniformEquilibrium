@@ -158,6 +158,18 @@ inequality alpha<m follows from compact attainment: equality would give an
 alpha-minimizer with a nonpositive coordinate. The alpha- and m-sources are
 generally DIFFERENT points. Nearby bad annotations need not be actual payoffs.
 
+There is a raw security filter on these cases. If for each i some a_i>0
+satisfies Z_i(T+i)+a_i Z_i(T)>=0 at every nonempty opponent coalition T,
+hazard1/(1+a_i) guarantees0 against every complete opponent law. Every
+actual cap and every zero-debt closure payoff is then nonnegative: `N-`
+is absent on that class. With all these inequalities strict and Gamma R0,
+every ACTUAL ALL-END profile with a zero cap is AllNever. Other zero-cap
+ALL-END endpoints must be unattained. Two zero caps force every owner's
+finite stopping probabilities before any fixed date to vanish along
+realizing sequences; original Never may still be below1. The
+[proof and scope](CODEX_ROOT__FIN4_METHOD_BOUNDARIES.md) retain this remaining
+compact-limit seam. These are source filters, not a new UE game class.
+
 Here a good root q is an auxiliary Nash root with some q_i=1 or with a
 successor payoff coordinate <=0. The precise source comparison and the open
 neighborhood consumer are in
@@ -265,6 +277,30 @@ also show why both triple certificates plus full Orientation cannot alone
 give a nonpositive joint bundle index. Good anchor-dropout faces must be
 controlled. No entire `R_S` closure is inferred.
 
+An actual continuation case of `R_O` has now been removed: the
+[opposed-pair source exclusion](../exports/OPPOSED_PAIR_FULL_CAP_SOURCE_EXCLUSION.md)
+fixes a hard singleton matrix and thirteen higher entries, leaving31 free.
+It excludes an open four-payoff region from ALL full zero-debt closure
+points, without assuming positive Never. Two forced genuine heads01 then03
+produce an impossible third tail. An exact ray passes two compact
+Nash-continuation layers but fails the third, even though one permitted
+completion has only bad auxiliary roots there. The exclusion persists
+locally under perturbation of all56 native coordinates.
+
+For this table family, a zero-debt source in the sign chamber
+u=(-A,-B,C,D), A,B,C,D>0, has a UNIQUE first incoming row:
+
+    q2=0, q3=max(0,(2B-14A-7D)/44),
+    q0=(B-q3)/7, q1=A+3q3.
+
+These formulas follow from the immediate-Quit inequalities and active
+equalities; a computed row outside the hazard cube excludes the source.
+The exported region lies in the01 branch and then forces03. The013
+branch, nonpositive outsider continuation caps, and failures of the tail
+sign guards remain. Other sign chambers and other opposed-pair reward tables
+remain open as well.
+No entire `R_O` or raw reward-table class is closed by this result.
+
 The cyclic T>1/4 family is a regression test within this map, not the whole
 frontier. Current source restrictions and its larger-T hull obstruction are
 in the [cyclic frontier note](CODEX_ROOT__CYCLIC_TWO_MATCHING_FRONTIER.md).
@@ -279,9 +315,9 @@ when its complete consumer or strict coverage change is proved.
 | --- | --- | --- |
 | Both source capstones | Their common pure-pair normalization is already available. A sure pair gives zero joint and deleted reach to its later tail; that tail's escape floor is not reached charge | A renewable whole-source return or contradiction, retaining the original entrance or an explicit adapter |
 | Native positive-source branch | For each alpha<s<m, compactness gives kappa_s=min_{E,nu<=s} min U>0. Existing positive-buffer extraction produces a finite exact Nash head crossing s, retaining(U,B,e,N) | Control as s approaches m, where kappa_s may vanish, followed by compatible joint head/tail revision at a zero face |
-| `R_S` | Only single-edge/matching graphs and the full Orientation gate survive; naive shared-index cancellation is false | Prove positive bundle excess forces a good root on a sure or anchor-dropout face under the complete all-bad/source hypotheses |
+| `R_S` | Only single-edge/matching graphs and full Orientation survive. In the matching shape, the raw gates alone admit a seven-root all-bad boxed example, already solved by the hull theorem | Single edge: force a good face or missing full-root cancellation. Matching: use actual source geometry or additional no-UE hypotheses beyond those raw gates |
 | `R_F` / `R_T` matrix test region | An explicit open singleton-matrix region passes R0/degree/Q pencil tests but has a uniform activity bound for arbitrary homogeneous switching, including unbounded phase counts and signed states when row factors stay bounded | A genuine nonlinear or finite-amplitude mechanism, or a valid actual-source budget beyond the homogeneous state space |
-| `R_O` | Pointwise selection and convexified calendar geometry can miss independent-law constraints; no complete opposed-join closure has been obtained | A global selected-source comparison using the joint independent laws and full deviation caps |
+| `R_O` | One complete open source region is excluded by two forced actual continuation rows; first-action and pointwise good-root tests do not exclude it | Extend the actual-cut classification to the013 branch and remaining sign guards, then to other opposed-pair tables |
 
 The fixed-s finite crossing is a consolidation of Section12 of
 [bounded crossing](CODEX_COORDINATOR__BOUNDED_CROSSING_SELECTION.md), not a
@@ -290,6 +326,20 @@ are proved in the [method-boundary note](CODEX_ROOT__FIN4_METHOD_BOUNDARIES.md).
 They rule out proposed proof steps; they do not exclude those reward tables
 as counterexamples. The two universal source capstones and all four full
 residual-arm targets remain open.
+
+The reciprocal shared-anchor tilt criterion is sound, but its prospective
+separating families admitted mixed stationary equilibria, including the
+entire last parameter strip. It is retained internally in the method note
+with no new coverage credit. The opposed-source packet is the new actual
+configuration exclusion, not another renamed normalization or controller
+obstruction.
+
+The marked price normalization also fixes the scale of the missing move.
+For mu_p(r)=min_{C, d_i=0(i!=p)}(d_p+r nu), compactness gives
+mu_p(r)/r->alpha and selected pivot debt o(r). A gain cr therefore requires
+a fixed positive Never release; an infinitesimal Never change cannot supply
+it. Summability of normalized debts over dyadic prices does not provide
+chronologically linked profiles. The short proof is in the method note.
 
 ## Rules for closing a case
 
