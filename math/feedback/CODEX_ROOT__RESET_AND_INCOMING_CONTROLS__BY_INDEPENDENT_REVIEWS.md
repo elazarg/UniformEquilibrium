@@ -597,3 +597,28 @@ producer is claimed. Fixed positive Never is used in actual-source
 compactness; closed cube witnesses give compactness of the finite outer
 kernels themselves. This distinction is explicit. No new numerical
 certificate or search payload is retained, and the frozen export is unchanged.
+
+## Cyclic two-matching construction target
+
+Reviewed research note:
+[Cyclic two-matching games](../notes/CODEX_ROOT__CYCLIC_TWO_MATCHING_FRONTIER.md).
+Exact final SHA256:
+`9e463a6c0140d27aa1097e0b027f449c82bad7f281a0b0f304f8e9d5d322f282`
+(271 lines).
+
+OPPOSED_GLOBAL independently gave complete mathematical PASS on these
+exact bytes; CODEX_ROOT checked the entire assembled proof. The underlying
+stationary calculation also had separate complete reviews by OPPOSED_GLOBAL
+and FRONTIER_ADVERSARY. The review checked all60 rewards, bad-source census,
+all stationary supports and limits, the74-coefficient identity in17 cyclic
+terms, and the complete arbitrary finite-period exclusion of supports of
+size at most two. Idle phases, unequal hazards, all singleton and adjacent
+pair cases, and favorite-pair alternation are covered. No objection remains.
+
+The partial old-admission arithmetic and failure of both frozen payoff-domain
+criteria were checked as stated. An earlier unsupported inference from
+nonnegative coalition sums to an old ledger admission was removed: the
+relevant old theorems also require proper-support lowness or orientation,
+which fail here. No complete old-coverage census or unrestricted behavioral
+gap is claimed. The note remains an unresolved construction target; no new
+UE class or export is admitted. Numerical controller failures are omitted.

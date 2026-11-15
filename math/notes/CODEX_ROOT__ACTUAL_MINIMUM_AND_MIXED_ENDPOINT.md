@@ -179,6 +179,15 @@ must be retained. The exact control below shows why arbitrary actual
 boundary membership cannot replace that information. General games failing
 both raw adapters and the unrestricted global comparison remain open.
 
+The [cyclic two-matching target](CODEX_ROOT__CYCLIC_TWO_MATCHING_FRONTIER.md)
+isolates a small explicit family beyond those local tests. Every original
+table in it has a strict gap over all stationary profiles, and every
+nontrivial exact finite-period equilibrium must contain a triple phase.
+The complete arbitrary-period exclusion covers all calendars whose active
+supports have size at most two. The old-admission audit is partial;
+absorbing native debt zero and original UE remain unresolved. This is a
+concrete construction target, not a counterexample or an additional export.
+
 The [incoming boundary controls](CODEX_ROOT__INCOMING_BOUNDARY_CONTROLS.md)
 show why the remaining cases need more than a bare carrier lemma. The
 positive-premium case can require arbitrarily long words across all incoming
