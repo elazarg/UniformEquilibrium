@@ -2828,6 +2828,32 @@ It therefore already excludes exactly ONE cofinal owner at A>0, without
 any inverse hypothesis. For two cofinal owners their tails are comparable
 in both directions. This older consequence is reused, not a new exclusion.
 
+The accepted [native collision floor](../exports/NATIVE_COLLISION_FLOOR_AND_GLOBAL_MASS_DICHOTOMY.md)
+is a second, stronger input on native zero-debt tails. For ANY actual law
+with total finite mass 0<beta<=1/2, write C for the sum over dates and
+unordered owner pairs of their finite atom products. It gives
+
+    A<=400M [D/(M beta^2)+4sqrt(C)/beta]^(1/9).
+
+Its actual-realizer transport applies at EVERY old conditional cut of a
+retained E source with positive original Never. Thus every such nontrivial
+small suffix satisfies
+
+    C_cut>=c_A beta_cut^2,
+    c_A=(1/16)[A/(400M)]^18>0.
+
+The elementary bound C<=3 beta times the largest second-owner atom at a
+date then produces, in EVERY such suffix, one date carrying TWO DISTINCT
+conditional owner masses each at least c_A beta_cut/3. In particular these
+joint bursts occur cofinally whenever finite tail mass tends to zero.
+The pair and date may change from suffix to suffix. This excludes purely
+nonatomic, singleton-only and vanishing-relative-collision terminal tails
+without any matrix or genericity hypothesis. It does not put a joint burst
+at every query, or consume dense shared bursts. At original raised minima
+the same packet gives either total finite mass O(t), or a pair-macroscopic
+burst. All these facts are already accepted results; they are recorded here
+to prevent rediscovering their weaker consequences as new coverage.
+
 ### Exact source restriction
 
 There are four independent stopping laws q_i on a canonical marked finite
@@ -3147,9 +3173,233 @@ already excludes collared pair Nash sources under its generic hypotheses;
 the direct table argument here retains the literal fixed entries. This E
 corollary is not applied to full-SUM minima having positive native debt.
 
+### Owner2 cofinality requires owner3 in a literal E source
+
+There is a stronger exclusion for one proper triple. In the literal
+fixed13 family, assume q_i({c})=0, each ORIGINAL N_i>0 and U=B=e.
+If owner3 is noncofinal, choose one real cutoff u<c above ALL its finite
+mass. For any old legal query x>u, let response2(x) be the original
+whole-source forced-Quit value. Earlier opponent coalitions cancel between
+this response and native Never. On survival to x, every possible subsequent
+opponent coalition belongs to {0,1,01}, paying owner2 respectively1,3,4.
+These are nonnegative, whereas every current participant2 reward is
+nonpositive. Retaining just the events in which one opponent quits strictly
+after x and the other two are original Never gives the unconditional bound
+
+    e2-response2(x)
+      >=N3 [N1 q0((x,c))+3N0 q1((x,c))].       (DOM2)
+
+If owner0 or owner1 is cofinal, this is strictly positive at EVERY such
+query. Cofinal owner2 would put positive own physical mass on these
+strict-gap queries. Retained Fubini would then give
+
+    d2=integral [B2-response2(x)] dq2(x)>0,
+
+contradicting E. Consequently the cofinal sets02,12,012 are impossible
+even without A>0. If A>0 and owner2 were the sole cofinal owner, the older
+late-tail debt theorem above would exclude it. Thus at A>0,
+
+    owner2 cofinal => owner3 cofinal.
+
+Together with the complete pair map, the proper three-cofinal possibilities
+are exactly the still-unexcluded supports013,023,123;012 is removed.
+This argument uses no row perturbation, source minimality, suffix minimum,
+or actual realization of the earlier compact history. The canonical empty
+END q_i({c})=0 is essential when choosing the cutoff above owner3's mass.
+
 This support table concerns COFINAL END activity, not the first finite
 root support or the native-m caseI/II histories. The positive inverse makes
 all surviving proper supports geometrically atomic with actual restarted
 suffixes. Their entire source is still allowed to have earlier compact
-history. Two-/three-cofinal geometric calendars and all-four-cofinal
-contact accumulation remain open; the isolated-END case remains separate.
+history. Two-/three-cofinal geometric calendars at positive native debt,
+the surviving E triples013,023,123, and all-four-cofinal contact accumulation
+remain open; the isolated-END case remains separate.
+
+
+## 24. One pair-ratio theorem unifies the dispersion mechanisms
+
+This is an internal synthesis, not another export or another solved raw
+reward class. It combines the [oriented-pair bound](../exports/ORIENTED_PAIR_UNIFORM_THREE_OWNER_DISPERSION.md)
+with the normalized-pair lemma in Sections5.1--5.3 of the accepted
+[three-owner dispersion proof](../exports/UNIFORM_THREE_OWNER_TAIL_DISPERSION.md),
+and closes the previously unnecessary ratio-one boundary between them.
+All payoffs, full caps, independent complete laws and ORIGINAL N have the
+native meanings above. Fix one bounded table with A>0 and Gamma_ij!=0
+for every i!=j. For each unordered pair set
+
+    r_i=J_ij/Gamma_ij, r_j=J_ji/Gamma_ji.
+
+Assume no unordered pair has EQUAL ratios r_i=r_j>=1. Equivalently, each
+pair satisfies min(r_i,r_j)<1 OR r_i!=r_j. Then there is c(Z)>0 such that
+EVERY actual profile and its augmented closure obey
+
+    D+beta epsilon>=c beta^2,
+    beta=sum_i(1-N_i), epsilon=f_(3)+f_(4).        (UNIFY)
+
+No recipient-row distinctness or blanket J_ij!=Gamma_ij assumption is
+needed. The strict-orientation packet gives an explicit constant on its
+own subdomain. This unified statement gives a qualitative constant and
+the same zero-debt, old-suffix and raised full-SUM consequences. For
+retained old suffixes, use the actual conditional realizers of Section8
+of the native collision-floor packet, already summarized in Section23;
+the carrier bound alone does not execute an abstract suffix. Equal
+viable ratios r_i=r_j>=1 remain outside THIS argument.
+
+### Common original-debt reduction for every mass regime
+
+If (UNIFY) failed, a sequence at this SAME table would satisfy
+
+    beta>0, D/beta^2->0, epsilon/beta->0.
+
+Fix labels i,j for the largest two finite masses along a subsequence.
+The one-owner comparison A f_(1)<=D+14M(f_(2)+epsilon) implies
+f_i,f_j>=kappa beta for some fixed kappa>0. Since beta<=4, D->0.
+Absorbing repair A<=D+14M(product N)^(1/4) gives EVERY N_k>=eta>0.
+These statements hold whether beta tends to zero or stays macroscopic.
+
+Let F_i,F_j be the normalized SURE FINITE parts on their original natural
+dates. With all other owners Never, let b_i be the full cap against F_j
+and p_i the response averaged under F_i. The original Fubini/censorship
+estimates of the oriented-pair packet give
+
+    0<=b_i-Gamma_ij<=D/(N_i f_j)+4M epsilon/f_j,
+    0<=b_i-p_i<=D/(f_i f_j)+4M epsilon/f_j.
+
+Both errors tend to zero; the same holds for j. Thus b_i,p_i->Gamma_ij
+and b_j,p_j->Gamma_ji. For independent X~F_i,Y~F_j put
+a=Pr(X<Y), b=Pr(Y<X), z=Pr(X=Y), a+b+z=1. Exactly,
+
+    Gamma_ij-p_i=Gamma_ij[a+(1-r_i)z],
+    Gamma_ji-p_j=Gamma_ji[b+(1-r_j)z].           (TRI)
+
+If min(r_i,r_j)<1, the strict timing-triangle separation excludes these
+two vanishing errors. This is the entire first branch of the proof.
+
+For the other branches reuse Theorem B of the accepted
+[unrestricted every-cut bound](../exports/GENERAL_LATE_TAIL_DEBT_AND_END_CAP_MINIMUM_REDUCTION.md):
+at EVERY original natural query x and every owner h,
+
+    D>=C_h A R_h(x)-18M sum_(k!=h)R_k(x),
+    C_h=product_(k!=h)N_k>=eta^3.               (CUT)
+
+It needs no END activity, Nash profile, or suffix minimum. R is the
+inclusive ORIGINAL finite tail, not a normalized or escaped mass.
+
+### Ratio one versus a strictly larger ratio
+
+Suppose r_i=1<r_j. From (TRI), a->0 and z->z0=1/r_j in(0,1).
+For any two sure finite laws, z<=2 sup_x min(F_i{x},F_j{x}); assign each
+atom product to its larger factor and sum those factors, at most2.
+Choose a common original atom x_n with both masses at least z0/8.
+Independence then gives
+
+    F_i(<x_n)<=a/F_j{x_n}->0,
+    F_j(>x_n)<=a/F_i{x_n}->0.
+
+The nonnegative pure-response deficit at this macroscopic j atom is at
+most (b_j-p_j)/F_j{x_n}, hence tends to zero. Its exact response value is
+Gamma_ji F_i(<x_n)+J_ji F_i{x_n}. Since b_j->Gamma_ji and J_ji!=0,
+
+    F_i{x_n}->z0, F_i(>x_n)->1-z0>0.
+
+The original legal query y_n=x_n+1 therefore has R_i(y_n)>=c1 beta,
+R_j(y_n)=o(beta), and total other tails at most epsilon=o(beta).
+Applying (CUT) and dividing by beta contradicts D/beta->0, because
+eta^3 A c1>0. No empty response before an old atom has been invented:
+x_n+1 belongs to the original complete natural-date query menu. The case
+r_j=1<r_i is symmetric. This consumes the entire ratio-one boundary.
+
+### Distinct ratios strictly above one
+
+If both r_i,r_j>1 and are unequal, the accepted normalized-pair lemma
+applies to the same F_i,F_j sequence and its full-cap contacts above.
+Its compact-clock proof retains the ORIGINAL query witnesses. It gives
+common successive atoms tau_m and geometric inclusive tails rho_i^m,
+rho_j^m, where rho_i=1-1/r_j and rho_j=1-1/r_i are distinct in(0,1).
+The lemma's row-distinctness uses are exactly Gamma!=0 and the strict
+ratios in this branch; no other reward-row entry occurs in that proof.
+
+Let s be the slower owner and w the faster, rho_s>rho_w. At every FIXED
+m take the actual old query witnesses x_(n,m) for tau_m. Their normalized
+inclusive tails converge to rho_s^m and rho_w^m. Along a further subsequence
+f_w/f_s->lambda in(0,infinity). Divide (CUT) at x_(n,m) by f_s and first
+let n tend to infinity. The original debt and minor-tail terms vanish,
+giving
+
+    eta^3 A rho_s^m<=18M lambda rho_w^m.
+
+Now divide by rho_s^m and let m tend to infinity: contradiction. The
+limits are taken in that order; there is no moving-depth uniformity
+assumption. This replaces the older outsider first-order argument by
+the unrestricted original-debt bound. The three branches exhaust every
+pair admitted by (UNIFY), proving the stated uniform constant exists.
+
+
+## 25. A global core barrier forces substantial owner2 activity
+
+The [positive-head barrier](../exports/OPPOSED_PAIR_POSITIVE_HEAD_FORCES_OUTSIDE_ACTIVITY.md)
+uses only the fixed core0,1,3 reward restriction; rewards involving owner2
+are arbitrary finite values. Put k=Z0(13). At k>=2, any faithful retained
+zero-debt core-only clock with positive ORIGINAL Never satisfies
+
+    w1<=0, w3>0 => Psi(w)<=0,
+    Psi(w)=w1/6+w3-min(w0,0)+(w1/6)max(w0,0).     (CORE)
+
+The proof treats EVERY atomic support switch and boundary solo row, then
+the continuous part and accumulations by the exact conditional-value BV
+equations. A positive Psi cannot decrease and cannot reach its terminal
+value0. The zero0/positive1 trap is consumed by the zero-tail endpoint,
+without a cofinal-owner assumption. No source attainment or tail minimum
+is needed. The full proof is in the packet, rather than duplicated here.
+
+### Direct original-head consumer, without a first013 assumption
+
+For ANY genuine proper03 E head X=prefix03(Y) with positive U1(X), let
+its hazards be (r,0,0,s). The genuine full-cap equations give
+
+    Y0=-s/(1-s)=-A<0, Y3=r/(1-r)=D>0,
+    U1(X)=[Y1+6(A-D)]/[(1+A)(1+D)].              (HEAD)
+
+If N2(Y)=1 and Y1>0, at the FIRST retained legal query positive1 forces
+its own hazard b=0. Then the immediate owner0 offer is3c>=0, contrary to
+its negative cap Y0. If Y1<=0, instead
+
+    Psi(Y)=Y1/6+A+D
+          =[(1+A)(1+D)/6]U1(X)+2D>0,
+
+contradicting (CORE). Thus the ENTIRE N2(Y)=N2(X)=1 branch is excluded
+at k>=2, for every tail1 sign and every subsequent history. No preceding01
+or first013 row, history-length bound or outside2 payoff sign is needed.
+This generalizes the intermediate immediate013 adapter and is counted
+as ONE source-class exclusion. It forces finite activity, not cofinal2;
+a finite owner2 excursion followed by cofinal013 remains possible.
+
+### Fixed-table activity floor at the selected original minima
+
+For the fixed13 family with A_Z>0, fix the table and the produced theta
+of Section19. That section supplies epsilon,kappa>0 and the original
+alpha>0 so that all selected source heads at small t have r,s in
+[epsilon,1-alpha/2], output B1>=kappa, and cluster at E sources of Never
+product alpha. Their genuine tails also have debt tending to zero.
+
+Consider the closed family of tuples (X,Y,r,s) satisfying
+
+    X,Y in E, nu(X)=alpha, X=prefix03(r,s,Y),
+    r,s in[epsilon,1-alpha/2], U1(X)>=kappa.
+
+It is compact and contains every cluster of those selected factorizations;
+such clusters exist, so the family is nonempty.
+Positive nu(X) and properness give all original Never coordinates of X,Y
+positive. By the head theorem, EVERY member has N2(Y)=N2(X)<1 at k>=2.
+The continuous coordinate N2 therefore attains a maximum strictly below1.
+There is delta>0, depending on this FIXED table, theta and collar, with
+N2<=1-delta on the entire family. Compactness then gives, for all
+sufficiently small t and EVERY selected factorization,
+
+    1-N2(X_t)=1-N2(Y_t)>=delta/2>0.              (MASS2)
+
+This is a TOTAL original finite-mass floor despite the first hazard q2=0.
+It applies to the original positive-debt full-SUM minima through their
+native E limits, rather than applying (CORE) directly at positive debt.
+No numerical delta or uniformity over varying finite reward tables is
+claimed. Finite owner2 excursions and the k<2 core-only branch remain open.

@@ -1724,7 +1724,7 @@ The literal raw pair map is exhaustive:01 and23 are impossible at A>0;
 and13 obey the printed fixed atom-ratio inequalities. Each remaining pair
 has a PHYSICALLY cofinal owner with NO sufficiently late cap contact.
 Retained Fubini therefore excludes that pair at a native zero-debt E point,
-without perturbing any of the31 free rewards. Both reviews checked this
+without perturbing any of the 31 free rewards. Both reviews checked this
 last step with strictly positive gaps integrated over positive late mass;
 no uniform gap is assumed. The E-only conclusion is explicitly NOT applied
 to full-SUM minima with positive native debt.
@@ -1739,3 +1739,166 @@ criterion and actual restarted-suffix producer, plus its exact literal
 cofinal support map. The surviving two-/three-cofinal geometric full-SUM modes,
 all-four cofinal contact accumulation and isolated-END global consumers
 remain open within their stated domains. No Fin4 solution is claimed.
+
+
+## Oriented-pair dispersion and the unified ratio boundary
+
+The frozen [oriented-pair dispersion packet](../exports/ORIENTED_PAIR_UNIFORM_THREE_OWNER_DISPERSION.md)
+has SHA256
+`c53dbc88bc5cf86e4114ae997132f18156f039cc7a575274d27492958595e381`.
+NATIVE_ZERO_DEBT_END and CONTACT_ACCUMULATION_ATTACK each read the ENTIRE
+final artifact, including the exact final boundary examples, and gave
+mathematical PASS on all eight export gates with no unresolved objection.
+Their substantive whole-review records have SHA256 respectively
+`e1ba85cdb4ca5770e32e4f6595f3b26a7f42765ae76265fabc61d5a0b21cf4cb`
+and `74be302ee1ce213f9d2bce555eedbcc91b29ba759574205018704c6689942cf9`.
+
+Both reviews independently checked the timing simplex a+b+z=1 and
+the integrated gaps L_i=Gamma_ij a+(Gamma_ij-J_ij)z. One strict same-sign
+direction and a nonzero reverse Gamma give the explicit separation
+delta=g m/(m+g+h). They checked the original full-debt Fubini identity,
+normalization by the SAME own finite law, response-uniform censorship,
+all total-mass regimes, the produced ORIGINAL Never collar and every
+constant in the all-profile bound D+beta epsilon>=c beta^2. No censored
+debt, altered objective, cap-sign assumption or missing response query
+is substituted. All six literal fixed13 orientations and their printed
+constants were recomputed, including the A>0 pure3 filter J23>-5.
+
+The carrier extension is continuity of D and original N. Actual conditional
+suffixes use the exact joint-survival gain factor; the current atom stays
+whole at suffix date zero. The original raised-minimum consumer compares
+the SAME full raised SUM objective with AllNever. Neither reviewer inferred
+actual attainment of an arbitrary compact source. The packet does not claim
+that native A>0 means native UE nonexistence: native AllNever has zero debt,
+whereas A is an absorbing infimum. A conjecture application must supply the
+stated native source premise through its applicable reduction.
+
+The explicit falsification checks include 25,480 exact signed timing
+triangles, 12 signed complete-profile normalization/censorship cases at
+small and macroscopic mass, a complete four-owner A=0 control despite
+strict pair orientations, failure at equal Gamma=J, zero reverse Gamma,
+and the literal J23=-5 absorbing-Nash boundary. Source declarations for
+the complete-law/behavior correspondence and semantic endpoints were
+statically inspected. No Lean/build check is claimed.
+
+The overlap review found genuine literal scope: the earlier generic
+dispersion theorem assumes row distinctness that fails at fixed repeated
+values in every fixed13 completion. The older collision floor supplies
+pair bursts, not a quantitative third-owner mass. The new packet excludes
+normalized one-/two-owner mass concentration without perturbing the 31 free
+entries, but closes no raw reward-table UE class.
+
+Section24 of the [method note](../notes/CODEX_ROOT__FIN4_METHOD_BOUNDARIES.md)
+is the broader internal synthesis. Its complete section has SHA256
+`0a972433cafd690a968242b504e226016c192053acd24e13e9808c4a87ea24ed`.
+FRONTIER_GENERALIZATION_REVIEW gave fresh whole mathematical PASS, including
+an explicit falsification attempt, at review-record SHA256
+`a6fffd389c35ba80d76557c804fcb8240b35907b428eda2ac59c60f75c93859d`.
+The proof covers every pair except equal viable ratios r_i=r_j>=1.
+The boundary r_i=1<r_j uses a macroscopic common atom and its ORIGINAL
+natural query x+1 to contradict the unrestricted every-cut debt bound.
+Distinct ratios above one reuse the accepted geometric-pair classification
+and its original query witnesses. The review checked that its only relevant
+row-distinctness uses are explicitly supplied in this branch, and checked
+the fixed-depth limit before sending the depth to infinity. Exact tests
+included 9,828 signed triangles and a complete A=0 borderline control.
+The retained-suffix consequence explicitly reuses actual conditional
+realizers; no abstract suffix execution follows from continuity alone.
+This is one unification, not another frozen copy of the older proof.
+
+## Literal cofinal012 exclusion and recovered older constraints
+
+NATIVE_ZERO_DEBT_END freshly reviewed the appended owner2 subsection of
+Section23, including the real-cutoff repair, at full METHOD SHA256
+`e3f56d47630179a072c0cc73ee33189bf715a4da188e38357219aa4d776d8250`
+before Section24 was appended. Its review proves the exact unconditional
+bound e2-response2(x)>=N3[N1 q0((x,c))+3N0 q1((x,c))]. Retained Fubini
+then excludes supports02,12,012 at E without A>0. Adding the accepted
+sole-cofinal exclusion gives cofinal2 implies cofinal3 at A>0. The empty
+finite END and original positive N remain explicit. No minimum or actual
+attainment is used. The only surviving proper E triples are 013,023,123.
+
+The living frontier also restores the older accepted collision-floor
+packet's EVERY-old-suffix bound C>=c_A beta^2 and pair-macroscopic burst
+consumer. This is recovered coverage, not a new theorem. The attempted
+singleton occupation amplification was consequently retired as duplicate
+coverage. Dense bursts and the two universal global consumers remain open.
+
+
+## Global core barrier and a complete positive03-head consumer
+
+The frozen [positive-head forced-activity packet](../exports/OPPOSED_PAIR_POSITIVE_HEAD_FORCES_OUTSIDE_ACTIVITY.md)
+has SHA256
+`cc97f16c6c02fa168f22600f8e74dc4feea8e91e8179049721b6d8c2fa9ff10b`.
+NATIVE_ZERO_DEBT_END and CONTACT_ACCUMULATION_ATTACK each gave fresh WHOLE
+mathematical PASS on ALL eight export gates, including the final broadened
+statement, actual boundary controls and weakened reward hypotheses. Their
+substantive review records have SHA256 respectively
+`f8b042131d0ccc8e1c3620d2e1dea9278d6443ed57c93d0e2e2e326784609a29`
+and `2f0295cdf6cb4086cc66ee2376ff1254617f757feb31db3c1aa246f0617bffbe`.
+No unresolved mathematical objection remains. No Lean verification is claimed.
+
+The theorem fixes ONLY the core0,1,3 reward restriction printed in the packet.
+All unused off-core rewards and signs are removed from its hypotheses.
+At k=Z0(13)>=2, any genuine proper03 E head X with positive ORIGINAL Never
+and U1(X)>0 must have N2(Y)=N2(X)<1. It covers ALL later core histories,
+all tail1 signs, arbitrary proper amplitudes, diffuse portions and compact
+accumulations. It requires no first013 row, eventual support, cofinality,
+positive2 input, source attainment, positive absorbing gap or tail minimum.
+
+Both reviews checked the complete actual-realizer representation, preserving
+each original Never coordinate and ALL old and moving pure-query caps.
+They checked exact conditional Fubini, every atomic support and boundary solo
+row, the produced03 size bound from its TRUE retained successor, all three
+full013 sign cases and endpoint factors, and extension from kappa=0 to
+kappa<=0 without dropping a tie term. They separately checked bounded
+variation, the continuous contact equations, min/max chain rule, atom
+accumulations and the joint sign/potential localization. Positive1 at zero0
+is consumed by exact survival identities through the terminal zero payoff,
+so no missing cofinal1 premise remains.
+
+The final direct-head adapter is broader than the intermediate immediate013
+attempt and replaces it rather than adding a duplicate result. Exact03 Nash
+equations give Y0=-A<0,Y3=D>0 and
+
+    Psi(Y)=[(1+A)(1+D)/6] U1(X)+2D>0.
+
+For Y1<=0 this contradicts the global core barrier; for Y1>0 the FIRST
+retained legal query already contradicts Y0<0 under core-only play. The
+reviews independently verified both cases and that the fixed-family native
+E source of Section19 supplies the strict head sign. The theorem is not
+applied directly to the positive-native-debt finite-raise source.
+
+Each reviewer ran the complete inline symbolic checker, reproducing all
+three PASS lines. Independent exact complete-menu enumerations verified
+the ACTUAL two-date positive control and the singleton3 negative controls,
+including k=2,3,10. The positive control has
+U=B=(3/11,40/1111,0,2/101) and
+N=(100/101,1,1/2,10/11); its tail begins at its conditional date ZERO,
+global date ONE, with no invented pre-tail response. The earlier atom
+falsification examined 18,401 exact positive-Psi rows without failure.
+CODEX_ROOT independently reran the inline checker and the actual positive
+control's four full caps. Both whole reviews checked nonredundancy against
+accepted source and dispersion results, tracked Lean references,
+self-containment and the handoff dependency order.
+
+Section25 of the [method note](../notes/CODEX_ROOT__FIN4_METHOD_BOUNDARIES.md)
+adds the fixed-table compactness consequence, at section SHA256
+`958210fe399334812091faa59a2998327c7cefe48cede029fcd8eec241d64c8d`.
+FRONTIER_GENERALIZATION_REVIEW gave fresh whole-copy mathematical PASS,
+review-record SHA256
+`b0d882c8e19742b2ccdc62515e2f53125d3ccbb028aa9a9bb630d98a3f849da5`;
+LAST_ATOM_JOINT_ATTACK independently confirmed the compact argument.
+For a FIXED fixed13 table with A_Z>0, fixed theta and Section19 collars,
+the closed nonempty family of native alpha-source factorizations is compact.
+Every member has N2<1, so its maximum is strictly below1. All selected
+sufficiently small-raise original full-SUM minima consequently have a
+positive TOTAL finite owner2 mass bounded away from zero, even though their
+first hazard q2 is exactly0. This is a limit argument through native E;
+no quantitative robustness of the barrier at positive debt is assumed.
+The lower bound is qualitative and not uniform over varying reward tables.
+
+Thus the entire N2=1 branch, including vanishing owner2 mass in the selected
+fixed-table limit, is consumed on k>=2. Macroscopic finite owner2 excursions,
+the k<2 core-only branch, the other universal modes and Fin4 remain open.
+No whole raw reward-table UE class is counted as solved.

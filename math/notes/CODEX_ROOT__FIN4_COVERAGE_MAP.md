@@ -323,6 +323,19 @@ The accepted [late-tail debt bound](../exports/GENERAL_LATE_TAIL_DEBT_AND_END_CA
 Theorem A, already excludes a sole cofinal owner under A>0; this older
 constraint is reused rather than counted as a new exclusion.
 
+The older [native collision floor](../exports/NATIVE_COLLISION_FLOOR_AND_GLOBAL_MASS_DICHOTOMY.md)
+also applies to EVERY old conditional suffix of a native E source with
+positive original Never. If its total conditional finite mass beta is
+nonzero and less than1/2, its pair-collision mass obeys
+C>=c_A beta^2, c_A=(A/(400M))^18/16. Each such suffix therefore contains
+one date with two distinct owner atoms each at least c_A beta/3.
+These bursts occur cofinally as finite tail mass tends to zero, though
+their owner pair may change. Purely nonatomic, singleton-only and
+vanishing-relative-collision tails were already excluded by this result.
+Dense shared bursts remain open. At original full-SUM raised minima its
+separate dichotomy is total finite mass O(t) or a pair-macroscopic burst;
+the E-only every-suffix floor is not asserted at positive native debt.
+
 These are disjoint modes of a CHOSEN marked representation, not raw reward
 classes or an actual-attainment theorem. A last positive atom does not imply
 that the preceding marked history is finite or realized on natural dates. For the additional raw condition that Gamma has no
@@ -368,6 +381,36 @@ nu=N^2, contradicting the fixed-table alpha envelope. A surviving such two-activ
 outside response kernel on a positive-probability event. Equal expected
 response values alone do not make kernel aliases. Those genuine outside
 contacts and alpha=1 remain open; physical inactivity alone is insufficient.
+
+The [oriented-pair dispersion theorem](../exports/ORIENTED_PAIR_UNIFORM_THREE_OWNER_DISPERSION.md)
+gives a quantitative restriction under a finite raw pair test. Suppose every
+off-diagonal Gamma entry is nonzero, and each unordered pair has a direction
+with Gamma_ij(Gamma_ij-J_ij)>0. At A>0 there is an explicit fixed-table c>0
+such that EVERY actual profile and its original augmented closure satisfy
+
+    D+beta epsilon>=c beta^2,
+    beta=sum_i(1-N_i), epsilon=f_(3)+f_(4).
+
+Thus every nontrivial native E point has at least three finite masses each
+at least c beta/2. At original raised full-SUM minima, either beta=O(t)
+or the third mass is at least c beta/4. The literal fixed13 family below
+satisfies every pair test at A>0, without any perturbation of its31 free
+rewards. This quantitative literal statement does not follow from the older
+dispersion packet's row-distinctness hypotheses. It excludes concentration
+near a one-/two-owner mass face, including dispersed three-cofinal tails
+whose third mass becomes negligible. It does not close a raw UE game class
+or assert a common three-owner atom.
+
+Section24 of the method note unifies this argument with the older geometric
+pair proof and consumes the intervening ratio-one boundary. Write
+r_i=J_ij/Gamma_ij and r_j=J_ji/Gamma_ji for a pair. The same dispersion
+conclusion holds if all off-diagonal Gamma entries are nonzero and no
+unordered pair has equal ratios r_i=r_j>=1. The new boundary proof uses a
+macroscopic common atom followed by the ORIGINAL query x+1 and the older
+unrestricted every-cut debt bound. Equal viable ratios are exceptions to
+THIS dispersion mechanism, not the remaining cases of Fin4 as a whole.
+The synthesis reuses the accepted compact geometric-pair lemma; it is not
+a second export of that proof.
 
 Section23 of the method note gives a finite ambient-matrix classification
 of proper cofinal support S. Test the linear feasibility problem
@@ -655,9 +698,25 @@ minimizing; the comparison lowers original Never at the global-alpha source.
 Longer first013 histories, remaining V<-a tails and negative-owner2 continuations
 remain open for THIS approach; native-m history bounds are not transferred.
 
-The remaining NATIVE-m targets on this family are precisely the negative-V
-immediate history, the four-row sectors V<0 or E-F<=V<3(E-F), and the surviving
-negative-owner2 chamber.
+The [global positive-head barrier](../exports/OPPOSED_PAIR_POSITIVE_HEAD_FORCES_OUTSIDE_ACTIVITY.md)
+now removes the ENTIRE core-only continuation of this native E first03
+source when k=Z0(13)>=2. Its head identity gives a strictly positive scalar
+Psi at the genuine tail; every later core row and continuous piece preserves
+that positivity, contradicting the zero-tail endpoint. All tail1 signs and
+arbitrarily long histories are covered, without a first013 assumption.
+Hence N2(X)=N2(Y)<1. Section25 of the method note upgrades this to a fixed
+TOTAL owner2 finite-mass floor at every selected sufficiently small-raise
+full-SUM minimum, by compactness of their native E limits. Their first
+hazard q2 is still exactly0. The proof uses only the core reward restriction;
+unused off-core reward and sign assumptions are removed in the packet.
+This closes no whole k>=2 UE reward class: finite owner2 excursions remain
+open, and cofinal013 is still possible after such an excursion. The core-only
+first03 branch at k<2 also remains open.
+
+The NATIVE-m finite-history targets still include the negative-V immediate
+history, the four-row sectors V<0 or E-F<=V<3(E-F), and the surviving
+negative-owner2 chamber. These targets also obey forced owner2 activity
+whenever their source has the stated genuine03 head at k>=2.
 The literal raw matrix has an entrywise strictly positive inverse, so all
 proper ambient face problems above are infeasible. Every proper nonempty
 cofinal tail therefore has a uniform geometric tail bound and an actual
@@ -670,8 +729,21 @@ finite cap contact. Therefore a literal zero-debt E source cannot have two
 cofinal owners, without any perturbation of its31 free rewards. Together
 with the older one-cofinal exclusion, its nonisolated END has either three
 cofinal owners on an actual suffix with geometrically decaying atom tails,
-or all four cofinal owners. No stationary hazard or finite-controller
-representation is asserted.
+or all four cofinal owners. Section23 additionally excludes the entire
+cofinal012 E mode: once owner3's finite activity has ended, owner2 strictly
+prefers Never at every later query if0 or1 is cofinal, because its passive
+rewards on0,1,01 are1,3,4 and all its participant rewards are nonpositive.
+Positive late own mass would contradict its zero debt. Thus cofinal2
+requires cofinal3, and the surviving proper E triples are013,023,123.
+No stationary hazard or finite-controller representation is asserted.
+The oriented-pair dispersion theorem also supplies a quantitative third
+mass floor on EVERY nontrivial zero-debt old suffix, using the accepted
+actual-realizer conditioning argument. Hence each surviving proper E
+triple has three uniformly comparable ORIGINAL terminal tails; a third
+cofinal owner with vanishing relative tail mass is excluded. For all four
+cofinal owners at least three tails remain macroscopic. The older collision
+floor simultaneously forces cofinal pair-macroscopic bursts; it does not
+turn this into a common triple collision.
 Full-SUM minima may have positive native debt, so their surviving pair
 modes are NOT removed by this E-only conclusion. None of these cofinal
 constraints is a bound on the first013 finite-history length.
