@@ -301,17 +301,28 @@ content is this same-table contact alignment and the support/price
 obstruction. The modifications preserve each owner's bounded/unbounded
 support status and the bounded/unbounded status of its contact dates.
 
-With the stronger complete bounded-contact price choice below, the
-remaining cases are:
+The [compact END-contact dichotomy](../exports/COMPACT_END_SEPARATED_CONTACT_EXCLUSION.md)
+removes actual attainment from the source-case partition. Avoid the singleton
+zero hyperplanes, select the native table afresh, then fix its produced
+cheap recipient weights before t and before any minimum. For EVERY marked
+representation of an all-END global minimum, exactly one geometry remains:
 
-| Disjoint minimum case | Necessary surviving geometry | Open consumer |
+| Marked source case | Necessary surviving geometry | Open consumer |
 | --- | --- | --- |
-| Nonrealized compact minimum | The finite joint cap-contact head is produced, but no actual complete law realizes the whole selected tuple | Consume the head through its retained compact suffix |
-| Actual, some owner has bounded finite support | Finite cap-contact dates are unbounded; a paid first-stage joint atom/contact can also be selected | Consume the unbounded contacts with the original full-SUM objective |
-| Actual, all four finite supports unbounded | Finite cap-contact dates are unbounded; the same first-stage normal form is available | A global consumer for these contacts |
+| Accumulating interior contacts | Distinct native cap-query locations approach the final finite END c from below | Consume their whole-source interaction; contacts need not be prescribed actions |
+| Isolated finite END | A last positive common-mixture atom has its retained interval ending at c; no owner has cofinal finite mass | Consume this last-atom source with its genuine earlier history |
 
-This is a source-case partition, not three raw reward classes or an actual
-attainment theorem. For the additional raw condition that Gamma has no
+The complete exclusion covers two, three or four cofinal physical owners,
+including nonatomic and nonrealized clocks. One cofinal owner already forces
+interior contact accumulation. Zero cofinality is exactly the isolated-END
+last-atom case. Fixed bounded latent densities compile every comparison into
+the SAME actual-tuple carrier, retaining all original N and old cap queries.
+Two cofinal owners admit an exact timing direction; three or four are excluded
+by the finite LP/two-form/Morse argument. An actual calendar is not an input.
+
+These are disjoint modes of a CHOSEN marked representation, not raw reward
+classes or an actual-attainment theorem. A last positive atom does not imply
+that the preceding marked history is finite or realized on natural dates. For the additional raw condition that Gamma has no
 reciprocal zero pair, EVERY actual all-END local minimum with positive
 original Never has a finite cap contact:
 otherwise at least two owners persist and their entire singleton block
@@ -341,6 +352,19 @@ late queries, and do not imply infinitely many prescribed atoms or UE.
 The universal remaining target is still the finite paid contact with its
 genuine compact suffix; actual contact sets and suffix realization are
 not replaced by a convenient calendar or equilibrium.
+
+The compact deletion identity in Section21 of the
+[method note](CODEX_ROOT__FIN4_METHOD_BOUNDARIES.md) additionally excludes
+one complete two-active-owner configuration. Fix the native table and theta
+with 0<alpha=min_E nu<1. At all sufficiently small rho, no all-END compact
+global minimum can have exactly two physically active laws, the other two
+literally Never, and every outside native cap contact a payoff-kernel alias of Never. This includes bounded
+physical supports, last atoms and nonrealized clocks. Four legal Never-mixing
+directions produce one common contact dual; exact deletion gives F=rho N,
+nu=N^2, contradicting the fixed-table alpha envelope. A surviving such two-active source therefore needs a genuinely different
+outside response kernel on a positive-probability event. Equal expected
+response values alone do not make kernel aliases. Those genuine outside
+contacts and alpha=1 remain open; physical inactivity alone is insufficient.
 
 The thirteen endpoint zero faces are a conditional refinement of this
 program, not thirteen additional universal reward classes. An inherited
@@ -604,8 +628,17 @@ a native-m minimum. The remaining task is to consume this exact first03
 head through its genuine compact negative0/positive3 tail. This full-SUM
 reduction does not close or replace the distinct native-m cases below.
 
-The remaining targets on this family are precisely the negative-V immediate
-history, the four-row sectors V<0 or E-F<=V<3(E-F), and the surviving
+Along t->0 this full-SUM producer selects one global-alpha source with its
+genuine first03 head. Section20 of the method note consumes its ENTIRE finite
+caseI later-zero1 exit, retaining every preceding row and the outermost03.
+It also consumes immediate01,013 tails with V>=-a, where a is the first
+triple owner0 hazard. The source suffix is not
+minimizing; the comparison lowers original Never at the global-alpha source.
+Longer first013 histories, remaining V<-a tails and negative-owner2 continuations
+remain open for THIS approach; native-m history bounds are not transferred.
+
+The remaining NATIVE-m targets on this family are precisely the negative-V
+immediate history, the four-row sectors V<0 or E-F<=V<3(E-F), and the surviving
 negative-owner2 chamber.
 Other opposed-pair reward tables, arbitrary-source sign chambers,
 nonnegative minimum sources outside this reduction's domain and both

@@ -1489,3 +1489,176 @@ Its scoped review-record SHA256 is
 `9a12eb3b946eefd0e0e8549c109d0bdf1367d4d57174dc150ac607314892ec26`.
 It verified proof-copy fidelity, source qualifications and both full review
 hashes. It does not promote this internal theorem to an export or UE claim.
+
+
+## Compact END-contact dichotomy: complete final export gate
+
+The frozen [compact END-separated-contact exclusion](../exports/COMPACT_END_SEPARATED_CONTACT_EXCLUSION.md)
+has SHA256
+`3137298fe4cb90a8a80a79cb9b0c6fee2af078d9c90b00efb2e77576c7114dbc`
+and866 lines. It extends the full-SUM bounded-contact consumer from actual
+calendars to arbitrary canonical marked clocks, including nonatomic and
+nonrealized sources. It is not a new UE reward-table class. The all-END
+global-minimum premise at the SAME fixed produced prices remains an
+explicit incoming strategic input. The source proof's smaller-epsilon
+compatibility was independently checked against its exact inequalities.
+
+Two noncontributing reviewers read the entire final artifact and each
+recorded all eight export gates with no unresolved mathematical objection:
+
+* COMPACT_WHOLE_AUDIT, review-record SHA256
+  `58a87b880d6652aef29138db91df85e26de4e6f6454cff4e392a5fb33375ff78`.
+* THREE_COFINAL_AUDIT, review-record SHA256
+  `2f2bf985e48862e693499807d9c46433e57b8e473dd39c323bc40566c6368cca`.
+
+Their recorded gate findings are consolidated here for durable use:
+
+1. Exact finite native data, A>0, singleton hypotheses, fixed produced theta
+   and t0 precede the source and quantify over EVERY smaller t, all-END
+   global minimum and canonical marked representation.
+2. The marked interval/kernel representation, each original e and N, fixed
+   bounded latent-density transport, full cap envelope, common cone normal,
+   timing direction, price bounds, finite LP/two-form argument and five
+   negative chronological chunks are all proved. No deferred local producer
+   or regular endpoint-level assumption remains.
+3. All physical randomization is private and independent. Every old finite
+   deadline and literal Never survives comparison; finite END is separate
+   from Never and each original prescribed N is retained.
+4. Both reviewers explicitly AFFIRMED the conditional source-mode exception:
+   all-END production is not proved in this packet, but the incoming
+   established source mode is strictly narrowed. The whole two/three/four-
+   cofinal END-separated case is eliminated, beyond the actual bounded-
+   contact packet. This is a complete consumer, not a supplied derivative
+   verifier. Neither reviewer credits a new UE game class.
+5. Exact positive algebraic and negative boundary tests were checked: the
+   inverse-column price matrix, diffuse and shared-atom timing derivatives,
+   loss from deleting an old empty query, unbounded moving density failure,
+   unavoidable finite-END contact, isolated END with no cofinal owner, and
+   the genuine three-quadratic-form obstruction.
+6. The nine cited Lean paths and exact declaration hypotheses were inspected
+   statically. In particular the raised-carrier surjection supplies every
+   hypothesis of `positive_minimum_fourPlayer_allOwner_quadraticMargins`
+   in `UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`;
+   it excludes AllNever, not either surviving mode. The bounded compiler
+   and nonrealized contact dichotomy are the missing ordinary mathematics.
+7. Each review is substantive and independently attempts falsification.
+   Neither single review certifies the existence of the other; the
+   coordinator verified both exact-hash records before promotion.
+8. The handoff derives comparisons, normals, timing and curvature rather
+   than placing those conclusions in input structures. No new Lean result,
+   compiler execution, or L/A/C credit is claimed.
+
+Specific attempted falsifiers included a missing physical owner with no
+old support, recompressed empty queries, tiny compact-block masses, negative
+normal components, a collapsing contact Jacobian, multiplier sets of more
+than one affine dimension, a common atom with later diffuse blocks, and an
+isolated END without a positive last mixture atom. The proof's exact legal
+controls, two-form restriction, negative-index dimension argument and
+canonical interval geometry resolve these tests. The last-atom alternative
+and accumulating genuine interior contacts themselves remain OPEN.
+
+The new bounded-density compiler and original four-cofinal compact argument
+were developed by LOW_FOUR_REVIEW. CODEX_ROOT supplied the transported
+three-cofinal proof; the final compact timing proof and unified assembly
+are COMPACT_UNIFIED_AUTHOR's. The finite cone/LP/Dines/Morse mechanism and
+actual timing proof are inherited mathematics, including
+FAMILY_GENERALIZATION's work, not counted again as separate results.
+The root three-cofinal proof received an additional full mathematical review
+at source SHA256
+`20bf6128a12f02c2ae1e87db3407ea0ffc128b8f9ec493e885cbce7339f77316`,
+review-record SHA256
+`437c2c5fb7a021f62ad2173008efbe402c92f171527a61048f8854d6f16e436e`.
+No extra export was created for its intermediate four/three-owner stages.
+
+## Global-alpha consumers: whole original heads, not native-m transfer
+
+Section20 of the [method note](../notes/CODEX_ROOT__FIN4_METHOD_BOUNDARIES.md)
+contains two complete internal consumers of the SELECTED global-alpha limit
+produced by Section19. They do not assign the genuine suffix a minimum.
+They are not separate exports or additional UE reward-table classes.
+
+The entire inherited caseI finite zero1 exit, including an initially zero1
+tail, is excluded. OPPOSED_GUARDS' final proof SHA256 is
+`1c83d74146e5daa27ac35518ecca45772789005815b15f4e4061859dcbfc59f2`;
+its complete17-check integer program has SHA256
+`27f1c7285912285b69a61d1483ebcb8bfcc36e246b5a78e3efdb8e6987690ccf`
+and is printed in the canonical note. FRESH_GLOBAL_REVIEW gave full
+mathematical PASS, review-record SHA256
+`f59a316a75dd146f7d717b19afd50f5f9d532c9c97129ed6eb5d8491be8a284b`.
+It checked the old NO7/NO6AB/quiet geometry without selected-m eligibility,
+genuine cofinal G>a production, exact binding quiet0 reconstruction,
+two-sided legality and all outer03 rows. It ran both the new17 checks and
+the old104 Bernstein/NO7 checks. OPPOSED_013 separately checked the genuine
+source/cofinal component; that is contributor review of its earlier lemma,
+not a second fresh whole-proof gate.
+
+The immediate first013 consumer is unified and strengthened to V<-a, where
+a is that row's owner0 hazard. It replaces the weaker V<0 proof rather than
+retaining two overlapping canonical arguments. RAW_NEGATIVE_ATTACK's final
+proof has SHA256
+`cb34f5c5d8b56b2fd66ac2cae9201685b5f1d4e9dfbc6e4234c67a4723011864`;
+the minimal15-comparison Fraction program has SHA256
+`38a4d36f0fe4a88087b4953a124e6bf767266101d8c94d82f0be4028385aec5f`.
+Two independent whole mathematical reviews PASS at these corrected bytes:
+COMPACT_WHOLE_AUDIT, record SHA256
+`6f2832439b34a3261dff7aaab09a1534022bbbc7b4d5a1a62906e1fdc0a9bada`,
+and THREE_COFINAL_AUDIT, record SHA256
+`0674c8b82ff4e75c13aad0a5d5a95042c4dd2c2ea667c7f5812ec6f278d2b48b`.
+They checked the stationary bracket on the ENTIRE mildly negative sector,
+production of T>0, the forced next genuine013, full quiet2 with arbitrary
+T1, concave kappa*q bounds, and descent across ALL FOUR original rows.
+The corrected hyperbola endpoint is K(1/6,d(2/5)); both final reviews
+verified the one-line correction and all15 exact rational comparisons.
+The earlier nonnegative proof by OPPOSED_GUARDS remains credited, but its
+proof is subsumed in the canonical extension. No native-m four-row history
+restriction is applied to the new global-alpha source.
+
+## Common dual and stronger compact deletion consumer
+
+The actual whole-law common-contact-dual proof by GLOBAL_VIABILITY has
+source SHA256
+`20d114af237ffe807a657a0f4d634871237fd51e58e8e27185245d1026d40541`.
+COMPACT_CONTACT_REVIEW gave full mathematical PASS, review-record SHA256
+`b3d0821d77d92f21bd39833b9f63a131a1dac96e35155aaa3dc185c2e0bfff64`.
+It checked finite-family separation, common-measure FIP, tester-gradient
+continuity, every whole-law COMP action, late column inequalities and
+persistent equalities, occupation bounds and the exact geometric test.
+Target Never may have a cost jump; tester continuity does not erase it.
+This proof remains ACTUAL-only in Section21A.
+
+Section21B-C instead uses FOUR legal Never-mixing directions in the marked
+compact carrier, so it removes actual attainment and persistence from the
+previous two-clock Green consumer. GLOBAL_CONTACT_ATTACK's direct deletion
+proof has source SHA256
+`72827b6cb82ee244ba4d33dd828e2216d53476bb39dbb9a519677418f4d7fadb`;
+its exact kernel-alias extension has SHA256
+`68d0b81f11b25822b2949c367128b88383fa20bb8b2787435933b2545e076a0d`.
+FRONTIER_CURATION_AUDIT read both entire artifacts and gave fresh whole
+mathematical PASS, review-record SHA256
+`32bf4727e6beb0a3db9cd7f032e84279e1692ef8314002fcfb51cb54d6c0f64c`.
+The review checked common finite-dimensional normals, all original N,
+every-owner deletion algebra, c/Never kernel equality throughout the legal
+variation family, two-active cancellation and fixed-table/fixed-theta
+small-rho quantifiers. A finite exact example shows that equal expected
+responses do not make payoff-kernel aliases; a scalar alpha=1 model shows
+why the envelope contradiction needs alpha<1. Neither falsifier is claimed
+to be a positive-gap quitting counterexample.
+
+Consequently, when0<alpha<1, any surviving compact small-rho minimum with
+exactly two physically active owners must have an OUTSIDE native maximizing
+response with payoff kernel different from Never on a positive-probability
+event. If all outside maximizing responses are kernel aliases, deletion
+gives F=rho N and nu=N^2, contradicting the alpha envelope. The argument
+covers bounded supports, last atoms and nonrealized clocks. The old
+persistence-dependent Green calculation by FRESH_GLOBAL_REVIEW is subsumed
+and is not retained as a duplicate canonical proof or extra result.
+Genuine outside contacts, alpha=1 and the general deleted-profile remainder
+remain open.
+
+A preceding proof-copy curation review of Section20's zero1 proof and
+Section21A, plus the now-superseded nonnegative/Green stages, had record
+SHA256 `8ce8b5d47875c62c4fe68161e6726a6aefaa2a8626a166527d7ec18acb8c5f5f`.
+It verified the unchanged old prefix and exact17-check program, and
+independently checked the complete COMP countertest at unequal prices.
+Only its unchanged-copy scope is retained; the stronger replacement proofs
+use their final whole reviews above.
