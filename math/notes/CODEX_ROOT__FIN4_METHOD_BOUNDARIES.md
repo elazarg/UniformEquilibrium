@@ -2810,3 +2810,346 @@ Neither mode is consumed. The second can have nonrealized or nonatomic
 earlier history; the first can include unused physical replies. This
 replaces actual attainment as a frontier partition, while retaining the
 original table, objective and Never coordinates. It does not close Fin4.
+
+
+## 23. Ambient singleton faces classify cofinal tail calendars
+
+This is one general tail theorem with an explicit positive-inverse
+corollary. It excludes complete diffuse/thin-atom source modes and realizes
+a RESTARTED late suffix; it supplies no minimum for that suffix.
+
+The accepted [general late-tail debt bound](../exports/GENERAL_LATE_TAIL_DEBT_AND_END_CAP_MINIMUM_REDUCTION.md),
+Theorem A, already gives at every offered query with R_h>0 and all END caps
+active
+
+    sum_(j!=h) R_j/R_h >= nu A/(18M)>0.
+
+It therefore already excludes exactly ONE cofinal owner at A>0, without
+any inverse hypothesis. For two cofinal owners their tails are comparable
+in both directions. This older consequence is reused, not a new exclusion.
+
+### Exact source restriction
+
+There are four independent stopping laws q_i on a canonical marked finite
+query set T contained in [0,c], together with a separate Never label. T
+is compact, c=max T, and q_i({c})=0. Every law has a bounded density
+relative to the canonical physical mixture mu=(sum_i q_i)/4=pi_*dx.
+Each positive finite mixture atom is a retained isolated point of T;
+all other points of T have zero mixture atom. Every pure query in T and
+Never is legal and its literal earliest-coalition payoff is retained.
+
+Native own singleton, live and all-Never rewards are zero. Let M>=1 bound
+the absolute value of every native reward. Let B_i be the COMPLETE cap
+over all T queries and Never, and e_i the Never response. Assume B_i=e_i
+for every owner. ORIGINAL Never masses N_i=q_i(Never) satisfy N_i>=n0>0.
+An owner is cofinal when q_i((u,c))>0 for every u<c. Let S be the
+nonempty proper set of cofinal owners. Let Gamma_ii=0 and Gamma_ij=Z_i({j}).
+For this support S,
+define the ambient finite linear feasibility set
+
+    K_S={y>=0:y_j=0 outside S, sum_j y_j=1, Gamma y>=0}.
+
+For the general theorem assume K_S is EMPTY. No matrix invertibility is
+needed. Define delta_S as the minimum of max_i(-(Gamma y)_i)^+ on this
+simplex face. Compactness and continuity give delta_S>0: its zero set is
+exactly K_S. By homogeneity every nonnegative y supported WITHIN S obeys
+
+    max_i(-(Gamma y)_i)^+>=delta_S sum_j y_j.          (SEP-S)
+
+Thus delta_S is produced from the finite table and support, not supplied
+as a strategic witness. Any positive lower bound delta<=delta_S suffices
+below. A relative tail limit need not have support equal to S; the closed
+support condition is essential. ALL FOUR ambient recipient rows are used,
+including physically inactive owners. This differs from a principal
+Gamma_[S,S] or R0 complementarity test.
+
+For the stated empty-face hypothesis there are a<c and kappa>0 such that
+EVERY legitimate finite query x in T intersect (a,c) satisfies
+
+    mu({x}) >= kappa mu([x,c)) > 0.                    (ATOM)
+
+In particular the entire late finite query set is a strictly increasing
+sequence x_1<x_2<... tending to c, with no empty test points or nonatomic
+mass there, and
+
+    mu([x_(n+1),c)) <= (1-kappa) mu([x_n,c)).           (GEOM)
+
+For an entrywise-positive-inverse table, a nontrivial atomless cofinal
+suffix, or arbitrarily late legal queries whose physical atom is a
+vanishing fraction of inclusive finite tail mass, forces ALL FOUR owners
+to be cofinal. This excludes an entire proper-
+cofinal diffuse/thin-atom source class, not the geometrically atomic
+proper-cofinal case. It requires no global dual, contact multiplier,
+regular level set or actual natural-date realization.
+
+If Gamma^-1 is entrywise strictly positive, every nonempty proper K_S
+is empty and a common explicit separation constant is produced below.
+This includes the studied literal opposed-pair matrix. A positive inverse
+COLUMN alone does not imply that every proper K_S is empty. Global full-SUM
+sources supply the canonical clock and their fixed original-N floor.
+
+### Thin atoms force an ambient semipositive support
+
+If a proper cofinal source admits legal queries x_n->c with
+mu({x_n})/mu([x_n,c))->0, the ambient feasible set K_S MUST be nonempty. In the GAP
+notation below, z/m is at most that physical ratio divided by n0. Hence
+z/m->0. Divide GAP by m, take a subsequential limit of y/m in the compact
+simplex face, and use m->0. The limit has Gamma(y/m)>=0, nonnegative
+coordinates supported WITHIN S and unit sum, so belongs to K_S. Thus the
+finite ambient face test classifies an actual remaining source geometry;
+feasibility by itself does not produce an all-END source or thin atoms.
+
+### An explicit common constant for entrywise positive inverse
+
+For this corollary assume P=Gamma^-1 is entrywise strictly positive. Put
+
+    Smax=max_j sum_i P_ij,
+    R=max_k [(sum_i P_ki)/(min_i P_ki)],
+    delta=1/(Smax R)>0.
+
+For every y>=0 having at least one zero coordinate,
+
+    max_i (-(Gamma y)_i)^+ >= delta sum_j y_j.         (SEP)
+
+Here a^+=max(a,0). To prove this, choose k with y_k=0, let
+w=Gamma y, and set eta=max_i(-w_i)^+. Then w+eta one>=0. The k-th
+row p of P is strictly positive and
+
+    sum_i p_i(w_i+eta)=eta sum_i p_i,
+
+because p w=y_k=0. Hence
+
+    sum_i w_i^+ <= sum_i(w_i+eta)
+                     <= eta (sum_i p_i)/(min_i p_i) <=eta R.
+
+Since y=P w and its coordinates are nonnegative,
+
+    sum_j y_j = sum_i (sum_j P_ji)w_i
+                   <= Smax sum_i w_i^+ <=Smax R eta.
+
+This proves (SEP), including eta=0. It is an exact raw matrix inequality,
+not an assumed cone-separation witness at the source.
+
+For
+
+    Gamma=[0,-2,-5,4; -6,0,-4,6; 1,3,0,-5; 1,-1,4,0],
+
+direct multiplication gives
+
+    42P=[52,17,62,82; 76,41,110,136;
+          6,6,12,24; 56,28,70,98].
+
+Its maximal column sum is Smax=170/21. The four row ratios are
+213/17,363/41,8,9, so R=213/17. Thus
+
+    delta=7/710.                                    (RAW)
+
+No restriction on the other thirty-one raw-family rewards is needed for
+this calculation; they enter only through their finite common bound M.
+
+### The exact all-END query inequality with its retained tie term
+
+Fix a LEGITIMATE query x in T below c. For every owner j define physical
+inclusive finite tail and current atom
+
+    f_j=q_j([x,c)), a_j=q_j({x}), n_j=N_j+f_j,
+    y_j=f_j/n_j, z_j=a_j/n_j,
+    m=sum_j y_j, z=sum_j z_j.
+
+Thus n_j is the original probability of surviving to x, including the
+current atom and original Never; n_j>=N_j>=n0 and n_j<=1. The vectors
+y,z are conditional probabilities after that survival, with 0<=z<=y.
+Let J_ij=Z_i({i,j}) off the zero diagonal.
+
+Compare responder i's native Never query with its pure finite query at x.
+If some opponent stops before x, the two replies see the identical first
+coalition and payoff. Conditional on every opponent surviving to x, the
+opponents remain independent, with the probabilities y_j,z_j above.
+If exactly ONE opponent j has a finite draw, the payoff difference is
+Gamma_ij for its later-than-x draw and Gamma_ij-J_ij for its draw at x.
+Therefore the contribution of all such events is exactly
+
+    sum_(j!=i) (Gamma_ij y_j-J_ij z_j)
+                         product_(k outside {i,j})(1-y_k).
+
+All events with at least two finite opponents have total probability at
+most m^2/2, and each reply-payoff difference has magnitude at most 2M.
+Replacing the products in the preceding display by one changes that
+display by at most 2M m^2, since |Gamma_ij y_j-J_ij z_j|<=2M y_j.
+Consequently the complete conditional gap has the exact form
+
+    [e_i-response_i(x)]/product_(j!=i)n_j
+        =(Gamma y)_i-(J z)_i+E_i, |E_i|<=3M m^2.      (GAP)
+
+The all-END FULL cap gives e_i-response_i(x)>=0 for EVERY i. Hence
+
+    (Gamma y)_i >= -M z-3M m^2 for every i.           (LOWER)
+
+The FIRST-ORDER J z term is essential. We have not inserted an arbitrary
+atomless cut into T or treated a tied finite query as an untied query.
+No assumption about which replies are cap contacts was used: the complete
+cap inequality applies to each actual legal query.
+
+### From a missing cofinal owner to a uniform atom floor
+
+For each k outside S choose u_k<c above all its physical finite mass,
+and take u=max_(k outside S) u_k<c. Thus f_k=y_k=0 for EVERY k outside S
+at every query x>u, so y is supported within S. By (SEP-S), or the explicit
+corollary (SEP), and (LOWER),
+
+    delta m <= M z+3M m^2.                            (1)
+
+All finite q_i tails tend to zero as x tends to c because q_i({c})=0.
+Since n_j>=n0, m tends to zero uniformly over queries approaching c.
+Enlarge u so every x in T intersect (u,c) satisfies m<=delta/(6M).
+Equation (1) then gives
+
+    z >= delta m/(2M).                               (2)
+
+Translate back to ORIGINAL physical masses:
+
+    sum_j a_j >= n0 sum_j z_j = n0 z,
+    m=sum_j f_j/n_j >= sum_j f_j.
+
+Thus
+
+    sum_j a_j >= [n0 delta/(2M)] sum_j f_j.            (3)
+
+Take kappa=min(1/2,n0 delta/(2M)). Dividing both sides by four proves
+(ATOM). Its strict positivity follows from S nonempty: a cofinal owner
+has positive finite mass after every x<c. For the literal raw matrix one
+may use the concrete common constant
+
+    kappa=7 n0/(1420M),
+
+which is below 1/2. At a global full-SUM source n0 may be the fixed repair
+floor c0=(A/(28M))^4; it is ORIGINAL Never, not escaped finite probability.
+
+### Canonical sequence geometry and geometric decay
+
+Every late T point is a positive mixture atom by (ATOM), and hence is
+isolated in T by the canonical representation. There is no accumulation
+point of these queries inside (u,c): compactness would put the
+limit in T, while (ATOM) would make it a positive atom and therefore
+isolated. Since a cofinal owner exists, there are nevertheless T points
+arbitrarily close to c from below.
+
+Choose one late query x_1. Successive minimum T points above it exist by
+compactness and isolation, are below c by cofinality, and enumerate the
+whole tail. They form x_n increasing to c. No other finite physical mass
+can lie between them because all physical laws are supported on T. Hence
+
+    mu([x_(n+1),c))=mu([x_n,c))-mu({x_n})
+                           <=(1-kappa)mu([x_n,c)),
+
+proving (GEOM). This also rules out diffuse physical mass in the late
+tail, not just extra empty query points.
+
+### The conditional late suffix has an actual natural-date realization
+
+Condition each owner's clock on belonging to [x_1,c) together with Never.
+Its normalizing probability is the ORIGINAL n_i(x_1)=N_i+f_i(x_1)>0.
+Independence is retained under this product conditioning. Relabel x_n as
+the natural date n-1 and retain literal Never. These are actual complete
+natural-date laws. Their first-coalition kernels preserve every strict
+order and retained tie exactly, and their marginal Never masses are
+exactly N_i/n_i(x_1). No escaped finite probability is relabeled Never.
+
+Every actual pure finite deadline is one of the enumerated x_n queries.
+The only extra old suffix query is c. Its kernel equals native Never
+because there is no physical atom at c and own singleton is zero. Thus
+all conditional prescribed payoffs, full caps, Never offers and individual
+Never masses agree with those of this actual suffix. No bound on the
+number of its dates or controller size is claimed.
+
+The conditional full caps here are taken over the restarted suffix menu
+T intersect [x_1,c] together with Never; earlier old queries are not part
+of that restarted game. Conditioning while retaining earlier old queries
+could add a zero response and is not asserted to preserve these caps.
+
+This realizes the conditional late suffix, NOT the possibly nonrealized
+earlier compact head or the whole source. It gives the suffix no minimum
+property. Conditioning at x_1 is an exact probability decomposition,
+not a proposed game action after an infinite prefix.
+
+### Source adapter, limitation and next question
+
+For the original full-SUM all-END source, use its exact canonical marked
+representation, the full payoff-kernel query menu and the produced lower
+bound for every original N_i. If its ambient face K_S is empty, the raw table and support produce
+delta_S and kappa as above; the positive-inverse hypothesis supplies a
+common constant for every proper support. Every such source must have
+an eventually geometric atomic calendar with an actual conditional natural-date suffix, regardless of
+unused cap contacts or actual attainment of the whole source.
+
+Combined with the compact contact dichotomy, the accumulating-contact
+branch for the studied raw matrix therefore separates into all-four
+cofinal sources and a rigid proper-cofinal geometric-atom branch. The
+isolated-END zero-cofinal case remains separate. This does not consume
+the all-four branch or the geometric atomic branch, and it is not an
+equilibrium-existence result.
+
+The next concrete question is whether the exact all-END inequalities on
+this geometric atomic tail, now with a uniform ratio of current atom to
+remaining finite mass, force a three-player absorbing exit or an original
+full-F/N improvement. Such a consumer must retain the J atom term; its
+sign cannot be discarded as a diffuse-tail error.
+
+### Exhaustive two-cofinal support map for the fixed13 family
+
+Suppose exactly two owners i,j are cofinal. Above the bounded finite
+activity of the other two, the END-minus-current-query gap for responder i
+is EXACTLY
+
+    product_(k outside{i,j}) N_k * [Gamma_ij R_j-J_ij a_j],
+    R_j=q_j([x,c)), a_j=q_j({x}).
+
+All earlier first coalitions cancel, every inactive opponent must be
+original Never, and only one finite opponent remains. Thus all-END gives
+Gamma_ij R_j>=J_ij a_j at EVERY offered late query. Cofinality makes
+0<=a_j/R_j<1. In particular Gamma_ij<0 requires J_ij<Gamma_ij and
+a_j/R_j>=Gamma_ij/J_ij. If Gamma_ij>0 and J_ij<=Gamma_ij, the gap is
+strictly positive, so i has NO sufficiently late finite cap contact.
+
+For the literal fixed13 family all six possible pair supports are covered:
+
+| Cofinal pair | Necessary guard or exclusion | Additional exact late restriction |
+| --- | --- | --- |
+| 01 | Impossible: Gamma01=-2,J01=-1 | The owner0 gap is negative |
+| 02 | Z0(02)<-5 | a2/R2>=5/(-Z0(02)); owner2 has no late cap contact |
+| 03 | Not excluded here | a0/R0<=1/2; owner0 has no late cap contact |
+| 12 | Z1(12)<-4 | a2/R2>=4/(-Z1(12)); owner2 has no late cap contact |
+| 13 | Not excluded here | a1/R1>=1/2; owner1 has no late cap contact |
+| 23 | Impossible at A>0 | The owner2 gap is negative |
+
+For the last exclusion, if Z2(23)<=-5 then pure3 is absorbing Nash:
+own3 and withdrawal both pay0; outsiders0,1 prefer passive4,6 to joining3,-1;
+and outsider2 prefers passive-5 to joining Z2(23). Hence A>0 forces
+Z2(23)>-5, contradicting the necessary strict negative-Γ guard for23.
+The no-contact statements in the other rows use participant1/2 rewards
+nonpositive, Gamma20=1,Gamma21=3, and fixed Gamma03=4,J03=3,
+Gamma13=6,J13=-1. No tail minimum, restricted-m eligibility, or sign of
+a missing owner's continuation is assumed.
+
+There is a further literal-family consequence when the source is in E,
+so U=B. Retained Fubini gives
+
+    d_i=integral [B_i-response_i(x)] dq_i(x).
+
+For each remaining pair02,03,12,13, the table supplies a COFINAL physical
+owner whose gap is strictly positive at EVERY sufficiently late query.
+That owner has positive late physical mass; integrating the nonnegative
+strict gap gives d_i>0, even without a uniform gap. Pairs01 and23 were
+already excluded. Thus NO literal fixed13 E source at A>0 has exactly two
+cofinal owners, with no row-distinctness or pair-ratio genericity imposed.
+The accepted [uniform three-owner dispersion](../exports/UNIFORM_THREE_OWNER_TAIL_DISPERSION.md)
+already excludes collared pair Nash sources under its generic hypotheses;
+the direct table argument here retains the literal fixed entries. This E
+corollary is not applied to full-SUM minima having positive native debt.
+
+This support table concerns COFINAL END activity, not the first finite
+root support or the native-m caseI/II histories. The positive inverse makes
+all surviving proper supports geometrically atomic with actual restarted
+suffixes. Their entire source is still allowed to have earlier compact
+history. Two-/three-cofinal geometric calendars and all-four-cofinal
+contact accumulation remain open; the isolated-END case remains separate.

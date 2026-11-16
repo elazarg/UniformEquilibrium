@@ -319,6 +319,9 @@ last-atom case. Fixed bounded latent densities compile every comparison into
 the SAME actual-tuple carrier, retaining all original N and old cap queries.
 Two cofinal owners admit an exact timing direction; three or four are excluded
 by the finite LP/two-form/Morse argument. An actual calendar is not an input.
+The accepted [late-tail debt bound](../exports/GENERAL_LATE_TAIL_DEBT_AND_END_CAP_MINIMUM_REDUCTION.md),
+Theorem A, already excludes a sole cofinal owner under A>0; this older
+constraint is reused rather than counted as a new exclusion.
 
 These are disjoint modes of a CHOSEN marked representation, not raw reward
 classes or an actual-attainment theorem. A last positive atom does not imply
@@ -365,6 +368,21 @@ nu=N^2, contradicting the fixed-table alpha envelope. A surviving such two-activ
 outside response kernel on a positive-probability event. Equal expected
 response values alone do not make kernel aliases. Those genuine outside
 contacts and alpha=1 remain open; physical inactivity alone is insufficient.
+
+Section23 of the method note gives a finite ambient-matrix classification
+of proper cofinal support S. Test the linear feasibility problem
+
+    y>=0, supp(y) subset S, sum y=1, Gamma y>=0.
+
+If it is infeasible, every sufficiently late OLD legal query carries a
+uniform positive fraction of all remaining finite mass. The entire late
+calendar is atomic with a uniform geometric tail bound, and its RESTARTED
+conditional suffix has
+an actual natural-date realization with full U,B,e and each conditional N
+preserved. This gives no actual realization of its earlier compact history
+and no minimum property to the suffix. Conversely, vanishing relative atoms
+force this ambient face problem to be feasible. A positive inverse COLUMN
+alone does not exclude feasibility on every proper face.
 
 The thirteen endpoint zero faces are a conditional refinement of this
 program, not thirteen additional universal reward classes. An inherited
@@ -640,6 +658,24 @@ remain open for THIS approach; native-m history bounds are not transferred.
 The remaining NATIVE-m targets on this family are precisely the negative-V
 immediate history, the four-row sectors V<0 or E-F<=V<3(E-F), and the surviving
 negative-owner2 chamber.
+The literal raw matrix has an entrywise strictly positive inverse, so all
+proper ambient face problems above are infeasible. Every proper nonempty
+cofinal tail therefore has a uniform geometric tail bound and an actual
+restarted suffix;
+diffuse or vanishing-relative-atom cofinal tails require all four owners.
+The cofinal pair map in Section23 is exhaustive:01 and23 are impossible;
+02 requires Z0(02)<-5;12 requires Z1(12)<-4;03 and13 have the stated fixed
+atom-ratio bounds. Each remaining pair has a cofinal owner with NO late
+finite cap contact. Therefore a literal zero-debt E source cannot have two
+cofinal owners, without any perturbation of its31 free rewards. Together
+with the older one-cofinal exclusion, its nonisolated END has either three
+cofinal owners on an actual suffix with geometrically decaying atom tails,
+or all four cofinal owners. No stationary hazard or finite-controller
+representation is asserted.
+Full-SUM minima may have positive native debt, so their surviving pair
+modes are NOT removed by this E-only conclusion. None of these cofinal
+constraints is a bound on the first013 finite-history length.
+
 Other opposed-pair reward tables, arbitrary-source sign chambers,
 nonnegative minimum sources outside this reduction's domain and both
 universal capstones remain open.

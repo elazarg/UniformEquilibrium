@@ -1662,3 +1662,80 @@ It verified the unchanged old prefix and exact17-check program, and
 independently checked the complete COMP countertest at unequal prices.
 Only its unchanged-copy scope is retained; the stronger replacement proofs
 use their final whole reviews above.
+
+
+## Ambient singleton faces, atom floors and restarted suffixes
+
+Section23 of the [method note](../notes/CODEX_ROOT__FIN4_METHOD_BOUNDARIES.md)
+is one unified theorem, not separate positive-inverse and LP exports.
+Its full-Never all-END hypothesis is objective-independent; global
+full-SUM minima supply it with their fixed original-N floor. It excludes
+a complete diffuse/thin-atom cofinal source mode and realizes the RESTARTED
+late suffix, not the earlier compact head. No new export is added.
+
+The starting positive-inverse proof is COMPACT_WHOLE_AUDIT's final240-line
+artifact SHA256
+`05e703e9a48cbc3648602e02ad81b81a5d7392e25ca00e7e4125d865816ce27f`.
+THREE_COFINAL_AUDIT gave fresh whole mathematical PASS, review-record SHA256
+`f2ec501b7084126db4623af7e3ec088a3f4b09ba2beb8ff6c5342b2f8c01e58d`.
+The exact four-owner full-query expansion retains the FIRST-ORDER J atom
+term and bounds only the multifinite error by3M m^2. It conditions with
+ORIGINAL n_i=N_i+R_i, then converts back to physical mixture masses using
+the original lower bound n0. No arbitrary atomless query is inserted.
+
+CODEX_ROOT generalized the matrix premise to infeasibility of the finite
+ambient face problem
+
+    y>=0, supp(y) subset S, sum y=1, Gamma y>=0.
+
+Compactness produces a strictly positive separating margin when this set
+is empty; every noncofinal owner's finite tail is removed by ONE common
+maximum cutoff before using support within S. The full ambient rows and
+closed support condition are essential. The positive-inverse calculation
+is its explicit corollary: for the literal raw matrix delta=7/710 and
+kappa=7n0/(1420M). A positive inverse COLUMN is insufficient for universal
+proper-face infeasibility. A vanishing physical-atom/tail ratio instead
+produces a semipositive normalized vector supported WITHIN S.
+
+The final canonical whole proof, including the generalization and the
+complete literal six-pair support map, has METHOD SHA256
+`f98b7c8ddbfb89861e4bc1aa9e32d761a18f51ac41be80f6a3fcabcd27c1dbe8`.
+Two independent reviewers read the ENTIRE appended section and gave
+mathematical PASS with no unresolved objection:
+
+* FRONTIER_CURATION_AUDIT, review-record SHA256
+  `957619b55e5e3d96471f0f2ea3e65cddb4b069679a718309dff2cc5555018946`.
+* THREE_COFINAL_AUDIT, review-record SHA256
+  `d5f7a4df77455876d6467d30c95e43002e389d4c76e007dee29d52b8dbd7d6c4`.
+
+They verified exact inverse arithmetic, every old legal query and its tie
+term, the physical atom fraction, compact sequence geometry, geometric
+TAIL BOUNDS (not stationary hazards), restarted full-cap equality after
+excluding earlier queries, and each conditional marginal N_i/n_i.
+The restarted suffix has an actual natural-date representation with no
+controller bound; neither source attainment nor suffix minimality follows.
+One review caught the common-cutoff exposition gap in the general face
+argument; the final bytes explicitly kill ALL noncofinal tails first.
+
+For exactly two cofinal owners, their exact late query gap is
+product_(k outside{i,j})N_k[Gamma_ij R_j-J_ij a_j]. Cofinality gives a_j<R_j.
+The literal raw pair map is exhaustive:01 and23 are impossible at A>0;
+02 and12 require the strict joining guards Z0(02)<-5 and Z1(12)<-4;03
+and13 obey the printed fixed atom-ratio inequalities. Each remaining pair
+has a PHYSICALLY cofinal owner with NO sufficiently late cap contact.
+Retained Fubini therefore excludes that pair at a native zero-debt E point,
+without perturbing any of the31 free rewards. Both reviews checked this
+last step with strictly positive gaps integrated over positive late mass;
+no uniform gap is assumed. The E-only conclusion is explicitly NOT applied
+to full-SUM minima with positive native debt.
+
+The already accepted general late-tail debt theorem excludes a sole
+cofinal owner at A>0, and the accepted uniform three-owner dispersion
+packet already excludes generic collared pair Nash sources. Those results
+are reused and credited, not relabeled as new exclusions. The literal
+fixed-family pair argument needs no row-distinctness or pair-ratio
+perturbation. The new general content is the ambient face calendar
+criterion and actual restarted-suffix producer, plus its exact literal
+cofinal support map. The surviving two-/three-cofinal geometric full-SUM modes,
+all-four cofinal contact accumulation and isolated-END global consumers
+remain open within their stated domains. No Fin4 solution is claimed.
