@@ -2008,3 +2008,19 @@ at section SHA-256
 The reviews covered exhaustion of proper supports, the passive-row
 inequalities on each viable cyclic child, the full-support index and
 strictification at matrices with zero entries in unrestricted positions.
+
+## Interleaved feeder and the complete no-mutually-positive additive class
+
+STRICT_RACE and SEPARATION independently reviewed the complete
+[interleaved-return theorem](../exports/INTERLEAVED_PAIR_RETURN_WITHOUT_MUTUALLY_POSITIVE_SINGLETONS.md)
+at SHA-256
+`a92fda9f3fc2aaa7d9fbfc76c84573eade2f330cbe8a940d5fc60153546c3fda`.
+They checked the reduction from raw games, both signs in the quiet-3
+recurrence, the small-probability bound uniform over all contact counts,
+boundary degree, the finite periodic approximation and signed uniform
+incentives. They checked the rational comparison against all feasible
+parameters of the earlier return and all stationary and sure-head
+supports. GRAPH_REVIEW verified the quiet-3 inequalities through an
+independent recurrence. TERMINAL_RAYS independently derived the small-p
+bound and reviewed the degree and finite-word arguments. The sign-class
+conclusion concerns the common proportional additive reward rule.
