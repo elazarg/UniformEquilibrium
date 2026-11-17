@@ -2070,3 +2070,19 @@ the logarithmic bound in both directions, the 65 stationary sign systems,
 and the rejections of the two-row and named payoff-domain tests. The
 inputs are the raw rewards and a choice among finitely many oriented
 triples. The exact subdivision criterion applies within the indicated cycle.
+
+## One recipient's joining payoffs
+
+STRICT_RACE and MIXED_GRAPHS independently accepted the complete
+[one-recipient theorem](../exports/ONE_RECIPIENT_JOINING_PAYOFF_UNIFORM_EQUILIBRIUM.md)
+at SHA-256
+`9915958fc3ec067faedc1e944c1d39cb79ebdb830d029b85fe61177793cab72c`.
+They checked the small positive shift, excision on the selected
+components, the compact boundary argument, the sole-quitter punishment
+and original signed payoffs. They independently checked the three earlier
+criteria on the marked table, including all choices of sure quitter and
+both cyclic triples, the two strict examples distinguishing the seven
+comparisons, and the two-dimensional survival-surface interpolation.
+OBSERVER independently verified the starting index in the positive
+region and the signed terminal branches. The mathematical theorem uses
+the raw row and the cited original no-equilibrium necessities.

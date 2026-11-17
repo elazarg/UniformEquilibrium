@@ -621,6 +621,27 @@ sequences, sure-quitter punishment heads and all three period-two schedules
 with disjoint pairs fail, yet this theorem gives a uniform payoff.
 [Two unrestricted recipients and the separating table](../exports/TWO_UNRESTRICTED_RECIPIENTS_UNIFORM_EQUILIBRIUM.md)
 
+### One recipient with 45 other entries unrestricted
+
+Write P for a player's native expected payoff on waiting at an opening,
+Q for its forced Quit offer, H for opponent survival and B=P-(1-H)Q.
+If one row satisfies P>0 implies Q>=P on all independent opponent
+hazards, the game has a uniform-equilibrium payoff for every completion
+of the other three rows. Seven coalition inequalities or seven weighted
+corner inequalities are finite sufficient tests. Both can be strict
+inclusion tests, as the exact examples show. The proof permits arbitrary
+signed own payoffs.
+
+A counterexample must pass **both** of the following obstructions for
+**every** recipient. First, a connected component of {P>0,B>0} whose
+closure reaches zero must contain a point where Q<P. Second, for every
+d strictly between zero and one there must be independent opponent
+hazards with H=d and B>0. In particular the seven weighted inequalities
+must fail for every scalar c>=1 in all four rows. These are additional
+necessary tests on the original table. The earlier two-row and cyclic
+tests still apply when all four rows fail.
+[One-recipient theorem and strict comparisons](../exports/ONE_RECIPIENT_JOINING_PAYOFF_UNIFORM_EQUILIBRIUM.md)
+
 ### Subdivisions of a three-player cycle with a fourth observer
 
 For a contracting three-player singleton cycle, the three phase tests in
