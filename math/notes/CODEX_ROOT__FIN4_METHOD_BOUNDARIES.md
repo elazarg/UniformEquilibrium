@@ -3838,3 +3838,62 @@ twelve off-diagonal entries, including when an unrestricted entry is zero.
 The determinant and each cofactor are nonzero multi-affine polynomials.
 Openness of no UE and averaging over the vertices of a small box give
 strict positivity at the literal matrix exactly as in the linked proof.
+
+## 30. Which raw rows preserve all best replies of an additive completion
+
+Fix one recipient, the three singleton comparisons gamma_j, all nonzero
+and of both signs, and a common u>0. In a second game keep those three
+comparisons, and allow arbitrary normalized higher rewards in the
+recipient's row. Suppose that against **every absorbing independent
+opponent calendar**, each best terminal deadline of the proportional
+additive row is still a best deadline of the second row. Then the raw
+row is the proportional additive row on all fifteen nonempty coalitions,
+after subtracting its own singleton level. Thus selection of the actual
+opponent calendars matters in transporting the
+[all-sign additive theorem](../exports/ALL_PROPORTIONAL_ADDITIVE_FOUR_PLAYER_UNIFORM_EQUILIBRIUM.md)
+to other completions of the same singletons.
+
+To see this, write L(q)=sum gamma_j q_j. For the raw row let P(q)
+be the unconditional expected payoff contribution from a nonempty
+opponent exit when the player waits, and Q(q) the expected payoff if the
+player quits. Both are multiaffine polynomials in the three opponent
+hazards and vanish at zero in native coordinates. In the additive row
+they are L and -uL. The mixed signs give a relatively open nonempty
+part of L=0 inside the open cube. For any such q, take a blank first
+date, then use constant independent hazards q. Every additive deadline
+has value zero. In the raw row the first three deadlines have values
+0, Q(q), P(q)+H Q(q), where H is one-round opponent survival. All
+three must tie. Hence P and Q vanish on that open part of the plane.
+Each is divisible by L, by polynomial division in any coordinate and
+the identity theorem for polynomials in the remaining two variables.
+As every coordinate has degree one in L and at most one in P,Q, each
+quotient is constant (the zero polynomial is also allowed). The raw
+singleton values fix P=L, and Q=dL for some real d.
+
+Choose distinct j,k with gamma_j<0<gamma_k. Have j quit at the first
+date with probability p and never otherwise, and have k quit surely at
+the second date. Choose the unique p in (0,1) satisfying
+(1+u)p(-gamma_j)=(1-p)gamma_k. Quitting at the first date and waiting
+past the second tie for best in the additive row. Joining k on the
+second date is strictly worse. In the raw row the same tie gives
+d p gamma_j=p gamma_j+(1-p)gamma_k, hence d=-u. Evaluation at the
+cube vertices recovers every passive and joining reward, including the
+grand coalition. Every calendar in this proof absorbs against every
+unilateral replacement, so original row offsets cancel. The result is
+about preservation of best deadlines on every opponent calendar. A
+construction using selected equilibrium calendars need only check the
+incentives on its own dates.
+
+There is a quantitative obstruction even to approximate inclusion. Fix
+gamma and u. The normalized row has eleven free higher entries. Subtract
+the additive row in this eleven-dimensional space. The pairwise payoff
+differences of the tied additive deadlines used in the two tests above
+are linear functionals on this difference space. Their common kernel is
+zero by the proof, so eleven of them span its dual. Fix such a selection.
+If every selected additive-best deadline is epsilon-optimal in the raw
+row against its indicated opponent calendar, each selected difference has
+absolute value at most epsilon. Inverting the finite linear map gives
+entrywise distance at most C epsilon from the additive row, for a finite
+C depending only on gamma and u. Thus even a sequence of uniformly more
+accurate calendar-independent transfers cannot cover a fixed different
+completion of these singletons.

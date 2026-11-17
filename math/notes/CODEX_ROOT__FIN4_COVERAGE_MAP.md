@@ -576,6 +576,15 @@ also gives a new finite restriction at **each** of the three pairings of
 any unrestricted counterexample, stated in (1) of the full theorem.
 [All proportional additive games and raw matching test](../exports/ALL_PROPORTIONAL_ADDITIVE_FOUR_PLAYER_UNIFORM_EQUILIBRIUM.md)
 
+There is a limit to transferring this class proof to other completions
+of the same singleton rewards. For a row with nonzero singleton comparisons
+of both signs, retaining all additive best deadlines against all absorbing
+opponent calendars forces the entire normalized raw row to be additive.
+Eleven comparisons suffice to bound its distance from that row in terms
+of the transfer error. The comparison concerns all calendars. A proof for
+selected equilibrium calendars can exploit their particular stopping laws.
+[Best-reply transfer and its quantitative bound](CODEX_ROOT__FIN4_METHOD_BOUNDARIES.md#30-which-raw-rows-preserve-all-best-replies-of-an-additive-completion)
+
 The player-2 column test also holds with unrestricted higher rewards on a
 larger singleton-sign region. It requires 01 to be mutually negative,
 both 0 and 1 to favor 3, 2 to disfavor 3 while 3 favors 2, and a negative
