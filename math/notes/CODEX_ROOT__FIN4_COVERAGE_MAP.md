@@ -605,6 +605,22 @@ column 2 of the adjugate. Each failed inequality settles the entire
 corresponding set of higher rewards.
 [Unrestricted-reward test, section 29](CODEX_ROOT__FIN4_METHOD_BOUNDARIES.md#29-a-named-inverse-column-for-unrestricted-higher-rewards)
 
+### Two unrestricted recipient rows
+
+Two recipients may have arbitrary values on all fifteen absorbing coalitions
+apiece. For an ordered assignment of the other two recipients to alternating
+dates, each of those rows must satisfy one polynomial implication. For the
+first assigned recipient, joining must also pay at least as much as waiting
+on the three nonempty subsets of the free pair. The two unrestricted players
+can act on both dates. A counterexample must fail this test under every
+assignment. In particular, if two proportional additive rows both value
+each of the two free singleton quitters nonpositively, arbitrary signed
+own levels and all thirty entries of the free rows are covered. At the
+explicit hard matrix there is a nonproportional table where stationary
+sequences, sure-quitter punishment heads and all three period-two schedules
+with disjoint pairs fail, yet this theorem gives a uniform payoff.
+[Two unrestricted recipients and the separating table](../exports/TWO_UNRESTRICTED_RECIPIENTS_UNIFORM_EQUILIBRIUM.md)
+
 ### Returns at the nonpositive-payoff minimum
 
 Two raw subsets of the opposed-pair branch now have uniform-equilibrium

@@ -2040,3 +2040,19 @@ endpoint at minus one, and the exact calibration over all box supports,
 triple inverse criteria and the degree-one full solution. The result
 gives a solved completion for every singleton matrix. The unrestricted
 higher-reward problem remains open.
+
+## Two unrestricted recipient rows
+
+OBSERVER and STRICT_RACE independently accepted the entire
+[two-row theorem](../exports/TWO_UNRESTRICTED_RECIPIENTS_UNIFORM_EQUILIBRIUM.md)
+at SHA-256
+`3f032c5a6804ed630d9cd89ae6ff383b9ecfeff78942a1a59ea1dd6f7a064baa`.
+They checked the duplicated minimum-map degree, the bound on the single
+shift and the original punishment comparison when only one owner plays or
+an owner becomes sure. They verified both decisions of each unrestricted
+recipient against full deviations. On the exact table they checked the
+stationary census, the rejection of all three physical pair partitions,
+and the support and weight obstructions. TERMINAL_RAYS separately checked
+the theorem, the census and the three pair exclusions. The input consists
+of the raw rewards. A universal choice of the two assigned players remains
+open.
