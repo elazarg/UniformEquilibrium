@@ -1985,3 +1985,16 @@ perturbation uses strict security comparisons on each nonempty opponent
 coalition. No strategic input is assumed. A stationary or uniformly
 bounded-period producer cannot cover the exhibited open class. Uniform
 equilibrium for unrestricted four-player rewards remains open.
+
+## Reciprocal signs for the additive class
+
+Section 28 of the [method note](../notes/CODEX_ROOT__FIN4_METHOD_BOUNDARIES.md#28-reciprocal-signs-for-proportional-additive-rewards)
+has section SHA-256
+`d9dc0d73fe0241c92782392a9c12d83c0c5dedb309c7aac38ecd9587aefdd73d`.
+STRICT_RACE checked the support census, the cyclic child's passive
+weights, the pair formula through the first intersection, the
+four-cycle determinant sign, and the small-u threshold including
+equality. The result combines the earlier Hamiltonian producer and
+the limiting pair return. Its sign classification is conditional on
+the common proportional additive reward rule. No new packet repeats
+the proofs of those two producers.

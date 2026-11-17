@@ -559,6 +559,18 @@ The positive gaps may depend on the period bound. The proof realizes the
 target by actual finite-period profiles as accuracy improves.
 [Sign-pattern theorem and exact-equilibrium separation](../exports/NONMATCHING_PAIR_LIMIT_RETURN_UNIFORM_EQUILIBRIUM.md)
 
+For a common proportional additive reward rule, all games with no mutually
+positive singleton pair and at most one mutually negative pair have UE,
+including zero comparisons. With strict signs and no mutually positive pair,
+every candidate left by the census has exactly two negative pairs. Its only
+positive arrow from each player forms a three-cycle and a fourth player
+points into that cycle. Three further inequalities on its rewards and
+the factor u are necessary. In particular, **for each fixed strict
+singleton matrix with no mutually positive pair, every sufficiently small
+u>0 is solved**. This census concerns the stated rule tying higher
+coalition payments to singleton rewards.
+[Reciprocal-sign proof, section 28](CODEX_ROOT__FIN4_METHOD_BOUNDARIES.md#28-reciprocal-signs-for-proportional-additive-rewards)
+
 ### Returns at the nonpositive-payoff minimum
 
 Two raw subsets of the opposed-pair branch now have uniform-equilibrium

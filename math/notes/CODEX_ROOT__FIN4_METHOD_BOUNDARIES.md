@@ -3617,3 +3617,175 @@ alpha=min_E nu<1. At ux=vw only the small-mass failure remains possible,
 with g/f->u/w=v/x. At alpha=1 this second exact equality is necessary in
 addition to the equal viable pair ratios. This classifies an exception to
 the dispersion argument. These pair profiles retain positive joint Never.
+
+## 28. Reciprocal signs for proportional additive rewards
+
+Let Gamma be a four-player singleton matrix with zero diagonal. In this
+section the native reward on a coalition S is the sum of Gamma_ij over j
+in S if i stays out, and minus u times the same sum if i belongs to S,
+for one common u>0. Allow arbitrary original own-singleton offsets, live
+and literal Never zero, independent private play and complete unilateral
+behavioral deviations. Call a pair mutually positive or mutually negative
+if both off-diagonal entries have the indicated strict sign.
+
+**Conclusion.** If there is no mutually positive pair and at most one
+mutually negative pair, every such game has a uniform-equilibrium payoff.
+This includes zero comparisons. With strict off-diagonal comparisons and
+no mutually positive pair, the only further configuration left by the
+proof below consists of a directed positive three-cycle and a fourth
+player whose sole positive comparison points into that cycle. It also
+has to pass the three strict magnitude tests at the end of this section.
+At each fixed strict singleton matrix with no mutually positive pair, all
+sufficiently small common factors u are therefore covered.
+
+When there is no mutually negative pair the
+[existing singleton theorem](../exports/NO_MUTUALLY_NEGATIVE_SINGLETON_PAIR_UNIFORM_EQUILIBRIUM.md)
+covers arbitrary coalition rewards. Now suppose all off-diagonal comparisons
+are strict and 01 is the unique mutually negative pair. Orient 23 by
+Gamma23<0<Gamma32. Every possible counterexample has a positive entry
+in each row because standard Q must solve the offset with all active
+targets at least one. Each column also has a negative entry because a
+nonnegative column would give a nonzero homogeneous complementary
+solution, contradicting R0. These necessary conditions apply to the
+original signed game.
+
+For each member i of 01, the ordered signs at columns (2,3) are therefore
+either (-,+), (+,-), or (+,+). At least one is (-,+), since column 2
+needs a negative entry. Up to exchanging 0 and 1 there are exactly three
+cases. If the second member has (+,-), the Hamiltonian order 0,3,1,2
+has positive forward and negative backward comparisons, negative
+opposite chord 01 and an opposite-sign second chord. This entire case
+has UE for arbitrary higher rewards by the
+[negative-chord theorem](../exports/NEGATIVE_CHORD_HAMILTONIAN_UNIFORM_EQUILIBRIUM.md).
+
+The other two cases have the following common matrix, with a,b,c,A,B,l,k,e,f,h>0.
+
+    Gamma = [ 0 ,-a,-c, A ]
+            [-b, 0, d, B ]
+            [ l, n, 0,-k ]
+            [-e,-f, h, 0 ].
+
+Here either d<0<n or n<0<d. The same argument below will also handle
+d,n<0 under an extra comparison. Work with generic singleton matrices
+first, with all principal blocks of size at least two nonsingular and all
+four entries of the adjugate column at 2 nonzero. These exclude the zeros
+of finitely many nonzero polynomials. Each principal determinant has a
+derangement monomial. The four indicated cofactors are nonzero polynomials since for
+Gamma=(0,-1,-1,2 / -1,0,1,1 / 2,-1,0,-1 / -1,-1,2,0) the determinant
+is 7 and the adjugate column is (5,1,3,2).
+
+At a standard-Q offset with positive y0,y1,y3 fixed and y2 tending to
+infinity, a support omitting 2 is bounded or infeasible. No pair can
+satisfy its two positive active targets, and 012 has a negative row 0.
+The remaining proper support that can occur along an unbounded sequence
+is i23 with i=0 or 1. Its row 2 needs Gamma2i>0. In the cases under
+consideration this forces Gamma_i2<0. Its block C is cyclic, with signs
+(0,-,+ / +,0,- / -,+,0). All entries of its adjugate are positive,
+so feasibility at a positive target forces det C>0. Let lambda be the
+other pair member's row on i23 times the inverse of C. The outside
+inequality at large y2 gives lambda2>=0. The equations in column 3 and
+column i give
+
+    Gamma_i3 lambda_i-k lambda2=Gamma_out,3>0,
+    Gamma_2i lambda2+Gamma_3i lambda3=Gamma_out,i<0.
+
+Consequently lambda_i,lambda3>0. The checked
+`exists_uniformEquilibriumPayoff_of_raw_nonnegativeInverse_triple`
+already gives UE for arbitrary higher rewards in this case.
+[Raw passive-row inverse criterion](../../UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/RawPassiveRowInverseCriterion.lean)
+
+A putative counterexample must therefore have full-support solutions along
+unbounded y2. Their limit after division by y2 gives v=Gamma^(-1)e2>=0,
+hence v>0 by genericity. Define
+
+    x(t)=(A-ct)/a,   y(t)=(B+dt)/b,
+    Phi(t)=ht-e y(t)-f x(t),    t0=v2/v3.
+
+The inverse-column equations give x(t0)=v1/v3>0, y(t0)=v0/v3>0,
+Phi(t0)=0 and l y(t0)+n x(t0)=k+1/v3>k. Let t_end be the first
+positive zero of x or y. Then 0<t0<t_end<infinity. The affine function
+Phi is strictly increasing since Phi(0)<0.
+
+Use the two solo blocks and the limiting 01 block of the
+[pair-return theorem](../exports/NONMATCHING_PAIR_LIMIT_RETURN_UNIFORM_EQUILIBRIUM.md).
+The following argument changes the choice of the return and the quiet
+player's inequalities. Put K_i=(1+u)(Gamma_i0+Gamma_i1)/(1+2u), so K3<0.
+For t between t0 and t_end set P=Phi(t)/(|K3|x(t)y(t)). It starts at
+zero and tends to infinity. Stop at its first intersection with 1/(1+t),
+and before that point set p=P/(1-tP), s=pt/(1+pt), T=kp/(1-p),
+X=P x(t), Y=P y(t). As t goes from t0 to the intersection, p goes from
+zero to one by continuity. In reverse construction order, solo 3 with
+probability p and solo 2 with probability s send T e2 to
+(aX,bY,0,hs). Every intermediate solo payoff is a convex interpolation
+between the corresponding nonnegative block endpoints. In the following 01 block the limiting payoff at 3 is
+zero by the defining equation for P. The limiting payoff at 2 is
+
+    R=(lY+nX+K2 XY)/[(1+X)(1+Y)].
+
+It is bounded as the expected passive reward of a block with zero initial
+payoff at 2. At t0 the right limit of R/T is (l y(t0)+n x(t0))/k>1.
+At the other endpoint T tends to infinity, so by continuity R=T>0
+at an interior t.
+
+At each 01 row let X',Y' be the new pair coordinates after division by
+a,b. The exact difference of a quiet owner's prescribed and forced-Quit
+values is w_i(1+X')(1+Y')-K_i X'Y', where w_i is its limiting payoff
+in the block. This follows by applying the passive limit formula to the
+remaining tail and using X'=u q1,Y'=u q0. Player 3 is quiet by K3<0.
+For player 2, K2<=0 suffices. If K2>0 it suffices that lY+nX>=0,
+since X',Y' are no larger than X,Y and z/(1+z) is increasing.
+This last inequality holds if n>0. When n<0<d, the ratio y(t)/x(t)
+increases, so l y(t)+n x(t)>0 by its value at t0. The finite truncation,
+subdivision and per-period opponent survival bounds from the cited
+construction now apply unchanged and restore every signed original offset.
+Generic approximation within the sign sector gives the boundary values
+by reward closure. To cover zero comparisons in the first conclusion,
+preserve any strict negative pair and approximate every other pair
+containing zero by opposite signs. Cases with no strict negative pair
+are already solved directly.
+
+For the rest of the strict no-mutually-positive region, let r be the
+number of mutually negative pairs. There are exactly 6-r positive entries,
+so r>=3 fails the necessary positive-row condition. At r=2 there is
+exactly one positive entry in each row. Draw an arrow from each row
+to its positive column. If the arrows form a four-cycle, permute the
+columns to place the positive entries on the diagonal of a matrix H.
+Standard Q implies Hx>0 for some x>0 (add a sufficiently small positive
+vector to a nonnegative witness if needed). Multiplying columns by that
+x gives a strictly row diagonally dominant matrix with positive diagonal
+and nonpositive entries elsewhere. Its determinant is positive by
+continuously scaling the off-diagonals to zero. The four-cycle column
+permutation is odd, so det Gamma<0, which gives UE for arbitrary higher
+rewards by the
+[determinant necessity](../exports/FIN4_STRICT_INVERSE_COLUMN_AND_ALL_END_MINIMUM_REDUCTION.md).
+
+The remaining graph is a three-cycle and a feeder. Label the feeder 1,
+its favored player 3, the predecessor of 3 in the cycle 0, and the
+remaining player 2. The displayed matrix then has d,n<0. The same proof
+works if l+n<=0 (so K2<=0), or if Ad+Bc>=0 (so y/x is nondecreasing).
+At equality approximate from within the corresponding inequality.
+
+A further bound covers small u even when l+n>0 and Ad+Bc<0.
+Put theta=u/(1+u). At the first pair prefix,
+X'/(1+X')=theta X/(1+X), and likewise for Y. These ratios decrease at
+all later pair prefixes, so the most demanding quiet-2 inequality at
+the fixed point R=T is exactly
+
+    T>=K2 theta^2 XY/[(1+X)(1+Y)].
+
+Since T=kP/[1-(1+t)P], x(t)<=A/a and y(t)<=B/b in this feeder case,
+it suffices that
+
+    k >= [(l+n)u^2/((1+u)(1+2u))] AB/(4ab).
+
+Indeed P[1-(1+t)P]<=1/[4(1+t)]<=1/4. Equality is included by
+approximation when the generic matrix argument is needed, for instance
+by slightly increasing k. In particular k>=(l+n)AB/(8ab) suffices for
+every u>0.
+
+Thus a strict no-mutually-positive common-additive counterexample must
+have the labeled three-cycle and feeder, l+n>0, Ad+Bc<0 and k strictly
+below the displayed u-dependent threshold. The threshold tends to zero
+as u tends to zero at any fixed strict matrix. These are necessary
+conditions. The region with mutually positive pairs still needs a
+separate classification.
