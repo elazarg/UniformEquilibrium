@@ -121,6 +121,49 @@ root. Its equilibrium uses alternating dates.
 [Joint tests, both calibrations and path proof](../exports/JOINT_RECIPIENT_AND_REVERSE_DEGREE_UNIFORM_EQUILIBRIUM.md)
 and [additive calibration](../exports/ALL_PROPORTIONAL_ADDITIVE_FOUR_PLAYER_UNIFORM_EQUILIBRIUM.md)
 
+### Two applications of the positive-residual path
+
+There is an explicit four-entry sufficient test. For each singleton
+quitter j, choose a different recipient i (recipients may repeat).
+Suppose the four selected native pair rewards Z_i({i,j}) are at least
+21M/2, where M>0 bounds the selected recipients' passive rewards above
+and their participant rewards below by -M. At the point on the path
+where max q=1/3, take j attaining this maximum and its recipient i.
+The probability pi that j alone quits among i's opponents is at least
+4/27; D_i=1-H_i is at most 19/27. Thus Q_i>=(21M/2+M)pi-M D_i>=M
+and P_i<=M D_i. This contradicts B_i>0. The resulting equilibrium
+class allows arbitrary signed own levels and has no upper bound on
+other participant rewards or lower bound on passive rewards.
+
+A more general sufficient test fixes the singleton matrix and marks
+entries by a recipient i and a nonempty rival set T. Marking means
+raising Z_i(T+i) to at least K or lowering Z_i(T) to at most -K; in
+the second case require |T|>=2 to preserve the singleton data. Impose
+uniform lower bounds on all participant rewards and upper bounds on all
+passive rewards. Require that every v>=0 with sum v_i=1 and Gamma v>=0
+have T contained in its support for at least one mark. This is a finite
+linear feasibility test on the supports omitting every T. Then some
+finite K suffices uniformly for all such rewards, independently of the
+relative sizes of the marked entries.
+
+Indeed at small r=sum q_i the one-sided bounds give
+B_i(q)<=(Gamma q)_i+C r^2 with C uniform. The singleton contributions
+to P have quadratic error, the passive mass on larger coalitions is
+O(r^2), and Q_i>=-C(1-H_i). By compactness there is eta>0 such that
+every normalized v with Gamma v>=-eta in each row has some marked T
+with v_j>=eta for all j in T. Otherwise a converging sequence violates
+the support hypothesis. Choose fixed 0<r<1 with Cr<eta. At the path
+point on that shell all B_i>0, so the normalized q/r meets this test.
+The exact rival coalition T has probability at least
+(r eta)^|T| (1-r)^(3-|T|), and 1-H_i>=r eta. The negative passive
+mark would send P_i to minus infinity with Q_i bounded below. A positive
+participant mark would send Q_i to plus infinity with P_i bounded above.
+Either contradicts B_i>0 when K is sufficiently large. In particular,
+for every rival pair {j,k} it suffices to mark a triple joining reward
+of one owner i outside that pair. At a counterexample each singleton
+column has a negative entry by R0, so every v in the support test uses
+at least two players. These applications use the path theorem above.
+
 ## Existing exhaustive source map: two open consumers
 
 The exact source-preserving Research reduction is

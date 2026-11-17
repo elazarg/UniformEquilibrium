@@ -2100,3 +2100,11 @@ face. They separately checked both calibrations, all sure-quitter cases,
 the rejected supports of size one and two in the reverse example, and
 the comparisons with the two-row and cyclic tests. All sufficient
 conditions are on the rewards, with no supplied strategic input.
+
+STRICT_RACE and MIXED_GRAPHS also checked the two
+[reward-bound applications](../notes/CODEX_ROOT__FIN4_COVERAGE_MAP.md#two-applications-of-the-positive-residual-path)
+at section SHA-256
+`f3c80aa0ea7b18cdf3afdb6997e04229fd14e7c2e3e44f1752c165af46f14617`.
+The factor 21/2 includes equality, the other bounds are one-sided,
+and the support test permits independent growth rates. These are
+consequences of the same positive-residual path.
