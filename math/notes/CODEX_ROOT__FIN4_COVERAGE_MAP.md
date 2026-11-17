@@ -621,6 +621,21 @@ sequences, sure-quitter punishment heads and all three period-two schedules
 with disjoint pairs fail, yet this theorem gives a uniform payoff.
 [Two unrestricted recipients and the separating table](../exports/TWO_UNRESTRICTED_RECIPIENTS_UNIFORM_EQUILIBRIUM.md)
 
+### Subdivisions of a three-player cycle with a fourth observer
+
+For a contracting three-player singleton cycle, the three phase tests in
+the linked theorem are necessary and sufficient for dividing its phases
+into dates at arbitrarily small regret. The fourth player may value part
+of a phase negatively. A date with a sufficiently large probability of
+the scheduled player's exit can still deter that player from joining.
+The bounds depend only on singleton payoffs and joining payoffs on pairs.
+Every possible counterexample must fail these tests on every eligible
+oriented triple. One explicit table fails every assignment in the
+two-unrestricted-row test above and all four passive triple inverse
+tests. Its fixed payoff is (1,2,1,1/2), and the number of dates per
+cycle needed for this construction grows as log(1/epsilon).
+[Cyclic triple subdivision theorem and exact example](../exports/CYCLIC_TRIPLE_PHASE_SUBDIVISION_UNIFORM_EQUILIBRIUM.md)
+
 ### Returns at the nonpositive-payoff minimum
 
 Two raw subsets of the opposed-pair branch now have uniform-equilibrium

@@ -2056,3 +2056,17 @@ and the support and weight obstructions. TERMINAL_RAYS separately checked
 the theorem, the census and the three pair exclusions. The input consists
 of the raw rewards. A universal choice of the two assigned players remains
 open.
+
+## Subdivisions of a three-player cycle with a fourth observer
+
+MIXED_GRAPHS and OBSERVER independently accepted the entire
+[cycle subdivision theorem](../exports/CYCLIC_TRIPLE_PHASE_SUBDIVISION_UNIFORM_EQUILIBRIUM.md)
+at SHA-256
+`f5592da09631c87f348d3c27fad189237e3c125ea9fadda29735f13f0007851f`.
+They checked the first and last step at negative outsider values, both
+mixed-sign constructions, cutoff errors under complete stopping laws and
+the original payoff. For the marked game they verified the fixed target,
+the logarithmic bound in both directions, the 65 stationary sign systems,
+and the rejections of the two-row and named payoff-domain tests. The
+inputs are the raw rewards and a choice among finitely many oriented
+triples. The exact subdivision criterion applies within the indicated cycle.
