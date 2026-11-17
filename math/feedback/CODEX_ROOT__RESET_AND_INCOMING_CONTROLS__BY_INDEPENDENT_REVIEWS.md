@@ -1902,3 +1902,48 @@ Thus the entire N2=1 branch, including vanishing owner2 mass in the selected
 fixed-table limit, is consumed on k>=2. Macroscopic finite owner2 excursions,
 the k<2 core-only branch, the other universal modes and Fin4 remain open.
 No whole raw reward-table UE class is counted as solved.
+
+## Ordered activity and the all-k first-coalition alternatives
+
+The [ordered activity packet](../exports/ORDERED_FINITE_ACTIVITY_AND_NAMED_OWNER_DISPERSION.md)
+has SHA256 `f1e3766946c178ad9009b9b2ac52659550fc33020dbed5c0e3e914a82482821b`.
+NAMED_REVIEW and EQUALPAIR independently approved the entire final artifact
+on all eight export gates. Their respective review hashes are
+`b0744ebc5f1d542ce9b8d1271177617d26fbda482ed409b6ae4d63c52fb3d877`
+and `3613a8accaf6754b86e30f66f0b1e19e7b1568758d7d558beac78dbcc801aac9`.
+They checked the pathwise coalition cases, the actual absorbing solo
+comparison at every cut, ties in the ordered probability, the full debt
+budget before conditioning, and the exact original Never coordinates.
+Independent exact tests used 96 signed tables/profiles at 192 cuts and
+16 further signed profiles. The result forces a specified owner's tail
+and specifies its order relative to another owner's finite draws. The
+older dispersion theorem only names the third largest mass. The older
+cofinal012 exclusion allows normalized four-owner tails to approach that
+face. The new inequalities also apply at positive native debt.
+
+Section26 of the [method note](../notes/CODEX_ROOT__FIN4_METHOD_BOUNDARIES.md)
+has final section hash
+`94e0b4168a9ab3a2996627b96d2ab9df9117d1e01765258703ca72c33c90294e`.
+NAMED_REVIEW approved the final complete section including (STRICT), review
+hash `1cf6ed7250a86c9f6bd55279d8941760fb295cef06362458196591485333c89d`.
+GLOBAL_ALL and STATIONARY independently checked the chamber extension and
+the first-coalition payment proof. The K=32/5 endpoint uses both actual
+conditional Never payoff ranges. For larger K only the protected full013
+atoms can incur the stated loss. Its sum is bounded using the genuine first
+13 event there. Cauchy--Schwarz on those same rows bounds the first 013
+event. The BV argument retains sign boundaries, actual ties and interior
+accumulations. The finite-price comparison uses a native E limit together
+with actual witnesses preserving the selected first-coalition and order
+kernels. The strict-order-zero last-atom argument is made at that E limit.
+There is no bound claimed uniformly over different reward tables.
+
+Section27 of the same note has section hash
+`d567a45c3d8fda8cbb068f8085360dc08b29e3b49a21c0f28db3d96591b82b36`.
+EQUALPAIR checked the final canonical copy. STATIONARY and EXTENDK
+independently checked the complete source proof, including the equal-ratio
+point-mass endpoint and both the small and macroscopic mass limits. The
+new test concerns the two outsider inequalities on the exceptional pair
+face. Strict compatibility gives actual pair Nash profiles with positive
+joint Never. The critical slope at alpha=1 and the Fin4 conjecture remain
+open. These two internal refinements reuse the established marked-clock
+and pair-classification proofs without duplicating their frozen exports.

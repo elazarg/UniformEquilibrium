@@ -410,7 +410,10 @@ macroscopic common atom followed by the ORIGINAL query x+1 and the older
 unrestricted every-cut debt bound. Equal viable ratios are exceptions to
 THIS dispersion mechanism, not the remaining cases of Fin4 as a whole.
 The synthesis reuses the accepted compact geometric-pair lemma; it is not
-a second export of that proof.
+a second export of that proof. Section27 tests the two outsiders on the
+equal-ratio boundary. At alpha=1 a dispersion failure also requires two
+strictly opposed outsider inequalities with exactly the same limiting
+finite-mass ratio, and total finite mass tending to zero.
 
 Section23 of the method note gives a finite ambient-matrix classification
 of proper cofinal support S. Test the linear feasibility problem
@@ -698,25 +701,44 @@ minimizing; the comparison lowers original Never at the global-alpha source.
 Longer first013 histories, remaining V<-a tails and negative-owner2 continuations
 remain open for THIS approach; native-m history bounds are not transferred.
 
-The [global positive-head barrier](../exports/OPPOSED_PAIR_POSITIVE_HEAD_FORCES_OUTSIDE_ACTIVITY.md)
-now removes the ENTIRE core-only continuation of this native E first03
-source when k=Z0(13)>=2. Its head identity gives a strictly positive scalar
-Psi at the genuine tail; every later core row and continuous piece preserves
-that positivity, contradicting the zero-tail endpoint. All tail1 signs and
-arbitrarily long histories are covered, without a first013 assumption.
-Hence N2(X)=N2(Y)<1. Section25 of the method note upgrades this to a fixed
-TOTAL owner2 finite-mass floor at every selected sufficiently small-raise
-full-SUM minimum, by compactness of their native E limits. Their first
-hazard q2 is still exactly0. The proof uses only the core reward restriction;
-unused off-core reward and sign assumptions are removed in the packet.
-This closes no whole k>=2 UE reward class: finite owner2 excursions remain
-open, and cofinal013 is still possible after such an excursion. The core-only
-first03 branch at k<2 also remains open.
+Section26 of the [method note](CODEX_ROOT__FIN4_METHOD_BOUNDARIES.md) gives
+an exhaustive alternative for the selected fixed13 positive03 sources at
+EVERY fixed real k=Z0(13). For all sufficiently small raises, at least one
+of the following holds in each genuinely represented tail, with a positive
+lower bound depending on the table and the fixed prices.
+
+| Surviving event | Restriction |
+| --- | --- |
+| Strictly ordered clocks | With probability bounded below, 0 and 1 choose Never and the finite owner2 clock rings strictly before the finite owner3 clock. The first coalition is the singleton 2. |
+| Joint exit involving 2 and 3 | At least one of the exact first coalitions 023 and 123 has probability bounded below. |
+| Core first coalitions | Both first-exit probabilities, exactly 13 and exactly 013, are bounded below. Some date has three substantial original atoms. |
+
+At k>=-22/5 the first two alternatives suffice. At every such selected
+source, the probability of 2 stopping at or before a finite 3 is bounded
+below, including ties. Section26 extends the
+[positive-head barrier](../exports/OPPOSED_PAIR_POSITIVE_HEAD_FORCES_OUTSIDE_ACTIVITY.md)
+by using the conditional Never payoff ranges. For smaller k, each decrease
+of the potential on a protected full013 row is bounded by a constant times
+the probability of first coalition 13 on that row. Before the potential
+can reach zero, the clock must accumulate that probability and a definite
+probability of first coalition 013. Compactness transfers the alternative
+to the selected small-raise full-SUM minima via their native E limits.
+
+The [ordered activity theorem](../exports/ORDERED_FINITE_ACTIVITY_AND_NAMED_OWNER_DISPERSION.md)
+also bounds the joint order probability after EVERY old cut from original
+debt and the remaining finite owner2 mass. In particular every nonempty
+zero-debt suffix assigns a fixed fraction of its finite tail mass to owner3.
+If owner2 is active at native E but never strictly precedes a finite owner3
+draw, all finite owner2 mass is at one shared last atom. For all k the only
+possible isolated last supports at native E are 023, 123 and 0123. The open
+consumers include strictly ordered finite excursions, those last supports,
+and the observed core collisions at k<-22/5. These are necessary events
+in this family. The general Fin4 capstones are still open.
 
 The NATIVE-m finite-history targets still include the negative-V immediate
 history, the four-row sectors V<0 or E-F<=V<3(E-F), and the surviving
 negative-owner2 chamber. These targets also obey forced owner2 activity
-whenever their source has the stated genuine03 head at k>=2.
+whenever their source has the stated genuine03 head at k>=-22/5.
 The literal raw matrix has an entrywise strictly positive inverse, so all
 proper ambient face problems above are infeasible. Every proper nonempty
 cofinal tail therefore has a uniform geometric tail bound and an actual

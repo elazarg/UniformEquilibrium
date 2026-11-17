@@ -3403,3 +3403,217 @@ It applies to the original positive-debt full-SUM minima through their
 native E limits, rather than applying (CORE) directly at positive debt.
 No numerical delta or uniformity over varying finite reward tables is
 claimed. Finite owner2 excursions and the k<2 core-only branch remain open.
+
+
+## 26. Owner order and first coalitions at the selected minima
+
+Keep the native zero-debt carrier, the fixed13 table and the selected full-SUM
+minima of Sections19 and25. All constants below may depend on that table.
+The [ordered activity theorem](../exports/ORDERED_FINITE_ACTIVITY_AND_NAMED_OWNER_DISPERSION.md)
+uses only a subset of its reward entries. At each old query x write R_i for
+original finite mass at or after x, beta for its sum, and define
+
+    H23(x)=Pr(x<=T2<=T3<Never).
+
+Then D+H23(x)>=c R2(x)^2 and D+beta R3(x)>=c' beta^2 for every actual
+profile and every faithfully represented source. H23 includes ties and
+preempted private clock draws. At native E, owner3 thus carries a fixed
+fraction of every nonempty finite tail. This excludes approach to the
+normalized face 012 even along four cofinal streams.
+
+If f2>0 at E and Pr(T2<T3<Never)=0, then H23>0 supplies a common atom z.
+Independence gives no finite2 before z and no finite3 after z. At every cut
+after z, (O) of the ordered theorem excludes any remaining2, and (N) excludes
+any remaining finite activity. All finite2 mass is therefore at that one
+shared last atom. More generally, at ANY isolated last atom of a native E
+source the conditional row q is full Nash over zero. Its third largest hazard is at least c0 sum(q)
+by the [oriented-pair bound](../exports/ORIENTED_PAIR_UNIFORM_THREE_OWNER_DISPERSION.md).
+It must include both 2 and 3. A last triple 012 gives active2 a strictly
+positive Never value against 0,1 and a nonpositive Quit value. A last triple
+013 gives active1 the impossible equality -7a-c=-6a+6c, where a,c are the
+positive 0,3 hazards. Thus only 023,123,0123 remain as last supports, for
+all k. These exclusions use the entire last row including ties.
+
+### The core barrier extends to k >= -22/5
+
+Use the [positive-head barrier](../exports/OPPOSED_PAIR_POSITIVE_HEAD_FORCES_OUTSIDE_ACTIVITY.md)
+and its notation in Section25. For core-only play put K=2-k, K0=32/5. Only
+full013 rows in the protected region w1<=0, w3>0, Psi>0 need a new estimate.
+Their proper hazards a,b,c are for 0,1,3 respectively. With h=(1-a)(1-b)(1-c)
+write w=(V,-E,F) and primes for the conditional values after that row. Then
+
+    V=3c-b, E=7a+c, F=2(a-b)>0,
+    V'=(b-c+Kbc)/[(1-b)(1-c)],
+    E'=(a+7c)/[(1-a)(1-c)], F'=(a-b)/[(1-a)(1-b)].
+
+Conditional Never1 faces only 0,3,03 and all-Never with payoffs -6,6,0,0.
+Conditional Never3 similarly faces values 1,-1,0,0. Thus 0<=E'<=6 and
+F'<=1, giving a<=1/(2-b). The function Psi(V',-E',F') is nonincreasing
+and 1-Lipschitz in V'. It suffices to bound its algebraic value at K0.
+
+* If b<=c, the exact K=0 margin h Psi'-Psi is c(3a+4b+c)/2. Increasing K
+  to K0 costs at most K0(1-a)bc. Since V>=0, positivity of Psi gives
+  5a>12b+c, so (3a+4b+c)/2>(28b+4c)/5>=32b/5. The margin pays the cost.
+* If c<=b<=3c, the same 5a>12b+c gives b(2-b)<5/12, hence b<1/4 and
+  a<4/7. Write u=b-c. Direct substitution at K0 yields
+
+      6(1-c)(h Psi'-Psi) = ac(9-77c/5)
+          +c^2[15-(299c+284u)/5]+u[6-7a-c-2ac/5].
+
+  All brackets are positive since 299c+284u<=299b<75, c<1/4 and a<4/7.
+* If b>=3c, positivity of Psi gives 5a>6b+19c. Thus b(2-b)<5/6, b<3/5,
+  a<5/7 and c<1/5. At K0 the exact difference is
+
+      6(1-c)(h Psi'-Psi)/c =12-5a+b(6-37a/5)+c(6a-5)-289bc/5
+                            >=12-25/7-1-867/125>0.
+
+This proves h Psi'>=Psi at every such full row for K<=K0. All other atom
+and diffuse formulas of the global proof are independent of K. Its compact
+sign trap and terminal contradiction therefore apply and give N2<1 for
+every genuine positive03 head at k>=-22/5. The fixed-table compactness
+proof of Section25 supplies a positive uniform owner2 mass at its selected
+small-raise full-SUM minima throughout this enlarged interval.
+
+### For more negative k the loss bounds two observed first coalitions
+
+Suppose a native E positive03 head has a core-only tail Y. Then K>K0.
+Write L=K-K0, nu=N0 N1 N3 for the genuine tail Never product and P=Psi(Y)>0,
+using (HEAD) of Section25. At a protected full row let S be joint survival
+from the beginning of Y to that row. Comparison with K0 at these very same
+hazards uses the Lipschitz estimate even if the new potential crosses zero.
+It gives
+
+    Psi' >= Psi/h - Lbc/[(1-b)(1-c)]
+         >= Psi - (L/nu) S(1-a)bc,
+
+since S h>=nu. Other protected rows and the continuous part have nonnegative
+forward increments of Psi. Integrate only up to the first exit from the
+protected region. If the total of the displayed losses were strictly less
+than P, adding the accumulated charges would give a nondecreasing BV
+function and leave a strictly positive floor for Psi through every atom
+and accumulation. A row preserves positive3, while at a nonatomic limiting
+exit w1=0 and w0>=0 imply Psi=w3. The zero0/positive1 trap from the global
+proof uses no K. Thus the clock would stay in the region to the empty END,
+contradicting its zero terminal payoff. The charges are summable because
+the events for first coalition 13 at distinct rows are disjoint. Hence,
+writing d=nu P/L and summing over protected full rows only,
+
+    p13=Pr(first coalition 13 in Y)>=sum S(1-a)bc>=d,
+    p013=Pr(first coalition 013 in Y)>=sum Sabc>=sum S b^2 c>=d^2.
+
+The last step uses a>b, Cauchy--Schwarz and sum S c<=1. These probabilities
+price the earliest coalition in the actual payoff kernel. Both survive
+faithful compact representation.
+
+Fix any real k in the literal family, A_Z>0 and the prices of Section19.
+There is a table-dependent xi>0 such that along EVERY selected sufficiently
+small-raise factorization, at the start of its genuine tail Y_t,
+
+    H23 >= xi   OR   min(p13,p013) >= xi.                     (ORDER)
+
+For k>=-22/5 the first alternative always holds. Indeed Section19 gives
+D(Y_t)->0. If H23 tends to zero, the ordered activity bound forces f2->0.
+Extract a compact limit while retaining the first-coalition probabilities:
+use a faithful representation obtained from actual approximants matching its
+first-coalition kernels. Choose one within 1/n on (U,B,e,N,p13,p013) at each
+source, then apply the original marked-clock construction to that sequence.
+Its kernel convergence preserves both earliest events. Prefix continuity and
+the uniform head collars give a genuine positive03 native E head at the
+limit. Its tail has N2=1. This is impossible when K<=K0. Otherwise the two
+bounds above preclude either p13 or p013 tending to zero. This proves (ORDER)
+by contradiction. Through the actual03 head, H23 is multiplied by the
+owner3 Continue factor, and p13,p013 by the joint Continue factor. These
+factors are uniformly positive on the selected family.
+
+In the second alternative some date has physical masses of 0,1,3 each at
+least xi/3. Indeed p013<=sum_x p0(x)p1(x)p3(x), where p_i(x) is an atom
+mass. Each triple product is at most the largest common lower bound across
+dates times the sum of its three pair products. Each pair-product sum is
+at most one, and a positive supremum is attained. Neither alternative has
+yet yielded a uniform equilibrium for the remaining tables.
+
+There is a finer disjunction in which the first alternative uses STRICT
+order. In the genuine tail of every selected sufficiently small-raise
+minimum at the fixed table, some constant xi0>0 bounds from below at
+least one of these three quantities:
+
+    Pr(T0=T1=Never and T2<T3<Never),
+    max(p023,p123),
+    min(p13,p013).                                          (STRICT)
+
+The first two suffice at k>=-22/5. To prove this, carry all these event
+probabilities in the preceding diagonal compactness argument. Strict order
+of the two designated clocks and their finite/Never labels survive the
+same raw-coordinate convergence: coordinates in one limiting atom interval
+eventually share the same old atom, while distinct limiting finite labels
+are eventually ordered. Nonatomic ties have product measure zero.
+
+At the limiting native E tail, f2=0 forces the two core first-coalition
+bounds above and requires k<-22/5. If f2>0 and the strict-order event for
+2,3 has positive probability, independence multiplies it by N0 N1>0 in
+the first alternative. Otherwise all finite2 sits at the final shared
+atom z proved above. Its support contains 2,3 and some l in {0,1}.
+Demand that those three owners draw z and that the fourth chooses literal
+Never. The independent event has positive probability, and its first
+coalition is exactly l23. Thus a limit with all applicable alternatives
+zero is impossible. This gives a uniform xi0 at the fixed table. The
+second alternative at positive debt asserts an observed first coalition.
+The last-atom characterization is used in the native zero-debt limit.
+
+
+## 27. Outsider tests on the equal-ratio boundary of dispersion
+
+Use the hypotheses of Section24 except for its unequal-ratio condition.
+If uniform three-owner dispersion fails, that section reduces the two
+leading owners i,j to a common ratio r=J_ij/Gamma_ij=J_ji/Gamma_ji>=1.
+Put z=1/r and rho=1-z. The normalized pair limit consists of independent
+geometric(z) finite clocks on the same dates, by the contact classification
+in [the dispersion proof](../exports/UNIFORM_THREE_OWNER_TAIL_DISPERSION.md).
+For z=1 both strict-order probabilities vanish by the integrated contact
+equalities, forcing a common point mass by independence.
+
+For each outsider h let s_h=Gamma_hi-z J_hi, t_h=Gamma_hj-z J_hj and c_h
+be its Never-minus-date-zero response against the two sure geometric laws.
+This is finite raw data. With H=Z_h(ij), T=Z_h(hij),
+
+    c_h=[rho(Gamma_hi+Gamma_hj)+z H]/(2-z)-z rho(J_hi+J_hj)-z^2 T.
+
+Give i and j finite masses f,g>0 on those geometric laws. Both active
+owners are indifferent at every offered date. At date m the outsider's gap
+is rho^m[f(1-g)s_h+g(1-f)t_h]+rho^(2m)fg c_h, by conditioning on which
+opponents draw finite times. Thus all four players are Nash exactly when
+
+    x s+y t >= d,  x=(1-g)/g>=0, y=(1-f)/f>=0,
+    d_h=max(0,-c_h) for z<1, and d_h=-c_h for z=1.
+
+At z=1 only date zero adds a constraint. Either axis gives absorption. At
+A>0, each of s,t has a negative entry, since otherwise the corresponding
+sure geometric solo profile would be absorbing Nash. If f/g stays bounded
+above and below and total mass tends to zero in a dispersion failure,
+Section6 of the dispersion proof at the first shared atom gives
+s+lambda t>=0 with lambda=lim g/f>0. The same derivation works at z=1:
+censor the two smaller masses o(f), compare their two old unary response
+kernels at witnesses of the common atom, and divide by f. The two-finite
+error is O(fg), and the original deficit error D/N_h is o(f).
+
+If instead total mass stays bounded below, censorship has vanishing cost
+in total debt. Both limiting finite masses and their original Never masses
+are positive. Restrict the limiting pair clock to its successive shared
+atoms. The resulting actual geometric pair retains those Nash comparisons,
+so (x,y) is feasible above. From a positive feasible point, any direction
+v with v1 s+v2 t>=0 that has a negative coordinate would reach an axis,
+contradicting A>0. A nonzero nonnegative direction on an axis is excluded
+by the solo test. Dependent row normals would admit an orthogonal line
+and thus a direction with a negative coordinate. For independent normals
+solve v1 s+v2 t=(1,1). The preceding argument forces both entries of v
+strictly positive, giving strict compatibility of the two outsider tests.
+
+Consequently, after exchanging outsiders, any failing pair must have
+s=(-u,v), t=(w,-x) with u,v,w,x>0 and ux<=vw. If ux<vw, a slope strictly
+between u/w and v/x exists. Large inverse odds on that ray give ACTUAL
+exact pair Nash profiles of arbitrarily small total mass for any fixed
+finite completion. The uniform dispersion inequality then fails and
+alpha=min_E nu<1. At ux=vw only the small-mass failure remains possible,
+with g/f->u/w=v/x. At alpha=1 this second exact equality is necessary in
+addition to the equal viable pair ratios. This classifies an exception to
+the dispersion argument. These pair profiles retain positive joint Never.
