@@ -1966,3 +1966,22 @@ lowers Never from 1/8 to 5/84. This eliminates a previously surviving
 source case on genuine clock data. The evidence supports the two stated
 UE classes and the pointwise exclusion. It leaves the existence of a
 fully mixed stationary profile for either calibration table undecided.
+
+## Limiting pair return and the exact-equilibrium boundary
+
+STRICT_RACE and TERMINAL_RAYS independently accepted the whole
+[sign-pattern theorem](../exports/NONMATCHING_PAIR_LIMIT_RETURN_UNIFORM_EQUILIBRIUM.md)
+at SHA-256
+`09237378d7ffcdcbddc0c3b112a6b04bfb00cf82b291a92b94f3c2b29a1738c5`.
+They checked all proper supports at a large player-2 offset, the cyclic
+child's passive payoff, the degree convention, and strictification on the
+literal singleton matrix. They independently checked the unequal pair
+contractions, the passive values at every finite row, both possible
+endpoints, the scalar fixed point, and bounds for entire unilateral laws
+in physical chronological order. The pure 01 exit covers positive K3.
+The proof also treats signed original payoffs, exact behavior at every
+reached date, and both compactness cases for bounded periods. The open
+perturbation uses strict security comparisons on each nonempty opponent
+coalition. No strategic input is assumed. A stationary or uniformly
+bounded-period producer cannot cover the exhibited open class. Uniform
+equilibrium for unrestricted four-player rewards remains open.

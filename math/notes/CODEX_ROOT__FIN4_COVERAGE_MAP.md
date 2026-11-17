@@ -530,6 +530,37 @@ already hull-covered, and its bad annotation lies outside the reward hull.
 Thus both shapes need actual source geometry or further global input; neither
 can be closed by those raw gates alone. No entire `R_S` closure is inferred.
 
+### A specific inverse column and an equilibrium using arbitrarily long periods
+
+Consider singleton comparisons with the following strict signs in some
+labeling, with each nonzero magnitude independent.
+
+    0 - - +
+    - 0 - +
+    + + 0 -
+    + - + 0
+
+Every counterexample on this pattern would require a positive determinant
+and a strictly positive **player-2 column** of the inverse. At large
+positive player-2 offsets, the only competing proper support is 123.
+Whenever that support survives, a three-player cycle is profitable
+enough to keep player 0 quiet. This settles that branch for arbitrary
+coalition rewards.
+
+On the full-support branch the two solo phases and a limiting sequence
+of 01 phases give a uniform payoff under the stated pair and outsider
+inequalities. This includes every singleton magnitude for the additive
+tables in which joining multiplies a player's passive singleton sum by
+a common negative number. The theorem also permits different row factors.
+An open set of original tables in all sixty coordinates has a uniform
+payoff, has no exact terminal Nash profile, and has a positive regret
+gap for each fixed upper bound on the period of the live hazards.
+The positive gaps may depend on the period bound. The proof realizes the
+target by actual finite-period profiles as accuracy improves.
+[Sign-pattern theorem and exact-equilibrium separation](../exports/NONMATCHING_PAIR_LIMIT_RETURN_UNIFORM_EQUILIBRIUM.md)
+
+### Returns at the nonpositive-payoff minimum
+
 Two raw subsets of the opposed-pair branch now have uniform-equilibrium
 payoffs, including arbitrary signed own-singleton offsets. At the minimum
 over continuations with a nonpositive coordinate, the first test returns
