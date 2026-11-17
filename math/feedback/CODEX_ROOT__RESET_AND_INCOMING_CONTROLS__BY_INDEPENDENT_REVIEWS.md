@@ -2086,3 +2086,17 @@ comparisons, and the two-dimensional survival-surface interpolation.
 OBSERVER independently verified the starting index in the positive
 region and the signed terminal branches. The mathematical theorem uses
 the raw row and the cited original no-equilibrium necessities.
+
+## Joint recipients, continuous residual paths and the reverse comparison
+
+OBSERVER and STRICT_RACE independently accepted the complete
+[joint and reverse theorem](../exports/JOINT_RECIPIENT_AND_REVERSE_DEGREE_UNIFORM_EQUILIBRIUM.md)
+at SHA-256
+`a2c51fee40e6d9ba20bb4a90f93b2ebad86f174dabcd6010ad203d0ec79e13c2`.
+They verified the uniform small-shift estimate for variable weights,
+the limiting sole-quitter comparison, the section degree of the compact
+semialgebraic path component and the product degree on the deleted
+face. They separately checked both calibrations, all sure-quitter cases,
+the rejected supports of size one and two in the reverse example, and
+the comparisons with the two-row and cyclic tests. All sufficient
+conditions are on the rewards, with no supplied strategic input.

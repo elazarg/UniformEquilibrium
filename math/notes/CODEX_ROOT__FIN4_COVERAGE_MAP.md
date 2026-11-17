@@ -93,6 +93,34 @@ Equivalently, proving A_Z=0 on a dense generic native domain covers its
 boundary by continuity. This removes exceptional TABLE loci, not zero
 coordinates or singular source configurations at a fixed table.
 
+## Joint conditions on every counterexample
+
+At a common vector of independent hazards let P_i be the native payoff
+on waiting at the current date, Q_i the Quit payoff, H_i opponent
+survival, and B_i=P_i-(1-H_i)Q_i. For each nonempty subset M there
+must be an opening at which at least one member has P_i>0 and every
+member has Q_i<P_i. The joint test can settle a game after each
+individual row has failed. A different test uses a recipient with
+B_a>=0 on a survival surface H_a=d. The reduced three-player degree
+with a silent must then equal one; a nonpositive residual of another
+recipient throughout the reduced region gives an equilibrium.
+
+For any four strictly positive weights w, there must also be a continuous
+path from zero hazards to a sure exit with q_i B_i=lambda w_i>0
+for every player after the start. In particular, at every fixed joint
+survival d in (0,1) the ratios must be attainable. Here nonzero weights
+on *any* subset suffice for the fixed-survival statement: approximate
+zero weights by positive ones and take a compact limit. Its lambda
+cannot vanish, since then the nonzero limiting profile is complementary
+and already gives a uniform payoff. With a single nonzero weight this
+forces the other three recipients to satisfy their stationary comparisons
+at the same opening. These conditions describe a stationary calculation.
+The earlier additive hard example also has the positive-weight paths,
+since it has local degree one and no nonzero stationary complementary
+root. Its equilibrium uses alternating dates.
+[Joint tests, both calibrations and path proof](../exports/JOINT_RECIPIENT_AND_REVERSE_DEGREE_UNIFORM_EQUILIBRIUM.md)
+and [additive calibration](../exports/ALL_PROPORTIONAL_ADDITIVE_FOUR_PLAYER_UNIFORM_EQUILIBRIUM.md)
+
 ## Existing exhaustive source map: two open consumers
 
 The exact source-preserving Research reduction is
