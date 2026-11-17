@@ -2024,3 +2024,19 @@ supports. GRAPH_REVIEW verified the quiet-3 inequalities through an
 independent recurrence. TERMINAL_RAYS independently derived the small-p
 bound and reviewed the degree and finite-word arguments. The sign-class
 conclusion concerns the common proportional additive reward rule.
+
+## Every common proportional additive four-player game
+
+GRAPH_REVIEW and TERMINAL_RAYS independently accepted the entire
+[all-sign class theorem](../exports/ALL_PROPORTIONAL_ADDITIVE_FOUR_PLAYER_UNIFORM_EQUILIBRIUM.md)
+at SHA-256
+`fda8754194079c7d061ed2b1a6f6c95d2063887260158d8f6d2530e87adea3c7`.
+Both reproduced the 218 canonical sign patterns and the thirteen cases
+after the stated exclusions. They checked the whole-cell signed comparisons,
+the change to contact monotonicity when C is negative, the source of the
+named column, finite profiles and all behavioral deviations. They also
+checked both signs of the raw opposite-phase comparison, including its
+endpoint at minus one, and the exact calibration over all box supports,
+triple inverse criteria and the degree-one full solution. The result
+gives a solved completion for every singleton matrix. The unrestricted
+higher-reward problem remains open.
