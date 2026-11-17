@@ -530,6 +530,21 @@ already hull-covered, and its bad annotation lies outside the reward hull.
 Thus both shapes need actual source geometry or further global input; neither
 can be closed by those raw gates alone. No entire `R_S` closure is inferred.
 
+Two raw subsets of the opposed-pair branch now have uniform-equilibrium
+payoffs, including arbitrary signed own-singleton offsets. At the minimum
+over continuations with a nonpositive coordinate, the first test returns
+to eligibility using 02 or 23 according to the sign of player 2's payoff.
+The second follows the indifference equations at 2 and 3 until 0 mixes or
+can stay quiet. Both comparisons strictly lower the original Never product.
+The common hypotheses fix the singleton matrix and six participant-pair
+entries. The explicit higher-reward inequalities distinguish the solved
+subsets. The pointwise return tests also exclude some continuations on
+tables outside both subsets. For example, an actual last 023 row supporting
+a positive 03 head has Never product 1/8, and a feasible 02 prefix lowers
+it to 5/84. An explicit annotation with a unique 03 response shows why the
+one-stage payoff guards alone leave other tables open.
+[Restricted-minimum return theorem](../exports/OPPOSED_PAIR_RESTRICTED_MINIMUM_RETURN_UNIFORM_EQUILIBRIUM.md)
+
 An actual continuation case of `R_O` has now been removed: the
 [opposed-pair source exclusion](../exports/OPPOSED_PAIR_FULL_CAP_SOURCE_EXCLUSION.md)
 fixes a hard singleton matrix and thirteen higher entries, leaving31 free.

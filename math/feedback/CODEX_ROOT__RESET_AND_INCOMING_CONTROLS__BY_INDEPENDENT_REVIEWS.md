@@ -1947,3 +1947,22 @@ face. Strict compatibility gives actual pair Nash profiles with positive
 joint Never. The critical slope at alpha=1 and the Fin4 conjecture remain
 open. These two internal refinements reuse the established marked-clock
 and pair-classification proofs without duplicating their frozen exports.
+
+## Restricted-minimum return through player 2
+
+CORE_RETURN and OBSERVER independently reviewed the complete
+[return theorem](../exports/OPPOSED_PAIR_RESTRICTED_MINIMUM_RETURN_UNIFORM_EQUILIBRIUM.md)
+at SHA-256
+`69e6e98f458330080f3ed6d960dd5a3df8ad5092cd5390f7d1dafcb4b3bf0bbb`.
+Both approved the final bytes. They checked the growing eigenmode,
+all proper zero sets, concatenation at zero, the strict reduction of
+the same restricted minimum, the boundary where 0 stays quiet, and the
+second almost-sure quitter needed for signed own levels. Both verified
+all 30 pure-coalition deviations and the 28 child witnesses. In the
+first fixture every sure-quitter root fails at every continuation,
+and all stationary 013 roots admit a profitable outside deviation.
+In a separate actual example outside both raw sets an admissible 02 row
+lowers Never from 1/8 to 5/84. This eliminates a previously surviving
+source case on genuine clock data. The evidence supports the two stated
+UE classes and the pointwise exclusion. It leaves the existence of a
+fully mixed stationary profile for either calibration table undecided.
