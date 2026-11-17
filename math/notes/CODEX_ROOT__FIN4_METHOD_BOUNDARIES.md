@@ -3897,3 +3897,157 @@ entrywise distance at most C epsilon from the additive row, for a finite
 C depending only on gamma and u. Thus even a sequence of uniformly more
 accurate calendar-independent transfers cannot cover a fixed different
 completion of these singletons.
+
+## 31. An open singleton region where every near equilibrium needs an atom
+
+Write Gamma_ij=r_i({j})-r_i({i}) and Gamma_ii=0. There is an open
+neighborhood of the following singleton matrix on which the claim below
+holds for **every** finite higher-coalition completion and all own payoff
+levels with at least one strictly positive coordinate:
+
+    Gamma_*=[0,-1,-1,5; -5,0,2,-1; -2,4,0,-5; 3,-4,2,0].
+
+For each fixed original table in this region there are epsilon,eta>0
+such that every profile of terminal regret at most epsilon has
+
+    max_i sup_{t finite} Pr(min_{j different from i} tau_j=t) >= eta.
+
+These are unconditional first-opponent stopping masses. The lower bound
+allows the identity of the owner and the date to depend on the profile.
+At the center the [proportional completion](../exports/ALL_PROPORTIONAL_ADDITIVE_FOUR_PLAYER_UNIFORM_EQUILIBRIUM.md)
+has an exact two-date-period equilibrium, full singleton degree one
+and three strictly positive inverse columns. The result below also
+precludes **any single sequence of profiles**, even with such atoms,
+from witnessing vanishing terminal regret simultaneously on *every*
+higher-reward completion of these same singleton rewards.
+
+### The limit of a hypothetical sequence with vanishing atoms
+
+Suppose the regrets and the displayed maximum both tend to zero along
+a sequence. The joint Never probability tends to zero: truncate a
+positive-own player's law at a finite deadline and let that deadline
+tend to infinity for each fixed profile. Its limiting gain is precisely
+its positive own level times joint Never. Center each row by subtracting
+its own level from all nonempty-coalition rewards. For a finite deadline
+the change in the deviation gain is minus that level times joint Never.
+The native Never response is the limit of native finite deadlines by
+bounded convergence, since its own singleton is zero. Thus maximum
+native regret also tends to zero. All rewards of this one table are
+bounded.
+
+Index the physical dates by cumulative prescribed absorption probability.
+Give date k an interval whose length h_k is the probability the first
+exit occurs there. The maximum interval length tends to zero: every
+first exit at k occurs as the first opponent exit for at least one of
+two distinct reference players. On dates with pre-date joint survival
+S_k>=delta>0, each opponent event of quitting at that date conditional
+on survival has probability at most the maximum first-opponent atom
+divided by delta. This follows by excluding a different reference player
+and conditioning on its opponents' survival to k, which has probability
+at least S_k. Independence makes the players' conditional hazards
+independent on the live history. Thus conditional probability of a tie
+is at most a constant times that bound times the conditional probability
+of any exit (use the union of the six pair events). Summing by h_k and
+then allowing the remaining survival delta to tend to zero shows total
+tie mass tends to zero.
+
+Assign each first exit to a member of its quitting coalition, using the
+least label on ties. On each date interval distribute its mass uniformly
+in these assigned proportions among four measures. Assign the unused
+joint Never interval arbitrarily as its length tends to zero. The four
+cumulative functions are uniformly Lipschitz with constant one and sum
+to elapsed interval length. A subsequence converges uniformly to
+integrals of measurable x_i>=0 with sum_i x_i=1 almost everywhere.
+Define the continuous vector
+
+    g(t)=integral from t to 1 of Gamma x(s) ds,    0<=t<=1.
+
+At every date's left endpoint t_k, S_k times its conditional prescribed
+native continuation payoff V_i(k) differs from g_i(t_k) by an amount
+tending uniformly to zero. Indeed assigning a singleton gives exactly
+its corresponding column, and the error of all ties and Never is bounded
+by a constant times their total mass.
+
+We have g>=0 and x_i=0 almost everywhere on {g_i>0}. To prove the first
+claim, preserve a player's earlier stopping rule and quit at k if still
+live. The possible gain is S_k(Q_i(k)-V_i(k)), where Q_i is its forced
+native Quit offer. On each compact absorption interval t<=1-delta
+these offers tend uniformly to zero, since a solo Quit earns zero and
+opponent hazards vanish uniformly there. Vanishing native regret and
+the mesh bound give g_i>=0 up to that endpoint, hence everywhere.
+
+For the support claim, sample the player's originally planned date k
+from its private law. Instead of quitting at k it may use its original
+conditional law from k onwards whenever V_i(k)>Q_i(k). This is a
+unilateral mixture of valid stopping laws. Its exact gain is
+
+    sum_k Pr(tau_i=k, all opponents survive to k) [V_i(k)-Q_i(k)]_+.
+
+Terms at dates with zero probability are omitted. Hence on an interval
+whose closure is inside {g_i>0} and bounded away from 1, the mass of
+assigned exits of i tends to zero: the positive part is bounded below
+and the assigned mass is at most the event probability in the sum.
+A countable union of such intervals proves the support claim. In
+particular g has a zero coordinate everywhere, by continuity.
+
+### Which zero sets can occur
+
+At an interior time t let J be the zero coordinates. Nearby, x is
+supported on J almost everywhere since the other coordinates of g stay
+positive. Integrating on a short interval on each side of t shows there
+must be nonzero vectors z,y>=0 on J with
+
+    Gamma_JJ z>=0,           Gamma_JJ y<=0.
+
+Here z is the integral of x to the left and y to the right. Each
+integral has positive coordinate sum. For two-element J with like
+off-diagonal signs, one of the two inequalities is impossible. For
+the larger J containing 0, the table gives a nonnegative row weight
+whose product with the corresponding principal has all entries of
+one strict sign.
+
+| J in increasing order | Row weights | Product at Gamma_* |
+| --- | --- | --- |
+| 012 | (3,1,0) | (-5,-3,-1) |
+| 013 | (0,1,1) | (-2,-4,-1) |
+| 023 | (1,0,1) | (3,1,5) |
+| 0123 | (11,0,10,7) | (1,1,3,5) |
+
+Thus an interior zero of g0 can only have J={0}. The zero set of g0 is
+both relatively open and closed in (0,1): near such a time the other
+coordinates remain positive and some coordinate must vanish. If g0
+vanished throughout, x would be e0 almost everywhere, forcing
+g(t)=(1-t)Gamma e0 with a negative coordinate. Hence x0=0 almost
+everywhere. Now g1,g2,g3 can vanish together at most once in (0,1).
+Between two such times the integral of x over 123 would be nonzero,
+annihilated by its invertible principal (determinant 32). On a final
+open interval after this possible time, the pairs 12 and 13 have like
+signs and cannot be zero sets. Thus if g1 ever vanishes on the interval
+it vanishes throughout by the same open-and-closed argument. Eventual
+x=e1 again contradicts a negative column entry. Otherwise x1=0 almost
+everywhere on this interval. The common zero of g2 and g3 now occurs
+at most once, by invertibility of the 23 principal. After it the only
+possible active owner is constant by continuity, again forcing g(t)
+to be a positive multiple of a column with a negative entry. This
+contradicts g>=0. All signs, strict weight tests and invertibility
+conditions used in this argument persist in a neighborhood of Gamma_*.
+
+### Why a single sequence cannot cover all higher rewards
+
+Suppose the same profiles have regret tending to zero for every choice
+of higher rewards with the specified singletons and own levels. Fix one
+base completion bounded in absolute value by M. Perturb a single
+recipient i's reward on one nonsingleton coalition K by +b and -b.
+For any unilateral replacement the change in gain is plus or minus
+b times the change in probability of K. The base gain has absolute
+value at most 2M. Taking both signs gives a limiting upper bound 2M/b
+on the supremum of that absolute probability change. Since b is
+arbitrarily large, the change tends to zero uniformly over replacements.
+For i in K, a Never deviation now proves that the prescribed probability
+of K tends to zero. A deterministic deadline t for i then has vanishing
+probability of any coalition K containing i and another player, uniformly
+over t. The sum of these finitely many probabilities equals the mass of
+the first opponent exit at t. This contradicts the atom bound proved
+above on the base completion. The conclusion concerns the demand for
+one sequence shared across completions. Fin4 allows the strategies to
+depend on the entire reward table.

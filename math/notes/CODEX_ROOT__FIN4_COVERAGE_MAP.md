@@ -585,6 +585,17 @@ of the transfer error. The comparison concerns all calendars. A proof for
 selected equilibrium calendars can exploit their particular stopping laws.
 [Best-reply transfer and its quantitative bound](CODEX_ROOT__FIN4_METHOD_BOUNDARIES.md#30-which-raw-rows-preserve-all-best-replies-of-an-additive-completion)
 
+A stronger obstruction holds on an open set of singleton matrices
+containing the exact period-two example above. For every fixed completion
+with some positive own level there are epsilon,eta>0 for which each
+epsilon-terminal Nash profile has a finite date where some player's
+first opponent exit has probability at least eta. In particular, no
+sequence of strategies works across every completion of those singletons.
+A diffuse limit would require a continuous path of nonnegative
+continuation payoffs. The signed principal-block tests leave that path
+with one eventual active owner, whose column has a negative entry.
+[Atom necessity and the proof excluding a common sequence](CODEX_ROOT__FIN4_METHOD_BOUNDARIES.md#31-an-open-singleton-region-where-every-near-equilibrium-needs-an-atom)
+
 The player-2 column test also holds with unrestricted higher rewards on a
 larger singleton-sign region. It requires 01 to be mutually negative,
 both 0 and 1 to favor 3, 2 to disfavor 3 while 3 favors 2, and a negative
