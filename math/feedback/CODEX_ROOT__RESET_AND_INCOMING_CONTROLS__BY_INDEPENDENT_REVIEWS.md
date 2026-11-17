@@ -1998,3 +1998,13 @@ equality. The result combines the earlier Hamiltonian producer and
 the limiting pair return. Its sign classification is conditional on
 the common proportional additive reward rule. No new packet repeats
 the proofs of those two producers.
+
+## Player-2 inverse column with unrestricted higher rewards
+
+STRICT_RACE and GRAPH_REVIEW independently accepted section 29 of the
+[method note](../notes/CODEX_ROOT__FIN4_METHOD_BOUNDARIES.md#29-a-named-inverse-column-for-unrestricted-higher-rewards)
+at section SHA-256
+`f08ce89e20de13ef6e04c14d18f71a59349325969bb07c1e7d1fecc3b2f3ff3e`.
+The reviews covered exhaustion of proper supports, the passive-row
+inequalities on each viable cyclic child, the full-support index and
+strictification at matrices with zero entries in unrestricted positions.

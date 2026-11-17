@@ -571,6 +571,15 @@ u>0 is solved**. This census concerns the stated rule tying higher
 coalition payments to singleton rewards.
 [Reciprocal-sign proof, section 28](CODEX_ROOT__FIN4_METHOD_BOUNDARIES.md#28-reciprocal-signs-for-proportional-additive-rewards)
 
+The player-2 column test also holds with unrestricted higher rewards on a
+larger singleton-sign region. It requires 01 to be mutually negative,
+both 0 and 1 to favor 3, 2 to disfavor 3 while 3 favors 2, and a negative
+comparison on each of the pairs 02 and 12. Every counterexample there
+must have positive determinant and four strictly positive entries in
+column 2 of the adjugate. Each failed inequality settles the entire
+corresponding set of higher rewards.
+[Unrestricted-reward test, section 29](CODEX_ROOT__FIN4_METHOD_BOUNDARIES.md#29-a-named-inverse-column-for-unrestricted-higher-rewards)
+
 ### Returns at the nonpositive-payoff minimum
 
 Two raw subsets of the opposed-pair branch now have uniform-equilibrium

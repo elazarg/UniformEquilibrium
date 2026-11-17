@@ -3789,3 +3789,52 @@ below the displayed u-dependent threshold. The threshold tends to zero
 as u tends to zero at any fixed strict matrix. These are necessary
 conditions. The region with mutually positive pairs still needs a
 separate classification.
+
+## 29. A named inverse column for unrestricted higher rewards
+
+For arbitrary real rewards define the hollow singleton matrix by
+Gamma_ij=r_i(j)-r_i(i). Suppose that in some labeling
+
+    Gamma01,Gamma10<0,   Gamma03,Gamma13>0,   Gamma23<0<Gamma32,
+    min(Gamma02,Gamma20)<0,      min(Gamma12,Gamma21)<0.           (S)
+
+There is no other sign premise. Under (S) every four-player counterexample
+would have det Gamma>0 and **every entry in column 2 of the adjugate
+strictly positive**. Thus failure of either test solves the original
+game for all nonsingleton rewards and signed own levels. One particularly
+simple solved region, obtained by expanding the cofactor at (2,2), is
+
+    (-Gamma10) Gamma03 Gamma31 + (-Gamma01) Gamma13 Gamma30 >= 0.
+
+The witness column here is specified by the signs and can be tested even
+when some other inverse column is strictly positive. This extends the
+matrix part of the [limiting-return theorem](../exports/NONMATCHING_PAIR_LIMIT_RETURN_UNIFORM_EQUILIBRIUM.md).
+
+For a generic matrix use the large player-2 offset of that proof, with
+the other targets strictly positive and fixed. Each principal of size at
+least two is nonsingular. A support omitting 2 is bounded or impossible.
+For pairs containing 2, a negative off-diagonal entry precludes two
+positive targets. For 012, if either of the first two players sees 2
+negatively, its row inside 012 is nonpositive. Otherwise row 2 inside
+012 is nonpositive by (S).
+
+Take i in {0,1}. A feasible i23 requires Gamma_2i>0, hence Gamma_i2<0.
+If Gamma_3i>0, the fixed row-3 target bounds both x_i and x_2. The
+fixed row-i equation then bounds x_3, so row 2 cannot reach an
+unbounded target. Otherwise Gamma_3i<0 and the child C on i23 is cyclic.
+Its adjugate is strictly positive, hence det C>0 wherever it maps a
+positive vector to the positive targets. If this support recurs at
+arbitrarily large targets, its passive row weights lambda satisfy
+lambda2>=0. The column-3 and column-i equations in section 28 give
+lambda_i,lambda3>0. The checked passive-row inverse criterion therefore
+settles the original table. These cases exhaust all proper supports.
+
+Consequently, under no UE the unique complementary solution at all
+sufficiently large such offsets has full support. The checked degree-one
+criterion and its full-support local index give det Gamma>0. Division
+by the unbounded target gives the specified nonnegative inverse column,
+strictly positive generically. The conditions (S) are open in the
+twelve off-diagonal entries, including when an unrestricted entry is zero.
+The determinant and each cofactor are nonzero multi-affine polynomials.
+Openness of no UE and averaging over the vertices of a small box give
+strict positivity at the literal matrix exactly as in the linked proof.
