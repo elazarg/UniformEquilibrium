@@ -2238,3 +2238,49 @@ replacement. They verified the unrestricted determinant implication and
 the scope of the earlier diagonal, small square, solo, staggered and
 orientation tests. Every hazard comes from the raw table and degree
 argument. Only the positive-determinant case uses the three-date producer.
+
+## Periodic blocks and the residual payoff graph
+
+POSITIVEATOM and PRIOR approved the exact
+[combined proof](../exports/RENEWABLE_PERIODIC_BLOCKS_AND_FINITE_PAYOFF_GRAPH.md)
+at SHA-256 `66da2f9e37f96de36293529256907bc361e2892b0b3f4eb163420ff8656ea696`.
+They checked the source-to-block implication even at restart after rare
+survival, simultaneous contraction of every deleted clock, fixed-point
+estimates through every phase, compression in both directions for pure
+deadlines and Never, and the graph's edge slack and rank equivalence.
+DIAMOND_WORD also checked the source and polynomial bound. The extraction
+uses a sequence of full small-regret calendars when proving necessity.
+The converse produces a calendar from every graph cycle. No cycle producer
+for all games is assumed or proved. Earlier Simon, quantile and finite-menu
+results supply distinct orbit or initial-regret conclusions. The additional
+arbitrary-game reduction is to independent, bounded-size semialgebraic
+edge problems with a common continuation-payoff rank in any counterexample.
+
+## Sink owner and signed phase subdivisions
+
+JOINTDIAMOND and PRIOR approved the
+[signed column deletion and subdivision proof](../exports/SINK_COLUMN_AND_SIGNED_PHASE_REFINEMENT.md)
+at SHA-256 `eea06c33a460ffb8617f0d362ccc275be38e566f9f49d238d343943d2d52c507`.
+Their falsification attempts included a one-sided accumulation at a sink
+endpoint, arbitrarily small physical dates, unbounded refinements with a
+limiting zero-length edge, the signed quiet bounds and the strict count
+on the degree-one benchmark. The raw column and principal tests generate
+the three remaining candidate phases and all cuts. The benchmark singleton
+matrix and the reversed order were known. The unrestricted timing decision
+and the sharp count for signed subdivisions go beyond those observations.
+
+## Computing the diamond word and the minimum lengths
+
+TRIANGLE_ATOMS and PRIOR checked the cyclic order of the twin ratios, the
+rank wrap and the bound on distinct windows. They separately reviewed the
+unbounded-period construction and the positive regret gap after arbitrary
+subdivision of a shorter word. PRIOR checked the final
+[companion proof](../notes/CODEX_ROOT__ORDERED_DIAMOND_WORDS_AND_UNBOUNDED_SOLO_PERIODS.md)
+at SHA-256 `acc8b34bbc2f7b44743b7e7fae2286d4a8d29c0d7acec6ca5558028793474faf`
+and the [rational checker](../experiments/FIN4_DIAMOND_SOLO_DECISION.py) at
+`7b1b0a4e59f0c6d8597edb9071f9dd7c626e005b04c19d1d8de07602f337fdf9`.
+They reconciled early rejection with the unique rotation frequency and
+checked the exact algebraic sign, previous-period mass and payoff calculations.
+The checker was run on both closed endpoints of the six-run calibration,
+a nine-run example, both sides of the six-run admissible interval and
+fourteen rational instances requiring six through forty-five runs.

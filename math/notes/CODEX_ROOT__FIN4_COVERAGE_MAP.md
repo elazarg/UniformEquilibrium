@@ -26,6 +26,30 @@ solved. The source declarations cited here were inspected statically; no fresh
 Lean build was run. The new bookkeeping and compositions are ordinary
 mathematics, not additional Lean declarations.
 
+## A finite payoff graph on the residual games
+
+After the existing all-Continue, sure-opening and sole-owner dispositions,
+the remaining games have the following exact test. At each accuracy
+partition the four-dimensional continuation-payoff cube into small boxes.
+An edge represents an actual finite block whose prescribed payoff starts
+in the first box given the second box as continuation, up to the specified
+error. The same block bounds every unilateral gain from every phase and has
+a fixed positive chance of absorption by opponents after deleting any player.
+The game has a uniform-equilibrium payoff exactly when the graph has a
+directed cycle at every reciprocal-integer mesh. A counterexample must have
+acyclic graphs at all sufficiently fine meshes.
+
+For fixed raw rewards and mesh h, there are O(h⁻⁴) vertices. Each edge is an
+independent semialgebraic problem on O(h⁻¹) dates. Equivalently, an existing
+equilibrium can be approximated by periodic calendars of length O(ε⁻⁵)
+that are ε-Nash after every phase. The constants and the surviving-table
+hypotheses are given in the proof. Simon's earlier theorem already searches
+cyclic orbits, and quantile compression already supplies finite initial-regret
+tests. The additional structure gives a concrete way to attack general
+existence: force cycles in these payoff graphs or certify a fine acyclic
+graph for a particular residual table. The universal cycle-existence
+statement is open. [Renewable blocks, period bound and payoff graph](../exports/RENEWABLE_PERIODIC_BLOCKS_AND_FINITE_PAYOFF_GRAPH.md)
+
 ## Universal native domain
 
 The original domain consists of 60 real rewards: four recipients at each of
@@ -826,6 +850,24 @@ future twin labels needed to recover the present label. This gives a finite
 list of periodic words and explicit payoff tests. At rational data the
 shortest exact solo period can use nine dates, with the word X,Y,U,X,Y,U,X,Y,V.
 [Finite decision and calibration](../exports/FINITE_SOLO_WORDS_ON_FOUR_PLAYER_DIAMONDS.md)
+
+The [rational diamond checker](../experiments/FIN4_DIAMOND_SOLO_DECISION.py)
+implements that decision. It tests one ordered word for each candidate
+reduced fraction. For every n≥1 there is an open family with shortest exact
+periodic solo word of 3(n+1) distinct-owner runs and a positive regret gap
+for shorter periodic solo calendars, even if their runs are subdivided.
+This sharp complexity result concerns a particular strategy class.
+[Ordering proof and lower-bound family](CODEX_ROOT__ORDERED_DIAMOND_WORDS_AND_UNBOUNDED_SOLO_PERIODS.md)
+
+Another finite raw decision applies when a player has no possible outgoing
+change of solo owner in the joining graph and the stated cone kernels are
+trivial. A terminal single-owner test or a three-owner cycle with a finite
+polygon subdivision test decides vanishing regret and collisions for
+arbitrary behavioral profiles. At the signed degree-one example the
+shortest permissible subdivision of a required phase grows without bound.
+A successful subdivision gives an original uniform payoff for all
+completions. Failure forces a positive simultaneous first-exit atom in any
+sufficiently accurate profile. [Column deletion and subdivision theorem](../exports/SINK_COLUMN_AND_SIGNED_PHASE_REFINEMENT.md)
 
 On the symmetric calibration the low-collision test requires both twin
 joining factors to lie in [8/9,16/17]. At factor 99/100 every sufficiently
