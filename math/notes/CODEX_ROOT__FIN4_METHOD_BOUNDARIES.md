@@ -4100,3 +4100,72 @@ In fact N_v≥μ_i−s_i everywhere. If the minimum N_* fell below μ_i−s_i, t
 If that auxiliary root has a sure date, every owner facing a sure rival there has H_v=0 and hence N_v=P_v≥Q_v, with equality when acting. A sole sure owner with D>0 has equality and Q_v=P_v+H_v[(1−t)N_v+tN_(v+1)]≥P_v+H_v(μ_i−s_i). If D=0, its rivals are quiet everywhere and the usual μ_i≤s_i test applies. Thus such a root gives a genuine original sure opening, excluded by hypothesis. At t=0 the m stationary maps are independent and a boundary zero in any coordinate similarly gives a genuine opening. The whole homotopy is boundary-zero-free, and its product endpoint has degree (d_1)^m, as claimed.
 
 In particular if Γ is R0 with degree one and there is no nonzero stationary complementarity root, d_1=1. Whenever genuine sure openings are also absent, every finite-word realization and its infinite-word consequence follow from these established stationary facts alone, even if a suitable nonstationary equilibrium already exists. The period degree identity explains why changing the clock length or the order of the designated deviators does not by itself close the remaining Fin4 branch. A reduction using these calendars must exploit additional information about the interior equilibria or impose constraints beyond the total degree on the entire hazard cube.
+
+## Three cap states exhaust every exact backward word from AllNever
+
+All four players have own singleton reward one. The example has the benchmark singleton difference matrix, no Nash row with a sure quitter over any actual continuation, an actual positive-Never child, and strict coordinatewise minimum-source cap margins at its parent. In the corresponding own-zero table the whole actual calendar and all its suffixes are exact Nash, and literal Never is a best response for every owner. All fifteen nonempty coalitions have physical mass at the mark. Over every finite cap-Nash word on literal AllNever, the exact minimum of the original, positive-own total debt is (1-k)^4/4, where k=(3−√5)/2. The minimizing word has two nonblank dates. Its fully mixed outer row uniquely minimizes total debt among every one-date prefix over that child. Its exact root spends the maximum charge attainable by any length of cap-Nash word. The obstruction also holds for words of unbounded length and vanishing cumulative defect whenever the child retains positive reach.
+
+The parent does not minimize the unrestricted objective. An explicit stationary profile witnesses that the latter minimum is zero. The example distinguishes precisely that global hypothesis from the local source and extremality properties.
+
+### Table and child
+
+Label the owners 0 to 3, pair them as 01 and 23, write j(i) for the partner, and let e=(1,-1,1,-1), A=20, C=(20,640,20,640) and b=1+Ae. The common child hazard is k=(3-√5)/2. Set
+```
+G = [0,-8,6,-2; 9,0,2,-10; -7,15,0,-4; 14,-3,-4,0].
+```
+Every passive singleton is 1+G_ij, and T_i denotes the sum of the three passive singletons for i. For each nonempty rival subset V use the participant-minus-passive difference
+```
+r_i(V+i)-r_i(V)=A e_i(2·1_{j(i) in V}-1).
+```
+Give all three two-rival subsets the common passive reward L_i and the three-rival subset the passive reward K_i. Choose them by the two linear conditions
+```
+k(1-k)^2 T_i + 3k²(1-k)L_i + k³K_i = b_i-(1-k)^3,
+T_i + 3L_i + K_i                         = 7b_i+8C_i.
+```
+The determinant is 3k²(1-2k)>0. In particular 36<L_0<37, 29<L_2<30 and K_i>198 for all four owners. These bounds follow by eliminating K_i and inserting 0.3819660<k<0.3819661. The optional balanced alterations below preserve every asserted source and enforce a separately checkable stationary equilibrium.
+
+At a row q put H_i=product_{j≠i}(1-q_j). At continuation cap v the Quit-minus-Wait advantage is exactly
+```
+Delta_i(q;v)=Ae_i(2q_{j(i)}-1)+(b_i-v_i)H_i.
+```
+This includes the empty-rival event using the own singleton one. At the child play hazards k for each player once, then everyone Never. The full allNever cap is one. Since 2k-1+(1-k)^3=0, every current action is optimal there, and the first linear condition gives the child cap b. The child debt equals d=4(1-k)^4 by exact survival scaling from AllNever. In the own-zero table obtained by subtracting one from each absorbing reward, every finite deadline pays exactly one less, and its limiting deadline is the literal Never offer. Thus finite caps change by one, all the displayed row comparisons are identical, and the final AllNever profile is exact equilibrium. Backward induction through the two exact rows proves native Nash for the literal source and its suffixes. Literal native Never is optimal at each, by the tied Continue actions. These comparisons test every whole stopping-law replacement.
+
+### Unique marked row and later restarts
+
+At b the only Nash row is q*= (1/2,1/2,1/2,1/2), by the two independent matching-pennies comparisons. Its outgoing cap is v=b+C componentwise. Indeed at q* the passive contribution is 7b_i/8+C_i, and H_i=1/8. The resulting debt is m0=d/16 with zero row defect. All fifteen nonempty coalitions have probability 1/16 at that very first date. Grand is funded: its participant surplus relative to own, less 3m0, is sum_i(K_i+Ae_i-1)-3m0>0. Every cap exceeds its own level by more than m0. The literal child has debt d and Never (1-k)^4; reference Never is the latter divided by 16. Beyond the child the debt is four and Never one, so all later literal continuations have larger debt and positive original reach.
+
+For every alternative single date q the unrestricted debt over the same child equals
+```
+d product_i(1-q_i) + sum_i [ max(0,a_i) - q_i a_i ],   a_i=Ae_i(2q_{j(i)}-1).
+```
+This function is multiaffine on each subbox cut by the four hyperplanes q_i=1/2. Each vertex other than q* has at least one positive defect, by uniqueness of the stage Nash root. Since a nonzero |a_i| is A and a positive assigned action weight is at least 1/2 there, its objective is at least A/2>m0. Multiaffine interpolation proves q* is the unique global minimizer over this entire four-dimensional prefix problem.
+
+### No sure roots and no extra charge
+
+Three facts about properness hold also after the optional adjustment. For types i=0,2, every immediate Quit payoff is strictly greater than 1-3A=-59. For the initial table this follows from the smallest passive singleton ≥-9, L_i,K_i>0 and the difference of at most 20. Thus every actual continuation cap for those types is strictly above -59. Two or more sure hazards would give H_i=0 for every i, making a Nash row an equilibrium of the two matching games, which is impossible. A sole sure negative type forces its positive-type partner to quit surely since H_partner=0. A sole sure positive type forces its partner to wait and, on the other pair, both members to mix at 1/2. For the sure owner its own advantage then equals -A+(b_i-v_i)/4<0 when v_i>1-3A. This rules out every sure Nash opening at every actual continuation, including the displayed parent.
+
+At v=b+C the unique Nash row is blank. For a proper row a positive-type owner can be active only when its negative partner exceeds 1/2. That partner, when active, needs the positive owner strictly below 1/2. Thus every positive-type rate is <1/2. If anyone is active, at least one negative type is active. Write Cmax=32A. Its H_i is at most A/Cmax=1/32, so the other negative type must have rate at least 1-4A/Cmax, by the bound on both positive types. In particular both negative types are active and both satisfy this lower bound. Now every positive type has H_i≤(4A/Cmax)^2 and advantage at least A(1-8A/Cmax)-16A²/Cmax>0 (all C_i≤Cmax), contradicting properness. The blank row fixes its cap v exactly.
+
+Every nonempty finite exact cap-Nash word over this child therefore has survival exactly 1/16. This persists in the limit for words with aggregate defect tending to zero and survival at least any sigma>0. In fact their unweighted defect sum tends to zero, since their source-weighted sum uses reach at least sigma throughout. The innermost row converges to q* by uniqueness and compactness. Its cap tends to v. Near v, any sufficiently small-defect row has uniformly small rates by compactness, uniqueness of blank, and continuity. Every owner then strictly prefers Wait by a fixed margin since v_i>1. The row defect bounds total hazard times that margin, and the cap changes by at most a fixed multiple of total hazard. Starting at the first outer cap, summing these bounds while inside one fixed ball about v shows that the remaining whole word stays inside it and has hazard sum tending to zero. Thus absorption cannot improve by any fixed positive amount while keeping the same child reached.
+
+### Exhaustion from the canonical AllNever boundary
+
+At AllNever the raised cap is the vector of ones. Write x,y for the positive- and negative-type hazards in one matched pair, and h for survival of the other pair. The two Quit-minus-Wait differences are
+```
+ A[(2-h)y-(1-h)],    -A[(2-h)x-(1-h)].
+```
+When the other pair is nonblank, properness gives h<1 and these two comparisons require x=y=(1-h)/(2-h)>0. Consequently any nonblank root uses both pairs. Writing a,beta for their common rates gives a=F(beta), beta=F(a), F(z)=[1-(1-z)^2]/[2-(1-z)^2]. Since F is strictly increasing on [0,1), the two rates must coincide. Its only positive fixed point is k. Both the blank root and the common k row are exact at AllNever.
+
+Thus an arbitrary finite exact word at AllNever has one of three forms, read from the innermost date outward: blank throughout; some blanks followed by the k row alone; or some blanks, the k row, the fully mixed 1/2 row, and arbitrarily many further blanks. These are all legal. Their respective original survival probabilities are 1, (1-k)^4, and (1-k)^4/16. Their raised debts are four times these probabilities. Their native debts are zero. The same result holds with an infinite supply of empty calendar positions or arbitrarily many exact steps. It does not describe limits of growing words with small positive per-step defects started at AllNever, where the blank action has no strict margin. The reached approximate-word proof above instead starts at the actual post-mark child.
+
+The familiar blank-only obstruction has no nonblank root at the initial cap. Here the first and second nonblank steps are unavoidable on any maximizing word. The first starts at the actual canonical boundary, and the second is a funded physical mark with every coalition visible. The surviving literal Never probability can then never be reduced any further by exact backward iteration.
+
+### Optional exact stationary witness
+
+Keep all singleton values and every participant-minus-passive difference. Set p=(17/50,14/25,17/50,14/25). For each recipient i among its three two-opponent subsets choose a set with maximal probability w_max at p and one with minimal probability w_min (ties arbitrary). Add E_i to the first passive value and subtract it from the second, where P_i(p) denotes its original passive contribution and H_i=H_i(p). Use
+```
+E_i = {(1-H_i)[ b_i + Ae_i(2p_{j(i)}-1)/H_i ]-P_i(p)}/(w_max-w_min).
+```
+Keep the prescribed joining differences by making matching adjustments to the two joining rewards. These changes leave the child and marked row intact because each has equal rates across players. Eliminating K_i as above and substituting the same rational bounds for k gives 5<E_0<7, 11<E_1<13, -6<E_2<-4, and 2<E_3<4. Thus for both positive types all three adjusted passive pairs exceed 20. At stationary hazards p every player mixes, its passive value is P_i^new(p)/(1-H_i), and the displayed formula makes its advantage zero there. Every deleted-clock rival survival vanishes geometrically, proving exact equilibrium against all full deviations. Consequently the positive number m0 is only the exact restricted one-date minimum, despite all local tests holding.
+
+Unique-blank cap stacks and estimates in a strict blank basin were established previously. The distinguishing construction here puts a uniquely minimizing, fully funded physical mark at the entrance to that basin, over an actual positive-Never child with the specified hard singleton matrix and without any sure equilibrium opening.
