@@ -728,6 +728,35 @@ tests. Its fixed payoff is (1,2,1,1/2), and the number of dates per
 cycle needed for this construction grows as log(1/epsilon).
 [Cyclic triple subdivision theorem and exact example](../exports/CYCLIC_TRIPLE_PHASE_SUBDIVISION_UNIFORM_EQUILIBRIUM.md)
 
+### When a simultaneous quit is necessary
+
+On an open region of asymmetric diamond singleton and joining rewards,
+the six-phase test decides whether terminal regret and the probability
+of a simultaneous first quit can both tend to zero. It constructs an
+exact solo equilibrium whenever the test passes. At the symmetric
+calibration the two branch players' joining factors must each belong
+to [8/9,16/17] for such an approximation. The order of distinct movers
+in an exact solo equilibrium eventually repeats X,Y,U,X,Y,V, even when
+the initial calendar is aperiodic. Under the additive completion a
+three-date joint construction supplies a uniform payoff throughout
+the entire interval of equal branch factors [0,1] under its stated
+row bounds. A second construction covers a rectangle of unequal factors.
+At factor 99/100 every sufficiently accurate behavioral profile has
+a physical date with a positive, game-dependent lower bound on the
+probability of a simultaneous first quit.
+[Diamond classification and constructions](../exports/DIAMOND_SOLO_AND_JOINT_UNIFORM_EQUILIBRIUM.md)
+
+A different open class has an exact two-date equilibrium with movers
+02 followed by 0123. Every exact two-date equilibrium there uses all
+four players on one date and at least two on the other. For sufficiently
+small common positive increases to the baseline joining rewards, every
+exact equilibrium requires three or more movers arbitrarily late.
+The proof bounds the sum of hazards on every intervening stretch of
+dates having at most two movers, regardless of its length.
+The latter conclusion concerns exact profiles. A universal
+constructor for the joint phases in arbitrary games remains open.
+[Sharp simultaneous activity](../exports/SHARP_SIMULTANEOUS_ACTIVITY_UNIFORM_EQUILIBRIUM.md)
+
 ### Returns at the nonpositive-payoff minimum
 
 Two raw subsets of the opposed-pair branch now have uniform-equilibrium

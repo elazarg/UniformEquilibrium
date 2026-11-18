@@ -2108,3 +2108,37 @@ at section SHA-256
 The factor 21/2 includes equality, the other bounds are one-sided,
 and the support test permits independent growth rates. These are
 consequences of the same positive-residual path.
+
+## Solo and joint play on the diamond
+
+DIAMOND_AUDIT and PERIODIC independently approved the
+[diamond theorem](../exports/DIAMOND_SOLO_AND_JOINT_UNIFORM_EQUILIBRIUM.md)
+at SHA-256
+`c42a3163f078ba84ceef97abb39dfd88e055e93fb0fed6548e8ec7ea5ece2646`.
+They checked the possible exceptional initial run, the two-step recurrence
+and the strict comparisons forcing alternation on the asymmetric chart.
+They tested mass escaping to Never, vanishing or macroscopic dates,
+and unilateral replacements changing the probability of reaching later
+dates. They verified that every sequence with vanishing regret and
+collision probability produces an exact solo clock, and that failure
+forces one macroscopic simultaneous first exit. They separately checked
+both scalar roots, the unequal-factor rectangle and the high-factor
+example against earlier hull, stationary, sure-head, and staggered-row
+tests. The raw data produce the hazards and the fixed target.
+
+## Four simultaneous movers in a two-date equilibrium
+
+DIAMOND_AUDIT and PERIODIC independently approved the
+[sharp activity theorem](../exports/SHARP_SIMULTANEOUS_ACTIVITY_UNIFORM_EQUILIBRIUM.md)
+at SHA-256
+`49bfdc53e389766af760c6a419d2a9bb1a11b81c4bd9ee43802aaa32461fd53b`.
+They replayed the rational box bounds, the stationary and sure-opening
+censuses, the 21 support exclusions and all 27 certificates for the
+successive pair dates. They checked that the apparently signed first
+hazard is positive at the constructed root, that all limiting masks,
+including hazards escaping to zero, are covered, and that the bounded
+potentials telescope over aperiodic stretches. The strict positive-sum
+perturbations escape the staggered two-recipient criterion for every
+assignment. The sufficient conditions are solely on the raw reward rows.
+Both proofs use the checked terminal Nash characterization. The new
+constructions and lower bounds have ordinary mathematical reviews.
