@@ -806,21 +806,37 @@ uniform equilibrium.
 
 ### When a simultaneous quit is necessary
 
-On an open region of asymmetric diamond singleton and joining rewards,
-the six-phase test decides whether terminal regret and the probability
-of a simultaneous first quit can both tend to zero. It constructs an
-exact solo equilibrium whenever the test passes. At the symmetric
-calibration the two branch players' joining factors must each belong
-to [8/9,16/17] for such an approximation. The order of distinct movers
-in an exact solo equilibrium eventually repeats X,Y,U,X,Y,V, even when
-the initial calendar is aperiodic. Under the additive completion a
-three-date joint construction supplies a uniform payoff throughout
-the entire interval of equal branch factors [0,1] under its stated
-row bounds. A second construction covers a rectangle of unequal factors.
-At factor 99/100 every sufficiently accurate behavioral profile has
-a physical date with a positive, game-dependent lower bound on the
-probability of a simultaneous first quit.
-[Diamond classification and constructions](../exports/DIAMOND_SOLO_AND_JOINT_UNIFORM_EQUILIBRIUM.md)
+For each player assume either a nonnegative own quitting reward or a
+distinct opponent whose singleton gives that player at most its own reward.
+This covers all nonnegative own levels and every full-normal-core table.
+A limiting payoff is achievable with regret and simultaneous first-exit
+probability both tending to zero exactly when a sequence with at most one
+possible quitter at every date achieves it. This includes dates that only a
+deviator can reach. Hence the set of such payoffs is fixed by the four own
+levels, twelve singleton comparisons and twelve joining entries. All other
+32 rewards may vary together arbitrarily. A signed example gives zero
+on-path collisions but solo regret at least 1/3 when a row lacks the
+required blocker. [General reduction](../exports/VANISHING_COLLISIONS_AND_SOLO_CALENDARS.md)
+
+On a signed diamond with each joining entry strictly between zero and its
+singleton comparison, the positivity of the four coefficients L in the twin
+balance equations gives a finite raw decision for this branch. A gap between
+the allowable future mass ratios for U and V bounds the number of consecutive
+future twin labels needed to recover the present label. This gives a finite
+list of periodic words and explicit payoff tests. At rational data the
+shortest exact solo period can use nine dates, with the word X,Y,U,X,Y,U,X,Y,V.
+[Finite decision and calibration](../exports/FINITE_SOLO_WORDS_ON_FOUR_PLAYER_DIAMONDS.md)
+
+On the symmetric calibration the low-collision test requires both twin
+joining factors to lie in [8/9,16/17]. At factor 99/100 every sufficiently
+accurate profile needs a date with a game-dependent positive probability
+of a simultaneous first quit. For the additive symmetric singleton diamond,
+the joint construction covers the whole square of independent twin factors
+for every f,g>0, when k_X lies in [0,1] and k_Y in [0,1/2].
+It supplies an exact three-date equilibrium on the positive-determinant
+branch. The existing determinant theorem covers the other branch for
+arbitrary completions. [Original six-date and collision classification](../exports/DIAMOND_SOLO_AND_JOINT_UNIFORM_EQUILIBRIUM.md)
+and [independent-factor construction](../exports/INDEPENDENT_TWIN_DIAMOND_UNIFORM_EQUILIBRIUM.md)
 
 A different open class has an exact two-date equilibrium with movers
 02 followed by 0123. Every exact two-date equilibrium there uses all

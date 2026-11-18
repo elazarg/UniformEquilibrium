@@ -2199,3 +2199,42 @@ endpoint bound, the original punishment inequality and the absence of
 boundary zeros throughout the homotopy. The result gives the product
 degree for all periods, including composite periods. It records a
 limitation of the method and claims no additional solved reward class.
+
+## Vanishing collisions and solo calendars
+
+JOINTDIAMOND and TRIANGLE_ATOMS approved the
+[payoff-preserving reduction](../exports/VANISHING_COLLISIONS_AND_SOLO_CALENDARS.md)
+at SHA-256 `e9ec91fb7e9e68cdfa0656b137049be8fcd19bc0f7a0e63b49f73b04ad36bad8`.
+Their falsification checks included a sole sure quitter who refuses,
+an infinite prefix with positive Never probability, deadlines created by
+serialization, and signed rewards. They verified the bounds for original
+payoffs and complete-deviation caps, the normal-core blocker and the
+1/3 signed boundary example. The previous serialization theorem requires
+uniformly small hazards, and the native hybrid theorem assumes small total
+finite-clock mass. Here any behavioral profile supplies the input. The
+28-coordinate conclusion concerns the limiting low-collision payoff set.
+
+## Finite words on a signed diamond
+
+TRIANGLE_ATOMS and POSITIVEATOM approved the
+[finite decision](../exports/FINITE_SOLO_WORDS_ON_FOUR_PLAYER_DIAMONDS.md)
+at SHA-256 `d15df5dbc2c18cb419fdff11459381bcd67a5139476db5cc3a5ff5fbe7a72675`.
+They rechecked the physical-date limit, the two-sided margin on the
+future twin masses, the common derivative domain, the unique-predecessor
+argument, the Perron selection and all nine phase comparisons. The old
+alternating test requires stronger coefficient inequalities. At the new
+example even the alternating ray violates a quiet comparison. The two
+raw matrices generate every candidate word and its equilibrium data.
+
+## Independent joining factors on the additive diamond
+
+POSITIVEATOM and DIAMOND_WORD approved the
+[joint construction](../exports/INDEPENDENT_TWIN_DIAMOND_UNIFORM_EQUILIBRIUM.md)
+at SHA-256 `e64741544d6819b16590648a8e5c818971f85e593a954cbfc779a9b7a7a0da38`.
+They independently checked the local degree using a positive slot of a
+largest-total twin, both boundary exclusions, factor-one endpoints,
+all quiet offers, and geometric absorption against every behavioral
+replacement. They verified the unrestricted determinant implication and
+the scope of the earlier diagonal, small square, solo, staggered and
+orientation tests. Every hazard comes from the raw table and degree
+argument. Only the positive-determinant case uses the three-date producer.
