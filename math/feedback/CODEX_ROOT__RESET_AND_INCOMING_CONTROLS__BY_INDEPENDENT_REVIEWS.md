@@ -2328,3 +2328,11 @@ singleton cycle, the three assignments in the two-recipient test, the
 orientation and projected-hull calculations, and the full-dimensional
 perturbation. This calibration documents separation from those specific
 previous criteria and uses the existing three-date proof.
+
+## Individual payoff and exit-law feasibility
+
+PRIOR and SUPERPOSITION independently approved the [fixed-target and forbidden-coalition theorem](../exports/FORBIDDEN_COALITIONS_AND_FIXED_TARGET_MOMENTS.md) at SHA-256 `910ecefc9508a7e3b964995b08a8f4da532c7211fa412f5d8a3b2c633385f2ba`. They tested relative regret at vanishing rates, the direction of the discounted path inequality, polynomial approximation at the initial state, each of the sixteen terminal-law coordinates, and the one-sided comparison of every deviating deadline and Never after editing dates. The result characterizes individual targets and intermediate support families from the table alone. The checked unrestricted polynomial criterion and the earlier solo approximation did not supply that conclusion. No strategy, return, or correlation device is an extra input.
+
+## Four movers forced on the first date
+
+SUPERPOSITION and QUADRATIC independently approved the [rigidity theorem](../exports/UNIQUE_FULLY_MIXED_BEHAVIORAL_QUITTING_EQUILIBRIUM.md) at SHA-256 `d52c8797c955bfd4147f1f26c1d1d4108e33104e25a8e53f319acdba682684d9`. Attempts to find an additional calendar covered sure openings at arbitrary continuations, limits with defective survival, signed translations, and the entire intrinsic payoff hull. They rederived the derivative with off-diagonal entry minus 3/32 and the strict weighted quadratic estimate. The example is solved by an interior stationary root. Its new force is uniqueness against all behavioral calendars, convergence of every vanishing-regret sequence from the first date, and exact identification of its law by degree two throughout an open class. No equilibrium, active set or tail estimate must be supplied by the caller.

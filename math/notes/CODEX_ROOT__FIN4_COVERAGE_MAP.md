@@ -26,6 +26,12 @@ solved. The source declarations cited here were inspected statically; no fresh
 Lean build was run. The new bookkeeping and compositions are ordinary
 mathematics, not additional Lean declarations.
 
+## Which exit laws remain possible
+
+On the positive-own, no-sure-opening branch with a positive sole-owner margin, one can now test a specified target payoff or the entire distribution of first quitters. At every degree, the raw table defines a convex hull and the proposed target specifies the point that must belong to it. The sixteen law coordinates include perpetual continuation. For an arbitrary list of forbidden coalitions, the same tests may use only calendars whose active players never contain one of those coalitions. Every limiting law attainable with vanishing regret and vanishing forbidden exit probability remains attainable under that stronger date-by-date restriction. In particular the support of any limiting exit law on the nonempty coalitions is downward closed. The solo case previously had a target-preserving approximation. Intermediate support families and the per-target moment equations are the additions. Existence of some target passing all degrees for every residual table is still open. [Fixed-target and forbidden-coalition theorem](../exports/FORBIDDEN_COALITIONS_AND_FIXED_TARGET_MOMENTS.md)
+
+No schedule bound of three simultaneously active players can cover arbitrary four-player games. On a rational table, every vanishing-regret sequence converges at each date to the calendar with four hazards of one half. Every nonempty first-exit coalition then has probability 1/16 on date one and 1/15 over the whole play. On an open neighborhood the unique behavioral calendar and its payoff vary with the table, and two polynomial degrees suffice to identify the only feasible target and law. Earlier four-mover necessity was limited to period two. The new example itself has a stationary equilibrium and does not eliminate a class of games that lack one. [Behavioral rigidity and the quadratic test](../exports/UNIQUE_FULLY_MIXED_BEHAVIORAL_QUITTING_EQUILIBRIUM.md)
+
 ## A finite payoff graph on the residual games
 
 After the existing all-Continue, sure-opening and sole-owner dispositions,
