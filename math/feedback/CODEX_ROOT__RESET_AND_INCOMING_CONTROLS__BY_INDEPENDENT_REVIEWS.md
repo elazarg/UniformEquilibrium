@@ -2229,7 +2229,7 @@ raw matrices generate every candidate word and its equilibrium data.
 ## Independent joining factors on the additive diamond
 
 POSITIVEATOM and DIAMOND_WORD approved the
-[joint construction](../exports/INDEPENDENT_TWIN_DIAMOND_UNIFORM_EQUILIBRIUM.md)
+[symmetric special-case proof](../notes/CODEX_ROOT__INDEPENDENT_TWIN_DIAMOND_SPECIALIZATION.md)
 at SHA-256 `e64741544d6819b16590648a8e5c818971f85e593a954cbfc779a9b7a7a0da38`.
 They independently checked the local degree using a positive slot of a
 largest-total twin, both boundary exclusions, factor-one endpoints,
@@ -2284,3 +2284,35 @@ checked the exact algebraic sign, previous-period mass and payoff calculations.
 The checker was run on both closed endpoints of the six-run calibration,
 a nine-run example, both sides of the six-run admissible interval and
 fourteen rational instances requiring six through forty-five runs.
+
+## Two raw core orientations
+
+DIAMOND_WORD and JOINTDIAMOND approved the
+[two-orientation theorem](../exports/RAW_TWO_CORE_ORIENTATIONS_UNIFORM_EQUILIBRIUM.md)
+at SHA-256 `0c877a7212bb2f5b03175c1f5a25073583c491cb338fcefc265d0cf97c04926e`.
+They independently checked elimination of the two core variables and the
+orientation of each principal index, including the case with only one
+negative recipient in the X column. Their boundary checks covered both
+choices of core signs, both twin slots, free entry perturbations at y=1,
+signed payoffs, and every unscheduled action. The raw tests produce all
+hazards and prices. The proof recovers the exact positive-determinant
+symmetric case as well as its existence conclusion. The reviewed shorter
+specialization was retained outside the formalization queue to avoid
+submitting the same class twice. The earlier raw solo criterion can have
+a strictly positive collision-or-regret floor within this new class.
+
+## Compact moment test on feasible individually rational payoffs
+
+JOINTDIAMOND and SURVIVAL approved the
+[compact moment criterion](../exports/COMPACT_PAYOFF_FLUX_MOMENTS.md)
+at SHA-256 `1ed0c8edb17dade322c2d9bc366c2cb3c5df580be09183fc7390e8b5905f1c6e`.
+They checked both directions of the exact-row and relative-regret limit,
+the rational separation margin and absorption constants, the original
+punishment-normal and no-sure-opening hypotheses, all-degree compactness,
+and the restriction to feasible individually rational continuations with
+proper rows. PRIOR checked the dual against the earlier exact singleton
+probes, cubic moment example, and polynomial characterization. The
+finite tests use only the raw table and computed punishment values;
+the probability is a mathematical witness and supplies no public
+randomization. The result is a new compact dual of the existing
+polynomial theorem. No game is claimed to fail a degree test.

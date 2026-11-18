@@ -50,6 +50,28 @@ existence: force cycles in these payoff graphs or certify a fine acyclic
 graph for a particular residual table. The universal cycle-existence
 statement is open. [Renewable blocks, period bound and payoff graph](../exports/RENEWABLE_PERIODIC_BLOCKS_AND_FINITE_PAYOFF_GRAPH.md)
 
+## A convex test on the original payoff polytope
+
+On the normal, positive-singleton, no-sure-opening branch, equilibrium
+existence is equivalent to the following raw-table condition. At every
+polynomial degree D, the convex hull of a specified list of normalized
+one-step moment changes must contain zero. At positive quit rates take
+exact independent one-stage Nash moves. At rate zero take directional
+derivatives along singleton exits for players pinned at their own quitting
+value. A single probability measure balances all the moments if and only if
+every finite-degree test passes. In degree D at most binomial(D+4,4)
+points are needed. All continuations can be confined to the convex hull of
+the fifteen exit payoffs above all four punishment values. All action rows
+there stay uniformly away from a sure quitter.
+
+The checked rational-polynomial nonexistence theorem is the source of the
+duality. Previous work already excludes low-degree potentials in the
+enclosing box and balances cubic moments on a specific table. The new
+test eliminates the relative tolerance and uses the intrinsic payoff
+polytope with explicit zero-rate rows. One infeasible intrinsic degree on
+one residual table would refute Fin4. Universal feasibility on that polytope
+remains open. [Compact moment criterion](../exports/COMPACT_PAYOFF_FLUX_MOMENTS.md)
+
 ## Universal native domain
 
 The original domain consists of 60 real rewards: four recipients at each of
@@ -872,13 +894,16 @@ sufficiently accurate profile. [Column deletion and subdivision theorem](../expo
 On the symmetric calibration the low-collision test requires both twin
 joining factors to lie in [8/9,16/17]. At factor 99/100 every sufficiently
 accurate profile needs a date with a game-dependent positive probability
-of a simultaneous first quit. For the additive symmetric singleton diamond,
-the joint construction covers the whole square of independent twin factors
-for every f,g>0, when k_X lies in [0,1] and k_Y in [0,1/2].
-It supplies an exact three-date equilibrium on the positive-determinant
-branch. The existing determinant theorem covers the other branch for
-arbitrary completions. [Original six-date and collision classification](../exports/DIAMOND_SOLO_AND_JOINT_UNIFORM_EQUILIBRIUM.md)
-and [independent-factor construction](../exports/INDEPENDENT_TWIN_DIAMOND_UNIFORM_EQUILIBRIUM.md)
+of a simultaneous first quit. A raw three-date theorem applies to two possible sign patterns
+on the core pair X,Y. The two twins' six outgoing singleton comparisons
+can be any real numbers. The core and four directed joining tests in the
+theorem allow nonlinear higher rewards. The R0, degree-one branch has an
+exact three-date profile. The existing singleton-matrix disposition
+handles the other branch. This includes all asymmetric singleton magnitudes
+of the additive diamond, for independent k_X,k_U,k_V in [0,1] and
+k_Y in [0,1/2]. The earlier symmetric proof remains available as a shorter
+specialization. [Original solo and collision classification](../exports/DIAMOND_SOLO_AND_JOINT_UNIFORM_EQUILIBRIUM.md)
+and [raw three-date theorem](../exports/RAW_TWO_CORE_ORIENTATIONS_UNIFORM_EQUILIBRIUM.md)
 
 A different open class has an exact two-date equilibrium with movers
 02 followed by 0123. Every exact two-date equilibrium there uses all
