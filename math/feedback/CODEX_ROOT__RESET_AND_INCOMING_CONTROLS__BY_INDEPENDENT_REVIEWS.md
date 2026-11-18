@@ -2186,3 +2186,16 @@ the linear complementary-vector test and the sign-pruned cyclic
 polynomial tests over exact rationals. Tests include the zero matrix,
 a non-pure constant solution, a genuine edge interval, a four-cycle
 with an irrational scale, a negative verdict and invalid inputs.
+
+## Degree over all dates in a finite period
+
+PERIODIC and TRIPLE_SOLO independently approved the
+[period degree calculation](../notes/CODEX_ROOT__FIN4_METHOD_BOUNDARIES.md#32-why-the-degree-on-a-full-periodic-hazard-cube-adds-no-stationary-test).
+The source SHA-256 with the standalone title is
+`aaffd370eeb7b540a199370f39cc1eebe1cd4dd3241e121a8a990397a619134b`.
+Only the section title changed on insertion. They verified continuity
+on the padded domain using positive-part hazards, the uniform 2Kt
+endpoint bound, the original punishment inequality and the absence of
+boundary zeros throughout the homotopy. The result gives the product
+degree for all periods, including composite periods. It records a
+limitation of the method and claims no additional solved reward class.

@@ -121,6 +121,16 @@ root. Its equilibrium uses alternating dates.
 [Joint tests, both calibrations and path proof](../exports/JOINT_RECIPIENT_AND_REVERSE_DEGREE_UNIFORM_EQUILIBRIUM.md)
 and [additive calibration](../exports/ALL_PROPORTIONAL_ADDITIVE_FOUR_PLAYER_UNIFORM_EQUILIBRIUM.md)
 
+For the entire hazard cube of a repeated calendar, the residual degree
+at period m equals the m-th power of its one-date degree when the
+original punishment bounds hold and genuine sure-quitter openings
+are excluded. A nonzero degree then supplies sure dates with any
+prescribed cyclic order of players benefiting from waiting. These
+tests already follow from the stationary hypotheses at a hard table.
+A periodic argument that distinguishes such a table must use more
+information than this total degree.
+[Period degree calculation](CODEX_ROOT__FIN4_METHOD_BOUNDARIES.md#32-why-the-degree-on-a-full-periodic-hazard-cube-adds-no-stationary-test)
+
 ### Two applications of the positive-residual path
 
 There is an explicit four-entry sufficient test. For each singleton

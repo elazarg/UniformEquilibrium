@@ -4051,3 +4051,52 @@ the first opponent exit at t. This contradicts the atom bound proved
 above on the base completion. The conclusion concerns the demand for
 one sequence shared across completions. Fin4 allows the strategies to
 depend on the entire reward table.
+
+## 32. Why the degree on a full periodic hazard cube adds no stationary test
+
+In the original four-player quitting game, write s_i for the own singleton levels and subtract these levels on nonempty exits to get native rewards. On date v of an m-periodic calendar let P_iv be the native exit contribution to waiting, Q_iv the forced Quit offer, H_iv the chance that all rivals wait, and S_v the chance everyone waits. Set
+
+    D_i=1−∏_v H_iv,
+    B_iv=Σ_(k=0)^(m−1) P_(i,v+k) ∏_(j=0)^(k−1) H_(i,v+j) − D_i Q_iv.
+
+For D_i>0 the native value N_iv of Never solves N_iv=P_iv+H_iv N_i,v+1 and B_iv=D_i(N_iv−Q_iv). If all these residuals are nonnegative, Never is a best response against the given cyclic rivals and s_i+N_iv≥μ_i, the original upper punishment value.
+
+**Necessary finite-word condition.** If there is no original uniform-equilibrium payoff, every finite cyclic word a_0,…,a_(m−1) in the owners is realizable by a calendar q satisfying the following. Every date has a sure quitter. All B_iv≥0 and all q_iv B_iv vanish except precisely at (a_v,v), where they are positive. At that date the prescribed owner is the only player with a profitable deviation in the original one-stage opening with continuation μ for a sole sure player. It acts with positive hazard and Q_(a_v,v)<P_(a_v,v). In particular, failure of any chosen finite cyclic word gives an existence theorem. The condition is semialgebraic in the table if the test retains B, the stated products, and Q_a<P_a. Labels prescribe the player benefiting from switching to Continue. The sure owner may be someone else.
+
+**The boundary argument.** At a sure date where every q_iv B_iv=0 and all dates have B≥0, every owner facing a sure rival has H_iv=0 and D_i=1. Hence P_iv≥Q_iv with equality when it acts. An unpriced sole sure owner g with D_g>0 has Q_gv=P_gv+H_gv N_g,v+1≥P_gv+H_gv(μ_g−s_g), which prices its withdrawal. If D_g=0, its rivals are always quiet and P_gv=Q_gv=0,H_gv=1. Then μ_g≤s_g, a no-UE necessity, prices withdrawal as well. Following this opening with the sole owner's approximate original punishment gives terminal Nash at every accuracy. Such an unpriced sure date is therefore impossible.
+
+On the padded cube Ω=(−1,1)^(4m), min(q,B(q)) has no nonzero closed root under no UE. With at least two effective owners, every D_i>0, the comparison with Never prices all actions, prescribed Quit is indifferent wherever used, and every unilateral replacement faces geometric absorption. This gives original terminal Nash. With a sole active owner g, run N periods and after survival switch its opponents to an original punishment within ε of μ_g≤s_g. Its earlier stops earn s_g. Any other deviator reaches the cutoff with probability at most the geometric survival of g, so the cutoff profiles give terminal Nash at every accuracy. Both conclusions give existence by the checked terminal characterization in TerminalUniformPayoffSelection.lean.
+
+The degree at zero is one. The derivative is (Lq)_iv=(Γu)_i, u_j=Σ_v q_jv. Complementarity for L collapses into that for Γ, hence L is R0 by the no-UE singleton necessity. Its degree equals that of Γ. Choose a generic target y so singular active blocks are excluded and the nonsingular active solutions at this target have strictly positive active weights and inactive slacks wherever feasible. The excluded offsets lie in finitely many proper linear subspaces or hyperplanes. Give the duplicate inequalities target y_i in one copy, y_i−1 in the others. The latter are strictly slack, so the roots and their active determinant signs coincide. All interpolating bounded offsets can be homotoped to zero on a fixed large ball by R0 and scaling. The uniform positive lower bound of ||min(q,Lq)|| on the unit sphere transfers this degree to min(q,B) by the quadratic error.
+
+For η>0 put x_iv=η²+1_(i=a_v)(η+S_v) and normalize w_iv=x_iv/Σx. These weights are continuous and strictly positive on the closed padded cube. Use the continuous field with entries (q_iv+B_iv−sqrt((q_iv−B_iv)^2+4λw_iv))/2. At λ=0 its degree is one. At λ>0 its roots have q_iv,B_iv>0 and q_iv B_iv=λw_iv. Summation gives λ≤4m max|B_iv|, uniformly in η for this fixed m, so homotopy to a larger λ must yield a spatial boundary root. Take η→0, preserving one coordinate already sure. If one limiting date were proper then the denominator Σx would stay positive and all sure dates would become unpriced, a contradiction. Every date is therefore sure. Since Σx≥mη the nondesignated weights vanish. At every date its designated product must remain positive to avoid an unpriced sure opening. All unpriced owners satisfy the genuine head comparisons just proved. Hence the designated owner must violate its own. Facing a sure rival it has Q_a<P_a. If it alone is sure its failure is Q_a<P_a+H_a(μ_a−s_a)≤P_a.
+
+**Infinite words and uniform margins.** For a sure head write C_i=P_i+H_i(μ_i−s_i). The maximal original one-stage regret is the maximum over i of (1−q_i)(Q_i−C_i) and q_i(C_i−Q_i). This is continuous on the compact union of sure faces and cannot vanish if there is no genuine punishment opening. Its minimum c is therefore positive. On each constructed date only the designated owner contributes positively, with q_a(C_a−Q_a)≥c. A pure singleton sure opening has no overquitting owner since μ_i≤s_i. Compactness thus bounds the second-largest hazard at each constructed date away from zero. Every player faces geometric rival absorption uniformly in these calendars. For any one-sided or two-sided infinite prescribed word, realize increasing centered windows by finite cyclic words and use a diagonal subsequence of the hazards and their bounded N values. The margin and recursions pass to the limit. Uniform geometric absorption identifies the limiting N with the actual Never values, giving the single-deviator property at every date of that word.
+
+**Exact degree for every period.** This criterion cannot supply a new existence class once the stationary and sure-opening alternatives have been excluded. In fact suppose only that μ_i≤s_i and that the game has no genuine sure-quitter punishment opening. Write d_m for the degree of the m-date minimum map on the padded cube. Then
+
+    d_m=(d_1)^m   for every m≥1.
+
+The m-date field is generally nonlinear and couples the dates. To prove the identity, for each t∈(0,1] consider the transition that stays on the current phase with probability 1−t and advances with probability t after survival. This defines an auxiliary field; it need not be an available strategy or a public lottery in the original game. Evaluate all hazard expressions below at q^+ in the padded cube. This agrees with the earlier extension on its nonnegative part and has the same degree, since the straight homotopy between extensions has no zeros with a negative coordinate. For one owner, suppress i and put
+
+    k_v=1−(1−t)H_v,     p_v=P_v/k_v,     h_v=tH_v/k_v,     D=1−∏_u h_u.
+    A_v=Σ_(j=0)^(m−1) p_(v+j) ∏_(l=0)^(j−1) h_(v+l),
+    B_v(t)=k_v[A_v−D Q_v].
+
+At t=1 this is the original cyclic residual. At t=0 it extends continuously to P_v−(1−H_v)Q_v, independently at each date. Indeed |p_v|≤K(1−h_v) for an absolute native reward bound K. Hence k_v A_v=P_v+t H_v R_v where the remaining m−1 summands after the first effective survival give |R_v|≤K. Also k_v D=(1−H_v)+tH_v(1−∏_(u≠v) h_u). The residuals converge uniformly with error at most 2Kt.
+
+The one-step inequality
+
+    max(Q_i(q), P_i(q)+H_i(q)(μ_i−s_i)) ≥ μ_i−s_i
+
+holds for every original opponent hazard vector. Otherwise prescribe those hazards for one opening date and follow survival by opponents' original punishment within ε of μ_i. The deviator's maximal payoff would be strictly below the defining infimum for small ε. This uses optimization against a single fixed rival profile and permits signed s_i.
+
+At a complementary root of the auxiliary field with D>0, let N_v=A_v/D. The periodic recursion gives
+
+    N_v=P_v+H_v[(1−t)N_v+tN_(v+1)],      N_v≥Q_v.
+
+In fact N_v≥μ_i−s_i everywhere. If the minimum N_* fell below μ_i−s_i, then at a minimizing date Q_v≤N_*<μ_i−s_i, hence the one-step inequality gives P_v≥(1−H_v)(μ_i−s_i). Substitution into the recursion forces H_v=1. Now P_v=0, and t>0 forces N_(v+1)=N_*. Iteration around the cycle would give H=1 at every date, contrary to D>0. This bound needs no assumption about correlated punishments or original public randomization.
+
+If that auxiliary root has a sure date, every owner facing a sure rival there has H_v=0 and hence N_v=P_v≥Q_v, with equality when acting. A sole sure owner with D>0 has equality and Q_v=P_v+H_v[(1−t)N_v+tN_(v+1)]≥P_v+H_v(μ_i−s_i). If D=0, its rivals are quiet everywhere and the usual μ_i≤s_i test applies. Thus such a root gives a genuine original sure opening, excluded by hypothesis. At t=0 the m stationary maps are independent and a boundary zero in any coordinate similarly gives a genuine opening. The whole homotopy is boundary-zero-free, and its product endpoint has degree (d_1)^m, as claimed.
+
+In particular if Γ is R0 with degree one and there is no nonzero stationary complementarity root, d_1=1. Whenever genuine sure openings are also absent, every finite-word realization and its infinite-word consequence follow from these established stationary facts alone, even if a suitable nonstationary equilibrium already exists. The period degree identity explains why changing the clock length or the order of the designated deviators does not by itself close the remaining Fin4 branch. A reduction using these calendars must exploit additional information about the interior equilibria or impose constraints beyond the total degree on the entire hazard cube.
