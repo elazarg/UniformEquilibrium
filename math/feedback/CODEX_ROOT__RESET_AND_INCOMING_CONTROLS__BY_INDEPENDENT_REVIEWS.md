@@ -2163,3 +2163,26 @@ The finite test solves for every strategic input it uses. The prior
 projective Q-bar and cyclic existence results remain sufficient criteria.
 The new necessity classifies the entire stated continuous strategy class.
 The results and the sign-map consequence are ordinary mathematics.
+
+## Continuous singleton paths at zero comparisons
+
+PERIODIC and TRIPLE_SOLO independently approved the
+[all-matrix theorem](../exports/ALL_FOUR_PLAYER_SINGLETON_PATHS_HAVE_A_FINITE_TEST.md)
+at SHA-256
+`872bbb559c267c7caac5d51f762aa4ef2565e0296d10bd4a9b248950002ab379`.
+They examined visits and accumulations at three-zero states, including
+singular principal submatrices, and motion along an edge with one or two
+zero singleton comparisons. They checked replacement of a two-color
+edge segment by a pure traversal, the rescaling of subsequent masses,
+and the perturbation of the simple closed curve at its edge segments
+and vertices. They recomputed the explicit edge trajectory and verified
+both named original-game consumers. All required payoff and hazard
+data are produced. This extends the earlier sharp nonzero-entry test
+to the remaining matrices and rules out additional continuous paths
+on those boundaries. The new classification is ordinary mathematics.
+
+The [checker](../experiments/FIN4_SINGLETON_PATH_DECISION.py) implements
+the linear complementary-vector test and the sign-pruned cyclic
+polynomial tests over exact rationals. Tests include the zero matrix,
+a non-pure constant solution, a genuine edge interval, a four-cycle
+with an irrational scale, a negative verdict and invalid inputs.

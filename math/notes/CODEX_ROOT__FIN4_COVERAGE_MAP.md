@@ -728,18 +728,38 @@ tests. Its fixed payoff is (1,2,1,1/2), and the number of dates per
 cycle needed for this construction grows as log(1/epsilon).
 [Cyclic triple subdivision theorem and exact example](../exports/CYCLIC_TRIPLE_PHASE_SUBDIVISION_UNIFORM_EQUILIBRIUM.md)
 
-### A complete generic test for continuous singleton paths
+### A complete test for continuous singleton paths on every matrix
 
-For a generic hollow singleton matrix, the search over all measurable
-continuous singleton paths reduces to at most four real scale factors.
-If each column has a negative entry, draw p→j when Γ_jp>0>Γ_pj.
-Only directed triangles and directed quadrilaterals need testing. There
-are at most two triangles and one quadrilateral. Their scale equations
-are linear for a triangle and quadratic for a quadrilateral. Positive
-phase lengths and nonnegative observer values are then linear feasibility
-conditions. A successful test gives a fixed original uniform payoff for
-any completion of the higher-coalition rewards and any signed own levels.
-A nonnegative column supplies a constant path separately.
+For every real hollow four-player singleton matrix, first test for a
+nonzero homogeneous complementary vector. If that fails, a measurable
+continuous singleton path exists exactly when a geometric triangle or
+quadrilateral of distinct players passes the phase inequalities. A
+successful test gives a fixed original uniform payoff for every completion
+of the higher rewards and arbitrary signed own levels. The homogeneous
+case uses the checked non-R0 theorem. The cycle case supplies the hazards,
+payoffs and opponent-divergence fields of the checked singleton cycle
+compiler. The proof covers zero entries, including trajectories that
+move along an edge where two continuation values vanish.
+[All-matrix path test](../exports/ALL_FOUR_PLAYER_SINGLETON_PATHS_HAVE_A_FINITE_TEST.md)
+
+With no zero off-diagonal entries, sign pruning leaves at most two
+triangles and one quadrilateral. Their scale equations have respective
+degrees one and two, giving at most four real scale factors to test
+before linear payoff feasibility. At zero entries the full polynomial
+test still applies. The [rational-input checker](../experiments/FIN4_SINGLETON_PATH_DECISION.py)
+reads a hollow four-by-four JSON matrix, from standard input or a file,
+and emits an exact constant or cyclic witness when one exists. It uses
+Python and `z3-solver`. For a case where the only eligible cycle uses
+a zero comparison, run
+
+```sh
+echo '[[0,0,-4,8],[8,0,-1,-2],[-2,8,0,-1],[-1,-2,8,0]]' | python math/experiments/FIN4_SINGLETON_PATH_DECISION.py
+```
+
+The cycle is 0123, its scale is 1/16 and its first-tour masses are
+(1/2,1/4,1/8,1/16). During the second phase two continuation values
+are zero. Its two opposite chords are mutually negative, so no
+triangle passes even the sign test.
 
 Failure of the test excludes aperiodic measurable singleton paths as
 well. With at least one positive own level, any sufficiently accurate
