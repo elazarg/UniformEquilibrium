@@ -66,4 +66,80 @@ Next complete **every** missing entry by \(K_n=n\). On this table choose a profi
 
 On the first completion each native passive payoff is the sum of that recipient's singleton comparisons against the quitters, and its native payoff for joining is the negative of that sum over the other quitters. The proportional-additive existence theorem gives a uniform-equilibrium payoff. The exact example in the singleton-path classification gives an \(\eta>0\) such that every attainable law on this completion has total joint-exit mass at least \(\eta\). Indeed each column has a negative entry, the only directed arc is \(2\to3\), and every recipient secures its own level by a constant half hazard. [Proportional-additive existence](../exports/ALL_PROPORTIONAL_ADDITIVE_FOUR_PLAYER_UNIFORM_EQUILIBRIUM.md) · [Exact matrix, finite path test and collision bound](../exports/GENERIC_FOUR_PLAYER_SINGLETON_PATH_CLASSIFICATION.md)
 
-On the second completion give every participant in a nonsingleton exit original reward \(-K\), and every outsider to it zero. At \(K>6\), any sure solo opening followed by AllContinue after a refusal is an exact equilibrium. The sole owner's refusal pays at most one and an outsider would earn \(-K\) by joining. Never guarantees each recipient at least \(-6\). If \(m_i\) denotes its probability of participating in a nonsingleton exit, its prescribed reward is at most \(6-(K+6)m_i\). Hence any attainable law has total joint-exit mass at most \(24/(K+6)\), since each such exit counts at least twice in \(\sum_i m_i\). Choose finite \(K>6\) with \(24/(K+6)<\eta/2\). The two nonempty law sets then have total variation distance at least \(\eta/2\), even with independent strategy choices on the two games. This separates first-exit laws and leaves the existence of equilibrium payoffs on arbitrary Fin4 tables open.
+## A whole affine line with incompatible equilibrium laws
+
+Keep the displayed singleton matrix Γ and all own levels equal to one. For every real v, let each outsider receive one plus the sum of its Γ entries against the quitters. A sole quitter receives one. A participant in a nonsingleton S receives
+
+    1 − ∑_{j∈S} Γ_ij + 2v.
+
+Every table on this line has an original uniform-equilibrium payoff. Nevertheless the attainable first-exit laws at v=0 are a positive distance from all those at sufficiently negative v.
+
+For v≤−1 let player 2 quit surely while everyone else waits. After a refusal everyone continues. Each outsider's advantage from joining at the opening is 2(v−Γ_i2)≤0 because the three entries are −1,2,2. Player 2 can receive at most one by refusing. For −1≤v≤0 use the matching 02|13 with multiplier one in the raw two-pair criterion. For every i, its mate j satisfies Γ_ij≤−1. Its comparison c_i=2(v−Γ_ij) is nonnegative and at least Γ_ij. Against a nonempty subset of the opposite pair the native joining reward is at most the negative of the passive reward, as required. Here native means subtracting one from each nonempty outcome for each recipient. [Two-pair criterion, equation (1)](../exports/ALL_PROPORTIONAL_ADDITIVE_FOUR_PLAYER_UNIFORM_EQUILIBRIUM.md)
+
+For 1/5≤v≤1, use a single date with hazards (1,1,(1+v)/2,(2−v)/5). Every owner faces a sure rival, and its native Quit advantage is twice v−(Γq)_i. For 0 and 1 these half-advantages are (5v−1)/2 and (22−v)/5. Both other owners are indifferent. For 1≤v≤3 use the sure coalition 123. The row sums against it are (3,1,−1,−2). For v≥3 let everyone quit surely. The full row sums are (3,−4,−3,1). These profiles are exact against every unilateral behavioral alternative.
+
+For 0≤v≤1/5 alternate the pairs 02 and 13. Write j for i's mate, O for the opposite pair, z=q_j, a=−Γ_ij, J=a+2v, c=2a+2v, P=∑_{k∈O}Γ_ik q_k and H=∏_{k∈O}(1−q_k). The native values at the player's scheduled and opposite dates are U=Jz and W=cz/(1−z), respectively. At the scheduled date these give exact indifference, since Wait earns Γ_ij z+(1−z)W. At the opposite date Wait earns P+HU. Thus its required value equation is
+
+    F_i(q,v)=(1−z)P−az−(a+2v)z[1−(1−z)H]=0.
+
+The certificate below gives a simultaneous solution with each q_i>0.016 and every sum of two hazards below 0.11. At an opposite date, Quit earns −P+2v(1−H). From the value equation the advantage of waiting is
+
+    2cz/(1−z)−HJz−2v(1−H) ≥ 3az−2v∑_{k∈O}q_k > 0.004.
+
+Each owner's rivals absorb with geometric tails under any unilateral deviation on this repeated two-date calendar, so the value equations price every stopping deadline and Never. The two-date calendar gives an exact terminal Nash profile and its fixed original uniform-equilibrium payoff.
+
+**Rational certificate.** In each of eight parameter intervals the map q↦q−BF(q,v) maps a closed radius-1/1000 box into itself with sup-norm Lipschitz constant below 0.217. Its self-map bound divided by the radius is below 0.818. In particular B is invertible, since I−B∂F has norm below one. Every interval is closed and no choice of a common root at a shared endpoint is required. The following Python uses exact rational arithmetic. In the Jacobian error bound at fixed v, the mate derivative contains −P−a−(a+2v)(1−H+2zH), whose last factor changes by at most 4r. An opposite derivative contains z(1−z)(1−q_l), changing by at most 1.07r since z<0.07. The central residual and Jacobian are affine in v, so endpoint bounds suffice.
+
+```python
+from fractions import Fraction as F
+from math import prod
+G=((0,-1,-1,5),(-5,0,2,-1),(-2,4,0,-5),(3,-4,2,0))
+mate=(2,3,0,1)
+B=((-665,-123,-595,-344),(-1144,22,-1078,-844),
+   (-2053,248,-1985,-1180),(-596,73,-779,-507))
+B=[[F(b,1000) for b in row] for row in B]
+ends=((20149,40192,63515,23259),(19748,39475,62320,22861),
+      (19363,38784,61169,22477),(18992,38116,60060,22106),
+      (18635,37471,58991,21746),(18291,36847,57959,21398),
+      (17960,36244,56963,21062),(17640,35660,56001,20735),
+      (17332,35095,55070,20418))
+I=range(4)
+r=F(1,1000)
+def fields(q,v):
+    A=[[F(0) for k in I] for i in I]
+    f=[]
+    for i in I:
+        j=mate[i]; O=[k for k in I if k not in (i,j)]
+        a=-G[i][j]; z=q[j]
+        P=sum(G[i][k]*q[k] for k in O); H=prod(1-q[k] for k in O)
+        f.append((1-z)*P-a*z-(a+2*v)*z*(1-(1-z)*H))
+        A[i][j]=-P-a-(a+2*v)*(1-H+2*z*H)
+        for k in O:
+            A[i][k]=(1-z)*G[i][k]-(a+2*v)*z*(1-z)*prod(1-q[l] for l in O if l!=k)
+    return f,A
+for n in range(8):
+    q=[F(x+y,2000000) for x,y in zip(ends[n],ends[n+1])]
+    vs=[F(n,40),F(n+1,40)]
+    residual=max(abs(sum(B[i][k]*f for k,f in enumerate(fields(q,v)[0]))) for i in I for v in vs)
+    # Every partial derivative is multiaffine in all inputs except the term
+    # z(1-z), increasing for z<1/2. A bound from the center's Jacobian:
+    # its separate dependence on v is affine. In a radius-r box,
+    # |delta P| <= r*sum |G_ik|, |delta(1-H+2zH)|<=4r;
+    # |delta[z(1-z)(1-q_l)]| <= (1+max q)r <= 1.07r.
+    E=[]
+    for i in I:
+        j=mate[i]; a=-G[i][j]; O=[k for k in I if k not in (i,j)]
+        es=[F(0) for k in I]
+        es[j]=r*(sum(abs(G[i][k]) for k in O)+4*(a+2*vs[1]))
+        for k in O:
+            es[k]=r*(abs(G[i][k])+F(107,100)*(a+2*vs[1]))
+        E.append(es)
+    R=max(sum(abs((i==k)-sum(B[i][l]*A[l][k] for l in I))
+              +sum(abs(B[i][l])*E[l][k] for l in I) for k in I)
+          for i in I for v in vs for A in [fields(q,v)[1]])
+    assert min(q)-r>F(16,1000) and max(q)+r<F(66,1000)
+    assert sum(sorted(q)[-2:])+2*r<F(11,100)
+    assert R<F(217,1000) and R+residual/r<F(818,1000)
+```
+
+At v=0 the singleton-path result above supplies η>0 such that every attainable law gives joint exits mass at least η. Set K=−2v>2. On this same line a nonjoining recipient gets at most 6, and a nonsingleton participant gets at most 8−K. Never guarantees each player at least −6. If its probability of participating in a nonsingleton exit is m_i, a profile with exploitability e therefore satisfies (K−2)m_i≤12+e. Each joint exit counts at least twice in ∑m_i. Passing to a limiting law gives total joint mass at most 24/(K−2). For K>2+48/η the two sets of attainable laws have total variation distance at least η/2. This separation holds even when each table chooses its own behavioral profiles.
