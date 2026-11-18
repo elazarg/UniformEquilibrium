@@ -905,6 +905,13 @@ k_Y in [0,1/2]. The earlier symmetric proof remains available as a shorter
 specialization. [Original solo and collision classification](../exports/DIAMOND_SOLO_AND_JOINT_UNIFORM_EQUILIBRIUM.md)
 and [raw three-date theorem](../exports/RAW_TWO_CORE_ORIENTATIONS_UNIFORM_EQUILIBRIUM.md)
 
+There is also a non-diamond singleton matrix with an open set of nonlinear
+completions on which three dates give exact equilibrium. Every sufficiently
+accurate equilibrium needs positive simultaneous first-exit probability.
+Stationary profiles, sure openings, the two-unrestricted-recipient assignments
+and the named orientation predicates all fail there.
+[Separating example and exact checks](CODEX_ROOT__SEPARATING_TWO_CORE_CALIBRATION.md)
+
 A different open class has an exact two-date equilibrium with movers
 02 followed by 0123. Every exact two-date equilibrium there uses all
 four players on one date and at least two on the other. For sufficiently

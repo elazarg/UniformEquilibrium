@@ -2316,3 +2316,15 @@ finite tests use only the raw table and computed punishment values;
 the probability is a mathematical witness and supplies no public
 randomization. The result is a new compact dual of the existing
 polynomial theorem. No game is claimed to fail a degree test.
+
+## Non-diamond calibration of the two-core construction
+
+APPENDIX_CHECK and CALIBRATION_SECOND independently approved the
+[worked comparison](../notes/CODEX_ROOT__SEPARATING_TWO_CORE_CALIBRATION.md)
+at SHA-256 `b2e3a6c689ece4627bd2c921b22f8f9584726986dd5b13bdb01d2aba4a243594`.
+Both reran the exact eighty-stratum stationary and sure-opening check.
+They verified the principal minors, wrong-signed quiet tail of the only
+singleton cycle, the three assignments in the two-recipient test, the
+orientation and projected-hull calculations, and the full-dimensional
+perturbation. This calibration documents separation from those specific
+previous criteria and uses the existing three-date proof.
