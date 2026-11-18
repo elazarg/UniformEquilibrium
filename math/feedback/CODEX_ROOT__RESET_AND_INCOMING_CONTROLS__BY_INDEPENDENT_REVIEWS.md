@@ -2142,3 +2142,24 @@ perturbations escape the staggered two-recipient criterion for every
 assignment. The sufficient conditions are solely on the raw reward rows.
 Both proofs use the checked terminal Nash characterization. The new
 constructions and lower bounds have ordinary mathematical reviews.
+
+## Finite decision for continuous singleton paths
+
+PERIODIC and TRIPLE_SOLO independently approved the
+[generic path classification](../exports/GENERIC_FOUR_PLAYER_SINGLETON_PATH_CLASSIFICATION.md)
+at SHA-256
+`f2c3e2a061030c1a7545935814dc9f2f05882481444386becd0d7d8411ee3fde`.
+They checked recurrence in the compact space of complete trajectories,
+the exclusion of infinitely many switches at an interior three-zero
+contact, and the Jordan curve argument for repeated edge crossings.
+They tested loops passing through vertices and singular matrices
+without a nonnegative kernel vector. They verified the degree of the
+four candidate scale equations, the two raw examples, and the six-date
+example distinguishing continuous from atomic solo play. The mesh
+construction prices every complete behavioral deviation and gives the
+fixed target. The converse distinguishes a large first exit from a
+simultaneous first exit and verifies the raw pair condition row by row.
+The finite test solves for every strategic input it uses. The prior
+projective Q-bar and cyclic existence results remain sufficient criteria.
+The new necessity classifies the entire stated continuous strategy class.
+The results and the sign-map consequence are ordinary mathematics.

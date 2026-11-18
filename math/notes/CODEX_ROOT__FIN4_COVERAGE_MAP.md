@@ -728,6 +728,52 @@ tests. Its fixed payoff is (1,2,1,1/2), and the number of dates per
 cycle needed for this construction grows as log(1/epsilon).
 [Cyclic triple subdivision theorem and exact example](../exports/CYCLIC_TRIPLE_PHASE_SUBDIVISION_UNIFORM_EQUILIBRIUM.md)
 
+### A complete generic test for continuous singleton paths
+
+For a generic hollow singleton matrix, the search over all measurable
+continuous singleton paths reduces to at most four real scale factors.
+If each column has a negative entry, draw p→j when Γ_jp>0>Γ_pj.
+Only directed triangles and directed quadrilaterals need testing. There
+are at most two triangles and one quadrilateral. Their scale equations
+are linear for a triangle and quadratic for a quadrilateral. Positive
+phase lengths and nonnegative observer values are then linear feasibility
+conditions. A successful test gives a fixed original uniform payoff for
+any completion of the higher-coalition rewards and any signed own levels.
+A nonnegative column supplies a constant path separately.
+
+Failure of the test excludes aperiodic measurable singleton paths as
+well. With at least one positive own level, any sufficiently accurate
+profile then needs a physical date with positive, uniformly bounded-below
+first-exit probability. If J_ij≥0 whenever Γ_ij<0, the first exit on
+such a date must have uniformly positive probability of being
+simultaneous. The rowwise security condition μ_i≥s_i implies this raw
+pair test in its row, by facing a sure singleton opponent j. The two
+conclusions have different scopes. The six-date diamond below has an
+exact solo equilibrium even though its continuous path test fails.
+[Generic finite path classification](../exports/GENERIC_FOUR_PLAYER_SINGLETON_PATH_CLASSIFICATION.md)
+
+There is a shorter sign map for the generic singleton matrix of a
+possible counterexample. A directed Hamiltonian cycle is already
+excluded. If neither opposite chord is mutually negative, apply the
+[no-mutually-negative-pair theorem](../exports/NO_MUTUALLY_NEGATIVE_SINGLETON_PAIR_UNIFORM_EQUILIBRIUM.md).
+With exactly one such chord apply the
+[negative-chord theorem](../exports/NEGATIVE_CHORD_HAMILTONIAN_UNIFORM_EQUILIBRIUM.md).
+With two, each row has only one positive supplier, and each supplier is
+needed for the standard Q problem at any strictly positive target y.
+Its solution is full, Γx=y. Hence Γ is onto and Γ inverse is
+nonnegative by taking limits of positive targets along coordinate rays.
+The checked nonnegative-inverse criterion rules this out.
+
+Thus a generic candidate has an acyclic mixed-sign graph, exactly one
+directed triangle, or two directed triangles sharing an arc. In the
+last case the remaining two players are mutually negative. Indeed any
+orientation of their pair would give a Hamiltonian cycle, while a
+mutually positive pair would leave no mutually negative pair at all.
+This gives the diamond topology. Every triangle present must fail its
+continuous feasibility test. These alternatives concern only singleton
+data. The simultaneous rewards still determine whether the game has a
+uniform equilibrium.
+
 ### When a simultaneous quit is necessary
 
 On an open region of asymmetric diamond singleton and joining rewards,
