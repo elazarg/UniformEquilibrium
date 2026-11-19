@@ -430,3 +430,37 @@ $$X-2Y+(1+A_v/R)Z\ge0.$$
 Indeed $G_{bv}=1$, $G_{av}=-1$, $G_{va}=2$, $G_{vb}=G_{vu}=-1$. The odds and the test use only the difference of the two payoffs across each withdrawal edge, so apply to both choices of $L$. If $R+A_v\ge2L$ then $(1+A_v/R)Z\ge 2Y$. If $A_u\ge N\sqrt{2R}$ then $X>2Y$. [Sure-opening criterion](FIVE_NONSINGLETON_REWARDS_AND_THE_SIX_ENTRY_FRONTIER.md)
 
 It remains to consider $N>R/(2K)$, $A_v<2L<2KN$, $A_u<N\sqrt{2R}$. Choose $C$ large enough that $C/2\ge M$, $2/C\le\delta$, and $\sqrt{2/C}\le\delta$, where $M,\delta$ are the constants of the four-date theorem above. Then $N\ge M$ and $R/(1+K)^2\ge M$. Furthermore $A_v/(NR)<2K/R\le 2/C$ and $A_u/[NR/(1+K)^2]<\sqrt{2}(1+K)^2/\sqrt R\le\delta$. The four-date theorem applies.
+
+### The passive withdrawal with four unrestricted prices
+
+At witness 6, with $a=3,b=2$ and **either** implementation of each withdrawal, there is $C<\infty$ such that every
+$$R\ge C(1+K)^6$$
+has an original uniform-equilibrium payoff, independently of **all** $L,N,A_u,A_v>0$ and the signed own singleton levels. For the participating withdrawal of size $N$ the preceding result gives the fourth power and an exact equilibrium. Here the withdrawal is $Z_u(vb)=N$. The two mates are symmetric. The sure tests above reduce the problem to
+$$L<KN,\qquad N>R/(2K),\qquad A_u/N<\sqrt{2R},\qquad A_v/N<2K.$$
+All implicit constants below are absolute. Bounds required to be small can be achieved by increasing $C$.
+
+**A full date and its predecessor.** Use $y\in[1/50,3/2]$ and $x\in[x_-,x_+]$, where
+$$x_-=8/\sqrt R,\qquad x_+=\begin{cases}y&K\le1,\\1/[200(1+K)]&K>1.\end{cases}$$
+In order $u,v,b,a$ use full-date odds $x,y,s,w$ where
+$$ w=\frac{x+y}{1+Rxy},\qquad z=Ns=\frac{1-x/y}{1-(A_u/N)w+(A_v/N)(x/y)w}.$$
+Here $w\le2/(Rx)$, $2w<x$ and $(A_u/N)w<1/2$. Thus $0\le z\le2$, $(z-1)_+=O(1/(x\sqrt R))$. Put $d=K-(L/N)z$, and use $r=K$ for passive $L$ or $r=d$ for participating $L$. Both mates on this date require the same continuation $h$, and the two outsiders require $0$ and $A$, respectively:
+$$h=x+s-2w+A_vsxw,\qquad A=x+y-2s+dxy.$$
+Indeed the other mate requires $y+s-2w+A_usyw-Nsy=h$, and $Rxyw=x+y-w$ ties $b$. The outputs $(U,V,B,D)$ at these indifferences are
+$$U=\frac{A_usyw}{(1+y)(1+s)(1+w)},\quad V=\frac{A_vsxw}{(1+x)(1+s)(1+w)},\quad B=\frac{x+y-w}{(1+x)(1+y)(1+w)},\quad D=\frac{rxy}{(1+x)(1+y)(1+s)}.$$
+In particular $h>0$, $U=O(1/(x\sqrt R))=O(1)$, $V=O(K/R)$. Uniformly $h=x+O((1+K)/\sqrt R)$ and $A\ge x+y-O((1+K)/\sqrt R)$.
+
+Prepend a $uva$ date with odds $P=V+2t$, $Q=U+2t$, $t$ in that order. The mates then tie at zero. The required tie for $a$ is
+$$F=D-P-Q-KPQ=0.$$
+When it holds the new $a$ value is $D_1=KPQ/[(1+P)(1+Q)]$. The new $b$ value from waiting is $B_1=(B+P+Q-t)/[(1+P)(1+Q)(1+t)]$; its guard is $B+P+Q-t\ge RPQt$. Link the two intervals $(x,t)=(x_-,t)$, $16(1+K)/\sqrt R\ge t\ge0$, and $(x,t)=(x,0)$, $x_-\le x\le x_+$. Their concatenation is one rectangle coordinate. Along with $y$, all offers are continuous. The formulas for $D_1,B_1$ define trial values everywhere.
+
+At the first endpoint $D\le Kx_-$, so $F<0$. At the last endpoint when $K\le1$ we have $x=y$, $z=0$, $U=V=0$ and $D>0$. When $K>1$, there $1-z\ge c x$ with a universal $c>0$: the numerator of $1-z$ is at least $x/y-O(1/(x\sqrt R))$ and the denominator is bounded above and below. Hence $D\ge c'Kx^2$ for either choice of $L$, while $U+V+KUV=O((1+K)/\sqrt R+K/R+K^2(1+K)/R^{3/2})$. With $R\ge C(1+K)^6$ this is strictly below $D$. Thus $F>0$ along the other face.
+
+**Closing the return.** Before this predecessor insert successive $uva$ dates with odds $(2p,2p,p)$, where $4p+4Kp^2=D_j$. The update is
+$$D_{j+1}=4Kp^2/(1+2p)^2,\qquad B_{j+1}=(B_j+3p)/[(1+2p)^2(1+p)].$$
+The two mate values stay zero and $a$ ties. Over the entire trial rectangle $P=O((1+K)/\sqrt R)$, $Q=O(1)$, hence $D_1=O(K(1+K)/\sqrt R)$ and $KD_1$ is small. The bound $D_{j+1}\le K D_j^2/4$ implies uniform geometric decrease. The $B_j$ are uniformly bounded (each update is an expected waiting payoff using bounded baseline entries), and $|B_{j+1}-B_j|=O(D_j)$. Thus $B_\infty$ exists continuously and $B_\infty=B_1+O(D_1)$.
+
+Starting with the putative seed $(0,0,B_\infty,0)$, prepend solo $a$ with odds $B_\infty$ and solo $b$ with odds $[2B_\infty-(1+B_\infty)h]/[(1+B_\infty)(1+h)]$. Matching the required continuation $(h,h,0,A)$ is equivalent to
+$$J=B_\infty(4-2h-3A)-(A+2h)=0.$$
+Use the formula for $J$ as a trial residual on the whole rectangle. Uniformly $B_\infty\ge B-o(1)>0$ and $B_\infty\le1+o(1)$, where $o(1)$ tends uniformly to zero as $C$ increases: $B\le1$, $P,t,D_1=o(1)$ and $(B+Q)/(1+Q)\ge B$. At $y=3/2$ we have $A\ge3/2-o(1)$ and $J<0$. At $y=1/50$ we have $x\le y$, $h=x+o(1)$, $A\le x+y+Kxy\le x+1.02y$, and $B\ge(x+y)/(1+y)^2-o(1)$. Thus $4-2h-3A>3.8$ there for large $C$ and $J>0$, since $3.8(x+y)/(1.02)^2>3x+1.02y$. Poincaré–Miranda gives a common zero of $F,J$. At the zero $A,h,B_\infty>0$, so the solo $b$ odds are positive: $2B_\infty-(1+B_\infty)h=A(1+3B_\infty)/2$. Both solo movers tie at zero, and quiet players there receive nonnegative values against zero immediate offers.
+
+On the first predecessor, if $t=0$ then the quiet $b$ guard holds. If $t>0$ then $x=x_-$ and $F=0$ implies $P,Q,t\le D\le8K/\sqrt R$, so $RPQt=O(K^3/\sqrt R)$ is small compared with $B$. At this zero $D_1=O((1+K)^3/R)$: for $t>0$ use these sharper bounds, and for $t=0$ use $P=V=O(K/R)$, $Q=U=O(1)$. All later quiet-$b$ guards follow since the respective offers in waiting-numerator units are $4Rp^3=O(RD_1^3)=O((1+K)^9/R^2)$ while all $B_j$ are bounded below by a positive constant. All four actions on the full date meet their comparisons even at a zero hazard, by the displayed ties. Truncate the quiet prefix and repeat the resulting finite block. Its prescribed and optimal reply payoffs at the seed agree and approach the seed. Each deviator faces at least one of the two fixed positive solo hazards per block, giving a common contraction below one. Actual terminal regret tends to zero and row translations restore the original signed target. [Truncated-return argument](FIVE_NONSINGLETON_REWARDS_AND_THE_SIX_ENTRY_FRONTIER.md)
