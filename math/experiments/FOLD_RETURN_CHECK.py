@@ -1,4 +1,4 @@
-"""Verify the finite inequalities for the nonperiodic matched saddle-node return.
+"""Verify the finite inequalities for the periodic matched saddle-node return.
 
 All intervals use signed integers at scale 2**210 and outward rounding. The
 Sturm isolation of the algebraic equilibrium is given in the accompanying
@@ -235,9 +235,14 @@ def local_checks():
         J = deriv(V)
         es = sum((q.abs() for q in J[0][1:]))
         ss = max((sum((q.abs() for q in row[1:])) for row in J[1:]))
-        upper = -low_center + 4 * es
+        # For u >= 10^-4 and delta <= 10^-11, delta / u^2 <= .001.
+        p = [y / (y - c) for y in V[2:]]
+        par = project([iv(0), iv(0), iv(0), p[0] * p[1]])
+        assert par[0].r < 0 and max(v.abs() for v in par) < 2
+        upper = -low_center + 4 * es + Q(2, 1000)
+        assert upper < Q('2.01')
         assert -high_center - 4 * es > Q('.66') and 1 - upper * hi > 0
-        assert stable + 4 * ss < 4 * (1 - upper * hi) ** 2 and guards(V)
+        assert stable + 4 * ss + Q(2, 1000) < 4 * (1 - upper * hi) ** 2 and guards(V)
 
 
 def take(l, h, k=75):
@@ -266,7 +271,7 @@ def take(l, h, k=75):
             x, R = step(x, R)
         out = [z.expand(s) for z, s in zip(project([a - b for a, b in zip(x, fixed)]), R)]
         u0 = Q(out[0].l, D)
-        return 0 < u0 and out[0].r * 50 < D and (max((z.abs() for z in out[1:])) < 4 * u0 * u0)
+        return Q(1, 200) < u0 and out[0].r * 50 < D and (max((z.abs() for z in out[1:])) < 4 * u0 * u0)
     except ZeroDivisionError:
         return False
 
@@ -291,6 +296,10 @@ def exit_transfer(center, width, stable, tangents, check_guards):
     radii = [r + d for r, d in zip([width, stable, stable, stable], noise)]
     pairs = list(combinations(range(4), 2))
     wedge = Q(1)
+    # Bound the parameter tangent wedged against the normalized first column.
+    parameter_wedge = Q(0)
+    output_norm = max(sum((P[i][a]*P[j][b] - P[i][b]*P[j][a]).abs()
+                          for a, b in pairs) for i, j in pairs)
     speed = Q(1)
     tangent = [iv(1)] + [iv(0).expand(Q(1, 4)) for _ in range(3)]
     for k in range(1500):
@@ -308,6 +317,12 @@ def exit_transfer(center, width, stable, tangents, check_guards):
             w = speed * Q(v[0].l, D)
             speed = Q(D * w.numerator // w.denominator, D)
             tangent = [iv(1)] + [s / v[0] for s in v[1:]]
+            rates = [y / (y - c) for y in V[2:]]
+            force = project([iv(0), iv(0), iv(0), rates[0] * rates[1]])
+            injection = max((tangent[i]*force[j] - tangent[j]*force[i]).abs()
+                            for i, j in pairs)
+            w = norm * parameter_wedge / Q(v[0].l, D) + injection
+            parameter_wedge = Q(-(-D * w.numerator // w.denominator), D)
         ps = [y / (y - c) for y in x[2:]]
         C = (1 - ps[0]) * (1 - ps[1])
         joint = ps[0] * ps[1]
@@ -317,7 +332,9 @@ def exit_transfer(center, width, stable, tangents, check_guards):
         radii = [Q(-(-D * w.numerator // w.denominator), D) for w in rs]
         x = list(map(mid, out))
     if tangents:
-        assert wedge < Q(1, 10 ** 20) and speed > 1 and (mv(P, tangent)[2].r < -Q('.01') * D)
+        section_slope = -Q(mv(P, tangent)[2].r, D)
+        assert wedge < Q(1, 10 ** 20) and speed > 1 and section_slope > Q('.01')
+        assert output_norm * parameter_wedge < 2000 * section_slope
     return enlarge(x, [sum((a.abs() * r for a, r in zip(row, radii))) for row in P])
 
 def exit_tile(k):
@@ -342,7 +359,7 @@ def fixed_checks():
     assert r.l > D * Q('1.29506724') and r.r < D * Q('1.29506778')
     assert s.l > D * Q('.06627961') and s.r < D * Q('.06628006')
     assert x.l > D * Q('.43382544') and x.r < D * Q('.43382561')
-    assert V[3].l > D * Q('-.0114') and V[3].r < D * Q('-.0112')
+    assert V[3].l > D * Q('-.01133') and V[3].r < D * Q('-.01131')
     low = orbit(Q('.57'), 1502, Q(1, 100000))
     high = orbit(Q('.80'), 1500, Q(1, 100000))
     difference = [a - b for a, b in zip(low, high)]
@@ -350,13 +367,24 @@ def fixed_checks():
     assert max((x.abs() for x in difference[1:])) < Q('0.00000000091')
     assert low[0].l > 0 and high[0].l > 0 and (max((x.abs() for x in low + high)) < Q('.000704'))
 if __name__ == '__main__':
+    fixed_checks()
+    # Include the entire one-sided scalar interval in every subsequent enclosure.
+    width = Q(1, 10**11)
+    assert Q(t.r, D) < Q(-203446, 610585) < Q(t.l, D) + width
+    t = I(t.l, t.r + I.c(width).r)
     local_checks()
-    print('Verified the cone and invariant strips.', flush=True)
+    upper = exit_transfer(UC - RR, 0, ZR, False, False)
+    lower = exit_transfer(UC + RR, 0, ZR, False, False)
+    assert upper[2].l > 0 and lower[2].r < 0
+    low = orbit(Q('.57'), 1502, Q(1, 100000))
+    high = orbit(Q('.80'), 1500, Q(1, 100000))
+    difference = [a - b for a, b in zip(low, high)]
+    assert difference[0].l > D * 4 * max(v.abs() for v in difference[1:])
+    assert low[0].l > 0 and high[0].l > 0 and max(v.abs() for v in low + high) < Q('.00071')
+    print('Verified the relative phase, transverse faces and invariant strips.', flush=True)
     with Pool(4) as pool:
         edges = [Q(57 + k, 100) for k in range(24)]
         counts = pool.map(tile, zip(edges, edges[1:]))
         print(f'Verified {sum(counts)} entrance intervals.', flush=True)
         assert set(pool.map(exit_tile, range(32))) == set(range(32))
-        print('Verified 32 transverse exit tiles.', flush=True)
-    fixed_checks()
-    print('Verified the relative entrance phase and strict reinjection.', flush=True)
+    print('Verified 32 exit tiles and reinjection for 0 <= t-tau <= 10^-11.', flush=True)
