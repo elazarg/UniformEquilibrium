@@ -146,6 +146,83 @@ In particular the three-date theorem applies throughout these twenty-three sign 
 
 The count uses the previously verified singleton census. For each eligible ternary sign orbit in each stratum, try the 24 assignments to the labels in the displayed inequalities. All eligible orbits pass, giving respective counts $8/8$, $11/11$, $4/4$. At least one valid assignment has $G_{02}<0$ by swapping the mates.
 
+### An exact three-date equilibrium with two different triple dates
+
+Take $a=2,b=3$ in the six-entry template. Write $u$ for the mate owning the $N$ withdrawal and $v$ for the other mate. For every eligible strict or tied singleton matrix and both choices of withdrawing mate there is a constant $c_0>0$ depending only on singleton data with the following consequence. The original game has a uniform-equilibrium payoff whenever $K\le K_*(G)$ or
+\[
+ R_b\le c_0\min(A_L,A_N),\quad
+ A_L=\begin{cases}K & \text{negative participating }L,\\
+ \min(K,\max(K^{3/4},K^{4/3}/L^{1/3})) & \text{positive passive }L,\end{cases}
+ \qquad A_N=\begin{cases}+\infty&G_{bv}<0,\\ K^{3/2}/N&G_{bv}\ge0.\end{cases}
+\]
+Neither positive grand $R_u,R_v$ enters the comparison, and either implementation of $N$ is allowed. In particular a sufficiently small $R_b$ alone suffices independently of the other five prices if $G_{bv}<0$. This covers both choices of withdrawing mate throughout the strict chambers of witnesses 6, 15 and 18, and one choice in each other strict six-entry chamber.
+
+Use the positive axis from the earlier reduction and normalize it as $(\xi,\upsilon,\omega,1)$ in the order $u,v,a,b$. Write $G_{uv}=-m,G_{vu}=-n,G_{ua}=-e,G_{va}=-f,G_{ub}=c,G_{vb}=d,G_{au}=h,G_{av}=i,G_{ab}=-j,G_{bu}=-k,G_{bv}=-l,G_{ba}=g$. Thus $c,d,g,j,m,n>0$, while the remaining letters need not be positive. Put $D=h\xi+i\upsilon$ and $\Delta=D-j>0$. On the unresolved branch $K\ge K_*=D/P$ and $L<KN/m$. In the earlier three-date formula $\sigma=P/(\xi\upsilon)$ solves
+\[
+ \Delta=[D(1+\omega)+j(\xi+\upsilon)]\sigma+j\xi\upsilon\sigma^2.
+\]
+
+Consider a repeating calendar with successive dates $\alpha=(u,v,a)$, a solo $b$ of probability $S$, and $\beta=(u,v,b)$. First consider the limiting case with an empty $\beta$ date and $R_b=0$. Take odds $(\xi S,\upsilon S,\omega S)$ on $\alpha$. The two mates' values at $\alpha$ vanish, and $b$ receives zero there by its balanced axis row. The indifference equation of $a$ is
+\[
+ K\xi\upsilon S^2\frac{1+\xi+\upsilon+\xi\upsilon S}{(1+\xi S)(1+\upsilon S)}=\Delta .\tag{1}
+\]
+The left side increases strictly from zero to infinity. At its root the waiting guard of $a$ on the solo $b$ date is $K\xi\upsilon S^2\ge DS$. Substituting (1) gives $S\le S_c$, where $\Delta=[D+j(\xi+\upsilon)]S_c+j\xi\upsilon S_c^2$. Thus $\sigma<S_c<1$ and $K_*>D/(\xi\upsilon S_c)$. At every $K\ge K_*$ the solution of (1) gives a strict guard and $S<1$.
+
+Now fix a small constant $\delta>0$ depending only on $G$. We will take $0<s\le\delta S$, with $s\le\delta/N$ also imposed if $l\le0$. We prescribe $s$ as the actual value of the quiet $b$ at $\alpha$. On $\beta$ use odds $(U,V,B)$ given by
+\[
+ U=dB/n,\qquad V=cB/(m-NB),\qquad kU+lV=s,\qquad 0<B<m/N .
+\]
+The final left side equals $(kd/n+lc/m)B+l[V-cB/m]$. The coefficient $kd/n+lc/m$ is $\det G_{uvb,uvb}/(mn)>0$ by the positive $a$-diagonal cofactor. If $l>0$ the expression strictly increases from zero to infinity, and $U,V,B=O_G(s)$ uniformly in $N$. Indeed $B\le s/(kd/n+lc/m)$ and $lV=s-kU$. For $l\le0$ the difference from its linear part is $lcNB^2/[m(m-NB)]$. On $0\le NB\le\eta(G)$ the derivative of this difference is bounded by a constant times $\eta$. On that interval the whole derivative is therefore at least $(kd/n+lc/m)/2$ for sufficiently small $\eta$. Every $s\le\delta/N$ is attained uniquely there for sufficiently small $\delta$, again with $U,V,B=O_G(s)$. Write $p=NV B/[(1+V)(1+B)]$ if $u$ has a negative participating withdrawal and $p=0$ otherwise. Then $0\le p\le mV$. When the following $\alpha$ values of $u,v$ are zero and that of $b$ is $s$, their respective expected payments on $\beta$ are $-p,0,0$, equal to each mover's forced offers. For $u$ the two implementations give the same indifference equation $-mV+cB+NVB=0$.
+
+Let $(X,Y,W)$ be the odds on $\alpha$. Set
+\[
+ X=(dS-fW)/n,\qquad Y=[cS-eW-(1-S)p]/m,
+ \qquad gW-kX-lY=s(1+X)(1+Y)(1+W).
+\]
+The first two equations make both mates indifferent at zero using their values on the solo date. The third gives $b$ its prescribed value $s$. At $s=p=0$ their solution is $(\xi,\upsilon,\omega)S$. The left side of the last equation has slope $g+k f/n+l e/m=(kd/n+lc/m)/\omega>0$ in $W$, by the axis equations. On a bounded interval around $\omega S$ the derivative of the right side is $O_G(s)$, and the residual at $\omega S$ is $O_G(s)$. Taking the unique nearby root yields a continuous solution $(X,Y,W)=(\xi,\upsilon,\omega)S+O_G(s)$, positive whenever $s/S$ is sufficiently small. All constants here are independent of the six price sizes.
+
+Write $A=KXY/[(1+X)(1+Y)]$, the forced value of $a$ at $\alpha$, and $D_\beta=(1+U)(1+V)(1+B)$. The passive value at $\beta$ is
+\[
+ A_\beta=[hU+iV-jB+\ell LUVB+A]/D_\beta,
+\]
+where $\ell=1$ for a positive passive $L$ and zero for its negative participating implementation. The remaining indifference equation at $\alpha$ is $F(S)=0$, with
+\[
+ F=KXY-hX-iY+jS-(1-S)A_\beta .
+\]
+Let $F_0$ denote the same expression at $s=0$. Then $F_0/S$ is the left side of (1) minus $\Delta$. On any fixed compact positive interval for $z=\sqrt K S$, with $S$ bounded above by one, one has
+\[
+ |F-F_0|\le C_G[s+\ell\min(Ks^2,Ls^3)] .\tag{2}
+\]
+Indeed the two terms containing $KXY$ combine to $KXY[1-(1-S)/((1+X)(1+Y)D_\beta)]$. The bracket is $O(S)$ and changes by $O(s)$ from $s=0$, while $XY$ changes by $O(Ss)$ and $KS^2$ stays bounded. The linear terms change by $O(s)$, and $LUVB\le K UV$ because $L<KN/m$ and $NB<m$; also $LUVB=O(Ls^3)$. This proves (2) uniformly in the prices. If $\ell=0$, choose $s=\delta S$. If $\ell=1$, choose
+\[
+ s=\delta\min\{S,\max(S^{3/2},(S/L)^{1/3})\}.
+\]
+In either case take the additional minimum with $\delta/N$ if $l\le0$. All choices are continuous in $S>0$. When the larger term in the displayed maximum is $S^{3/2}$, use $Ks^2\le\delta^2(KS^2)S$. Otherwise use $Ls^3\le\delta^3 S$. Thus the right side of (2) is $O_G(\delta+\delta^2)S$ in all cases.
+
+For precision let $q=1/\sqrt K$ vary in $[0,1/\sqrt{K_*}]$. In variable $z=S/q$ the function $F_0/S$ extends continuously to $q=0$ with value $\xi\upsilon(1+\xi+\upsilon)z^2-\Delta$. Its unique positive simple root $z_0(q)$ is continuous. At that root the solo guard $K\xi\upsilon S^2-DS=\xi\upsilon z_0(q)^2-Dqz_0(q)$ is strictly positive throughout the compact interval, including its endpoint $q=0$. Also $S<1$ uniformly there. Choose a uniformly narrow strip around $z_0(q)$ with these strict margins, with $z$ bounded above and away from zero, and with opposite strict boundary signs of $F_0/S$. By (2) and continuity a sufficiently small fixed $\delta$ gives a zero of $F$ inside the strip for each $K\ge K_*$ and all allowed remaining prices. The actual solo guard $KXY-hX-iY\ge0$ persists, since $K|XY-\xi\upsilon S^2|=O_G(KSs)=O_G(\delta)$ on the strip. The mates' solo-date values are the waiting values $cS-(1-S)p$ and $dS$, strictly positive for small $s/S$.
+
+At $\beta$ the passive $a$ numerator exceeds its forced offer $KUV-(1-\ell)LUVB$: the term $A$ is bounded below by a fixed positive constant throughout the strip, the linear terms are $O_G(s)$ and $KUV=O_G(Ks^2)=O_G(\delta^2KS^2)=O_G(\delta^2)$. At $\alpha$, the only remaining quiet guard is $R_b XYW\le s(1+X)(1+Y)(1+W)$. Since $XYW=O_G(S^3)$ and $S$ is between two positive singleton-dependent multiples of $K^{-1/2}$, the chosen $s$ gives $s/S^3\ge c_1\min(A_L,A_N)$ throughout the strip. This proves the quiet guard in the claimed price range for sufficiently small $c_0>0$. These three proper product rows now repeat with exact local obedience. Under any single-player replacement a recurring rival stops with positive probability per block, so the local comparisons extend to arbitrary stopping rules and signed row translations.
+
+### A period with two triple dates and no stationary approximation
+
+Use witness 6 with rows $(0,-1,-1,2),(-1,0,-1,2),(1,1,0,-1),(-1,-1,2,0)$. Take $u=0,v=1,a=2,b=3$, all own singleton levels one, $K=L=16$, $N=48$, and $R_u=R_v=R_b=1$, using both positive passive withdrawals. The ordinary $01,2,3$ calendar fails its $K$ guard, since $K_*=6+2\sqrt{10}<16$. There is an exact equilibrium with the two triple dates. In the preceding notation set $s=1/5$, $(U,V,B)=(1/30,1/6,1/60)$, and use equal mate odds $X=Y=x$ on $\alpha$, where $2/15\le x\le3/20$. Set
+\[
+ W=\frac{2x+s(1+x)^2}{2-s(1+x)^2},\qquad S=(x+W)/2,\qquad A=16x^2/(1+x)^2.
+\]
+These choices give $U=2B$, $V=2B/(1-48B)$, $U+V=s$ and $2(W-x)=s(1+x)^2(1+W)$. Taking $A_\beta=(s-B+16UVB+A)/[(1+U)(1+V)(1+B)]$, the residual $16x^2-2x+S-(1-S)A_\beta$ at the two endpoints is respectively $-84297320981/3375806297850$ and $9276037343/694435333800$. At an intervening zero all active owners are indifferent. Throughout the interval $x<W<1/3$, so $x^2 W<1/5\le 2(W-x)$; also $16x^2>2x$ and $A>16UV$. These are the quiet guards of $b$ on $\alpha$ and of $a$ on the solo and $\beta$ dates. Both mates earn $2S>0$ on the solo date. This verifies the exact signed periodic profile.
+
+There is no sure opening. Here $KN>mL$, $G_{bv}<0$ excludes sole $v$, and the sole-$b$ candidate satisfies $2X^2+3X=1/8$, so $X\le1/24$ and its guard $X^2+3/16-4\ge0$ fails. Consider a stationary profile of strictly positive proper odds $(x,y,t,w)$ in order $u,v,a,b$, writing $h_i=1-\prod_{j\ne i}(1+p_j)^{-1}$. The four stationary indifferences give
+\[
+ 2w-t=x(1+h_vtw)=y(1-48w+h_utw),\qquad x+y=(2-h_bxy)t,\qquad w=x+y+16(w-h_a)xy.
+\]
+If $w\ge2$, the last equation gives $xy\le1/8$ and $x+y\le w$. Thus $x+y\ge3t/2$ and $2w-t\ge4w/3$. The first identities imply $\min(x,y)\ge4/[3(t+1/w)]$ and $t>48-1/w>1$, while $\max(x,y)\ge3t/4$. This forces $xy\ge t/(t+1/w)>1/2$. Hence $w<2$ and $t<2w<4$; the positive factor $1-48w+h_utw$ now yields $w<1/44$. The first identities and $x+y\le2t$ imply $t\ge w/(1+w^2)$, since $x,y\ge(2w-t)/(1+2w^2)$. Therefore $x+y-w\ge(2-4w^2)t-w>w/2$, using $xy\le t^2$. But $h_a\le x+y+w\le5w$ gives $16h_a xy\le320w^3<w/2$, contradicting the last equation.
+
+Proper stationary triples omitting either mate reduce on the active rows to the nonsingular singleton submatrix. Without $a$, row $b$ is negative on both mates; without $b$, either mate sees both its active rivals negatively. Pairs have nonzero internal singleton comparisons, and every singleton has a negative outsider who benefits by quitting immediately. Perpetual continuation by all four loses to the positive own singleton. These also exclude stationary approximations whose hazards converge to a nonzero vector: at two positive limiting hazards the prescriptions and immediate and Never offers are continuous for all rows, while at a sole positive limiting hazard its negative outsider already strictly gains in the limit. If all hazards tend to zero, pass to a subsequence of positive total hazards with their sum-normalized vector tending to $z$ of sum one. The native prescription tends to $(Gz)_i$ and the immediate quit offer to zero. For $z_i<1$ the Never offer tends to $(Gz)_i/(1-z_i)$. The signed row constants cancel whenever there is another positive hazard; profiles with only one active owner are uniformly excluded by a negative outsider. Vanishing regret would give $Gz\ge0$ and $(Gz)_i=0$ on every positive $z_i<1$; if $z_i=1$, its row is zero by hollowness. This contradicts the $R_0$ property checked for witness 6. Thus a positive regret gap separates every stationary profile from the exhibited exact equilibrium.
+
+The two-triple period and the positive stationary regret gap also hold on a nonempty open set in all sixty original reward coordinates. To see this, give $b$ pair joining rewards $Z_b(ub)=5\varepsilon$ and $Z_b(vb)=-\varepsilon$ at the calibration above, with $\varepsilon>0$ sufficiently small. At the same odds $V=5U$ on $\beta$, its forced payoff is still zero. At $\alpha$ its forced-offer numerator increases by only $4\varepsilon x$, so the strict quiet guard persists throughout the bracket. The stationary gap persists as well: changing every reward by at most $d$ changes every deviation gain by at most $2d$, uniformly in the profile.
+
+For arbitrary nearby tables use as each active player's stage value its forced immediate payoff, with native value zero at the solo date of $b$. Compute the quiet value of $b$ at $\alpha$ from that following solo value, the quiet value of $a$ at $\beta$ from its forced $\alpha$ value, and the three quiet solo values from $\beta$. This gives seven smooth indifference equations in the seven odds or probabilities. At the modified calibration fix $X=x$ in the stated interval. The solo indifference of $b$ sets its forced $\beta$ numerator $\varepsilon(5U-V)$ to zero. The $\beta$ indifferences of $v,u$ require $U=2B$, $V=2B/(1-48B)$. These three equations have an invertible Jacobian in $U,V,B$, since $[2B/(1-48B)]/(2B)$ has strictly positive derivative there. After them, the two $\alpha$ mate equations are $X=Y=2S-W$, and the $\beta$ indifference of $b$ reduces to $2(W-x)=s(1+x)^2(1+W)$; its coefficient $2-s(1+x)^2$ is positive. Thus the six equations have invertible Jacobian in $U,V,B,Y,S,W$ throughout the compact $x$ interval. The implicit function theorem, with local solutions agreeing by uniqueness, solves them on the interval for every sufficiently small perturbation of the full table. The seventh equation retains opposite strict signs at its endpoints, and every quiet guard stays strict on the interval. An intervening root supplies the exact same phase supports on this open set.
+
 ## A return for the opposite assignment on every surviving singleton matrix
 
 Here the joining owner is denoted by $a$, the remaining outsider by $b$, and the mutual pair by $u,v$. Either mate may own the withdrawal edit, independently of this labeling. Write $K=Z_a(M+a)>0$ and $R=Z_b(I)>0$. As in the three-date construction the other four edits may have arbitrary magnitudes with either allowed withdrawal implementation.

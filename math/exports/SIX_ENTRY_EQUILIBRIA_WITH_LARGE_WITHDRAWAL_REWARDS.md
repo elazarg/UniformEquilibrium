@@ -2,7 +2,7 @@
 
 Use the six-position template for four independent quitting players. In native units the pair $01$ is mutually negative. Player $a=3$ receives $K>0$ on $013$, and the two mates and player $b=2$ receive positive grand rewards. The two other changes give an advantage $L>0$ to player 3 for withdrawing from the grand coalition, and an advantage $N>0$ to one mate $u$ for withdrawing from $012$. Each advantage can be implemented by lowering the participating reward or raising the passive reward after withdrawal. Other higher entries are zero except where explicitly allowed below. All four original own singleton levels are arbitrary. The general three-player return, the sure-owner tests and the 21 numbered integer singleton examples are given in the main six-entry paper. [Template, first-date tests and accumulating return](FIVE_NONSINGLETON_REWARDS_AND_THE_SIX_ENTRY_FRONTIER.md)
 
-Most of the results below use witness 18, whose singleton rows are $(0,-1,-1,2),(-2,0,1,2),(1,1,0,-2),(-1,-1,2,0)$. On this matrix the small-$R$ return and the large-$R$ stationary branch overlap even when the positive triple price and a mate's grand reward are unbounded. A different construction permits a fourth player to mix on the dates where the three-player return would give it a profitable deviation.
+Most of the results below use witness 18, whose singleton rows are $(0,-1,-1,2),(-2,0,1,2),(1,1,0,-2),(-1,-1,2,0)$. On this matrix the small-$R$ return and the large-$R$ stationary branch overlap even when the positive triple price and a mate's grand reward are unbounded. A different construction permits a fourth player to mix on the dates where the three-player return would give it a profitable deviation. For a large negative participating withdrawal the affected mate can have a negative continuation. The last sections carry that continuation through a two-dimensional return near witnesses 6 and 18.
 
 ## Three unrestricted prices at witness 18
 
@@ -176,3 +176,103 @@ $$ P_B(w)=\frac{B+hx+iy-dw}{xyw}.$$
 If the quiet guard fails, $R>P_B(w_0)$, and we instead require $R=P_B(w)$. This function decreases strictly from infinity. Indeed $xw,xy,yw$ increase strictly and $w/y$ also increases. For $xy$ use $d(xy)/dx=(ky-lx)/(k+Kx)>0$. For $yw$ and $w/y$ use, respectively, the positive quantities $(k+KX)y-Dlw$ and $A-lX+DKwy$ after differentiating. If $hD\ge d$, write $P_B=(B+hX)/(xyw)+(hD-d)/(xy)+i/(xw)$. If $hD<d$, write its last two terms as $[i+(hD-d)w/y]/(xw)$. The bracket decreases and is positive since $y\ge Cw$ and $H>0$. These formulas also prove $P'_B(w)<0$ throughout. The proper comparison and the quiet/proper switching surface therefore have exactly the nonsingular derivatives used above.
 
 The passive output of $b$ has nonnegative numerator $B+hx+iy-dw\ge H w$ and stays below $\max(h,i)$ whenever its child does. The active output $A'=Kxy/[(1+x)(1+y)]$ obeys $A-A'\ge lx+ky$. After the first step $X=Y=0$. Since $x=Dw$ and $y/w\ge C$, the last expression is at least $\min(k,E/(D+C+1))(x+y+w)$. The first step has bounded odds on the compact seed interval. Later $A$ is decreasing, so $x,y,w$ are uniformly bounded and $A=lx+ky+Kxy\le c_K(x+y+w)$. Thus $A$ contracts geometrically and the sum of all these odds is uniformly bounded. The blank product stays strictly positive, giving the strict upper fixed-point sign from the terminal $B=0$ at the two solo steps. At small seed the quiet numerator is at least $Hw$ against the cubic grand term, so the original positive-slope return gives the opposite sign. The finite stable charts, quiet resetting step and signed seam argument now follow as in the four-player-date theorem. This proves existence for $N\ge N_0$ and $0<L,A_u,A_v\le\delta N$ uniformly over positive compact sets of $K,R$.
+
+### The large negative participating withdrawal at witness 6
+
+Take singleton witness 6 with $u=0,v=1,b=2,a=3$ as in the passive-withdrawal theorem. Instead implement $N$ by the negative participating entry $Z_u(uvb)=-N$. For every $K,R>0$ there are $d>0,N_0<\infty$ such that all tables
+$$N\ge N_0,\qquad 0<L,A_u,A_v\le dN$$
+have a uniform-equilibrium payoff. Both implementations of $L$ and either mate as withdrawal owner are allowed. The constants are uniform on compact subsets of the positive $(K,R)$ quadrant. This uses a new two-coordinate return. The large negative payoff remains present in the mover's continuation at a repaired date.
+
+**Limiting dates.** Use child order $(U,V,B,A)$ and odds $(x,y,s,w)$, retaining $z=Ns$ as $1/N,L/N,A_u/N,A_v/N$ tend to zero. At an all-proper date the four required child values are
+$$U=y-2w-zy,\quad V=x-2w,\quad B=-x-y+w+Rxyw,\quad A=x+y+Kxy.$$
+The forced quit value of $u$ now converges to $-zy/[(1+y)(1+w)]$. A return starts at $(0,v,b,0)$ with $0<b\le1$ and $0\le v\le4b$. Prepend the two solo dates $a,b$ as before. Their output is
+$$ (0,V,0,A),\qquad V=\frac{v}{1+3b},\qquad A=\frac{4b}{1+3b}.$$
+Thus $V\le A\le1$. The solo owners tie at zero and waiting players get nonnegative payoffs.
+
+For $U\le0,V\ge0,A\ge0$ define a nonnegative upper endpoint $w_0$. If $A>V-U$ it is the unique $w_0>-U/2$ for which $x=V+2w_0$, $y=U+2w_0$, $A=x+y+Kxy$. Otherwise set $w_0=-U/2$. These prescriptions agree at $A=V-U$. For a trial $w=\theta w_0$, $0<\theta\le1$, set
+$$
+ x=\min(A,V+2w),\quad y=(A-x)/(1+Kx),\quad t=y-U-2w,\quad
+ g=-x-y+w+Rxyw,\qquad D=(1+x)(1+y)(1+w).
+$$
+One has $t\ge0$. When $y>0$, $x=V+2w$ and $y\ge U+2w$. When $y=0$, $x=A$, $w\le -U/2$ and $V+2w\ge x$. Use the following outputs for all trials:
+$$
+ U'=-\frac{t}{(1+y)(1+w)},\quad V'=\frac{V+2w-x}{(1+x)(1+w)},\quad
+ B'=\frac{B+x+y-w}{D},\quad A'=\frac{Kxy}{(1+x)(1+y)} .
+$$
+For $\theta=1$ these are an actual three-mover stage with $b$ waiting when $y>0$, and a stage on $u,a$ when $y=0$, provided $B\ge g$. In the latter case $x=A,w=-U/2$, both $U',A'$ vanish, and the passive $v$ numerator is $V-A-U\ge0$. This also covers a zero hazard for one or both movers. For an interior trial with $B=g$ and $x,y,w>0$, the equations give a repaired date with $z=t/y$.
+
+**Bounds for arbitrary trials.** One always has $0\le A'\le A-x-y$, and $A'/A\le K/(1+K)$ for $0<A\le1$ since $xy\le x+y$. The first trial has $B=U=0$, $V\le A$. Unless $V=A$ and $w=0,y=0$, its $x=V+2w$ and $y>0$, with $V'=0$. Here $B'\ge0$, $-1\le U'\le0$, and
+$$D(4B'+3U')=4x+2w+y(1-3x)+6xw\ge0.$$
+At the exceptional $x=A=V,y=w=0$ the same conclusions hold. After this first trial all states satisfy
+$$
+ -1\le U\le0,\quad V\ge0,\quad 0\le B\le1,\quad 4B\ge V-3U .
+$$
+Indeed writing $a_0=-U\le1$, the bound $t\le y+a_0$ propagates $-U'\le1$. When $y>0$, $V'=0$ and
+$$D(4B'+3U')=(4B-3a_0)+(4-3a_0)x+y(1-3x)+2w+6xw\ge0.$$
+For $x\le1/3$ all terms are nonnegative; otherwise $x+y\le1$ bounds the middle terms below by $1-3x+3x^2>0$. Here $w\le x/2$ gives $B'\ge0$. When $y=0$,
+$$D(4B'-V'+3U')=(4B-V-3a_0)+x(5-3a_0)+6xw\ge0,$$
+and $w\le a_0/2\le 2B/3$ implies $B'\ge0$. In all cases $B'\le1$ since this is the waiting value under odds $x,y,w$, with singleton rewards $1,1,-1$, zero higher rewards and child $B\le1$. In fact $B'>0$ at every step from a seed with $b>0$: on the first trial $x+y>0$, and every subsequent positive $B$ remains positive.
+
+Consider $J$ trials followed by one forced upper endpoint and then only quiet stages. The $A$ values decrease geometrically uniformly in the trials. Once $A$ is small the upper endpoint's $b$ guard is strict: for $y>0$ it has $w\le x/2$ and $Rxw<1/2$, and for $y=0$ one has $g\le w-A\le2B/3-A<B$. At that endpoint either a $u,a$ stage resets $U=A=0$ and leaves the new $(0,V',B',0)$, or a quiet three-mover stage resets $U=V=0$. In the latter case the exact small-$A$ quiet tail from the previous theorem gives $(0,0,F_b,0)$. At the transition $y=0,V+2w=x$ these two outputs agree, since $A',V'$ vanish and the tail changes $B'$ by $O(A')$. Denote the resulting output by $(0,F_v,F_b,0)$; it is continuous in the seed and trials, and $F_b>0$, $0\le F_v\le4F_b$.
+
+The upper seed has $F_b<1$ uniformly in all trials. Indeed $\sum(x+y)\le A_{\rm initial}\le1$. Up to the first date with $y=0$ one has $w\le x/2$. At this first $y=0$ date $w\le1/2$, and thereafter $A=x=y=0$ and $-U$ drops by at least $w$ at every off-solution trial. This gives a uniform bound on the sum of all $w$, including the tail. The blank product of the joint prefix is uniformly bounded below, and its child immediately after the two solos had $B=0$. On the lower seed choose $b_*>0$ small. For any choices satisfying the $b$ comparisons, all stages there are quiet since $x,y\le A\le4b_*$ and the $y=0$ bound just proved excludes an interior $b$ choice. At the first quiet date, uniformly in $0\le v\le4b$,
+$$
+ F_b=3b+v/4+O_K(b^2)>b
+$$
+for all sufficiently small $b>0$. Indeed $w=(A-V)/4+O_K(b^2)$, the first passive value is $V+3w+O_K(b^2)$, the new $A'$ is $O_K(b^2)$ and later changes are $O_K(b^2)$. At $v=4b$ the first quiet date instead has $x=A=V$, $y=w=0$, gives $F_v=0$, and all trials are identical because $w_0=0$.
+
+**Finite tables and simultaneous choice.** Work on $b\in[b_*,1]$, $\tau=v/b\in[0,4]$, and $J$ controls $\theta_j\in[\epsilon,1]$. Take $J$ large to reach the strict final quiet region just proved. Choose $\epsilon>0$ small so $Rxw<1/2$ at $w=\epsilon w_0$ on the whole bounded domain. On this face $g<B$ uniformly at each of the finitely many limiting trials: if $y>0$, $w\le x/2$, and if $y=0$, $w\le2B/3$ except at the first date where the only such trial has $w=0,x=A>0$. The same inequalities hold for a sufficiently large $J$ regardless of the value of $\epsilon$. All constants can be chosen for a fixed compact set of $K,R$.
+
+Here are details for replacing the finite trial graphs by continuous maps at actual finite prices. They avoid dividing by a disappearing trial $y$. On each compact limiting graph $g-B$ is strictly negative wherever $x y w=0$. For $w=0$ this follows from $g=-x-y$ and $A+B>0$; $x=0$ or $y=0$ was handled above. Choose $\eta>0$ so that $g-B\ge-3\eta$ requires all three odds bounded strictly above zero. Use a continuous cutoff $\chi$ equal to one on $g-B\ge-\eta$ and zero on $g-B\le-2\eta$.
+
+On the support of the cutoff, keep the trial's $w$ fixed and continue its other variables using the exact equations
+$$
+ x=(V+2w-s)/(1+A_vsw),\quad
+ y=(A-x+2s)/(1+x(K-Ls)),\quad
+ z=1+A_usw-(U+2w-s)/y,\qquad s=z/N.
+$$
+These are smooth in $(1/N,A_v/N,A_u/N,L/N)$. At the zero parameters, the first two equations select $x,y$ successively, independently of $z$, and the third selects $z=t/y$. The Jacobian is triangular with diagonal ones. Compactness and local uniqueness give uniformly close continuous solutions in neighborhoods of these compact graphs. Where $\theta=1$ on this support the endpoint is the quiet three-mover endpoint and $z=0$ exactly; where $\theta<1$, $z>0$ at close finite parameters. For the latter assertion, away from the endpoint use strict positivity at the limit. At a quiet endpoint $y=U+2w>0$, its $z$ derivative with respect to $w$ is strictly negative, since $y=(A-V-2w)/(1+K(V+2w))$ strictly decreases. This sign and the simple endpoint zero persist uniformly near the switching set.
+
+Use the actual forced offers for $u,v,a$ and the passive value for $b$ on this chart, and the actual comparison $g=-x-y+w+Rxyw$ with these continued odds. Interpolate the four outputs and this comparison with the limiting formulas using $\chi$. Thus the maps are continuous and uniformly close to the limiting ones. At $\theta=1$ both formulas agree exactly on a genuine quiet ($b$ waiting) stage for the given child, including the $u,a$ switch; this uses $s=0$. If an interior control satisfies the interpolated equality $g=B$, it lies in $\chi=1$ for a sufficiently small perturbation and gives a genuine four-proper stage. For evaluating fake intermediate inputs one may truncate $U$ above at zero and $V,B,A$ below at zero. All true-stage outputs already have these signs: on the proper chart $U'=s y(A_u w-N)/[(1+y)(1+s)(1+w)]\le0$ and $V'\ge0$, while $A'\ge0$ for small $L/N$ by the positive lower odds on that graph. On a true upper endpoint $V'$ is either zero or the nonnegative passive value. All $B$ outputs after the first date keep a positive margin by compactness. Induction over the finite steps keeps all trial states uniformly close to the limiting graphs.
+
+The last forced quiet endpoint and its exact tail are continuous on a neighborhood of these last states and use only the six-position entries already specified. The strict $b$ guard at that endpoint persists by compactness, and by geometric decay the later $U=V=0$ quiet tail is uniformly valid when $A$ is small. Its seam varies continuously, also at the switch to the $u,a$ stage. Hence the actual trial output and its comparison maps converge uniformly to the limiting ones over the whole box.
+
+Apply Brouwer using updates $\theta_j\mapsto\operatorname{proj}_{[\epsilon,1]}(\theta_j+B_j-g_j)$, $b\mapsto\operatorname{proj}_{[b_*,1]}F_b$ and $\tau\mapsto\operatorname{proj}_{[0,4]}(F_v/F_b)$. The strict lower control bounds exclude $\theta_j=\epsilon$. All chosen stages therefore meet their actual $b$ comparison. Uniform convergence excludes $b=1$. At $b=b_*$ every fixed limiting control is quiet and $F_b>b_*$. At $\tau=4$ the limiting first trial has $w_0=0$, then returns $F_v=0$. Compactness excludes these two fixed-point faces at sufficiently close finite parameters, by passing any contrary sequence to a limiting fixed point. At $\tau=0$ the true output $F_v$ is nonnegative, so clipping does not change a fixed equality. Thus the actual seam is exactly $(0,v,b,0)$. Truncate any infinite quiet tail and repeat the resulting finite word. The fixed solo dates for $a,b$ bound the block Lipschitz factors of both the prescribed and unrestricted best-reply values strictly below one, uniformly in the truncation. As in the previous theorem this gives a signed uniform-equilibrium payoff.
+
+The conclusion also persists on a singleton neighborhood of witness 6, common to each fixed positive compact set of $K,R$. To verify this at the upper endpoints as well as inside the proper charts, write
+$$
+m=-G_{uv},\ n=-G_{vu},\ c=G_{ua},\ c'=G_{va},\ h=G_{bu},\ i=G_{bv},\ d_0=-G_{ba},\ f=G_{ab},\ \ell=-G_{au},\ k=-G_{av}.
+$$
+These constants are positive near this matrix. The first solo odds are $b/d_0$. After that stage $B=0$; prepend the solo $b$ at the smaller of the mates' two nonnegative zero-value thresholds, their current payoffs divided by $-G_{ub},-G_{vb}$ respectively. One mate reaches zero and the other stays nonnegative. The first child varies continuously, including the choice boundary. The waiting guards there persist as the entrants have positive singleton gains on the other's solo date, and the active owners tie at zero.
+
+For later children $U\le0$ use $w_0=-U/c$ when $A\le(\ell/n)(V-c'U/c)$. Otherwise solve $A=\ell x+k y+Kxy$ with $x=(V+c'w_0)/n$, $y=(U+c w_0)/m$. At the boundary these prescriptions agree. In the initial child it is also possible that $U>0$ and $V=0$. This can happen only close to the limiting initial mate tie $v=0$ by compactness, so $A$ stays bounded below and $U$ tends to zero uniformly as the singleton perturbation shrinks. Then the strictly positive quiet endpoint exists by the same scalar equation. Use trials $w=\theta w_0$ with
+$$x=\min(A/\ell,(V+c'w)/n),\qquad y=(A-\ell x)/(k+Kx),\qquad t=my-U-cw.$$
+Their outputs replace $V+2w-x$ by $V+c'w-nx$ and $B+x+y-w$ by $B+hx+iy-d_0w$, and use $g=-hx-iy+d_0w+Rxyw$. On the proper cutoff chart the three exact finite equations become
+$$
+x=(V+c'w+G_{vb}s)/(n+A_vsw),\quad
+y=(A-\ell x+fs)/(k+x(K-Ls)),\quad
+z=m+A_usw-(U+cw+G_{ub}s)/y .
+$$
+Their transverse limit at fixed $w$ persists, and their $z=0$ endpoint is exactly the perturbed quiet endpoint. Consequently all finite trial maps, their cutoff margins and their strict fixed-point boundary exclusions persist by uniform convergence to the center graphs. The exact tail after a resetting quiet date uses $x=c'w/n$, $y=cw/m$ when $U=V=0$; its passive numerator $B+(hc'/n+ic/m-d_0)w$ has a uniformly positive linear coefficient, and $A=\ell x+k y+Kxy$ still gives a uniformly geometrically decreasing positive sequence. The finite construction, its exact pair/triple switch, and the signed seam argument therefore work for all singleton matrices in the stated neighborhood.
+
+### A negative participating withdrawal at witness 18
+
+The large-$N$ participant-withdrawal conclusion also holds near witness 18 when $u=0,v=1$, $a=3,b=2$. Thus $N$ is the magnitude of the negative participating reward $Z_0(012)$; the other withdrawal may have either implementation. For every compact positive set of $K,R$ there are $d>0,N_0<\infty$ and a neighborhood of this singleton matrix giving original uniform equilibrium whenever $N\ge N_0$ and $0<L,A_u,A_v\le dN$.
+
+Start instead from the rectangular seed $(0,v,b,0)$, $0\le v\le3$, $b_*\le b\le1$. The solo $a$ odds are $b/2$; the solo $b$ then makes row $u$ zero. Both stages have their proper comparisons and give
+$$ U=B=0,\qquad V=(2v+4b)/(2+3b),\qquad A=4b/(2+3b)\le4/5.$$
+The same endpoint and trial formulas as in the variable-singleton version apply with $m=1,n=2,c=c'=2,h=i=1,d_0=2,f=2,\ell=k=1$. Thus $x=\min(A,V/2+w)$, $y=(A-x)/(1+Kx)$, $t=y-U-2w$, and the passive numerators in $V',B'$ are $V+2w-2x$ and $B+x+y-2w$, respectively. At the upper endpoint when $y=0$ the pair $u,a$ resets $U,A$ and leaves $V'\ge0$. On the initial trial that ends this way $w=0$ because $U=0$. All earlier notation for $D$ and $g$ uses the actual coefficients; in particular $g=-x-y+2w+Rxyw$.
+
+Write $a_0=-U$. The uniform invariant is
+$$0\le a_0+A\le4/5,\qquad 0\le B\le1,\qquad B\ge a_0.$$
+Indeed $a_0'\le(y+a_0)/(1+y)$ and $A'\le(A-x-y)/(1+y)$, giving the first bound. At every trial
+$$D(B'-a_0')=(B-a_0)+x(1-a_0-y+2w)\ge (B-a_0)+x/5.$$
+These inequalities include $y=0$ and the initial $U=B=0$. At that first trial $x>0$ since $A>0$ and $V\ge A$, so $B>a_0$ persists thereafter. Also $B'\le1$ by the waiting formula. The trial $V'$ is bounded by $\max(V,2)$: its numerator is $V+2w-2x$ against $u,a$ odds, and it vanishes if $y>0$. At the top face $v=3$ the initial solo stages give $V<3$ uniformly for $b\ge b_*$, hence all outputs have $F_v<3$. No coupling of the two seed coordinates is needed.
+
+At a small-$A$ upper endpoint with $y>0$, $x\ge w$ and $y=U+2w$. The previously produced mate deficit $U$ can be substantial. Nevertheless $B>a_0$ gives
+$$B-g=B+x+y-2w-Rxyw=B-a_0+x-Rxyw>0$$
+as soon as $Ryw<1$. If $y=0$ at the endpoint, $B-g=B+A-a_0>0$. The reset and exact quiet tail therefore work as before. For an arbitrary limiting trial with $xyw=0$, either $w=0$ and $g=-x-y<B$, or $y=0$ and $2w\le a_0$, so $B-g\ge B-a_0+x>0$. The analogous strict inequality at the initial trial follows from $V\ge A>0$. At the lower control face choose $\epsilon>0$ small. More explicitly the formulas extend to $\theta=0$, where $w=0$ and $x+y+B>0$ on every finite trial graph, including earlier choices in $[0,1]$. The first positive $x$ bound and the displayed invariant persist at $\theta=0$, giving strict lower-face comparisons uniformly by compactness. This supplies the proper cutoff, finite charts and control endpoint guards for the Brouwer argument.
+
+The sum of $x+y$ over the entire prefix is bounded by the initial $A$. Before the first zero $y$ one has $w\le x$. At the zero and later trials the same decrease of $a_0$ bounds their extra $w$'s. The blank product is uniformly positive and $F_b(1,v)<1$. For sufficiently small $b>0$, every true trial on the first date is quiet. If $V\ge2A$ its upper endpoint is the solo $u$ at $x=A$, $w=0$, giving $F_b=A/(1+A)=2b+O(b^2)$. Otherwise $V<2A=O(b)$; the first quiet odds satisfy $w=(A-V/2)/3+O_K(b^2)$, $y=2w$, $x=V/2+w$. Its passive output is $x+O_K(b^2)$, and later changes are $O_K(b^2)$, hence $F_b=(A+V)/3+O_K(b^2)\ge4b/3+O_K(b^2)$. To exclude interior controls on this lower seed, for $y>0$ one has $x\ge w$, and $t\ge0$ gives $y\ge2w-a_0$. Thus $B-g\ge B-a_0+x(1-Ryw)>0$ for all trials with $A$ small and $y>0$, as $w\le x\le A$. For $y=0$ use the strict guard above. This establishes the strict lower fixed-point boundary.
+
+Use the previous product Brouwer proof with the updates for $b$ and the controls unchanged and $v\mapsto\operatorname{proj}_{[0,3]}F_v$. Nonnegativity at the pair end and the strict upper face exclude spurious clipping. The finite proper chart and the continuous exact quiet tail are those in the variable-singleton formulas. The same limiting fixed-point boundary signs and finite graph cutoff comparisons persist in a singleton neighborhood. The initial $b$ solo continues to zero row $u$ there, since only that mate sees a negative $b$ singleton. This gives the claimed signed uniform equilibrium.
