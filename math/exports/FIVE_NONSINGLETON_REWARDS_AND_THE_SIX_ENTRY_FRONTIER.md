@@ -18,6 +18,8 @@ $$
                          KN>(-G_{uv})L .
 $$
 These restrictions apply to arbitrary real singleton data, including ties.
+They exclude every six-entry table with at least three ties among the twelve foreign singleton comparisons. A positive gap requires a strictly negative entry in every column by the singleton complementarity condition, and one in every row. For the latter, if a row had no negative entry, a small upward perturbation of its foreign ties would leave a positive gap and give that player a strictly positive foreign row, contrary to the normal-core reduction. The five pairs other than $M$ require five distinct positive entries. With at least three ties there is room for at most four negatives. Exactly four would have to occupy distinct rows and columns. They would define a permutation without fixed points containing the transposition $u,v$, forcing a second mutually negative pair on $a,b$. This contradicts the six-entry restrictions. Filtering the surviving singleton sign census by the same pair condition leaves eight strict sign classes, eleven one-tie classes and four two-tie classes up to relabeling (respectively 180, 264 and 96 labeled patterns). To reproduce these numbers take the existing strict census and its boundary representatives, retain each matrix with exactly one pair satisfying $\max(G_{ij},G_{ji})\le0$, and require both comparisons of this pair to be strictly negative. [Singleton sign census and negative-column condition](TWENTY_ONE_SINGLETON_SIGN_CLASSES_FOR_FOUR_PLAYER_QUITTING_GAMES.md) · [Boundary enumeration](../experiments/FIN4_SINGLETON_SIGN_CLASSES.py)
+
 
 For any full table write $m_k$ for the $k$th-largest absolute native nonsingleton entry. Its infimum of maximum terminal regret is at most $2m_6$. If retaining any choice of six largest entries gives a table outside the displayed exceptions, the bound is $2m_7$. Indeed the first truncation keeps five entries and the second six, leaving all original singleton and perpetual payoffs fixed. The prescribed payoff and every unilateral offer change by at most the largest deleted magnitude, uniformly over all profiles. Thus at a positive gap $\gamma$ there must be at least six higher entries of magnitude $\gamma/2$ or larger. If there are only six, their signed projection must pass the role and size restrictions above.
 
@@ -69,3 +71,42 @@ $$
 If $G_{ab}>0$, then $Y=0$, so the second inequality forces $G_{vb}>0$ and $V=0$. The third forces $G_{ub}>0$ as well, contradicting a negative entry in column $b$. Thus $G_{ab}<0$, requiring $X,V>0$, and the second equality then forces $G_{vb}>0$, $Y>0$. Substitution of $V=C/X$, $Y=D/X$ yields the displayed quadratic.
 
 For either candidate the sure owner $i$ has nonnegative native payoffs on all coalitions in which it participates. After a blank, its exact minimal possible reply cap is zero: it can immediately quit for a nonnegative payoff, while having a weak blocker $k$ quit alone on the following date, all others strictly later, bounds all its replies by $\max(0,G_{ik})=0$. Hence its exact timed incentive is the stated final inequality, comparing quitting and waiting with that zero continuation. Each other owner faces a sure rival on the first date, so its stage action comparisons suffice. Finite punishment clocks and first-date absorption give an exact terminal equilibrium against every unilateral replacement, valid also after signed row translations.
+
+## A three-date equilibrium on the six-entry frontier
+
+Label the unique mutually negative pair $M=01$, let $a=2$ be the owner with the positive reward $K=Z_2(012)$, and let $b=3$. Either mate may make the final withdrawal. Throughout this section the other five edits in the six-position template have arbitrary magnitudes and either permitted implementation.
+
+Suppose $G_{03},G_{13},G_{32}>0$, $G_{23}<0$, and that positive masses $(X,U,Y,Z)$ satisfy
+$$
+G(X,U,Y,Z)^\top=\delta e_2,\qquad \delta>0 .
+$$
+For invertible $G$ this last condition just tests the signs of its column $G^{-1}e_2$. Put $D=G_{20}X+G_{21}U=\delta-G_{23}Z>0$, $\rho=-G_{23}Z/D\in(0,1)$, and choose the unique $P>0$ with
+$$
+ XU=P\left[Y+Z+\frac{\rho}{1-\rho}(X+U+Y+Z+P)\right].
+$$
+Then **$KP\le D$ gives an exact periodic equilibrium for every signed row translation**. Rescaling the four singleton masses rescales $D$ and $P$ equally.
+
+Use the three successive dates $01,2,3$, where only the named players may quit. Assign the first cycle unnormalized singleton exit masses $X,U,Y,Z$ and joint exit mass $P$ on $01$. Multiply all masses by $\rho$ on each later cycle. Divide by the total remaining mass at each date to obtain its probabilities. At the joint date the blank mass is the quantity inside the brackets above. The equation for $P$ is exactly the independence identity for the two binary actions, and its right side increases strictly from zero to infinity. Thus the masses specify genuine private hazards.
+
+The zero rows of $G(X,U,Y,Z)^\top$ give the two mates value zero on date $01$, and player 3 value zero there and on its own preceding date. The equation $G_{23}Z+\rho D=0$ gives player 2 value zero on its date and the subsequent date of player 3. Every mover's forced quit payoff is also zero. At the joint date player 2's prescribed value and its quit offer, multiplied by the remaining mass, are $D$ and $KP$. At the date of player 2, the two mates have strictly positive weighted values $G_{02}Y+G_{03}Z=-G_{01}U$ and $G_{12}Y+G_{13}Z=-G_{10}X$, while player 3 has $G_{32}Y>0$. Both mates have positive value on player 3's date. All remaining quiet quit offers are zero. None of the other five changed entries affects these comparisons, since there is no date with three possible quitters and the only possible pair is $01$. Every unilateral deviation faces a recurring rival, so the local comparisons iterate to the complete stopping law, including Never. This gives the signed uniform payoff as well. The earlier attached-pair construction uses the same phase order and assumes that all six offers for either solo player joining the joint phase are nonpositive. Here the continuation on that phase funds a strictly positive offer. [Earlier attached-pair theorem](ATTACHED_NEGATIVE_PAIR_COMPLEMENTARY_SOLO_UNIFORM_EQUILIBRIUM.md)
+
+Exactly eight of the 21 integer calibrations in the sign census have a unique mutually negative pair. In the labels of each listed matrix, $M=01$ and the displayed assignments use $a=2$. The table gives exact masses at $Z=1$.
+
+| Census witness | $X$ | $U$ | $Y$ | $\rho$ |
+|---|---:|---:|---:|---:|
+| 6 | 1 | 1 | 1 | $1/2$ |
+| 8 | 1 | 1 | 1 | $1/3$ |
+| 15 | $5/2$ | $1/2$ | $3/2$ | $2/9$ |
+| 16 | 1 | 1 | 1 | $1/2$ |
+| 17 | $7/4$ | $5/4$ | $3/4$ | $4/9$ |
+| 18 | $8/5$ | $4/5$ | $6/5$ | $5/6$ |
+| 19 | 1 | 1 | 1 | $1/2$ |
+| 21 | $11/5$ | $7/5$ | $3/5$ | $5/9$ |
+
+Direct multiplication gives the three zero rows and the positive axis entry for each witness. Since all eight matrices are invertible, every strict $KP<D$ persists throughout a neighborhood of its singleton matrix, with all other five edit sizes still free. [Exact integer singleton witnesses](../experiments/FIN4_SINGLETON_SIGN_CLASSES.py)
+
+For example witness 18 has rows $(0,-1,-1,2),(-2,0,1,2),(1,1,0,-2),(-1,-1,2,0)$. Here $125P^2+630P-32=0$, giving
+$$
+ 0<K\le\frac{3(63+\sqrt{4129})}{8}.
+$$
+For an instance strictly inside this interval take $u=0,v=1$, $K=2$, $L=N=1$, $R_u=1$ and $R_v=R_b=1/10$. Fix either implementation of each withdrawal. The two-sure test fails since $KN=2>(-G_{uv})L=1$. The sole-$v$ test fails at $G_{bv}=-1$. For sole $b$ the unique positive solution of $2X^2+2X-40=0$ is $X=4$, and its required gain numerator is $16+2-40+4=-18$. Thus all sure openings fail. The only mutually negative pair is $01$ and its triple joining offer $K$ is positive, so every relabeling fails the earlier attached-pair caps. The full-support product-low test also fails. Indeed proper hazards with the hazard of 2 sufficiently near one and that of 3 sufficiently near zero make all four native forced quit offers strictly positive. The new periodic certificate does not require a verdict on mixed stationary equilibria.

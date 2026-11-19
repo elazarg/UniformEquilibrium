@@ -1,4 +1,4 @@
-# The fourth order test for the reciprocal pair with two distinct dependents
+# The fourth order test for two classes with a reciprocal pair
 
 Let a four-player quitting table have native singleton comparisons $G_{ij}=r_i(\{j\})-r_i(\{i\})$. Suppose each row has one positive foreign comparison. Two players name one another as their positive donor, and each of the other players names a different member of this pair. Then the native all-four-finite order test passes at rank four, for all twelve singleton magnitudes and every choice of the 44 nonsingleton rewards. It also passes if any subset of the strict comparisons is replaced by zero. The signed test follows with arbitrary own-singleton levels. This is one entire strict orbit among the 21 in the singleton census. Its closure contains two of the 46 surviving one-tie orbits, three of the 39 two-tie orbits and one of the ten three-tie orbits. The theorem concerns the fourth order test. The conjecture requires unbounded ranks. [Order tests](../notes/CODEX_ROOT__INTERLACED_ORDER_TESTS_FOR_ARBITRARY_FOUR_PLAYER_GAMES.md) · [Sign census](TWENTY_ONE_SINGLETON_SIGN_CLASSES_FOR_FOUR_PLAYER_QUITTING_GAMES.md)
 
@@ -62,3 +62,39 @@ $$
 Every coefficient is nonnegative. Every word used separately has $F_{03}(t)\ge0$. These bounds prove every required conditional obedience inequality at the actual parameter, including the surplus of row zero.
 
 The certificate lists rational vertices, schedules and tetrahedra. Exact determinant comparisons verify containment, pairwise disjoint interiors and equality of summed volumes, so the cover includes every boundary point. A numerical unit-flow program proposes a finite mixture of complete order paths at each vertex. Verification rounds its weights to integers, checks the count discrepancy at every cut, and enumerates all $4^4=256$ independent validation-label choices on each complete word. It then compares the symmetric vertex coefficients by integer products. The 23 tetrahedra use 1,191 weighted words across their vertex priors and 16,880 exact Bernstein inequalities. Only the exact checks enter the proof. With four finite clocks every unilateral replacement still faces a finite exit, so row translation preserves all inequalities. Closedness in the original rewards proves the weak-sign assertion. [Exact tetrahedron cover and order verification](../experiments/RANK_FOUR_RECIPROCAL_CORE.py)
+
+## A chain into a reciprocal pair
+
+Suppose each of four recipients has a unique positive foreign singleton comparison. Two recipients name one another, a third names one of that pair, and the fourth names the third. At every choice of the twelve strict singleton magnitudes, all 44 higher rewards and all signed own levels, the all-four-finite order test passes at rank four. Passing is closed in the table, so arbitrary subsets of these strict comparisons can be replaced by ties. In the sign census the strict orbit is $(2,1,1,4)$. Its closure contains four of the surviving one-tie orbits, six two-tie orbits, and three three-tie orbits. A uniform equilibrium requires unbounded ranks.
+
+Label the positive donors $(3,3,1,0)$ in row order, so the singleton comparison matrix is
+$$
+G=\begin{pmatrix}
+0&-a&-b&c\\
+-d&0&-e&f\\
+-g&h&0&-i\\
+j&-k&-l&0
+\end{pmatrix},\qquad a,b,c,d,e,f,g,h,i,j,k,l>0.
+$$
+A failure of the all-finite test persists in an open neighborhood, by compactness of the finite order simplex. We can assume all principal triples nonsingular. A failed game has positive native absorbing infimum, since the negative comparisons furnish four-finite completion. Thus $\det G>0$, some column of $G^{-1}$ is positive, and the singleton minimum map has degree one. We use the positive-axis degree test and the private hidden continuation at a charged triple default from the [positive columns and negative defaults](#two-full-positive-columns-and-two-negative-defaults).
+
+For targets supported on $1,2$, eliminating rows $0,3$ gives $x_0=(kx_1+lx_2)/j$, $x_3=(ax_1+bx_2)/c$ and the two-by-two matrix on coordinates $1,2$
+$$
+M=\begin{pmatrix}A&B\\C&D\end{pmatrix}=
+\begin{pmatrix}
+fa/c-dk/j&fb/c-dl/j-e\\
+h-gk/j-ia/c&-gl/j-ib/c
+\end{pmatrix}.
+$$
+Here $D<0$, $\det M=-\det G/(cj)<0$, and $(G^{-1})_{\{1,2\},\{1,2\}}=M^{-1}$. Axis 0 cannot be a positive column, since its diagonal cofactor is $-eik-fhl<0$. If axis 1 is positive, $C>0$ and the degree test on the positive reciprocal pair $0,3$ forces $\det G_{013,013}=-cjA>0$. Hence $A<0$, and $B>0$ by the determinant. If axis 2 is positive, the second column of $M^{-1}$ gives $B>0$ and $A<0$, then $C>0$. If axis 3 is positive, the degree test on the negative reciprocal pair $0,1$ again forces $\det G_{013,013}>0$, since both see 3 positively. Now the two positive leaf coordinates satisfy $M(x_1,x_2)^T=(d/j,g/j)^T$. Its two negative diagonal entries imply $B,C>0$. Thus $M^{-1}>0$ entrywise in every case. The two core equations make both full columns 1 and 2 strictly positive. Their principal inverse determinant is negative. Consequently, on at least one of these axes $m$, the normalized vector $y=G^{-1}e_m/\sum_r(G^{-1})_{rm}$ has $y_m\le y_{3-m}$.
+
+The triple default on $1,0,3$ with masses proportional to $(1,k/j,a/c)$ gives negative payoff $A/(1+k/j+a/c)$ in row 1, zero on the two helpers, and positive payoff $C/(1+k/j+a/c)$ at the outsider 2. On $2,0,3$ use masses proportional to $(1,l/j,b/c)$ to give the corresponding values $D/(1+l/j+b/c)$ at 2 and $B/(1+l/j+b/c)$ at 1. Both defaults are implementable by diffuse races. With the helper 0 at the first default and the more negative of helpers 0,3 at the second, the two ratios of helper loss to charged default loss satisfy
+$$
+R_1=\frac{d(1+k/j+a/c)}{dk/j-fa/c}>1+j/k>1+y_1/y_0,\qquad
+R_2=\frac{\max(g,i)(1+l/j+b/c)}{gl/j+ib/c}\ge1+\frac1{l/j+b/c}>1+\frac{y_2}{y_0+y_3}.
+$$
+Either ratio at least four already passes the rank-four hidden continuation test. A failure therefore satisfies $y_1\le 3y_0$, $y_2\le3(y_0+y_3)$.
+
+For each axis $m$ use the order-word score differences $F_{ip}(t)$ of the reciprocal-pair construction. Every word is restricted to have $F_{m,p(m)}(t)\ge0$. With the sole positive donor $p(i)$ in each row, the only further inequalities are $y_n F_{i,p(i)}-y_{p(i)}F_{in}\ge0$ for both negative donors $n$ and all observed dates, Late and Never. Nonaxis rows are balanced at $y$, and the axis surplus has the same sign as its positive donor. [Order-word construction](#order-priors-throughout-the-tetrahedron)
+
+The [finite certificate](../experiments/RANK_FOUR_CHAIN.py) checks these inequalities by affine vertex priors with the same training observation and nonnegative bilinear Bernstein coefficients. It relabels each selected axis to 0 and its positive donor to 3, so the flow proposal, independent label enumeration, exact cover check and rational rescoring are shared with the reciprocal-pair verifier. To obtain the joint volume of the two axis domains set $t=y_1$, $z=y_2$. The available interval in $y_0$ has length $1-t-z-t/3$. The base on $t\le z$ is the triangle with vertices $(0,0),(0,3/4),(3/7,3/7)$, with respective heights $1,1/4,0$. On $z\le t$ the triangle is its reflection, with heights $1,0,0$. Each triangle has area $9/56$. Six times the total volume is $45/112+9/28=81/112$. All certificate tetrahedra lie on their stated axis side and have pairwise disjoint interiors. Equality of summed and domain volumes gives the closed cover including each tie face, by limits within the appropriate side. The 50 tetrahedra use 2,885 weighted words across their vertex priors, giving 40,080 exact Bernstein inequalities. Every tested exit uses only a singleton reward. Four finite clocks protect all original signed row translations.
