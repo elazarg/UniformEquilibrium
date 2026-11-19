@@ -1,6 +1,9 @@
 """Count supports passing the pure-coalition, positive-participation and two-sure tests."""
 from dataclasses import dataclass
-from itertools import combinations
+from itertools import combinations, permutations
+
+from FIN4_ONE_JOINING_BOUNDARIES import matrix
+from FIN4_SINGLETON_SIGN_CLASSES import WITNESSES, boundary_faces, canonical
 
 PLAYERS = range(4)
 COALITIONS = tuple(s for s in range(16) if s.bit_count() >= 2)
@@ -82,6 +85,31 @@ def all_pair_count(k):
     return len(fixed), len(union)
 
 
+def check_outsider_roles():
+    strict = {canonical(matrix(witness)) for witness in WITNESSES}
+    counts = []
+    for _, representatives in boundary_faces(strict):
+        count = 0
+        for signs in representatives:
+            g = matrix(signs)
+            pairs = [(u, v) for u, v in combinations(PLAYERS, 2)
+                     if max(g[u][v], g[v][u]) <= 0]
+            if len(pairs) != 1:
+                continue
+            u, v = pairs[0]
+            if max(g[u][v], g[v][u]) == 0:
+                continue
+            outsiders = [i for i in PLAYERS if i not in (u, v)]
+            assert any(g[u][b] > 0 and g[v][b] > 0 and g[b][a] > 0
+                       and g[a][b] < 0 and min(g[u][a], g[v][a]) < 0
+                       for a, b in permutations(outsiders))
+            count += 1
+        counts.append(count)
+    assert counts == [8, 11, 4, 0]
+    return counts
+
+
 if __name__ == '__main__':
+    print("Outsider role counts by number of ties:", check_outsider_roles(), flush=True)
     for k in (6, 7):
         print(k, all_pair_count(k), flush=True)

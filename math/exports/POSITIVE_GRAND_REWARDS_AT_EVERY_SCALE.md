@@ -16,12 +16,25 @@ Every such table has a full-support proper stationary equilibrium. All four stop
 
 In particular, as the selected positive grand rewards tend to zero, each of the twelve participating triple rewards can independently be as large as a fixed positive multiple of $t^2$ in either sign, with its corresponding passive pair payoff close to $h_*$ times that value. The $4-|J|$ unselected grand rewards allow analogous magnitudes of order $t$, with their corresponding passive triple payoffs. The pair joining rewards may vary in a fixed interval. For large $M$, $t$ is of order $M^{-1/3}$; for small $M$, $t$ is of order $M^{-1/2}$. These are restrictions on finite original tables and need no assumption that the other prices are zero or of fixed sign.
 
-For a positive odds vector $p$ write $h_i(p)=1-\prod_{j\ne i}(1+p_j)^{-1}$. The stationary field, divided by opponent survival, is the sum of the passive terms $Z_i(T)\prod_{j\in T}p_j$ minus $h_i(p)$ times the analogous joining terms. Compare on the scale $p=t x$ and divide this field by $t$. The reference fixed point map for its zero is
+## An all-scale test with several coalition sizes and both signs
+
+More generally fix any collection of strictly sign-definite inverse columns, with $\sigma_i G^{-1}e_i>0$ on each selected row and $\sigma_i\in\{-1,1\}$. For any rival set $T$ of size $k=2,3$, allow independent reference magnitudes $U_{iT},V_{iT}\ge0$ for the passive and participating entries in each selected row. Set them to zero in every other row. Assume at least one is positive. Choose $t>0$ by
 $$
- T_0(x)=G^{-1}\sum_{i\in J} (R_i/M)\,\phi_i(t,x)e_i,qquad
- \phi_i(t,x)=\frac{1+t}{t}h_i(tx)\prod_{j\ne i}x_j .
+   \sum_{i,T}t^{k-1}[U_{iT}+h_* V_{iT}]=1,\qquad h_*=1-(1+t)^{-3}.
 $$
-Take $D$ to be the part of the probability simplex where every coordinate is at least $d>0$, with $2d$ less than the smallest coordinate of every normalized positive column under consideration. At $x=\rho y$, $y\in D$, the normalized $T_0$ is in the convex hull of these columns. For $0<\rho\le1$, $h_i(t\rho y)\le\min(1,t\rho)$ gives $\|T_0\|_1\le C_1\rho^3$. For $\rho\ge1$, a single rival's lower bound $h_i(t\rho y)\ge td/(1+td)$ and the presence of one coefficient $R_i/M=1$ give $\|T_0\|_1\ge c_1\rho^3$. Choose fixed $r<1<D_0$ so that the reference map has norm below $r/2$ on the inner boundary and above $2D_0$ on the outer boundary. Its norm is bounded below on the whole intervening shell, uniformly in $t$ and in all reward ratios: on the shell $x_j\ge rd$ and the same one-rival bound works there with $rd$ in place of $d$.
+The left side is strictly increasing from zero to infinity. Equally one may use any $t$ for which that sum lies in $[1/4,12]$. In the displayed error bounds of the grand-reward theorem replace $A_i(T),B_i(T)$ by the remainders
+$$
+ A_i(T)=Z_i(T)+\sigma_i U_{iT},\qquad
+ B_i(T)=Z_i(T+i)-\sigma_i V_{iT}.
+$$
+For unselected rows these are simply the two native payoffs. Keep the same singleton-rival joining bounds. The full-support proper stationary conclusion and the two-sided odds bounds still hold, uniformly over all reference sizes and proportions. Thus one may combine exit sets with two and three opponents present, including negative reference passive rewards on a positive inverse column. The case of several positive grand rewards above uses $U=0$, $V_{i,I-i}=R_i$: since $h_*(1+t)/t$ lies between one and three and $\sum R_i/M\in[1,4]$, its prescribed scale satisfies the stated interval.
+
+For the proof write $p=tx$, where $p$ are the positive stopping odds, and $h_i(p)=1-\prod_{j\ne i}(1+p_j)^{-1}$. The stationary field divided by opponent survival sums the passive terms $Z_i(T)\prod_{j\in T}p_j$ and subtracts $h_i(p)$ times the corresponding joining terms. After division by $t$, the reference fixed point map for its zero is
+$$
+ T_0(x)=\sum_{i,T}(\sigma_i G^{-1}e_i)\,t^{k-1}
+          [U_{iT}+h_i(tx)V_{iT}]\prod_{j\in T}x_j .
+$$
+Take $D$ to be the part of the probability simplex where every coordinate is at least $d>0$, with $2d$ less than the smallest coordinate of the normalized selected columns $\sigma_i G^{-1}e_i$. At $x=\rho y$, $y\in D$, the normalized $T_0$ is in the convex hull of these columns. For $0<\rho\le1$ one has $h_i(t\rho y)\le h_*$, hence $\|T_0\|_1\le C_1\rho^2$. For $\rho\ge1$ a single rival gives $h_i(t\rho y)\ge td/(1+td)\ge c_2 h_*$, using $h_*\le\min(1,3t)$. Since the total normalized weight is at least $1/4$, $\|T_0\|_1\ge c_1\rho^2$. Fix $r<1<D_0$ so that the reference norm is below $r/2$ on the inner boundary and above $2D_0$ on the outer boundary. On the entire intervening shell the reference norm is bounded below uniformly in $t$ and the proportions: use $rd$ instead of $d$ in the single-rival estimate and the positive minimum of $(rd)^k$.
 
 Let $T_G(x)$ be the actual fixed point map obtained by multiplying the higher terms by $G^{-1}$ with the same sign convention. On this shell $h_i(tx)=O(t/(1+t))$ and $|h_i(tx)-h_*|=O(t/(1+t)^4)$ uniformly. The latter follows by differentiating $\prod_{j\ne i}(1+t x_j)^{-1}$ along the segment from $x$ to the all-ones vector; all three coordinates stay bounded above zero. Each nonreference term on a rival set of size $k=2,3$ therefore has absolute value bounded by
 $$

@@ -23,6 +23,10 @@ They exclude every six-entry table with at least three ties among the twelve for
 
 For any full table write $m_k$ for the $k$th-largest absolute native nonsingleton entry. Its infimum of maximum terminal regret is at most $2m_6$. If retaining any choice of six largest entries gives a table outside the displayed exceptions, the bound is $2m_7$. Indeed the first truncation keeps five entries and the second six, leaving all original singleton and perpetual payoffs fixed. The prescribed payoff and every unilateral offer change by at most the largest deleted magnitude, uniformly over all profiles. Thus at a positive gap $\gamma$ there must be at least six higher entries of magnitude $\gamma/2$ or larger. If there are only six, their signed projection must pass the role and size restrictions above.
 
+**There is a positive size threshold even on the 96 exceptional supports.** For each fixed real singleton matrix (ties included), either all six-entry tables are solved or the singleton signs select one of the two outsiders to the mutually negative pair. In any six-entry counterexample that player's positive participating higher reward must exceed a positive threshold depending only on the singleton matrix, with the other five prices arbitrary. With the other five prices held fixed, this same price must also lie below a finite upper threshold. At the upper end the positive inverse column proved below gives a proper stationary equilibrium by the single-column jackpot theorem, for a triple or a grand reward as appropriate. [Single-column theorem](SIGNED_SINGLE_COLUMN_JACKPOT_UNIFORM_EQUILIBRIUM.md)
+
+For a dense table, retain any six largest higher entries. If this projection has the required signed template, let $x$ denote the selected player's positive higher price and $c(G)>0$ the lower threshold just described. The original maximum-regret infimum is at most $2\max\{m_7,(x-c(G))_+\}$. Reduce only that price to $\min(x,c(G))$ in the six-entry projection. The resulting game has a uniform-equilibrium payoff; the two changes have disjoint supports, so the largest change at any exit is the maximum in the formula.
+
 ## First-date comparisons and the six edits
 
 A pure first-date set $S$ of at least two quitters is a terminal equilibrium whenever no player prefers the adjacent set $S\mathbin{\triangle}\{i\}$. Each unilateral replacement still faces a sure rival at the first date, so these comparisons prove original uniform equilibrium, including signed own rewards. On the reference table with all nonsingletons zero every triple and the grand coalition meet this test. So does each pair with both singleton comparisons nonpositive. Let $m$ be the number of such pairs. A new strict improvement at a previously stable vertex needs a change in one of the two entries on its comparison edge. Different spoiled vertices require different edges, since one edge cannot give a strict improvement in both directions. A changed row entry belongs to just one comparison edge. Thus $m+4$ arbitrary changes preserve a pure equilibrium. Every strict singleton matrix of a possible counterexample has a mutually negative pair, and the same necessity holds without genericity. This proves the five-entry conclusion. [Reciprocal-negative necessity](NO_MUTUALLY_NEGATIVE_SINGLETON_PAIR_UNIFORM_EQUILIBRIUM.md)
@@ -125,7 +129,24 @@ $$
 $$
 For an instance strictly inside this interval take $u=0,v=1$, $K=2$, $L=N=1$, $R_u=1$ and $R_v=R_b=1/10$. Fix either implementation of each withdrawal. The two-sure test fails since $KN=2>(-G_{uv})L=1$. The sole-$v$ test fails at $G_{bv}=-1$. For sole $b$ the unique positive solution of $2X^2+2X-40=0$ is $X=4$, and its required gain numerator is $16+2-40+4=-18$. Thus all sure openings fail. The only mutually negative pair is $01$ and its triple joining offer $K$ is positive, so every relabeling fails the earlier attached-pair caps. The full-support product-low test also fails. Indeed proper hazards with the hazard of 2 sufficiently near one and that of 3 sufficiently near zero make all four native forced quit offers strictly positive. The new periodic certificate does not require a verdict on mixed stationary equilibria.
 
-## A return for the opposite assignment at all eight calibrations
+### A positive axis throughout all six-entry sign chambers
+
+In the labels of the three-date theorem, suppose
+\[
+ G_{01},G_{10}<0,\qquad G_{03},G_{13},G_{32}>0>G_{23},
+ \qquad \min(G_{02},G_{12})<0 .
+\]
+These strict comparisons hold in a suitable labeling throughout all eight strict, eleven one-tie and four two-tie singleton sign orbits in the six-entry census. Other comparisons may be zero. At every such matrix, either every higher-reward completion already has an original uniform-equilibrium payoff, or $\det G>0$ and $G^{-1}e_2>0$ entrywise.
+
+Indeed if any completion fails, the singleton minimum map is $R_0$ of degree one and $\det G>0$. Its nonzero degree at target $e_2$ gives $x\ge0$, $Gx\ge e_2$, $x\cdot(Gx-e_2)=0$. The degree carries to this possibly nonregular target because the $R_0$ condition bounds all zeros uniformly over any bounded target homotopy. A solution omitting 2 would be nonzero and homogeneous complementary, contrary to $R_0$. The singleton support $\{2\}$ cannot pay its positive target. For a pair containing 2, its other member $i$ must have $G_{i2}=0$. Thus $i$ is a mate, and the other mate dislikes both $i$ and 2, violating its inactive inequality. Triple $012$ cannot balance the mate who dislikes 2, since it also dislikes the other mate. These arguments do not require nonsingularity of principal triples.
+
+If the support is $i,2,3$ with $i$ a mate, scale $x_2$ to one and write the other occupied masses as $X=x_i/x_2$, $Z=x_3/x_2$. The active equations give $G_{3i}X=-G_{32}$, $G_{i3}Z=-G_{i2}$ and $G_{2i}X+G_{23}Z>0$. The directed singleton cycle $i,2,3$ therefore has masses proportional to $(X,1,Z)$ and tour ratio $\rho=-G_{23}Z/(G_{2i}X)\in(0,1)$. Its active zero conditions follow successively from those three equations. Its quiet mate $o$ has initial unnormalized tail $A=G_{oi}X+G_{o2}+G_{o3}Z\ge0$ by the inactive inequality. Removing the first phase's negative term raises this tail. Before the last phase its value is $\rho A+(1-\rho)G_{o3}Z>0$. This verifies each phase and gives an actual uniform equilibrium for every completion by the singleton path theorem. Hence at a failed completion the solution has full support and equals $G^{-1}e_2$. [Positive determinant and source conditions](FIN4_STRICT_INVERSE_COLUMN_AND_ALL_END_MINIMUM_REDUCTION.md) · [Degree](UNIVERSAL_REDUCED_SINGLETON_DEGREE.md) · [Singleton paths](ALL_FOUR_PLAYER_SINGLETON_PATHS_HAVE_A_FINITE_TEST.md)
+
+In particular the three-date theorem applies throughout these twenty-three sign chambers in the assignment $a=2,b=3$. At any singleton matrix lacking the uniform conclusion for every completion, the positive masses in its four-by-four linear system are automatic. Its positive threshold $K_*(G)=(G_{20}X+G_{21}U)/P$ gives an original uniform-equilibrium payoff for every $0<K\le K_*(G)$, with all five remaining prices independent and unrestricted, either withdrawal owner, either implementation of either withdrawal, and arbitrary own levels. The threshold depends only on singleton data and is invariant under a common rescaling of the axis masses.
+
+The count uses the previously verified singleton census. For each eligible ternary sign orbit in each stratum, try the 24 assignments to the labels in the displayed inequalities. All eligible orbits pass, giving respective counts $8/8$, $11/11$, $4/4$. At least one valid assignment has $G_{02}<0$ by swapping the mates.
+
+## A return for the opposite assignment on every surviving singleton matrix
 
 Here the joining owner is denoted by $a$, the remaining outsider by $b$, and the mutual pair by $u,v$. Either mate may own the withdrawal edit, independently of this labeling. Write $K=Z_a(M+a)>0$ and $R=Z_b(I)>0$. As in the three-date construction the other four edits may have arbitrary magnitudes with either allowed withdrawal implementation.
 
@@ -139,11 +160,19 @@ $$
  C=c/m,\quad D=c'/n,\quad E=lD+kC,\quad H=hD+iC-d,\quad
  V=(c'+gc/e)/(nd),\quad W=fc/(ed)-lV,\quad B=\max(h,i).
 $$
-Assume $B,E,W>0$, $V\ge0$, and $hV+HW/E>1$. Define
+For each remaining singleton matrix these constants can be chosen with $B,E,W,h>0$, $V\ge0$ and $hV+HW/E>1$. To see this, let $a=3,b=2$ in the eight-chamber axis result above. Among mates who dislike $b$ choose $u$ to minimize $G_{ua}/(-G_{ub})$. This makes $V\ge0$, including when the other mate likes $b$. Since every pair other than $M$ has a strictly positive comparison and $G_{ub}<0$, we have $h=G_{bu}>0$. The diagonal cofactor at $b$ is $mnE$, positive by $G^{-1}e_b>0$ and $\det G>0$. Put
+$$
+ z_0=(V+D W/E,\ C W/E,\ c/(ed),\ 1/d+W/E)
+$$
+in the coordinate order $u,v,b,a$. Direct substitution gives $Gz_0=(hV+HW/E-1)e_b$. Since its $b$ coordinate is strictly positive, the positive inverse column forces the scalar on the right to be strictly positive, and then $C W/E>0$. This verifies every sign condition on the entire chambers. More generally the return below uses only the displayed sign and slope conditions.
+
+There are $r_0,r_1>0$ depending only on the singleton matrix such that **every $R\le\max(r_0,r_1 K)$ yields an original uniform-equilibrium payoff**. All other four changed rewards can have arbitrary permitted magnitudes. Together with the opposite assignment this gives a global six-entry restriction: at every real singleton matrix, including ties, either the earlier exclusions solve every six-entry table or the singleton signs identify an outsider (player 2 in the printed labels) whose positive higher reward must exceed a positive singleton-dependent threshold in any counterexample. This reward is its participating triple if it is the joining player, and its grand reward otherwise. A common threshold is obtained by taking the smaller of the two assignment thresholds, and if necessary a minimum over the finite relabelings. In particular, with any real singleton matrix held fixed, all sufficiently small higher tables supported on at most six entries have an original uniform-equilibrium payoff.
+
+For explicit constants define
 $$
  P=\frac{B}{1+(1+c/e)B/d},\quad T=WP/E.
 $$
-Suppose that some $L\ge0$ satisfies $hV\ge LW$ and $\epsilon=H+L(E-WP)>0$. Then the original game has a uniform-equilibrium payoff whenever
+One sufficient bound, used below at the calibrated matrices, is as follows. Suppose that some $L\ge0$ satisfies $hV\ge LW$ and $\epsilon=H+L(E-WP)>0$. Then the original game has a uniform-equilibrium payoff whenever
 $$
  R\min\!\left\{C T(VP+DT),\ WP/K\right\}\le\epsilon.
 $$
@@ -162,21 +191,24 @@ $$
 $$
 For each subsequent backward step from $(0,0,y,x)$ use the same odds with $Vz$ replaced by zero, now choosing $Et+KCDt^2=x$. The new formulas for $x',y'$ replace the two numerators by $KCDt^2$ and $y+Ht$, respectively. Only the singletons, the positive triple entry $K$ and the grand offer $R$ of the quiet player enter these calculations. At joint dates the quiet player can quit for $R p_up_vt$ in units multiplied by the full odds denominator.
 
-The first joint step gives $y\ge Lx$. Indeed subtract $L(1+t)(Wz-Et)$ from $hVz+Ht$. The difference is
-$$
- (hV-LW)z+[H+L(E-Wz)]t+LEt^2\ge\epsilon t.
-$$
-At a subsequent step $x\le WP$ and $y\ge Lx$ imply
-$$
- y+Ht-L(1+t)(x-Et)\ge [H+L(E-x)]t+LEt^2\ge\epsilon t.
-$$
-Hence the invariant persists, and every quiet payoff numerator is at least $\epsilon t$. On all steps $p_up_v\le C T(VP+DT)$ and $Kp_up_v\le WP$, which prove the quiet guard. Beyond the first step, $x-x'\ge Et$ and $x'/x$ is a continuous function of $x$ on $[0,WP]$, taking value zero at zero and strictly less than one everywhere. Its maximum is strictly below one for each fixed table. Each quiet value $y$ belongs to $[0,B]$, since the quiet row's on-path rewards are at most $B$ and the invariant gives nonnegativity. The change in $y$ on each subsequent step is bounded by a common multiple of $t$. Thus the backward iteration converges uniformly to $F(S)e_b$, with $F$ continuous on $[0,B]$ and $F(B)\le B$. As $S$ decreases to zero the first $t=W S/E+O_K(S^2)$, the first $x=O_K(S^2)$ and the sum of subsequent odds $t$ is $O_K(S^2)$. This gives
+First run these equations for every seed before imposing the quiet player's guard. Beyond the first step $x-x'\ge Et$ and $x'/x$ is continuous on $[0,WP]$, with value zero at zero and strictly below one everywhere. Thus its maximum is below one at each fixed table. The quantities $y$ are bounded by the minimum and maximum of the quiet player's on-path rewards and seed values, since they are actual prescribed one-stage averages even if an offer to deviate is profitable. In particular $y\le B$. The change in $y$ on each subsequent step is bounded by a common multiple of $t$. Hence the backward iteration converges uniformly to $F(S)e_b$, with $F$ continuous on $[0,B]$ and $F(B)\le B$. As $S$ decreases to zero the first $t=W S/E+O_K(S^2)$, the first $x=O_K(S^2)$ and the sum of subsequent $t$ is $O_K(S^2)$. Therefore
 $$
  F(S)=(hV+HW/E)S+O_K(S^2)>S
 $$
-for all sufficiently small positive $S$. There is a positive fixed point. Truncate the backward steps at this fixed point and repeat the finite block. Each deviator faces at least one of the two distinct fixed solo hazards per block. Its best-reply and prescribed value maps therefore have a common contraction factor below one, uniformly in truncation length. The block's prescribed and best-reply outputs at the seed coincide and converge to the seed. Hence both true values converge to it and the maximum terminal regret vanishes. With each truncation fixed, survival under any individual replacement is geometrically bounded in the number of blocks. Restoring the four own singleton levels therefore gives the corresponding signed uniform target.
+for small positive $S$. Fix a positive seed with $F(S)=S$.
 
-The following exact substitutions use $u=0,v=1,a=3,b=2$ at each of the eight strict integer calibrations from the three-date table.
+If $H>0$, the displayed explicit bound already applies with $L=0$: on every joint date the quiet payoff numerator is at least $Ht$, while $p_up_v\le C T(VP+DT)$ and $Kp_up_v\le WP$. More generally the earlier bound with $L\ge0$ follows by induction on $y\ge Lx$. At the first joint date subtract $L(1+t)(Wz-Et)$ from $hVz+Ht$; the result is $(hV-LW)z+[H+L(E-Wz)]t+LEt^2\ge\epsilon t$. Thereafter $y+Ht-L(1+t)(x-Et)\ge[H+L(E-x)]t+LEt^2\ge\epsilon t$. Thus all guards hold in the stated range.
+
+If $H\le0$, a nonpositive $y$ could never yield a positive limiting value in the later recurrence. All joint outputs at the chosen seed are therefore positive, and they decrease to $S$. In particular every quiet numerator is at least $S$. At all joint dates $z\le S$ and $t\le WS/E$. Consequently
+$$
+ p_u p_v t\le C(W/E)^2(V+D W/E) S^3,\qquad
+ Kp_u p_v t\le W^2 S^2/E .
+$$
+These estimates give the required two bounds, for example $r_0=1/[C(W/E)^2(V+D W/E)B^2]$ and $r_1=E/(W^2 B)$. Uniform positive constants also exist near $H=0$: if $H_+ W/E<1/2$ the total possible later increase from the positive forcing terms is at most $H_+\sum t\le H_+WS/E<S/2$. A nonpositive output could then never reach the limit $S$. Starting from a positive output, each further positive output is at most the previous value plus $H_+t$. Thus all joint outputs exceed $S/2$, and half the displayed thresholds suffice throughout this neighborhood.
+
+Truncate the backward steps at this fixed point and repeat the finite block. Each deviator faces at least one of the two distinct fixed solo hazards per block. Its best-reply and prescribed value maps therefore have a common contraction factor below one, uniformly in truncation length. The block's prescribed and best-reply outputs at the seed coincide and converge to the seed. Hence both true values converge to it and the maximum terminal regret vanishes. With each truncation fixed, survival under any individual replacement is geometrically bounded in the number of blocks. Restoring the four own singleton levels therefore gives the corresponding signed uniform target.
+
+For the sharper explicit bounds the following exact substitutions use $u=0,v=1,a=3,b=2$ at each of the eight strict integer calibrations from the three-date table.
 
 | Witness | $E$ | $H$ | $V$ | $W$ | $WP$ | $L$ | $hV+HW/E$ |
 |---|---:|---:|---:|---:|---:|---:|---:|
@@ -205,23 +237,15 @@ On both of these dates $w_0=w_1=0$ and $w_2,w_3>0$. Row 3 can earn its positive 
 
 The remaining tail has only solo dates and absorbs almost surely. As cumulative exit probability increases, linearly interpolate its remaining *unconditional* native payoffs along each solo segment. These vectors stay nonnegative, and the active owner's coordinate is zero throughout its segment. This is a continuous singleton path for witness 18. The exact singleton classification excludes it: the only switch cycle is $023$, with relative masses $1,1/2,1/4$ and scaling $1/2$. The omitted row 1's total on its first tour is $-2+1/2+1/2=-1$. The singleton matrix satisfies the $R_0$ condition as checked by the census. This gives the contradiction. The limiting construction above avoids it because the number of three-player dates per finite block tends to infinity. [Finite singleton-path test](ALL_FOUR_PLAYER_SINGLETON_PATHS_HAVE_A_FINITE_TEST.md) · [Census calibration](../experiments/FIN4_SINGLETON_SIGN_CLASSES.py)
 
-## Every grand-reward size near all eight singleton calibrations
+## Every grand-reward size at the surviving singleton matrices
 
-At each of the eight singleton calibrations with a unique mutually negative pair, both assignments of the two outsiders admit a whole positive line in the six-entry template. For each assignment there are a neighborhood of its singleton matrix and $\eta>0$ such that the other five required magnitudes $K,L,N,R_u,R_v$ may independently take any values in $(0,\eta)$, with either mate owning the withdrawal and either implementation of its two edges, while $R_b=Z_b(I)$ may be any positive real number. At the assignment $a=2,b=3$ the three-date construction already gives more: for sufficiently small $K>0$ its guard $KP<D$ is strict, and all five other magnitudes are arbitrary.
-
-For the opposite assignment $a=3,b=2$, the accumulating theorem supplies a fixed interval $0<R_b\le r$, with $r>0$ bounded away from zero on a neighborhood of each listed calibration. Its sufficient bound using $CT(VP+DT)$ does not depend on $K$. The remaining interval follows by perturbing a stationary branch. At the reference table whose only nonzero higher reward is $R_b$ for the grand coalition, put $y=G^{-1}e_b>0$ as verified for all eight matrices. In proper odds $p$ the three nonpivot equations are $(Gp)_i=0$. They have the ray $p=ty$, $t>0$. The pivot equation becomes
-$$
- R_b=\frac{1}{t^2\,[1-\prod_{j\ne b}(1+t y_j)^{-1}]\prod_{j\ne b}y_j}.
-$$
-The denominator is strictly increasing with strictly positive derivative, from zero to infinity. Each $R_b>0$ has a transverse positive solution: the three nonpivot rows have rank three, and the remaining scalar equation has nonzero derivative on their kernel.
-
-These solutions persist uniformly over $R_b\ge r$ under small perturbations of the singleton matrix and other fixed higher entries. To include infinity, set $\lambda=R_b^{-1/3}$ and $p=\lambda x$. After division by $\lambda$ the stationarity field at $\lambda=0$ is $Gx-H(x)e_b$ with $H(x)=(\sum_{j\ne b}x_j)\prod_{j\ne b}x_j$. The field extends smoothly to this endpoint since $(1-\prod_{j\ne b}(1+\lambda x_j)^{-1})/\lambda$ does. There is a positive transverse root $x=y/H(y)^{1/3}$, with Jacobian determinant $-3\det G$. All other bounded higher entries give vanishing scaled terms there. The reference roots thus extend to a compact positive transverse graph on $0\le\lambda\le r^{-1/3}$. Finitely many implicit-function neighborhoods ensure a proper stationary root at every $R_b\ge r$ throughout one neighborhood of the reference parameters. The stationary and accumulating intervals together give the claimed whole line, including cases in which the two-sure inequality fails.
+Fix any of the remaining singleton matrices, using the role labeling from the axis result. For each assignment of the two outsiders there is $\eta>0$ such that $K,L,N,R_u,R_v$ may independently take any values in $(0,\eta)$, while $R_b=Z_b(I)$ may be any positive real number. Either mate can own the withdrawal, either implementation is permitted and all original row levels are arbitrary. For the assignment $a=2,b=3$ this is immediate from the three-date construction: sufficiently small $K$ alone already suffices. For $a=3,b=2$ the accumulating return supplies a low interval $0<R_b\le r_0$ independently of the five other prices. The positive-axis stationary theorem applied with $J=\{b\}$ covers the complementary interval $R_b\ge r_0$ for uniformly small other prices. Indeed its scale $t$ stays bounded above there, and all three tolerances in its inequalities have positive lower bounds. Together the intervals cover the entire positive line. On the branch with $G^{-1}e_2>0$ these conclusions hold on singleton neighborhoods: the axis remains positive, the designated singleton signs persist, and the two possible orders at a tie of the initial mate ratios both meet the return conditions. [Positive grand rewards at every scale](POSITIVE_GRAND_REWARDS_AT_EVERY_SCALE.md)
 
 ### A sure opening extends the return to five unrestricted prices
 
 Use the opposite assignment and abbreviate the positive grand reward of $b$ by $R$. Write $L=Z_a(T)-Z_a(I)>0$ for the grand withdrawal size, independently of the auxiliary slope in the accumulating-return calculation. Suppose the returns above give equilibrium for
 $$0<R\le\max(r_0,r_1K),\qquad r_0,r_1>0.$$
-Both numbers can be chosen locally uniformly at the eight calibrations: take the two terms of the previously proved bound separately. Assume $G_{bv}>0>G_{vb}$, and set $m=-G_{uv}$, $m_v=-G_{vu}$. When $G_{av}\ne0$, define
+Both numbers can be chosen locally uniformly on the positive-axis branch by the bounds in the preceding return. Assume $G_{bv}>0>G_{vb}$, and set $m=-G_{uv}$, $m_v=-G_{vu}$. When $G_{av}\ne0$, define
 $$
  R_{\rm sure}=\begin{cases}
  L G_{bv}(G_{va})_+/[(-G_{vb})(-G_{av})] & (G_{av}<0),\\
@@ -238,63 +262,12 @@ For $G_{av}<0$, either a sufficiently small $L$ alone or a sufficiently small $N
 
 In the census labels $a=3,b=2$, the fixed mate $v=0$ satisfies $G_{bv}>0>G_{vb}$ at all eight witnesses. Its $G_{av}$ is negative at 6, 8, 15, 16, 18 and 19, and positive at 17 and 21. The mate $v=1$ also qualifies at 6 (negative $G_{av}$) and 8 (positive $G_{av}$). Here $u$ is the other mate and owns the withdrawal from $T$; the order used in the accumulating return may be chosen independently. With outsider roles exchanged, the earlier three-date theorem already allows all five other prices for sufficiently small $K$ for either mate.
 
-### Three unrestricted prices at witness 18
+### Independent large prices for the three-date assignment
 
-At the singleton matrix of witness 18, use the opposite entrant assignment $a=3,b=2$. Write $R=Z_2(I)$ and $A=Z_0(I)$, $B=Z_1(I)$ for the three positive grand rewards. Fix $N=4,L=B=1$. **All three prices $K,A,R$ may vary independently throughout $(0,\infty)$.** This holds for either withdrawal owner and both implementations of each edge, and for all original own levels. The conclusion persists throughout an open neighborhood of the singleton data and three fixed prices within the six-position template.
+Take $a=2,b=3$ on the positive-axis branch, and let $J$ be any subset of $\{u,v,b\}$ whose inverse columns are strictly positive. The triple price $K$, the grand withdrawal size $L$, and every grand reward $R_j$ for $j\in J$ may vary independently over $(0,\infty)$ whenever $N$ and the grand rewards of the other owners are sufficiently small. Either mate may own the withdrawal and either implementation of each withdrawal is allowed. For witnesses $6,8$ the maximal $J$ is $\{3\}$; for $15,16,17$ it is $\{1\}$; for $18,21$ it is $\{0,1\}$; for $19$ it is empty. The indices denote the original census labels. The grand $R_b$ here is $R_3$, while in the opposite assignment the sufficient small-grand condition concerns $R_2$.
 
-With withdrawal owner $u=1$, the preceding sure-$v$ criterion for $v=0$ applies at $R\ge2L$, while the accumulating return already covers every $K>0$ at smaller $R$. It suffices to establish the claim for $u=0$. In the general return specialized here, write $s=2z=4S/(2+3S)$. The first joint step uses odds $p_0=s/2+t$, $p_1=2t$, $p_3=t$, with $3t+K(st+2t^2)=s/2$. Every later joint prepend uses $p_0=p_3=t$ and $p_1=2t$. In the recurrence for witness 18, $y+x/3$ decreases under each subsequent prepend: its new numerator over $(1+t)^2(1+2t)$ is $y+(1+t)x/3-t^2$. Its value at the first prepend is at most $2s/[3(1+s/2)]$, since the corresponding numerator is $2s/3+st/6-t^2$ and denominator $(1+s/2+t)(1+2t)(1+t)$. Thus $F(S)\le8S/(6+15S)$, using $s=4S/(2+3S)$. Choose $S=1/7$, where $F(S)<S$; every seed up to this value has $s\le4/17$ and first and subsequent $t\le s/6\le2/51$. The row-2 guard $2Rt^2\le1$ holds with strict margin for $R\le300$. We now give stationary equilibria whenever $R\ge250$.
+The three-date equilibrium covers $K\le K_*(G)$, and the sure pair covers $mL\ge KN$. Otherwise apply the all-scale positive-column theorem with the marked triple $K$ in row 2 and the marked grands $R_j$ for $j\in J$. Its scale $t$ satisfies $h_*(t)[Kt+\sum_{j\in J}R_jt^2]=1$, $h_*(t)=1-(1+t)^{-3}$. Thus $t$ is bounded above and $Kt^2\le t/h_*(t)$ is also bounded. An unmarked withdrawal of size $L$ on the rival triple gives a perturbation bounded by a constant times $Lt^2\le N Kt^2/m$, for either its passive or its participating implementation. The $N$-term and the unmarked grand rewards have bounded scale factors. Uniformly small $N$ and unmarked grands therefore satisfy the perturbation bounds, independently of all designated prices. This also gives the whole $K$ line when $J$ is empty.
 
-Let the positive stopping odds be $(x,y,s,w)$ and $h_i=1-\prod_{j\ne i}(1+p_j)^{-1}$. Set $n,l\in\{0,1\}$ equal to one for a positive passive implementation of the respective withdrawals $N,L$ and zero for a negative participating implementation. The nonpivot equations are
-$$
-\begin{aligned}
- f_0&=2w-s-y+sy[N(n+(1-n)h_0)-A h_0 w],\\
- f_1&=2w+s-2x-sx B h_1 w,\\
- f_3&=2s-x-y+xy[sL(l+(1-l)h_3)-Kh_3].
-\end{aligned}
-$$
-In $s/2\le w\le2s$ and $0<s\le1/5$, the first two equations have unique nonnegative continuous roots in $y,x$, respectively. They decrease strictly in their own variable, with derivatives at most $-1+sN<0$ and $-2$, since $h_i+p_j\partial_jh_i<1$. They tend to minus infinity at large own variable. The root $x$ lies in $[(2w+s)/(2+sBw),w+s/2]$, and $y>0$ except at the left edge. At that edge $f_3=2s-x>0$. On the right edge $x\ge5s/(2+2s^2B)>2s$ and $sLx<1$, so $f_3<0$. These signs are uniform in $K,A$.
+There is a stronger conclusion when $G_{bu},G_{bv}<0$. In this case **$N$ alone can be sufficiently small while every other price is arbitrary and positive**. Use the sure-$b$ test with $C=-G_{ab}/L$, $D=G_{vb}/R_v$. Its unique positive candidate solves $G_{ub}X^2+NCX=R_uCD$. If the test fails, $|G_{bu}|X^2+|G_{bv}|C+R_bCD<G_{ba}D$. Thus $X^2\le c/R_v$, $R_v,R_b\le cL$ and $R_u\le c(L+N\sqrt{R_v})\le c'(L+N\sqrt L)$, with constants depending only on the singleton matrix. Since $K\ge K_*(G)>0$, $L<KN/m$ and $N\le1$, all three grand prices and $L$ are at most $c''KN$. Mark only the triple $K$ in the preceding scale argument. Each of these four errors is then bounded by a constant times $KNt^2=O(N)$, and the $N$ withdrawal is also $O(N)$. This covers the complete strict singleton chambers of witnesses $6,15,18$ and the tied matrices with the same strict comparisons, with either withdrawing mate. At a tied matrix satisfying the displayed signs, the sure-$b$ candidate remains sufficient by its explicit first-date indifferences and its weak-blocker fallback; its use here requires no exhaustive classification of sure openings at ties.
 
-The remaining row is $f_2=x+y-2w-R h_2xyw$. At the top edge $s=1/5$ we have $w\ge1/10$, $x\ge (2/5)/(2+2/25)>19/100$ and $h_2\ge1-1/[(1+19/100)(1+1/10)]>23/100$. Because $x\le w+s/2\le2w$, the top has $f_2<0$ for $R\ge250$ (also at $y=0$, since $x<2w$). On every sufficiently small bottom edge at every zero of $f_3$, one has $f_2>0$. In fact, for any fixed finite prices, divide the three nonpivot equations by $s$ and take $s\downarrow0$ along such zeros. Since $y\le(2w-s)/(1-sN)$ and $x\le w+s/2$, compactness and the nonsingular leading equations give $(x,y,w)/s\to(4/3,2/3,5/6)$ and $f_2/s\to1/3$.
-
-The rectangle in $(w/s,s)$ has opposite strict $f_3$ signs on its vertical sides and opposite strict $f_2$ signs at the $f_3$ zeros on its two horizontal sides. Its two-component field has nonzero degree: homotope $f_2$ to the affine function that is positive at the bottom and negative at the top, then $f_3$ to the affine function positive on the left and negative on the right. No boundary zero occurs. The interior zero has strictly positive odds and gives an exact absorbing stationary equilibrium, valid also after the row translations.
-
-For perturbations of $G,N,L,B$, replace the left edge by $w/s=-G_{02}/G_{03}$ so that $y=0$ there. The monotone inverses and bounds on the sides persist with strict relative margins after division by $s$, uniformly in $K,A$: the contribution of $A$ to $f_0$ and of $K$ to $f_3$ on the right is nonpositive. For the top, $x$ depends only on $G_{10},G_{12},G_{13},B,s,w$, and the baseline $G_{20}x+G_{23}w=x-2w$ is strictly negative throughout that compact edge even at its left end, since $B>0$. The positive lower bounds on $h_2,x,w$ absorb the nearby $G_{21}y$ term. The positive leading $f_2/s$ at the lower $f_3$ zeros persists by nonsingularity for each fixed finite price.
-
-For the lower interval use the general return notation and $\alpha=H/E>0$. The subsequent-step identity gives
-$$
- y'+\alpha x'=\frac{y+\alpha(1+t)x-\alpha E t^2}{(1+Dt)(1+Ct)(1+t)}\le y+\alpha x.
-$$
-At the first step its numerator is $(hV+\alpha W)z+\alpha Wzt-\alpha Et^2$ and its denominator is $(1+Vz+Dt)(1+Ct)(1+t)$. Consequently $F(S)\le (hV+\alpha W)z/(1+Vz)$. The upper bound at $S=1/7$ is strictly smaller than that seed and depends only on singleton data. Every prepend has $t\le Wz/E$, where $z$ is at most its endpoint value, and the quiet guard follows from $R C t^2\le\min(h,H/D)$. The strict margin up to $R=300$ persists for nearby singleton data, independently of $K,A$. This proves openness of the entire orthant.
-
-There is a second, larger orthant at the same singleton matrix. **Fix $N=B=1$. All four $K,L,A,R$ may independently take any positive values**, in either withdrawal orientation and both implementations. This also holds on neighborhoods of $G,N,B$. For $u=0$ only the right-side sign of $f_3$ needs a new check. If $KN\le mL$ the sure pair already works ($m=-G_{01}=1$). Otherwise $L<KN/m$. On the right edge $w=2s$ one has $x>2s$ and
-$$h_3\ge 1-[(1+x)(1+s)]^{-1}\ge s/(1+s)+x/[(1+s)(1+x)]> 3s/2$$
-for $0<s\le1/5$, using $x>2s$. This strictly exceeds $sN/m$ with a uniform relative margin. Hence $sL(l+(1-l)h_3)-Kh_3<0$ for every $K>0$. All other estimates above apply with their original margins. For $u=1$ the sure-$v$ cutoff is $2L$ while $m=-G_{10}=2$. Whenever $KN>mL$, this cutoff is smaller than $K$. The general return at this matrix already supplies $R\le(5/2)K$ since $\epsilon=1$ and $WP=2/5$. These strict overlaps persist on neighborhoods. This proves the four-price assertion.
-
-### One bounded price at witness 18, in either orientation
-
-Let $G$ be the displayed witness 18 matrix, $a=3,b=2$. If $0<N\le1/4$, **all five other prices $K,L,R_0,R_1,R_2$ are independently arbitrary and positive**. Either mate may own the withdrawal and either implementation of each edge is permitted. The conclusion holds uniformly on a neighborhood of the singleton matrix for all these choices. For $u=1$, the preceding sure-$v$ and accumulating comparison already proves the result, since on the only remaining branch $KN>2L$ one has $2L<KN\le K/4$. We give a different argument for $u=0$, where that sure-$v$ sign comparison fails. Write $A=R_0,B=R_1,R=R_2$ and $m=-G_{01}$. On a sufficiently small neighborhood we may suppose $m>3/4$. The earlier square and return let us assume
-$$
- L<KN/m,\qquad R>20,\qquad K<R .
-$$
-Indeed the return covers every $R\le20$ with a strict uniform guard and also $R\le K$, since its center linear cutoff is $(5/2)K$.
-
-Write the odds as $p=(x,y,s,w)$ and $h_i=1-\prod_{j\ne i}(1+p_j)^{-1}$. Set $z=Ns[n+(1-n)h_0]$, $M=(G+z e_0 e_1^\top)^{-1}$, and write stationary indifference as $p=M q$, where
-$$
- q=\big(A s y w h_0,\ B s x w h_1,\ R x y w h_2,\ xy[Kh_3-sL(l+(1-l)h_3)]\big).
-$$
-Use $0<s\le1$, so $0\le z\le1/4$ and $sN/m<h_3$ since $h_3\ge s/(1+s)$. Hence $q$ is nonnegative.
-
-We record explicit matrix inequalities uniform in this interval of $z$. At the stated witness,
-$$
- G^{-1}=\begin{pmatrix}3&1&4&1\\1&1&2&0\\2&1&3&1\\2&1&5/2&1/2\end{pmatrix},\qquad
- M=G^{-1}-\frac{z}{1+z}G^{-1}e_0e_1^\top G^{-1}.
-$$
-Every $M_{2j}>0$, and all ratios $M_{0j}/M_{2j},M_{3j}/M_{2j}$ lie strictly between $1/3$ and $4$. The ratios $M_{1j}/M_{2j}$ are strictly below $4$. Moreover $M_{10},M_{11}>0$, $M_{12}>3/2$ and $M_{13}>-1/20$. These follow directly from $0\le z/(1+z)\le1/5$, including $M_{13}=0$ at the center, and persist throughout one singleton neighborhood by compactness.
-
-Use angular variables $(x/s,y/s,w/s)\in[1/3,4]\times[0,4]\times[1/3,4]$. Form $T=Mq$ and send these ratios to $(T_0,\max(0,T_1),T_3)/T_2$. This is a continuous self-map of the angular box for each $s>0$, since $q_1>0$. At any angular fixed point $y>0$: if $y=0$, the only nonzero coordinate of $q$ is $q_1$ and $M_{11}>0$. Thus $T_1/y=T_2/s$ there. For every fixed finite choice of the six prices the maximum of $T_2/s$ over the angular box tends to zero as $s\downarrow0$. In contrast, at $s=1$ and at every angular fixed point, $h_2\ge 1-(1+1/3)^{-2}=7/16$, and
-$$
- \frac{T_2}{s}=\frac{T_1}{y}
- \ge x\left(\tfrac32 R w h_2- K/20\right)
- > \frac R3\left(\frac7{32}-\frac1{20}\right)>1 .
-$$
-The bound includes the potentially negative $M_{13}q_3$, since $q_3\le Kxy$. Choose a small bottom radius $s_*>0$ where all angular ratios have $T_2<s_*$. Adjoin to the angular map the scalar update $s\mapsto\operatorname{proj}_{[s_*,1]}(2s-T_2)$. Brouwer gives a fixed point; the two strict radial inequalities exclude both endpoint radii. At the interior fixed point $s=T_2$ and all four odds are positive, so $p=Mq$. This gives an original absorbing stationary equilibrium throughout the remaining region, uniformly over the five unrestricted prices. Together with the square and return this proves the full statement.
+At witness 18, $N\le1$ suffices for both withdrawal owners in the opposite assignment and all five other prices may vary independently. Other results cover large withdrawals and allow variations in all 38 formerly zero higher entries. The companion paper gives the sharper constants, the stationary proofs and the four-player adjustment of the accumulating return. [Large withdrawal rewards](SIX_ENTRY_EQUILIBRIA_WITH_LARGE_WITHDRAWAL_REWARDS.md)
