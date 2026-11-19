@@ -43,3 +43,31 @@ On the two full-axis domains each word separately has $F_{h,p_h}(t)\ge0$ for its
 The checker covers the column-2 half-space $2y_3\ge y_2$ by 38 tetrahedra and the column-3 half-space $2y_3\le y_2$ by 26 tetrahedra inside the normalized simplex. The first has normalized volume $2/3$, the second $1/3$. It checks containment, pairwise disjoint interiors and the total determinant volumes. The proper triangle has vertices proportional to $(0,1,0,0),(0,1,2,0),(0,1,0,2)$; six longest-edge bisection leaves cover it. On each piece a common training observation and a prior per vertex give all balanced-generator inequalities throughout the piece by checking every symmetrized mixed vertex coefficient. The face verifier repeats one vertex to reuse the four-vertex calculation. Independent enumeration of all $4^4$ validation selections per complete word checks interlacing, every tested date and each surplus condition. The respective word and integer-inequality counts are 1,903 and 31,840 on column 2, 1,017 and 22,720 on column 3, and 243 and 7,360 on the face. [Exact checker and sign counts](../experiments/RANK_FOUR_THREE_CYCLE_TAIL.py)
 
 All rival clocks are finite, so the inequalities survive every signed row translation. The order simplex is compact and its inequalities are continuous in the table, giving the weak-sign closure. The new chamber's closure contains six surviving one-tie orbits, ten two-tie orbits and five three-tie orbits, disjoint from those covered by the three earlier unique-donor chambers. This leaves 17 strict, 33 one-tie and 17 two-tie orbits outside these four rank-four closures.
+
+## A positive comparison back to the dependent
+
+In the three-cycle theorem change the core owner's comparison $G_{30}$ back to the dependent from negative to positive. **The fourth order test still passes for the entire strict chamber, all 44 nonsingleton rewards, every signed own-singleton level, and every specialization of foreign comparisons to zero.** This is census chamber $(2,4,9,4)$, witness 5. It adds one strict, four one-tie and three two-tie orbits to the preceding four full-chamber results. Their union now passes rank four on 5 of 21 strict, 17 of 46 one-tie, 25 of 39 two-tie and all 10 three-tie orbits.
+
+Use physical labels
+$$G=\begin{pmatrix}
+0&-a&-b&c\\-d&0&-e&f\\-g&h&0&-i\\ j&-k&l&0
+\end{pmatrix},\qquad a,b,c,d,e,f,g,h,i,j,k,l>0.$$
+As in the preceding three-cycle result, it suffices to treat the hard matrix branch. The positive-axis theorem for a mutually negative pair $01$ applies directly to these signs, giving $\det G>0$ and $G^{-1}e_2>0$. Its matrix hypotheses require $G_{03},G_{13},G_{32}>0>G_{23}$ and $\min(G_{02},G_{12})<0$, and therefore hold here regardless of the higher rewards. [Positive axis from a mutually negative pair](FIVE_NONSINGLETON_REWARDS_AND_THE_SIX_ENTRY_FRONTIER.md#a-positive-axis-throughout-all-six-entry-sign-chambers)
+
+Eliminate rows and columns $1,3$, leaving $0,2$. The Schur matrix is
+$$
+ M=\begin{pmatrix}A&B\\ C&D\end{pmatrix}
+ =\begin{pmatrix}cd/f-aj/k&ce/f-al/k-b\\hj/k-g-id/f&hl/k-ie/f\end{pmatrix},
+ \qquad \det M=\det G/(fk)>0.
+$$
+The leaf coordinates of $G^{-1}e_2$ are $(-B,A)/\det M$, so $A>0>B$. For $x=G^{-1}e_3$ the two leaf equations have right side $(-a/k,h/k)$; thus $x_0=(-aD-hB)/(k\det M)$. If $x_0>0$ the first equation gives $x_2>0$. Rows 1 and 2 then give $x_3=(d x_0+e x_2)/f>0$, $x_1=(g x_0+i x_3)/h>0$. Otherwise $D>0$ and $c(e/f)\ge b+a i(e/f)/h$. Set $U=l/k$, $V=e/f$, $\rho=iV/(hU)<1$. This is exactly $cV\ge a\rho U+b$, the sufficient condition for the shifted three-cycle continuation and proper-face certificate above. The changed entry $G_{30}$ plays no role there: 0 waits beyond all three core clocks, including after a core clock is deleted, and affects no payoff or offer to owner 3.
+
+It remains to price the two full positive axes. Write $y^{(h)}$ for the positive inverse column $h$ normalized to total mass one. The $2,3$ principal minor of $G^{-1}$ equals $-ad/\det G$, while the minor with rows $0,2$ and columns $2,3$ equals $af/\det G$. The complementary-minor identity therefore gives
+$$
+ \frac{y^{(2)}_3}{y^{(2)}_2}>\frac{y^{(3)}_3}{y^{(3)}_2},
+ \qquad
+ \frac{y^{(2)}_0}{y^{(2)}_2}>\frac{y^{(3)}_0}{y^{(3)}_2}.
+$$
+Use axis 2 on $2y_3\ge y_2$ or $y_0\ge y_2$. If both inequalities fail at this column, axis 3 lies in $2y_3\le y_2$ and $y_0\le y_2$.
+
+The checker reuses the original two half-space partitions. In the region $2y_3\le y_2$ five base tetrahedra lie in $y_0\ge y_2$. They have total normalized volume $1/10$ and move to axis 2. The resulting axis domains have volumes $23/30$ and $7/30$. Subdivision addresses and thirty explicitly listed training schedules certify them with affine vertex priors. For a row with several positive donors, split each negative singleton's weighted deficit among its positive donors using their available masses $G_{ip}y_p$. The unspent mass is the axis surplus. It therefore suffices to price each balanced generator $y_n e_p-y_p e_n$ and, on the nonzero axis, every positive-donor surplus separately. Row 3 now has positive donors 0 and 2; the verifier explicitly counts both assigned-minus-tested surpluses when this row is the axis. Its integer checks enumerate every validation draw and all observed dates, Never and Late. The two full-axis domains require respectively 55 and 33 tetrahedra, with 63,520 and 42,480 balanced-generator inequalities. All rival clocks are finite. Compactness of the finite order simplex gives the stated weak-sign specializations. The five-chamber union is still a fixed-rank result. [Exact schedules and sign-count checker](../experiments/RANK_FOUR_MIXED_THREE_CYCLE.py)

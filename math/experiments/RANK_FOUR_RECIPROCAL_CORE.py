@@ -114,8 +114,8 @@ def check_cover():
 
 
 @cache
-def graph(schedule,late=None):
-    """Cut count graph, deleting paths with a possible first 0 and second 3."""
+def graph(schedule,late=None,protected=(3,)):
+    """Cut count graph excluding a protected second owner after a possible first 0."""
     training = (0,)*4
     states, edges, labels = [], [], []
     previous = {}
@@ -131,7 +131,9 @@ def graph(schedule,late=None):
                 v = tuple(x+(i==j) for i,x in enumerate(c))
                 if j==late and any(c[r]<4 for r in PLAYERS if r!=late):
                     continue
-                if v in index and not (j==3 and c[0]>0 and c[1]<4 and c[2]<4):
+                blocked = j in protected and c[0]>0 and all(
+                    c[k]<4 for k in PLAYERS if k not in (0,j))
+                if v in index and not blocked:
                     edges.append((index[c],index[v]))
                     labels.append((k,c,j))
         states.extend(counts)
@@ -171,8 +173,8 @@ def graph(schedule,late=None):
     return incidence,flow,endpoints,steps,hint
 
 
-def guess(schedule,vertices,faces=FACES,late=None):
-    incidence,flow,endpoints,steps,hint = graph(schedule,late)
+def guess(schedule,vertices,faces=FACES,late=None,protected=(3,)):
+    incidence,flow,endpoints,steps,hint = graph(schedule,late,protected)
     n = len(steps)
     blocks = []
     vertex_gains = []
@@ -288,8 +290,11 @@ def rational_priors(priors,schedule,vertices,faces):
         x[col] = Fraction(val)
     return [x[starts[i]:starts[i+1]].tolist() for i in PLAYERS]
 
-def check_cell(schedule,vertices,faces=FACES,late=None):
-    priors = guess(schedule,vertices,faces,late)
+def check_cell(schedule,vertices,faces=FACES,late=None,protected=(3,)):
+    priors = guess(schedule,vertices,faces,late,protected)
+    for prior in priors:
+        for _,path in prior:
+            assert all(np.min(score(schedule,path)[0,donor])>=0 for donor in protected)
     if late is not None:
         for prior in priors:
             for _,path in prior:
