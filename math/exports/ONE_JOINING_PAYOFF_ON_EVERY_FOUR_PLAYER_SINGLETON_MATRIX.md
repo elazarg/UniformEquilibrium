@@ -50,6 +50,42 @@ s\big[t r H_2(y^s)+r^2 U_3(y^s)\big]=1
 $$
 has a unique positive simple root $r$. Indeed the quadratic coefficient, when present, is positive and the constant after moving 1 to the left is negative. In the linear case the coefficient is positive. Near $x=r y^s$ the map $\Phi(x)=x/|H(x)|$ is a local diffeomorphism: it preserves radial directions, and its radial derivative is nonzero by the simple root just proved. Its image contains $y^s$. In that neighborhood the target minimum at $\Phi(x)$ is precisely $\min(x,Gx-H(x)e_o)/|H(x)|$. The local degree of the leading stationarity equation is therefore nonzero even when an inactive row ties. The same uniform perturbation argument on its isolating neighborhood applies. To see common constants, if none existed one could choose $K>n$, other weighted errors $\le1/n$, and no stationary root with maximum hazard $\le n/K$ and third-largest hazard $\ge 1/(nK)$. A convergent coefficient subsequence and its fixed neighborhood contradict this. This argument also gives uniformity over compact positive ratios of the two triple magnitudes.
 
+## Three raw entries are necessary for a universal two-dimensional stationary exterior
+
+The preceding strict two-scale theorem uses a pair entry and two comparable triple entries. It is impossible, on some strict singleton matrices, to select any two individual nonsingleton entries whose entire two-dimensional exterior produces stationary equilibria with at least two active owners and maximum hazard below one. The two raw entries may even be in different recipient rows. Consider the following integer strict sign-census witness, with all other nonsingleton native entries zero:
+$$
+G=\begin{pmatrix}
+0&-2&-1&3\\-3&0&1&2\\1&1&0&-1\\-3&1&2&0
+\end{pmatrix}.
+$$
+Its four principal triple determinants in lexicographic order are $1,3,3,3$ and its determinant is $3$. Each singleton column has a negative entry. These facts imply $R_0$: with two active coordinates the active singleton equations cannot vanish, with three or four active coordinates the corresponding principal matrix is nonsingular, and one active coordinate is excluded by the negative column entry.
+
+For a stationary hazard vector with every $q_i<1$, write $p_i=q_i/(1-q_i)$. When only one nonsingleton entry $V=Z_o(S)$ varies, the exact field in odds coordinates is $F_i/H_i=(Gp)_i$ off row $o$. Its pivot row is $(Gp)_o-b$, where
+$$
+ b=-V\prod_{j\in S}p_j \quad(o\notin S),\qquad
+ b=V(1-H_o)\prod_{j\in S-o}p_j \quad(o\in S).
+$$
+A nonzero solution must have $b\ne0$ by $R_0$. If there are at least two active owners then $p_o>0$ since otherwise the active subset in the complementary principal triple cannot have size two or three. Thus $p/|b|$ solves the axis problem at target $\operatorname{sign}(b)e_o$, with its support containing $o$ and every required rival in the displayed product. All axis solutions with $o$ positive are enumerated by supports of size three or four: retain $sG_{SS}^{-1}e_o>0$ only when the outside slacks are nonnegative. This gives
+
+| Recipient | Supports at $-e_o$ | Supports at $+e_o$ |
+|---|---|---|
+| 0 | 013 | 023 |
+| 1 | none | 013 |
+| 2 | none | 0123 |
+| 3 | 013 | 023 |
+
+In particular, any payoff entry independently capable of both signs must be either $J_{03}=Z_0(03)$ or $J_{30}=Z_3(03)$. Every passive entry would require two common rivals, as would every participating triple or larger coalition. It remains to test those two entries together.
+
+Set $J_{03}=-K$, $J_{30}=K$, $K>0$. A solution with two or more active owners must have $p_0,p_3>0$. If either vanishes the other affected row's extra term vanishes, leaving the nonsingular complementary principal triple's homogeneous equations, which cannot admit two or three active owners. Put $x=p_0/p_3$, $y=p_1/p_3$, $z=p_2/p_3$. The unaffected rows require $-3x+z+2$ and $x+y-1$ to be nonnegative and complementary to $y,z$, respectively. Both $y,z$ cannot vanish, since that would require $x\le2/3$ and $x\ge1$. When both are positive, $2/3<x<1$, and the pivot row 0 has $(Gp)_0/p_3=3-x>0$ although its right side is strictly negative.
+
+If $y>0$ and $z=0$, then $x=2/3$. Row 3 requires $y>2$, and the two pivot equations give
+$$
+\frac{J_{30}}{|J_{03}|}=
+\frac{(y-2)(1-H_0)}{x(2y-3)(1-H_3)}
+\le \frac{(y-2)(1+y)}{x(2y-3)(x+y)}<\frac34 .
+$$
+Indeed $(1-H_0)/(1-H_3)=1+(1-x)/[(1+p_3)(x+y+xyp_3)]\le(1+y)/(x+y)$. If $y=0$ and $z>0$, then $x=1$, the two rival survival probabilities are equal, and row 0 requires $z>3$. The forced ratio is $(2z-3)/(z-3)>2$. Both possible ratios exclude $J_{30}/|J_{03}|=1$, at every $K$. This proves the obstruction. The table still has a grand-coalition equilibrium at date one. The sharpness concerns the universal proper stationary conclusion of the exterior theorem.
+
 ## A single coordinate at all tied singleton matrices
 
 **Boundary conclusion.** For every real hollow singleton matrix, including ties and singular matrices, there is a recipient o and a rival j such that making the single native pair payoff $J_{oj}=Z_o(\{o,j\})$ sufficiently large with either sign produces an original uniform equilibrium for all 43 other higher rewards fixed and arbitrary signed own levels. Equivalently, the same type of weighted boxes with some $\delta,K_0>0$ works. On an already solved singleton matrix the conclusion applies to every completion. On the remaining weak matrices the construction usually gives exact proper stationary equilibria on both tails. The sole-quitter construction below gives arbitrarily accurate stationary profiles when the sole owner's signed singleton is negative.
@@ -90,3 +126,20 @@ $$
  (cgs,\ cgr,\ ahs+r(ai-bg),\ chs+cir).
 $$
 Its full positive-target solution is transverse. At target $-e_1$ there is also a transverse solution on support $\{0,1,3\}$. Give owner 1 weight one, owner 0 weight $s/r$, and owner 3 weight $b/a$. Rows 0 and 3 vanish, row 1 equals $-es/r$, and omitted row 2 has value $hs/r+i-gb/a>0$. The active principal determinant is $aes>0$. Normalize by $es/r$. With common donor 0 the previous local transformations give proper exact stationary equilibria for both signs of $J_{10}$. This exhausts the weak sign classes and proves the boundary conclusion.
+
+## Ten independently unbounded recipient payoffs
+
+For the all-matrix roles $o,j$ put $s=\operatorname{sign}J_{oj}$, $K=|J_{oj}|$. All 33 nonsingleton entries in other rows retain the weighted bounds above. Each of the other ten nonsingleton entries in row $o$ needs only a one-sided bound:
+$$
+ s Z_o(S)\ge-\delta K^{|S|-1}\quad(o\in S),\qquad
+ s Z_o(S)\le\delta K^{|S|-1}\quad(o\notin S).
+$$
+The opposite sides can grow independently, faster than any function of $K$. The original UE conclusion still holds. On the proper stationary branches the maximum hazard remains $O(1/K)$. The same selected two or three hazards are at least $c/L$, where $L=\max(1,K,\max_{i,S:\,|S|\ge2}|Z_i(S)|^{1/(|S|-1)})$.
+
+On a degree branch take the compact isolated nonzero-index set $Y$ at $s e_o$ used above. Its normalized directions form an isolated part of the unit-sphere directions $v\ge0$ complementing $Gv$ in every nonpivot row. Indeed $v_o,v_j,s(Gv)_o$ are bounded below there, and the inverse radial normalization is $v\mapsto v/|(Gv)_o|$. Choose an angular neighborhood $O$ in the whole unit sphere with closure inside those strict inequalities, containing no other complementary directions in its closure, and preserving each further selected positive coordinate. Linearly homotope all higher entries except $J_{oj}$ from zero to their final values. At a complementary zero one always has $q\ge0$. For $r=\|q\|$, $v=q/r$, the nonpivot fields obey uniformly
+$$
+F_i(q)/r=(Gv)_i+O_G(r)+O\!\left(\delta\sum_{d=2}^4(Kr)^{d-1}\right).
+$$
+Thus for $0<r\le C/K$, large $K$ and small $\delta$ there are no zeros on the angular boundary, by compactness. At $r=C/K$ the distinguished term in $sF_o/r$ is at most $-c_0Kr$: here $q_j/r$ is bounded below, $1-H_o\ge q_j$, and remaining wait factors tend uniformly to one. At nonnegative $q$ all ten unrestricted portions have the same favorable sign as this term. Their adverse portions cost at most $O(\delta\sum_{d=2}^4 C^{d-1})$; the singleton contribution is bounded. Choose $C$ large, then $\delta$ small and $K$ large, making $sF_o/r<0$ on the outer sphere, whereas $q_o>0$ requires zero. For $0<r\le c/L$ all rows are uniformly close after division by $r$ to $Gv$ by the same monomial estimate with $L$ in place of $K$. The $R_0$ property and compactness exclude zeros for small $c$.
+
+At the initial table only $J_{oj}$ is nonzero among higher entries, so the inner exclusion holds all the way to $c/K$. In $c/K<r<C/K$, rescale by $K$. The limiting field on the angular sector has precisely the radial image of $Y$ as its zero set, interior for $c$ small and $C$ large, with nonzero degree by the involution above. Uniform convergence transfers this degree to the initial table. The boundary estimates then carry it throughout the homotopy in $c/L<r<C/K$. Every resulting root has the asserted lower and upper hazard bounds. On the exceptional negative tail with sole owner 2 the ten other entries of the pivot row contribute to none of the limiting offers. The fixed-table signed perturbation there still applies. The cases solved for every completion require no bounds.
