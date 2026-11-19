@@ -219,6 +219,48 @@ def calibrate(pattern):
     raise ArithmeticError(f'No small calibration on {pattern}')
 
 
+def balanced_rows(signs, total):
+    positive = [j for j in I if signs[j] > 0]
+    negative = [j for j in I if signs[j] < 0]
+    if len(positive) == len(negative) == 1:
+        yield [total*s for s in signs]
+        return
+    singleton, pair = (positive, negative) if len(positive) == 1 else (negative, positive)
+    for u in range(1, total):
+        row = [0]*4
+        for j, magnitude in zip(singleton + pair, (total, u, total-u)):
+            row[j] = signs[j] * magnitude
+        yield row
+
+
+def circulation(a, b, c):
+    # The first three upper entries are free; row sums determine the rest.
+    return [[0,a,b,-a-b], [-a,0,c,a-c], [-b,-c,0,b+c], [a+b,-a+c,-b-c,0]]
+
+
+def check_balanced_center(pattern, strict):
+    signs = [[0]*4 for _ in I]
+    for (i,j), value in zip(EDGES, pattern):
+        signs[i][j] = value
+    basis = [circulation(1,0,0), circulation(0,1,0), circulation(0,0,1)]
+    for total in (2,3,4,6):
+        for G in product(*(balanced_rows(row,total) for row in signs)):
+            triples = [det([[G[i][j] for j in I if j!=o] for i in I if i!=o]) for o in I]
+            if max(triples) <= 0:
+                continue
+            if strict:
+                if 0 in triples or has_triangle(G):
+                    continue
+                if not any(triples[h]>0 and all(triples[6-h-i-j]>0 for i,j
+                           in forbidden_pairs(signs,h)) for h in I):
+                    continue
+            rows = [[sum(a*b for a,b in zip(A[i],G[i])) for A in basis] for i in I]
+            normal = [(-1)**i*det([row for k,row in enumerate(rows) if k!=i]) for i in I]
+            if min(normal) < 0 < max(normal):
+                return
+    raise ArithmeticError(f"No balanced center with a strict circulation on {pattern}")
+
+
 def main():
     counts=Counter()
     for vals in product((-1,1),repeat=12):
@@ -255,8 +297,9 @@ def main():
         witnessed.add(mask)
     assert surviving==witnessed
     for zeros, representatives in boundary_faces(surviving):
-        if zeros:
-            for pattern in representatives:
+        for pattern in representatives:
+            check_balanced_center(pattern, strict=(zeros == 0))
+            if zeros:
                 bound, _, _ = calibrate(pattern)
                 assert zeros < 3 or bound == 2
         print(f'{zeros} singleton ties: {len(representatives)} sign orbits.')
