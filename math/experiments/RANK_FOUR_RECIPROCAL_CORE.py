@@ -1,8 +1,8 @@
 """Verify the entire reciprocal-core sign class at the fourth order level.
 
 Vertex entries are homogeneous probability coordinates. The linear solver
-proposes path weights. Only complete paths rounded to integer weights enter
-the certificate, and payoff verification uses literal independent label draws.
+proposes path weights. Complete paths with exact rational weights enter the
+certificate, and payoff verification uses literal independent label draws.
 """
 from fractions import Fraction
 from functools import cache
@@ -85,16 +85,14 @@ def volume(rows):
                * prod(rows[i][p[i]] for i in PLAYERS) for p in permutations(PLAYERS))
 
 
-def check_cover():
-    hull = ((0,1,0,0),(0,0,0,1),(0,0,3,1),(3,1,3,1))
-    def size(t):
-        return Fraction(abs(volume(t)), prod(sum(v) for v in t))
-    cells = [tuple(POINTS[i] for i in indices) for indices,_ in CELLS]
-    for a,b,c,d in POINTS:
-        assert min(a,b,c,d) >= 0 and a <= c and a <= 3*b and c <= 3*d
-    assert all(size(t)>0 for t in cells)
-    assert sum(size(t) for t in cells) == size(hull)
-    for left,right in combinations(cells,2):
+def simplex_size(t):
+    return Fraction(abs(volume(t)), prod(sum(v) for v in t))
+
+
+def check_partition(tetrahedra,target_volume):
+    assert all(simplex_size(t)>0 for t in tetrahedra)
+    assert sum(simplex_size(t) for t in tetrahedra) == target_volume
+    for left,right in combinations(tetrahedra,2):
         # A plane through three vertices separates the interiors.
         for face in combinations(set(left+right),3):
             l = [volume(face+(v,)) for v in left]
@@ -104,6 +102,15 @@ def check_cover():
                 break
         else:
             raise AssertionError((left,right))
+
+
+
+def check_cover():
+    hull = ((0,1,0,0),(0,0,0,1),(0,0,3,1),(3,1,3,1))
+    for a,b,c,d in POINTS:
+        assert min(a,b,c,d) >= 0 and a <= c and a <= 3*b and c <= 3*d
+    tetrahedra = [tuple(POINTS[i] for i in indices) for indices,_ in CELLS]
+    check_partition(tetrahedra,simplex_size(hull))
 
 
 @cache
@@ -162,14 +169,14 @@ def graph(schedule):
     return incidence,flow,endpoints,steps,hint
 
 
-def guess(schedule,vertices):
+def guess(schedule,vertices,faces=FACES):
     incidence,flow,endpoints,steps,hint = graph(schedule)
     n = len(steps)
     blocks = []
     vertex_gains = []
     for v in vertices:
         y = np.array(v)/sum(v)
-        vertex_gains.append(np.vstack([y[j]*hint[i,p]-y[p]*hint[i,j] for i,p,j in FACES]))
+        vertex_gains.append(np.vstack([y[j]*hint[i,p]-y[p]*hint[i,j] for i,p,j in faces]))
     for u,v in PAIRS:
         row = [sparse.csr_matrix(vertex_gains[0].shape) for _ in PLAYERS]
         row[u] += sparse.csr_matrix(vertex_gains[v])
@@ -238,26 +245,68 @@ def score(schedule,word):
     return f
 
 
-def check_cell(schedule,vertices):
-    priors = guess(schedule,vertices)
-    for scale in (10**4,10**8):
+def rational_priors(priors,schedule,vertices,faces):
+    """Restore numerically tight linear comparisons over the rationals."""
+    from scipy.linalg import qr
+    from sympy import Matrix
+    starts = np.r_[0, np.cumsum(list(map(len,priors)))]
+    paths = [p for prior in priors for _,p in prior]
+    weights = np.array([w for prior in priors for w,_ in prior])
+    basis = []
+    for v in vertices:
+        # Scores are integer columns indexed by complete order words.
+        basis.append(np.array([v[n]*score(schedule,w)[i,p]-v[p]*score(schedule,w)[i,n]
+                               for i,p,n in faces for w in paths],dtype=np.int64)
+                     .reshape(len(faces),len(paths),-1).transpose(0,2,1)
+                     .reshape(-1,len(paths)))
+    equations = []
+    for i in PLAYERS:
+        r = np.zeros(len(paths),dtype=np.int64)
+        r[starts[i]:starts[i+1]] = 1
+        equations.append(r)
+    for u,v in PAIRS:
+        r = np.zeros_like(basis[0])
+        for a,b in ((u,v),(v,u)):
+            sl = slice(starts[a],starts[a+1])
+            r[:,sl] += sum(vertices[a])*basis[b][:,sl]
+        equations.extend(r[np.abs(r@weights)<1e-6])
+    eq = np.array(equations)
+    # A numerical pivot suggestion only. The final comparisons use all rows.
+    _,r,indices = qr(eq.T.astype(float),mode="economic",pivoting=True)
+    rank = sum(abs(np.diag(r))>1e-8)
+    selected = indices[:rank]
+    a = eq[selected,:]
+    _,_,indices = qr(a.astype(float),mode="economic",pivoting=True)
+    dep,free = indices[:rank],indices[rank:]
+    x = np.array([Fraction(round(w*10**14),10**14) for w in weights],dtype=object)
+    target = (selected<4).astype(int)
+    rhs = target-a[:,free]@x[free]
+    solution = Matrix(a[:,dep].tolist()).inv()*Matrix(rhs.tolist())
+    for col,val in zip(dep,solution):
+        x[col] = Fraction(val)
+    return [x[starts[i]:starts[i+1]].tolist() for i in PLAYERS]
+
+def check_cell(schedule,vertices,faces=FACES):
+    priors = guess(schedule,vertices,faces)
+    for scale in (10**4,10**8,None):
+        corrections = rational_priors(priors,schedule,vertices,faces) if scale is None else None
         totals,counts = [],[]
-        for prior in priors:
-            weights = [int(round(w*scale)) for w,_ in prior]
+        for i,prior in enumerate(priors):
+            weights = corrections[i] if corrections else [int(round(w*scale)) for w,_ in prior]
             assert min(weights)>=0 and sum(weights)>0
             totals.append(sum(weights))
-            counts.append(sum(w*score(schedule,path) for w,(_,path) in zip(weights,prior)).astype(object))
+            counts.append(sum(w*score(schedule,path).astype(object) for w,(_,path) in zip(weights,prior)).astype(object))
         def cross(u,v):
             p = vertices[v]
             f = counts[u]
-            return np.array([p[n]*f[i,j]-p[j]*f[i,n] for i,j,n in FACES],dtype=object)
+            return np.array([p[n]*f[i,j]-p[j]*f[i,n] for i,j,n in faces],dtype=object)
         for u,v in PAIRS:
             gain = (totals[v]*sum(vertices[u])*cross(u,v)
                     +totals[u]*sum(vertices[v])*cross(v,u))
             if np.min(gain)<0:
                 break
         else:
-            return sum(map(len,priors)), len(PAIRS)*len(FACES)*(1+len(schedule))
+            return sum(map(len,priors)), len(PAIRS)*len(faces)*(1+len(schedule))
     raise AssertionError((schedule,vertices))
 
 
