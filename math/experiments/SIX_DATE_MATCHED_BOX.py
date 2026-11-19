@@ -12,6 +12,7 @@ from sympy import Matrix, eye
 SIX = (((0,), (1,), (0, 2), (1, 3), (0, 2), (3,)),
        (.641, .592, .147, .544, .482, .591, .452, .689, .738))
 FOUR = (((0, 2), (1, 3), (2,), (3,)), (.63, .06, .63, .06, .63, .63))
+ROTATED_FOUR = (((0,), (1,3), (0,2), (3,)), (.62, .608, .08, .19, .664, .66))
 AXES = [(Q(-1), Q(-3, 4), 8)] * 2 + [(Q(1, 2), Q(2, 3), 6)] * 2
 DIGITS = sum(1 << (2*j) for j in range(16))
 
@@ -99,7 +100,9 @@ def verify(calendar, cell, required_margin):
     theta = Matrix([(hi-lo)/2 for lo,hi in cell])
     rewards = list(map(float, T))
     sample = root(lambda x: comparisons(groups, x, rewards, False)[0], seed, tol=1e-12).x
-    if not np.all((sample>0)&(sample<1)):
+    f_sample, g_sample = comparisons(groups, sample, rewards, False)
+    if (not np.all((sample>0)&(sample<1)) or min(g_sample)<=0
+            or max(map(abs, f_sample))>1e-6):
         return False
     x = [Q(round(10**12 * v), 10**12) for v in sample]
     F, G = comparisons(groups, x, T, True)
@@ -146,20 +149,49 @@ def six_cell(index):
     return verify(SIX, cell, Q(1,100))
 
 
-def upper_cell(index):
-    cell = tuple((Q(j,6), Q(j+1,6)) for j in index)
-    if any(all(cell[i][1]<=Q(1,3) for i in pair) for pair in [(0,2),(1,3)]):
-        return True  # Existing paired-observer cylinder, including its boundary.
-    return any(verify(FOUR, cell[k:]+cell[:k], Q(0)) for k in range(4))
+def canonical(cell):
+    return min(cell[k:]+cell[:k] for k in range(4))
+
+
+def middle_cell(cell):
+    if any(all(-Q(1,2)<=cell[i][0] and cell[i][1]<=Q(1,3) for i in pair)
+           for pair in [(0,2),(1,3)]):
+        return True  # Existing paired-observer interval, including its boundaries.
+    for calendar in [FOUR, ROTATED_FOUR, SIX]:
+        for k in range(4):
+            if verify(calendar, cell[k:]+cell[:k], Q(0)):
+                return True
+    return False
+
+
+def split(cell):
+    i = max(range(4), key=lambda j: cell[j][1]-cell[j][0])
+    lo, hi = cell[i]
+    mid = (lo+hi)/2
+    return [canonical(cell[:i]+((a,b),)+cell[i+1:]) for a,b in [(lo,mid),(mid,hi)]]
+
+
+def verify_middle_cube(pool):
+    edges = (Q(-1,2), Q(0), Q(1,3), Q(2,3))
+    intervals = tuple(zip(edges, edges[1:]))
+    cells = sorted({canonical(cell) for cell in product(intervals, repeat=4)})
+    accepted = 0
+    for depth in range(16):
+        successes = pool.map(middle_cell, cells)
+        remaining = [cell for cell, success in zip(cells, successes) if not success]
+        accepted += len(cells)-len(remaining)
+        if not remaining:
+            print(f'Full [−1/2,2/3]^4 certified: {accepted} accepted cyclic representatives, depth {depth}.',flush=True)
+            return
+        cells = sorted({child for cell in remaining for child in split(cell)})
+    raise ArithmeticError('Uncertified subregion of the middle cube')
 
 
 if __name__=='__main__':
     with Pool(4) as pool:
-        if all(pool.imap_unordered(upper_cell, product(range(4),repeat=4))):
-            print('Upper [0,2/3]^4 certified, using its paired-observer cylinder and 144 checked cells.',flush=True)
-        else:
-            raise ArithmeticError('Uncertified upper cell')
-        if 'upper' not in sys.argv:
+        if 'six-only' not in sys.argv:
+            verify_middle_cube(pool)
+        if 'middle-only' not in sys.argv:
             if not all(pool.imap_unordered(six_cell, product(*(range(n) for _,_,n in AXES)))):
                 raise ArithmeticError('Uncertified six-date cell')
-            print('All 2304 six-date cells certified with every idle advantage >1/100.',flush=True)
+            print('All 2304 low/high six-date cells certified with every idle advantage >1/100.',flush=True)
