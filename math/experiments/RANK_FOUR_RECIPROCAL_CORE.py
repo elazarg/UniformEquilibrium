@@ -114,7 +114,7 @@ def check_cover():
 
 
 @cache
-def graph(schedule):
+def graph(schedule,late=None):
     """Cut count graph, deleting paths with a possible first 0 and second 3."""
     training = (0,)*4
     states, edges, labels = [], [], []
@@ -129,6 +129,8 @@ def graph(schedule):
         for c in counts:
             for j in PLAYERS:
                 v = tuple(x+(i==j) for i,x in enumerate(c))
+                if j==late and any(c[r]<4 for r in PLAYERS if r!=late):
+                    continue
                 if v in index and not (j==3 and c[0]>0 and c[1]<4 and c[2]<4):
                     edges.append((index[c],index[v]))
                     labels.append((k,c,j))
@@ -169,8 +171,8 @@ def graph(schedule):
     return incidence,flow,endpoints,steps,hint
 
 
-def guess(schedule,vertices,faces=FACES):
-    incidence,flow,endpoints,steps,hint = graph(schedule)
+def guess(schedule,vertices,faces=FACES,late=None):
+    incidence,flow,endpoints,steps,hint = graph(schedule,late)
     n = len(steps)
     blocks = []
     vertex_gains = []
@@ -286,8 +288,13 @@ def rational_priors(priors,schedule,vertices,faces):
         x[col] = Fraction(val)
     return [x[starts[i]:starts[i+1]].tolist() for i in PLAYERS]
 
-def check_cell(schedule,vertices,faces=FACES):
-    priors = guess(schedule,vertices,faces)
+def check_cell(schedule,vertices,faces=FACES,late=None):
+    priors = guess(schedule,vertices,faces,late)
+    if late is not None:
+        for prior in priors:
+            for _,path in prior:
+                prefix = path[:path.index(late)]
+                assert all(prefix.count(j)==4 for j in PLAYERS if j!=late)
     for scale in (10**4,10**8,None):
         corrections = rational_priors(priors,schedule,vertices,faces) if scale is None else None
         totals,counts = [],[]
