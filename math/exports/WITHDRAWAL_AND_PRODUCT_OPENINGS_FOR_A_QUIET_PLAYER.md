@@ -91,3 +91,37 @@ For the upper bound, if L_T>0, choose profiles and pure outsider deadlines whose
 For the reverse bound, prepend a row of type 1 to individually finite child approximants witnessing z. Each complete child replacement on the first date either quits or continues. After a blank, even an optimal further replacement improves on the approximant's prescribed continuation by at most its vanishing regret. The two head offers satisfy the limiting Nash inequalities, so full child regret vanishes. For type 2 with a unique sure owner k, attach individually finite independent rival clocks whose complete k cap is at most χ_k+η. The other owners face a sure rival at the first date. Owner k's best refusal earns at most P_k+H(χ_k+η). Any finite tail assignment suffices with two or more sure owners. In both cases prescribing the finite root and these tails yields individually finite child approximants, with date-one outside gain tending to the stated value. This proves the equality.
 
 One can also test a specified target z*∈E_T. Along any witnessing child sequence, a positive outsider gain would produce one of the above openings with positive survival S. Its post-cut distribution π_C=m_C+m0 z_C satisfies Sπ_C≤z*_C for each nonempty C, since the contribution from exits before the cutoff is nonnegative. Thus excluding positive openings with supp(π)⊆supp(z*) suffices for a safe lift from this target, even when another target is unsafe. Outer approximations to E_T are available from each finite interlaced-order test using the seven first-exit indicator functions as additional target coordinates, imposed conditional on every positive training observation as in that test. The intersection over all ranks yields E_T by private quantile reconstruction. The unrestricted four-player conjecture still permits equilibria with every player active. [Interlaced order tests](../notes/CODEX_ROOT__INTERLACED_ORDER_TESTS_FOR_ARBITRARY_FOUR_PLAYER_GAMES.md)
+
+## Sharp powers for full outsider regret
+
+The zero-set test can apply even when no bounded, profile-dependent linear comparison of debts is possible. Here are two calibrations. In each let (x,y,s) be the three child hazards and e the sum of their complete terminal regrets. Signed row translations preserve the debt comparisons on these individually finite profiles.
+
+**A square-root loss on a surviving singleton matrix.** Use the four singleton rows
+```
+( 0, 1,−1, 1)
+(−1, 0, 2,−1)
+(−1,−1, 0, 2)
+(−2, 1, 1, 0).
+```
+This is a relabeling of integer witness 17 of the twenty-one-class census, with canonical mask (2,4,3,5) and determinant 5. At 01,02,12,012 respectively put the four rows (0,0,0,0), (−1,0,2,0), (0,0,−2,0), (0,0,0,0). For each nonempty child set R define
+```
+J_3(R) = 3 J_2(R) + 1_{0∈R, 2∉R} − 1_{2∈R}.
+```
+Other entries are arbitrary. Use g_0=0 because an immediate quit always pays zero in child row 0. The other floors may be any valid lower bounds. We have B_0=x(y−s) and Σ_R m_R J_2(R)=(1−s)(x−y). At every child coalition C both 3Z_2(C) and 4Z_2(C) are at most Z_3(C). Consequently
+```
+Y ≤ 3 A_2+(1−s)x−s,       Y ≤ 4 A_2+(1−s)y−s.
+```
+The smaller excess above 4 max(0,A_2) is bounded by min(x,y−s), hence by √max(0,B_0). This gives Y≤4Φ+√Φ. At any outside deadline with survival S the total child regret bounds SΦ, so the full outsider regret is at most 4e+√e.
+
+For sharpness, on date one let (x,y,s)=(t,t,0), where 0<t<1. On a blank, players 0 and 2 quit at date two and 1 at date three. Against its rivals, player 0 can receive t by waiting to date two, collecting the positive singleton of 1 if it occurs first and zero otherwise. A later choice loses one on the branch where 2 quits alone. Its prescription gets t(1−t), so its regret is t². Player 1 earns −1 if 0 quits initially, regardless of whether 1 joins it, and can earn only zero on the remaining branch. Player 2 is indifferent between its complete prescription and a first-date quit, since its joining increments on sole 0 and sole 1 are +1 and −1 at equal probabilities and the increment on 01 is zero. On a blank initial date withdrawing at the second date gives the negative singleton of 0. Thus e=t². The outsider's first-date gain is t, its gain at date two is nonpositive, and all later offers equal its prescription. The complete outside regret is exactly t. This table also has the pure equilibrium with 0 and 2 quitting together on the first date.
+
+**A cube-root loss.** For a second native table put
+```
+Z_0(R)=−1_{R=012},      Z_1(R)=1_{1∈R}(1_{0∈R}−1_{2∈R}),
+Z_2(R)=1_{2∈R}(1_{0∈R}−1_{1∈R}).
+```
+On child exits put Z_3(R)=max(0,Z_1(R),Z_2(R)) and set J_3(R)=1 if R is the singleton 0, zero otherwise. Complete the remaining entries arbitrarily. All child players obtain at least zero by Never and we take these floors. Let v_i=Σ_C z_C Z_i(C). Here B_0=xys, A_1=(1−y)(x−s)−m0 v_1, A_2=(1−s)(x−y)−m0 v_2 and Y=x(1−y)(1−s)−m0 v_3. From v_3≥0,v_1,v_2 it follows that Y≤x, Y≤A_1+s and Y≤A_2+y. Thus Y≤Φ+min(x,y,s)≤Φ+Φ^(1/3). As above the full outside debt is at most e+e^(1/3).
+
+At date one all three independently quit with probability t. On a blank, schedule 1 at date two, 2 at date three, 0 at date four. The suffix gives all three zero. Player 1 cannot gain by withdrawing past its date because 2 precedes 0, player 2 would lose by joining 1, and player 0 cannot receive a positive payoff anywhere. Players 1 and 2 are indifferent between a date-one quit and continuing since the two opposing single-join increments cancel at equal hazards. Past a blank their suffixes are best replies. Player 0 loses precisely the probability t³ of the triple and can always obtain zero by Never. The outsider's first-date gain is t(1−t)², with zero gain at every later date since the blank suffix has only the first coalition {1}. Thus no exponent larger than 1/3 can hold across all tables passing the product test, even with a constant depending on the table.
+
+Some positive exponent does work uniformly over these tables if constants can depend on their rewards and chosen floors. For each parameter list form the graph of ω(d)=max{max(0,Y):Φ≤d} over q,z in the compact product domain, for small positive d where the set is nonempty. If the zero set is empty, Φ already has a positive minimum. Otherwise the product test implies ω(d)→0. A single semialgebraic formula with the rewards and floors as parameters defines all these graphs. Quantifier elimination gives a finite list of bivariate polynomials in d and ω, with a common degree bound D and parameter-dependent coefficients. After specializing a table, discard identically zero polynomials. Any positive branch near zero must lie in the zero set of at least one remaining polynomial, because strict sign cells are open and a graph has empty interior. By the one-variable semialgebraic decomposition choose a single such polynomial on a sufficiently short interval. The first positive exponent of a vanishing algebraic branch is rational with reduced denominator at most D, by the Newton polygon, and hence is at least 1/D. Therefore ω(d)=O(d^(1/D)), or ω vanishes identically there. Survival scaling preserves this positive exponent. The optimal exponent over all tables remains open.
