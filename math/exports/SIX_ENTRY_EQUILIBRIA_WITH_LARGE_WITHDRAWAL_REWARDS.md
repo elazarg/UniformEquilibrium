@@ -2,7 +2,7 @@
 
 Use the six-position template for four independent quitting players. In native units the pair $01$ is mutually negative. Player $a=3$ receives $K>0$ on $013$, and the two mates and player $b=2$ receive positive grand rewards. The two other changes give an advantage $L>0$ to player 3 for withdrawing from the grand coalition, and an advantage $N>0$ to one mate $u$ for withdrawing from $012$. Each advantage can be implemented by lowering the participating reward or raising the passive reward after withdrawal. Other higher entries are zero except where explicitly allowed below. All four original own singleton levels are arbitrary. The general three-player return, the sure-owner tests and the 21 numbered integer singleton examples are given in the main six-entry paper. [Template, first-date tests and accumulating return](FIVE_NONSINGLETON_REWARDS_AND_THE_SIX_ENTRY_FRONTIER.md)
 
-Most of the results below use witness 18, whose singleton rows are $(0,-1,-1,2),(-2,0,1,2),(1,1,0,-2),(-1,-1,2,0)$. On this matrix the small-$R$ return and the large-$R$ stationary branch overlap even when the positive triple price and a mate's grand reward are unbounded. A different construction permits a fourth player to mix on the dates where the three-player return would give it a profitable deviation. For a large negative participating withdrawal the affected mate can have a negative continuation. The last sections carry that continuation through a two-dimensional return near witnesses 6 and 18.
+Most of the results below use witness 18, whose singleton rows are $(0,-1,-1,2),(-2,0,1,2),(1,1,0,-2),(-1,-1,2,0)$. On this matrix the small-$R$ return and the large-$R$ stationary branch overlap even when the positive triple price and a mate's grand reward are unbounded. A different construction permits a fourth player to mix on the dates where the three-player return would give it a profitable deviation. For a large negative participating withdrawal the affected mate can have a negative continuation. The two-dimensional return carries that continuation through the large-withdrawal dates near witnesses 6 and 18. At witness 6 a four-date solution also works with two independently large rewards and explicit bounds uniform in the triple reward.
 
 ## Three unrestricted prices at witness 18
 
@@ -276,3 +276,130 @@ as soon as $Ryw<1$. If $y=0$ at the endpoint, $B-g=B+A-a_0>0$. The reset and exa
 The sum of $x+y$ over the entire prefix is bounded by the initial $A$. Before the first zero $y$ one has $w\le x$. At the zero and later trials the same decrease of $a_0$ bounds their extra $w$'s. The blank product is uniformly positive and $F_b(1,v)<1$. For sufficiently small $b>0$, every true trial on the first date is quiet. If $V\ge2A$ its upper endpoint is the solo $u$ at $x=A$, $w=0$, giving $F_b=A/(1+A)=2b+O(b^2)$. Otherwise $V<2A=O(b)$; the first quiet odds satisfy $w=(A-V/2)/3+O_K(b^2)$, $y=2w$, $x=V/2+w$. Its passive output is $x+O_K(b^2)$, and later changes are $O_K(b^2)$, hence $F_b=(A+V)/3+O_K(b^2)\ge4b/3+O_K(b^2)$. To exclude interior controls on this lower seed, for $y>0$ one has $x\ge w$, and $t\ge0$ gives $y\ge2w-a_0$. Thus $B-g\ge B-a_0+x(1-Ryw)>0$ for all trials with $A$ small and $y>0$, as $w\le x\le A$. For $y=0$ use the strict guard above. This establishes the strict lower fixed-point boundary.
 
 Use the previous product Brouwer proof with the updates for $b$ and the controls unchanged and $v\mapsto\operatorname{proj}_{[0,3]}F_v$. Nonnegativity at the pair end and the strict upper face exclude spurious clipping. The finite proper chart and the continuous exact quiet tail are those in the variable-singleton formulas. The same limiting fixed-point boundary signs and finite graph cutoff comparisons persist in a singleton neighborhood. The initial $b$ solo continues to zero row $u$ there, since only that mate sees a negative $b$ singleton. This gives the claimed signed uniform equilibrium.
+
+### The other negative participating withdrawal at witness 18
+
+Take $u=1,v=0,b=2,a=3$ at witness 18 with $Z_u(uvb)=-N$. Fix any compact subset of the positive $(K,R,A_v)$ octant, where $R=Z_b(I)$ and $A_v=Z_v(I)$. In a singleton neighborhood, all sufficiently large $N$ give original uniform equilibrium whenever $0<L,A_u\le dN$ for a sufficiently small common $d>0$, with either implementation of $L$. Two different four-mover stages are used. On one the small odds belong to $b$, on the other to $v$.
+
+Write $(U,V,B,A)$ for the child values, $(x,y,s,w)$ for the four odds in the same order, and $a_0=-U$. From the seed $(0,v,b,0)$ use coordinates $T=b+v/4\in[\rho,2]$, $\tau=v/(4T)\in[0,1]$. Prepend solo dates $a,b$ with odds $b/2$ and $(v+b)/(1+b/2)$. Their owners tie at zero and the waiting players get nonnegative values. This gives
+$$U=(v+2b)/D_0,\quad V=B=0,\quad A=(2v+2b)/D_0,\qquad D_0=1+v+3b/2.$$
+Thus $0<U\le A<2$, $U\ge A/2$ and $A-U<1$.
+
+**The primary trials.** First let $(1/N,L/N,A_u/N)$ tend to zero and use $s=z/N$. If $A>V+a_0$, choose the quiet endpoint $x=V+2w_0,y=w_0-a_0/2,A=x+y+Kxy$. Its unique root has $w_0>a_0/2$ and is strictly positive also at the initial child. Otherwise put $w_0=a_0/2$. For $w=\theta w_0$, $0<\theta\le1$, set $x=\min(A,V+2w)$, $y=(A-x)/(1+Kx)$ and $D=(1+x)(1+y)(1+w)$. On $y>0$ the outputs and the comparison for $b$ are
+$$a_0'=(2y+a_0-2w)/[(1+y)(1+w)],\quad V'=0,\quad B'=(B+x+y-2w)/D,\quad A'=Kxy/[(1+x)(1+y)],\quad g=-V-y+Rxyw.$$
+At $\theta=1$ this is a true quiet triple if $B\ge g$, and at $B=g$ it is a repaired stage with $z=(2y+a_0-2w)/y\ge0$, strictly positive for $\theta<1$. The zero-$y$ control is defined below.
+
+After the first trial $a_0,A,V\ge0$, $a_0+A\le1$, $0\le B\le1$, $a_0\le3B$. Indeed $a_0'+A'\le (a_0+2y-2w+Kxy)/(1+y)\le(a_0+A+y)/(1+y)\le1$. On later positive-$y$ trials $x=V+2w\le A\le1$ gives
+$$D(3B'-a_0')=(3B-a_0)+3x+y-4w+x(2w-a_0-2y)\ge (3B-a_0)+x(1-a_0-y)+y(1-x)\ge0.$$
+On the first trial $x=2w$ and $D(2B'-a_0')=U+x(1+x+U-2y)\ge3x/2+3x^2/2+y(1/2-3x/2)>0$. For $x>1/3$ the last expression is at least $1-2x+3x^2$ since $x+y\le2$; for smaller $x$ use $x+y>0$. The passive formula gives $0<B'\le1$ on every positive-$y$ trial. Also $A'\le A-x-y$, with $A'/A\le K/(1+K)$ after the first trial.
+
+**The upper endpoint on the pair face.** When $A\le V+a_0$ try $u,a$ with $x=A,w=a_0/2$. This works if $a_0\le A+B$, and gives $U'=A'=0$, $V'=(V+a_0-A)/[(1+A)(1+a_0/2)]$, $B'=(B+A-a_0)/[(1+A)(1+a_0/2)]$. Otherwise use
+$$s_b=(a_0-A-B)/3>0,\qquad x=A+2s_b,\quad w=(B+x)/2.$$
+With $y=0$ all three movers $u,b,a$ tie at zero. The guard of the quiet $v$ is $V+B\ge s_b+A_vxs_bw$. On success the output is $(0,(V+B-s_b)/[(1+x)(1+s_b)(1+w)],0,0)$.
+
+On failure use all four movers with $y=z/N$. There is a unique $0<s<s_b$ solving
+$$x=A+2s,\quad w=(B+x)/2,\quad s+A_vxsw=V+B.$$
+Here $V+B>0$ and the left side increases strictly. Set $z=(a_0-A-B-3s)/s$; the four indifferences give
+$$a_0'=(a_0-A-B-3s)/[(1+s)(1+w)],\quad V'=(V+B-s)/[(1+x)(1+s)(1+w)],\qquad A'=B'=0.$$
+These outputs agree with the three-mover outputs at $s=s_b$.
+
+In fact $V'>H(a_0')$ where $H(t)=t/3+t^2/9$. We have $V'>4a_0'/9$: in $9(V+B-s)>4(a_0-A-B-3s)(1+A+2s)$ the worst case has $V=0,B=a_0/3,A=0$, since $a_0\le1$ makes the right side decreasing in $A$. For $r=s/a_0\in[0,2/9]$ this follows from $4(2-9r)(1+2r)<9(1-3r)$ or $1-7r+72r^2>0$. Repeat the endpoint procedure on $(U',V',0,0)$. On another repair $s+2A_v s^3=V$, $0<s<a_0/3$, and
+$$a_0'=(a_0-3s)/(1+s)^2,\qquad V'=(V-s)/[(1+2s)(1+s)^2].$$
+At $V=H(a_0)$ direct subtraction gives
+$$V'-H(a_0')=\frac{s^2[(a_0-3s)^2+9(s+1)^2]}{9(1+s)^4(1+2s)}>0.$$
+A previous strict excess is added after division by $(1+2s)(1+s)^2$. At sufficiently small $a_0$ one has $H(a_0)\ge a_0/3+2A_v(a_0/3)^3$, so the quiet $u,b,a$ endpoint terminates. Before then every repair reduces $a_0$ by at least $3s$, uniformly positive for $a_0$ bounded below since $V\ge H(a_0)$. Thus only boundedly many secondary repairs occur. The completed endpoint has $a_0'=A'=0$ and is continuous also at a switch to zero $v$ hazard, where the following quiet completion changes $V'$ by $O(a_0')$. Each completion has $0\le B'\le1$, $V'\le\max(V,2)$ by the waiting numerator $V+2w-x-s$. It leaves $V'+B'>0$ when $V+B>0$, using $s_b\le2B/3$ on the first three-mover candidate and the strict $H$ excess on its successors.
+
+**Completing the control maps.** On the primary $y=0$ arc take $g=-V$, agreeing with the other formula at the boundary. At its lower endpoint $w_1=(A-V)_+/2$, use
+$$a_0'=(a_0-2w_1)/(1+w_1),\quad V'=(V+2w_1-A)/[(1+A)(1+w_1)],\quad B'=(B+A-2w_1)/[(1+A)(1+w_1)],\quad A'=0.$$
+For $w_1\le w\le w_0=a_0/2$ interpolate linearly between this state and the completed upper endpoint. If $w_1=w_0$ the two definitions agree. For $w_1>0$ the lower bounds pass by continuity from $y>0$. When $w_1=0$ one has $V\ge A$, $a'_0=a_0$, $B'=(B+A)/(1+A)\ge B$. The upper endpoint has $a'_0=A'=0$, so the same convex bounds hold throughout. The first trial always has $y>0$. Subsequently $V+B>0$ persists: at the lower endpoint the sum of the two numerators is $B+V$ and at the upper endpoint use the preceding strict conclusion. Thus $g<B$ everywhere on the zero-$y$ face of each finite trial graph.
+
+Use $J$ controls $\theta\in[\epsilon,1]$ followed by a forced upper endpoint and quiet tail. Choose $J$ large by geometric decrease of $A$, which becomes zero after any zero-$y$ trial. On every final positive-$y$ upper endpoint $Rxw<1$, giving $g=-V-(1-Rxw)y<B$, and $U'=V'=0$. The exact subsequent quiet tail has $x=2w,y=w$, a positive linear passive numerator $B+w$ and summable odds. It varies continuously also at the switch to the completed pair face, since $A'\to0$ there. On the lower control face choose $\epsilon>0$ small so $Rxw<1/2$. Then $g<B$ uniformly by the same inequalities and finite compactness. The inequality is strict wherever $xyw=0$. At a positive-$y$ quiet endpoint $z=2+(a_0-2w)/y$ has a simple zero, since $y=(A-V-2w)/(1+K(V+2w))$ strictly decreases. As in the preceding two-coordinate return, continue the three primary proper equations at fixed $w$ via the triangular $(x,y,z)$ chart and use a cutoff supported near $g=B$. Interpolate its outputs and comparison there. At the pair-face upper control use the actual completed endpoint as specified below, keeping the control comparison $-V$. Finite induction gives uniformly close trial graphs; harmless off-solution inputs to the primary stage after the first can be clipped to $U\le0$ and $A,V,B\ge0$. On true primary outcomes these signs hold, even for negative participating $L$, by the uniform positive odds on the primary proper charts and small $L/N$. The subsequent secondary repair uses its own output estimates below instead of this clipping.
+
+The limiting seam has $F_b\le1,F_v\le2$, so $F_b+F_v/4\le3/2<2$. For small $T$ all selected primary trials are quiet, since $Rxw<1$ on the positive-$y$ arc. The first quiet stage has $w=(A-U/2)/3+O_K(T^2)$, $y=U/2+w$, $B'=y+O_K(T^2)$ and $A'=O_K(T^2)$. The rest of the quiet tail changes this by $O_K(T^2)$, hence $F_b=v+4b/3+O_K(T^2)>T$ uniformly at $T=\rho$ sufficiently small. Always $F_v+F_b>0$. Apply Brouwer with projected updates to $F_b+F_v/4$, $F_v/(4F_b+F_v)$ and $\theta+B-g$ for $T,\tau$ and each control respectively. The strict boundary margins persist, with exact limiting chosen controls used at $T=\rho$. Nonnegative true outputs make the proportion equality exact. At a fixed point each upper control takes its genuine quiet or completed endpoint, and each interior control gives its genuine proper row in the cutoff chart. The first primary control always has positive $x,y,w$: even when $b=0$, the first child has $U>0$, $A\ge U$, $V=0$ and the lower control is positive. This fixed finite stage supplies a recurring rival against every one-owner deviation, uniformly under truncation of the final tail. The exact seam and the preceding contraction argument give the original signed uniform payoff.
+
+**The second repair on finite tables.** Write $a=-U$ for the mate's deficit in this patch. Consider first the limiting terminal branch after the primary trial. Its input satisfies $a+A\le1$, $a\le3B$, $A,B\ge0$, and $V+B$ is uniformly positive on each compact incoming trial graph. This last inequality concerns the states on which a terminal patch is actually evaluated. If the $ua$ stage fails its $b$ guard, the quiet-$v$ candidate has
+$$s_0=(a-A-B)/3>0,\qquad x_0=A+2s_0,\qquad w_0=(B+x_0)/2.$$
+At the boundary where $s_0=0$ it matches the $ua$ stage. On the subset where the quiet-$v$ guard fails or binds,
+$$A_v x_0s_0w_0\ \ge\ V+B-s_0\ \ge\ (V+B)/3,$$
+since $s_0\le2B/3$. Thus all three physical odds are bounded away from zero there, uniformly for $A_v$ in a positive compact interval. The repaired root $s$ given by $s+A_v(A+2s)s(B+A+2s)/2=V+B$ is also bounded away from zero, as are its $x,w$. At these first repair outputs the limiting excess $V'-H(a')$, $H(a)=a/3+a^2/9$, has a strictly positive uniform minimum. Indeed the proved inequality $V'\ge4a'/9$ is strict above $H(a')$ when $0<a'<1$, and $a'\le a-B\le2/3$. If $a'=0$ the positive $x,s,w$ and $A_v$ give a strictly positive $V'$. Include the contacting $z=0$ outputs in this compactness argument.
+
+During subsequent all-proper limiting repairs the excess at least propagates as $(V-H(a))/[(1+2s)(1+s)^2]$, using the displayed invariant calculation. The sum of the successive $s$ is bounded by $1/3$ since $a-a'\ge3s$. Hence the excess stays uniformly positive, even if the number of steps is provisionally unbounded. The equation $s+2A_v s^3=V$ then bounds $s$ uniformly away from zero on every proper step or contact. The drop $a-a'\ge3s$ consequently bounds their number by a common finite integer. At every true terminal quiet repair, one may pad with empty dates leaving $(0,V',0,0)$.
+
+For finite tables put $y=z/N$ on this second chart, and solve successively at fixed $s,z$
+$$
+ x=\frac{A-y+2s}{1+Ky-(L/N)zs},\qquad
+ w=\frac{B+x+y}{2+Rxy},\qquad
+ z=\frac{2y-s-2w-U}{s[1-(A_u/N)w]}.
+$$
+These are the exact indifferences of $a,b,u$. At zero $(1/N,L/N,A_u/N)$ the first two give $x=A+2s,w=(B+x)/2$ independently of $z$, and the third has unit derivative in $z$ on moving all terms to the left. The remaining exact residual for $v$ is $x+s-2w+A_v xsw-V$. Its derivative after elimination is strictly positive in $s$ at the limit. Also $z=(a-A-B)/s-3$ strictly decreases in $s$ on these positive-odds charts. The implicit function theorem and compactness supply the same nearby proper solution, with positive $z$ precisely on the side where the quiet-$v$ guard fails near a contact. At $z=0$ the two branches coincide exactly. Away from contact both strict signs persist. This continuation uses $A_v$ itself as a compact parameter, with no upper bound independent of that compact set. The other two error parameters are $L/N,A_u/N$.
+
+One must also handle the possibility that the actual $A'$ is slightly negative for the negative-grand implementation of $L$. On every secondary proper date its exact outputs are
+$$
+ a'=\frac{zs[1-(A_u/N)w]}{(1+y)(1+s)(1+w)},\quad
+ B'=\frac{Rxyw}{(1+x)(1+y)(1+w)},\quad
+ A'=\frac{xy(K-\mathbf1_{\rm neg} Ls)}{(1+x)(1+y)(1+s)} .
+$$
+The other mate's output is $V'=A_v xsw/[(1+x)(1+s)(1+w)]$. On the compact active and contacting charts $s$ has the positive lower bound just proved, and all odds have upper bounds. Consequently $a'\ge0$,
+$$ |A'|\le C(1/N+L/N)a',\qquad 0\le B'\le (C/N)a' .$$
+At $z=0$ all three vanish exactly. After a secondary proper date apply the quiet-$v$ candidate directly, even if the child $A$ is negative. The relative bounds give $s_0=(a-A-B)/3>0$, $x_0=A+2s_0>0$ and $w_0=(B+x_0)/2>0$ whenever $a>0$ and the errors are small. If $a=0$ all three are exactly zero. As $a\downarrow0$ all these odds are $O(a)$, while $V$ still has its positive margin; the quiet-$v$ guard is then strict and the stage resets $U,A,B$ to zero. This gives a continuous endpoint even at $a=0$. The estimates and compact implicit charts now continue the finite number of secondary choices, uniformly over the compact incoming graph. Equivalently, on every still-proper finite step the decrease of $a$ keeps half the uniform positive limiting drop, and the strongly quiet small-$a$ stages terminate the patch. No clipping of a negative intermediate $A$ is necessary on this patch. At a true quiet-$v$ endpoint any passive output has numerator $V+B-s_0$ and bounds the positive grand quit offer by the guard, so the retained $V'$ is nonnegative.
+
+The same proof works on a singleton neighborhood. At a quiet $uab$ stage write $c=G_{ua}>0$, $g=G_{ub}>0$, $h=G_{bu}>0$, $d_0=-G_{ba}>0$, $\ell=-G_{au}>0$ and $f=G_{ab}>0$. The exact positive-odds equations are
+$$
+ s_0=\frac{a-(c/d_0)(B+hA/\ell)}{g+c h f/(d_0\ell)},\qquad
+ x_0=(A+f s_0)/\ell,\qquad w_0=(B+h x_0)/d_0.
+$$
+Thus $s_0$ changes sign exactly at the $ua$ guard, the relative estimates ensure positivity after a secondary proper date, and the two patches match when $s_0=0$. The true four-row equations have the same nonsingular derivatives at the certified compact limiting charts, with coefficients depending smoothly on the singleton entries. The ratios in the three exact output formulas are determined by the higher rewards and retain their bounds. Hence all strict comparisons and the continuous return persist.
+
+For the primary interpolation at nearby singleton matrices use the variable-singleton formulas of the preceding return. In particular $w_1=[(n A/\ell)-V]_+/c'$ where $n=-G_{vu},\ c'=G_{va}$. On the pair face extend the control comparison by $-G_{bu}V/n+(d_0-G_{bu}c'/n)w_1$. This agrees with the proper formula at a zero-$y$ boundary and converges uniformly to $-V$. The lower endpoint uses the actual passive values there and the upper endpoint uses the continued exact procedure just given. They agree when the interpolation interval collapses. Initial solo odds still reset $V,B$ exactly and the limiting first $U>0$, first positive $x,y,w$, cutoff and boundary margins persist. All finite maps therefore converge uniformly to the controlled center maps as the singleton and price perturbations vanish.
+
+### An exact four-date solution on two independent large-price axes
+
+At witness 6 use the negative participating withdrawal $Z_u(uvb)=-N$, positive passive withdrawal $Z_a(uvb)=L$, and any $K=Z_a(uva)>0$. Write $A_u,A_v,R$ for the positive grand rewards of $u,v,b$. There are $M<\infty$ and $\delta>0$ such that, for every $K>0$, any $L>0$ and all positive prices satisfying
+$$
+N\ge M(1+K),\qquad R\ge M(1+K)^2,\qquad A_u\le\delta NR/(1+K)^2,\qquad A_v\le\delta NR/(1+K),
+$$
+the game admits exact terminal equilibrium, including original signed levels. If $L<KN$ an exact period of four dates suffices with supports $ua,uvba,b,a$ in that chronological order. If $L\ge KN$ the earlier sure-pair criterion applies. There is no prescribed ratio between $N$ and $R$. Either mate can own the withdrawal by symmetry.
+
+Write $(x,y,s,w)$ for the full date's odds on $(u,v,b,a)$. Seek a seam $(0,v,b,0)$ immediately before date $ua$. In reverse order the two solo dates $a,b$ have odds $b$ and $2b/(1+b)$ and give child $(0,v/(1+3b),0,4b/(1+3b))$. For the full date to fit its zero $U,B$ rows exactly we must take
+$$
+ t=Rw=(x+y)/(xy+1/R),\qquad z=Ns=\frac{1-2w/y}{1-1/(Ny)-(A_u/(NR))t}.
+$$
+The two remaining required child values are
+$$V_c=x+s-2w+(A_v/(NR))xzt,\qquad A_c=x+y-2s+xy(K-(L/N)z).$$
+Write $D=(1+x)(1+y)(1+w)$. The full date outputs
+$$
+ U'=\frac{(A_u/(NR))zyt-zy}{(1+y)(1+s)(1+w)},\quad
+ V'=\frac{(A_v/(NR))zxt}{(1+x)(1+s)(1+w)},\quad
+ B'=\frac{x+y-w}{D},\quad
+ A'=\frac{Kxy}{(1+x)(1+y)(1+s)} .
+$$
+The preceding $ua$ date has odds $x_2=A'$ and $w_2=-U'/2$, giving $U=A=0$ and seam values
+$$ v=\frac{V'+2w_2-x_2}{(1+x_2)(1+w_2)},\qquad b=\frac{B'+x_2-w_2}{(1+x_2)(1+w_2)} .$$
+It remains to solve
+$$4bV_c-A_cv=0,\qquad (4-3A_c)v-4V_c=0.\tag{1}$$
+At a positive solution these identities give the two required solo-prefix continuations. On $ua$ both passive quit offers are zero, hence $b,v>0$ suffice. The two solo dates have zero immediate offers for waiting players; their prescribed native values are nonnegative by the explicit solo calculation. The mandated full date gives geometric rival absorption, so these equalities imply exact terminal equilibrium and the original fixed uniform payoff.
+
+First take $K$ in a compact interval of $[0,\infty)$, and let $1/N,1/R,A_u/(NR),A_v/(NR)$ tend to zero, retaining $k=1-L/(KN)\in[0,1]$. All formulas with $L/N=K(1-k)$ now extend through $K=0$. For $x,y$ in a positive compact rectangle, $s=w=0$, $z=1$ and $t=(x+y)/(xy)$ at the limit. Put $p=y/x$, $T=y/(1+y)$. The child requires $V_c=x$ and $A_c=x+y+Kkxy$. Also $-U'=T$, $A'=KxT/(1+x)$ and $B'=(x+y)/[(1+x)(1+y)]$. Define $E=1+(1-K)x$ and take $x>0$ with $E>0$. The pair step gives
+$$
+ v=\frac{TE}{(1+x+KxT)(1+T/2)},\qquad
+ \frac bv=\frac{1/p+1/2+(K-1/2)x}{E}.
+$$
+Thus the first equation of (1) is equivalent to
+$$4[1/p+1/2+(K-1/2)x]=[1+(1+Kkx)p]E.\tag{2}$$
+There is a unique positive $p$ and the difference of the two sides decreases strictly with nonzero derivative. As $x\downarrow0$ it tends to the positive root $(1+\sqrt{17})/2$. On this graph the second equation is equivalent to
+$$4(1+y)(1+x+KxT)(1+T/2)-pE(4-3A_c)=0.\tag{3}$$
+Its left side at zero is $4-4p<0$. If $K\le1$, an endpoint $x>4/3$ works since $A_c\ge x$. If $K>1$, take $x$ near $1/(K-1)$ from below. Then $p\to\infty$ uniformly over $k\in[0,1]$: the left side of (2) is bounded away from zero, and $E\to0$. Thus one obtains $A_c>4/3$ and a strict positive sign for (3) in both cases. For each $K$ we now have a fixed compact interval of positive $x$ with opposite signs, uniformly over $k$. The signs also persist near that $K$. In (1) the first equation is a smooth nonzero multiple of (2) at its zeros; its compact positive graph continues under small errors by the implicit function theorem. Equation (1)'s second sign change then gives a common root by continuity. Finitely many such intervals cover any compact range of $K$, including zero. At the limiting roots $v>0$ and $4xb=A_cv>0$. For actual $K>0$ the pair odds $x_2=A'$ is positive even arbitrarily close to $K=0$. The other odds and required guards remain positive or equal as stated above.
+
+For unbounded $K$ the same price class follows with the exponents in the statement. Put $e=1/K$, $y=Y$, $x=e(1-he)/(1-e)$, and parameterize the errors by
+$$
+ 1/R=r e^2,\quad 1/N=n e,\quad A_u/(NR)=\alpha e^2,\quad A_v/(NR)=\beta e .
+$$
+Here $h,Y$ will stay in a fixed positive compact region. Write $x=eX$, $e t=(eX+Y)/(XY+r e)$. Then $w=e r(e t)$, $s=e n z$, and $z$ is smooth in all variables at $e=r=n=\alpha=\beta=0$ with value one. The two residuals of (1) divided by $e$ extend smoothly through $e=0$. Indeed $V_c/e=X+nz-2r(e t)+\beta Xz(e t)$; and $V'/e$ is smooth, while $-U'=A'=T$ identically at $e=0$ even for nearby $r,n,\alpha,\beta$. Thus the apparent pole in $v/e$ is removable. At the joint zero of the five parameters let $D=(1+T)(1+T/2)$. Direct substitution or differentiation gives
+$$ V_c/e=1,\quad A_c=(1+k)Y,\quad v/e=Th/D,\quad b=3T/(2D).$$
+The first scaled residual fixes $h=6/A_c$. After this substitution the second is equivalent to
+$$
+ 1+k=\frac{6}{(1+Y)(1+6T+T^2/2)},\qquad T=Y/(1+Y).
+$$
+Its right side decreases with strictly negative derivative from six to zero. Every $0\le k\le1$ has a unique transverse positive root, continuously in $k$; the derivative of the first residual in $h$ is $-A_c T/D\ne0$. Compactness gives a single positive implicit-function neighborhood of this graph for all five error parameters. At the continued roots $v/e,b,Y,h$ are positive, as are $x_2,w_2,t,z$ for actual $e>0$. Thus all sufficiently large $K$ admit the claimed simultaneous bounds. Combine this with the bounded-$K$ result by enlarging $M$ and decreasing $\delta$. No uniform lower bound on an individual positive hazard is asserted as the reward table varies.
+
+For the separated subfamily take all four own singletons equal to one, $K=A_u=A_v=1$, any sufficiently large fixed $R$, $L=2R$, and then all sufficiently large $N$. The six-entry exclusion gives a positive stationary regret floor and a single date carrying uniformly positive first-exit mass for each of the fifteen coalitions in every sufficiently accurate profile. The four-date solution above attains exact equilibrium on these same tables. It also works when $L$ is a negative participating grand reward. Only the formula for $A'$ changes, to $xy(K-(L/N)z)/[(1+x)(1+y)(1+s)]$. At $L/N=0$ the bounded-$K$ graph is identical and has $A'>0$ uniformly. Its transverse first equation and strict endpoint signs persist for small $1/R,1/N,A_u/(NR),A_v/(NR),L/N$. [Sharp six-entry exclusion](SHARP_SPARSITY_FOR_COMPULSORY_GRAND_EXITS.md#compulsory-grand-exits-together-with-a-positive-stationary-regret-gap)
