@@ -44,6 +44,27 @@ def has_common_rival(rows):
     return False
 
 
+def has_negative_joining_exterior(rows):
+    """Try a reciprocal core or the three-row conditions with the fourth row free."""
+    for i, c, d, k in permutations(I):
+        if all(rows[i][c] * rows[i][j] < 0 and rows[c][i] * rows[c][j] < 0
+               for j in (d, k)):
+            return True
+        if not (rows[c][i] > 0 and rows[i][k] > 0
+                and rows[c][d] < 0 and rows[d][c] < 0
+                and min(rows[c][k], rows[d][k]) < 0):
+            continue
+        if rows[i][d] > 0:
+            return True
+        if rows[d][i] <= 0:
+            continue
+        if rows[i][d] == 0 or rows[d][k] >= 0:
+            return True
+        if rows[i][c] <= 0 and rows[k][d] > 0 > rows[k][i] and rows[k][c] <= 0:
+            return True
+    return False
+
+
 EXCEPTIONS = {
     1: {'--+--+++--0+', '--+--+++--+0', '--+-+0++---+', '--+-+0++-+-+'},
     2: {'--+-+0++-0-+', '--+-+0++-+-0'},
@@ -55,6 +76,11 @@ def main():
     strict = {canonical(matrix(w)) for w in WITNESSES}
     signs = {1: '+', -1: '-', 0: '0'}
     for ties, representatives in boundary_faces(strict):
+        negative_count = sum(has_negative_joining_exterior(matrix(face))
+                             for face in representatives)
+        assert negative_count == (21, 34, 21, 4)[ties]
+        print(f'{ties} ties: negative joining exterior with a free row '
+              f'{negative_count}/{len(representatives)}')
         if ties == 0:
             continue
         exceptions = {''.join(signs[v] for v in face) for face in representatives
