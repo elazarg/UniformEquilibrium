@@ -352,115 +352,91 @@ Thus $s_0$ changes sign exactly at the $ua$ guard, the relative estimates ensure
 
 For the primary interpolation at nearby singleton matrices use the variable-singleton formulas of the preceding return. In particular $w_1=[(n A/\ell)-V]_+/c'$ where $n=-G_{vu},\ c'=G_{va}$. On the pair face extend the control comparison by $-G_{bu}V/n+(d_0-G_{bu}c'/n)w_1$. This agrees with the proper formula at a zero-$y$ boundary and converges uniformly to $-V$. The lower endpoint uses the actual passive values there and the upper endpoint uses the continued exact procedure just given. They agree when the interpolation interval collapses. Initial solo odds still reset $V,B$ exactly and the limiting first $U>0$, first positive $x,y,w$, cutoff and boundary margins persist. All finite maps therefore converge uniformly to the controlled center maps as the singleton and price perturbations vanish.
 
-### An exact four-date equilibrium on an unbounded six-price region
+### Exact short periods and a quadratic upper tail on an open set of singleton matrices
 
-At witness 6 use the negative participating withdrawal $Z_u(uvb)=-N$. Use either implementation of the grand withdrawal of size $L$, and write $K=Z_a(uva)>0$ for the entrant's triple price. The three positive grand prices of $u,v,b$ are $A_u,A_v,R$. There are universal $M<\infty$ and $\delta>0$ such that every $K,L>0$ and positive prices satisfying
-$$
- N\ge M,\qquad \frac{R}{(1+K)^2}+\frac{A_v}{N(1+K)}\ge M,\qquad A_v\le\delta N R,\qquad A_u\le\delta\left(\frac{NR}{(1+K)^2}+\frac{A_v}{1+K}\right)
-$$
-admit an exact terminal equilibrium and its original uniform-equilibrium payoff for any signed own levels. The prices $N,R$ have no required ratio. Either mate may own the withdrawal by symmetry. If $L\ge KN$ the sure pair suffices. We construct an exact period of four dates, with supports $ua,uvba,b,a$ in chronological order, throughout $0<L<KN$.
+Take witness 6 with $a=3,b=2$, let $u,v$ be its mates, and use the participating withdrawal $Z_u(uvb)=-N$. Here $K=Z_a(uva)>0$, $Z_u(I)=A_u>0$, $Z_v(I)=A_v>0$, $Z_b(I)=R>0$ and either $Z_a(uvb)=L>0$ or $Z_a(I)=-L<0$. The other 38 higher entries are zero. There is an open neighborhood of the twelve singleton comparisons and common $M<\infty$, $\delta>0$ such that, writing $k_0=1+K$,
+$$N\ge M,\qquad R/k_0^2+A_v/(Nk_0)\ge M,\qquad A_v\le\delta NR,\qquad A_u\le\delta NR/k_0$$
+give an exact terminal equilibrium and an original uniform-equilibrium payoff for either prescribed mate $u$, either implementation of $L$ and all signed own levels. Here $m=-G_{uv}$. The sure-pair square handles $mL\ge KN$. For $mL<KN$ the construction uses at most five dates, and exactly four at the center. As a consequence, **$R\ge C k_0^2$ suffices for all four independent positive prices $L,N,A_u,A_v$** with no other price bounds.
 
-**The four exact dates.** Introduce an auxiliary coefficient $d\in[0,K]$. The required child value of $a$ on the full date will use $d$, and its forced output will use $r$ with $r=K$ for passive $L$ and $r=d$ for participating $L$. We shall enforce $d=K-Ls$, where $(x,y,s,w)$ are the full-date odds in player order $u,v,b,a$. Set
-$$
- t=Rw=\frac{x+y}{xy+1/R},\quad
- z=Ns=\min\!\left(1,\frac{1-2w/y}{1-1/(Ny)-(A_u/(NR))t}\right).
-$$
-Below these odds are strictly positive and the denominator is positive. The required continuations for all four proper actions to tie are
-$$U_c=y+s-2w+(A_u/(NR))zyt-zy,\quad V_c=x+s-2w+(A_v/(NR))zxt,\quad B_c=0,\quad A_c=x+y-2s+dxy.$$
-The odds $w$ give $B_c=0$ and the cap on $z$ gives $U_c\ge0$, as the first expression decreases in $z$ and vanishes at the uncapped choice. The full-date outputs are
-$$
- U'=\frac{(A_u/(NR))zyt-zy}{(1+y)(1+s)(1+w)},\quad V'=\frac{(A_v/(NR))zxt}{(1+x)(1+s)(1+w)},\quad
- B'=\frac{x+y-w}{(1+x)(1+y)(1+w)},\quad A'=\frac{rxy}{(1+x)(1+y)(1+s)}.
-$$
-Prepend $ua$ with odds $x_2=A'$, $w_2=-U'/2$. Both movers tie at zero. Its passive outputs are
-$$
- v=\frac{V'+2w_2-x_2}{(1+x_2)(1+w_2)},\qquad b=\frac{B'+x_2-w_2}{(1+x_2)(1+w_2)}.
-$$
-Use $(0,v,b,0)$ as the seed. In reverse order the solo $a$ odds $b$ give $V_b=0$ in row $b$. The solo $b$ odds $q=[2b-(1+b)U_c]/[(1+b)(1+U_c)]$ then give row values $U_c$, $U_c+v(1+U_c)/(1+3b)$, $0$ and $(4b-2(1+b)U_c)/(1+3b)$. Therefore it suffices to solve
-$$
- J_1=4b(V_c-U_c)-(A_c+2U_c)v=0,\quad
- J_2=b(4-2U_c-3A_c)-(A_c+2U_c)=0,\quad
- J_3=d-K+(L/N)z=0
-$$
-with $b,V_c-U_c,A_c,-U',x,y,s,w>0$. At such a zero $J_1=0$ implies $v>0$ and the relations recover the two solo continuation values exactly, and $A_c=2q/(1+q)>0$ gives $q>0$ (the denominator $1+q=(1+3b)/[(1+b)(1+U_c)]$ is positive). All waiting players on $ua$ and the solo dates have zero immediate quit offers and nonnegative waiting values. Every deviator faces geometric rival absorption on this four-date word.
+Use the positive constants $m=-G_{uv},n=-G_{vu},c_i=G_{ia},g_i=-G_{ib},f_i=G_{bi}$ for $i=u,v$, and $D=-G_{ba},E=G_{ab},l=-G_{au},k=-G_{av}$. Put $\gamma=c_u/c_v$, $\Delta=(\gamma g_v-g_u)/E$. For the unrestricted four-price consequence, failure of the sure-pair and sole-$v$ tests gives $L<KN/m$, $N\ge cR/K$, $A_v/N\le C_0K$, $A_u/N\le C_0\sqrt R$. Indeed the latter opening has odds $X=f_v/(RY)$, $Y<N/A_u$, $Z=(K+kRY/f_v)/L$ and failed guard $nX+(g_v+A_vf_v/R)Z<c_vY$. These bounds imply all four direct hypotheses when $R\ge C k_0^2$ and $C$ is large. We now prove the direct theorem under $L<KN/m$. [Sure-opening criterion](FIVE_NONSINGLETON_REWARDS_AND_THE_SIX_ENTRY_FRONTIER.md)
 
-**Uniform angular bounds.** Parameterize $d=\theta r$, $0\le\theta\le1$; use $\theta=1$ also when $r=d=0$. At zero errors $z=1$, $s=w=U_c=0$, $V_c=x$, $A_c=x+y+dxy$. Put $e=(1+r)^{-1}$, $T=y/(1+y)$, $E=1+(1-r)x$. From the displayed offers,
+Use full-date coordinates $x=\epsilon X$, $\epsilon=(1+r)^{-1}$, full odds $(x,y,s,w)$ in order $(u,v,b,a)$, and auxiliary coefficient $d$ to be set to $K-Ls$. Set $r=d$ for participating $L$ and $r=K$ for passive $L$. Adjoin a coordinate $0\le\pi\le\pi_0$ with $\pi_0$ small, representing an optional solo $u$ between the full date and the solos $b,a$. Now
+$$w=\frac{f_u x+f_v y+f_u\pi}{D+Rxy},\qquad s=z/N,\qquad z_f=\frac{m-c_uw/y}{1-g_u/(Ny)-(A_u/N)w}.$$
+For participating $L$ let $0\le d\le K$ and $z=\min(m+d,z_f)$. For passive $L$ take $-\sigma K\le d\le K$, $z=z_f$. Here $\sigma>0$ is a sufficiently small fixed absolute constant. Required full continuations in the two mate rows are
+$$H_u=my+g_u s-c_u w+A_usyw-zy,\qquad H_v=nx+g_v s-c_vw+A_vsxw.$$
+In $b,a$ they are $f_u\pi$ and $A=lx+ky-Es+dxy$. The full outputs are
+$$U'=\frac{(A_uw/N-1)zy}{(1+y)(1+s)(1+w)},\qquad V'=\frac{A_vsxw}{(1+x)(1+s)(1+w)},\qquad B'=\frac{Rxyw}{(1+x)(1+y)(1+w)},\qquad A'=\frac{rxy}{(1+x)(1+y)(1+s)}.$$
+Prepend $ua$ with odds $x_2=A'/l$, $w_2=-U'/c_u$. Its mate $u$ and entrant $a$ tie at zero. Its other waiting outputs are
+$$v=(V'+c_vw_2-nx_2)/H,\qquad b=(B'+f_ux_2-Dw_2)/H,\qquad H=(1+x_2)(1+w_2).$$
+
+Pick a continuous $0\le\chi\le1$ on $[0,1]$, equal to one on $[0,1/4]$ and zero on $[1/2,1]$. Write $A_0=(A+l\pi)/(1-\pi)$, $V_0=(H_v+n\pi)/(1-\pi)$, and impose four equations:
 $$
- v=\frac{TE}{(1+x+rxT)(1+T/2)},\qquad \frac bv=\frac{x/y+1/2+(r-1/2)x}{E}.
+\begin{aligned}
+J_1&=c_u b E(\gamma V_0+\Delta A_0-H_u)-\gamma D(EH_u+g_u A_0)v=0,\\
+J_2&=c_u b(E-A_0)-(D+b)(EH_u+g_u A_0)=0,\\
+J_3&=d-K+(L/N)z=0,\\
+J_4&=\pi-\chi(\epsilon)(-\Delta)_+ A/(\gamma n+\Delta l)=0.
+\end{aligned}
 $$
-Thus $J_1=(v/E)Q(x)$ with the positive prefactor defined by the first formula, where
-$$ Q(x)=Cx^2+[1-y+(r-d)y]x-y,\qquad C=4/y-3+5r+d(r-1)y .$$
-For $0<y\le1$ both $C\ge1$ and the linear coefficient is nonnegative. The unique positive root is $x_*=eX_*$, determined by
-$$ (e^2 C)X_*^2+[e(1-y)+(1-\theta)(1-e)y]X_*-y=0.$$
-The coefficients are polynomial in $e$ for each $y,\theta$. At $e=0$ the unique positive root is one and its scalar derivative in $X_*$ is $(1+\theta)y>0$, including $\theta=0$. Thus on every fixed compact interval of positive $y\le1$ the root extends smoothly on $0\le e\le1$. If $r>1$, evaluation at $x=1/(r-1)$ gives $Q(x)=4x[x/y+1/2+(r-1/2)x]>0$. Therefore $E>0$ at $x_*$ for all $r$.
-
-Write $x=e(X_*+\xi)$. At $\xi=0$ the derivative of the unscaled $J_1$ in $\xi$ is the positive prefactor $v/E$ times
-$$2e^2 C X_*+e(1-y)+(1-\theta)(1-e)y,$$
-strictly positive also at $e=0$. The formula defining $v/E$ above extends as a positive function when $E=0$. Thus $J_1$ has uniform opposite signs on $\xi=\pm\eta$ around its zero, once a compact $y$ interval is fixed.
-
-On the middle graph $J_2=b(4-3A_c)-A_c$. At $y=1$, $A_c\ge1$, and $b$ is uniformly below one: $B'\le1$, $w_2=T/2=1/4$, and $b=(B'+A'-T/2)/[(1+A')(1+T/2)]\le4/5$. The sign is negative. For $y\downarrow0$, uniformly in $r,\theta$, $x_*\le y/(1-y)$. Also $dx_*$ is bounded: for $d\ge2$ use $C\ge d^2y/2$, and for $d<2$ use the preceding bound. The linear coefficient gives $(r-d)x_*\le1$. Consequently $A_c=O(y)$ and $A'=O(y)$. Since $r\ge d$,
-$$ b=\frac{(x+y+rxy)/[(1+x)(1+y)]-T/2}{(1+A')(1+T/2)}\ge(1/2-o(1))A_c .$$
-Thus $J_2>0$ at some fixed $y_*>0$. These two signs have strict uniform margins on the compactified graph; $A_c\ge y$ there. Choose small $\eta$ so they hold also for $|\xi|\le\eta$, and obtain the strict signs for $J_1$ on $\xi=\pm\eta$ from its uniform positive derivative.
-
-**Restoring finite prices.** Put $X=X_*+\xi$ and write
+**The reference angular box.** At the witness with $\pi=0$, $J_1=4b(H_v-H_u)-(A+2H_u)v$ and $J_2=b(4-2H_u-3A)-(A+2H_u)$. First take $0\le d\le r$. Parameterize $d=\theta r$, $0\le\theta\le1$; use $\theta=1$ also when $r=d=0$. At zero errors $z=1$, $s=w=H_u=0$, $H_v=x$, $A=x+y+dxy$. Put $\epsilon=(1+r)^{-1}$, $T=y/(1+y)$, $E_x=1+(1-r)x$. From the displayed offers,
 $$
- \nu=1/N,\qquad \beta=A_v/(NR),\qquad \alpha=A_u/(NR e),\qquad
- \rho=1/[R e(e+\beta)] .
+ v=\frac{TE_x}{(1+x+rxT)(1+T/2)},\qquad \frac bv=\frac{x/y+1/2+(r-1/2)x}{E_x}.
 $$
-Since $e\ge(1+K)^{-1}$ the theorem's bounds give $\nu,\rho\le1/M$, $\beta\le\delta$ and $\alpha\le\delta(e+\beta)$. This remains true when the second term of $R/(1+K)^2+A_v/[N(1+K)]$ furnishes the lower bound. In these variables
-$$ \tau=e t=\frac{eX+y}{Xy+\rho(e+\beta)},\qquad w=\rho(e+\beta)\tau,\qquad s=\nu z,\qquad z=\min\!\left(1,\frac{1-2w/y}{1-\nu/y-\alpha\tau}\right). $$
-On the strip $y_*\le y\le1$, $|\xi|\le\eta$, both $X,\tau$ stay bounded above and below by positive constants. The cap is well-defined with $z$ close to one. In all expressions $rx=(1-e)X$, $dx=\theta(1-e)X$, $(A_u/(NR))zyt=\alpha z y\tau$ and $(A_v/(NR))zxt=\beta z X\tau$. Hence the two unscaled residuals $J_1,J_2$ are continuous through $e=0$ and converge uniformly to their displayed zero-error values. Their four face signs persist. The quantities $b,A_c,-U',z,\tau$ are uniformly positive upon shrinking $\eta$ and the errors. Indeed at the reference center $A_c\ge y$ and $x_*\le1$ from $Q(x_*)=0$; the formula for $b$ then gives strict positivity including $e=0$ and $r=0$.
+Thus $J_1=(v/E_x)Q(x)$ with the positive prefactor defined by the first formula, where
+$$ Q(x)=C_x x^2+[1-y+(r-d)y]x-y,\qquad C_x=4/y-3+5r+d(r-1)y .$$
+For $0<y\le1$ both $C_x\ge1$ and the linear coefficient is nonnegative. The unique positive root is $x_*=\epsilon X_*$, determined by
+$$ (\epsilon^2 C_x)X_*^2+[\epsilon(1-y)+(1-\theta)(1-\epsilon)y]X_*-y=0.$$
+The coefficients are polynomial in $\epsilon$ for each $y,\theta$. At $\epsilon=0$ the unique positive root is one and its scalar derivative in $X_*$ is $(1+\theta)y>0$, including $\theta=0$. Thus on every fixed compact interval of positive $y\le1$ the root extends smoothly on $0\le\epsilon\le1$. If $r>1$, evaluation at $x=1/(r-1)$ gives $Q(x)=4x[x/y+1/2+(r-1/2)x]>0$. Therefore $E_x>0$ at $x_*$ for all $r$.
 
-For actual $e>0$ one still needs $V_c>U_c$, since both can become small at different rates. When the fraction for $z$ is below one, $U_c=0$ and $V_c=eX+\nu z-2\rho(e+\beta)\tau+\beta z X\tau>0$. The positive terms in $e$ and $\beta$ dominate the $\rho$ term uniformly. When the cap is one, the $s$ and $w$ terms cancel exactly, giving $V_c-U_c=eX+\beta X\tau-\alpha y\tau>0$ by $\alpha\le\delta(e+\beta)$. This proof only uses $V_c>U_c$ at the actual prices.
+Write $x=\epsilon(X_*+\xi)$. At $\xi=0$ the derivative of the unscaled $J_1$ in $\xi$ is the positive prefactor $v/E_x$ times
+$$2\epsilon^2 C_x X_*+\epsilon(1-y)+(1-\theta)(1-\epsilon)y,$$
+strictly positive also at $\epsilon=0$. The formula defining $v/E_x$ above extends as a positive function when $E_x=0$. Thus $J_1$ has uniform opposite signs on $\xi=\pm\eta$ around its zero, once a compact $y$ interval is fixed.
 
-At $d=0$ the third residual is negative since $L<KN$ and $z\le1$, while at $d=K$ it is positive. On the box with coordinates $(\xi,y,d/K)$ use $r=K$, $\theta=d/K$ for passive $L$ and $r=d$, $\theta=1$ for participating $L$. Poincaré–Miranda gives a common zero. It has $r>0$, so the $ua$ odds are strictly positive even arbitrarily close to $L=KN$. This proves the stated single uniform price bound for both implementations.
+On the middle graph $J_2=b(4-3A)-A$. At $y=1$, $A\ge1$, and $b$ is uniformly below one since $B'\le1$, $w_2=T/2=1/4$, and $b=(B'+A'-T/2)/[(1+A')(1+T/2)]\le4/5$. The sign is negative. For $y\downarrow0$, uniformly in $r,\theta$, $x_*\le y/(1-y)$. Also $dx_*$ is bounded. For $d\ge2$ use $C_x\ge d^2y/2$, and for $d<2$ use the preceding bound. The linear coefficient gives $(r-d)x_*\le1$. Consequently $A=O(y)$ and $A'=O(y)$. Since $r\ge d$,
+$$ b=\frac{(x+y+rxy)/[(1+x)(1+y)]-T/2}{(1+A')(1+T/2)}\ge(1/2-o(1))A .$$
+Thus $J_2>0$ at some fixed $y_*>0$. These two signs have strict uniform margins on the compactified graph; $A\ge y$ there. Choose small $\eta$ so they hold also for $|\xi|\le\eta$, and obtain the strict signs for $J_1$ on $\xi=\pm\eta$ from its uniform positive derivative.
+
+For passive $L$ extend the box to $-\sigma\le\theta=d/K\le0$. At $\theta=0$ the $X_*$ derivative stays strictly positive on the compactified $(\epsilon,y)$ graph, including $\epsilon=0$. The implicit function theorem, local uniqueness and compactness give the extension with unchanged strict face signs and positive lower bounds on $b,A,-U',X$ for sufficiently small fixed $\sigma>0$. On the center graph $-U'=T>0$, $A\ge y$ and $b>0$ by the numerator $(x+y+rxy)/[(1+x)(1+y)]-T/2>0$ since $x_*\le1$. Shrink the angular strip to retain these bounds.
+
+**Restoring the actual prices.** Put $\nu=1/N$, $\beta=A_v/(NR)$, $\alpha=A_u/(NR\epsilon)$, $\rho=1/[R\epsilon(\epsilon+\beta)]$. The direct bounds give $\nu,\rho\le1/M$ and $\beta,\alpha\le\delta$ since $\epsilon\ge1/(1+K)$. This includes ranges in which $A_v/[N(1+K)]$ supplies the lower bound on the combined price. By small errors we mean limits as $1/M,\delta$ tend to zero, uniformly on the compact angular strip. In particular $R\epsilon w$ is bounded above and below by positive constants, directly from the new formula for $w$, and $z_f=m+o(1)$. All unscaled residual formulas for $J_1,J_2$ are uniformly close to the original zero-error formulas on the box when the price errors, $\pi_0$ and the singleton neighborhood are small. Indeed $x=\epsilon X$, $rx=(1-\epsilon)X$, $dx$ stays bounded as above, $A_usyw=O(A_u/(NR\epsilon))$, $A_vsxw=O(\beta)$, and $Rxyw=(f_u x+f_v y+f_u\pi)-Dw$. Thus the four angular face signs and positive lower bounds on $b,A,-U',X,R\epsilon w$ persist, even as $\epsilon$ tends to zero. Here $R\epsilon w=(f_u\epsilon X+f_v y+f_u\pi)/[Xy+D\rho(\epsilon+\beta)]$. $J_3$ is negative at its lower face, since $z\le m$ there for participating $L$, while for passive $L$ one has $z_f<m(1+\sigma/2)$. It is positive at its upper face. $J_4\le0$ at $\pi=0$, and $J_4>0$ at $\pi_0$ by subsequently taking $|\Delta|$ small. Poincaré–Miranda gives a common zero, with $r>0$. For participating $L$, the strict lower-face sign ensures this last assertion even arbitrarily near $L=KN/m$.
+
+We verify the signs needed for actual play. The cap gives $H_u\ge0$, with equality on the uncapped branch. Always $H_v>0$: its positive terms $nx$ and $A_vsxw$ together dominate $c_vw$ uniformly since $X,z,R\epsilon w$ stay bounded above and below, and $w=O(\epsilon+\beta)/[R\epsilon(\epsilon+\beta)]$. If the cap binds, $d=o(1)$, $\epsilon>1/2$ and $H_u=o(1)$, so $\pi=0$ there. On $\epsilon\ge1/4$, $H_v$ is bounded below and $H_u=o(1)$, hence $\gamma V_0+\Delta A_0-H_u>0$ uniformly. Else $H_u=0$ and $J_4=0$ gives
+$$(1-\pi)(\gamma V_0+\Delta A_0)=\gamma H_v+\Delta A+(\gamma n+\Delta l)\pi\ge\gamma H_v>0.$$
+Consequently $J_1$ gives $v>0$. Whenever $\pi>0$ we have $H_u=0$.
+
+From seed $(0,v,b,0)$ prepend solo $a$ with odds $b/D$, then solo $b$ with odds $A_0/(E-A_0)$. Both are positive by $J_2=0$. The resulting $u,a,b$ values are $H_u,A_0,0$ from $J_2$. The resulting $v$ value is $V_0$: subtracting its solo formula times $\gamma$ from the $u$ formula gives $\gamma V_0+\Delta A_0-H_u=\gamma Dv(1-A_0/E)/(D+b)$, which follows from $J_1,J_2$. Prepending solo $u$ with probability $\pi$ is obedient and gives exactly $H_u,H_v,f_u\pi,A$. Chronologically the four compulsory dates have supports $ua,uvba,b,a$, with the optional solo $u$ between $uvba$ and $b$. The assembled period satisfies every waiting comparison on the solo and $ua$ dates since the quiet offers are zero and the prescribed payoffs are nonnegative. Every replacement faces recurrent rival absorption. At the center $\Delta=0$, so the optional date is blank.
 
 For the separated subfamily take all four original own singletons equal to one, $K=A_u=A_v=1$, sufficiently large fixed $R$, $L=2R$ and then sufficiently large $N$. The six-entry exclusion gives a positive stationary regret floor and a single date with uniformly positive first-exit probabilities for every one of the fifteen coalitions in each sufficiently accurate profile. Here an exact four-date profile achieves equilibrium on the same tables. [Sharp six-entry exclusion](SHARP_SPARSITY_FOR_COMPULSORY_GRAND_EXITS.md)
 
-### Four unrestricted prices on the high grand-reward tail
+### The passive upper tail on an open set of singleton matrices
 
-At witness 6 with the participating withdrawal of size $N$, there is a constant $C$ such that
-$$R\ge C(1+K)^4$$
-gives an exact terminal equilibrium and an original uniform-equilibrium payoff for **every** positive $L,N,A_u,A_v$, either implementation of $L$, either choice of withdrawing mate, and all signed own singleton levels.
-
-If $L\ge KN$ the two sure mates work. For $L<KN$ the sole-$v$ test gives positive odds $X,Y,Z$ for $u,a,b$, respectively, at which all three are indifferent. At witness 6 they satisfy
-$$X=1/(RY),\qquad 0<Y<N/A_u,\qquad Z=(K+RY)/L=1/(N-A_uY).$$
-The sufficient and necessary inequality for $v$ to quit surely is
-$$X-2Y+(1+A_v/R)Z\ge0.$$
-Indeed $G_{bv}=1$, $G_{av}=-1$, $G_{va}=2$, $G_{vb}=G_{vu}=-1$. The odds and the test use only the difference of the two payoffs across each withdrawal edge, so apply to both choices of $L$. If $R+A_v\ge2L$ then $(1+A_v/R)Z\ge 2Y$. If $A_u\ge N\sqrt{2R}$ then $X>2Y$. [Sure-opening criterion](FIVE_NONSINGLETON_REWARDS_AND_THE_SIX_ENTRY_FRONTIER.md)
-
-It remains to consider $N>R/(2K)$, $A_v<2L<2KN$, $A_u<N\sqrt{2R}$. Choose $C$ large enough that $C/2\ge M$, $2/C\le\delta$, and $\sqrt{2/C}\le\delta$, where $M,\delta$ are the constants of the four-date theorem above. Then $N\ge M$ and $R/(1+K)^2\ge M$. Furthermore $A_v/(NR)<2K/R\le 2/C$ and $A_u/[NR/(1+K)^2]<\sqrt{2}(1+K)^2/\sqrt R\le\delta$. The four-date theorem applies.
-
-### The passive withdrawal with four unrestricted prices
-
-At witness 6, with $a=3,b=2$ and **either** implementation of each withdrawal, there is $C<\infty$ such that every
+At witness 6 take $a=3,b=2$ and the two remaining owners as $u,v$. There is a neighborhood of its twelve singleton comparisons with a common $C<\infty$ such that
 $$R\ge C(1+K)^6$$
-has an original uniform-equilibrium payoff, independently of **all** $L,N,A_u,A_v>0$ and the signed own singleton levels. For the participating withdrawal of size $N$ the preceding result gives the fourth power and an exact equilibrium. Here the withdrawal is $Z_u(vb)=N$. The two mates are symmetric. The sure tests above reduce the problem to
-$$L<KN,\qquad N>R/(2K),\qquad A_u/N<\sqrt{2R},\qquad A_v/N<2K.$$
-All implicit constants below are absolute. Bounds required to be small can be achieved by increasing $C$.
+gives an original uniform-equilibrium payoff for **every** $L,N,A_u,A_v>0$ with the passive withdrawal $Z_u(vb)=N$. Here $K=Z_a(uva)$, the three positive grand rewards of $u,v,b$ are $A_u,A_v,R$, and $Z_a(uvb)=L$ or $Z_a(I)=-L$. Either mate can own the passive withdrawal, the remaining 38 higher entries are zero and original row levels are arbitrary. An accumulating return uses a full date, quiet three-player dates and up to three solo dates.
 
-**A full date and its predecessor.** Use $y\in[1/50,3/2]$ and $x\in[x_-,x_+]$, where
-$$x_-=8/\sqrt R,\qquad x_+=\begin{cases}y&K\le1,\\1/[200(1+K)]&K>1.\end{cases}$$
-In order $u,v,b,a$ use full-date odds $x,y,s,w$ where
-$$ w=\frac{x+y}{1+Rxy},\qquad z=Ns=\frac{1-x/y}{1-(A_u/N)w+(A_v/N)(x/y)w}.$$
-Here $w\le2/(Rx)$, $2w<x$ and $(A_u/N)w<1/2$. Thus $0\le z\le2$, $(z-1)_+=O(1/(x\sqrt R))$. Put $d=K-(L/N)z$, and use $r=K$ for passive $L$ or $r=d$ for participating $L$. Both mates on this date require the same continuation $h$, and the two outsiders require $0$ and $A$, respectively:
-$$h=x+s-2w+A_vsxw,\qquad A=x+y-2s+dxy.$$
-Indeed the other mate requires $y+s-2w+A_usyw-Nsy=h$, and $Rxyw=x+y-w$ ties $b$. The outputs $(U,V,B,D)$ at these indifferences are
-$$U=\frac{A_usyw}{(1+y)(1+s)(1+w)},\quad V=\frac{A_vsxw}{(1+x)(1+s)(1+w)},\quad B=\frac{x+y-w}{(1+x)(1+y)(1+w)},\quad D=\frac{rxy}{(1+x)(1+y)(1+s)}.$$
-In particular $h>0$, $U=O(1/(x\sqrt R))=O(1)$, $V=O(K/R)$. Uniformly $h=x+O((1+K)/\sqrt R)$ and $A\ge x+y-O((1+K)/\sqrt R)$.
+Write $m=-G_{uv}$, $n=-G_{vu}$, $c_i=G_{ia}$ and $g_i=-G_{ib}$ for $i=u,v$, $f_i=G_{bi}$, $d=-G_{ba}$, $e=G_{ab}$, $l=-G_{au}$ and $k=-G_{av}$. These are positive near the center. Put $\gamma=c_u/c_v$, $\Delta=(\gamma g_v-g_u)/e$. The sure tests allow us to assume $L<KN/m$, $N\ge cR/K$, $A_v/N\le C_0K$, $A_u/N\le C_0\sqrt R$, locally uniformly. Indeed their odds satisfy $X=f_v/(RY)$, $Y<N/A_u$, $Z=(K+kRY/f_v)/L$, and their failed guard is $nX+(g_v+A_v f_v/R)Z<c_vY$.
 
-Prepend a $uva$ date with odds $P=V+2t$, $Q=U+2t$, $t$ in that order. The mates then tie at zero. The required tie for $a$ is
-$$F=D-P-Q-KPQ=0.$$
-When it holds the new $a$ value is $D_1=KPQ/[(1+P)(1+Q)]$. The new $b$ value from waiting is $B_1=(B+P+Q-t)/[(1+P)(1+Q)(1+t)]$; its guard is $B+P+Q-t\ge RPQt$. Link the two intervals $(x,t)=(x_-,t)$, $16(1+K)/\sqrt R\ge t\ge0$, and $(x,t)=(x,0)$, $x_-\le x\le x_+$. Their concatenation is one rectangle coordinate. Along with $y$, all offers are continuous. The formulas for $D_1,B_1$ define trial values everywhere.
+Use $1/50\le y\le3/2$ and two linked segments in the $(x,t)$ plane. On the first, $x=x_-=M_0/\sqrt R$ while $t$ runs from $4M_0(1+K)/\sqrt R$ down to zero. On the second, $t=0$ and $x$ runs from $x_-$ to $x_+$. Take $M_0$ a sufficiently large absolute constant. Set $x_+$ as follows. For $K>1$ use $1/[200(1+K)]$ if $\Delta\ge0$, and $y/2$ otherwise. For $K\le1$ use the unique solution near $y$ of
+$$my=\gamma nx+\Delta[lx+ky+y\min(Kx,\eta)],\qquad \eta=1/25.$$
+The right side increases strictly with $x$ and the root lies between $0.9y$ and $1.1y$ after shrinking the singleton neighborhood. Adjoin a third rectangle coordinate $0\le\pi\le\pi_0$, with $\pi_0>0$ a small constant. It represents the quitting probability of a solo $u$ placed just before the two solos $b,a$ in chronological order.
 
-At the first endpoint $D\le Kx_-$, so $F<0$. At the last endpoint when $K\le1$ we have $x=y$, $z=0$, $U=V=0$ and $D>0$. When $K>1$, there $1-z\ge c x$ with a universal $c>0$: the numerator of $1-z$ is at least $x/y-O(1/(x\sqrt R))$ and the denominator is bounded above and below. Hence $D\ge c'Kx^2$ for either choice of $L$, while $U+V+KUV=O((1+K)/\sqrt R+K/R+K^2(1+K)/R^{3/2})$. With $R\ge C(1+K)^6$ this is strictly below $D$. Thus $F>0$ along the other face.
+Use full-date odds $(x,y,s,w)$ for $(u,v,b,a)$ with $w=(f_u x+f_v y+f_u\pi)/(d+Rxy)$, $s=z/N$. Trial required child values are
+$$H_u=my+g_u s-c_u w+A_usyw-zy,\qquad H_v=nx+g_v s-c_v w+A_vsxw,$$
+$$A^*=lx+ky-es+y\min\{Kx(1-Lz/(KN)),\eta\},\qquad T=\gamma H_v+\Delta A^*.$$
+The equations for $b$ and for the two mate children will use respectively $B_c=f_u\pi$ and $H_u=T_+$. The latter equation determines a unique continuous nonnegative $z$ on all trials. To verify it, $w=O(1/(Rx))$, $(A_u/N)w<1/2$, $H_v\ge c x$, and $H_u$ decreases with $z$ at slope at most $-c y$ for large $M_0,C$. At $z=0$, $H_u\ge0$ and $H_u\ge T$ by the upper $x$ choices: the latter comparison has identical $w$ terms and is the displayed endpoint inequality with $x$ in place of its root. For $K>1$ the term $\Delta y\min(Kx,\eta)$ is uniformly small and $x\le y/2$. If $\Delta\le0$, $T$ is nondecreasing in $z$. If $\Delta>0$, $Kx$ is uniformly bounded on its chosen interval and the negative slope contributed by $\Delta A^*$ has magnitude at most $|\Delta|(e/N+(L/N)xy)=o_G(1)y$, upon shrinking the neighborhood. Thus $H_u-T_+$ decreases strictly. It reaches zero no later than the zero of $H_u$. In particular $z=O(1)$ and
+$$z\le m+O(1/(x\sqrt R)+1/N),\qquad A^*\ge lx+ky-o_C(1),\qquad H_v=nx+o_C(1).$$
+Here and below $o_C(1)$ tends to zero uniformly as $C$ increases. For the middle bound use $mL/N<K$ and $Kx=O(K)$ in the estimate for $z$. Shrink the neighborhood and enlarge $C$ to ensure $A^*>0$.
 
-**Closing the return.** Before this predecessor insert successive $uva$ dates with odds $(2p,2p,p)$, where $4p+4Kp^2=D_j$. The update is
-$$D_{j+1}=4Kp^2/(1+2p)^2,\qquad B_{j+1}=(B_j+3p)/[(1+2p)^2(1+p)].$$
-The two mate values stay zero and $a$ ties. Over the entire trial rectangle $P=O((1+K)/\sqrt R)$, $Q=O(1)$, hence $D_1=O(K(1+K)/\sqrt R)$ and $KD_1$ is small. The bound $D_{j+1}\le K D_j^2/4$ implies uniform geometric decrease. The $B_j$ are uniformly bounded (each update is an expected waiting payoff using bounded baseline entries), and $|B_{j+1}-B_j|=O(D_j)$. Thus $B_\infty$ exists continuously and $B_\infty=B_1+O(D_1)$.
+The full outputs in rows $b,a$ are $B=(f_u x+f_v y-dw+f_u\pi)/[(1+x)(1+y)(1+w)]$, and $D=rxy/[(1+x)(1+y)(1+s)]$ with the **unclipped** $r=K$ for passive $L$ or $r=K-(L/N)z$ for participating $L$. The preceding $uva$ date uses odds $(P,Q,t)$ in that order, where $P=(V+c_vt)/n$, $Q=(U+c_ut)/m$, and
+$$F=D-lP-kQ-KPQ.$$
+Its new entries are $D_1=KPQ/[(1+P)(1+Q)]$ and $B_1=(B+f_uP+f_vQ-dt)/[(1+P)(1+Q)(1+t)]$. On the repeated quiet prefix solve $D_j=lP+kQ+KPQ$ with $P=c_vt/n$, $Q=c_ut/m$, and use the same two updates. Indeed $U=A_u s y w/[(1+y)(1+s)(1+w)]=O(1/(x\sqrt R))=O(1)$ and $V=A_v s x w/[(1+x)(1+s)(1+w)]=O(K/R)$. On the entire rectangle $P=O((1+K)/\sqrt R)$, $Q=O(1)$ at the first step and hence $D_1=O(K(1+K)/\sqrt R)$. The bound $D_{j+1}=O(KD_j^2)$ gives uniform geometric decrease since $KD_1$ is small. The $B_j$ stay bounded by the fixed singleton waiting rewards and initial bound. Since $|B_{j+1}-B_j|=O(D_j)$, their continuous limit satisfies $B_\infty=B_1+O(D_1)$.
 
-Starting with the putative seed $(0,0,B_\infty,0)$, prepend solo $a$ with odds $B_\infty$ and solo $b$ with odds $[2B_\infty-(1+B_\infty)h]/[(1+B_\infty)(1+h)]$. Matching the required continuation $(h,h,0,A)$ is equivalent to
-$$J=B_\infty(4-2h-3A)-(A+2h)=0.$$
-Use the formula for $J$ as a trial residual on the whole rectangle. Uniformly $B_\infty\ge B-o(1)>0$ and $B_\infty\le1+o(1)$, where $o(1)$ tends uniformly to zero as $C$ increases: $B\le1$, $P,t,D_1=o(1)$ and $(B+Q)/(1+Q)\ge B$. At $y=3/2$ we have $A\ge3/2-o(1)$ and $J<0$. At $y=1/50$ we have $x\le y$, $h=x+o(1)$, $A\le x+y+Kxy\le x+1.02y$, and $B\ge(x+y)/(1+y)^2-o(1)$. Thus $4-2h-3A>3.8$ there for large $C$ and $J>0$, since $3.8(x+y)/(1.02)^2>3x+1.02y$. Poincaré–Miranda gives a common zero of $F,J$. At the zero $A,h,B_\infty>0$, so the solo $b$ odds are positive: $2B_\infty-(1+B_\infty)h=A(1+3B_\infty)/2$. Both solo movers tie at zero, and quiet players there receive nonnegative values against zero immediate offers.
+At the first interpolation endpoint $D\le Kx_-$ and $F<0$ from the chosen $t$. At the last endpoint $z=0$ if $K\le1$, which gives $F=D>0$. For $K>1$ we have $T\ge c x$ there. When $\Delta\ge0$ this follows from $A^*>0$, and otherwise $x=y/2$, $A^*\le lx+(k+\eta)y$ and $|\Delta|$ is small. Since $H_u=T$, its equation yields $m-z\ge c' x-O(1/(x\sqrt R)+1/N)\ge c''x$ there. Thus $D\ge c'''Kx^2$ for either grand withdrawal while $U+V+KUV=O((1+K)/\sqrt R+K/R+K^2(1+K)/R^{3/2})$ since $x_+\ge c/(1+K)$. This gives $F>0$ there. At any zero of $F$, the artificial clipping in $A^*$ is inactive. For $t>0$, $x=x_-$ so that $Kx=o_C(1)$. For $t=0$, clipping would require $Kx\ge\eta$, hence $U+V+KUV=O(K/\sqrt R+K/R+K^3/R^{3/2})=o_C(1)$; whereas $D$ would be bounded below by a positive constant since $Kx(1-Lz/(KN))\ge\eta$ and $y\ge1/50$. This contradicts $F=0$.
 
-On the first predecessor, if $t=0$ then the quiet $b$ guard holds. If $t>0$ then $x=x_-$ and $F=0$ implies $P,Q,t\le D\le8K/\sqrt R$, so $RPQt=O(K^3/\sqrt R)$ is small compared with $B$. At this zero $D_1=O((1+K)^3/R)$: for $t>0$ use these sharper bounds, and for $t=0$ use $P=V=O(K/R)$, $Q=U=O(1)$. All later quiet-$b$ guards follow since the respective offers in waiting-numerator units are $4Rp^3=O(RD_1^3)=O((1+K)^9/R^2)$ while all $B_j$ are bounded below by a positive constant. All four actions on the full date meet their comparisons even at a zero hazard, by the displayed ties. Truncate the quiet prefix and repeat the resulting finite block. Its prescribed and optimal reply payoffs at the seed agree and approach the seed. Each deviator faces at least one of the two fixed positive solo hazards per block, giving a common contraction below one. Actual terminal regret tends to zero and row translations restore the original signed target. [Truncated-return argument](FIVE_NONSINGLETON_REWARDS_AND_THE_SIX_ENTRY_FRONTIER.md)
+Set $A_0=(A^*+l\pi)/(1-\pi)$ and $V_0=(H_v+n\pi)/(1-\pi)$. The remaining two residuals are
+$$J=c_v B_\infty(e-A_0)-(d+B_\infty)(e V_0+g_v A_0),\qquad E=\pi-(-T)_+/(\gamma n+\Delta l).$$
+The denominator in $E$ is positive. Since $H_v>0$ and $A^*$ is uniformly bounded, $E\le0$ at $\pi=0$ and $E>0$ at $\pi=\pi_0$ if $|\Delta|$ is small enough. For $J$, take $\pi_0$ small before fixing the singleton neighborhood. On $y=1/50$ we have $x\le1.1y$, $A^*\le lx+(k+\eta)y$. Also $B_\infty\ge(f_ux+f_vy)/[(1+x)(1+y)]-o_C(1)-O(\|G-G_6\|+\pi_0)$, since the bounded $Q$ contributes its singleton payoff $f_v\ge B-O(\|G-G_6\|+\pi_0)$ in the first quiet update. The same estimates give $B_\infty,B_j\ge c>0$ uniformly on the rectangle. Hence at the lower face the center estimates become, up to errors tending to zero with $\pi_0,\|G-G_6\|,1/C$, $4-2V_0-3A_0>3.8$ and $3.8(x+y)/[(1+1.1y)(1+y)]>3x+1.04y$. At $y=3/2$ one has $A_0\ge 3/2-o_C(1)-O(\|G-G_6\|)$ and $B_\infty\le 1+O(\pi_0+\|G-G_6\|)+o_C(1)$. Thus $J$ is positive on the lower face and negative on the upper face. These estimates use the trial cap, independently of $Kx$. Poincaré–Miranda in three dimensions gives a common zero.
+
+To check the extra date, start from seed $(0,0,B_\infty,0)$. First prepend solo $a$ with odds $B_\infty/d$ and then solo $b$ with odds $A_0/(e-A_0)$. These are positive since $J=0$, $V_0,A_0,B_\infty>0$. The outputs in rows $v,a,b$ are $V_0,A_0,0$; that in row $u$ is $\gamma V_0+\Delta A_0$. Now $E=0$ gives $\gamma V_0+\Delta A_0=T_+$, and if $\pi>0$ that number is zero. Thus $u$ may quit alone with probability $\pi$. The resulting child values are exactly $H_u,H_v,f_u\pi,A^*$. All prescribed waiting values on the solos are nonnegative. On the first quiet date the outsider $b$ requires $B+f_uP+f_vQ-dt\ge RPQt$. For $t=0$ this holds. If $t>0$, $F=0$ gives $P,Q,t=O(D)=O(K/\sqrt R)$, so $RPQt=O(K^3/\sqrt R)$ is small compared with $B$. In this case $D_1=O(K^3/R)$; if $t=0$, $P=O(K/R)$ and $Q=O(1)$ give $D_1=O(K^2/R)$. All subsequent quiet dates therefore have $RPQt=O(RD_1^3)=O((1+K)^9/R^2)$, small relative to their positive $B_j$. The three active owners meet their tie equations by construction.
+
+Truncate the quiet prefix and repeat the resulting finite block. Its prescribed and optimal reply payoffs at the seed agree and approach the seed. Each unilateral replacement faces at least one of the two fixed positive solo hazards of $a,b$ per block. The induced payoff maps have a common contraction factor below one, giving vanishing terminal regret and an original uniform-equilibrium payoff after any signed row translations. [Truncated-return argument](FIVE_NONSINGLETON_REWARDS_AND_THE_SIX_ENTRY_FRONTIER.md)
