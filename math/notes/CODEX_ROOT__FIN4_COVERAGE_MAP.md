@@ -39,6 +39,19 @@ A table has 16 singleton rewards and 44 higher rewards. Fix the singleton data a
 
 For a proof by cases there are **21 disjoint strict singleton cases up to relabeling**. In each case the obligation is UE for every matrix passing the tests and every completion still outside proved UE families. It suffices to do this on rational tables with all 44 centered higher rewards nonzero. Indeed the unrestricted terminal regret infimum changes by at most $2\|r-r'\|_\infty$. A positive gap at any table would persist on an open ball. That ball contains a rational table off all the singleton-tie and zero-higher-reward hyperplanes, and its strict sign class must be among the 21. This accounts for the 95 tied classes and all sparse tables in the universal proof. They remain informative for deciding individual inputs and for testing constructions. [Strict and tied census](../exports/TWENTY_ONE_SINGLETON_SIGN_CLASSES_FOR_FOUR_PLAYER_QUITTING_GAMES.md) · [Reward continuity](../../UniformEquilibrium/Quitting/Terminal/TerminalExploitabilityRewardRobustness.lean)
 
+**Whole classes closed for UE: 0 of 21.** For a second measure let $\Delta_C$ be the worst, over a whole sign class with all centered rewards in $[-1,1]$, of the infimum maximum deviation gain over absorbing independent profiles. Zero closes the entire class. No class has a certified positive lower bound. The table gives upper bounds that hold simultaneously over every singleton matrix and all 44 higher rewards. They remain valid with unbounded higher rewards if each row is measured in units of its largest positive foreign singleton. [Definition, proof and finite enclosures](CODEX_ROOT__INTERLACED_ORDER_TESTS_FOR_ARBITRARY_FOUR_PLAYER_GAMES.md#worst-case-regret-on-an-entire-singleton-class) · [Exact checker](../experiments/STRICT_CLASS_REGRET_BOUNDS.py)
+
+| Certified upper bound on $\Delta_C$ | Strict census classes |
+| --- | --- |
+| $1/16$ | 9 |
+| $1/13$ | 12 |
+| $1/12$ | 1, 2, 3, 4, 5, 10, 11, 13, 14 |
+| $1/10$ | 6, 15 |
+| $1/9$ | 7, 8, 16, 17 |
+| $1/8$ | 18, 19, 20, 21 |
+
+All 21 therefore pass the $1/8$ threshold. Class 9 exposes a limit to this construction. For its literal matrix with positive mate payoffs $1$ and crossed payoffs $-5/16$, even the best choice of constant relative quitting rates has limiting maximum gain at least $1/32$ as the hazards vanish. Any proof at all accuracies must accommodate other profiles on that matrix. [Exact floor for constant relative rates](CODEX_ROOT__INTERLACED_ORDER_TESTS_FOR_ARBITRARY_FOUR_PLAYER_GAMES.md#worst-case-regret-on-an-entire-singleton-class)
+
 Two existing results subdivide these cases in different ways. The first column below records coverage by the nine whole-chamber proofs of the fourth all-four-finite order test. The second records whether the singleton pair condition still permits a six-entry counterexample. A negative in the second column settles every completion with exactly six nonzero centered higher entries there. A positive leaves the other six-entry tests to apply. A fourth-rank certificate leaves higher ranks to prove.
 
 | In one of the nine rank-four closures | Six-entry pair condition permits the signs | Strict census labels | One-tie classes | Two-tie classes | Three-tie classes |
