@@ -201,6 +201,87 @@ DUPLICATED_DONOR_CERTIFICATES_3 = (
 )
 
 
+COMBINED_SCHEDULES = SCHEDULES + DUPLICATED_DONOR_SCHEDULES + tuple(
+    tuple(int(mask,16) for mask in word) for word in (
+        "2148212481248148",
+        "4812484184218122",
+        "1248124812481248",
+        "1481214824812482",
+        "4218421482184218",
+    )
+ )
+
+COMBINED_CERTIFICATES_2 = (
+    0,
+    1,
+    1,
+    (('0', 3), ('10', 3), ('110', 3), ('111', 14)),
+    (('0', 5), ('10', 5), ('11', 6)),
+    (('0', 6), ('1', 6)),
+    7,
+    8,
+    9,
+    10,
+    11,
+    10,
+    (('00', 12), ('01', 0), ('1', 0)),
+    1,
+    1,
+    1,
+    (('0', 3), ('100', 45), ('101', 14), ('110', 45), ('111', 14)),
+    9,
+    14,
+    5,
+    14,
+    5,
+    14,
+    5,
+    15,
+    1,
+    1,
+    1,
+    7,
+    6,
+    46,
+    46,
+    11,
+    11,
+    11,
+    18,
+    18,
+    18,
+)
+
+COMBINED_CERTIFICATES_3 = (
+    (('00', 12), ('01000', 45), ('010010', 12), ('010011', 45), ('0101', 47), ('01100', 48), ('011010', 12), ('011011', 48), ('0111', 48), ('100', 35), ('10100', 45), ('10101', 12), ('1011', 47), ('11', 48)),
+    48,
+    48,
+    48,
+    (('0000', 45), ('0001', 14), ('001', 45), ('01', 14), ('10000', 45), ('10001', 14), ('10010', 45), ('10011', 14), ('10100', 45), ('10101', 14), ('1011', 14), ('110', 45), ('111', 14)),
+    19,
+    20,
+    21,
+    49,
+    24,
+    25,
+    (('00', 26), ('01', 26), ('10', 23), ('11', 23)),
+    27,
+    26,
+    25,
+    25,
+    21,
+    28,
+    25,
+    21,
+    23,
+    23,
+    23,
+    23,
+    29,
+    23,
+)
+
+
 def normalized(row):
     return tuple(Fraction(x, sum(row)) for x in row)
 
@@ -219,12 +300,15 @@ def subcell(vertices, address):
     return vertices
 
 
-def check_domain(reference, points, cells, certificates, volumes, totals, duplicated=False):
+def check_domain(reference, points, cells, certificates, volumes, totals, duplicated=False, combined=False):
     assert len(cells)==len(certificates)
     base = [tuple(points[j] for j in indices) for indices,_ in cells]
     check_partition(base, Fraction(2 if reference==2 else 1, 3))
     donors = ((3,), (3,), (0,1), (2,)) if duplicated else ((3,), (3,), (1,), (0,2))
     schedules = DUPLICATED_DONOR_SCHEDULES if duplicated else SCHEDULES
+    if combined:
+        donors = ((3,), (3,), (0,1), (0,2))
+        schedules = COMBINED_SCHEDULES
     for vertices,cert in zip(base, certificates):
         assert all(min(v)>=0 and sum(v)>0 for v in vertices)
         if reference==2:
@@ -243,6 +327,8 @@ def check_domain(reference, points, cells, certificates, volumes, totals, duplic
             axis=reference
         primary = 1 if axis==2 else 2
         perm = (axis, *(j for j in PLAYERS if j not in (axis,primary)), primary)
+        if combined:
+            perm = (2,1,3,0) if axis==2 else (3,1,0,2)
         faces = tuple((a,perm.index(p),perm.index(n)) for a,i in enumerate(perm)
                       for p in donors[i] for n in PLAYERS if n!=i and n not in donors[i])
         protected = tuple(perm.index(p) for p in donors[axis])
@@ -263,6 +349,27 @@ def check_domain(reference, points, cells, certificates, volumes, totals, duplic
                 totals[axis][j] += number
 
 
+
+def check_middle_owner_face():
+    # Work in the manuscript's labels, then mark 3 and put a protected donor last.
+    donors = ((3,), (3,), (0,1), (0,2))
+    perm = (3, 1, 0, 2)
+    faces = tuple((a,perm.index(p),perm.index(n)) for a,i in enumerate(perm)
+                  for p in donors[i] for n in PLAYERS if n!=i and n not in donors[i])
+    schedules = ("54488882222511", "54588882222114")
+    totals = [0,0,0]
+    for i,s in enumerate(schedules):
+        # Rectangles 2Q in [i,i+1], 2Z in [0,1], in homogeneous coordinates.
+        points = tuple((q,0,2,z) for q,z in ((i,0),(i+1,0),(i,1),(i+1,1)))
+        schedule = tuple(tuple(perm.index(j) for j in PLAYERS if int(m,16)&(1<<j)) for m in s)
+        for triangle in ((0,1,3), (0,2,3)):
+            vertices = tuple(tuple(points[k][j] for j in perm) for k in (*triangle,triangle[-1]))
+            words,gains = check_cell(schedule, vertices, faces, protected=(2,3), before=(0,1))
+            for j,n in enumerate((1,words,gains)):
+                totals[j] += n
+    return totals
+
+
 def check_sign_counts(index=5):
     def mask(values):
         matrix = [[0]*4 for _ in PLAYERS]
@@ -270,7 +377,8 @@ def check_sign_counts(index=5):
             matrix[i][j]=v
         return canonical(matrix)
     strict = {mask(w) for w in WITNESSES}
-    previous = {mask(WITNESSES[n-1]) for n in ((1,2,4,9) if index==5 else (1,2,4,5,9))}
+    older = {5:(1,2,4,9), 6:(1,2,4,5,9), 8:(1,2,3,4,5,6,7,9)}
+    previous = {mask(WITNESSES[n-1]) for n in older[index]}
     new = mask(WITNESSES[index-1])
     results=[]
     for ties,forms in boundary_faces(strict):
@@ -287,7 +395,8 @@ def check_sign_counts(index=5):
             all_five+=bool((previous|{new}) & ancestors)
         results.append((own,extra,all_five))
     assert results==([(1,1,5),(6,4,17),(10,3,25),(5,0,10)] if index==5
-                     else [(1,1,6),(3,2,19),(6,2,27),(4,0,10)])
+                     else [(1,1,6),(3,2,19),(6,2,27),(4,0,10)] if index==6
+                     else [(1,1,9),(6,2,27),(11,0,31),(6,0,10)])
     return results
 
 
@@ -310,3 +419,14 @@ if __name__=='__main__':
     assert volumes=={2:Fraction(1,3),3:Fraction(1,6)}
     print('duplicated donors, axes 2 and 3',totals)
     print('own, newly covered, all six',check_sign_counts(6))
+
+    totals={2:[0,0,0],3:[0,0,0]}
+    volumes={2:Fraction(0),3:Fraction(0)}
+    check_domain(2,AXIS2_RAW_POINTS,AXIS2_RAW_CELLS,COMBINED_CERTIFICATES_2,
+                 volumes,totals,combined=True)
+    check_domain(3,AXIS3_POINTS,AXIS3_CELLS,COMBINED_CERTIFICATES_3,
+                 volumes,totals,combined=True)
+    assert volumes=={2:Fraction(23,30),3:Fraction(7,30)}
+    print('two additional donors, axes 2 and 3',totals)
+    print('ordered proper face, triangles/words/gains', check_middle_owner_face())
+    print('own, newly covered, all nine',check_sign_counts(8))

@@ -1,4 +1,4 @@
-# The fourth order test for three classes with a reciprocal pair
+# The fourth order test for sign classes with a reciprocal pair
 
 Let a four-player quitting table have native singleton comparisons $G_{ij}=r_i(\{j\})-r_i(\{i\})$. Suppose each row has one positive foreign comparison. Two players name one another as their positive donor, and each of the other players names a different member of this pair. Then the native all-four-finite order test passes at rank four, for all twelve singleton magnitudes and every choice of the 44 nonsingleton rewards. It also passes if any subset of the strict comparisons is replaced by zero. The signed test follows with arbitrary own-singleton levels. This is one entire strict orbit among the 21 in the singleton census. Its closure contains two of the 46 surviving one-tie orbits, three of the 39 two-tie orbits and one of the ten three-tie orbits. The theorem concerns the fourth order test. The conjecture requires unbounded ranks. [Order tests](../notes/CODEX_ROOT__INTERLACED_ORDER_TESTS_FOR_ARBITRARY_FOUR_PLAYER_GAMES.md) · [Sign census](TWENTY_ONE_SINGLETON_SIGN_CLASSES_FOR_FOUR_PLAYER_QUITTING_GAMES.md)
 
@@ -117,3 +117,29 @@ The ratio $y_3/y_2=(d/f)(y_0/y_2)+e/f$ increases strictly from column 0 to colum
 Partition each of the two domains by the weak ordering of the four coordinates. If $p$ lists them in descending order, the vertices are the indicator vectors of its first $k$ owners, normalized by $k$, for $1\le k\le4$. Indeed the barycentric coefficients of a probability vector $y$ in that order are $k(y_{p_k}-y_{p_{k+1}})$, with the next value after the fourth taken as zero. This accounts for every point of both domains including their common boundary. On each cell the checker uses the same complete-word scoring and affine interpolation as the reciprocal-core certificate. The marked row has a single positive donor, respectively 1 or 3. Every other balanced row uses all its positive-negative donor pairs, including both positive donors of row 3. This yields the order inequality for the entire singleton cone at each point of the cell. All validation symbols are solo, so every higher entry is unrestricted. Closedness of fixed-rank passing gives the weak signs, and the negative singleton in the strict chamber provides the signed completion as above. [Exact fourth-rank order check](../experiments/RANK_FOUR_ADDITIONAL_DONOR.py)
 
 This adds one strict, three one-tie and two two-tie orbits to the six-chamber count. Its closure alone meets $1,5,7,3$ surviving orbits with zero through three ties. The seven closures together meet $7/21$, $22/46$, $29/39$ and $10/10$, respectively. [Sign census](TWENTY_ONE_SINGLETON_SIGN_CLASSES_FOR_FOUR_PLAYER_QUITTING_GAMES.md)
+
+## A dependent with a second positive comparison
+
+In the reciprocal-core matrix displayed above, change $G_{20}$ to $+g$ and keep $G_{02}=-b$. The positive donors are $3,3,\{0,1\},1$ in physical row order. The canonical mask is $(2,1,1,6)$, witness 7 of the singleton census. The all-four-finite fourth order test passes on this class for every choice of the 44 nonsingleton rewards. The same conclusion holds at all weak specializations and with arbitrary own-singleton levels.
+
+Put $J=j/k$, $L=l/k$, $D=d/f$, $E=e/f$. The reciprocal-core exterior theorem already treats both dependent-to-dependent comparisons with either sign. On the hard branch its reduced matrix has positive inverse and negative diagonals:
+$$
+ M=\begin{pmatrix}cD-aJ&G_{02}+cE-aL\\G_{20}+hJ-iD&hL-iE\end{pmatrix}
+   =\begin{pmatrix}A&B\\ C&H\end{pmatrix},\qquad A,H<0<B,C.
+$$
+The core equations $x_1=Jx_0+Lx_2$ and $x_3=Dx_0+Ex_2$ then reconstruct two strictly positive full leaf columns. The fixed-rank openness and four-finite reduction used above supply the same singleton hypotheses at a putative rank-four failure. [Seven reciprocal-core exteriors](TWO_FREE_ROWS_FROM_A_RECIPROCAL_PAIR.md#seven-strict-singleton-chambers-for-the-exterior)
+
+Return to $G_{02}=-b$, $G_{20}=+g$ and take $y$ to be the positive column 0 normalized to sum one. The old $013$ default still has just one negative value $A/(1+J+D)$, and the omitted row has positive value $C/(1+J+D)$. Likewise the $213$ default has one negative value $H/(1+L+E)$ and the omitted row is positive. Reusing their rank-four hidden tests yields $y_0\le3y_1$, $y_2\le3y_3$. The first test also gives
+$$
+ D(1+4c/a)<3J-1.
+$$
+Since $c y_3>a y_1+b y_2$ at this column, and $y_1\ge J y_0$, one obtains $D y_0<y_3(3y_1-y_0)/(y_3+4y_1)$. Using $E y_2=y_3-Dy_0$ gives the additional price bound
+$$
+ \frac{d}{e}<\frac{y_2}{y_0}\;\frac{3y_1-y_0}{y_3+y_1+y_0}.
+$$
+
+The half of this domain with $y_0\le y_2$ is exactly the tetrahedron in the first reciprocal-core certificate. Reflecting it by $(0\,2)(1\,3)$ gives the half with $y_2\le y_0$. The order checker covers both halves at column 0, using the full sign generators where possible. On each restricted cell of the reflected half, write the numerator $N(y)=y_2(3y_1-y_0)$ and denominator $P(y)=y_0(y_3+y_1+y_0)$ of the displayed bound. Take $u$ to be the largest of the ratios of their symmetrized bilinear coefficients on vertex pairs with positive denominator. A coefficient with zero denominator also has zero numerator, since $y_2\le y_0$ throughout that half. Expanding in nonnegative barycentric coefficients gives $N(y)\le uP(y)$ on the whole cell. Thus the physical fraction $d/(d+e)$ lies in $[0,u/(1+u)]$.
+
+For a deadline let $F_{ij}$ denote the complete-word assigned count at foreign singleton $j$ minus the corresponding deadline count. Row 1 is balanced at $y$, with $f y_3=d y_0+e y_2$. Its gain multiplied by $y_3/(d+e)$ is the convex combination of $y_0 F_{13}-y_3 F_{10}$ and $y_2 F_{13}-y_3 F_{12}$ with first weight $d/(d+e)$. Checking the two endpoints of the stated interval proves every physical row-1 comparison. Each endpoint remains linear in $y$, so the usual quadratic Bernstein verification with affine priors applies without a change of degree. The other rows are fully priced and the surplus at row 0 has the single donor 3. [Rank-four word checker](../experiments/RANK_FOUR_DEPENDENT_COMPARISON.py)
+
+Among the surviving strict, one-tie, two-tie and three-tie orbits the closure meets $1,5,8,3$, respectively. Combined with the seven previously covered chambers it adds $1,3,2,0$, bringing the totals to $8/21$, $25/46$, $31/39$ and $10/10$. [Singleton sign census](TWENTY_ONE_SINGLETON_SIGN_CLASSES_FOR_FOUR_PLAYER_QUITTING_GAMES.md)

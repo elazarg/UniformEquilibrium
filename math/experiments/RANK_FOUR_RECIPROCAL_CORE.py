@@ -114,7 +114,7 @@ def check_cover():
 
 
 @cache
-def graph(schedule,late=None,protected=(3,)):
+def graph(schedule,late=None,protected=(3,), before=None):
     """Cut count graph excluding a protected second owner after a possible first 0."""
     training = (0,)*4
     states, edges, labels = [], [], []
@@ -129,6 +129,8 @@ def graph(schedule,late=None,protected=(3,)):
         for c in counts:
             for j in PLAYERS:
                 v = tuple(x+(i==j) for i,x in enumerate(c))
+                if before is not None and j==before[1] and c[before[0]]<4:
+                    continue
                 if j==late and any(c[r]<4 for r in PLAYERS if r!=late):
                     continue
                 blocked = j in protected and c[0]>0 and all(
@@ -173,14 +175,22 @@ def graph(schedule,late=None,protected=(3,)):
     return incidence,flow,endpoints,steps,hint
 
 
-def guess(schedule,vertices,faces=FACES,late=None,protected=(3,)):
-    incidence,flow,endpoints,steps,hint = graph(schedule,late,protected)
+def balanced_gain(y, counts, row, positive, negative):
+    """An integer weighted set of negative donors gives a restricted row generator."""
+    if isinstance(negative, int):
+        return y[negative] * counts[row, positive] - y[positive] * counts[row, negative]
+    return sum(weight * (y[donor] * counts[row, positive] - y[positive] * counts[row, donor])
+               for donor, weight in negative)
+
+
+def guess(schedule,vertices,faces=FACES,late=None,protected=(3,), before=None):
+    incidence,flow,endpoints,steps,hint = graph(schedule,late,protected,before)
     n = len(steps)
     blocks = []
     vertex_gains = []
     for v in vertices:
         y = np.array(v)/sum(v)
-        vertex_gains.append(np.vstack([y[j]*hint[i,p]-y[p]*hint[i,j] for i,p,j in faces]))
+        vertex_gains.append(np.vstack([balanced_gain(y,hint,i,p,j) for i,p,j in faces]))
     for u,v in PAIRS:
         row = [sparse.csr_matrix(vertex_gains[0].shape) for _ in PLAYERS]
         row[u] += sparse.csr_matrix(vertex_gains[v])
@@ -259,7 +269,7 @@ def rational_priors(priors,schedule,vertices,faces):
     basis = []
     for v in vertices:
         # Scores are integer columns indexed by complete order words.
-        basis.append(np.array([v[n]*score(schedule,w)[i,p]-v[p]*score(schedule,w)[i,n]
+        basis.append(np.array([balanced_gain(v,score(schedule,w),i,p,n)
                                for i,p,n in faces for w in paths],dtype=np.int64)
                      .reshape(len(faces),len(paths),-1).transpose(0,2,1)
                      .reshape(-1,len(paths)))
@@ -290,11 +300,14 @@ def rational_priors(priors,schedule,vertices,faces):
         x[col] = Fraction(val)
     return [x[starts[i]:starts[i+1]].tolist() for i in PLAYERS]
 
-def check_cell(schedule,vertices,faces=FACES,late=None,protected=(3,)):
-    priors = guess(schedule,vertices,faces,late,protected)
+def check_cell(schedule,vertices,faces=FACES,late=None,protected=(3,), before=None):
+    priors = guess(schedule,vertices,faces,late,protected,before)
     for prior in priors:
         for _,path in prior:
             assert all(np.min(score(schedule,path)[0,donor])>=0 for donor in protected)
+            if before is not None:
+                first, later = before
+                assert path[:path.index(later)].count(first)==4
     if late is not None:
         for prior in priors:
             for _,path in prior:
@@ -311,7 +324,7 @@ def check_cell(schedule,vertices,faces=FACES,late=None,protected=(3,)):
         def cross(u,v):
             p = vertices[v]
             f = counts[u]
-            return np.array([p[n]*f[i,j]-p[j]*f[i,n] for i,j,n in faces],dtype=object)
+            return np.array([balanced_gain(p,f,i,j,n) for i,j,n in faces],dtype=object)
         for u,v in PAIRS:
             gain = (totals[v]*sum(vertices[u])*cross(u,v)
                     +totals[u]*sum(vertices[v])*cross(v,u))
