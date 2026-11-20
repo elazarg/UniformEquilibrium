@@ -1,11 +1,13 @@
 """Decide continuous singleton paths for a hollow rational matrix (requires z3-solver)."""
 import argparse
 from fractions import Fraction
-from itertools import permutations
+from itertools import permutations, product
 import json
 import sys
 
 import z3
+
+from FIN4_SINGLETON_SIGN_CLASSES import det
 
 
 def read_matrix(stream):
@@ -81,14 +83,57 @@ def decide(matrix):
     return {"verdict": "no_continuous_path"}
 
 
+def minimum_map_degree(matrix):
+    """Local degree of x -> min(x, Gx), assuming its only zero is the origin."""
+    identity = [[int(i == j) for j in range(4)] for i in range(4)]
+    degree = 0
+    for selected in product((False, True), repeat=4):
+        linear = [matrix[i] if use_g else identity[i] for i, use_g in enumerate(selected)]
+        determinant = det(linear)
+        if determinant == 0:
+            continue
+        for i, use_g in enumerate(selected):
+            other = identity[i] if use_g else matrix[i]
+            difference = [b - a for a, b in zip(linear[i], other)]
+            # The target (1,t,t²,t³) for small positive t misses every wall.
+            # Cramer's rule gives det(linear) times each comparison coefficient.
+            for j in range(4):
+                replaced = linear.copy()
+                replaced[j] = difference
+                numerator = det(replaced)
+                if numerator:
+                    break
+            else:
+                raise ArithmeticError("identical selector rows on a hollow matrix")
+            if numerator * determinant < 0:
+                break
+        else:
+            degree += 1 if determinant > 0 else -1
+    return degree
+
+
+def decide_behavioral(matrix):
+    """Existence of a completion forcing both behaviors, for some positive own level."""
+    result = decide(matrix)
+    possible = False
+    if result["verdict"] == "no_continuous_path":
+        degree = minimum_map_degree(matrix)
+        result["minimum_map_degree"] = degree
+        possible = degree == 1
+    result["some_completion_requires_nonstationarity_and_collisions"] = possible
+    return result
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("matrix", nargs="?", type=argparse.FileType("r"), default=sys.stdin,
                         help="4-by-4 JSON matrix (default: standard input)")
+    parser.add_argument("--behavioral", action="store_true",
+                        help="test for a completion requiring both behaviors, assuming at least one positive own reward")
     args = parser.parse_args()
     try:
         with args.matrix as stream:
             matrix = read_matrix(stream)
-        print(json.dumps(decide(matrix)))
+        print(json.dumps(decide_behavioral(matrix) if args.behavioral else decide(matrix)))
     except (ValueError, ZeroDivisionError, OSError, RuntimeError, z3.Z3Exception) as error:
         parser.exit(2, f"{parser.prog}: {error}\n")
