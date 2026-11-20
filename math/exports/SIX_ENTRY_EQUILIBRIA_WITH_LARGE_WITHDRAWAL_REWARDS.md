@@ -195,6 +195,14 @@ At a large quiet date $B'$ is bounded below since $x+y$ is bounded below and $x\
 
 If there are only finitely many reseeds, use instead a close pair of bounded actual states along the ensuing infinite sequence of ordinary dates and finite repairs. Each full date has three ordinary hazards bounded below. On large quiet dates after ordinary steps, $V$ is small, and $x=(V+c_vw)/n$, $y=(-t+c_uw)/m$ with $t\ge0$ for participating $N$ and $|t|$ small otherwise. Thus $x,w$ are bounded below since $A\ge\eta$; either owner faces the other. Finite negative-entrant repairs occur only after full dates. Hence one can choose a recurring subsequence of large full or large regular quiet dates, with a common rival absorption bound on each intervening stretch; if repairs recur infinitely often use the full dates that trigger them. In either case the reversed word between close states has prescribed and optimal payoff maps with a common contraction factor $q<1$ for each owner (on a single date the best-reply map is the maximum of its immediate offer and a waiting offer having the rival blank probability as continuation coefficient). Repeating a word whose two outputs are within $\epsilon$ of its seed gives terminal regret at most $2\epsilon/(1-q)$. Unilateral replacements face geometric rival absorption in the repeated word, so signed row translations and compact payoff selection give the claimed original uniform-equilibrium payoff.
 
+**Both mate grand rewards may vary independently over the entire positive quadrant on an additional price region.** On the preceding singleton neighborhood, retain its compact range of $K$ and constants $N_0,h$, shrinking $h>0$ if necessary. For $N\ge N_0$ an original uniform-equilibrium payoff exists for all $A_u,A_v>0$ whenever
+$$c_v L- g_vkR/f_v\;\le\; h\min\{kN,g_v K\}.$$
+Either mate can own the withdrawal, and both implementations of each withdrawal are allowed. At the center this reads $2L-R\le h\min\{N,K\}$.
+
+Indeed the sure-pair test handles $mL\ge KN$. Otherwise the [sole-$v$ test](FIVE_NONSINGLETON_REWARDS_AND_THE_SIX_ENTRY_FRONTIER.md) has positive odds $Y<N/A_u$, $X=f_v/(RY)$, $Z=(K+kRY/f_v)/L$ for $a,u,b$, respectively. Failure requires $c_vY>nX+(g_v+A_vf_v/R)Z$. Multiply by $L/Y$ and expand the last product. In particular
+$$c_vL>g_vkR/f_v + k A_v+g_vK A_u/N.$$
+The displayed price condition then gives $A_v<hN$ and $A_u<hN$, so the preceding large-withdrawal theorem applies. This covers the full positive grant quadrant, including grants of unbounded size and arbitrary ratio.
+
 ### Three more passive-withdrawal tails with opposite singleton signs in the entrant row
 
 The same large-passive-$N$ statement holds at witnesses $8,19$ for $u=1$ and at $21$ for $u=0$, on neighborhoods, with both implementations of $L$. Here $a=3,b=2$. The following sufficient conditions give the common proof. For the chosen withdrawal owner $u$ and the other mate $v$ put
