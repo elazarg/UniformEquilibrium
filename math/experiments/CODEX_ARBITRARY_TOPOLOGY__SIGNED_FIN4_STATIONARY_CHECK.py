@@ -6,9 +6,10 @@ their defaults are zero and 100.
 Alternatively --uniform-k [p] [u] proves both exclusions for every K>=100,
 with nonnegative p and u=Z_3({1,3}); both default to zero. A failed finite
 certificate stops with an assertion and makes no exclusion claim.
+--chronology checks the dense matched table in the losing-clock deletion theorem.
 """
 from fractions import Fraction as Q
-from itertools import product
+from itertools import combinations, product
 from math import comb, lcm
 import sys
 
@@ -16,9 +17,12 @@ pair_premium = Q(0)
 pair_cost = Q(100)
 joining_premium = Q(0)
 uniform_k = False
+chronology = False
 if __name__ == '__main__':
  args = sys.argv[1:]
- if args and args[0] == '--uniform-k':
+ if args == ['--chronology']:
+  chronology = True
+ elif args and args[0] == '--uniform-k':
   if len(args)>3:
    raise SystemExit('usage: SIGNED_FIN4_STATIONARY_CHECK.py --uniform-k [p] [u]')
   uniform_k = True
@@ -40,8 +44,31 @@ Z = [
 Z[2][6] = pair_premium
 Z[1][6] = -pair_cost
 Z[3][10] = joining_premium
+if chronology:
+ # Twice the native rewards, in increasing coalition-mask order.
+ doubled = [
+  [0,0,-2,3,-2,39,43,5,6,3,59,25,-25,29,10,21],
+  [0,-2,0,-10,6,11,-7,-4,-2,-4,-1,-2,-3,-25,-1,-4],
+  [0,-2,6,-1,0,-1,-7,-7,-2,-6,-1,27,-3,-3,-8,-6],
+  [0,6,-2,24,-2,7,-21,12,0,32,-43,-43,45,15,13,41],
+ ]
+ Z = [[Q(value,2) for value in row] for row in doubled]
 Z = [[Q(x) for x in row] for row in Z]
 G = [[Z[i][1 << j] for j in range(4)] for i in range(4)]
+if chronology:
+ assert min(sum(Z[i][a] for i in range(4)) for a in range(1,16))==1
+ for i in (1,2):
+  assert all(Z[i][a]<0 for a in (1,8,9))
+  assert all(Z[i][a]<0 for a in range(1,16) if a&(1<<i) and a!=1<<i)
+ inc = [[Z[i][(1<<i)|(1<<j)]-G[i][j] for j in range(4)] for i in range(4)]
+ assert inc[0][3]<0<inc[3][0] and all(inc[i][j] for i in range(4) for j in range(4) if i!=j)
+ assert all(inc[i][j]*inc[j][k]*inc[k][i]+inc[i][k]*inc[k][j]*inc[j][i]
+            for i,j,k in combinations(range(4),3))
+ # At a switch a -> b, a's first-b guard and b's last-a guard both hold.
+ switches={(a,b) for a in range(4) for b in range(4) if a!=b
+           and Z[a][(1<<a)|(1<<b)]<=0 and inc[b][a]<=0}
+ assert switches=={(1,2),(2,1),(1,3)}
+ assert G[0][1]==G[0][2]==-1 and min(Z[0][3],Z[0][5])>0
 
 def clean(p): return {m:c for m,c in p.items() if c}
 def add(p,r):
@@ -60,7 +87,7 @@ xs=[{tuple(int(j==i) for j in range(4)):Q(1)} for i in range(4)]
 cs=[add(one,scale(x,-1)) for x in xs]
 F=[]; ROOT=[]
 floor=[min([Q(-1)]+[Z[i][a] for a in range(1,16) if not (a>>i&1)]) for i in range(4)]
-assert floor==[-12,-8,-10,-12]
+if not chronology:assert floor==[-12,-8,-10,-12]
 for i in range(4):
  P={};R={};H=one
  for j in range(4):
@@ -84,6 +111,46 @@ def inverse(A):
    if i!=j:
     t=a[i][j];a[i]=[v-t*w for v,w in zip(a[i],a[j])]
  return [row[n:] for row in a]
+
+def chronology_deletion_test():
+ # Each row is the corrected score of a first-exit mask less the limiting
+ # positive-opening score at the corner (q0,q3)=(x,y) of support 03.
+ def score(mask,x,y):
+  row=[Z[i][mask] for i in range(4)]
+  row[0]-=Z[0][9]*y
+  row[3]-=Z[3][9]*x
+  for i in range(4):
+   smaller=mask&~(1<<i)
+   if smaller:
+    row.append(Z[i][smaller]-Z[i][mask])
+   else:
+    row.append(min(Z[i][r] for r in range(1,16) if not r&(1<<i)))
+  return row
+ bases={
+  0:[(m,0,1) for m in (1,2,4,7,11,12)]+[(7,1,1),(15,1,1)],
+  3:[(m,1,1) for m in (1,2,4,7,8,11,12,15)],
+ }
+ for i,corners in bases.items():
+  rows=[score(*corner) for corner in corners]
+  weights=[-v for v in inverse(rows)[i]]
+  assert min(weights)>0
+  assert all(sum(w*row[j] for w,row in zip(weights,rows))==-int(i==j) for j in range(8))
+
+def chronology_axis_test():
+ from FIN4_SINGLETON_SIGN_CLASSES import det
+ edited=[row[:] for row in Z]
+ edited[0][7]=Q(-5)
+ masks=(2,4,6,7,8)
+ weights=(344,241,62,206,94)
+ assert all(sum(w*row[m] for m,w in zip(masks,weights))==0 for row in edited)
+ assert det([[row[m] for m in (2,4,6,8)] for row in edited])==Q(-309,2)
+ passive_floor=min(edited[0][m] for m in range(2,16,2))
+ def score(m):
+  deleted=edited[0][m&~1] if m!=1 else passive_floor
+  return sum(c*row[m] for c,row in zip((6,6,8,9),edited))+deleted
+ assert min(score(m) for m in range(1,16))==Q(1,2)
+ edited[0][7]=Q(-71,12)
+ assert score(7)==0 and min(score(m) for m in range(1,16))==0
 
 def restrict(p,pat,free):
  out={}
@@ -110,7 +177,8 @@ def exclude(pat,polynomials=F):
   return 1
  if d==1 and 1 not in pat:
   j=free[0]
-  assert any(i!=j and G[i][j]<0 and Z[i][(1<<i)|(1<<j)]>=0 for i in range(4))
+  # A waiting outsider earns G[i][j]. Its immediate Quit earns q_j J_ij.
+  assert any(i!=j and G[i][j]<0 and Z[i][(1<<i)|(1<<j)]>G[i][j] for i in range(4))
   return 1
  E=None
  if d>=2:
@@ -179,9 +247,18 @@ def exclude(pat,polynomials=F):
 if __name__=='__main__':
  total=sum(exclude(pat) for pat in product((0,1,2),repeat=4) if any(pat))
  known={(Q(0),Q(0)):(862,369),(Q(1),Q(0)):(862,371),(Q(0),Q(10)):(864,371)}
- expected=known.get((pair_premium,joining_premium)) if uniform_k else ((978,369) if pair_premium==0 and pair_cost==100 else None)
+ if chronology:
+  chronology_deletion_test()
+  chronology_axis_test()
+  expected=(1046,87)
+  scope='chronological exclusion, matched singleton table'
+ elif uniform_k:
+  expected=known.get((pair_premium,joining_premium))
+  scope=f'every K>=100, p={pair_premium}, u={joining_premium}'
+ else:
+  expected=(978,369) if pair_premium==0 and pair_cost==100 else None
+  scope=f'K={pair_cost}, p={pair_premium}'
  if expected:assert total==expected[0],total
- scope=f'every K>=100, p={pair_premium}, u={joining_premium}' if uniform_k else f'K={pair_cost}, p={pair_premium}'
  print(f'EXACT RATIONAL PASS: {scope}; all 80 nonzero supports excluded; {total} nodes')
  roots=sum(exclude(pat,ROOT) for pat in product((0,1,2),repeat=4) if 1 in pat)
  if expected:assert roots==expected[1],roots
