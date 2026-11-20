@@ -291,3 +291,26 @@ $$
 $$
 
 This follows from monotonicity of every native reply payoff and the exact change to the prescription. Maximality and passage to a subsequence give a compact limiting minimum law at u whose parenthesized value is at least λΣv. Taking the coordinate directions supplies a positively marked minimum law for each T and a minimum with positive Never probability, all on this same original table. Taking every nonnegative direction and separating the convex hull from the translated positive orthant gives a single convex combination of minimum laws with sν≥λ and C_T μ(T)≥λ for all T. The individual minima are limits of actual independent profiles. A convex combination can require different such limits. Whether the grand mark can be imposed on a maximum-Never minimum itself remains open. [Native shift and terminal criterion](../exports/PRESCRIBED_SIGNS_AND_NATIVE_LIMITS_OF_FOUR_PLAYER_ESCAPE.md) · [Maximum-Never escape criterion](../exports/ONE_ESCAPE_OBLIGATION_FOR_ARBITRARY_FOUR_PLAYER_GAMES.md)
+
+## When a prescribed coalition and Never occur on the same minimizing law
+
+Suppose a native table has positive absorbing regret infimum. Fix any nonsingleton T, including the grand coalition. One can select a native table with the same singleton matrix, changing only rewards at T, for which one of the following holds.
+
+* After finite signed row shifts, the unrestricted original game has positive gap, and **every** minimizing sequence puts probabilities bounded away from zero on both first exit exactly at T and on Never. In particular the maximum-Never minimum itself carries the specified mark.
+* At the selected native table, with absorbing infimum A>0, some γ>0 satisfies the following inequality for **every** absorbing independent profile P, including profiles of unbounded support:
+  $$D(P)\ \ge\ A+\gamma\sum_i n_i(P)\big(B_i(P)-e_i(P)\big).$$
+
+To select the table, interpolate the rewards at T from their initial values to the values making pure T weakly stable, using the increments aᵢ(T) above. The absorbing gap is positive at the initial endpoint and zero at the final endpoint. At an interior point of strictly negative derivative the same backwards difference estimate gives A>0 and μ(T)≥β>0 at every compact absorbing minimum. Keep this table fixed. Write Lᵢ=nᵢ(Bᵢ−eᵢ), so 0≤Lᵢ≤dᵢ.
+
+Choose one owner h. Give h shift −K and distribute a total positive shift λK among the other three, with 0<λ<1. Let Cₕ be the compact native carrier, retaining the actual first-exit law, with at least one zero Never marginal outside h. It is the closure of profiles with such a clock surely finite, by redirecting a vanishing Never marginal. **The unrestricted original infimum tends to the minimum of D−(1−λ)Lₕ on Cₕ as K tends to infinity.** On every sequence within o(1) of the infimum, each converging native subsequence minimizes this expression and Kν tends to its Lₕ.
+
+Indeed, put z=K∏ⱼ≠ₕ nⱼ, n=nₕ and Δ=Bₕ−eₕ. The exact signed regret is
+$$
+D-(1-\lambda)L_h+(1-\lambda)n(\Delta-z)_+
+ +[1-(1-\lambda)n](z-\Delta)_+ .
+$$
+Bounded scores keep z bounded, so a winning marginal tends to zero along any convergent subsequence. For recovery take actual approximants with a winning clock surely finite. Independently replace the same fraction u of each winning law by Never. The product of their new Never marginals is continuous in u, starts at zero and is at least u³. Hence some u≤(Δ/K)¹ᐟ³ sets z equal to the target Δ of the carrier point. Coupling controls all payoffs, caps and first-exit probabilities uniformly as u tends to zero. This gives the asserted minimum limit. The two nonnegative terms must vanish on minimizing sequences, and their sum bounds min(λ,1−λ)|Kν−Lₕ|.
+
+If the second alternative fails, some fixed h admits absorbing profiles with D−tLₕ<A for arbitrarily small t>0. They have nₕ>0 and hence belong to Cₕ. Fix such a t with λ=1−t. Every minimizer on Cₕ has D≤A+2Mt, where M bounds the absolute native rewards. By compactness all carry μ(T)≥β/2 when t is small enough. All have Lₕ≥(A−min₍Cₕ₎(D−tLₕ))/t>0, and the limiting score is at least λA. Consequently for every sufficiently large fixed finite K, every unrestricted minimum charges T and Never by positive amounts and the original gap is positive. This gives the first alternative.
+
+The inequality in the second alternative forces every absorbing minimum to assign its entire regret to finite deadlines. It bounds the cost of adding Never mass even off the minimizing set. For example, at an actual absorbing minimum, suppose h has unbounded finite support and two other owners are surely finite. Send h's remaining finite mass δ after a cut to Never, keeping its rivals fixed. Its term Lₕ rises by δ(Bₕ−eₕ). For each other owner k the uniform change to any deadline payoff is at most 2Mδ times the probability that both clocks outside {h,k} survive the cut. These probabilities tend to zero, and the same coupling bounds the change in prescriptions. The edited absorbing profile therefore has D≤A+o(δ), forcing Bₕ=eₕ. The unrestricted same-law conclusion for arbitrary tables satisfying the inequality remains open. [Signed row identity and native absorbing reduction](../exports/PRESCRIBED_SIGNS_AND_NATIVE_LIMITS_OF_FOUR_PLAYER_ESCAPE.md) · [Escape from a maximum-Never minimum](../exports/ONE_ESCAPE_OBLIGATION_FOR_ARBITRARY_FOUR_PLAYER_GAMES.md)
