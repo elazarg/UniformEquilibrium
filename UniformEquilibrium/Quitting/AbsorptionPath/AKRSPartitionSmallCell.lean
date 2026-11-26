@@ -864,7 +864,7 @@ theorem isCompletelyAbsorbing_partitionCellRoots
   have hlive : Tendsto (fun cutoff ↦
       1 - partitionCut path resolution cutoff) atTop (nhds 0) := by
     convert tendsto_const_nhds.sub hcuts using 1
-    all_goals norm_num
+    norm_num
   exact hlive.congr' <| Filter.Eventually.of_forall fun cutoff ↦
     (quittingSurvivalPrefix_partitionCellRoots path hpathTotal
       hnoTerminalJump resolution hresolution hcollision cutoff).symm

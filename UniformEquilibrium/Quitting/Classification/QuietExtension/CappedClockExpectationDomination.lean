@@ -190,7 +190,7 @@ theorem expect_cappedClock_weighted_childGain_eq_sum_expect_of_weight
           expect law (fun sample =>
             cappedClockActualEvaluatedChildGain reward evaluation
               sample.1 sample.2 i) := by
-    rw [Math.Probability.expect_finset_sum_of_bounded law S
+    rw [_root_.Math.Probability.expect_finset_sum_of_bounded law S
       (fun i sample => weight i *
         cappedClockActualEvaluatedChildGain reward evaluation
           sample.1 sample.2 i)
@@ -392,7 +392,7 @@ theorem expect_cappedClockActualOutsideGain_le_sum_childExpectations_add_slack
     rw [abs_mul, abs_of_nonneg certificate.neverSlack_nonneg]
     simpa using mul_le_mul_of_nonneg_left
       (hfactorBound sample) certificate.neverSlack_nonneg
-  rw [Math.Probability.expect_add_of_summable] at h
+  rw [_root_.Math.Probability.expect_add_of_summable] at h
   · rw [expect_const_mul] at h
     have hweightedExpect : expect law weighted =
         ∑ i, certificate.weight i *
@@ -418,7 +418,7 @@ theorem expect_cappedClockActualOutsideGain_le_sum_childExpectations_add_slack
         exact abs_cappedClockJointNeverIndicator_le_one sample.1
     exact h.trans (add_le_add_right
       (mul_le_mul_of_nonneg_left hfactorExpect certificate.neverSlack_nonneg) _)
-  · exact Math.Probability.expect_summable_of_bounded law weighted hweightedBound
-  · exact Math.Probability.expect_summable_of_bounded law _ hcorrectionBound
+  · exact _root_.Math.Probability.expect_summable_of_bounded law weighted hweightedBound
+  · exact _root_.Math.Probability.expect_summable_of_bounded law _ hcorrectionBound
 
 end GameTheory

@@ -188,8 +188,11 @@ theorem select_strictMono
 /-- Premark residual still tends to zero on the composed selector. -/
 theorem residual_tendsto_zero
     (result : FinFourMovingMarkedPairOffMinimumEndpoint residual) :
-    Tendsto (data.premarkResidual ∘ result.select) atTop (nhds 0) :=
-  residual.residual_tendsto_zero.comp result.refinement_strictMono.tendsto_atTop
+    Tendsto (data.premarkResidual ∘ result.select) atTop (nhds 0) := by
+  change Tendsto ((data.premarkResidual ∘ residual.select) ∘ result.refinement)
+    atTop (nhds 0)
+  exact Tendsto.comp (f := result.refinement) (g := data.premarkResidual ∘ residual.select)
+    residual.residual_tendsto_zero result.refinement_strictMono.tendsto_atTop
 
 /-- The literal target remains uniformly above the supplied minimum. -/
 theorem minimum_add_excessFloor_le_targetDebt
@@ -260,8 +263,11 @@ theorem select_strictMono
 /-- Premark residual still tends to zero on the composed selector. -/
 theorem residual_tendsto_zero
     (result : FinFourMovingMarkedPairMinimumApproach residual) :
-    Tendsto (data.premarkResidual ∘ result.select) atTop (nhds 0) :=
-  residual.residual_tendsto_zero.comp result.refinement_strictMono.tendsto_atTop
+    Tendsto (data.premarkResidual ∘ result.select) atTop (nhds 0) := by
+  change Tendsto ((data.premarkResidual ∘ residual.select) ∘ result.refinement)
+    atTop (nhds 0)
+  exact Tendsto.comp (f := result.refinement) (g := data.premarkResidual ∘ residual.select)
+    residual.residual_tendsto_zero result.refinement_strictMono.tendsto_atTop
 
 end FinFourMovingMarkedPairMinimumApproach
 

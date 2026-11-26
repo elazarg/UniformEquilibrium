@@ -391,6 +391,8 @@ theorem
       residual := hphantom.some.residual
       endpoint := hphantom.some.endpointLimit.endpoint
       noSureExit := hphantom.some.noSureExit
+      orbit := hphantom.some.orbit
+      orbit_eq := hphantom.some.orbit_eq
       port := hphantom.some.port
       phantom := hphantom.some.phantom
       phantom_value_eq := hphantom.some.phantom_value_eq

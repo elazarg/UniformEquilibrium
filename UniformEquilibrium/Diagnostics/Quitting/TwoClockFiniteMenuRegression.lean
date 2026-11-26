@@ -146,12 +146,12 @@ theorem pureTimingPayoff_true (a b : Action N) :
   exact TwoClockOrderedPureTimePayoff.pureTime_payoff_true _ _
 
 theorem expect_halfLastNever (first : Option ℕ) :
-    Math.Probability.expect (halfLastNever N hN) (fun action =>
+    _root_.Math.Probability.expect (halfLastNever N hN) (fun action =>
       activeValue first (decode N action)) =
       (1 / 2 : ℝ) * activeValue first (some (N - 1)) +
         (1 / 2 : ℝ) * activeValue first none := by
-  rw [halfLastNever, Math.Probability.expect_map]
-  simp [quitLast, decode, Math.Probability.expect_eq_sum]
+  rw [halfLastNever, _root_.Math.Probability.expect_map]
+  simp [quitLast, decode, _root_.Math.Probability.expect_eq_sum]
   norm_num
 
 theorem finiteNash : IsQuittingFiniteDeadlineNash reward N 0 (mixed N hN) := by
@@ -259,14 +259,14 @@ theorem omitted_quitN_payoff_false :
 
 /-- Inclusive survival of a finite timing-menu law through rows strictly before `cutoff`. -/
 def menuSurvival (law : PMF (Action N)) (cutoff : ℕ) : ℝ :=
-  Math.Probability.expect law fun action =>
+  _root_.Math.Probability.expect law fun action =>
     if cutoff ≤ (decode N action).getD cutoff then 1 else 0
 
 theorem false_survival_before_last_eq_zero :
     menuSurvival N (mixed N hN false) (N - 1) = 0 := by
   unfold menuSurvival
   rw [show mixed N hN false = PMF.pure (quit0 N hN) by rfl,
-    Math.Probability.expect_pure]
+    _root_.Math.Probability.expect_pure]
   simp [decode, quit0]
   omega
 
@@ -274,8 +274,8 @@ theorem deleted_false_survival_before_last_eq_one :
     menuSurvival N (mixed N hN true) (N - 1) = 1 := by
   rw [show mixed N hN true = halfLastNever N hN by rfl]
   unfold menuSurvival halfLastNever
-  rw [Math.Probability.expect_map]
-  simp [quitLast, decode, Math.Probability.expect_eq_sum]
+  rw [_root_.Math.Probability.expect_map]
+  simp [quitLast, decode, _root_.Math.Probability.expect_eq_sum]
   have : N ≤ N - 1 + 1 := by omega
   simp [this]
 
@@ -516,7 +516,7 @@ theorem full_debt_false :
             (quittingFiniteDeadlineTimingGame reward N).mixedExtension_eu]
           simp only [quittingFiniteDeadlineTimingGame, KernelGame.eu_ofPureEU]
           rw [Math.PMFProduct.expect_pmfPi_boolFamily]
-          rw [Function.update_self, Math.Probability.expect_pure,
+          rw [Function.update_self, _root_.Math.Probability.expect_pure,
             Function.update_of_ne (by decide : true ≠ false)]
           rw [show mixed N hN true = halfLastNever N hN by rfl]
           simp [pureTimingPayoff]
@@ -541,7 +541,7 @@ theorem oneRowCap_zero (root : Bool → PMF Bool) :
     quittingRootAbsorbingContribution, quittingRootExpectedPayoff]
   rw [Math.PMFProduct.expect_pmfPi_boolFamily,
     Math.PMFProduct.expect_pmfPi_boolFamily]
-  simp_rw [Math.Probability.expect_eq_sum, Fintype.sum_bool]
+  simp_rw [_root_.Math.Probability.expect_eq_sum, Fintype.sum_bool]
   simp [quittingRootPayoff, reward, quittingQuitters, Finset.ext_iff,
     Finset.nonempty_iff_ne_empty]
   rw [Math.PMFProduct.pmfBool_false_toReal]
@@ -586,7 +586,7 @@ theorem stationaryUnilateralCap_false (root : Bool → PMF Bool) :
     quittingRootAbsorbingContribution, quittingRootExpectedPayoff]
   rw [Math.PMFProduct.expect_pmfPi_boolFamily,
     Math.PMFProduct.expect_pmfPi_boolFamily]
-  simp_rw [Math.Probability.expect_eq_sum, Fintype.sum_bool]
+  simp_rw [_root_.Math.Probability.expect_eq_sum, Fintype.sum_bool]
   simp [quittingRootPayoff, reward, quittingQuitters, Finset.ext_iff,
     Finset.nonempty_iff_ne_empty]
   rw [quittingFixedOpponentsContinueMass_bool_false,

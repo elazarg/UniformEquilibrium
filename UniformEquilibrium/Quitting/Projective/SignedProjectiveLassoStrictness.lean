@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import GameTheory.Math.Probability.FiniteUniform
 import UniformEquilibrium.Quitting.Projective.WeightedProjectiveLasso
 import Mathlib.Probability.Distributions.Uniform
 import Mathlib.Tactic.FinCases
@@ -42,7 +43,7 @@ abbrev Terminal := {S : Finset Player // S.Nonempty}
 def reward (_ : Terminal) : Payoff Player := 0
 
 /-- A marginal which quits and continues with probability `1/2`. -/
-def halfCoin : PMF Bool := PMF.uniformOfFintype Bool
+def halfCoin : PMF Bool := GameTheory.Math.Probability.uniformLaw Bool
 
 /-- The same half-continuation root at both phases. -/
 def cycle (_ : Fin 2) (_ : Player) : PMF Bool := halfCoin
@@ -80,7 +81,7 @@ def value (phase : Fin 2) : Payoff Player :=
 @[simp] theorem continueMass_cycle (phase : Fin 2) :
     quittingStationaryContinueMass (cycle phase) = (1 / 2 : ℝ) := by
   simp [quittingStationaryContinueMass, cycle, halfCoin,
-    quittingAllContinueAction, pmfPi_apply, PMF.uniformOfFintype_apply]
+    quittingAllContinueAction, pmfPi_apply, GameTheory.Math.Probability.uniformLaw_apply]
 
 /-- The displayed alternating displacement forces residual `3/2` times that
 displacement at each phase. -/

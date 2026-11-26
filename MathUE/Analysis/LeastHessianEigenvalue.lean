@@ -127,8 +127,8 @@ theorem exists_minimumHessianEigenvalue
       (fun pair : E × E => fderiv ℝ (fderiv ℝ potential) pair.1 pair.2 pair.2)
       (box ×ˢ sphere 0 1) :=
     ((hsecond.comp continuous_fst.continuousOn
-      (fun _ hpair => hbox hpair.1)).clm_apply continuous_snd.continuousOn).clm_apply
-        continuous_snd.continuousOn
+      (fun _ (hpair : _ ∈ box ×ˢ sphere (0 : E) 1) => hbox hpair.1)).clm_apply
+      continuous_snd.continuousOn).clm_apply continuous_snd.continuousOn
   obtain ⟨pair, hpair, hminimum⟩ :=
     (hcompact.prod (isCompact_sphere (0 : E) 1)).exists_isMinOn
       (hnonempty.prod hsphere) hquadratic

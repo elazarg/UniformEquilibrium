@@ -377,6 +377,15 @@ def realExploitability (reward : RationalFinFourRewardCode)
     max 0 (realCap reward clockBound weight player -
       realPayoff reward clockBound weight player)
 
+private theorem continuous_finiteClockWeightProd {clockBound : ℕ}
+    (selected : Finset (Fin 4)) (choices : Fin 4 → FiniteClockAtom clockBound) :
+    Continuous fun weight : Fin 4 → FiniteClockAtom clockBound → ℝ =>
+      ∏ player ∈ selected, weight player (choices player) :=
+  continuous_finsetProd
+    (f := fun player (weight : Fin 4 → FiniteClockAtom clockBound → ℝ) =>
+      weight player (choices player)) selected
+    fun player _ => (continuous_apply (choices player)).comp (continuous_apply player)
+
 theorem continuous_realPayoff (reward : RationalFinFourRewardCode)
     (clockBound : ℕ) (observer : Fin 4) :
     Continuous fun weight : Fin 4 → FiniteClockAtom clockBound → ℝ ↦
@@ -385,9 +394,7 @@ theorem continuous_realPayoff (reward : RationalFinFourRewardCode)
   apply continuous_finsetSum
   intro choices _
   apply Continuous.mul
-  · apply continuous_finsetProd
-    intro player _
-    exact (continuous_apply (choices player)).comp (continuous_apply player)
+  · exact continuous_finiteClockWeightProd Finset.univ choices
   · exact continuous_const
 
 theorem continuous_realDeviationPayoff
@@ -399,10 +406,7 @@ theorem continuous_realDeviationPayoff
   apply continuous_finsetSum
   intro choices _
   apply Continuous.mul
-  · apply continuous_finsetProd
-    intro opponent _
-    exact (continuous_apply (choices opponent)).comp
-      (continuous_apply opponent)
+  · exact continuous_finiteClockWeightProd (Finset.univ.erase player) choices
   · exact continuous_const
 
 theorem continuous_realCap (reward : RationalFinFourRewardCode)

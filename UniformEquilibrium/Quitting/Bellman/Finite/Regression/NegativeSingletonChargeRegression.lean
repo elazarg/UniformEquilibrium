@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import GameTheory.Math.Probability.FiniteUniform
 import UniformEquilibrium.Examples.BigMatch.Basic
 import UniformEquilibrium.Quitting.Bellman.Finite.BellmanTelescope
 import MathUE.PMFProduct.Bool
@@ -48,7 +49,7 @@ def tail : Payoff Bool := fun who => if who then 0 else -1
 
 /-- Player `false` quits surely; player `true` mixes uniformly. -/
 def root : Bool → PMF Bool := fun who =>
-  if who then PMF.uniformOfFintype Bool else PMF.pure true
+  if who then GameTheory.Math.Probability.uniformLaw Bool else PMF.pure true
 
 /-- A constant sequence, used only to express the one-stage opponent-survival
 weight in the common telescope language. -/
@@ -71,7 +72,7 @@ def roots : ℕ → Bool → PMF Bool := fun _ => root
 
 @[simp] theorem root_false : root false = PMF.pure true := by simp [root]
 
-@[simp] theorem root_true : root true = PMF.uniformOfFintype Bool := by
+@[simp] theorem root_true : root true = GameTheory.Math.Probability.uniformLaw Bool := by
   simp [root]
 
 @[simp] theorem false_quitPayoff :

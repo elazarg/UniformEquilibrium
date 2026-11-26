@@ -112,9 +112,16 @@ private theorem isClosed_strictDeficitReverseEdge
     fun edge => (edge.1.1.1, edge.2.1.2)
   have hdata : Continuous edgeData := by
     fun_prop
-  exact isClosed_eq
-    (continuous_fst.comp (continuous_subtype_val.comp continuous_snd))
-    ((continuous_quittingRootSuccessorPayoff_simplex reward).comp hdata)
+  let laterPayoff (edge : StrictDeficitReverseBox (ι := ι) M ×
+      StrictDeficitReverseBox (ι := ι) M) : Payoff ι := edge.2.1.1
+  let successorValue (point : Payoff ι × QuittingRootSimplex ι) : Payoff ι :=
+    quittingRootSuccessorPayoff reward point.1 (quittingRootOfSimplex point.2)
+  have hlater : Continuous laterPayoff :=
+    continuous_fst.comp (continuous_subtype_val.comp continuous_snd)
+  have hsuccessor : Continuous successorValue :=
+    continuous_quittingRootSuccessorPayoff_simplex reward
+  change IsClosed {edge | laterPayoff edge = (successorValue ∘ edgeData) edge}
+  exact isClosed_eq hlater (hsuccessor.comp hdata)
 
 private theorem strictDeficitBoxSource_edge
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)

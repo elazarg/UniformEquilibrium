@@ -78,12 +78,11 @@ theorem eventually_twoOwnerPunishmentDeficit_lt
     (first second : ι) {ε : ℝ} (hε : 0 < ε) :
     ∀ᶠ t in 𝓝 (0 : ℝ),
       t * packet.tangent first / (1 - t * packet.mass second) < ε := by
+  have hnum : ContinuousAt (fun t : ℝ => t * packet.tangent first) 0 := by fun_prop
+  have hden : ContinuousAt (fun t : ℝ => 1 - t * packet.mass second) 0 := by fun_prop
+  have hne : (1 : ℝ) - 0 * packet.mass second ≠ 0 := by norm_num
   have hcontinuous : ContinuousAt (fun t : ℝ =>
-      t * packet.tangent first / (1 - t * packet.mass second)) 0 := by
-    apply ContinuousAt.div
-    · fun_prop
-    · fun_prop
-    · norm_num
+      t * packet.tangent first / (1 - t * packet.mass second)) 0 := hnum.div hden hne
   have hzero : (0 : ℝ) * packet.tangent first /
       (1 - (0 : ℝ) * packet.mass second) < ε := by simpa using hε
   exact hcontinuous.eventually_lt continuousAt_const hzero

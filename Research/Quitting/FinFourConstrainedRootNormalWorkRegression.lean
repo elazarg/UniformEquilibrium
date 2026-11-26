@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors.
 -/
 
+import GameTheory.Math.Probability.FiniteUniform
 import Research.Quitting.ConstrainedRootNormalWork
 import MathUE.PMFProduct.FiniteFubini
 import UniformEquilibrium.Quitting.Stationary.MinMax
@@ -216,7 +217,7 @@ theorem nextPhase_mover_ne (phase : Phase) :
 
 /-! ## The actual zero-debt stationary minimum -/
 
-def fairMarginal : PMF Bool := PMF.uniformOfFintype Bool
+def fairMarginal : PMF Bool := GameTheory.Math.Probability.uniformLaw Bool
 
 def fairRoot : Player → PMF Bool :=
   ![PMF.pure true, PMF.pure true, fairMarginal, fairMarginal]
@@ -232,7 +233,7 @@ def fairValue : Payoff Player := ![0, 0, (1 / 2 : ℝ), (1 / 2 : ℝ)]
 @[simp] theorem fairMarginal_apply_toReal (action : Bool) :
     (fairMarginal action).toReal = (1 / 2 : ℝ) := by
   unfold fairMarginal
-  rw [PMF.uniformOfFintype_apply]
+  rw [GameTheory.Math.Probability.uniformLaw_apply]
   norm_num
 
 @[simp] theorem quittingQuitters_vec4 (a b c d : Bool) :
@@ -258,7 +259,7 @@ theorem fairRoot_absorbingContribution (who : Player) :
   fin_cases who <;>
     simp [fairRoot, fairValue, fairMarginal, expect_eq_sum,
       quittingRootPayoff, reward, quittingQuitters_vec4,
-      PMF.uniformOfFintype_apply, hostFirst, hostSecond,
+      GameTheory.Math.Probability.uniformLaw_apply, hostFirst, hostSecond,
       strategicFirst, strategicSecond, Fin.ext_iff] <;>
     norm_num
 
@@ -272,7 +273,7 @@ theorem fairRoot_fixedOpponentsQuitValue (who : Player) :
   fin_cases who <;>
     simp [fairRoot, fairValue, fairMarginal, expect_eq_sum,
       quittingRootPayoff, reward, quittingQuitters_vec4,
-      PMF.uniformOfFintype_apply, hostFirst, hostSecond,
+      GameTheory.Math.Probability.uniformLaw_apply, hostFirst, hostSecond,
       strategicFirst, strategicSecond, Fin.ext_iff]
 
 theorem fairRoot_fixedOpponentsContinueReward (who : Player) :
@@ -285,7 +286,7 @@ theorem fairRoot_fixedOpponentsContinueReward (who : Player) :
   fin_cases who <;>
     simp [fairRoot, fairValue, fairMarginal, expect_eq_sum,
       quittingRootPayoff, reward, quittingQuitters_vec4,
-      PMF.uniformOfFintype_apply, hostFirst, hostSecond,
+      GameTheory.Math.Probability.uniformLaw_apply, hostFirst, hostSecond,
       strategicFirst, strategicSecond, Fin.ext_iff]
 
 theorem fairRoot_fixedOpponentsContinueMass (who : Player) :

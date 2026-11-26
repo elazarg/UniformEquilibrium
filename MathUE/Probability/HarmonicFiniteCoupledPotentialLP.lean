@@ -340,7 +340,7 @@ private theorem encodeCoupledPotentialFlow_rhs_sum
 /-- Raw Farkas weights are exactly nonnegative charged-flow obstructions. -/
 theorem hasCertificate_coupledPotential_iff_exists_flowObstruction
     (kernel : Node → PMF Node) (charge : Node → ℝ) (bound : ℝ) :
-    Maths.LinearProgramming.HasCertificate
+    Maths.LinearProgramming.HasFarkasCertificate
         (coupledPotentialMatrix kernel) (coupledPotentialRhs charge bound) ↔
       ∃ alpha beta gamma,
         IsCoupledPotentialFlowObstruction kernel charge bound alpha beta gamma := by
@@ -425,7 +425,7 @@ bounded potential LP is infeasible. -/
 theorem not_nonempty_boundedCoupledPotential_iff_farkas
     (kernel : Node → PMF Node) (charge : Node → ℝ) (bound : ℝ) :
     ¬Nonempty (BoundedCoupledPotential kernel charge bound) ↔
-      Maths.LinearProgramming.HasCertificate
+      Maths.LinearProgramming.HasFarkasCertificate
         (coupledPotentialMatrix kernel) (coupledPotentialRhs charge bound) := by
   rw [nonempty_boundedCoupledPotential_iff_isFeasible]
   exact Maths.LinearProgramming.theorem_of_alternative

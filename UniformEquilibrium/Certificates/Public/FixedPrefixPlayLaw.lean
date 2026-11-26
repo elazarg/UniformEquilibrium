@@ -150,7 +150,7 @@ private theorem restricted_coordsDist_map_window
     Measure.restrict_apply (Measurable.of_discrete hset),
     coordsDist_add_eq_bind_coordinateLawAfter, PMF.toMeasure_bind_apply
       (G.histDist profile initial length) (fun other => coordinateLawAfter G profile other time)
-      _ ((Measurable.of_discrete hset).inter MeasurableSet.of_discrete), Measure.smul_apply,
+      _ ((Measurable.of_discrete hset).inter MeasurableSet.of_discrete), smul_apply,
     smul_eq_mul]
   have hterm (other : G.Hist length) :
       (coordinateLawAfter G profile other time).toMeasure

@@ -113,8 +113,8 @@ def compactStoppingLawBarycenter (n : Nat)
       ENNReal.ofReal (weights.weights index) • (points index : Measure CompactStoppingTime)
   refine ⟨measure, ?_⟩
   rw [MeasureTheory.isProbabilityMeasure_iff]
-  simp only [measure, Measure.coe_finsetSum, Finset.sum_apply,
-    Measure.smul_apply, measure_univ, smul_eq_mul, mul_one]
+  simp only [measure, FunLike.coe_sum, Finset.sum_apply,
+    smul_apply, measure_univ, smul_eq_mul, mul_one]
   have hsum := ENNReal.ofReal_sum_of_nonneg (s := Finset.univ)
     (f := fun index : Fin (n + 1) => weights.weights index)
     (fun index _ => weights.weights_nonneg index)
@@ -140,10 +140,10 @@ theorem CompactStoppingLaw.realMass_barycenter (n : Nat)
   unfold CompactStoppingLaw.realMass compactStoppingLawBarycenter
   change ((∑ index, ENNReal.ofReal (weights.weights index) •
       (points index : Measure CompactStoppingTime)) event).toReal = _
-  rw [Measure.coe_finsetSum, Finset.sum_apply, ENNReal.toReal_sum]
+  rw [FunLike.coe_sum, Finset.sum_apply, ENNReal.toReal_sum]
   · apply Finset.sum_congr rfl
     intro index _
-    rw [Measure.smul_apply, smul_eq_mul, ENNReal.toReal_mul]
+    rw [smul_apply, smul_eq_mul, ENNReal.toReal_mul]
     congr 1
     exact ENNReal.toReal_ofReal (weights.weights_nonneg index)
   · intro index _

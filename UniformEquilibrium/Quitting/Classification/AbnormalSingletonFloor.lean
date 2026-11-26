@@ -57,7 +57,7 @@ theorem quittingPunishmentValue_le_soloReward_of_abnormal
       atTop (nhds (quittingSoloReward reward abnormal abnormal)) := by
     convert ((tendsto_const_nhds.sub hrateVanish).mul
       tendsto_const_nhds).add (hrateVanish.mul tendsto_const_nhds) using 1
-    all_goals ring_nf
+    ring_nf
   have hcap : Tendsto
       (fun n => quittingStationaryUnilateralCap reward
         (quittingSoloStationaryRoot owner (hazard n)) abnormal)

@@ -21,7 +21,7 @@ theorem finite_range_of_add_period {α : Type*} (sequence : ℕ → α)
   have hremainder : ∀ n, ∃ r < period, sequence n = sequence r := by
     intro n
     induction n using Nat.strong_induction_on with
-    | h n ih =>
+    | ind n ih =>
         by_cases hn : n < period
         · exact ⟨n, hn, rfl⟩
         · let earlier := n - period

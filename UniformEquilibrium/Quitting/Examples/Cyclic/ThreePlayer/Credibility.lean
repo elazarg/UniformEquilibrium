@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import GameTheory.Math.Probability.FiniteUniform
 import UniformEquilibrium.Architectures.PublicResponse.CredibilityCriterion
 import MathUE.PMFProduct.FiniteFubini
 import MathUE.ProbabilityMassFunction.Bool
@@ -135,7 +136,7 @@ def publicState : Config → game.State
 quit.  At an absorbing child the chosen row is immaterial. -/
 def play : Config → ∀ _ : Player, PMF Bool
   | Sum.inl c => fun who =>
-      if who = c then PMF.uniformOfFintype Bool else PMF.pure false
+      if who = c then GameTheory.Math.Probability.uniformLaw Bool else PMF.pure false
   | Sum.inr _ => fun _ => PMF.pure false
 
 /-- Total public controller update.  On live survival the clock advances; a

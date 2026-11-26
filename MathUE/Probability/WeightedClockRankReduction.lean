@@ -541,9 +541,9 @@ theorem moment_two_le_mesh_log_add_two_mesh
       exact cut.tail_pos.trans_le (clock.tail_antitone (Nat.zero_le cut.cut))
     rw [Real.log_div htotalPos.ne' cut.tail_pos.ne',
       Real.log_div htotalPos.ne' cut.mesh_pos.ne']
-    have hlog := Real.strictMonoOn_log.monotoneOn
-      cut.mesh_pos cut.tail_pos cut.tail_gt_mesh.le
-    linarith
+    have hlog : Real.log mesh ≤ Real.log (clock.tail cut.cut) :=
+      Real.strictMonoOn_log.monotoneOn cut.mesh_pos cut.tail_pos cut.tail_gt_mesh.le
+    exact sub_le_sub_left hlog _
   unfold moment
   rw [← Finset.sum_range_add_sum_Ico
     (fun time ↦ clock.live time * clock.hazard time ^ 2) cut.cut_le]

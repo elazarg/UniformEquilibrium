@@ -83,7 +83,7 @@ def render_block(game: RationalQuittingGame | None = None) -> str:
             reward,
             "",
             "/-- The hinted `(1/2, 1/2)` product root from the source table. -/",
-            "def root : Player → PMF Bool := fun _ => PMF.uniformOfFintype Bool",
+            "def root : Player → PMF Bool := fun _ => GameTheory.Math.Probability.uniformLaw Bool",
             "",
             "/-- The exact zero-tail payoff recomputed from the source table. -/",
             f"def value : Payoff Player := {_lean_vector(evaluation.value)}",

@@ -80,7 +80,6 @@ theorem ae_decodeCell_cellCutEvent (laws : ι → FinDist (Option ℕ))
     decodeCell laws ⁻¹' cellCutEvent laws side cut
       =ᵐ[referenceMeasure laws p] rawCutEvent side cut := by
   filter_upwards [ae_decodeCell_mem_interval_referenceMeasure laws p] with x hx
-  apply propext
   exact mem_cellCutEvent_iff_of_mem_interval laws side cut hcut hx
 
 theorem probOf_cellCutEvent (laws : ι → FinDist (Option ℕ))

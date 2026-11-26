@@ -133,7 +133,9 @@ private theorem forcedMarkedRoot_eq_rayPureRoot
   rw [hprofile, quittingProfileLiveRoot_literalPureRootProfile_self]
   have hterminal := packet.forcedTerminal_eq_movingTerminal index
   rw [hterminal]
-  rfl
+  funext who
+  by_cases hmem : who ∈ packet.movingTerminal.val <;>
+    simp [rayTerminal, quittingPureSetRoot, quittingSetAction, quittingCoalitionAction, hmem]
 
 theorem rayBaseProfile_ownerDefect_eq_zero
     (packet : FinFourOwnerCompressedMinimumReturnForcedPairPacket

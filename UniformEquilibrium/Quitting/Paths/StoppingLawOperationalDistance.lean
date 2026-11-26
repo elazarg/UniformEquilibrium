@@ -139,7 +139,7 @@ def delayStoppingTime : Option Nat -> Option Nat
 
 @[simp] theorem map_delayStoppingTime_zero (law : PMF (Option Nat)) :
     law.map delayStoppingTime (some 0) = 0 := by
-  rw [PMF.map_apply, ENNReal.tsum_eq_zero]
+  rw [PMF.map_apply, tsum_eq_zero_iff]
   intro choice
   cases choice <;> simp [delayStoppingTime]
 
@@ -1078,7 +1078,7 @@ theorem quittingTerminalPayoff_stoppingLawProfile_eq_expectedPayoff
         (quittingStoppingLawProfile reward laws) observer =
       quittingStoppingLawExpectedPayoff reward laws observer := by
   classical
-  have hmixture := Math.Probability.expect_pmfPi_eq_of_separatelyAffine
+  have hmixture := GameTheory.Math.Probability.expect_pmfPi_eq_of_separatelyAffine
     (fun who choice =>
       quittingPureTimeBehaviorStrategy reward who choice)
     (fun who law =>

@@ -72,7 +72,7 @@ theorem firstRoot_successorValue_zero (tail : ℝ) :
   unfold quittingRootSuccessorPayoff quittingRootExpectedPayoff
   rw [expect_pmfPi_fin4]
   simp [firstRoot, quarterHazard, reward, quittingRootPayoff,
-    quittingQuitters, Math.Probability.expect_eq_sum]
+    quittingQuitters, _root_.Math.Probability.expect_eq_sum]
   ring
 
 theorem secondRoot_successorValue_zero (tail : ℝ) :
@@ -81,7 +81,7 @@ theorem secondRoot_successorValue_zero (tail : ℝ) :
   unfold quittingRootSuccessorPayoff quittingRootExpectedPayoff
   rw [expect_pmfPi_fin4]
   simp [secondRoot, thirdHazard, reward, quittingRootPayoff,
-    quittingQuitters, Math.Probability.expect_eq_sum]
+    quittingQuitters, _root_.Math.Probability.expect_eq_sum]
   ring
 
 theorem fixedOpponentsQuitValue_zero
@@ -92,7 +92,7 @@ theorem fixedOpponentsQuitValue_zero
     quittingRootExpectedPayoff
   rw [expect_pmfPi_fin4]
   simp [reward, quittingRootPayoff, quittingQuitters,
-    Math.Probability.expect_eq_sum]
+    _root_.Math.Probability.expect_eq_sum]
   have hone : (roots time 1 false).toReal +
       (roots time 1 true).toReal = 1 := by
     simpa [Fintype.sum_bool, add_comm] using
@@ -132,7 +132,7 @@ theorem fixedOpponentsContinueReward_zero
     quittingRootAbsorbingContribution quittingRootExpectedPayoff
   rw [expect_pmfPi_fin4]
   simp [reward, quittingRootPayoff, quittingQuitters,
-    Math.Probability.expect_eq_sum]
+    _root_.Math.Probability.expect_eq_sum]
   have hone : (roots time 1 false).toReal +
       (roots time 1 true).toReal = 1 := by
     simpa [Fintype.sum_bool, add_comm] using

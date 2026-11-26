@@ -135,7 +135,7 @@ theorem exists_rationalCappedClockWeight_or_exactLPDual
     (∃ weight : ι → ℚ,
       (∀ who, 0 ≤ weight who) ∧
       ∀ row, cappedClockExactLPBase reward row ≤
-        Maths.FiniteInequality.ratDotProduct
+        dotProduct
           (cappedClockExactLPDelta reward row) weight) ∨
     (∃ coefficient : CappedClockExactLPRow ι → ℚ,
       (∀ row, 0 ≤ coefficient row) ∧
@@ -151,7 +151,7 @@ theorem not_exists_rationalCappedClockWeight_iff_exactLPDual
     (¬∃ weight : ι → ℚ,
       (∀ who, 0 ≤ weight who) ∧
       ∀ row, cappedClockExactLPBase reward row ≤
-        Maths.FiniteInequality.ratDotProduct
+        dotProduct
           (cappedClockExactLPDelta reward row) weight) ↔
     ∃ coefficient : CappedClockExactLPRow ι → ℚ,
       (∀ row, 0 ≤ coefficient row) ∧

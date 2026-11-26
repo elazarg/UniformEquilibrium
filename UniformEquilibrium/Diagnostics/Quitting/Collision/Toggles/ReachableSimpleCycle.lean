@@ -138,8 +138,8 @@ private def periodicCycleWalk
         (periodic.vertex 0) (periodic.vertex time)
   | 0 => .nil
   | time + 1 =>
-      ((periodicCycleWalk witness seed hR periodic time).concat
-        (periodic.vertex time) rfl).castFinish
+      (Maths.EdgeGraph.Walk.concat (periodic.vertex time)
+        (periodicCycleWalk witness seed hR periodic time)).castFinish
           ((hR _ _).mp (periodic.edge time))
 
 @[simp] private theorem periodicCycleWalk_length
@@ -156,7 +156,7 @@ private def periodicCycleWalk
   | succ time ih =>
       unfold periodicCycleWalk
       exact (Maths.EdgeGraph.Walk.length_castFinish _ _).trans
-        ((Maths.EdgeGraph.Walk.length_concat _ _ _).trans
+        ((Maths.EdgeGraph.Walk.length_concat _ _).trans
           (congrArg (fun length => length + 1) ih))
 
 private theorem strictToggleReachableWalk_card_mod_two
@@ -167,13 +167,12 @@ private theorem strictToggleReachableWalk_card_mod_two
     finish.1.card % 2 = (start.1.card + walk.length) % 2 := by
   induction walk with
   | nil => simp
-  | @concat middle walk edge legal ih =>
+  | concat edge walk ih =>
       have hedge := witness.strictToggleSuccessor_card_mod_two edge.1
-      change edge = middle at legal
-      subst edge
       change
-        (witness.strictToggleSuccessor middle.1).card % 2 =
+        (witness.strictToggleSuccessor edge.1).card % 2 =
           (start.1.card + (walk.length + 1)) % 2
+      change edge.1.card % 2 = (start.1.card + walk.length) % 2 at ih
       omega
 
 private theorem strictToggleReachableGraph_no_length_two
@@ -214,7 +213,7 @@ structure ReachableStrictToggleSimpleCycle
     (seed : Finset iota) where
   base : witness.StrictToggleReachableCoalition seed
   cycle : (witness.strictToggleReachableGraph seed).Walk base base
-  simple : Maths.AdditiveTransport.IsSimpleCycle cycle
+  simple : Maths.EdgeGraph.Walk.IsSimpleCycle cycle
   length_even : Even cycle.length
   four_le_length : 4 ≤ cycle.length
   length_le_sixteen : cycle.length ≤ 16

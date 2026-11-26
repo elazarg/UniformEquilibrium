@@ -1076,24 +1076,37 @@ theorem nonempty_finFourNearMinimumTargetSourceRegeneration
   nonempty_finFourPairedSameResidualSourceRegeneration
     (finFourNearMinimumTargetSourceData copied)
 
+private structure CycleSourceRegeneration
+    (Compactification : Type)
+    (ChordRegeneration : Compactification → Type)
+    (CopiedPrefix : {compactification : Compactification} →
+      ChordRegeneration compactification → Type)
+    (TargetRegeneration : {compactification : Compactification} →
+      {chordRegeneration : ChordRegeneration compactification} →
+        CopiedPrefix chordRegeneration → Type) where
+  compactification : Compactification
+  chordRegeneration : ChordRegeneration compactification
+  copiedPrefix : CopiedPrefix chordRegeneration
+  targetRegeneration : TargetRegeneration copiedPrefix
+
 /-- Complete near-minimum output: both the interior chord source and the
 strict target child are source-faithful minimum producers with the original
 hard residual, connected by the literal copied-prefix response edge. -/
-structure FinFourNearMinimumCycleSourceRegeneration
+abbrev FinFourNearMinimumCycleSourceRegeneration
     {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
     {bound M : ℝ} {source : FinFourMinimumAtomProducer reward bound}
     {chronology : FinFourMinimumAtomChronology source}
     {cycles : FinFourCofinalOffMinimumResponseCycles source chronology M}
     (data : FinFourNearMinimumCycleEdgeData cycles)
-    (weight : ℝ) (hweight0 : 0 < weight) (hweight1 : weight < 1) where
-  compactification : QuittingNearMinimumExactResponseChordCompactification
-    data.exactResponseFamily weight hweight0 hweight1
-  chordRegeneration : FinFourPairedSameResidualSourceRegeneration
-    (finFourNearMinimumChordSourceData data weight hweight0 hweight1
-      compactification)
-  copiedPrefix : FinFourNearMinimumCopiedPrefixData chordRegeneration
-  targetRegeneration : FinFourPairedSameResidualSourceRegeneration
-    (finFourNearMinimumTargetSourceData copiedPrefix)
+    (weight : ℝ) (hweight0 : 0 < weight) (hweight1 : weight < 1) :=
+  CycleSourceRegeneration
+    (QuittingNearMinimumExactResponseChordCompactification
+      data.exactResponseFamily weight hweight0 hweight1)
+    (fun compactification => FinFourPairedSameResidualSourceRegeneration
+      (finFourNearMinimumChordSourceData data weight hweight0 hweight1 compactification))
+    (fun chordRegeneration => FinFourNearMinimumCopiedPrefixData chordRegeneration)
+    (fun copiedPrefix => FinFourPairedSameResidualSourceRegeneration
+      (finFourNearMinimumTargetSourceData copiedPrefix))
 
 namespace FinFourNearMinimumCycleSourceRegeneration
 

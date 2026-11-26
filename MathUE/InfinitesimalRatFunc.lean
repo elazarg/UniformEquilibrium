@@ -87,7 +87,7 @@ The positivity predicate on `RatFunc ℝ` and cone axioms:
   `not_posNearZero_and_neg` — the positivity-cone axioms.
 
 Order instances (all `scoped` to this namespace — see the diamond-avoidance note below):
-* `cone : RingCone (RatFunc ℝ)` and `scoped instance : LinearOrder (RatFunc ℝ)`,
+* `cone : Subsemiring (RatFunc ℝ)` and `scoped instance : LinearOrder (RatFunc ℝ)`,
   `scoped instance : IsOrderedRing (RatFunc ℝ)` (which makes `IsStrictOrderedRing (RatFunc ℝ)`
   available automatically, since `RatFunc ℝ` is a domain).
 
@@ -106,20 +106,10 @@ existing instance to collide with. Nevertheless, per the design brief, both orde
 must `open scoped Math.InfinitesimalRatFunc` to bring `<`/`≤` on `RatFunc ℝ` into scope. This
 keeps the order invisible to unrelated code and leaves room for a different order on `RatFunc K`
 (e.g. at a different point, or the order relevant to a different `K`) to be added later without a
-clash. The order is built via Mathlib's `RingCone`/`AddGroupCone` positivity-cone framework
-(`Mathlib.Algebra.Order.Ring.Cone`) rather than by hand-rolling `LinearOrder` axioms: this is the
-modern, blessed route (introduced specifically to replace the old `LinearOrderedField.mk''`
-pattern) and it automatically discharges `IsOrderedAddMonoid`/`IsOrderedRing` from the cone
-closure lemmas. One genuine diamond hazard was found and worked around: elaborating
-`IsOrderedRing.mkOfCone cone` in *term* mode against the ambient `PartialOrder (RatFunc ℝ)`
-found via the generic `LinearOrder → Lattice → PartialOrder` derivation chain fails outright
-(`Type mismatch`, differing `Semiring`/`PartialOrder` projection paths); wrapping the same term in
-`by exact ...` (tactic-mode elaboration, which retries unification more aggressively) resolves it
-cleanly, so `IsOrderedRing (RatFunc ℝ)` below is proved with `by exact IsOrderedRing.mkOfCone cone`
-rather than a bare term. `IsStrictOrderedRing (RatFunc ℝ)` is *not* declared explicitly: it comes
-for free from the library instance `IsOrderedRing.toIsStrictOrderedRing` once `IsOrderedRing`,
-`NoZeroDivisors`, and `Nontrivial` are all in scope (the latter two already hold for `RatFunc ℝ`
-as a `Field`).
+clash. The order comes from a pointed and spanning subsemiring of nonnegative germs.
+Mathlib's `LinearOrder.ofAddSubmonoid` and `IsOrderedRing.ofSubsemiring` turn these
+closure and sign facts into order instances. Since `RatFunc ℝ` is a field, the
+library supplies the strict ordered ring instance as well.
 
 ## What remains for the transfer package
 
@@ -382,11 +372,8 @@ theorem posNearZero_one : PosNearZero (1 : RatFunc ℝ) := by
 Both instances below are `scoped` — see the "Instance-packaging choices" section of the module
 docstring for why, and for the diamond that had to be worked around. -/
 
-/-- The cone of rational functions that are zero or positive near `0⁺`. This packages
-`PosNearZero` (together with the closure lemmas above) into the shape Mathlib's
-`RingCone`/`AddGroupCone` framework expects, from which the actual order instances are derived
-below via `LinearOrder.mkOfAddGroupCone` and `IsOrderedRing.mkOfCone`. -/
-noncomputable def cone : RingCone (RatFunc ℝ) where
+/-- The subsemiring of rational functions that are zero or positive near `0⁺`. -/
+noncomputable def cone : Subsemiring (RatFunc ℝ) where
   carrier := {f | f = 0 ∨ PosNearZero f}
   zero_mem' := Or.inl rfl
   one_mem' := Or.inr posNearZero_one
@@ -402,18 +389,17 @@ noncomputable def cone : RingCone (RatFunc ℝ) where
     · exact Or.inl (by simp)
     · exact Or.inl (by simp)
     · exact Or.inr (posNearZero_mul ha hb)
-  eq_zero_of_mem_of_neg_mem' := by
-    rintro a (rfl | ha) (h0 | hneg)
-    · rfl
-    · rfl
-    · exact neg_eq_zero.mp h0
-    · exact absurd hneg (not_posNearZero_and_neg ha)
 
-/-- Trichotomy of the cone: every rational function is in `cone` or its negation is (this is
-Mathlib's `HasMemOrNegMem`, the hypothesis needed to upgrade the `PartialOrder` from `cone` to a
-full `LinearOrder`). -/
-instance instHasMemOrNegMem : HasMemOrNegMem cone := by
-  refine ⟨fun a => ?_⟩
+theorem cone_isPointed : cone.IsPointed := by
+  rintro a (rfl | ha) (h0 | hneg)
+  · rfl
+  · rfl
+  · exact neg_eq_zero.mp h0
+  · exact absurd hneg (not_posNearZero_and_neg ha)
+
+/-- Every rational function is in the cone or its negation is. -/
+theorem cone_isSpanning : cone.IsSpanning := by
+  intro a
   rcases trichotomy_posNearZero a with h | h | h
   · exact Or.inl (Or.inl h)
   · exact Or.inl (Or.inr h)
@@ -422,14 +408,12 @@ instance instHasMemOrNegMem : HasMemOrNegMem cone := by
 open Classical in
 /-- The `0⁺`-germ linear order on `RatFunc ℝ`. Scoped: `open scoped Math.InfinitesimalRatFunc`
 to use `<`/`≤` on `RatFunc ℝ`. -/
-noncomputable scoped instance : LinearOrder (RatFunc ℝ) := .mkOfAddGroupCone cone
+noncomputable scoped instance : LinearOrder (RatFunc ℝ) :=
+  LinearOrder.ofAddSubmonoid cone_isPointed cone_isSpanning
 
-/-- `RatFunc ℝ` is an ordered ring under the `0⁺`-germ order (elaborated in tactic mode to route
-around a `PartialOrder`/`Semiring` diamond between the cone-derived and generically-derived
-instances — see the module docstring). Together with `RatFunc ℝ` being a `Field` (hence a domain),
-this automatically makes `IsStrictOrderedRing (RatFunc ℝ)` available via the library instance
-`IsOrderedRing.toIsStrictOrderedRing`, without any further declaration here. -/
-scoped instance : IsOrderedRing (RatFunc ℝ) := by exact IsOrderedRing.mkOfCone cone
+/-- `RatFunc ℝ` is an ordered ring under the `0⁺`-germ order. -/
+scoped instance : IsOrderedRing (RatFunc ℝ) := by
+  exact IsOrderedRing.ofSubsemiring cone_isPointed
 
 theorem le_iff_sub (a b : RatFunc ℝ) : a ≤ b ↔ b - a ∈ cone := Iff.rfl
 

@@ -176,7 +176,6 @@ theorem eventually_presentationSectionMap_eq
     (g : MvPolynomial σ ℝ)
     [Algebra (Polynomial ℝ)
       (MvPolynomial σ ℝ ⧸ J)]
-    [Algebra (Polynomial ℝ) GermField]
     (hg : g ∉ J)
     (hJmem :
       ∀ Q : MvPolynomial σ ℝ,

@@ -108,7 +108,8 @@ theorem harmful_pair_matrix_eq (player partner : Fin 4)
   fin_cases player <;> fin_cases partner
   all_goals norm_num at hdistinct
   all_goals norm_num [favorite] at hfavorite
-  all_goals fin_cases row <;> fin_cases column <;> norm_num [matrix, Matrix.submatrix]
+  all_goals as_aux_lemma =>
+    fin_cases row <;> fin_cases column <;> norm_num [matrix, Matrix.submatrix]
 
 theorem harmful_pair_isR0 (player partner : Fin 4)
     (hdistinct : partner ≠ player) (hfavorite : partner ≠ favorite player) :
@@ -141,7 +142,8 @@ def tripleMatrix (omitted : Fin 4) : Matrix (Fin 3) (Fin 3) ℝ :=
 theorem triple_inverse_diagonal_neg (omitted : Fin 4) (player : Fin 3) :
     (tripleMatrix omitted)⁻¹ player player < 0 := by
   rw [Matrix.inv_def]
-  fin_cases omitted <;> fin_cases player <;>
+  fin_cases omitted <;> fin_cases player
+  all_goals as_aux_lemma =>
     norm_num [tripleMatrix, matrix, Matrix.det_fin_three, Matrix.adjugate_fin_three,
       Matrix.submatrix, Fin.succAbove, Ring.inverse_eq_inv]
 

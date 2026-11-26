@@ -321,7 +321,7 @@ theorem rootBefore_endpointDifference_zero (dates : ℕ) :
     quittingRootContinuePayoff quittingRootExpectedPayoff
   rw [expect_pmfPi_fin4, expect_pmfPi_fin4]
   simp [rootBefore, valueAfter, reward, quittingRootPayoff,
-    quittingQuitters, Math.Probability.expect_eq_sum]
+    quittingQuitters, _root_.Math.Probability.expect_eq_sum]
   rw [oneHazard_eq_indifference]
   have hden : 0 < 3 / 2 - zeroValue dates := by
     have := zeroValue_lt_half dates
@@ -337,7 +337,7 @@ theorem rootBefore_endpointDifference_one (dates : ℕ) :
     quittingRootContinuePayoff quittingRootExpectedPayoff
   rw [expect_pmfPi_fin4, expect_pmfPi_fin4]
   simp [rootBefore, valueAfter, reward, quittingRootPayoff,
-    quittingQuitters, Math.Probability.expect_eq_sum]
+    quittingQuitters, _root_.Math.Probability.expect_eq_sum]
   rw [zeroHazard_eq_indifference]
   have hden : 0 < 2 + oneValue dates := by
     have := oneValue_gt_neg_one dates
@@ -352,7 +352,7 @@ theorem rootBefore_endpointDifference_two (dates : ℕ) :
     quittingRootContinuePayoff quittingRootExpectedPayoff
   rw [expect_pmfPi_fin4, expect_pmfPi_fin4]
   simp [rootBefore, valueAfter, reward, quittingRootPayoff,
-    quittingQuitters, Math.Probability.expect_eq_sum]
+    quittingQuitters, _root_.Math.Probability.expect_eq_sum]
 
 theorem rootBefore_endpointDifference_three (dates : ℕ) :
     quittingRootEndpointDifference reward (valueAfter dates)
@@ -361,7 +361,7 @@ theorem rootBefore_endpointDifference_three (dates : ℕ) :
     quittingRootContinuePayoff quittingRootExpectedPayoff
   rw [expect_pmfPi_fin4, expect_pmfPi_fin4]
   simp [rootBefore, valueAfter, reward, quittingRootPayoff,
-    quittingQuitters, Math.Probability.expect_eq_sum]
+    quittingQuitters, _root_.Math.Probability.expect_eq_sum]
 
 /-- Each displayed root is an exact Nash root against its displayed tail. -/
 theorem rootBefore_isZeroNash (dates : ℕ) :
@@ -390,7 +390,7 @@ theorem rootBefore_quitPayoff_zero (dates : ℕ) :
   unfold quittingRootQuitPayoff quittingRootExpectedPayoff
   rw [expect_pmfPi_fin4]
   simp [rootBefore, valueAfter, reward, quittingRootPayoff, quittingQuitters,
-    Math.Probability.expect_eq_sum]
+    _root_.Math.Probability.expect_eq_sum]
   ring
 
 theorem rootBefore_quitPayoff_one (dates : ℕ) :
@@ -399,7 +399,7 @@ theorem rootBefore_quitPayoff_one (dates : ℕ) :
   unfold quittingRootQuitPayoff quittingRootExpectedPayoff
   rw [expect_pmfPi_fin4]
   simp [rootBefore, valueAfter, reward, quittingRootPayoff, quittingQuitters,
-    Math.Probability.expect_eq_sum]
+    _root_.Math.Probability.expect_eq_sum]
   ring
 
 theorem rootBefore_continuePayoff_two (dates : ℕ) :
@@ -408,7 +408,7 @@ theorem rootBefore_continuePayoff_two (dates : ℕ) :
   unfold quittingRootContinuePayoff quittingRootExpectedPayoff
   rw [expect_pmfPi_fin4]
   simp [rootBefore, valueAfter, reward, quittingRootPayoff, quittingQuitters,
-    Math.Probability.expect_eq_sum]
+    _root_.Math.Probability.expect_eq_sum]
 
 theorem rootBefore_continuePayoff_three (dates : ℕ) :
     quittingRootContinuePayoff reward (valueAfter dates) (rootBefore dates) 3 =
@@ -416,7 +416,7 @@ theorem rootBefore_continuePayoff_three (dates : ℕ) :
   unfold quittingRootContinuePayoff quittingRootExpectedPayoff
   rw [expect_pmfPi_fin4]
   simp [rootBefore, valueAfter, reward, quittingRootPayoff, quittingQuitters,
-    Math.Probability.expect_eq_sum]
+    _root_.Math.Probability.expect_eq_sum]
 
 /-- Exact backward Bellman update for the displayed roots. -/
 theorem valueAfter_succ_eq_successor (dates : ℕ) :
@@ -1242,63 +1242,63 @@ theorem comparisonProfile_payoff (length : ℕ) :
   rw [expect_pmfPi_fin4]
   fin_cases who <;>
     simp [comparisonRoot, comparisonTarget, reward, quittingRootPayoff,
-      quittingQuitters, Math.Probability.expect_eq_sum]
+      quittingQuitters, _root_.Math.Probability.expect_eq_sum]
 
 theorem comparisonRoot_quitPayoff_zero (tail : Payoff Player) :
     quittingRootQuitPayoff reward tail comparisonRoot 0 = 0 := by
   unfold quittingRootQuitPayoff quittingRootExpectedPayoff
   rw [expect_pmfPi_fin4]
   simp [comparisonRoot, reward, quittingRootPayoff, quittingQuitters,
-    Math.Probability.expect_eq_sum]
+    _root_.Math.Probability.expect_eq_sum]
 
 theorem comparisonRoot_quitPayoff_one (tail : Payoff Player) :
     quittingRootQuitPayoff reward tail comparisonRoot 1 = -1 := by
   unfold quittingRootQuitPayoff quittingRootExpectedPayoff
   rw [expect_pmfPi_fin4]
   simp [comparisonRoot, reward, quittingRootPayoff, quittingQuitters,
-    Math.Probability.expect_eq_sum]
+    _root_.Math.Probability.expect_eq_sum]
 
 theorem comparisonRoot_quitPayoff_two (tail : Payoff Player) :
     quittingRootQuitPayoff reward tail comparisonRoot 2 = -1 := by
   unfold quittingRootQuitPayoff quittingRootExpectedPayoff
   rw [expect_pmfPi_fin4]
   simp [comparisonRoot, reward, quittingRootPayoff, quittingQuitters,
-    Math.Probability.expect_eq_sum]
+    _root_.Math.Probability.expect_eq_sum]
 
 theorem comparisonRoot_quitPayoff_three (tail : Payoff Player) :
     quittingRootQuitPayoff reward tail comparisonRoot 3 = -1 := by
   unfold quittingRootQuitPayoff quittingRootExpectedPayoff
   rw [expect_pmfPi_fin4]
   simp [comparisonRoot, reward, quittingRootPayoff, quittingQuitters,
-    Math.Probability.expect_eq_sum]
+    _root_.Math.Probability.expect_eq_sum]
 
 theorem comparisonRoot_continuePayoff_zero (tail : Payoff Player) :
     quittingRootContinuePayoff reward tail comparisonRoot 0 = 1 := by
   unfold quittingRootContinuePayoff quittingRootExpectedPayoff
   rw [expect_pmfPi_fin4]
   simp [comparisonRoot, reward, quittingRootPayoff, quittingQuitters,
-    Math.Probability.expect_eq_sum]
+    _root_.Math.Probability.expect_eq_sum]
 
 theorem comparisonRoot_continuePayoff_one (tail : Payoff Player) :
     quittingRootContinuePayoff reward tail comparisonRoot 1 = tail 1 := by
   unfold quittingRootContinuePayoff quittingRootExpectedPayoff
   rw [expect_pmfPi_fin4]
   simp [comparisonRoot, reward, quittingRootPayoff, quittingQuitters,
-    Math.Probability.expect_eq_sum]
+    _root_.Math.Probability.expect_eq_sum]
 
 theorem comparisonRoot_continuePayoff_two (tail : Payoff Player) :
     quittingRootContinuePayoff reward tail comparisonRoot 2 = 0 := by
   unfold quittingRootContinuePayoff quittingRootExpectedPayoff
   rw [expect_pmfPi_fin4]
   simp [comparisonRoot, reward, quittingRootPayoff, quittingQuitters,
-    Math.Probability.expect_eq_sum]
+    _root_.Math.Probability.expect_eq_sum]
 
 theorem comparisonRoot_continuePayoff_three (tail : Payoff Player) :
     quittingRootContinuePayoff reward tail comparisonRoot 3 = 0 := by
   unfold quittingRootContinuePayoff quittingRootExpectedPayoff
   rw [expect_pmfPi_fin4]
   simp [comparisonRoot, reward, quittingRootPayoff, quittingQuitters,
-    Math.Probability.expect_eq_sum]
+    _root_.Math.Probability.expect_eq_sum]
 
 /-- Exact all-behavior cap of the comparison profile. Only player `1` can
 gain, by refusing the prefix and choosing one atom of the uniform tail. -/

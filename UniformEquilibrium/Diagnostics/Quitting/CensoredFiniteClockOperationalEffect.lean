@@ -160,24 +160,24 @@ private theorem pmfTV_le_couplingMismatch
     (hfirst : coupling.map Prod.fst = first)
     (hsecond : coupling.map Prod.snd = second) :
     Math.Probability.pmfTV first second ≤
-      Math.Probability.expect coupling fun pair =>
+      _root_.Math.Probability.expect coupling fun pair =>
         if pair.1 ≠ pair.2 then 1 else 0 := by
   let witness : α → ℝ :=
     Math.Probability.pmfPositiveVariationWitness first second 1
   calc
     Math.Probability.pmfTV first second =
-        Math.Probability.expect first witness -
-          Math.Probability.expect second witness := by
+        _root_.Math.Probability.expect first witness -
+          _root_.Math.Probability.expect second witness := by
       symm
       simpa [witness] using
-        Math.Probability.expect_sub_pmfPositiveVariationWitness first second 1
-    _ = Math.Probability.expect coupling fun pair =>
+        _root_.Math.Probability.expect_sub_pmfPositiveVariationWitness first second 1
+    _ = _root_.Math.Probability.expect coupling fun pair =>
           witness pair.1 - witness pair.2 := by
-      rw [← hfirst, ← hsecond, Math.Probability.expect_map,
-        Math.Probability.expect_map, Math.Probability.expect_sub]
-    _ ≤ Math.Probability.expect coupling fun pair =>
+      rw [← hfirst, ← hsecond, _root_.Math.Probability.expect_map,
+        _root_.Math.Probability.expect_map, _root_.Math.Probability.expect_sub]
+    _ ≤ _root_.Math.Probability.expect coupling fun pair =>
           if pair.1 ≠ pair.2 then 1 else 0 := by
-      apply Math.Probability.expect_mono
+      apply _root_.Math.Probability.expect_mono
       intro pair
       by_cases heq : pair.1 = pair.2
       · simp [heq]
@@ -225,12 +225,12 @@ theorem pmfTV_quittingFiniteDeadline_include_censor_le_boundary
     rw [PMF.map_comp]
     rfl
   have hmismatch :
-      Math.Probability.expect coupling (fun pair =>
+      _root_.Math.Probability.expect coupling (fun pair =>
           if pair.1 ≠ pair.2 then 1 else 0) =
         (law (quittingFiniteDeadlineTimingBoundaryAction deadline)).toReal := by
-    change Math.Probability.expect
+    change _root_.Math.Probability.expect
         (law.map fun action => (project action, action)) _ = _
-    rw [Math.Probability.expect_map,
+    rw [_root_.Math.Probability.expect_map,
       Math.Probability.apply_toReal_eq_expect_indicator]
     congr 1
     funext action
@@ -277,7 +277,7 @@ theorem pmfTV_quittingFiniteDeadline_include_censor_eq_boundary
   have hprojectedBoundary :
       projected (quittingFiniteDeadlineTimingBoundaryAction deadline) = 0 := by
     unfold projected
-    rw [PMF.map_apply, ENNReal.tsum_eq_zero]
+    rw [PMF.map_apply, tsum_eq_zero_iff]
     intro oldAction
     split
     · next heq =>
@@ -299,7 +299,7 @@ theorem pmfTV_quittingFiniteDeadline_include_censor_eq_boundary
     let indicator : QuittingFiniteDeadlineTimingAction (deadline + 1) → ℝ :=
       fun action => if action =
         quittingFiniteDeadlineTimingBoundaryAction deadline then 1 else 0
-    have hvariation := Math.Probability.expect_sub_le_mul_pmfPositiveVariation
+    have hvariation := _root_.Math.Probability.expect_sub_le_mul_pmfPositiveVariation
       law projected indicator (U := 1)
       (fun action => by by_cases h : action =
           quittingFiniteDeadlineTimingBoundaryAction deadline <;>
@@ -307,12 +307,12 @@ theorem pmfTV_quittingFiniteDeadline_include_censor_eq_boundary
       (fun action => by by_cases h : action =
           quittingFiniteDeadlineTimingBoundaryAction deadline <;>
         simp [indicator, h])
-    have hlaw : Math.Probability.expect law indicator =
+    have hlaw : _root_.Math.Probability.expect law indicator =
         (law (quittingFiniteDeadlineTimingBoundaryAction deadline)).toReal := by
       symm
       exact Math.Probability.apply_toReal_eq_expect_indicator law _
-    have hprojected : Math.Probability.expect projected indicator = 0 := by
-      rw [Math.Probability.expect_eq_sum]
+    have hprojected : _root_.Math.Probability.expect projected indicator = 0 := by
+      rw [_root_.Math.Probability.expect_eq_sum]
       apply Finset.sum_eq_zero
       intro action _
       by_cases haction : action =

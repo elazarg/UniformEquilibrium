@@ -187,6 +187,137 @@ private theorem norm_field_sub_lcpMinMap_scaled_lt
   rw [hequal, hmin, norm_smul, norm_smul, Real.norm_eq_abs, abs_of_pos hscalar]
   exact mul_lt_mul_of_pos_left (herror.trans_le hlower) hscalar
 
+private theorem quittingDiscountedClippedMap_mapsTo_box
+    (reward : {S : Finset (Fin n) // S.Nonempty} → Payoff (Fin n))
+    (discount radius : ℝ) (hradius : 1 ≤ radius) :
+    MapsTo (quittingDiscountedClippedMap reward discount)
+      (Icc (fun _ => -radius) (fun _ => radius)) (Icc (fun _ => -radius) (fun _ => radius)) := by
+  intro hazard _hhazard
+  have hcube := quittingDiscountedClippedMap_mem_unitBox reward discount hazard
+  constructor <;> intro who
+  · exact (neg_nonpos.mpr (zero_le_one.trans hradius)).trans (hcube.1 who)
+  · exact (hcube.2 who).trans hradius
+
+private theorem quittingDiscountedClippedMap_fixedPoints_mem_ball
+    (reward : {S : Finset (Fin n) // S.Nonempty} → Payoff (Fin n))
+    (discount radius : ℝ) (hdiscount : 0 < discount) (hradius : 0 < radius)
+    (localRadius : ℝ) (hlocalInner : localRadius < radius / 2)
+    (hlocal : ∀ hazard : Fin n → ℝ,
+      quittingDiscountedClippedMap reward discount hazard = hazard →
+        ∀ who, hazard who / discount < localRadius) :
+    ∀ hazard ∈ Icc (fun _ : Fin n => -radius) (fun _ => radius),
+      hazard = quittingDiscountedClippedMap reward discount hazard →
+        hazard ∈ Metric.ball 0 (discount * (radius / 2)) := by
+  intro hazard _hhazard hfixed
+  have hcube : hazard ∈ Icc (0 : Fin n → ℝ) 1 := by
+    rw [hfixed]
+    exact quittingDiscountedClippedMap_mem_unitBox reward discount hazard
+  have hbound := hlocal hazard hfixed.symm
+  have hinner : 0 < discount * (radius / 2) := mul_pos hdiscount (half_pos hradius)
+  rw [Metric.mem_ball, dist_zero_right, pi_norm_lt_iff hinner]
+  intro who
+  rw [Real.norm_eq_abs, abs_of_nonneg (hcube.1 who)]
+  have hwho := (div_lt_iff₀ hdiscount).mp (hbound who)
+  have hscale := mul_lt_mul_of_pos_right hlocalInner hdiscount
+  exact (hwho.trans hscale).trans_eq (mul_comm _ _)
+
+private theorem norm_field_sub_lcpMinMap_lt_of_uniform_bound
+    (matrix : Matrix (Fin n) (Fin n) ℝ) (offset : Fin n → ℝ)
+    (map : (Fin n → ℝ) → (Fin n → ℝ)) (discount : ℝ) (hdiscount : 0 < discount)
+    (radius margin : ℝ)
+    (happrox : ∀ hazard ∈ Metric.closedBall (0 : Fin n → ℝ) (radius / 2),
+      ‖(fun who => ((discount • hazard) who - map (discount • hazard) who) / discount) -
+        lcpMinMap matrix offset hazard‖ < margin)
+    (hmargin : ∀ hazard ∈ Metric.sphere (0 : Fin n → ℝ) (radius / 2),
+      margin ≤ ‖lcpMinMap matrix offset hazard‖)
+    (point : UnitCube (Fin n))
+    (hpoint : point ∈ frontier (degreeChart radius ⁻¹' Metric.ball 0 (discount * (radius / 2)))) :
+    ‖(degreeChart radius point - map (degreeChart radius point)) -
+        lcpMinMap matrix (discount • offset) (degreeChart radius point)‖ <
+      ‖lcpMinMap matrix (discount • offset) (degreeChart radius point)‖ := by
+  let source := degreeChart radius point
+  have hsourceNorm : ‖discount⁻¹ • source‖ = radius / 2 :=
+    norm_scaled_degreeChart_of_mem_frontier radius discount hdiscount point hpoint
+  have hsourceSphere : discount⁻¹ • source ∈ Metric.sphere (0 : Fin n → ℝ) (radius / 2) := by
+    simpa only [Metric.mem_sphere, dist_zero_right] using hsourceNorm
+  have hsourceClosed : discount⁻¹ • source ∈
+      Metric.closedBall (0 : Fin n → ℝ) (radius / 2) := by
+    simpa only [Metric.mem_closedBall, dist_zero_right] using hsourceNorm.le
+  have herror := happrox (discount⁻¹ • source) hsourceClosed
+  simp only [smul_inv_smul₀ hdiscount.ne'] at herror
+  have hscaled : ‖discount⁻¹ • (source - map source) -
+      lcpMinMap matrix offset (discount⁻¹ • source)‖ < margin := by
+    change ‖(fun who => discount⁻¹ * (source who - map source who)) -
+      lcpMinMap matrix offset (discount⁻¹ • source)‖ < margin
+    simpa only [div_eq_mul_inv, mul_comm] using herror
+  exact norm_field_sub_lcpMinMap_scaled_lt matrix offset discount hdiscount
+    source (source - map source) margin hscaled (hmargin _ hsourceSphere)
+
+private theorem localDegree_eq_one_of_clipped_map_comparison
+    (matrix : Matrix (Fin n) (Fin n) ℝ) (offset : Fin n → ℝ)
+    (map : (Fin n → ℝ) → (Fin n → ℝ)) (hmap : Continuous map)
+    (radius discount margin : ℝ) (hradius : 0 < radius)
+    (hdiscount : 0 < discount) (hdiscountOne : discount ≤ 1)
+    (hself : MapsTo map (Icc (fun _ => -radius) (fun _ => radius))
+      (Icc (fun _ => -radius) (fun _ => radius)))
+    (hfixed : ∀ hazard ∈ Icc (fun _ => -radius) (fun _ => radius),
+      hazard = map hazard → hazard ∈ Metric.ball 0 (discount * (radius / 2)))
+    (hbaseBound : ∀ root, IsStandardLCPSolution matrix offset root →
+      ∀ who, root who < radius / 2)
+    (happrox : ∀ hazard ∈ Metric.closedBall (0 : Fin n → ℝ) (radius / 2),
+      ‖(fun who => ((discount • hazard) who - map (discount • hazard) who) / discount) -
+        lcpMinMap matrix offset hazard‖ < margin)
+    (hmarginBound : ∀ hazard ∈ Metric.sphere (0 : Fin n → ℝ) (radius / 2),
+      margin ≤ ‖lcpMinMap matrix offset hazard‖)
+    (hreferenceCentral : (lcpMinBoxProblem matrix (discount • offset) 0 radius hradius).IsIsolating
+      (diagonalCentralRegion n)) :
+    (lcpMinBoxProblem matrix (discount • offset) 0 radius hradius).localDegree
+      (diagonalCentralRegion n) hreferenceCentral = 1 := by
+  have hwidth : ∀ _ : Fin n, -radius < radius := fun _ => (neg_lt_zero.mpr hradius).trans hradius
+  let region : Set (UnitCube (Fin n)) :=
+    degreeChart radius ⁻¹' Metric.ball 0 (discount * (radius / 2))
+  have hopen : IsOpen region := Metric.isOpen_ball.preimage
+    (continuous_rectangularCubePoint (fun _ : Fin n => -radius) (fun _ => radius))
+  let actual := BoxComplementarityProblem.ofAmbientMap
+    (fun _ => -radius) (fun _ => radius) hwidth (fun point => point - map point)
+    (continuousOn_id.sub hmap.continuousOn)
+  have hactualIsolating : actual.IsIsolating region :=
+    BoxComplementarityProblem.isIsolating_of_selfMap_preimage
+      (fun _ => -radius) (fun _ => radius) hwidth map hmap.continuousOn hself
+      (Metric.ball 0 (discount * (radius / 2))) Metric.isOpen_ball hfixed
+  have hactualDegree : actual.localDegree region hactualIsolating = 1 :=
+    BoxComplementarityProblem.localDegree_of_selfMap_preimage_eq_one
+      (fun _ => -radius) (fun _ => radius) hwidth map hmap.continuousOn hself
+      (Metric.ball 0 (discount * (radius / 2))) Metric.isOpen_ball hfixed
+  let reference := lcpMinBoxProblem matrix (discount • offset) 0 radius hradius
+  have hinterior : ∀ point ∈ frontier region,
+      ∀ who, 0 < (point who : ℝ) ∧ (point who : ℝ) < 1 := by
+    intro point hpoint
+    apply coordinateInterior_of_norm_degreeChart_lt radius hradius point
+    rw [norm_degreeChart_of_mem_frontier_preimage_ball radius _ point hpoint]
+    exact (mul_le_of_le_one_left (half_pos hradius).le hdiscountOne).trans_lt
+      (by linarith only [hradius])
+  have hclose : ∀ point ∈ frontier region,
+      ‖actual.gain point - reference.gain point‖ < ‖reference.gain point‖ := by
+    intro point hpoint
+    have hreferenceGain : reference.gain point =
+        -lcpMinMap matrix (discount • offset) (degreeChart radius point) :=
+      lcpMinBoxProblem_gain_degreeChart matrix (discount • offset) radius hradius point
+    have hactualGain : actual.gain point =
+        -(degreeChart radius point - map (degreeChart radius point)) := rfl
+    rw [hactualGain, hreferenceGain, neg_sub_neg, norm_sub_rev, norm_neg]
+    exact norm_field_sub_lcpMinMap_lt_of_uniform_bound matrix offset map discount hdiscount
+      radius margin happrox hmarginBound point hpoint
+  obtain ⟨hreferenceIsolating, _hactualIsolating, hdegrees⟩ :=
+    reference.localDegree_eq_of_norm_sub_lt_norm actual region hopen hinterior hclose
+  have hsolutions : reference.solutionsIn region =
+      reference.solutionsIn (diagonalCentralRegion n) :=
+    solutionsIn_shrinking_ball_eq_central matrix offset radius hradius
+      discount hdiscount hdiscountOne hbaseBound
+  have hexcision := reference.localDegree_eq_of_solutionsIn_eq region
+    (diagonalCentralRegion n) hreferenceIsolating hreferenceCentral hsolutions
+  exact hexcision.symm.trans (hdegrees.trans hactualDegree)
+
 /-- Full R0 and uniform scaled localization of every literal clipped fixed point
 force the canonical total R0 degree to be one. The localization premise concerns
 the actual source map, not a selected branch or a supplied degree identity. -/
@@ -210,8 +341,8 @@ theorem r0Degree_quittingSingletonMatrix_eq_one_of_discounted_fixedPoint_localiz
   obtain ⟨radius, hradius, hfloor, hfamily⟩ :=
     exists_radius_above_lcpMinBoxProblem_localDegree_eq_r0Degree matrix hR0 bound
       (2 + 2 * localRadius)
-  have hradiusOne : 1 < radius := by linarith
-  have hlocalInner : localRadius < radius / 2 := by linarith
+  have hradiusOne : 1 < radius := by linarith only [hfloor, hlocalRadius]
+  have hlocalInner : localRadius < radius / 2 := by linarith only [hfloor]
   obtain ⟨_hbaseIsolating, hbaseBound, _hbaseDegree⟩ := hfamily offset hoffset
   obtain ⟨margin, hmargin, hmarginBound⟩ :=
     exists_pos_minMap_sphere_margin matrix offset (radius / 2) (half_pos hradius) hbaseBound
@@ -224,101 +355,28 @@ theorem r0Degree_quittingSingletonMatrix_eq_one_of_discounted_fixedPoint_localiz
   have hdiscountApprox : discount ≤ δ :=
     (min_le_left (min threshold δ) 1).trans (min_le_right threshold δ)
   have hdiscountOne : discount ≤ 1 := min_le_right _ _
-  have hinner : 0 < discount * (radius / 2) := mul_pos hdiscount (half_pos hradius)
   let map := quittingDiscountedClippedMap reward discount
-  have hmap : Continuous map :=
-    (continuous_quittingDiscountedClippedMap reward).comp
-      (continuous_const.prodMk continuous_id)
-  have hwidth : ∀ _ : Fin n, -radius < radius := by intro _; linarith
-  have hself : MapsTo map (Icc (fun _ => -radius) (fun _ => radius))
-      (Icc (fun _ => -radius) (fun _ => radius)) := by
-    intro hazard _hhazard
-    have hcube := quittingDiscountedClippedMap_mem_unitBox reward discount hazard
-    constructor <;> intro who
-    · have h := hcube.1 who
-      change 0 ≤ map hazard who at h
-      change -radius ≤ map hazard who
-      linarith
-    · have h := hcube.2 who
-      change map hazard who ≤ 1 at h
-      change map hazard who ≤ radius
-      linarith
-  let region : Set (UnitCube (Fin n)) :=
-    degreeChart radius ⁻¹' Metric.ball 0 (discount * (radius / 2))
-  have hopen : IsOpen region := Metric.isOpen_ball.preimage
-    (continuous_rectangularCubePoint (fun _ : Fin n => -radius) (fun _ => radius))
-  let actual := BoxComplementarityProblem.ofAmbientMap
-    (fun _ => -radius) (fun _ => radius) hwidth (fun point => point - map point)
-    (continuousOn_id.sub hmap.continuousOn)
-  have hfixed : ∀ hazard ∈ Icc (fun _ => -radius) (fun _ => radius),
-      hazard = map hazard → hazard ∈ Metric.ball 0 (discount * (radius / 2)) := by
-    intro hazard _hhazard hfixed
-    have hcube : hazard ∈ Icc (0 : Fin n → ℝ) 1 := by
-      rw [hfixed]
-      exact quittingDiscountedClippedMap_mem_unitBox reward discount hazard
-    have hbound := hlocal discount hdiscount hdiscountThreshold hazard hfixed.symm
-    rw [Metric.mem_ball, dist_zero_right, pi_norm_lt_iff hinner]
-    intro who
-    rw [Real.norm_eq_abs, abs_of_nonneg (hcube.1 who)]
-    have hwho := (div_lt_iff₀ hdiscount).mp (hbound who)
-    have hscale := mul_lt_mul_of_pos_right hlocalInner hdiscount
-    nlinarith
-  have hactualIsolating : actual.IsIsolating region :=
-    BoxComplementarityProblem.isIsolating_of_selfMap_preimage
-      (fun _ => -radius) (fun _ => radius) hwidth map hmap.continuousOn hself
-      (Metric.ball 0 (discount * (radius / 2))) Metric.isOpen_ball hfixed
-  have hactualDegree : actual.localDegree region hactualIsolating = 1 :=
-    BoxComplementarityProblem.localDegree_of_selfMap_preimage_eq_one
-      (fun _ => -radius) (fun _ => radius) hwidth map hmap.continuousOn hself
-      (Metric.ball 0 (discount * (radius / 2))) Metric.isOpen_ball hfixed
-  let reference := lcpMinBoxProblem matrix (discount • offset) 0 radius hradius
+  let slice : (Fin n → ℝ) → ℝ × (Fin n → ℝ) := fun point => (discount, point)
+  let family : ℝ × (Fin n → ℝ) → (Fin n → ℝ) :=
+    fun point => quittingDiscountedClippedMap reward point.1 point.2
+  have hslice : Continuous slice := continuous_const.prodMk continuous_id
+  have hfamilyContinuous : Continuous family := continuous_quittingDiscountedClippedMap reward
+  have hmap : Continuous map := by
+    change Continuous (family ∘ slice)
+    exact hfamilyContinuous.comp hslice
   have hscaledOffset : ∀ who, |(discount • offset) who| ≤ bound := by
     intro who
     simp only [Pi.smul_apply, smul_eq_mul, abs_mul, abs_of_pos hdiscount]
     exact (mul_le_of_le_one_left (abs_nonneg _) hdiscountOne).trans (hoffset who)
   obtain ⟨hreferenceCentral, _hscaledRootBound, hreferenceDegree⟩ :=
     hfamily (discount • offset) hscaledOffset
-  have hinterior : ∀ point ∈ frontier region,
-      ∀ who, 0 < (point who : ℝ) ∧ (point who : ℝ) < 1 := by
-    intro point hpoint
-    apply coordinateInterior_of_norm_degreeChart_lt radius hradius point
-    rw [norm_degreeChart_of_mem_frontier_preimage_ball radius _ point hpoint]
-    exact (mul_le_of_le_one_left (half_pos hradius).le hdiscountOne).trans_lt (by linarith)
-  have hclose : ∀ point ∈ frontier region,
-      ‖actual.gain point - reference.gain point‖ < ‖reference.gain point‖ := by
-    intro point hpoint
-    let source := degreeChart radius point
-    have hsourceNorm : ‖discount⁻¹ • source‖ = radius / 2 :=
-      norm_scaled_degreeChart_of_mem_frontier radius discount hdiscount point hpoint
-    have hsourceSphere : discount⁻¹ • source ∈ Metric.sphere (0 : Fin n → ℝ) (radius / 2) := by
-      simpa only [Metric.mem_sphere, dist_zero_right] using hsourceNorm
-    have hsourceClosed : discount⁻¹ • source ∈
-        Metric.closedBall (0 : Fin n → ℝ) (radius / 2) := by
-      simpa only [Metric.mem_closedBall, dist_zero_right] using hsourceNorm.le
-    have herror := (happrox discount hdiscount hdiscountApprox
-      (discount⁻¹ • source) hsourceClosed).2
-    simp only [smul_inv_smul₀ hdiscount.ne'] at herror
-    have herror' : ‖discount⁻¹ • (source - map source) -
-        lcpMinMap matrix offset (discount⁻¹ • source)‖ < margin := by
-      change ‖(fun who => discount⁻¹ * (source who - map source who)) -
-        lcpMinMap matrix offset (discount⁻¹ • source)‖ < margin
-      simpa only [div_eq_mul_inv, mul_comm] using herror
-    have hcomparison := norm_field_sub_lcpMinMap_scaled_lt matrix offset discount hdiscount
-      source (source - map source) margin herror' (hmarginBound _ hsourceSphere)
-    have hreferenceGain : reference.gain point =
-        -lcpMinMap matrix (discount • offset) source :=
-      lcpMinBoxProblem_gain_degreeChart matrix (discount • offset) radius hradius point
-    have hactualGain : actual.gain point = -(source - map source) := rfl
-    rw [hactualGain, hreferenceGain, neg_sub_neg, norm_sub_rev, norm_neg]
-    exact hcomparison
-  obtain ⟨hreferenceIsolating, _hactualIsolating, hdegrees⟩ :=
-    reference.localDegree_eq_of_norm_sub_lt_norm actual region hopen hinterior hclose
-  have hsolutions : reference.solutionsIn region =
-      reference.solutionsIn (diagonalCentralRegion n) :=
-    solutionsIn_shrinking_ball_eq_central matrix offset radius hradius
-      discount hdiscount hdiscountOne hbaseBound
-  have hexcision := reference.localDegree_eq_of_solutionsIn_eq region
-    (diagonalCentralRegion n) hreferenceIsolating hreferenceCentral hsolutions
-  exact hreferenceDegree.symm.trans (hexcision.symm.trans (hdegrees.trans hactualDegree))
+  have hself := quittingDiscountedClippedMap_mapsTo_box reward discount radius hradiusOne.le
+  have hfixed := quittingDiscountedClippedMap_fixedPoints_mem_ball reward discount radius
+    hdiscount hradius localRadius hlocalInner (hlocal discount hdiscount hdiscountThreshold)
+  have hone := localDegree_eq_one_of_clipped_map_comparison matrix offset map hmap
+    radius discount margin hradius hdiscount hdiscountOne hself hfixed hbaseBound
+    (fun hazard hhazard => (happrox discount hdiscount hdiscountApprox hazard hhazard).2)
+    hmarginBound hreferenceCentral
+  exact hreferenceDegree.symm.trans hone
 
 end GameTheory

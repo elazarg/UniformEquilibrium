@@ -230,7 +230,7 @@ theorem quittingLiftDeletedProfile_outsideDebt_le_of_cappedClockFutureJoin
       simpa [optionReward, optionProfile, childProfile,
         CappedClockParentFutureJoinCertificate.toSlack] using hoption
     _ = _ := by
-      congr 1
+      refine congrArg₂ (fun a b : ℝ => a + b) ?_ rfl
       · apply Finset.sum_congr rfl
         intro who _
         change certificate.weight who *

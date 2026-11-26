@@ -263,7 +263,9 @@ theorem coeff_normalizedTaylorTransform_of_le
       divByXPow (n + k)
         ((scaledTaylorTransform f A n).coeff i) := by
   classical
-  simp [normalizedTaylorTransform, Polynomial.coeff_monomial, hi]
+  simp only [normalizedTaylorTransform, Polynomial.finsetSum_coeff,
+    Polynomial.coeff_monomial_apply, Finset.sum_ite_eq', Finset.mem_range, Nat.lt_succ_iff,
+    ite_eq_left hi]
 
 theorem coeff_normalizedTaylorTransform_of_lt
     (f : Polynomial (PowerSeries K))
@@ -271,8 +273,9 @@ theorem coeff_normalizedTaylorTransform_of_lt
     {i : ℕ} (hi : f.natDegree < i) :
     (normalizedTaylorTransform f A n k).coeff i = 0 := by
   classical
-  simp [normalizedTaylorTransform, Polynomial.coeff_monomial,
-    Nat.not_le_of_gt hi]
+  simp only [normalizedTaylorTransform, Polynomial.finsetSum_coeff,
+    Polynomial.coeff_monomial_apply, Finset.sum_ite_eq', Finset.mem_range, Nat.lt_succ_iff,
+    ite_eq_right (Nat.not_le_of_gt hi)]
 
 /-- The normalized transform satisfies its defining polynomial identity. -/
 theorem C_X_pow_mul_normalizedTaylorTransform
@@ -285,7 +288,8 @@ theorem C_X_pow_mul_normalizedTaylorTransform
     Polynomial.C (PowerSeries.X ^ (n + k)) *
         normalizedTaylorTransform f A n k =
       scaledTaylorTransform f A n := by
-  apply Polynomial.ext
+  apply AddMonoidAlgebra.ext
+  apply DFunLike.ext
   intro i
   rw [Polynomial.coeff_C_mul]
   by_cases hi : i ≤ f.natDegree
@@ -558,8 +562,9 @@ theorem coeff_normalizedBivPolynomialTaylorTransform_of_le
       polynomialDivByXPow (n + k)
         ((scaledBivPolynomialTaylorTransform Q A n).coeff i) := by
   classical
-  simp [normalizedBivPolynomialTaylorTransform,
-    Polynomial.coeff_monomial, hi]
+  simp only [normalizedBivPolynomialTaylorTransform, Polynomial.finsetSum_coeff,
+    Polynomial.coeff_monomial_apply, Finset.sum_ite_eq', Finset.mem_range, Nat.lt_succ_iff,
+    ite_eq_left hi]
 
 theorem coeff_normalizedBivPolynomialTaylorTransform_of_lt
     (Q : Polynomial (Polynomial K))
@@ -567,8 +572,9 @@ theorem coeff_normalizedBivPolynomialTaylorTransform_of_lt
     {i : ℕ} (hi : Q.natDegree < i) :
     (normalizedBivPolynomialTaylorTransform Q A n k).coeff i = 0 := by
   classical
-  simp [normalizedBivPolynomialTaylorTransform,
-    Polynomial.coeff_monomial, Nat.not_le_of_gt hi]
+  simp only [normalizedBivPolynomialTaylorTransform, Polynomial.finsetSum_coeff,
+    Polynomial.coeff_monomial_apply, Finset.sum_ite_eq', Finset.mem_range, Nat.lt_succ_iff,
+    ite_eq_right (Nat.not_le_of_gt hi)]
 
 theorem C_X_pow_mul_normalizedBivPolynomialTaylorTransform
     (Q : Polynomial (Polynomial K))
@@ -580,7 +586,8 @@ theorem C_X_pow_mul_normalizedBivPolynomialTaylorTransform
     Polynomial.C (Polynomial.X ^ (n + k)) *
         normalizedBivPolynomialTaylorTransform Q A n k =
       scaledBivPolynomialTaylorTransform Q A n := by
-  apply Polynomial.ext
+  apply AddMonoidAlgebra.ext
+  apply DFunLike.ext
   intro i
   rw [Polynomial.coeff_C_mul]
   by_cases hi : i ≤ Q.natDegree

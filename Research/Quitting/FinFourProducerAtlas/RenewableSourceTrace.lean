@@ -141,7 +141,7 @@ theorem nonempty_renewalTrace
   classical
   generalize hrank : node.frontier.positiveDebtSupport.card = rank
   induction rank using Nat.strong_induction_on generalizing node with
-  | h rank ih =>
+  | ind rank ih =>
       rcases node.terminalExit_or_nonempty_supportDescent with
         hexit | hdescent
       · exact ⟨FinFourRenewableTrace.terminal node hexit⟩

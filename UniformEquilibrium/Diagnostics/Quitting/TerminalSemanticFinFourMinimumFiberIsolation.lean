@@ -55,6 +55,8 @@ theorem quittingTerminalSemanticMinimumFiber_isCompact
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (base : QuittingTerminalSemanticPair ι) :
     IsCompact (quittingTerminalSemanticMinimumFiber reward base) := by
+  change IsCompact (quittingTerminalSemanticCarrier reward ∩
+    {pair | quittingTerminalSemanticDebtSum pair = quittingTerminalSemanticDebtSum base})
   apply (quittingTerminalSemanticCarrier_isCompact reward).inter_right
   exact isClosed_eq continuous_quittingTerminalSemanticDebtSum continuous_const
 

@@ -19,7 +19,7 @@ payoff of the parent law in which the outsider uses `outsideLaw`. -/
 theorem expect_parentSource_outside_eq_stoppingLawExpectedPayoff
     (reward : {A : Finset (Option ι) // A.Nonempty} → Option ι → ℝ)
     (childLaws : ι → PMF (Option ℕ)) (outsideLaw : PMF (Option ℕ)) :
-    Math.Probability.expect
+    _root_.Math.Probability.expect
       (pmfPi (cappedClockParentSourceLaws childLaws outsideLaw))
         (fun clocks => quittingPureClockTerminalPayoff reward
           (outsideDeadlineClocks (fun i => clocks (some i)) (clocks none)) none) =
@@ -37,7 +37,7 @@ theorem expect_parentSource_quiet_eq_stoppingLawExpectedPayoff
     (reward : {A : Finset (Option ι) // A.Nonempty} → Option ι → ℝ)
     (childLaws : ι → PMF (Option ℕ)) (outsideLaw : PMF (Option ℕ))
     (who : Option ι) :
-    Math.Probability.expect
+    _root_.Math.Probability.expect
       (pmfPi (cappedClockParentSourceLaws childLaws outsideLaw))
         (fun clocks => quittingPureClockTerminalPayoff reward
           (quietParentClocks fun i => clocks (some i)) who) =
@@ -53,7 +53,7 @@ expected payoff of the actual reconstructed capped child law. -/
 theorem expect_parentSource_cappedChild_eq_stoppingLawExpectedPayoff
     (reward : {A : Finset (Option ι) // A.Nonempty} → Option ι → ℝ)
     (childLaws : ι → PMF (Option ℕ)) (outsideLaw : PMF (Option ℕ)) (i : ι) :
-    Math.Probability.expect
+    _root_.Math.Probability.expect
       (pmfPi (cappedClockParentSourceLaws childLaws outsideLaw))
         (fun clocks => quittingPureClockTerminalPayoff reward
           (cappedChildParentClocks (fun j => clocks (some j))

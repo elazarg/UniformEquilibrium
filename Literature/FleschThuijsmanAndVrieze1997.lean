@@ -477,7 +477,7 @@ theorem stationaryRoot_quitPayoff_zero
   rw [Math.PMFProduct.expect_pmfPi_fin3]
   simp [stationaryRoot, CyclicThreePlayerQuitting.Minimality.terminalReward,
     expect_coin, expect_pure, Matrix.cons_val_two]
-  all_goals ring
+  ring
 
 theorem stationaryRoot_quitPayoff_one
     (profile : StationaryProfile) (value : Payoff Player) :
@@ -496,7 +496,7 @@ theorem stationaryRoot_quitPayoff_two
   rw [Math.PMFProduct.expect_pmfPi_fin3]
   simp [stationaryRoot, CyclicThreePlayerQuitting.Minimality.terminalReward,
     expect_coin, expect_pure, Matrix.cons_val_two]
-  all_goals ring
+  ring
 
 theorem stationaryRoot_continuePayoff_zero
     (profile : StationaryProfile) (value : Payoff Player) :
@@ -509,7 +509,7 @@ theorem stationaryRoot_continuePayoff_zero
   rw [Math.PMFProduct.expect_pmfPi_fin3]
   simp [stationaryRoot, CyclicThreePlayerQuitting.Minimality.terminalReward,
     expect_coin, expect_pure, Matrix.cons_val_two]
-  all_goals ring
+  ring
 
 theorem stationaryRoot_continuePayoff_one
     (profile : StationaryProfile) (value : Payoff Player) :
@@ -522,7 +522,7 @@ theorem stationaryRoot_continuePayoff_one
   rw [Math.PMFProduct.expect_pmfPi_fin3]
   simp [stationaryRoot, CyclicThreePlayerQuitting.Minimality.terminalReward,
     expect_coin, expect_pure, Matrix.cons_val_two]
-  all_goals ring
+  ring
 
 theorem stationaryRoot_continuePayoff_two
     (profile : StationaryProfile) (value : Payoff Player) :
@@ -535,7 +535,7 @@ theorem stationaryRoot_continuePayoff_two
   rw [Math.PMFProduct.expect_pmfPi_fin3]
   simp [stationaryRoot, CyclicThreePlayerQuitting.Minimality.terminalReward,
     expect_coin, expect_pure, Matrix.cons_val_two]
-  all_goals ring
+  ring
 
 /-! ### Lemma 3.1: no stationary equilibrium -/
 
@@ -1868,7 +1868,7 @@ theorem theorem3_2_corrected :
         rw [hlimitValueFormula, stationaryPayoffNumerator_zero,
           hzeroOne, hzeroTwo, hdenominator]
         field_simp [hpositive.ne']
-        all_goals norm_num
+        norm_num
       · change 1 ≤ limitValue 1
         have hzeroZero : (limit 0).1 = 0 := hotherZero 0 (by decide)
         have hzeroTwo : (limit 2).1 = 0 := hotherZero 2 (by decide)
@@ -1880,7 +1880,7 @@ theorem theorem3_2_corrected :
         rw [hlimitValueFormula, stationaryPayoffNumerator_one,
           hzeroZero, hzeroTwo, hdenominator]
         field_simp [hpositive.ne']
-        all_goals norm_num
+        norm_num
       · change 1 ≤ limitValue 2
         have hzeroZero : (limit 0).1 = 0 := hotherZero 0 (by decide)
         have hzeroOne : (limit 1).1 = 0 := hotherZero 1 (by decide)
@@ -1892,7 +1892,7 @@ theorem theorem3_2_corrected :
         rw [hlimitValueFormula, stationaryPayoffNumerator_two,
           hzeroZero, hzeroOne, hdenominator]
         field_simp [hpositive.ne']
-        all_goals norm_num
+        norm_num
     have hfixed : limitValue = quittingRootSuccessorPayoff
         CyclicThreePlayerQuitting.AdmissibleCycle.reward limitValue
           (stationaryRoot limit) := by
@@ -4172,15 +4172,16 @@ private theorem continuationPayoff_eq_of_inactive_interval
     (hinactive : ∀ time, start ≤ time → time < finish →
       ¬ IsActiveStage profile time) :
     continuationPayoff profile start = continuationPayoff profile finish := by
-  exact Nat.le_induction
-    (P := fun time _ ↦ time ≤ finish →
-      continuationPayoff profile start = continuationPayoff profile time)
-    (fun _ ↦ rfl)
-    (fun time hstart ih hfinish ↦
-      (ih (by omega)).trans
+  have hconstant (time : ℕ) (htime : start ≤ time) :
+      time ≤ finish → continuationPayoff profile start = continuationPayoff profile time := by
+    induction time, htime using Nat.le_induction with
+    | base => intro _; rfl
+    | succ time hstart ih =>
+      intro hfinish
+      exact (ih (by omega)).trans
         (continuationPayoff_eq_next_of_not_active profile time
-          (hinactive time hstart (by omega))))
-    finish hle le_rfl
+          (hinactive time hstart (by omega)))
+  exact hconstant finish hle le_rfl
 
 private theorem exists_first_active_stage_after
     (profile : MarkovProfile)
@@ -5306,7 +5307,7 @@ private theorem terminal_coordinate_sum_eq_four
             continuationPayoff profile fuel 2)) atTop (nhds 4) := by
     convert (tendsto_const_nhds.mul
       (tendsto_const_nhds.sub hsurvival)).add hresidual using 1
-    all_goals norm_num
+    norm_num
   have hleft : Tendsto (fun _ : ℕ ↦
       continuationPayoff profile 0 0 +
         continuationPayoff profile 0 1 +

@@ -46,7 +46,7 @@ theorem QuittingTerminalExploitabilityWitness.not_exists_globalStrictToggleRank
   have impossible : ∀ bound coalition, rank coalition = bound → False := by
     intro bound
     induction bound using Nat.strong_induction_on with
-    | h bound ih =>
+    | ind bound ih =>
         intro coalition hrank
         let who := witness.strictTogglePlayer coalition
         have hstrict : IsQuittingStrictMembershipToggle reward coalition who := by

@@ -351,7 +351,7 @@ theorem le_pmfMass_of_mem (μ : PMF α) {E : α → Prop} {a : α}
     μ a ≤ pmfMass (μ := μ) E := by
   calc
     μ a = pmfMask (μ := μ) E a := by simp [pmfMask, ha]
-    _ ≤ ∑' x : α, pmfMask (μ := μ) E x := ENNReal.le_tsum a
+    _ ≤ ∑' x : α, pmfMask (μ := μ) E x := le_tsum (pmfMask (μ := μ) E) a
     _ = pmfMass (μ := μ) E := rfl
 
 theorem pmfMass_ne_zero_of_mem_ne_zero (μ : PMF α) {E : α → Prop} {a : α}
@@ -414,7 +414,7 @@ theorem pmfMass_mono (μ : PMF α) {E F : α → Prop}
     (hEF : ∀ a, E a → F a) :
     pmfMass (μ := μ) E ≤ pmfMass (μ := μ) F := by
   simp only [pmfMass, pmfMask]
-  apply ENNReal.tsum_le_tsum
+  apply tsum_le_tsum
   intro a
   by_cases hE : E a
   · simp [hE, hEF a hE]
@@ -1546,6 +1546,37 @@ theorem abs_expect_sub_le_mul_pmfMass
     _ = bound * (pmfMass law fun sample => sample ∈ event).toReal := by
       rw [tsum_mul_left, hmass]
 
+private theorem summable_weighted_geometric_payoff
+    {Ω : Type*} (d : PMF Ω) {δ C : ℝ}
+    (hδ0 : 0 ≤ δ) (hδ1 : δ < 1) (hC0 : 0 ≤ C)
+    (f : Ω → ℕ → ℝ) (hbd : ∀ ω n, |f ω n| ≤ C) :
+    Summable (fun p : Ω × ℕ => (d p.1).toReal * (δ ^ p.2 * f p.1 p.2)) := by
+  let F : Ω × ℕ → ℝ := fun ωn =>
+    (d ωn.1).toReal * (δ ^ ωn.2 * f ωn.1 ωn.2)
+  have hd : Summable fun ω => (d ω).toReal :=
+    Math.Probability.pmf_toReal_summable d
+  have hg : Summable fun n : ℕ => C * δ ^ n :=
+    (summable_geometric_of_lt_one hδ0 hδ1).mul_left C
+  have hmajor : Summable fun ωn : Ω × ℕ =>
+      (d ωn.1).toReal * (C * δ ^ ωn.2) :=
+    hd.mul_of_nonneg hg (fun _ => ENNReal.toReal_nonneg)
+      (fun n => mul_nonneg hC0 (pow_nonneg hδ0 n))
+  show Summable F
+  refine Summable.of_norm_bounded hmajor ?_
+  intro ωn
+  rw [Real.norm_eq_abs]
+  dsimp [F]
+  rw [abs_mul, abs_of_nonneg ENNReal.toReal_nonneg, abs_mul,
+    abs_of_nonneg (pow_nonneg hδ0 ωn.2)]
+  calc
+    (d ωn.1).toReal * (δ ^ ωn.2 * |f ωn.1 ωn.2|) ≤
+        (d ωn.1).toReal * (δ ^ ωn.2 * C) := by
+      exact mul_le_mul_of_nonneg_left
+        (mul_le_mul_of_nonneg_left (hbd ωn.1 ωn.2) (pow_nonneg hδ0 _))
+        ENNReal.toReal_nonneg
+    _ = (d ωn.1).toReal * (C * δ ^ ωn.2) :=
+      congrArg ((d ωn.1).toReal * ·) (mul_comm _ _)
+
 -- The double-series domination and `tsum_comm'` elaboration is inference-heavy.
 /-- Exchange expectation and a geometrically weighted sum under a uniform
 bound. -/
@@ -1557,27 +1588,7 @@ theorem expect_tsum_geometric_of_bounded
       ∑' n : ℕ, δ ^ n * Math.Probability.expect d (fun ω => f ω n) := by
   let F : Ω × ℕ → ℝ := fun ωn =>
     (d ωn.1).toReal * (δ ^ ωn.2 * f ωn.1 ωn.2)
-  have hd : Summable fun ω => (d ω).toReal :=
-    Math.Probability.pmf_toReal_summable d
-  have hg : Summable fun n : ℕ => C * δ ^ n :=
-    (summable_geometric_of_lt_one hδ0 hδ1).mul_left C
-  have hmajor : Summable fun ωn : Ω × ℕ =>
-      (d ωn.1).toReal * (C * δ ^ ωn.2) :=
-    hd.mul_of_nonneg hg (fun _ => ENNReal.toReal_nonneg)
-      (fun n => mul_nonneg hC0 (pow_nonneg hδ0 n))
-  have hF : Summable F := by
-    refine Summable.of_norm_bounded hmajor ?_
-    intro ωn
-    rw [Real.norm_eq_abs]
-    dsimp [F]
-    rw [abs_mul, abs_of_nonneg ENNReal.toReal_nonneg, abs_mul,
-      abs_of_nonneg (pow_nonneg hδ0 ωn.2)]
-    calc
-      (d ωn.1).toReal * (δ ^ ωn.2 * |f ωn.1 ωn.2|) ≤
-          (d ωn.1).toReal * (δ ^ ωn.2 * C) := by
-        gcongr
-        exact hbd ωn.1 ωn.2
-      _ = (d ωn.1).toReal * (C * δ ^ ωn.2) := by ring
+  have hF : Summable F := summable_weighted_geometric_payoff d hδ0 hδ1 hC0 f hbd
   have hrow : ∀ ω, Summable fun n => F (ω, n) := by
     intro ω
     have hs : Summable fun n : ℕ => δ ^ n * f ω n := by
@@ -1617,8 +1628,7 @@ theorem expect_tsum_geometric_of_bounded
             ∑' ω, δ ^ n * ((d ω).toReal * f ω n) := by
           apply tsum_congr
           intro ω
-          simp [F]
-          ring
+          exact mul_left_comm _ _ _
         _ = δ ^ n * ∑' ω, (d ω).toReal * f ω n := by
           rw [tsum_mul_left]
 

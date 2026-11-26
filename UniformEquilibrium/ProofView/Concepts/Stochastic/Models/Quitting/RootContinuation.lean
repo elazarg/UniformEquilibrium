@@ -265,6 +265,23 @@ def quittingRootPayoff
     reward ⟨quittingQuitters action, h⟩ who
   else continuation who
 
+omit [DecidableEq ι] in
+theorem quittingRootPayoff_of_nonempty
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (continuation : Payoff ι) (action : ι → Bool) (who : ι)
+    (h : (quittingQuitters action).Nonempty) :
+    quittingRootPayoff reward continuation action who =
+      reward ⟨quittingQuitters action, h⟩ who :=
+  dite_eq_left h
+
+omit [DecidableEq ι] in
+theorem quittingRootPayoff_of_not_nonempty
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (continuation : Payoff ι) (action : ι → Bool) (who : ι)
+    (h : ¬ (quittingQuitters action).Nonempty) :
+    quittingRootPayoff reward continuation action who = continuation who :=
+  dite_eq_right h
+
 /-- Expected payoff of the finite one-stage continuation game. -/
 def quittingRootExpectedPayoff
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)

@@ -42,7 +42,7 @@ theorem ENNReal_tsum_pi_fin {n : ℕ} {A : Fin n → Type*}
     set e : A 0 × ((i : Fin n) → A i.succ) ≃ ((i : Fin (n+1)) → A i) :=
       Fin.consEquiv A with he
     rw [← e.tsum_eq (f := fun s => ∏ i, g i (s i))]
-    rw [ENNReal.tsum_prod']
+    rw [tsum_prod']
     have h_split : ∀ (a₀ : A 0) (s' : (i : Fin n) → A i.succ),
         (∏ i, g i (e (a₀, s') i)) = g 0 a₀ * ∏ i, g i.succ (s' i) := by
       intro a₀ s'
@@ -138,7 +138,7 @@ open Classical in
 independently sample each coordinate. -/
 noncomputable def pmfPi [Fintype ι] (σ : ∀ i, PMF (A i)) : PMF (∀ i, A i) :=
   ⟨fun s => ∏ i, σ i (s i),
-   ENNReal.summable.hasSum_iff.2 (by
+   CompleteLattice.summable.hasSum_iff.2 (by
      rw [ENNReal_tsum_pi (g := fun i a => σ i a)]
      simp [PMF.tsum_coe])⟩
 

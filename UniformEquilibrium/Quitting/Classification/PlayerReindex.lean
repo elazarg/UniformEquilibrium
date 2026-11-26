@@ -290,6 +290,16 @@ theorem stageActionDist_quittingProfilePullback (e : ι ≃ κ)
   rw [harg]
   rfl
 
+private theorem map_bind_eq_of_transport
+    {A B C D : Type} (source : PMF A) (target : PMF B)
+    (reindex : A → B) (transport : C → D)
+    (first : A → PMF C) (second : B → PMF D)
+    (hsource : source.map reindex = target)
+    (hstep : ∀ a, (first a).map transport = second (reindex a)) :
+    (source.bind first).map transport = target.bind second := by
+  rw [PMF.map_bind, ← hsource, PMF.bind_map]
+  exact congrArg (PMF.bind source) (funext hstep)
+
 /-- One-step transport of the history law: mapping the one-stage extension
 distribution of the pulled-back profile through the history transport gives
 the one-stage extension distribution of the original profile at the
@@ -333,28 +343,14 @@ theorem quittingHistEquiv_map_historyStep (e : ι ≃ κ)
           PMF.map (quittingStateEquiv e)
             ((quittingGame reward).transition h.2 a) :=
       quittingGame_transition_reindex e reward h.2 a
-    refine (PMF.map_bind _ _ _).trans ?_
-    refine Eq.trans ?_ (congrFun (congrArg PMF.bind htrans.symm) _)
-    refine Eq.trans ?_ (PMF.bind_map _ _ _).symm
-    refine congrArg (PMF.bind ((quittingGame reward).transition h.2 a))
-      (funext fun s' => ?_)
+    refine map_bind_eq_of_transport _ _ (quittingStateEquiv e)
+      (quittingHistEquiv e reward (t + 1)) _ _ htrans.symm ?_
+    intro s'
     exact (PMF.pure_map (⇑(quittingHistEquiv e reward (t + 1))) _).trans
       (congrArg PMF.pure (quittingHistEquiv_snoc e reward h a s'))
-  refine (PMF.map_bind _ _ _).trans ?_
-  refine Eq.trans (congrArg
-      (PMF.bind ((quittingGame reward).stageActionDist
-        (quittingProfilePullback e reward σ') h))
-      (funext hinner)) ?_
-  exact (PMF.bind_map _ _ _).symm.trans
-    (congrFun (congrArg PMF.bind
-      (stageActionDist_quittingProfilePullback e reward σ' h))
-      fun b =>
-        ((quittingGame (quittingRewardReindex e reward)).transition
-            (quittingHistEquiv e reward t h).2 b).bind fun s'' =>
-          PMF.pure
-            ((Fin.snoc (quittingHistEquiv e reward t h).1
-                ((quittingHistEquiv e reward t h).2, b), s'') :
-              (quittingGame (quittingRewardReindex e reward)).Hist (t + 1)))
+  exact map_bind_eq_of_transport _ _ (quittingActEquiv e)
+    (quittingHistEquiv e reward (t + 1)) _ _
+    (stageActionDist_quittingProfilePullback e reward σ' h) hinner
 
 /-- **Transport of the history law.**  At every horizon, the distribution of
 transported histories under the pulled-back profile is the history

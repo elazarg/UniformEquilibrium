@@ -49,7 +49,7 @@ theorem isTrimmedAt_of_selects_trimLeading
     (hselected : (trimLeading original).Selects environment trimmed) :
     IsTrimmedAt environment original trimmed := by
   induction hlength : original.length using Nat.strong_induction_on generalizing original trimmed with
-  | h length ih =>
+  | ind length ih =>
       cases original with
       | nil =>
           simp [trimLeading, Selects] at hselected

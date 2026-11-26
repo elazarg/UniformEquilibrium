@@ -1,4 +1,4 @@
-import GameTheory.Math.Probability.FinDist
+import MathUE.Probability.FinDist
 import MathUE.Probability.SignedConditioningLikelihood
 
 /-! # Signed conditioning of finite probability laws

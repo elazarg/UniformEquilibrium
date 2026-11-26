@@ -181,25 +181,17 @@ theorem variableRoot_phase (length : Fin L → ℕ) (p : Fin L)
             (certificate.hazard_lt_one p) l)
           (Math.rationalArcHazard_lt_one (certificate.hazard_nonneg p)
             (certificate.hazard_lt_one p) l).le) := by
-  let coordinate := variableCoordinates length (variablePhase length p l)
-  have hcoordinate : coordinate = ⟨p, l⟩ := variableCoordinates_phase length p l
-  have howner : certificate.owner coordinate.1 = certificate.owner p :=
-    congrArg (fun coordinate => certificate.owner coordinate.1) hcoordinate
-  have hhazard : Math.rationalArcHazard (certificate.hazard coordinate.1)
-      (length coordinate.1) coordinate.2 =
-      Math.rationalArcHazard (certificate.hazard p) (length p) l :=
-    congrArg (fun coordinate : (p : Fin L) × Fin (length p) =>
-      Math.rationalArcHazard (certificate.hazard coordinate.1)
-        (length coordinate.1) coordinate.2) hcoordinate
-  dsimp only [coordinate] at hhazard
-  unfold variableRoot
-  dsimp only
-  rw [howner]
-  congr 1
-  apply _root_.Math.ProbabilityMassFunction.eq_of_forall_toReal_eq
-  intro choice
-  cases choice <;>
-    simp only [quittingHazardCoin_true_toReal, quittingHazardCoin_false_toReal, hhazard]
+  let rootAt (coordinate : (q : Fin L) × Fin (length q)) : ι → PMF Bool :=
+    quittingSoloStationaryRoot (certificate.owner coordinate.1)
+      (quittingHazardCoin
+        (Math.rationalArcHazard (certificate.hazard coordinate.1)
+          (length coordinate.1) coordinate.2)
+        (Math.rationalArcHazard_nonneg (certificate.hazard_nonneg coordinate.1)
+          (certificate.hazard_lt_one coordinate.1) coordinate.2)
+        (Math.rationalArcHazard_lt_one (certificate.hazard_nonneg coordinate.1)
+          (certificate.hazard_lt_one coordinate.1) coordinate.2).le)
+  change rootAt (variableCoordinates length (variablePhase length p l)) = rootAt ⟨p, l⟩
+  exact congrArg rootAt (variableCoordinates_phase length p l)
 
 def variableValue (length : Fin L → ℕ) (phase : Fin
   (variablePeriod length)) : Payoff ι :=

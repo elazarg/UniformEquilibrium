@@ -34,6 +34,26 @@ variable
   {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
   {bound : ℝ} {source : FinFourMinimumAtomProducer reward bound}
 
+private theorem tendsto_observerDebt_of_semanticLaw
+    (profiles : ℕ → (quittingGame reward).BehaviorProfile) (observer : Fin 4)
+    (point : QuittingTerminalSemanticLawPoint (Fin 4))
+    (h : Tendsto (fun rank =>
+      (quittingTerminalSemanticPair reward (profiles rank),
+        quittingTerminalOutcomeMass reward (profiles rank))) atTop (nhds point)) :
+    Tendsto (fun rank =>
+      quittingTerminalSemanticDebt (quittingTerminalSemanticPair reward (profiles rank)) observer)
+      atTop (nhds (quittingTerminalSemanticDebt point.1 observer)) := by
+  have hprojection : Continuous
+      (fun p : QuittingTerminalSemanticLawPoint (Fin 4) =>
+        quittingTerminalSemanticDebt p.1 observer) :=
+    (continuous_quittingTerminalSemanticDebt observer).comp continuous_fst
+  exact Tendsto.comp
+    (f := fun rank => (quittingTerminalSemanticPair reward (profiles rank),
+      quittingTerminalOutcomeMass reward (profiles rank)))
+    (g := fun p : QuittingTerminalSemanticLawPoint (Fin 4) =>
+      quittingTerminalSemanticDebt p.1 observer)
+    (hprojection.tendsto point) h
+
 /-- Source-attached finite rows immediately before the stopping-law branch.
 Unlike `FinFourMinimumResponseRectanglePacket`, this record contains no atom,
 response, or compact response endpoint. -/
@@ -146,9 +166,8 @@ theorem charge_le_endpointPoint_observerDebt :
           origin.observer) atTop
       (nhds (quittingTerminalSemanticDebt origin.endpointPoint.1
         origin.observer)) :=
-    ((continuous_quittingTerminalSemanticDebt origin.observer).comp
-      continuous_fst).tendsto origin.endpointPoint |>.comp
-        origin.endpoint_tendsto
+    tendsto_observerDebt_of_semanticLaw origin.endpointProfile origin.observer
+      origin.endpointPoint origin.endpoint_tendsto
   apply le_of_tendsto_of_tendsto' tendsto_const_nhds hlimit
   intro rank
   have hsource : 0 ≤ quittingTerminalSemanticDebt
@@ -850,7 +869,7 @@ theorem two_mul_charge_le_endpointDebtChange
         endpoint.targetPoint.1 observer := by
   rw [canonical.charge_eq]
   convert endpoint.finFour_recipient_rise using 1
-  all_goals ring
+  ring
 
 /-- The endpoint observer itself has the full `rho² D_*/64` debt floor,
 which is stronger than positivity by the decoder's half-sized charge. -/
@@ -1055,12 +1074,10 @@ theorem nonempty_canonicalMinimumResponseEndpointRiseOrigin
           (ConcentratedCollisionFourRole.targetProfile reward (rawProfile rank)
             (stage rank) mover)) observer) atTop
       (nhds (quittingTerminalSemanticDebt endpoint.targetPoint.1 observer)) := by
-    have hprojection : Continuous
-        (fun point : QuittingTerminalSemanticLawPoint (Fin 4) =>
-          quittingTerminalSemanticDebt point.1 observer) :=
-      (continuous_quittingTerminalSemanticDebt observer).comp continuous_fst
-    exact hprojection.tendsto endpoint.targetPoint |>.comp
-      endpoint.target_joint_tendsto
+    exact tendsto_observerDebt_of_semanticLaw
+      (fun rank => ConcentratedCollisionFourRole.targetProfile reward (rawProfile rank)
+        (stage rank) mover)
+      observer endpoint.targetPoint endpoint.target_joint_tendsto
   have hchange : Tendsto (fun rank =>
       quittingTerminalSemanticDebt
           (quittingTerminalSemanticPair reward
@@ -1135,7 +1152,7 @@ theorem nonempty_canonicalMinimumResponseEndpointRiseOrigin
       rw [show (endpoint.transfer (select rank)).mover = mover from
         endpoint.transfer_mover_eq (select rank)] at hgain
       convert hgain using 1
-      all_goals norm_num
+      norm_num
     unfold ConcentratedCollisionFourRole.gain at hcanonical
     rw [show quittingTerminalPayoff reward (literalEndpoint (select rank)) mover =
         quittingTerminalPayoff reward

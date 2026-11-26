@@ -305,8 +305,8 @@ def germ : (quittingGame reward).AnalyticBellmanGerm where
   analytic_assignment := by
     have hHazard : AnalyticAt ℝ hazard 0 := by
       unfold hazard
-      exact analyticAt_id.div
-        (analyticAt_const.sub analyticAt_id) (by norm_num)
+      have hnonzero : (1 : ℝ) - 0 ≠ 0 := by norm_num
+      exact analyticAt_id.div (analyticAt_const.sub analyticAt_id) hnonzero
     rw [analyticAt_pi_iff]
     intro coordinate
     cases coordinate with
@@ -347,8 +347,8 @@ def quitRateJet : Math.LeadingOrderJet (quittingGermQuitRate germ) where
   cofactor := fun _ t => 1 / (1 - t)
   analytic_cofactor := by
     intro who
-    exact analyticAt_const.div
-      (analyticAt_const.sub analyticAt_id) (by norm_num)
+    have hnonzero : (1 : ℝ) - 0 ≠ 0 := by norm_num
+    exact analyticAt_const.div (analyticAt_const.sub analyticAt_id) hnonzero
   factor_eq := by
     intro who
     filter_upwards [] with t
@@ -412,8 +412,9 @@ private theorem tendsto_absorption_div_parameter_two :
       (nhdsWithin (0 : ℝ) (Ioi 0)) (nhds (2 : ℝ)) := by
   have hcontinuous : ContinuousAt
       (fun t : ℝ => (2 - 3 * t) / (1 - t) ^ 2) 0 := by
+    have hnonzero : ((1 : ℝ) - 0) ^ 2 ≠ 0 := by norm_num
     exact (continuousAt_const.sub (continuousAt_const.mul continuousAt_id)).div
-      ((continuousAt_const.sub continuousAt_id).pow 2) (by norm_num)
+      ((continuousAt_const.sub continuousAt_id).pow 2) hnonzero
   have htend : Tendsto
       (fun t : ℝ => (2 - 3 * t) / (1 - t) ^ 2)
       (nhdsWithin (0 : ℝ) (Ioi 0))

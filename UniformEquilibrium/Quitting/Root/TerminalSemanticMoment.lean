@@ -56,7 +56,7 @@ theorem quittingAbsorbedMass_nonneg_terminalMoment
     (terminal : {S : Finset ι // S.Nonempty}) :
     0 ≤ quittingAbsorbedMass reward profile time terminal := by
   unfold quittingAbsorbedMass StochasticGame.expectedStateValue
-  apply Math.Probability.expect_nonneg
+  apply _root_.Math.Probability.expect_nonneg
   intro history
   unfold quittingAbsorbedIndicator
   split <;> norm_num

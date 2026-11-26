@@ -151,7 +151,7 @@ theorem finkObstructionTranspose_mulVec_adjustment_residual
       G.finkContinuationResidualVector A z s who := by
   classical
   rw [G.finkContinuationResidualVector_eq_expect_stateKernel,
-    Math.Probability.expect_eq_sum]
+    _root_.Math.Probability.expect_eq_sum]
   simp only [Matrix.mulVec, dotProduct, Matrix.transpose_apply,
     finkObstructionBalance, finkAdjustmentCoefficient,
     Fintype.sum_prod_type]
@@ -196,8 +196,8 @@ theorem finkObstructionTranspose_mulVec_adjustment_action
   by_cases hsupported : G.finkProfile z s who d ≠ 0
   · rw [ite_eq_left hsupported,
       G.finkContinuationGain_eq_expect_stateKernels,
-      Math.Probability.expect_eq_sum,
-      Math.Probability.expect_eq_sum]
+      _root_.Math.Probability.expect_eq_sum,
+      _root_.Math.Probability.expect_eq_sum]
     simp only [Matrix.mulVec, dotProduct, Matrix.transpose_apply,
       finkObstructionBalance, finkAdjustmentCoefficient,
       Fintype.sum_prod_type]

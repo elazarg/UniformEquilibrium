@@ -26,7 +26,7 @@ equilibrium, so it does not force the second pair and is not a counterexample.
 
 noncomputable section
 
-open GameTheory.Math.Probability
+open GameTheory.Math.Probability hiding expect
 
 namespace GameTheory
 

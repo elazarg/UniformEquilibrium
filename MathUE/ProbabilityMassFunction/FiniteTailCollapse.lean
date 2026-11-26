@@ -66,7 +66,7 @@ theorem collapseLateFiniteStoppingLaw_some_of_gt
     collapseLateFiniteStoppingLaw law deadline (some time) = 0 := by
   classical
   rw [collapseLateFiniteStoppingLaw, PMF.map_apply]
-  apply ENNReal.tsum_eq_zero.mpr
+  apply tsum_eq_zero_iff.mpr
   intro source
   cases source with
   | none => simp

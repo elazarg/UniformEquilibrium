@@ -434,7 +434,7 @@ theorem exactFiniteFirstStoppingCoalitionMass_eq_outcomeLaw_toReal
   have hexpected : quittingStoppingLawExpectedPayoff indicator laws observer =
       (quittingIndependentTerminalOutcomeLaw laws (some coalition)).toReal := by
     unfold quittingStoppingLawExpectedPayoff
-    rw [Math.Probability.expect_eq_sum]
+    rw [_root_.Math.Probability.expect_eq_sum]
     rw [Fintype.sum_eq_single (some coalition)]
     · simp [indicator, quittingTerminalOutcomeReward]
     · intro outcome houtcome

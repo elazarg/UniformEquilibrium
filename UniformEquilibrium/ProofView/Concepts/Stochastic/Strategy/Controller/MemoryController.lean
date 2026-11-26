@@ -65,8 +65,9 @@ private theorem reweight_update_weighted_eq
     simp [PMF.bind_apply, tsum_fintype]
   rw [hZ]
   by_cases hZ0 : (∑ m : M, μ m * select m a) = 0
-  · have hterm : ∀ m, μ m * select m a = 0 :=
-      fun m => (ENNReal.tsum_eq_zero.mp (by rwa [tsum_fintype])) m
+  · have htsum : (∑' m : M, μ m * select m a) = 0 := by
+      simpa only [tsum_fintype] using hZ0
+    have hterm : ∀ m, μ m * select m a = 0 := tsum_eq_zero_iff.mp htsum
     rw [hZ0, zero_mul]
     symm
     apply Finset.sum_eq_zero

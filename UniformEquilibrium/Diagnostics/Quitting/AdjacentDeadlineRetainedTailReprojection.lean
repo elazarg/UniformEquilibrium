@@ -31,15 +31,15 @@ private theorem expect_sub_expect_censoredLift_eq_boundary_mul
     {deadline : ℕ}
     (law : PMF (QuittingFiniteDeadlineTimingAction (deadline + 1)))
     (value : QuittingFiniteDeadlineTimingAction (deadline + 1) → ℝ) :
-    Math.Probability.expect law value -
-        Math.Probability.expect
+    _root_.Math.Probability.expect law value -
+        _root_.Math.Probability.expect
           ((law.map quittingFiniteDeadlineTimingActionCensor).map
             quittingFiniteDeadlineTimingActionInclude) value =
       (law (quittingFiniteDeadlineTimingBoundaryAction deadline)).toReal *
         (value (quittingFiniteDeadlineTimingBoundaryAction deadline) -
           value none) := by
-  rw [Math.Probability.expect_map, Math.Probability.expect_map,
-    ← Math.Probability.expect_sub, Math.Probability.expect_eq_sum]
+  rw [_root_.Math.Probability.expect_map, _root_.Math.Probability.expect_map,
+    ← _root_.Math.Probability.expect_sub, _root_.Math.Probability.expect_eq_sum]
   rw [Finset.sum_eq_single
     (quittingFiniteDeadlineTimingBoundaryAction deadline)]
   · simp [quittingFiniteDeadlineTimingActionCensor,
@@ -842,7 +842,7 @@ private theorem finiteDeadlineParticipantGraft_sub_censoredGraft_eq
   have hcensoredUpdateEU := congrArg
     (fun mixed => game.mixedExtension.eu mixed participant) hcensoredUpdate
   have hcensoredEU' : game.mixedExtension.eu base participant =
-      Math.Probability.expect censoredLaw value :=
+      _root_.Math.Probability.expect censoredLaw value :=
     hcensoredUpdateEU.symm.trans hcensoredEU
   have hexpect := expect_sub_expect_censoredLift_eq_boundary_mul law value
   have hpure := finiteDeadline_censoredBoundary_sub_pass_eq
@@ -881,13 +881,13 @@ private theorem finiteDeadlineParticipantGraft_sub_censoredGraft_eq
   change quittingTerminalPayoff reward
       (quittingAdjacentDeadlineCensoredGraft source tail) participant = _
       at hcensoredPayoff
-  let participantExpectation := Math.Probability.expect
+  let participantExpectation := _root_.Math.Probability.expect
     (source.new participant) fun action =>
       (quittingRetainedTailFiniteTimingGame reward
         (source.deadline + 1) tail).mixedExtension.eu
         (Function.update (quittingAdjacentDeadlineCensoredTiming source)
           participant (PMF.pure action)) participant
-  let censoredExpectation := Math.Probability.expect
+  let censoredExpectation := _root_.Math.Probability.expect
     (((source.new participant).map
         quittingFiniteDeadlineTimingActionCensor).map
       quittingFiniteDeadlineTimingActionInclude) fun action =>

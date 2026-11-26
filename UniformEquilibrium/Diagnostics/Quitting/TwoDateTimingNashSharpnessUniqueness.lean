@@ -65,11 +65,11 @@ theorem dummy_now_payoff (mixed : Player → PMF Action)
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
-  change Math.Probability.expect
+  change _root_.Math.Probability.expect
       (pmfPi (Function.update mixed dummy (PMF.pure now)))
       (fun choices => timingPurePayoff reward 2 choices dummy) = -1
   calc
-    _ = Math.Probability.expect
+    _ = _root_.Math.Probability.expect
         (pmfPi (Function.update mixed dummy (PMF.pure now)))
         (fun _ => -1) := by
       apply Math.ProbabilityMassFunction.expect_congr_on_support
@@ -84,7 +84,7 @@ theorem dummy_now_payoff (mixed : Player → PMF Action)
         · rw [Function.update_of_ne hplayer]
       rw [heq]
       exact pure_dummy_now_general choices dummy hzero hone
-    _ = -1 := Math.Probability.expect_const _ _
+    _ = -1 := _root_.Math.Probability.expect_const _ _
 
 theorem dummy_never_payoff (mixed : Player → PMF Action)
     (dummy : Player) (hzero : dummy ≠ 0) (hone : dummy ≠ 1) :
@@ -95,11 +95,11 @@ theorem dummy_never_payoff (mixed : Player → PMF Action)
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
-  change Math.Probability.expect
+  change _root_.Math.Probability.expect
       (pmfPi (Function.update mixed dummy (PMF.pure never)))
       (fun choices => timingPurePayoff reward 2 choices dummy) = 0
   calc
-    _ = Math.Probability.expect
+    _ = _root_.Math.Probability.expect
         (pmfPi (Function.update mixed dummy (PMF.pure never)))
         (fun _ => 0) := by
       apply Math.ProbabilityMassFunction.expect_congr_on_support
@@ -114,7 +114,7 @@ theorem dummy_never_payoff (mixed : Player → PMF Action)
         · rw [Function.update_of_ne hplayer]
       rw [heq]
       exact pure_dummy_never_general choices dummy hzero hone
-    _ = 0 := Math.Probability.expect_const _ _
+    _ = 0 := _root_.Math.Probability.expect_const _ _
 
 theorem dummy_now_mass_eq_zero (mixed : Player → PMF Action)
     (hnash : (quittingTwoDateTimingGame reward).mixedExtension.IsNash mixed)
@@ -220,10 +220,10 @@ theorem column_deviation_value_of_row_pure_now
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
   let deviated := Function.update mixed 1 (PMF.pure action)
-  change Math.Probability.expect (pmfPi deviated)
+  change _root_.Math.Probability.expect (pmfPi deviated)
       (fun choices => timingPurePayoff reward 2 choices 1) = _
   calc
-    _ = Math.Probability.expect (pmfPi deviated)
+    _ = _root_.Math.Probability.expect (pmfPi deviated)
         (fun _ => if action = now then 1 else -1) := by
       apply Math.ProbabilityMassFunction.expect_congr_on_support
       intro choices hchoices
@@ -237,7 +237,7 @@ theorem column_deviation_value_of_row_pure_now
       have hcolumnChoice := eq_of_mem_support_pmfPi_of_marginal_eq_pure
         deviated choices hchoices 1 action hcolumnMarginal
       rw [pure_column_value_of_row_now choices hrowChoice, hcolumnChoice]
-    _ = _ := Math.Probability.expect_const _ _
+    _ = _ := _root_.Math.Probability.expect_const _ _
 
 private theorem pure_row_value_of_column_now
     (choices : Player → Action) (hcolumn : choices 1 = now) :
@@ -286,10 +286,10 @@ theorem row_deviation_value_of_column_pure_now
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
   let deviated := Function.update mixed 0 (PMF.pure action)
-  change Math.Probability.expect (pmfPi deviated)
+  change _root_.Math.Probability.expect (pmfPi deviated)
       (fun choices => timingPurePayoff reward 2 choices 0) = _
   calc
-    _ = Math.Probability.expect (pmfPi deviated)
+    _ = _root_.Math.Probability.expect (pmfPi deviated)
         (fun _ => if action = now then -1 else 1) := by
       apply Math.ProbabilityMassFunction.expect_congr_on_support
       intro choices hchoices
@@ -303,7 +303,7 @@ theorem row_deviation_value_of_column_pure_now
       have hcolumnChoice := eq_of_mem_support_pmfPi_of_marginal_eq_pure
         deviated choices hchoices 1 now hcolumnMarginal
       rw [pure_row_value_of_column_now choices hcolumnChoice, hrowChoice]
-    _ = _ := Math.Probability.expect_const _ _
+    _ = _ := _root_.Math.Probability.expect_const _ _
 
 theorem reward_bound (terminal : {S : Finset Player // S.Nonempty})
     (who : Player) : |reward terminal who| ≤ 1 := by
@@ -445,10 +445,10 @@ theorem column_now_value_of_row_now_mass_zero
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
   let deviated := Function.update mixed 1 (PMF.pure now)
-  change Math.Probability.expect (pmfPi deviated)
+  change _root_.Math.Probability.expect (pmfPi deviated)
       (fun choices => timingPurePayoff reward 2 choices 1) = -1
   calc
-    _ = Math.Probability.expect (pmfPi deviated) (fun _ => -1) := by
+    _ = _root_.Math.Probability.expect (pmfPi deviated) (fun _ => -1) := by
       apply Math.ProbabilityMassFunction.expect_congr_on_support
       intro choices hchoices
       have hcolumnMarginal : deviated 1 = PMF.pure now := by
@@ -461,7 +461,7 @@ theorem column_now_value_of_row_now_mass_zero
       have hrowChoice := ne_of_mem_support_pmfPi_of_marginal_eq_zero
         deviated choices hchoices 0 now hrowMass
       rw [pure_column_now_value choices hcolumnChoice, ite_eq_right hrowChoice]
-    _ = -1 := Math.Probability.expect_const _ _
+    _ = -1 := _root_.Math.Probability.expect_const _ _
 
 theorem row_now_mass_eq_zero_of_column_pure_now
     (mixed : Player → PMF Action)
@@ -696,11 +696,11 @@ theorem column_next_value_of_no_current_mass
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
   let deviated := Function.update mixed 1 (PMF.pure next)
-  change Math.Probability.expect (pmfPi deviated)
+  change _root_.Math.Probability.expect (pmfPi deviated)
       (fun choices => timingPurePayoff reward 2 choices 1) = _
-  have hintegrand : Math.Probability.expect (pmfPi deviated)
+  have hintegrand : _root_.Math.Probability.expect (pmfPi deviated)
       (fun choices => timingPurePayoff reward 2 choices 1) =
-      Math.Probability.expect (pmfPi deviated)
+      _root_.Math.Probability.expect (pmfPi deviated)
         (fun choices => if choices 0 = next then 1 else -1) := by
     apply Math.ProbabilityMassFunction.expect_congr_on_support
     intro choices hchoices
@@ -728,7 +728,7 @@ theorem column_next_value_of_no_current_mass
   rw [hintegrand, expect_pmfPi_fin4]
   simp only [deviated,
     Function.update_of_ne (by decide : (0 : Player) ≠ 1)]
-  rw [Math.Probability.expect_eq_sum, Fintype.sum_option,
+  rw [_root_.Math.Probability.expect_eq_sum, Fintype.sum_option,
     Fin.sum_univ_two]
   rw [show (some (0 : Fin 2) : Action) = now by rfl,
     show (some (1 : Fin 2) : Action) = next by rfl]
@@ -751,11 +751,11 @@ theorem column_never_value_of_no_current_mass
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
   let deviated := Function.update mixed 1 (PMF.pure never)
-  change Math.Probability.expect (pmfPi deviated)
+  change _root_.Math.Probability.expect (pmfPi deviated)
       (fun choices => timingPurePayoff reward 2 choices 1) = _
-  have hintegrand : Math.Probability.expect (pmfPi deviated)
+  have hintegrand : _root_.Math.Probability.expect (pmfPi deviated)
       (fun choices => timingPurePayoff reward 2 choices 1) =
-      Math.Probability.expect (pmfPi deviated)
+      _root_.Math.Probability.expect (pmfPi deviated)
         (fun choices => if choices 0 = never then 0 else -1) := by
     apply Math.ProbabilityMassFunction.expect_congr_on_support
     intro choices hchoices
@@ -783,7 +783,7 @@ theorem column_never_value_of_no_current_mass
   rw [hintegrand, expect_pmfPi_fin4]
   simp only [deviated,
     Function.update_of_ne (by decide : (0 : Player) ≠ 1)]
-  rw [Math.Probability.expect_eq_sum, Fintype.sum_option,
+  rw [_root_.Math.Probability.expect_eq_sum, Fintype.sum_option,
     Fin.sum_univ_two]
   rw [show (some (0 : Fin 2) : Action) = now by rfl,
     show (some (1 : Fin 2) : Action) = next by rfl]
@@ -900,11 +900,11 @@ theorem dummy_two_next_payoff
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
   let deviated := Function.update mixed 2 (PMF.pure next)
-  change Math.Probability.expect (pmfPi deviated)
+  change _root_.Math.Probability.expect (pmfPi deviated)
       (fun choices => timingPurePayoff reward 2 choices 2) = _
-  have hintegrand : Math.Probability.expect (pmfPi deviated)
+  have hintegrand : _root_.Math.Probability.expect (pmfPi deviated)
       (fun choices => timingPurePayoff reward 2 choices 2) =
-      Math.Probability.expect (pmfPi deviated) (fun choices =>
+      _root_.Math.Probability.expect (pmfPi deviated) (fun choices =>
         if choices 0 = now ∨ choices 1 = now then 0 else -1) := by
     apply Math.ProbabilityMassFunction.expect_congr_on_support
     intro choices hchoices
@@ -928,9 +928,9 @@ theorem dummy_two_next_payoff
   simp only [deviated,
     Function.update_of_ne (by decide : (0 : Player) ≠ 2),
     Function.update_of_ne (by decide : (1 : Player) ≠ 2),
-    Function.update_self, Math.Probability.expect_pure,
+    Function.update_self, _root_.Math.Probability.expect_pure,
     Function.update_of_ne (by decide : (3 : Player) ≠ 2)]
-  simp [Math.Probability.expect_eq_sum, Fintype.sum_option,
+  simp [_root_.Math.Probability.expect_eq_sum, Fintype.sum_option,
     Fin.sum_univ_two, now]
   have hrowSum := Math.Probability.pmf_toReal_sum_one (mixed 0)
   have hcolumnSum := Math.Probability.pmf_toReal_sum_one (mixed 1)
@@ -1027,11 +1027,11 @@ theorem dummy_three_next_payoff
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
   let deviated := Function.update mixed 3 (PMF.pure next)
-  change Math.Probability.expect (pmfPi deviated)
+  change _root_.Math.Probability.expect (pmfPi deviated)
       (fun choices => timingPurePayoff reward 2 choices 3) = _
-  have hintegrand : Math.Probability.expect (pmfPi deviated)
+  have hintegrand : _root_.Math.Probability.expect (pmfPi deviated)
       (fun choices => timingPurePayoff reward 2 choices 3) =
-      Math.Probability.expect (pmfPi deviated) (fun choices =>
+      _root_.Math.Probability.expect (pmfPi deviated) (fun choices =>
         if choices 0 = now ∨ choices 1 = now then 0 else -1) := by
     apply Math.ProbabilityMassFunction.expect_congr_on_support
     intro choices hchoices
@@ -1056,8 +1056,8 @@ theorem dummy_three_next_payoff
     Function.update_of_ne (by decide : (0 : Player) ≠ 3),
     Function.update_of_ne (by decide : (1 : Player) ≠ 3),
     Function.update_of_ne (by decide : (2 : Player) ≠ 3),
-    Function.update_self, Math.Probability.expect_pure]
-  simp [Math.Probability.expect_eq_sum, Fintype.sum_option,
+    Function.update_self, _root_.Math.Probability.expect_pure]
+  simp [_root_.Math.Probability.expect_eq_sum, Fintype.sum_option,
     Fin.sum_univ_two, now]
   have hrowSum := Math.Probability.pmf_toReal_sum_one (mixed 0)
   have hcolumnSum := Math.Probability.pmf_toReal_sum_one (mixed 1)

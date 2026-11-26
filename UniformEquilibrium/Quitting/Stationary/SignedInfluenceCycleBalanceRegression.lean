@@ -153,10 +153,9 @@ theorem influenceWalk_source_le_target {start finish : Player}
     start.val ≤ finish.val := by
   induction walk with
   | nil => exact le_rfl
-  | concat walk edge legal ih =>
+  | concat edge walk ih =>
       calc
         start.val ≤ _ := ih
-        _ = edge.1.1.val := congrArg Fin.val legal.symm
         _ ≤ edge.1.2.val := (influenceEdge_source_lt_target edge).le
 
 theorem influenceWalk_source_lt_target_of_pos {start finish : Player}
@@ -165,10 +164,9 @@ theorem influenceWalk_source_lt_target_of_pos {start finish : Player}
     start.val < finish.val := by
   cases walk with
   | nil => simp at hpositive
-  | concat walk edge legal =>
+  | concat edge walk =>
       calc
         start.val ≤ _ := influenceWalk_source_le_target walk
-        _ = edge.1.1.val := congrArg Fin.val legal.symm
         _ < edge.1.2.val := influenceEdge_source_lt_target edge
 
 theorem everyDirectedInfluenceCyclePositive :
@@ -310,7 +308,7 @@ theorem no_sureExitSet : ¬∃ S, IsQuittingSureExitSet reward S := by
 theorem exists_negativeSimpleInfluenceCycle :
     ∃ (base : Player)
       (cycle : (quittingInfluenceGraph reward).Walk base base),
-      Maths.AdditiveTransport.IsSimpleCycle cycle ∧
+      Maths.EdgeGraph.Walk.IsSimpleCycle cycle ∧
         walkLabel quittingInfluenceLabel cycle = -1 :=
   exists_negativeSimpleInfluenceCycle_of_no_sureExitSet
     signConsistent no_sureExitSet

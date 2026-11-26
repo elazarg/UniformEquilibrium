@@ -5,15 +5,14 @@ Authors: UniformEquilibrium contributors
 -/
 
 import GameTheory.Stochastic.Basic
-import MathUE.Probability.FinitePMF
 import UniformEquilibrium.ProofView.Languages.MultiRound.StochasticGame
 
 /-!
 # Native GameTheory bridge for the PMF proof view
 
 The project proof view retains Mathlib PMFs because its finite-history algebra
-is expressed in those terms. On finite state spaces it compiles without loss
-to the canonical finite-support stochastic game supplied by GameTheory.
+is expressed in those terms. The bridge preserves the transition law when
+compiling to the canonical stochastic game supplied by GameTheory.
 -/
 
 noncomputable section
@@ -25,21 +24,20 @@ namespace StochasticGame
 variable {ι : Type}
 
 /-- Compile a finite-state PMF proof-view game to GameTheory's canonical
-finite-support stochastic-game carrier. The proof-only discount field is
+stochastic-game carrier. The proof-only discount field is
 irrelevant to finite-horizon average play and is intentionally erased. -/
 @[reducible]
 def toNative (G : StochasticGame ι) [Finite G.State] :
     Stochastic.Game ι where
   State := G.State
   Action := G.Act
-  transition state actions :=
-    _root_.Math.Probability.finDistOfPMF (G.transition state actions)
+  transition := G.transition
   stageUtility := G.stagePayoff
 
 @[simp]
 theorem toNative_transition_toPMF (G : StochasticGame ι) [Finite G.State]
     (state : G.State) (actions : ∀ i, G.Act i) :
-    ((G.toNative.transition state actions).toPMF) = G.transition state actions :=
+    G.toNative.transition state actions = G.transition state actions :=
   rfl
 
 @[simp]
@@ -54,15 +52,14 @@ namespace Stochastic.Game
 
 variable {ι : Type}
 
-/-- Forget finite-support witnesses and regard a native stochastic game as a
-PMF proof-view game. The chosen discount is zero because the proof view's
-finite-average semantics does not inspect that field. -/
+/-- Regard a native stochastic game as a PMF proof-view game. The chosen discount
+is zero because the proof view's finite-average semantics does not inspect it. -/
 @[reducible]
 def toProofView (G : Stochastic.Game ι) : StochasticGame ι where
   State := G.State
   Act := G.Action
   stagePayoff := G.stageUtility
-  transition state actions := (G.transition state actions).toPMF
+  transition := G.transition
   discount := 0
   discount_nonneg := le_rfl
   discount_lt_one := zero_lt_one
@@ -70,7 +67,7 @@ def toProofView (G : Stochastic.Game ι) : StochasticGame ι where
 @[simp]
 theorem toProofView_transition (G : Stochastic.Game ι)
     (state : G.State) (actions : ∀ i, G.Action i) :
-    G.toProofView.transition state actions = (G.transition state actions).toPMF :=
+    G.toProofView.transition state actions = G.transition state actions :=
   rfl
 
 @[simp]

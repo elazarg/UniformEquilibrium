@@ -2014,10 +2014,10 @@ private theorem remark1_tightFamily_sup_inf {A : Type*} [Fintype A] {δ : ℝ}
     have hWtight := htight W (Finset.mem_cons_self _ _)
     have hrest := ih (fun T hT => htight T (Finset.mem_cons_of_mem hT))
     constructor
-    · rw [Finset.sup'_cons (b := W) (hb := hW) hfamily id, Finset.sup_eq_union]
+    · rw [Finset.sup'_cons (b := W) (hb := hW) hfamily id]
       exact (remark1_tightSets_union_inter hδ hhalf hx W
         (family.sup' hfamily id) hWtight hrest.1).1
-    · rw [Finset.inf'_cons (b := W) (hb := hW) hfamily id, Finset.inf_eq_inter]
+    · rw [Finset.inf'_cons (b := W) (hb := hW) hfamily id]
       exact (remark1_tightSets_union_inter hδ hhalf hx W
         (family.inf' hfamily id) hWtight hrest.2).2
 

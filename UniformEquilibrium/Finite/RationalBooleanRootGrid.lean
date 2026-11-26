@@ -238,18 +238,18 @@ theorem expectedUtility_rationalBooleanTableGame_eq_pmfPi
     expectedUtility (rationalBooleanTableGame payoff).utility who
         ((rationalBooleanTableGame payoff).toForm.mixed.play profile) =
       _root_.Math.Probability.expect
-        (_root_.Math.PMFProduct.pmfPi fun player => (profile player).toPMF)
+        (_root_.Math.PMFProduct.pmfPi fun player => profile player)
         (fun action => (payoff action who : ℝ)) := by
   let game := rationalBooleanTableGame payoff
-  have hplay : game.toForm.mixed.play profile = FinDist.pi profile := by
+  have hplay : game.toForm.mixed.play profile =
+      _root_.Math.PMFProduct.pmfPi profile := by
     rw [GameForm.mixed_play]
-    exact FinDist.bind_pure _
+    change (independentProduct profile).bind PMF.pure = _
+    rw [PMF.bind_pure]
+    ext actions
+    rfl
   rw [hplay]
-  unfold expectedUtility
-  change FinDist.expect (FinDist.pi profile)
-      (fun action => (payoff action who : ℝ)) = _
-  rw [← _root_.Math.Probability.expect_finDistOfPMF]
-  congr 1
+  rfl
 
 /-- A uniform change `d` in Boolean marginal probabilities changes every
 expected payoff by at most `2 R n d`. -/
@@ -258,7 +258,7 @@ theorem abs_expectedUtility_rationalBooleanTableGame_sub_le
     (first second : Profile (rationalBooleanTableGame payoff).sig.mixed)
     (who : Fin players) {d : ℝ}
     (hclose : ∀ player,
-      |(first player).prob true - (second player).prob true| ≤ d) :
+      |(first player true).toReal - (second player true).toReal| ≤ d) :
     |expectedUtility (rationalBooleanTableGame payoff).utility who
           ((rationalBooleanTableGame payoff).toForm.mixed.play first) -
         expectedUtility (rationalBooleanTableGame payoff).utility who
@@ -267,15 +267,15 @@ theorem abs_expectedUtility_rationalBooleanTableGame_sub_le
   rw [expectedUtility_rationalBooleanTableGame_eq_pmfPi,
     expectedUtility_rationalBooleanTableGame_eq_pmfPi]
   have htv := _root_.Math.PMFProduct.pmfTV_pmfPi_bool_le_card_mul_of_trueProbability_close
-    (fun player => (first player).toPMF)
-    (fun player => (second player).toPMF) hclose
+    (fun player => first player)
+    (fun player => second player) hclose
   have hobservable : ∀ action : Fin players → Bool,
       |(payoff action who : ℝ)| ≤ (rationalBooleanPayoffBound payoff : ℝ) := by
     intro action
     exact_mod_cast abs_payoff_le_rationalBooleanPayoffBound payoff action who
   have hexpect := _root_.Math.Probability.abs_expect_sub_le_two_mul_pmfTV
-    (_root_.Math.PMFProduct.pmfPi fun player => (first player).toPMF)
-    (_root_.Math.PMFProduct.pmfPi fun player => (second player).toPMF)
+    (_root_.Math.PMFProduct.pmfPi fun player => first player)
+    (_root_.Math.PMFProduct.pmfPi fun player => second player)
     (fun action => (payoff action who : ℝ)) hobservable
   have hbound : 0 ≤ (rationalBooleanPayoffBound payoff : ℝ) := by
     exact_mod_cast (rationalBooleanPayoffBound_pos payoff).le
@@ -283,8 +283,8 @@ theorem abs_expectedUtility_rationalBooleanTableGame_sub_le
   calc
     2 * (rationalBooleanPayoffBound payoff : ℝ) *
           _root_.Math.Probability.pmfTV
-            (_root_.Math.PMFProduct.pmfPi fun player => (first player).toPMF)
-            (_root_.Math.PMFProduct.pmfPi fun player => (second player).toPMF) ≤
+            (_root_.Math.PMFProduct.pmfPi fun player => first player)
+            (_root_.Math.PMFProduct.pmfPi fun player => second player) ≤
         2 * (rationalBooleanPayoffBound payoff : ℝ) *
           ((Fintype.card (Fin players) : ℝ) * d) :=
       mul_le_mul_of_nonneg_left htv (by positivity)
@@ -294,8 +294,10 @@ private noncomputable def roundedRationalBooleanGridPoint
     (payoff : RationalBooleanPayoff players)
     (profile : Profile (rationalBooleanTableGame payoff).sig.mixed)
     (resolution : ℕ) : Fin players → Fin (resolution + 2) :=
-  Math.RationalCubeGrid.point (fun who => (profile who).prob true)
-    (fun who => (profile who).prob_le_one true) resolution
+  Math.RationalCubeGrid.point (fun who => (profile who true).toReal)
+    (fun who => by
+      simpa using ENNReal.toReal_mono ENNReal.one_ne_top
+        (PMF.coe_le_one (profile who) true)) resolution
 
 private theorem roundedRationalBooleanGridPoint_close
     (payoff : RationalBooleanPayoff players)
@@ -303,10 +305,12 @@ private theorem roundedRationalBooleanGridPoint_close
     (resolution : ℕ) (who : Fin players) :
     |((rationalBooleanGridProbability resolution
           (roundedRationalBooleanGridPoint payoff profile resolution) who : ℚ) : ℝ) -
-        (profile who).prob true| < 1 / (resolution + 1 : ℝ) := by
-  exact Math.RationalCubeGrid.point_close (fun player => (profile player).prob true)
-    (fun player => FinDist.prob_nonneg (profile player) true)
-    (fun player => (profile player).prob_le_one true) resolution who
+        (profile who true).toReal| < 1 / (resolution + 1 : ℝ) := by
+  exact Math.RationalCubeGrid.point_close (fun player => (profile player true).toReal)
+    (fun _ => ENNReal.toReal_nonneg)
+    (fun player => by
+      simpa using ENNReal.toReal_mono ENNReal.one_ne_top
+        (PMF.coe_le_one (profile player) true)) resolution who
 
 private theorem rationalBooleanGrid_mesh_lt
     (payoff : RationalBooleanPayoff players) (accuracy : ℚ)
@@ -373,7 +377,7 @@ private theorem cast_rationalBooleanPurePayoff_eq
             ((rationalBooleanTableGame payoff).toMixed
               (rationalBooleanMixedProfile payoff probability)
               (rationalBooleanMixedProfile_isMixed payoff probability hunit))
-            who (FinDist.pure action))) := by
+            who (PMF.pure action))) := by
   rw [rationalBooleanPurePayoff_eq_tableGame]
   let game := rationalBooleanTableGame payoff
   let mixed := rationalBooleanMixedProfile payoff probability
@@ -408,6 +412,7 @@ theorem rationalBooleanRootGridSearch_isSome_of_pos
     ⟨(show Bool from false)⟩
   obtain ⟨exactProfile, hexactNash⟩ :=
     exists_isNash_mixed (F := game.toForm) game.utility
+      (game.toForm.hasIntegrableUtility_of_finiteOutcome _)
   let resolution := rationalBooleanGridResolution payoff accuracy
   let point := roundedRationalBooleanGridPoint payoff exactProfile resolution
   let probability := rationalBooleanGridProbability resolution point
@@ -423,20 +428,26 @@ theorem rationalBooleanRootGridSearch_isSome_of_pos
     dsimp only [mesh]
     positivity
   have hclose : ∀ who,
-      |(candidate who).prob true - (exactProfile who).prob true| ≤ mesh := by
+      |(candidate who true).toReal - (exactProfile who true).toReal| ≤ mesh := by
     intro who
     have hrounded := roundedRationalBooleanGridPoint_close
       payoff exactProfile resolution who
-    have hcandidates : (candidate who).prob true = (probability who : ℝ) := by
-      exact game.toMixed_prob mixed hmixed who true
+    have hcandidates : (candidate who true).toReal = (probability who : ℝ) := by
+      have hprobability : 0 ≤ (probability who : ℝ) := by
+        exact_mod_cast (hunit who).1
+      calc
+        (candidate who true).toReal = (ENNReal.ofReal (probability who : ℝ)).toReal :=
+          congrArg ENNReal.toReal
+            (game.toMixed_apply mixed hmixed who (show game.Action who from true))
+        _ = _ := ENNReal.toReal_ofReal hprobability
     rw [hcandidates]
     exact hrounded.le
   have hbase := abs_expectedUtility_rationalBooleanTableGame_sub_le
     payoff candidate exactProfile
   have hforcedClose (who : Fin players) (action : Bool) :
       ∀ player,
-        |((Profile.update candidate who (FinDist.pure action)) player).prob true -
-            ((Profile.update exactProfile who (FinDist.pure action)) player).prob true| ≤
+        |(Profile.update candidate who (PMF.pure action) player true).toReal -
+            (Profile.update exactProfile who (PMF.pure action) player true).toReal| ≤
           mesh := by
     intro player
     by_cases hplayer : player = who
@@ -446,22 +457,23 @@ theorem rationalBooleanRootGridSearch_isSome_of_pos
       exact hclose player
   have hforced (who : Fin players) (action : Bool) :=
     abs_expectedUtility_rationalBooleanTableGame_sub_le payoff
-      (Profile.update candidate who (FinDist.pure action))
-      (Profile.update exactProfile who (FinDist.pure action)) who
+      (Profile.update candidate who (PMF.pure action))
+      (Profile.update exactProfile who (PMF.pure action)) who
       (hforcedClose who action)
   have hexactPure (who : Fin players) (action : Bool) :
       expectedUtility game.utility who
           (game.toForm.mixed.play
-            (Profile.update exactProfile who (FinDist.pure action))) ≤
+            (Profile.update exactProfile who (PMF.pure action))) ≤
         expectedUtility game.utility who
           (game.toForm.mixed.play exactProfile) := by
     rw [isNash_iff] at hexactNash
-    simpa only [euPreference_apply] using
-      hexactNash who (FinDist.pure action)
+    exact (euPreference_iff _ _ _ _
+      (payoffIntegrable_of_finite _ _) (payoffIntegrable_of_finite _ _)).mp
+        (hexactNash who (PMF.pure action))
   have hpureGain (who : Fin players) (action : Bool) :
       expectedUtility game.utility who
           (game.toForm.mixed.play
-            (Profile.update candidate who (FinDist.pure action))) ≤
+            (Profile.update candidate who (PMF.pure action))) ≤
         expectedUtility game.utility who
             (game.toForm.mixed.play candidate) +
           4 * (rationalBooleanPayoffBound payoff : ℝ) * (players * mesh) := by

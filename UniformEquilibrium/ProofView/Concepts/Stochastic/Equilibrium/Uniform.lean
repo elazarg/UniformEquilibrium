@@ -319,25 +319,25 @@ theorem abs_finiteAveragePayoff_withStagePayoff_sub_le
       exact_mod_cast hT
     change
       |(T : ℝ)⁻¹ *
-          Math.Probability.expect
+          _root_.Math.Probability.expect
             ((G.withStagePayoff reward).histDist σ s₀ T)
             (fun h => (G.withStagePayoff reward).totalPayoff who h) -
         (T : ℝ)⁻¹ *
-          Math.Probability.expect (G.histDist σ s₀ T)
+          _root_.Math.Probability.expect (G.histDist σ s₀ T)
             (fun h => G.totalPayoff who h)| ≤ ρ
     rw [histDist_withStagePayoff, ← mul_sub]
     change
       |(T : ℝ)⁻¹ *
-          (Math.Probability.expect (G.histDist σ s₀ T)
+          (_root_.Math.Probability.expect (G.histDist σ s₀ T)
               (fun h : G.Hist T =>
                 ∑ k : Fin T, reward (h.1 k).1 (h.1 k).2 who) -
-            Math.Probability.expect (G.histDist σ s₀ T)
+            _root_.Math.Probability.expect (G.histDist σ s₀ T)
               (fun h : G.Hist T =>
                 ∑ k : Fin T,
                   G.stagePayoff (h.1 k).1 (h.1 k).2 who))| ≤ ρ
-    rw [← Math.Probability.expect_sub]
+    rw [← _root_.Math.Probability.expect_sub]
     have hExpect :
-        |Math.Probability.expect (G.histDist σ s₀ T)
+        |_root_.Math.Probability.expect (G.histDist σ s₀ T)
             (fun h => (G.withStagePayoff reward).totalPayoff who h -
               G.totalPayoff who h)| ≤ (T : ℝ) * ρ :=
       Math.Probability.abs_expect_le_of_abs_le _ _ fun h =>
@@ -346,7 +346,7 @@ theorem abs_finiteAveragePayoff_withStagePayoff_sub_le
     rw [abs_mul, abs_of_nonneg (by positivity : 0 ≤ (T : ℝ)⁻¹)]
     calc
       (T : ℝ)⁻¹ *
-          |Math.Probability.expect (G.histDist σ s₀ T)
+          |_root_.Math.Probability.expect (G.histDist σ s₀ T)
             (fun h => (G.withStagePayoff reward).totalPayoff who h -
               G.totalPayoff who h)|
           ≤ (T : ℝ)⁻¹ * ((T : ℝ) * ρ) :=

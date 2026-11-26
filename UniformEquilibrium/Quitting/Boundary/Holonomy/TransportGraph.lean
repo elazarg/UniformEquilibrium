@@ -97,10 +97,8 @@ theorem walk_time_le
     diagram.time finish ≤ diagram.time start := by
   induction walk with
   | nil => exact le_rfl
-  | @concat middle walk edge legal ih =>
-      have hedge := diagram.target_time_lt_source_time edge
-      rw [legal] at hedge
-      exact (Nat.le_of_lt hedge).trans ih
+  | concat edge _ ih =>
+      exact (diagram.target_time_lt_source_time edge).le.trans ih
 
 /-- A nonempty typed walk strictly decreases literal time. -/
 theorem walk_time_lt_of_edges_ne_nil
@@ -110,10 +108,8 @@ theorem walk_time_lt_of_edges_ne_nil
     diagram.time finish < diagram.time start := by
   cases walk with
   | nil => exact (hne rfl).elim
-  | @concat middle walk edge legal =>
-      have hedge := diagram.target_time_lt_source_time edge
-      rw [legal] at hedge
-      exact hedge.trans_le (diagram.walk_time_le walk)
+  | concat edge walk =>
+      exact (diagram.target_time_lt_source_time edge).trans_le (diagram.walk_time_le walk)
 
 /-- Every closed walk in a literal boundary graph is empty. -/
 theorem closedWalk_edges_eq_nil
@@ -165,7 +161,7 @@ theorem exists_bestResponseLaxSection_iff_unitSurvivalCycles_nonpos
     (∃ potential : V → ℝ,
       IsLaxSection diagram.graph (diagram.bestResponseLabel who) potential) ↔
       ∀ (base : V) (cycle : (diagram.unitSurvivalGraph who).Walk base base),
-        Maths.MaxPlusPotential.walkWeight
+        Maths.walkSum
           (diagram.unitSurvivalShift who) cycle ≤ 0 := by
   exact exists_isLaxSection_iff_unitSlopeCycles_nonpos_of_slope_le_one
     (diagram.bestResponseLabel_slope_le_one who)
@@ -183,7 +179,7 @@ theorem exists_bestResponseLaxSection
   have hnil := (diagram.unitSurvivalDiagram who).closedWalk_edges_eq_nil
     base cycle
   change cycle.edges = [] at hnil
-  unfold Maths.MaxPlusPotential.walkWeight
+  unfold Maths.walkSum
   rw [hnil]
   rfl
 

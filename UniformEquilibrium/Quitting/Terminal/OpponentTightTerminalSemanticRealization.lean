@@ -56,7 +56,7 @@ omit [Fintype ι] [DecidableEq ι] [Nontrivial ι] in
       (PMF.pure (WithTop.some time))
         (fun choice => choice ∈ {choice | WithTop.some time < choice}) = 0 := by
     unfold _root_.Math.ProbabilityMassFunction.pmfMass
-    rw [ENNReal.tsum_eq_zero]
+    rw [tsum_eq_zero_iff]
     intro choice
     by_cases hchoice : choice = WithTop.some time
     · subst choice

@@ -155,7 +155,7 @@ theorem traj_restrict_extendPrefix (time : ℕ)
   rw [lintegral_indicator (measurableSet_singleton extended)]
   rw [lintegral_singleton]
   rw [partialTraj_succ_singleton transition time initial next]
-  rw [Measure.smul_apply, smul_eq_mul]
+  rw [smul_apply, smul_eq_mul]
   exact mul_comm _ _
 
 end

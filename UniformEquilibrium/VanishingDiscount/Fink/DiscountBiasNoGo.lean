@@ -165,7 +165,7 @@ theorem isAlgebraicBranch_vWitness : IsAlgebraicBranch vWitness := by
       (Polynomial.X : Polynomial (Polynomial ℝ)) ^ 2 - Polynomial.C (Polynomial.X : Polynomial ℝ)
       with hPdef
     have hPcoeff2 : P.coeff 2 = 1 := by
-      simp [hPdef, Polynomial.coeff_sub, Polynomial.coeff_X_pow]
+      simp [hPdef, Polynomial.coeff_X_pow]
     have hPne : P ≠ 0 := by
       intro h
       rw [h] at hPcoeff2

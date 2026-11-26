@@ -443,7 +443,7 @@ theorem liveWeightedTailAverage_eq_expect
           0 := by
   unfold liveWeightedTailAverage liveWeightedStagePayoff
   rw [← Fin.sum_univ_eq_sum_range,
-    Math.Probability.expect_sum_comm, ← expect_const_mul]
+    _root_.Math.Probability.expect_sum_comm, ← expect_const_mul]
   apply Math.ProbabilityMassFunction.expect_congr_on_support
   intro base _
   by_cases hbase : base.2 = State.live
@@ -534,7 +534,7 @@ theorem playerOneSecurityWeightedTailAverage_eq_expect
   unfold playerOneSecurityWeightedTailAverage
     playerOneSecurityWeightedStagePayoff
   rw [← Fin.sum_univ_eq_sum_range,
-    Math.Probability.expect_sum_comm, ← expect_const_mul]
+    _root_.Math.Probability.expect_sum_comm, ← expect_const_mul]
   apply Math.ProbabilityMassFunction.expect_congr_on_support
   intro base _
   by_cases hbase : base.2 = State.live

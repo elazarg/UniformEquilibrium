@@ -134,12 +134,12 @@ theorem quittingTerminalPayoff_finiteDeadlineTimingProfile_eq_mixedEU
     Math.Probability.CompactStoppingLaw.toPMF_ofPMF,
     quittingFiniteDeadlineTimingGame, KernelGame.eu_ofPureEU]
   calc
-    Math.Probability.expect
+    _root_.Math.Probability.expect
           (Math.PMFProduct.pmfPi fun player =>
             (mixed player).map quittingFiniteDeadlineTimingActionTime)
           (fun choices => quittingTerminalPayoff reward
             (quittingPureStoppingTimeProfile reward choices) who) =
-        Math.Probability.expect
+        _root_.Math.Probability.expect
           ((Math.PMFProduct.pmfPi mixed).map fun choices player =>
             quittingFiniteDeadlineTimingActionTime (choices player))
           (fun choices => quittingTerminalPayoff reward
@@ -148,7 +148,7 @@ theorem quittingTerminalPayoff_finiteDeadlineTimingProfile_eq_mixedEU
       exact (Math.PMFProduct.pmfPi_push_coordwise mixed
         (fun _ => quittingFiniteDeadlineTimingActionTime)).symm
     _ = _ := by
-      rw [Math.Probability.expect_map]
+      rw [_root_.Math.Probability.expect_map]
 
 /-- Replacing one timing coordinate by a pure date or Never has the same
 payoff as the corresponding pure-time behavioral deviation. -/
@@ -193,7 +193,7 @@ theorem quittingFiniteDeadlineTimingLaw_some_eq_zero_of_le
     (quittingFiniteDeadlineTimingLaw mixed).toPMF (WithTop.some time) = 0 := by
   rw [quittingFiniteDeadlineTimingLaw,
     Math.Probability.CompactStoppingLaw.toPMF_ofPMF, PMF.map_apply]
-  rw [ENNReal.tsum_eq_zero]
+  rw [tsum_eq_zero_iff]
   intro action
   split
   · next heq =>

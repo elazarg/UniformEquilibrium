@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import GameTheory.Math.Probability.FiniteUniform
 import UniformEquilibrium.Quitting.Boundary.Repair.CutoffOneSafety
 import MathUE.PMFProduct.FiniteFubini
 import MathUE.ProbabilityMassFunction.Bool
@@ -96,7 +97,7 @@ def reward (S : Terminal) : Payoff Player :=
   fin_cases who <;> simp [reward]
 
 /-- Every player independently Quits with probability one half. -/
-def root : Player → PMF Bool := fun _ => PMF.uniformOfFintype Bool
+def root : Player → PMF Bool := fun _ => GameTheory.Math.Probability.uniformLaw Bool
 
 /-- The exact zero-tail root payoff. -/
 def value : Payoff Player := ![1, 1 / 4, 0]
@@ -121,7 +122,7 @@ theorem quitPayoff_eq_value (who : Player) :
   rw [Math.PMFProduct.expect_pmfPi_fin3]
   fin_cases who <;>
     simp [root, quittingRootPayoff, reward, quitters_vector, value]
-  all_goals norm_num
+  norm_num
 
 theorem continuePayoff_eq_value (who : Player) :
     quittingRootContinuePayoff reward (0 : Payoff Player) root who = value who := by
@@ -150,7 +151,7 @@ theorem root_successor_zero :
   funext who
   rw [quittingRootSuccessorPayoff_eq_endpointMix,
     quitPayoff_eq_value, continuePayoff_eq_value]
-  simp [root, PMF.uniformOfFintype_apply]
+  simp [root, GameTheory.Math.Probability.uniformLaw_apply]
   ring
 
 @[simp] theorem positiveSingletonDebtCap_zero :
@@ -202,7 +203,7 @@ theorem markedAction_mass :
       1 / 4 := by
   rw [pmfPi_apply]
   rw [Fin.prod_univ_three]
-  simp [root, markedAction, PMF.uniformOfFintype_apply]
+  simp [root, markedAction, GameTheory.Math.Probability.uniformLaw_apply]
   norm_num
 
 theorem markedAction_terminalAdvantage :

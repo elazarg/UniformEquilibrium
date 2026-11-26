@@ -508,10 +508,16 @@ theorem chordTail_debt_tendsto
       (common.chordTail rank) who) atTop
       (nhds (quittingTerminalSemanticDebt
         compactification.chordPoint.1 who)) := by
-  have hpair := continuous_fst.tendsto compactification.chordPoint |>.comp
+  let points (rank : ℕ) : QuittingTerminalSemanticLawPoint (Fin 4) :=
+    (quittingTerminalSemanticPair reward (common.chordTail rank),
+      quittingTerminalOutcomeMass reward (common.chordTail rank))
+  let debt (point : QuittingTerminalSemanticLawPoint (Fin 4)) : ℝ :=
+    quittingTerminalSemanticDebt point.1 who
+  have hcontinuous : Continuous debt :=
+    (continuous_quittingTerminalSemanticDebt who).comp continuous_fst
+  change Tendsto (debt ∘ points) atTop (nhds (debt compactification.chordPoint))
+  exact Tendsto.comp (f := points) (g := debt) (hcontinuous.tendsto _)
     common.chordTail_tendsto
-  exact (continuous_quittingTerminalSemanticDebt who).tendsto
-    compactification.chordPoint.1 |>.comp hpair
 
 /-- Exact chord-prefixed playerwise debt scaling. -/
 theorem chordPrefixed_debt_eq_survival_mul

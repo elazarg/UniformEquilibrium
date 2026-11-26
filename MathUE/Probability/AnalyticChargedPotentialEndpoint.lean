@@ -302,9 +302,10 @@ theorem not_eventually_gaugeFixAt_eq_zero
     exact charge_eq_one
   have weightedCharge_eventually_pos :
       ∀ᶠ t in nhds 0, 0 < weightedCharge t := by
-    apply weightedCharge_analytic.continuousAt.tendsto
-    rw [weightedCharge_zero]
-    exact Ioi_mem_nhds zero_lt_one
+    have hpos : 0 < weightedCharge 0 := by
+      rw [weightedCharge_zero]
+      exact zero_lt_one
+    exact Filter.Tendsto.eventually_const_lt hpos weightedCharge_analytic.continuousAt.tendsto
   intro gauge_eventually_zero
   have combined :
       ∀ᶠ t in nhdsWithin 0 (Ioi 0),

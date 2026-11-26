@@ -357,17 +357,13 @@ theorem continuous_quittingDynamicDebtUpdate
   have hendpointData : Continuous endpointData := by
     dsimp only [endpointData]
     fun_prop
-  have hquit : Continuous
-      (fun edge : QuittingDebtPoint ι × QuittingDebtPoint ι ↦
-        quittingRootQuitPayoff reward edge.2.1.1
-          (quittingRootOfSimplex edge.1.1.2) who) :=
-    (continuous_quittingRootQuitPayoff_simplex reward who).comp hendpointData
-  have hcontinue : Continuous
-      (fun edge : QuittingDebtPoint ι × QuittingDebtPoint ι ↦
-        quittingRootContinuePayoff reward edge.2.1.1
-          (quittingRootOfSimplex edge.1.1.2) who) :=
-    (continuous_quittingRootContinuePayoff_simplex reward who).comp
-      hendpointData
+  let quit (point : Payoff ι × QuittingRootSimplex ι) : ℝ :=
+    quittingRootQuitPayoff reward point.1 (quittingRootOfSimplex point.2) who
+  let continuePayoff (point : Payoff ι × QuittingRootSimplex ι) : ℝ :=
+    quittingRootContinuePayoff reward point.1 (quittingRootOfSimplex point.2) who
+  have hquit : Continuous quit := continuous_quittingRootQuitPayoff_simplex reward who
+  have hcontinue : Continuous continuePayoff :=
+    continuous_quittingRootContinuePayoff_simplex reward who
   have hmass : Continuous
       (fun edge : QuittingDebtPoint ι × QuittingDebtPoint ι ↦
         quittingDebtOpponentContinueMass edge.1 who) :=
@@ -381,8 +377,8 @@ theorem continuous_quittingDynamicDebtUpdate
         edge.1.1.1 who) := by
     fun_prop
   unfold quittingDynamicDebtUpdate
-  exact (hquit.max (hcontinue.add (hmass.mul hsuccessorDebt))).sub
-    hcurrentValue
+  exact ((hquit.comp hendpointData).max
+    ((hcontinue.comp hendpointData).add (hmass.mul hsuccessorDebt))).sub hcurrentValue
 
 /-- The bounded exact dynamic-debt edge graph is closed. -/
 theorem isClosed_quittingDynamicDebtEdgeGraph

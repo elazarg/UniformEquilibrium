@@ -186,11 +186,14 @@ theorem continuousOn_candidateBonusCurve (lo hi : ℝ) (hlo : 0 < lo) (hhi : hi 
     intro u hu
     obtain ⟨hu0, hu1⟩ := hbounds u hu
     exact ne_of_gt (mul_pos (by linarith) (pow_pos hu0 3))
+  have hnum : Continuous (fun u : ℝ => 2 - 3 * u ^ 3) := by fun_prop
+  have hfirstDen : Continuous (fun u : ℝ => (1 - u) * u ^ 3) := by fun_prop
+  have hsecondDen : Continuous (fun u : ℝ => 1 - u ^ 4) := by fun_prop
   have hexplicit : ContinuousOn
       (fun u : ℝ ↦ (2 - 3 * u ^ 3) / ((1 - u) * u ^ 3) + (9 / 2) / (1 - u ^ 4))
       (Set.Icc lo hi) :=
-    ContinuousOn.add (ContinuousOn.div (by fun_prop) (by fun_prop) hden2)
-      (ContinuousOn.div (by fun_prop) (by fun_prop) hden1)
+    (hnum.continuousOn.div hfirstDen.continuousOn hden2).add
+      (continuousOn_const.div hsecondDen.continuousOn hden1)
   refine hexplicit.congr ?_
   intro u hu
   obtain ⟨hu0, hu1⟩ := hbounds u hu

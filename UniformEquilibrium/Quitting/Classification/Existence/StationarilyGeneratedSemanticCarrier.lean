@@ -65,8 +65,11 @@ theorem continuous_quittingTerminalSemanticPrefixFoldSimplex
   induction steps with
   | zero => exact continuous_snd
   | succ steps ih =>
-      exact (continuous_quittingTerminalSemanticPrefixSimplex reward).comp
-        (continuous_fst.prodMk ih)
+      let prepare (data : QuittingRootSimplex ι × QuittingTerminalSemanticPair ι) :=
+        (data.1, quittingTerminalSemanticPrefixFoldSimplex reward steps data)
+      have hprepare : Continuous prepare := continuous_fst.prodMk ih
+      change Continuous (quittingTerminalSemanticPrefixSimplex reward ∘ prepare)
+      exact (continuous_quittingTerminalSemanticPrefixSimplex reward).comp hprepare
 
 /-- Repeating a fixed root finitely many times preserves the compact terminal
 semantic carrier. -/

@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import GameTheory.Math.Probability.FiniteUniform
 import Mathlib.Probability.Distributions.Uniform
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Core.Basic
 
@@ -62,13 +63,13 @@ def action
 def uniform
     (source : DistinguishedBitActions G controller) :
     PMF (G.Act controller) :=
-  (PMF.uniformOfFintype Bool).map source.action
+  (GameTheory.Math.Probability.uniformLaw Bool).map source.action
 
 /-- The observable bit marginal of the distinguished mixture is uniform. -/
 theorem map_bit_uniform
     (source : DistinguishedBitActions G controller) :
     (source.uniform).map source.bit =
-      PMF.uniformOfFintype Bool := by
+      GameTheory.Math.Probability.uniformLaw Bool := by
   unfold uniform
   rw [PMF.map_comp]
   have hcomp : source.bit ∘ source.action = id := by
@@ -103,16 +104,16 @@ def xorLaw (leftLaw rightLaw : PMF Bool) : PMF Bool :=
 
 /-- XOR with an independent uniform right bit is uniform. -/
 theorem xorLaw_uniform_right (leftLaw : PMF Bool) :
-    xorLaw leftLaw (PMF.uniformOfFintype Bool) =
-      PMF.uniformOfFintype Bool := by
+    xorLaw leftLaw (GameTheory.Math.Probability.uniformLaw Bool) =
+      GameTheory.Math.Probability.uniformLaw Bool := by
   have hfixed : ∀ leftBit : Bool,
-      (PMF.uniformOfFintype Bool).bind
+      (GameTheory.Math.Probability.uniformLaw Bool).bind
           (fun rightBit => PMF.pure (leftBit ^^ rightBit)) =
-        PMF.uniformOfFintype Bool := by
+        GameTheory.Math.Probability.uniformLaw Bool := by
     intro leftBit
     ext value
     rw [PMF.bind_apply, tsum_fintype, Fintype.sum_bool]
-    simp only [PMF.uniformOfFintype_apply, PMF.pure_apply,
+    simp only [GameTheory.Math.Probability.uniformLaw_apply, PMF.pure_apply,
       Fintype.card_bool]
     cases leftBit <;> cases value <;> simp
   unfold xorLaw
@@ -121,16 +122,16 @@ theorem xorLaw_uniform_right (leftLaw : PMF Bool) :
 
 /-- XOR with an independent uniform left bit is uniform. -/
 theorem xorLaw_uniform_left (rightLaw : PMF Bool) :
-    xorLaw (PMF.uniformOfFintype Bool) rightLaw =
-      PMF.uniformOfFintype Bool := by
+    xorLaw (GameTheory.Math.Probability.uniformLaw Bool) rightLaw =
+      GameTheory.Math.Probability.uniformLaw Bool := by
   have hfixed : ∀ rightBit : Bool,
-      (PMF.uniformOfFintype Bool).bind
+      (GameTheory.Math.Probability.uniformLaw Bool).bind
           (fun leftBit => PMF.pure (leftBit ^^ rightBit)) =
-        PMF.uniformOfFintype Bool := by
+        GameTheory.Math.Probability.uniformLaw Bool := by
     intro rightBit
     ext value
     rw [PMF.bind_apply, tsum_fintype, Fintype.sum_bool]
-    simp only [PMF.uniformOfFintype_apply, PMF.pure_apply,
+    simp only [GameTheory.Math.Probability.uniformLaw_apply, PMF.pure_apply,
       Fintype.card_bool]
     cases rightBit <;> cases value <;> simp
   unfold xorLaw
@@ -189,9 +190,9 @@ theorem signalLaw_eq_uniform_of_right
     (marginal : ∀ player, PMF (G.Act player))
     (hright :
       (marginal coin.right).map coin.rightSource.bit =
-        PMF.uniformOfFintype Bool) :
+        GameTheory.Math.Probability.uniformLaw Bool) :
     (pmfPi marginal).map coin.signal =
-      PMF.uniformOfFintype Bool := by
+      GameTheory.Math.Probability.uniformLaw Bool := by
   classical
   rw [coin.signalLaw_eq_xorLaw]
   have hinner : ∀ leftAction,
@@ -200,7 +201,7 @@ theorem signalLaw_eq_uniform_of_right
             PMF.pure
               (coin.leftSource.bit leftAction ^^
                 coin.rightSource.bit rightAction)) =
-        PMF.uniformOfFintype Bool := by
+        GameTheory.Math.Probability.uniformLaw Bool := by
     intro leftAction
     calc
       (marginal coin.right).bind
@@ -214,12 +215,12 @@ theorem signalLaw_eq_uniform_of_right
               (coin.leftSource.bit leftAction ^^ rightBit)) := by
                 rw [← PMF.bind_pure_comp, PMF.bind_bind]
                 simp
-      _ = (PMF.uniformOfFintype Bool).bind
+      _ = (GameTheory.Math.Probability.uniformLaw Bool).bind
           (fun rightBit =>
             PMF.pure
               (coin.leftSource.bit leftAction ^^ rightBit)) := by
             rw [hright]
-      _ = PMF.uniformOfFintype Bool := by
+      _ = GameTheory.Math.Probability.uniformLaw Bool := by
         simpa [xorLaw] using
           xorLaw_uniform_right
             (PMF.pure (coin.leftSource.bit leftAction))
@@ -233,9 +234,9 @@ theorem signalLaw_eq_uniform_of_left
     (marginal : ∀ player, PMF (G.Act player))
     (hleft :
       (marginal coin.left).map coin.leftSource.bit =
-        PMF.uniformOfFintype Bool) :
+        GameTheory.Math.Probability.uniformLaw Bool) :
     (pmfPi marginal).map coin.signal =
-      PMF.uniformOfFintype Bool := by
+      GameTheory.Math.Probability.uniformLaw Bool := by
   classical
   rw [coin.signalLaw_eq_xorLaw]
   rw [PMF.bind_comm]
@@ -245,7 +246,7 @@ theorem signalLaw_eq_uniform_of_left
             PMF.pure
               (coin.leftSource.bit leftAction ^^
                 coin.rightSource.bit rightAction)) =
-        PMF.uniformOfFintype Bool := by
+        GameTheory.Math.Probability.uniformLaw Bool := by
     intro rightAction
     calc
       (marginal coin.left).bind
@@ -260,13 +261,13 @@ theorem signalLaw_eq_uniform_of_left
                 coin.rightSource.bit rightAction)) := by
                 rw [← PMF.bind_pure_comp, PMF.bind_bind]
                 simp
-      _ = (PMF.uniformOfFintype Bool).bind
+      _ = (GameTheory.Math.Probability.uniformLaw Bool).bind
           (fun leftBit =>
             PMF.pure
               (leftBit ^^
                 coin.rightSource.bit rightAction)) := by
             rw [hleft]
-      _ = PMF.uniformOfFintype Bool := by
+      _ = GameTheory.Math.Probability.uniformLaw Bool := by
         simpa [xorLaw] using
           xorLaw_uniform_left
             (PMF.pure (coin.rightSource.bit rightAction))
@@ -306,7 +307,7 @@ theorem signalLaw_prescribedMarginal_eq_uniform
     (coin : JointPublicXorCoin G)
     (fallback : ∀ player, PMF (G.Act player)) :
     (pmfPi (coin.prescribedMarginal fallback)).map coin.signal =
-      PMF.uniformOfFintype Bool := by
+      GameTheory.Math.Probability.uniformLaw Bool := by
   apply coin.signalLaw_eq_uniform_of_left
   rw [coin.prescribedMarginal_left]
   exact coin.leftSource.map_bit_uniform
@@ -322,7 +323,7 @@ theorem signalLaw_update_eq_uniform
         (Function.update
           (coin.prescribedMarginal fallback) who deviation)).map
         coin.signal =
-      PMF.uniformOfFintype Bool := by
+      GameTheory.Math.Probability.uniformLaw Bool := by
   by_cases hwho : who = coin.left
   · subst who
     apply coin.signalLaw_eq_uniform_of_right
@@ -354,7 +355,7 @@ theorem stageActionDist_signal_update_eq_uniform
         (Function.update
           (coin.prescribedProfile fallback) who deviation)
         history).map coin.signal =
-      PMF.uniformOfFintype Bool := by
+      GameTheory.Math.Probability.uniformLaw Bool := by
   unfold stageActionDist prescribedProfile
   have hmarginal :
       (fun player =>
@@ -423,7 +424,7 @@ theorem oneStepNextStateLaw_update_eq_uniform_bind
         (Function.update
           (coin.prescribedMarginal fallback) who deviation)
         state =
-      (PMF.uniformOfFintype Bool).bind kernel := by
+      (GameTheory.Math.Probability.uniformLaw Bool).bind kernel := by
   rw [
     coin.oneStepNextStateLaw_eq_signal_bind
       _ state kernel hfactor,
@@ -466,7 +467,7 @@ def source (controller : Player) :
 
 @[simp] theorem source_uniform (controller : Player) :
     (source controller).uniform =
-      PMF.uniformOfFintype Bool := by
+      GameTheory.Math.Probability.uniformLaw Bool := by
   unfold DistinguishedBitActions.uniform
   have haction :
       (source controller).action = id := by
@@ -482,7 +483,7 @@ def coin : JointPublicXorCoin game where
   rightSource := source true
 
 def fallback : ∀ player, PMF (game.Act player) :=
-  fun _ => PMF.uniformOfFintype Bool
+  fun _ => GameTheory.Math.Probability.uniformLaw Bool
 
 def prescribed : ∀ player, PMF (game.Act player) :=
   coin.prescribedMarginal fallback
@@ -494,9 +495,9 @@ def deviating : ∀ player, PMF (game.Act player) :=
 XOR bit. -/
 theorem signal_laws_eq_uniform :
     (pmfPi prescribed).map coin.signal =
-        PMF.uniformOfFintype Bool ∧
+        GameTheory.Math.Probability.uniformLaw Bool ∧
       (pmfPi deviating).map coin.signal =
-        PMF.uniformOfFintype Bool := by
+        GameTheory.Math.Probability.uniformLaw Bool := by
   constructor
   · exact coin.signalLaw_prescribedMarginal_eq_uniform fallback
   · exact coin.signalLaw_update_eq_uniform fallback false
@@ -505,12 +506,12 @@ theorem signal_laws_eq_uniform :
 /-- Under prescribed play, the next state is the uniform left action. -/
 theorem nextStateLaw_prescribed :
     JointPublicXorCoin.oneStepNextStateLaw prescribed false =
-      PMF.uniformOfFintype Bool := by
+      GameTheory.Math.Probability.uniformLaw Bool := by
   unfold JointPublicXorCoin.oneStepNextStateLaw
   change
     (pmfPi prescribed).bind
         (fun action => PMF.pure (action false)) =
-      PMF.uniformOfFintype Bool
+      GameTheory.Math.Probability.uniformLaw Bool
   rw [pmfPi_bind_eval]
   rw [PMF.bind_pure]
   rw [show prescribed false = (source false).uniform by
@@ -542,7 +543,7 @@ theorem equal_uniform_signal_but_nextStateLaw_ne :
   · rw [nextStateLaw_prescribed, nextStateLaw_deviating]
     intro heq
     have hfalse := congrArg (fun law : PMF Bool => law false) heq
-    norm_num [PMF.uniformOfFintype_apply, PMF.pure_apply] at hfalse
+    norm_num [GameTheory.Math.Probability.uniformLaw_apply, PMF.pure_apply] at hfalse
 
 end PublicXorTransitionObstruction
 

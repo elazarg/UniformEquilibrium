@@ -32,10 +32,10 @@ theorem pivot_punishment_eq_one : quittingPunishmentValue reward false = 1 := by
       (Function.update root false (PMF.pure true)) false
     unfold quittingRootAbsorbingContribution quittingRootExpectedPayoff
     calc
-      1 = Math.Probability.expect
+      1 = _root_.Math.Probability.expect
           (pmfPi (Function.update root false (PMF.pure true)))
           (fun _ => (1 : ℝ)) :=
-        (Math.Probability.expect_const _ (1 : ℝ)).symm
+        (_root_.Math.Probability.expect_const _ (1 : ℝ)).symm
       _ ≤ _ := by
         apply Math.ProbabilityMassFunction.expect_mono_on_support
         intro action hsupport

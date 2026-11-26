@@ -231,8 +231,11 @@ theorem exists_small_rates_quittingSingletonProbe
     by_cases hinterior : point who < upper
     · have hcont : ContinuousAt (fun rate => source rate who) 0 := by
         unfold source quittingSingletonProbeSource
-        exact continuousAt_const.add ((continuousAt_id.div
-          (continuousAt_const.sub continuousAt_id) (by norm_num)).mul continuousAt_const)
+        have hdenominator : ContinuousAt (fun rate : ℝ => 1 - rate) 0 :=
+          continuousAt_const.sub continuousAt_id
+        have hdenominator_ne_zero : (1 : ℝ) - 0 ≠ 0 := by norm_num
+        exact continuousAt_const.add
+          ((continuousAt_id.div hdenominator hdenominator_ne_zero).mul continuousAt_const)
       have hstrict : source 0 who < upper := by simpa [source,
         quittingSingletonProbeSource] using hinterior
       exact (hcont.eventually (gt_mem_nhds hstrict)).mono fun rate hrate =>

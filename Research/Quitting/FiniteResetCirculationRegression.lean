@@ -27,7 +27,7 @@ state-matched Nash--Bellman/punishment hypothesis).
 
 noncomputable section
 
-open GameTheory.Math.Probability
+open GameTheory.Math.Probability hiding expect_eq_sum
 
 namespace GameTheory
 

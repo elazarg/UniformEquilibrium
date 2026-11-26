@@ -35,7 +35,7 @@ theorem pmfMass_complement_toReal_eq_one_sub {Ω : Type*}
           pmfMask law (fun other => ¬event other) point) = fun point => law point := by
       funext point
       by_cases hpoint : event point <;> simp [pmfMask, hpoint]
-    rw [pmfMass, pmfMass, ← ENNReal.tsum_add, hpointwise, PMF.tsum_coe]
+    rw [pmfMass, pmfMass, ← tsum_add, hpointwise, PMF.tsum_coe]
   have hreal := congrArg ENNReal.toReal htotal
   rw [ENNReal.toReal_add (pmfMass_ne_top law event)
     (pmfMass_ne_top law fun point => ¬event point), ENNReal.toReal_one] at hreal

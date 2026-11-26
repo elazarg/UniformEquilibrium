@@ -465,6 +465,11 @@ theorem meshCycle_opponentProduct_eq (δ : HazardParameter)
   fin_cases who <;>
     norm_num [blockOwner, blockHazard, Fin.prod_univ_two] <;> ring
 
+private theorem meshCycle_opponentProductBound_lt_one (delta : ℝ)
+    (hdelta : 0 < delta) (who : Player) :
+    ![(1 / 2 : ℝ), 1 - delta, (1 - delta) / 2, (1 - delta) / 2] who < 1 := by
+  fin_cases who <;> norm_num <;> linarith
+
 /-- One fixed mesh is terminal Nash with the explicit two-scale error and has
 exactly the second block's payoff. -/
 theorem meshProfile_isTerminalNash_and_hasPayoff
@@ -523,7 +528,7 @@ theorem meshProfile_isTerminalNash_and_hasPayoff
           (meshCycleRoot δ m phase) who) < 1 := by
     intro who
     rw [meshCycle_opponentProduct_eq δ m hm who]
-    fin_cases who <;> norm_num <;> nlinarith [δ.2.1, δ.2.2]
+    exact meshCycle_opponentProductBound_lt_one δ.1 δ.2.1 who
   have hnash :=
     isεAsymptoticNash_quittingCyclicBehaviorProfile_of_quitError_and_continueUpperBound
       reward (meshCycleRoot δ m) (meshCycleValue reward δ m) initial he0
@@ -541,6 +546,77 @@ theorem meshProfile_isTerminalNash_and_hasPayoff
     rw [quittingTerminalPayoff_cyclicBehaviorProfile, ← hcyclicValue]
     exact quittingSingletonArcCycleValue_initialPhase
       reward blockOwner (blockHazard δ) (coarsePayoff δ) (1 : Fin 2) m hm
+
+private theorem collisionScale_div_lt_half (cost epsilon horizon : ℝ)
+    (hepsilon : 0 < epsilon) (hhorizon : 0 < horizon)
+    (hlarge : 2 * cost / epsilon < horizon) : cost / horizon < epsilon / 2 := by
+  have hscaled := (div_lt_iff₀ hepsilon).mp hlarge
+  rw [div_lt_iff₀ hhorizon]
+  linarith only [hscaled]
+
+private theorem twoBlock_tolerance_bounds (delta epsilon : ℝ)
+    (hdelta : 0 < delta) (hepsilon : 0 < epsilon) (hle : delta ≤ epsilon / 4) :
+    delta / (2 * (1 + delta)) < epsilon / 2 ∧
+      3 * delta / (4 * (1 + delta)) < epsilon := by
+  have hproduct := mul_pos hepsilon hdelta
+  constructor
+  · rw [div_lt_iff₀ (show 0 < 2 * (1 + delta) by linarith)]
+    nlinarith
+  · rw [div_lt_iff₀ (show 0 < 4 * (1 + delta) by linarith)]
+    nlinarith
+
+private theorem exists_mesh_subdivision (δ : HazardParameter) (bound ε : ℝ)
+    (hbound : 0 ≤ bound) (hε : 0 < ε) :
+    ∃ m : ℕ, 0 < m ∧
+      2 * bound * max (quittingMeshHazard δ.1 m) (quittingMeshHazard (1 / 2) m) < ε / 2 := by
+  let aStar := max (quittingMeshIntensity δ.1)
+    (quittingMeshIntensity (1 / 2))
+  have hintensityδ0 : 0 ≤ quittingMeshIntensity δ.1 :=
+    quittingMeshIntensity_nonneg δ.2.1.le δ.2.2.le
+  have hintensityHalf0 : 0 ≤ quittingMeshIntensity (1 / 2) :=
+    quittingMeshIntensity_nonneg (by norm_num) (by norm_num)
+  have haStar0 : 0 ≤ aStar := by
+    exact hintensityδ0.trans (le_max_left _ _)
+  let collisionScale := 2 * bound * aStar
+  have hcollisionScale0 : 0 ≤ collisionScale :=
+    mul_nonneg (mul_nonneg (by norm_num) hbound) haStar0
+  obtain ⟨m, hmLarge⟩ :=
+    exists_nat_gt (2 * collisionScale / ε)
+  have hmReal : 0 < (m : ℝ) := by
+    have hthreshold0 : 0 ≤ 2 * collisionScale / ε :=
+      div_nonneg (mul_nonneg (by norm_num) hcollisionScale0) hε.le
+    exact lt_of_le_of_lt hthreshold0 hmLarge
+  have hm : 0 < m := by exact_mod_cast hmReal
+  have hcollisionSmall : collisionScale / (m : ℝ) < ε / 2 :=
+    collisionScale_div_lt_half collisionScale ε m hε hmReal hmLarge
+  have hhazardδ : quittingMeshHazard δ.1 m ≤ aStar / (m : ℝ) := by
+    exact (quittingMeshHazard_le_intensity_div δ.2.2).trans
+      (div_le_div_of_nonneg_right (le_max_left _ _) (Nat.cast_nonneg m))
+  have hhazardHalf : quittingMeshHazard (1 / 2) m ≤
+      aStar / (m : ℝ) := by
+    exact (quittingMeshHazard_le_intensity_div (by norm_num)).trans
+      (div_le_div_of_nonneg_right (le_max_right _ _) (Nat.cast_nonneg m))
+  have hhazardMax : max (quittingMeshHazard δ.1 m)
+      (quittingMeshHazard (1 / 2) m) ≤ aStar / (m : ℝ) :=
+    max_le hhazardδ hhazardHalf
+  have hcollisionError :
+      2 * bound *
+          max (quittingMeshHazard δ.1 m)
+            (quittingMeshHazard (1 / 2) m) < ε / 2 := by
+    have hscaled :
+        2 * bound *
+            max (quittingMeshHazard δ.1 m)
+              (quittingMeshHazard (1 / 2) m) ≤
+          2 * bound * (aStar / (m : ℝ)) :=
+      mul_le_mul_of_nonneg_left hhazardMax
+        (mul_nonneg (by norm_num) hbound)
+    have hrewrite : 2 * bound *
+        (aStar / (m : ℝ)) = collisionScale / (m : ℝ) := by
+      dsimp only [collisionScale]
+      ring
+    rw [hrewrite] at hscaled
+    exact hscaled.trans_lt hcollisionSmall
+  exact ⟨m, hm, hcollisionError⟩
 
 /-- At every positive accuracy, one terminal approximate Nash profile both
 approximates the fixed target and is evaluated against unrestricted behavioral
@@ -563,71 +639,17 @@ theorem exists_terminalNash_and_payoff_close_to_target
   let δ : HazardParameter := ⟨δValue, hδValue0, hδValue1⟩
   have hδLe : δ.1 ≤ ε / 4 := by
     exact min_le_right _ _
-  have hdefect : singletonDefect δ < ε / 2 := by
-    have hdenom : 0 < 2 * (1 + δ.1) := by nlinarith [δ.2.1]
-    rw [singletonDefect, div_lt_iff₀ hdenom]
-    have hεδ : 0 < ε * δ.1 := mul_pos hε δ.2.1
-    nlinarith
-  have htarget : 3 * δ.1 / (4 * (1 + δ.1)) < ε := by
-    have hdenom : 0 < 4 * (1 + δ.1) := by nlinarith [δ.2.1]
-    rw [div_lt_iff₀ hdenom]
-    have hεδ : 0 < ε * δ.1 := mul_pos hε δ.2.1
-    nlinarith
-  let aStar := max (quittingMeshIntensity δ.1)
-    (quittingMeshIntensity (1 / 2))
-  have hintensityδ0 : 0 ≤ quittingMeshIntensity δ.1 :=
-    quittingMeshIntensity_nonneg δ.2.1.le δ.2.2.le
-  have hintensityHalf0 : 0 ≤ quittingMeshIntensity (1 / 2) :=
-    quittingMeshIntensity_nonneg (by norm_num) (by norm_num)
-  have haStar0 : 0 ≤ aStar := by
-    exact hintensityδ0.trans (le_max_left _ _)
-  let collisionScale := 2 * quittingRewardBound reward * aStar
-  have hcollisionScale0 : 0 ≤ collisionScale :=
-    mul_nonneg (mul_nonneg (by norm_num)
-      (quittingRewardBound_nonneg reward)) haStar0
-  obtain ⟨m, hmLarge⟩ :=
-    exists_nat_gt (2 * collisionScale / ε)
-  have hmReal : 0 < (m : ℝ) := by
-    have hthreshold0 : 0 ≤ 2 * collisionScale / ε :=
-      div_nonneg (mul_nonneg (by norm_num) hcollisionScale0) hε.le
-    exact lt_of_le_of_lt hthreshold0 hmLarge
-  have hm : 0 < m := by exact_mod_cast hmReal
-  have hcollisionSmall : collisionScale / (m : ℝ) < ε / 2 := by
-    have hscaled : 2 * collisionScale < (m : ℝ) * ε :=
-      (div_lt_iff₀ hε).mp hmLarge
-    rw [div_lt_iff₀ hmReal]
-    nlinarith
-  have hhazardδ : quittingMeshHazard δ.1 m ≤ aStar / (m : ℝ) := by
-    exact (quittingMeshHazard_le_intensity_div δ.2.2).trans
-      (div_le_div_of_nonneg_right (le_max_left _ _) (Nat.cast_nonneg m))
-  have hhazardHalf : quittingMeshHazard (1 / 2) m ≤
-      aStar / (m : ℝ) := by
-    exact (quittingMeshHazard_le_intensity_div (by norm_num)).trans
-      (div_le_div_of_nonneg_right (le_max_right _ _) (Nat.cast_nonneg m))
-  have hhazardMax : max (quittingMeshHazard δ.1 m)
-      (quittingMeshHazard (1 / 2) m) ≤ aStar / (m : ℝ) :=
-    max_le hhazardδ hhazardHalf
-  have hcollisionError :
-      2 * quittingRewardBound reward *
-          max (quittingMeshHazard δ.1 m)
-            (quittingMeshHazard (1 / 2) m) < ε / 2 := by
-    have hscaled :
-        2 * quittingRewardBound reward *
-            max (quittingMeshHazard δ.1 m)
-              (quittingMeshHazard (1 / 2) m) ≤
-          2 * quittingRewardBound reward * (aStar / (m : ℝ)) :=
-      mul_le_mul_of_nonneg_left hhazardMax
-        (mul_nonneg (by norm_num) (quittingRewardBound_nonneg reward))
-    have hrewrite : 2 * quittingRewardBound reward *
-        (aStar / (m : ℝ)) = collisionScale / (m : ℝ) := by
-      dsimp only [collisionScale]
-      ring
-    rw [hrewrite] at hscaled
-    exact hscaled.trans_lt hcollisionSmall
+  obtain ⟨hsmallDefect, htarget⟩ := twoBlock_tolerance_bounds δ.1 ε δ.2.1 hε hδLe
+  have hdefect : singletonDefect δ < ε / 2 := hsmallDefect
+  obtain ⟨m, hm, hcollisionError⟩ :=
+    exists_mesh_subdivision δ (quittingRewardBound reward) ε
+      (quittingRewardBound_nonneg reward) hε
   obtain ⟨hnash, hpayoff⟩ :=
     meshProfile_isTerminalNash_and_hasPayoff conditions δ m hm
   refine ⟨meshProfile reward δ m hm, ?_, ?_⟩
-  · exact StochasticGame.IsεAsymptoticNash.mono hnash (by linarith)
+  · have htotal := add_lt_add hdefect hcollisionError
+    rw [add_halves] at htotal
+    exact StochasticGame.IsεAsymptoticNash.mono hnash htotal.le
   · intro who
     rw [hpayoff]
     exact (secondBlockPayoff_sub_target_abs_le δ who).trans htarget.le

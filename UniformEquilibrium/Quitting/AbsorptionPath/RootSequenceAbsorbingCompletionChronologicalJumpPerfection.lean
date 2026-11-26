@@ -158,7 +158,7 @@ theorem ChronologicalJumpRootTailLimit.tail_eq_absorptionPathPayoff
         (roots index) (stage index + 1)) atTop
       (nhds (1 - QuittingAbsorptionPath.pathTotal limit.path time)) := by
     convert tendsto_const_nhds.sub hclock using 1
-    all_goals simp [QuittingAbsorptionPath.quittingRootSequenceClock]
+    simp [QuittingAbsorptionPath.quittingRootSequenceClock]
   have htail (who : ι) : Tendsto (fun index ↦
       quittingRootSequenceTailVector reward (roots index) (stage index + 1) who)
       atTop (nhds (approximation.tail.1 who)) := by

@@ -199,7 +199,8 @@ theorem exists_pos_strictlyPositiveInverse_sub_offDiagonalOnes
     rcases lt_or_gt_of_ne hdet with hnegative | hpositive
     · filter_upwards [hlimit.eventually (isOpen_Iio.mem_nhds hnegative)] with epsilon heps
       exact (sign_neg heps).trans (sign_neg hnegative).symm
-    · filter_upwards [hlimit.eventually (isOpen_Ioi.mem_nhds hpositive)] with epsilon heps
+    · have hmem : M.det ∈ Set.Ioi (0 : ℝ) := hpositive
+      filter_upwards [hlimit.eventually (isOpen_Ioi.mem_nhds hmem)] with epsilon heps
       exact (sign_pos heps).trans (sign_pos hpositive).symm
   obtain ⟨threshold, hthreshold, hsmall⟩ :=
     Metric.eventually_nhds_iff.mp (hnorm.and hsign)

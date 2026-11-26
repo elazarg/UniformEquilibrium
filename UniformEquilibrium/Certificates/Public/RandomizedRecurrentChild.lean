@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import GameTheory.Math.Probability.FiniteUniform
 import UniformEquilibrium.Certificates.Public.RecurrentClassTarget
 import MathUE.OutcomeClosure
 import MathUE.OutcomeClosure.TerminalTarget
@@ -141,7 +142,7 @@ instance (who : Player) : DecidableEq (game.Act who) :=
 
 /-- Prescribed play uses a fair public selection at every history. -/
 def prescribedProfile : game.BehaviorProfile :=
-  fun _ _ _ => PMF.uniformOfFintype Bool
+  fun _ _ _ => GameTheory.Math.Probability.uniformLaw Bool
 
 /-- The player can instead select the high absorbing child with certainty. -/
 def highDeviation : game.BehaviorStrategy () :=
@@ -154,19 +155,19 @@ def continuationTarget : State → ℝ
   | .low => 0
   | .high => 1
 
+private theorem expect_pmfPi_eval
+    {Index : Type} [Fintype Index] [DecidableEq Index]
+    {A : Index → Type} [∀ i, Finite (A i)]
+    (σ : ∀ i, PMF (A i)) (j : Index) (f : A j → ℝ) :
+    expect (pmfPi σ) (fun action => f (action j)) = expect (σ j) f := by
+  have hmap : PMF.map (fun action : ∀ i, A i => action j) (pmfPi σ) = σ j :=
+    pmfPi_push_coord σ j
+  rw [← expect_map (fun action : ∀ i, A i => action j), hmap]
+
 private theorem expect_jointAction_eq_coord
     (σ : ∀ _ : Player, PMF Action) (f : Action → ℝ) :
-    expect (pmfPi σ) (fun action => f (action ())) =
-      expect (σ ()) f := by
-  calc
-    expect (pmfPi σ) (fun action => f (action ())) =
-      expect (PMF.map (fun action => action ()) (pmfPi σ)) f := by
-        symm
-        exact expect_map (fun action => action ()) (pmfPi σ) f
-    _ = expect (σ ()) f := by
-      have h := pmfPi_push_coord σ ()
-      change PMF.map (fun action => action ()) (pmfPi σ) = σ () at h
-      rw [h]
+    expect (pmfPi σ) (fun action => f (action ())) = expect (σ ()) f :=
+  expect_pmfPi_eval (A := fun _ : Player => Action) σ () f
 
 /-- The prescribed public selection preserves the parent target in
 expectation. -/
@@ -186,10 +187,10 @@ theorem prescribed_target_preserved :
         cases action () <;> simp [continuationTarget]]
   have hcoord :=
     expect_jointAction_eq_coord
-      (fun _ : Player => PMF.uniformOfFintype Bool)
+      (fun _ : Player => GameTheory.Math.Probability.uniformLaw Bool)
       (fun selected => if selected then 1 else 0)
   rw [hcoord]
-  norm_num [expect, PMF.uniformOfFintype_apply, tsum_fintype,
+  norm_num [expect, GameTheory.Math.Probability.uniformLaw_apply, tsum_fintype,
     continuationTarget]
 
 /-- A unilateral deviation changes the public child law and raises the
@@ -237,7 +238,7 @@ public current state. -/
 def childPhaseProfile : PublicPhaseProfile game where
   Phase := State
   phase := fun _ history => history.2
-  play := fun _ _ => PMF.uniformOfFintype Bool
+  play := fun _ _ => GameTheory.Math.Probability.uniformLaw Bool
 
 /-- A deviation ceiling that agrees with each absorbing child's target but
 dominates the player-controlled selection at the initial state. -/
@@ -256,15 +257,15 @@ private theorem prescribed_stage_eq_target
       rw [hstate]
       change
         expect (pmfPi
-          (fun _ : Player => PMF.uniformOfFintype Bool))
+          (fun _ : Player => GameTheory.Math.Probability.uniformLaw Bool))
             (fun action => if action () then 1 else 0) =
           1 / 2
       have hcoord :=
         expect_jointAction_eq_coord
-          (fun _ : Player => PMF.uniformOfFintype Bool)
+          (fun _ : Player => GameTheory.Math.Probability.uniformLaw Bool)
           (fun selected => if selected then 1 else 0)
       rw [hcoord]
-      norm_num [expect, PMF.uniformOfFintype_apply, tsum_fintype,
+      norm_num [expect, GameTheory.Math.Probability.uniformLaw_apply, tsum_fintype,
         continuationTarget]
   | low =>
       simp [stageEUAt, stageActionDist, prescribedProfile, game,
@@ -284,7 +285,7 @@ private theorem prescribed_continuation_eq_target
       simp only [game, hstate, expect_pure]
       have hcoord :=
         expect_jointAction_eq_coord
-          (fun _ : Player => PMF.uniformOfFintype Bool)
+          (fun _ : Player => GameTheory.Math.Probability.uniformLaw Bool)
           (fun selected => if selected then 1 else 0)
       rw [show
         (fun action : Player → Action =>
@@ -294,7 +295,7 @@ private theorem prescribed_continuation_eq_target
           funext action
           cases action () <;> simp [continuationTarget]]
       rw [hcoord]
-      norm_num [expect, PMF.uniformOfFintype_apply, tsum_fintype,
+      norm_num [expect, GameTheory.Math.Probability.uniformLaw_apply, tsum_fintype,
         continuationTarget]
   | low =>
       simp [historyContinuationEU, stageActionDist, prescribedProfile,

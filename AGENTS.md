@@ -205,7 +205,7 @@ owner.
 Keep compiler memory use conservative: request one target per targeted check,
 use `LEAN_NUM_THREADS=1` for Lake builds, and use `-j1` for direct Lean checks.
 
-Lean 4.34.0 is required. Lean 4.32.0 is excluded because of a kernel soundness
+Lean 4.36.0 is required. Lean 4.32.0 is excluded because of a kernel soundness
 bug.
 
 Keep living documentation current and timeless. Ordinary implementation history

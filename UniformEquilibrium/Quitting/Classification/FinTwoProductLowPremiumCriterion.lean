@@ -46,7 +46,7 @@ theorem finTwo_quitPremium_formula
     unfold quittingRootQuitPayoff quittingRootExpectedPayoff
     rw [Math.PMFProduct.expect_pmfPi_fin2]
     simp +decide [finTwoPairPremium, quittingRootPayoff, quittingQuitters,
-      quittingSingletonTerminal, Math.Probability.expect_eq_sum,
+      quittingSingletonTerminal, _root_.Math.Probability.expect_eq_sum,
       pmfBool_false_toReal, hfull, hsolo]
     ring
   · have hfull :
@@ -64,7 +64,7 @@ theorem finTwo_quitPremium_formula
     unfold quittingRootQuitPayoff quittingRootExpectedPayoff
     rw [Math.PMFProduct.expect_pmfPi_fin2]
     simp +decide [finTwoPairPremium, quittingRootPayoff, quittingQuitters,
-      quittingSingletonTerminal, Math.Probability.expect_eq_sum,
+      quittingSingletonTerminal, _root_.Math.Probability.expect_eq_sum,
       pmfBool_false_toReal, hfull, hsolo]
     ring
 

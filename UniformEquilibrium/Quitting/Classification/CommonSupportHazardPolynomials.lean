@@ -56,11 +56,7 @@ theorem continuous_hazardContinueZeroPayoff
     · exact continuous_finsetProd _ fun other _ => continuous_apply other
     · exact continuous_finsetProd _ fun other _ =>
         continuous_const.sub (continuous_apply other)
-  · by_cases hcoalition : coalition.Nonempty
-    · simp only [hcoalition, dite_true]
-      exact continuous_const
-    · simp only [hcoalition, dite_false]
-      exact continuous_const
+  · exact continuous_const
 
 @[simp] theorem hazardContinueZeroPayoff_zero
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (player : ι) :

@@ -63,16 +63,16 @@ theorem nonnegativePotential_constraints_iff_rat
     (delta : Row → State → ℚ) (base : Row → ℚ)
     (potential : State → ℚ) :
     (∀ action, nonnegativePotentialBase base action ≤
-      ratDotProduct (nonnegativePotentialDelta delta action) potential) ↔
+      dotProduct (nonnegativePotentialDelta delta action) potential) ↔
       (∀ state, 0 ≤ potential state) ∧
-        ∀ row, base row ≤ ratDotProduct (delta row) potential := by
+        ∀ row, base row ≤ dotProduct (delta row) potential := by
   classical
   constructor
   · intro h
     constructor
     · intro state
       have hstate := h (Sum.inr state)
-      simpa [nonnegativePotentialBase, nonnegativePotentialDelta, ratDotProduct] using hstate
+      simpa [nonnegativePotentialBase, nonnegativePotentialDelta, dotProduct] using hstate
     · intro row
       simpa [nonnegativePotentialBase, nonnegativePotentialDelta] using h (Sum.inl row)
   · rintro ⟨hnonnegative, hrow⟩ action
@@ -80,7 +80,7 @@ theorem nonnegativePotential_constraints_iff_rat
     | inl row =>
         simpa [nonnegativePotentialBase, nonnegativePotentialDelta] using hrow row
     | inr state =>
-        simpa [nonnegativePotentialBase, nonnegativePotentialDelta, ratDotProduct] using
+        simpa [nonnegativePotentialBase, nonnegativePotentialDelta, dotProduct] using
           hnonnegative state
 
 /-- Real finite inequalities have either a nonnegative feasible potential or
@@ -96,7 +96,7 @@ theorem exists_nonnegativePotential_or_nonpositiveCertificate
       (∀ state, ∑ row, coefficient row * delta row state ≤ 0) ∧
       0 < ∑ row, coefficient row * base row) := by
   classical
-  rcases Maths.exists_potential_or_nonnegative_incompatibility
+  rcases Maths.FiniteInequality.exists_potential_or_farkasCertificate
       (nonnegativePotentialDelta delta) (nonnegativePotentialBase base) with
     hpotential | ⟨coefficient, hnonnegative, hbalance, hpositive⟩
   · left
@@ -128,7 +128,7 @@ theorem exists_rationalNonnegativePotential_or_nonpositiveCertificate
     (delta : Row → State → ℚ) (base : Row → ℚ) :
     (∃ potential : State → ℚ,
       (∀ state, 0 ≤ potential state) ∧
-      ∀ row, base row ≤ ratDotProduct (delta row) potential) ∨
+      ∀ row, base row ≤ dotProduct (delta row) potential) ∨
     (∃ coefficient : Row → ℚ,
       (∀ row, 0 ≤ coefficient row) ∧
       (∀ state, ∑ row, coefficient row * delta row state ≤ 0) ∧
@@ -166,7 +166,7 @@ theorem exists_rationalNonnegativePotential_iff_exists_realNonnegativePotential
     (delta : Row → State → ℚ) (base : Row → ℚ) :
     (∃ potential : State → ℚ,
       (∀ state, 0 ≤ potential state) ∧
-      ∀ row, base row ≤ ratDotProduct (delta row) potential) ↔
+      ∀ row, base row ≤ dotProduct (delta row) potential) ↔
     ∃ potential : State → ℝ,
       (∀ state, 0 ≤ potential state) ∧
       ∀ row, (base row : ℝ) ≤
@@ -177,7 +177,7 @@ theorem exists_rationalNonnegativePotential_iff_exists_realNonnegativePotential
     refine ⟨fun state => (potential state : ℝ), fun state => ?_, fun row => ?_⟩
     · exact Rat.cast_nonneg.mpr (hnonnegative state)
     · have hcast := Rat.cast_mono (K := ℝ) (hrow row)
-      simpa only [ratDotProduct, Rat.cast_sum, Rat.cast_mul, dotProduct] using hcast
+      simpa only [dotProduct, Rat.cast_sum, Rat.cast_mul, dotProduct] using hcast
   · rintro ⟨potential, hnonnegative, hrow⟩
     have haugmented : ∃ potential : State → ℝ,
         ∀ action, ((nonnegativePotentialBase base action : ℚ) : ℝ) ≤
@@ -239,7 +239,7 @@ private theorem nonpositiveCertificate_excludes_rationalPotential
     {delta : Row → State → ℚ} {base : Row → ℚ}
     {potential : State → ℚ}
     (hpotentialNonnegative : ∀ state, 0 ≤ potential state)
-    (hpotential : ∀ row, base row ≤ ratDotProduct (delta row) potential)
+    (hpotential : ∀ row, base row ≤ dotProduct (delta row) potential)
     {coefficient : Row → ℚ}
     (hcoefficientNonnegative : ∀ row, 0 ≤ coefficient row)
     (hcolumns : ∀ state, ∑ row, coefficient row * delta row state ≤ 0) :
@@ -247,12 +247,12 @@ private theorem nonpositiveCertificate_excludes_rationalPotential
   classical
   calc
     ∑ row, coefficient row * base row ≤
-        ∑ row, coefficient row * ratDotProduct (delta row) potential := by
+        ∑ row, coefficient row * dotProduct (delta row) potential := by
       apply Finset.sum_le_sum
       intro row _
       exact mul_le_mul_of_nonneg_left (hpotential row) (hcoefficientNonnegative row)
     _ = ∑ state, (∑ row, coefficient row * delta row state) * potential state := by
-      simp only [ratDotProduct, Finset.mul_sum]
+      simp only [dotProduct, Finset.mul_sum]
       rw [Finset.sum_comm]
       apply Finset.sum_congr rfl
       intro state _
@@ -294,7 +294,7 @@ theorem not_exists_rationalNonnegativePotential_iff_exists_nonpositiveCertificat
     (delta : Row → State → ℚ) (base : Row → ℚ) :
     (¬∃ potential : State → ℚ,
       (∀ state, 0 ≤ potential state) ∧
-      ∀ row, base row ≤ ratDotProduct (delta row) potential) ↔
+      ∀ row, base row ≤ dotProduct (delta row) potential) ↔
     ∃ coefficient : Row → ℚ,
       (∀ row, 0 ≤ coefficient row) ∧
       (∀ state, ∑ row, coefficient row * delta row state ≤ 0) ∧

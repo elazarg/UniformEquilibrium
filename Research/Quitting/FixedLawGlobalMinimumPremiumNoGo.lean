@@ -164,12 +164,12 @@ theorem quitNow_payoff_debtor_eq_one
   let root := quittingProfileLiveRoot reward profile 0
   let distribution := Math.PMFProduct.pmfPi
     (Function.update root debtor (PMF.pure true))
-  change Math.Probability.expect distribution
+  change _root_.Math.Probability.expect distribution
       (fun action => quittingRootPayoff reward 0 action debtor) = 1
   rw [Math.ProbabilityMassFunction.expect_congr_on_support distribution
     (fun action => quittingRootPayoff reward 0 action debtor)
     (fun _ => (1 : ℝ))]
-  · exact Math.Probability.expect_const distribution 1
+  · exact _root_.Math.Probability.expect_const distribution 1
   · intro action haction
     have hself : action debtor = true :=
       action_eq_true_of_mem_support_pmfPi_update_pure_true

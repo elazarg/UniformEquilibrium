@@ -123,11 +123,11 @@ theorem mixedEU_eq_prefix_at_dummy
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu,
     (quittingTwoDateTimingGame prefixReward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
-  change Math.Probability.expect (pmfPi mixed)
+  change _root_.Math.Probability.expect (pmfPi mixed)
       (fun choices => timingPurePayoff reward 2 choices dummy) =
-    Math.Probability.expect (pmfPi mixed)
+    _root_.Math.Probability.expect (pmfPi mixed)
       (fun choices => timingPurePayoff prefixReward 2 choices dummy)
-  congr 1
+  apply congrArg (_root_.Math.Probability.expect (pmfPi mixed))
   funext choices
   exact purePayoff_eq_prefix_of_dummy 2 choices dummy hzero hone
 
@@ -140,15 +140,15 @@ theorem activeProfile_mixedEU_eq_prefix
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu,
     (quittingTwoDateTimingGame prefixReward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
-  change Math.Probability.expect (pmfPi (activeProfile row column))
+  change _root_.Math.Probability.expect (pmfPi (activeProfile row column))
       (fun choices => timingPurePayoff reward 2 choices who) =
-    Math.Probability.expect (pmfPi (activeProfile row column))
+    _root_.Math.Probability.expect (pmfPi (activeProfile row column))
       (fun choices => timingPurePayoff prefixReward 2 choices who)
   rw [expect_pmfPi_fin4, expect_pmfPi_fin4]
-  simp only [activeProfile, Math.Probability.expect_pure, Fin.isValue]
-  congr 1
+  simp only [activeProfile, _root_.Math.Probability.expect_pure, Fin.isValue]
+  apply congrArg (_root_.Math.Probability.expect row)
   funext rowAction
-  congr 1
+  apply congrArg (_root_.Math.Probability.expect column)
   funext columnAction
   exact purePayoff_eq_prefix_of_dummies_never 2
     ![rowAction, columnAction, never, never] rfl rfl who
@@ -266,7 +266,7 @@ theorem nonUniqueNash_deviation_value
       | 3 => if action = now then -1 else 0 := by
   rw [(quittingTwoDateTimingGame prefixReward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
-  change Math.Probability.expect
+  change _root_.Math.Probability.expect
       (pmfPi (Function.update nonUniqueNashProfile who (PMF.pure action)))
       (fun choices => timingPurePayoff prefixReward 2 choices who) = _
   have hprofile : Function.update nonUniqueNashProfile who (PMF.pure action) =
@@ -277,7 +277,7 @@ theorem nonUniqueNash_deviation_value
     · subst player
       simp
     · simp [Function.update_of_ne hplayer, nonUniqueNashProfile]
-  rw [hprofile, pmfPi_pure, Math.Probability.expect_pure]
+  rw [hprofile, pmfPi_pure, _root_.Math.Probability.expect_pure]
   exact pure_nonUniqueNash_deviation_value who action
 
 theorem nonUniqueNash_payoff (who : Player) :
@@ -356,18 +356,8 @@ private theorem canonical_pureDeviation_mixedEU_eq_prefix
         _ = _ := (congrArg (fun profile : Player → PMF Action =>
             (quittingTwoDateTimingGame prefixReward).mixedExtension.eu profile 1)
           hupdate).symm
-    · rw [(quittingTwoDateTimingGame reward).mixedExtension_eu,
-        (quittingTwoDateTimingGame prefixReward).mixedExtension_eu]
-      simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
-      change Math.Probability.expect
-          (pmfPi (Function.update equilibriumProfile who (PMF.pure action)))
-          (fun choices => timingPurePayoff reward 2 choices who) =
-        Math.Probability.expect
-          (pmfPi (Function.update equilibriumProfile who (PMF.pure action)))
-          (fun choices => timingPurePayoff prefixReward 2 choices who)
-      congr 1
-      funext choices
-      exact purePayoff_eq_prefix_of_dummy 2 choices who hzero hone
+    · exact mixedEU_eq_prefix_at_dummy
+        (Function.update equilibriumProfile who (PMF.pure action)) who hzero hone
 
 theorem canonicalProfile_isNash :
     (quittingTwoDateTimingGame prefixReward).mixedExtension.IsNash

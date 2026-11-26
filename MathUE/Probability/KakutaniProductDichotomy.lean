@@ -41,9 +41,9 @@ noncomputable def stepMeasure (f : I → ℝ) : Measure I :=
 
 theorem stepMeasure_apply (f : I → ℝ) (s : Set I) :
     stepMeasure f s = ∑ i, s.indicator (fun j => ENNReal.ofReal (f j)) i := by
-  rw [stepMeasure, Measure.finsetSum_apply]
+  rw [stepMeasure, FunLike.coe_sum, Finset.sum_apply]
   refine Finset.sum_congr rfl fun i _ => ?_
-  rw [Measure.smul_apply, Measure.dirac_apply, smul_eq_mul]
+  rw [smul_apply, Measure.dirac_apply, smul_eq_mul]
   by_cases hi : i ∈ s
   · rw [Set.indicator_of_mem hi, Set.indicator_of_mem hi, Pi.one_apply, mul_one]
   · rw [Set.indicator_of_notMem hi, Set.indicator_of_notMem hi, mul_zero]
@@ -596,11 +596,11 @@ theorem productLaw_absolutelyContinuous (p q : ℕ → I → ℝ)
       hdense.approx A hA (measure_ne_top _ _) (1 / ((N : ℝ) + 1)) (by positivity)
     have hQd : productLaw q (A ∆ C) ≤ ENNReal.ofReal (1 / ((N : ℝ) + 1)) := by
       refine le_trans ?_ hCd.le
-      rw [Measure.add_apply]
+      rw [add_apply]
       exact self_le_add_right _ _
     have hRd : R (A ∆ C) ≤ ENNReal.ofReal (1 / ((N : ℝ) + 1)) := by
       refine le_trans ?_ hCd.le
-      rw [Measure.add_apply]
+      rw [add_apply]
       exact self_le_add_left _ _
     have hsub1 : A ⊆ C ∪ (A ∆ C) := by
       intro x hx

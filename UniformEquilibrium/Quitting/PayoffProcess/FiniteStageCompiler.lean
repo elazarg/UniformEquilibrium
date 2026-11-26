@@ -139,12 +139,9 @@ theorem QuittingPayoffProcess.expectedUtility_finiteStage_eq_value
     (ω : process.Ω) (who : ι) :
     expectedUtility (process.finiteStageUtility time nextValue ω) who
         ((quittingBinaryForm ι).mixed.play
-          (fun player ↦
-            _root_.Math.Probability.finDistOfPMF
-              (process.finiteStageRoot time hδ nextValue ω player))) =
+          (process.finiteStageRoot time hδ nextValue ω)) =
       process.finiteStageValue time hδ nextValue ω who := by
   rw [expectedUtility_quittingBinaryForm_eq]
-  simp only [_root_.Math.Probability.toPMF_finDistOfPMF]
   rfl
 
 /-- Pointwise one-stage incentive bound for an arbitrary randomized action

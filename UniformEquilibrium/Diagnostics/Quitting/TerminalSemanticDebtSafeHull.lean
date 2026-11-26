@@ -39,14 +39,14 @@ it to at most one more than the number of players. -/
 def quittingTerminalSemanticDebtSafeHull
     (A : Set (QuittingTerminalSemanticPair ι)) :
     Set (QuittingTerminalSemanticPair ι) :=
-  fun pair ↦ ∃ (m : ℕ)
+  {pair | ∃ (m : ℕ)
       (point : Fin m → QuittingTerminalSemanticPair ι)
       (weight : Fin m → ℝ),
     (∀ k, 0 ≤ weight k) ∧
     (∑ k, weight k) = 1 ∧
     (∀ k, point k ∈ A) ∧
     (∀ who, pair.1 who ≤ ∑ k, weight k * (point k).1 who) ∧
-    (∀ who k, (point k).2 who ≤ pair.2 who)
+    (∀ who k, (point k).2 who ≤ pair.2 who)}
 
 omit [Fintype ι] [DecidableEq ι] in
 theorem quittingTerminalSemanticDebtSafeHull_mono

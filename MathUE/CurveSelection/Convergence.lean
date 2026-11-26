@@ -592,7 +592,8 @@ theorem derivative_eval_ne_zero_of_irreducible_bivPolynomial
       (FractionRing (PowerSeries ℂ))).comp coeffHom
   have hcoeffHom : Function.Injective coeffHom := by
     intro p q hpq
-    apply Polynomial.ext
+    apply AddMonoidAlgebra.ext
+    apply DFunLike.ext
     intro n
     have h :=
       congrArg (PowerSeries.coeff n) hpq
@@ -630,7 +631,8 @@ theorem derivative_eval_ne_zero_of_irreducible_bivPolynomial
   have hmapQ :
       Qfrac.map liftFrac =
         Q.map intoFrac := by
-    apply Polynomial.ext
+    apply AddMonoidAlgebra.ext
+    apply DFunLike.ext
     intro n
     simp [Qfrac, liftFrac, intoFrac,
       IsFractionRing.lift_algebraMap]
@@ -640,7 +642,8 @@ theorem derivative_eval_ne_zero_of_irreducible_bivPolynomial
           (algebraMap (PowerSeries ℂ)
             (FractionRing (PowerSeries ℂ))) := by
     rw [← Polynomial.derivative_map, hmapQ]
-    apply Polynomial.ext
+    apply AddMonoidAlgebra.ext
+    apply DFunLike.ext
     intro n
     simp [intoFrac, coeffHom,
       bivPolynomialToPowerSeriesPolynomial]
@@ -939,7 +942,8 @@ theorem derivative_eval_ne_zero_of_irreducible_bivPolynomial_map
       (FractionRing (PowerSeries L))).comp coeffHom
   have hcoeffHom : Function.Injective coeffHom := by
     intro p q hpq
-    apply Polynomial.ext
+    apply AddMonoidAlgebra.ext
+    apply DFunLike.ext
     intro n
     apply σ.injective
     have h :=
@@ -978,7 +982,8 @@ theorem derivative_eval_ne_zero_of_irreducible_bivPolynomial_map
   have hmapQ :
       Qfrac.map liftFrac =
         Q.map intoFrac := by
-    apply Polynomial.ext
+    apply AddMonoidAlgebra.ext
+    apply DFunLike.ext
     intro n
     simp [Qfrac, liftFrac, intoFrac,
       IsFractionRing.lift_algebraMap]
@@ -988,7 +993,8 @@ theorem derivative_eval_ne_zero_of_irreducible_bivPolynomial_map
           (algebraMap (PowerSeries L)
             (FractionRing (PowerSeries L))) := by
     rw [← Polynomial.derivative_map, hmapQ]
-    apply Polynomial.ext
+    apply AddMonoidAlgebra.ext
+    apply DFunLike.ext
     intro n
     simp [intoFrac, coeffHom,
       mappedBivPolynomialToPowerSeriesPolynomial]
@@ -1091,7 +1097,8 @@ theorem derivative_eval_ne_zero_of_irreducible_bivPolynomial_of_coeffHom
   have hmapQ :
       Qfrac.map liftFrac =
         Q.map intoFrac := by
-    apply Polynomial.ext
+    apply AddMonoidAlgebra.ext
+    apply DFunLike.ext
     intro n
     simp [Qfrac, liftFrac, intoFrac,
       IsFractionRing.lift_algebraMap]
@@ -1101,7 +1108,8 @@ theorem derivative_eval_ne_zero_of_irreducible_bivPolynomial_of_coeffHom
           (algebraMap (PowerSeries L)
             (FractionRing (PowerSeries L))) := by
     rw [← Polynomial.derivative_map, hmapQ]
-    apply Polynomial.ext
+    apply AddMonoidAlgebra.ext
+    apply DFunLike.ext
     intro n
     simp [intoFrac]
   have hQzero :
@@ -1212,7 +1220,8 @@ theorem
     (PowerSeries.expand p hp).toRingHom.comp base
   have hbase : Function.Injective base := by
     intro a b hab
-    apply Polynomial.ext
+    apply AddMonoidAlgebra.ext
+    apply DFunLike.ext
     intro n
     apply Complex.ofRealHom.injective
     have hn := congrArg (PowerSeries.coeff n) hab
@@ -1345,7 +1354,8 @@ theorem
     (PowerSeries.expand p hp).toRingHom.comp base
   have hbase : Function.Injective base := by
     intro a b hab
-    apply Polynomial.ext
+    apply AddMonoidAlgebra.ext
+    apply DFunLike.ext
     intro n
     apply Complex.ofRealHom.injective
     have hn := congrArg (PowerSeries.coeff n) hab
@@ -1499,7 +1509,7 @@ theorem eventually_ne_of_trunc_ne
   have hBcontinuous : ContinuousAt B 0 := by
     have hqcontinuous :
         ContinuousAt (fun x : ℂ => q.eval x) 0 :=
-      (Polynomial.continuous_eval₂ q (RingHom.id ℂ)).continuousAt
+      q.continuousAt
     exact hqcontinuous.add
       ((continuousAt_id.pow _).mul (hzs.sub hzt))
   have hnm_pos : 0 < n - m := Nat.sub_pos_of_lt hm
@@ -1772,7 +1782,8 @@ theorem exists_irreducible_bivFactor_of_formalRoot
     UniqueFactorizationMonoid.irreducible_of_normalized_factor q hqmem
   have hcoeffHom : Function.Injective coeffHom := by
     intro p r hpr
-    apply Polynomial.ext
+    apply AddMonoidAlgebra.ext
+    apply DFunLike.ext
     intro n
     have hn := congrArg (PowerSeries.coeff n) hpr
     simpa [coeffHom] using hn

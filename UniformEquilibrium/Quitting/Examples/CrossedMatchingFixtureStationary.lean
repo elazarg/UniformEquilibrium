@@ -83,41 +83,88 @@ private theorem active_stationary_balance
         excludedValue (weightOfReward reward) (hazardOfRoot root) player := by
   exact stationary_proper_mixing_balance reward root player hproper hnash
 
+private def LiteralPartnerQuit (hazard : Fin 4 → ℝ) (missing : Fin 4) : Prop :=
+    sigmaValue (weightOfReward reward) hazard (partnerOfMissing missing) =
+      1 + pairPremium missing * hazard (firstOfMissing missing) -
+        2 * hazard (thirdOfMissing missing) - (pairPremium missing + 9) *
+          hazard (firstOfMissing missing) * hazard (thirdOfMissing missing)
+
+local macro "prove_literal_partner_quit" hmissing:ident : tactic => `(tactic|
+  (unfold LiteralPartnerQuit
+   rw [sigmaValue_eq_pureQuitEndpointRowSum]
+   norm_num [firstOfMissing, partnerOfMissing, thirdOfMissing, pairPremium,
+     pureQuitEndpointRowSum, opponentCoalitionMass, weightOfReward,
+     Math.Finset.finFourCoalitionOfRow, Fin.sum_univ_succ, Fin.prod_univ_succ, ($hmissing)]
+   solve
+   | norm_num [reward, Math.FiniteCoalition.binaryCode_finFour]
+   | norm_num [reward, Math.FiniteCoalition.binaryCode_finFour]
+     ring))
+
+private theorem literal_partner_quit_0 (hazard : Fin 4 → ℝ) (hmissing : hazard 0 = 0) :
+    LiteralPartnerQuit hazard 0 := by
+  prove_literal_partner_quit hmissing
+
+private theorem literal_partner_quit_1 (hazard : Fin 4 → ℝ) (hmissing : hazard 1 = 0) :
+    LiteralPartnerQuit hazard 1 := by
+  prove_literal_partner_quit hmissing
+
+private theorem literal_partner_quit_2 (hazard : Fin 4 → ℝ) (hmissing : hazard 2 = 0) :
+    LiteralPartnerQuit hazard 2 := by
+  prove_literal_partner_quit hmissing
+
+private theorem literal_partner_quit_3 (hazard : Fin 4 → ℝ) (hmissing : hazard 3 = 0) :
+    LiteralPartnerQuit hazard 3 := by
+  prove_literal_partner_quit hmissing
+
 private theorem literal_partner_quit (hazard : Fin 4 → ℝ) (missing : Fin 4)
     (hmissing : hazard missing = 0) :
     sigmaValue (weightOfReward reward) hazard (partnerOfMissing missing) =
       1 + pairPremium missing * hazard (firstOfMissing missing) -
         2 * hazard (thirdOfMissing missing) - (pairPremium missing + 9) *
           hazard (firstOfMissing missing) * hazard (thirdOfMissing missing) := by
-  rw [sigmaValue_eq_pureQuitEndpointRowSum]
+  change LiteralPartnerQuit hazard missing
   fin_cases missing
-  all_goals norm_num only at hmissing
-  all_goals first
-    | change hazard (0 : Fin 4) = 0 at hmissing
-    | change hazard (1 : Fin 4) = 0 at hmissing
-    | change hazard (2 : Fin 4) = 0 at hmissing
-    | change hazard (3 : Fin 4) = 0 at hmissing
-  all_goals norm_num [firstOfMissing, partnerOfMissing, thirdOfMissing, pairPremium,
-    pureQuitEndpointRowSum, opponentCoalitionMass, weightOfReward,
-    Math.Finset.finFourCoalitionOfRow, Fin.sum_univ_succ, Fin.prod_univ_succ, hmissing]
-  all_goals norm_num [reward, Math.FiniteCoalition.binaryCode_finFour]
-  all_goals ring
+  · exact literal_partner_quit_0 hazard hmissing
+  · exact literal_partner_quit_1 hazard hmissing
+  · exact literal_partner_quit_2 hazard hmissing
+  · exact literal_partner_quit_3 hazard hmissing
+
+private def LiteralPartnerContinueReward (hazard : Fin 4 → ℝ) (missing : Fin 4) : Prop :=
+    excludedValue (weightOfReward reward) hazard (partnerOfMissing missing) = 0
+
+local macro "prove_literal_partner_continue_reward" hmissing:ident : tactic => `(tactic|
+  (unfold LiteralPartnerContinueReward
+   rw [excludedValue_eq_excludedEndpointRowSum]
+   norm_num [partnerOfMissing,
+     excludedEndpointRowSum, opponentCoalitionMass, weightOfReward,
+     Math.Finset.finFourCoalitionOfRow, Fin.sum_univ_succ, Fin.prod_univ_succ, ($hmissing)]
+   norm_num [reward, Math.FiniteCoalition.binaryCode_finFour]))
+
+private theorem literal_partner_continue_reward_0 (hazard : Fin 4 → ℝ) (hmissing : hazard 0 = 0) :
+    LiteralPartnerContinueReward hazard 0 := by
+  prove_literal_partner_continue_reward hmissing
+
+private theorem literal_partner_continue_reward_1 (hazard : Fin 4 → ℝ) (hmissing : hazard 1 = 0) :
+    LiteralPartnerContinueReward hazard 1 := by
+  prove_literal_partner_continue_reward hmissing
+
+private theorem literal_partner_continue_reward_2 (hazard : Fin 4 → ℝ) (hmissing : hazard 2 = 0) :
+    LiteralPartnerContinueReward hazard 2 := by
+  prove_literal_partner_continue_reward hmissing
+
+private theorem literal_partner_continue_reward_3 (hazard : Fin 4 → ℝ) (hmissing : hazard 3 = 0) :
+    LiteralPartnerContinueReward hazard 3 := by
+  prove_literal_partner_continue_reward hmissing
 
 private theorem literal_partner_continue_reward (hazard : Fin 4 → ℝ) (missing : Fin 4)
     (hmissing : hazard missing = 0) :
     excludedValue (weightOfReward reward) hazard (partnerOfMissing missing) = 0 := by
-  rw [excludedValue_eq_excludedEndpointRowSum]
+  change LiteralPartnerContinueReward hazard missing
   fin_cases missing
-  all_goals norm_num only at hmissing
-  all_goals first
-    | change hazard (0 : Fin 4) = 0 at hmissing
-    | change hazard (1 : Fin 4) = 0 at hmissing
-    | change hazard (2 : Fin 4) = 0 at hmissing
-    | change hazard (3 : Fin 4) = 0 at hmissing
-  all_goals norm_num [partnerOfMissing, excludedEndpointRowSum,
-    opponentCoalitionMass, weightOfReward, Math.Finset.finFourCoalitionOfRow,
-    Fin.sum_univ_succ, Fin.prod_univ_succ, hmissing]
-  all_goals norm_num [reward, Math.FiniteCoalition.binaryCode_finFour]
+  · exact literal_partner_continue_reward_0 hazard hmissing
+  · exact literal_partner_continue_reward_1 hazard hmissing
+  · exact literal_partner_continue_reward_2 hazard hmissing
+  · exact literal_partner_continue_reward_3 hazard hmissing
 
 private theorem literal_partner_continue_mass (hazard : Fin 4 → ℝ) (missing : Fin 4)
     (hmissing : hazard missing = 0) :
@@ -136,44 +183,95 @@ private theorem literal_partner_continue_mass (hazard : Fin 4 → ℝ) (missing 
   all_goals norm_num +decide [Finset.prod_insert, Finset.prod_singleton, hmissing]
   all_goals ring
 
+private def LiteralFirstQuit (hazard : Fin 4 → ℝ) (missing : Fin 4) : Prop :=
+    sigmaValue (weightOfReward reward) hazard (firstOfMissing missing) =
+      1 - 2 * hazard (thirdOfMissing missing) -
+        ((pairPremium missing + 9) * hazard (thirdOfMissing missing) - pairPremium missing) *
+          hazard (partnerOfMissing missing)
+
+local macro "prove_literal_first_quit" hmissing:ident : tactic => `(tactic|
+  (unfold LiteralFirstQuit
+   rw [sigmaValue_eq_pureQuitEndpointRowSum]
+   norm_num [firstOfMissing, partnerOfMissing, thirdOfMissing, pairPremium,
+     pureQuitEndpointRowSum, opponentCoalitionMass, weightOfReward,
+     Math.Finset.finFourCoalitionOfRow, Fin.sum_univ_succ, Fin.prod_univ_succ, ($hmissing)]
+   solve
+   | norm_num [reward, Math.FiniteCoalition.binaryCode_finFour]
+   | norm_num [reward, Math.FiniteCoalition.binaryCode_finFour]
+     ring))
+
+private theorem literal_first_quit_0 (hazard : Fin 4 → ℝ) (hmissing : hazard 0 = 0) :
+    LiteralFirstQuit hazard 0 := by
+  prove_literal_first_quit hmissing
+
+private theorem literal_first_quit_1 (hazard : Fin 4 → ℝ) (hmissing : hazard 1 = 0) :
+    LiteralFirstQuit hazard 1 := by
+  prove_literal_first_quit hmissing
+
+private theorem literal_first_quit_2 (hazard : Fin 4 → ℝ) (hmissing : hazard 2 = 0) :
+    LiteralFirstQuit hazard 2 := by
+  prove_literal_first_quit hmissing
+
+private theorem literal_first_quit_3 (hazard : Fin 4 → ℝ) (hmissing : hazard 3 = 0) :
+    LiteralFirstQuit hazard 3 := by
+  prove_literal_first_quit hmissing
+
 private theorem literal_first_quit (hazard : Fin 4 → ℝ) (missing : Fin 4)
     (hmissing : hazard missing = 0) :
     sigmaValue (weightOfReward reward) hazard (firstOfMissing missing) =
       1 - 2 * hazard (thirdOfMissing missing) -
         ((pairPremium missing + 9) * hazard (thirdOfMissing missing) - pairPremium missing) *
           hazard (partnerOfMissing missing) := by
-  rw [sigmaValue_eq_pureQuitEndpointRowSum]
+  change LiteralFirstQuit hazard missing
   fin_cases missing
-  all_goals norm_num only at hmissing
-  all_goals first
-    | change hazard (0 : Fin 4) = 0 at hmissing
-    | change hazard (1 : Fin 4) = 0 at hmissing
-    | change hazard (2 : Fin 4) = 0 at hmissing
-    | change hazard (3 : Fin 4) = 0 at hmissing
-  all_goals norm_num [firstOfMissing, partnerOfMissing, thirdOfMissing, pairPremium,
-    pureQuitEndpointRowSum, opponentCoalitionMass, weightOfReward,
-    Math.Finset.finFourCoalitionOfRow, Fin.sum_univ_succ, Fin.prod_univ_succ, hmissing]
-  all_goals norm_num [reward, Math.FiniteCoalition.binaryCode_finFour]
-  all_goals ring
+  · exact literal_first_quit_0 hazard hmissing
+  · exact literal_first_quit_1 hazard hmissing
+  · exact literal_first_quit_2 hazard hmissing
+  · exact literal_first_quit_3 hazard hmissing
+
+private def LiteralFirstContinueReward (hazard : Fin 4 → ℝ) (missing : Fin 4) : Prop :=
+    excludedValue (weightOfReward reward) hazard (firstOfMissing missing) =
+      favoriteReward missing * hazard (thirdOfMissing missing) *
+        (1 - hazard (partnerOfMissing missing))
+
+local macro "prove_literal_first_continue_reward" hmissing:ident : tactic => `(tactic|
+  (unfold LiteralFirstContinueReward
+   rw [excludedValue_eq_excludedEndpointRowSum]
+   norm_num [firstOfMissing, partnerOfMissing, thirdOfMissing, favoriteReward,
+     excludedEndpointRowSum, opponentCoalitionMass, weightOfReward,
+     Math.Finset.finFourCoalitionOfRow, Fin.sum_univ_succ, Fin.prod_univ_succ, ($hmissing)]
+   solve
+   | norm_num [reward, Math.FiniteCoalition.binaryCode_finFour]
+   | norm_num [reward, Math.FiniteCoalition.binaryCode_finFour]
+     ring))
+
+private theorem literal_first_continue_reward_0 (hazard : Fin 4 → ℝ) (hmissing : hazard 0 = 0) :
+    LiteralFirstContinueReward hazard 0 := by
+  prove_literal_first_continue_reward hmissing
+
+private theorem literal_first_continue_reward_1 (hazard : Fin 4 → ℝ) (hmissing : hazard 1 = 0) :
+    LiteralFirstContinueReward hazard 1 := by
+  prove_literal_first_continue_reward hmissing
+
+private theorem literal_first_continue_reward_2 (hazard : Fin 4 → ℝ) (hmissing : hazard 2 = 0) :
+    LiteralFirstContinueReward hazard 2 := by
+  prove_literal_first_continue_reward hmissing
+
+private theorem literal_first_continue_reward_3 (hazard : Fin 4 → ℝ) (hmissing : hazard 3 = 0) :
+    LiteralFirstContinueReward hazard 3 := by
+  prove_literal_first_continue_reward hmissing
 
 private theorem literal_first_continue_reward (hazard : Fin 4 → ℝ) (missing : Fin 4)
     (hmissing : hazard missing = 0) :
     excludedValue (weightOfReward reward) hazard (firstOfMissing missing) =
       favoriteReward missing * hazard (thirdOfMissing missing) *
         (1 - hazard (partnerOfMissing missing)) := by
-  rw [excludedValue_eq_excludedEndpointRowSum]
+  change LiteralFirstContinueReward hazard missing
   fin_cases missing
-  all_goals norm_num only at hmissing
-  all_goals first
-    | change hazard (0 : Fin 4) = 0 at hmissing
-    | change hazard (1 : Fin 4) = 0 at hmissing
-    | change hazard (2 : Fin 4) = 0 at hmissing
-    | change hazard (3 : Fin 4) = 0 at hmissing
-  all_goals norm_num [firstOfMissing, partnerOfMissing, thirdOfMissing, favoriteReward,
-    excludedEndpointRowSum, opponentCoalitionMass, weightOfReward,
-    Math.Finset.finFourCoalitionOfRow, Fin.sum_univ_succ, Fin.prod_univ_succ, hmissing]
-  all_goals norm_num [reward, Math.FiniteCoalition.binaryCode_finFour]
-  all_goals ring
+  · exact literal_first_continue_reward_0 hazard hmissing
+  · exact literal_first_continue_reward_1 hazard hmissing
+  · exact literal_first_continue_reward_2 hazard hmissing
+  · exact literal_first_continue_reward_3 hazard hmissing
 
 private theorem literal_first_continue_mass (hazard : Fin 4 → ℝ) (missing : Fin 4)
     (hmissing : hazard missing = 0) :

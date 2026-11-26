@@ -1,6 +1,7 @@
 module
 
 public import MathUE.Complex.HolomorphicShortArc
+import Mathlib.Analysis.SpecialFunctions.Complex.LogDeriv
 
 /-! # Relative disk neighborhoods cut out by logarithmic rectangles
 

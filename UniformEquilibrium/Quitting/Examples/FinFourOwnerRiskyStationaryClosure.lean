@@ -787,8 +787,10 @@ def sharpCenteredCertificate
         (fun who ↦ quittingFaceNumerator
           (weightOfReward (sharpReward R singletonLevel)) hazard who) = 0 := by
       funext who
-      have := hzero who
-      simpa [sharpOrientedField, Pi.zero_apply] using neg_eq_zero.mp this
+      have heq := hzero who
+      change -applySharpPreconditioner (fun player ↦ quittingFaceNumerator
+        (weightOfReward (sharpReward R singletonLevel)) hazard player) who = 0 at heq
+      exact neg_eq_zero.mp heq
     have hzeroInput : applySharpPreconditioner (0 : Player → ℝ) = 0 := by
       funext who
       simp [applySharpPreconditioner]

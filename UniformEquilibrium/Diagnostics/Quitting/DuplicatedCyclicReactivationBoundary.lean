@@ -91,7 +91,7 @@ theorem singletonChildRootAt_direction_tendsto (first : Fin 3) (who : Player) :
       fin_cases who <;>
         simp [singletonChildRootAt, firstChildRootAt, previousOwner,
           singletonDirectionAt, nextOwner]
-      all_goals simpa [one_div] using
+      simpa [one_div] using
         (hazard_div_linearSquare_tendsto 1 one_ne_zero)
 
 theorem firstChildRootAt_totalHazard_tendsto_zero (first : Fin 3) :
@@ -331,7 +331,7 @@ theorem otherSecondChildRootAt_direction_tendsto (first : Fin 3) (who : Player) 
       fin_cases who <;>
         simp [otherSecondChildRootAt, firstChildRootAt, nextOwner,
           otherSingletonDirectionAt, previousOwner]
-      all_goals simpa [one_div] using
+      simpa [one_div] using
         (hazard_div_linearSquare_tendsto 1 one_ne_zero)
 
 theorem otherSecondChildRootAt_totalHazard_tendsto_zero (first : Fin 3) :

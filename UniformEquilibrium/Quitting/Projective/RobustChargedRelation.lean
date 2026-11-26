@@ -1,4 +1,4 @@
-import Maths.Graph.ChargedRelation
+import MathUE.ChargedRelation
 import UniformEquilibrium.Quitting.Root.NashDefectContinuity
 
 /-! # Floor-free robust charged relation

@@ -220,10 +220,18 @@ theorem exists_uniformGap_of_positive_at_calibrationPoint
             profile.2.1 := by
   let calibration : CalibrationSquare → ℝ := fun profile =>
     coupledCalibrationDebt targetHost targetClock profile.1.1 profile.2.1
+  have hhost : Continuous (fun profile : CalibrationSquare => (profile.1 : ℝ)) :=
+    continuous_subtype_val.comp continuous_fst
+  have hclock : Continuous (fun profile : CalibrationSquare => (profile.2 : ℝ)) :=
+    continuous_subtype_val.comp continuous_snd
+  let coordinates : CalibrationSquare → ℝ × ℝ := fun profile => (profile.1.1, profile.2.1)
+  have hcoordinates : Continuous coordinates := hhost.prodMk hclock
+  let debt : ℝ × ℝ → ℝ := fun point =>
+    coupledCalibrationDebt targetHost targetClock point.1 point.2
+  have hdebt : Continuous debt := continuous_coupledCalibrationDebt targetHost targetClock
   have hcalibrationContinuous : Continuous calibration := by
-    exact (continuous_coupledCalibrationDebt targetHost targetClock).comp
-      ((continuous_subtype_val.comp continuous_fst).prodMk
-        (continuous_subtype_val.comp continuous_snd))
+    change Continuous (debt ∘ coordinates)
+    exact hdebt.comp hcoordinates
   have hcalibrationNonneg : ∀ profile, 0 ≤ calibration profile := by
     intro profile
     exact coupledCalibrationDebt_nonneg targetHost targetClock _ _
@@ -231,6 +239,7 @@ theorem exists_uniformGap_of_positive_at_calibrationPoint
   have hzeroSlice : ∀ profile, calibration profile = 0 →
       0 < audit profile := by
     intro profile hzero
+    change coupledCalibrationDebt targetHost targetClock profile.1.1 profile.2.1 = 0 at hzero
     have heq := (coupledCalibrationDebt_eq_zero_iff targetHost targetClock
       profile.1.1 profile.2.1 htargetHost0 htargetHost1 htargetClock0
       htargetClock1 profile.1.2.1 profile.1.2.2 profile.2.2.1
@@ -241,10 +250,10 @@ theorem exists_uniformGap_of_positive_at_calibrationPoint
       apply Prod.ext <;> apply Subtype.ext
       · exact heq.1
       · exact heq.2
-    simpa [hprofile] using hauditAtTarget
-  simpa only [calibration] using
-    Math.Topology.CalibrationSliceCompactness.exists_uniformGap_of_positive_on_zeroSlice
-      audit calibration hauditContinuous hcalibrationContinuous hauditNonneg
-      hcalibrationNonneg hzeroSlice
+    rw [hprofile]
+    exact hauditAtTarget
+  exact Math.Topology.CalibrationSliceCompactness.exists_uniformGap_of_positive_on_zeroSlice
+    audit calibration hauditContinuous hcalibrationContinuous hauditNonneg
+    hcalibrationNonneg hzeroSlice
 
 end Research.ORCoupledCalibrationGame

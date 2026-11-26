@@ -187,7 +187,7 @@ theorem expectedStagePayoff_succ_shift (G : StochasticGame ι) [Fintype ι]
   rw [expect_bind]
   congr 1
   funext s₁
-  rw [Math.Probability.expect_map_fintype_target]
+  rw [_root_.Math.Probability.expect_map_fintype_target]
   rfl
 
 /-- Normalized `β`-discounted expected payoff: the factor `1 - β` scales the

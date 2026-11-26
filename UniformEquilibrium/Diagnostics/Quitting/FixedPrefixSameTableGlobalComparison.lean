@@ -123,7 +123,7 @@ private theorem value_policy
       rw [expect_pmfPi_fin4]
       simp [value, roots, uniformHazard, htime, hnext, reward,
         quittingRootPayoff, quittingQuitters,
-        Math.Probability.expect_eq_sum, hsub, hcast]
+        _root_.Math.Probability.expect_eq_sum, hsub, hcast]
     case «0» =>
       field_simp [ne_of_gt hrPos, ne_of_gt hrNextPos']
       ring
@@ -137,7 +137,7 @@ private theorem value_policy
       unfold quittingRootSuccessorPayoff quittingRootExpectedPayoff <;>
       rw [expect_pmfPi_fin4] <;>
       simp [value, roots, uniformHazard, reward, quittingRootPayoff,
-        quittingQuitters, Math.Probability.expect_eq_sum] <;>
+        quittingQuitters, _root_.Math.Probability.expect_eq_sum] <;>
       norm_num
 
 /-- The selected finite chain is the literal terminal payoff of the root sequence. -/
@@ -440,7 +440,7 @@ theorem profile_debt
   rw [profile_bestResponse length hlength who,
     congrFun (profile_payoff length hlength) who]
   fin_cases who <;> simp [value, hlength]
-  all_goals ring
+  ring
 
 /-- The same-table global comparison has exact unrestricted exploitability
 `2 / length`. -/

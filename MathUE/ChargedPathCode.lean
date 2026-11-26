@@ -1,4 +1,4 @@
-import Maths.Graph.ChargedRelation
+import MathUE.ChargedRelation
 import Mathlib.Algebra.BigOperators.Fin
 
 /-! # Finite charged-path codes

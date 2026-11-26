@@ -30,7 +30,7 @@ theorem matrix_operator_norm_le_of_rowSum_le
   rw [Matrix.linfty_opNorm_def]
   have hrowNN (row : ι) : (∑ column, ‖matrix row column‖₊) ≤ ⟨bound, hbound⟩ := by
     change ((∑ column, ‖matrix row column‖₊ : NNReal) : ℝ) ≤ bound
-    simpa only [NNReal.coe_sum, coe_nnnorm] using hrow row
+    simpa only [NNReal.coe_sum, coe_nnNorm] using hrow row
   exact NNReal.coe_le_coe.mpr (Finset.sup_le (fun row _ => hrowNN row))
 
 /-- Every absolute row sum is bounded by the induced row-sum norm. -/
@@ -39,7 +39,7 @@ theorem matrix_rowSum_le_operator_norm (matrix : Matrix ι ι ℝ) (row : ι) :
   rw [Matrix.linfty_opNorm_def]
   have h := NNReal.coe_le_coe.mpr (Finset.le_sup
     (f := fun who : ι => ∑ col, ‖matrix who col‖₊) (Finset.mem_univ row))
-  simpa only [NNReal.coe_sum, coe_nnnorm] using h
+  simpa only [NNReal.coe_sum, coe_nnNorm] using h
 
 /-- Each entry is bounded by the same induced row-sum norm. -/
 theorem matrix_entry_norm_le_operator_norm (matrix : Matrix ι ι ℝ) (row column : ι) :

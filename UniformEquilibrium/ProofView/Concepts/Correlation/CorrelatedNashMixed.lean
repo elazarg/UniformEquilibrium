@@ -284,13 +284,14 @@ theorem IsCorrelatedEq.support_avoids_dominated_relative
     have hd := hdom σ0 (hS σ0 hσ0)
     calc G.eu σ0 who = G.eu (Function.update σ0 who s) who := by rw [heq]
       _ < G.eu (Function.update σ0 who t) who := hd
-  have hstrict := Math.Probability.expect_lt_of_le_of_exists_lt μ
+  have hstrict := _root_.Math.Probability.expect_lt_of_le_of_exists_lt μ
     (fun σ => G.eu σ who)
     (fun σ => if S σ then G.eu (Function.update σ who (dev (σ who))) who else G.eu σ who)
     hle ⟨σ0, hσ0, hlt0⟩
-  have hcongr : Math.Probability.expect μ
+  have hcongr : _root_.Math.Probability.expect μ
       (fun σ => if S σ then G.eu (Function.update σ who (dev (σ who))) who else G.eu σ who) =
-      Math.Probability.expect μ (fun σ => G.eu (Function.update σ who (dev (σ who))) who) := by
+      _root_.Math.Probability.expect μ
+        (fun σ => G.eu (Function.update σ who (dev (σ who))) who) := by
     apply Math.ProbabilityMassFunction.expect_congr_of_ne_zero
     intro σ hσ
     rw [ite_eq_left (hS σ hσ)]

@@ -27,7 +27,7 @@ theorem finiteRootWordCap_singleton_eq (solo value : ℝ)
         fun _ => PMF.pure true := by
       funext who
       simp [Subsingleton.elim who PUnit.unit]
-    rw [hroot, Math.PMFProduct.pmfPi_pure, Math.Probability.expect_pure]
+    rw [hroot, Math.PMFProduct.pmfPi_pure, _root_.Math.Probability.expect_pure]
     simp [reward, quittingRootPayoff]
   · unfold quittingStationaryFixedOpponentsContinueReward
       quittingStationaryFixedOpponentsContinueMass
@@ -38,7 +38,7 @@ theorem finiteRootWordCap_singleton_eq (solo value : ℝ)
         fun _ => PMF.pure false := by
       funext who
       simp [Subsingleton.elim who PUnit.unit]
-    rw [hroot, Math.PMFProduct.pmfPi_pure, Math.Probability.expect_pure]
+    rw [hroot, Math.PMFProduct.pmfPi_pure, _root_.Math.Probability.expect_pure]
     simp [quittingRootPayoff]
     have hall : quittingAllContinueAction = fun _ : PUnit => false := by
       funext who

@@ -264,7 +264,7 @@ theorem exists_vriezeRankCompletion_of_dualFeasible
         (G.controllerSucc controller)
         (G.vriezeOccupationSupport controller z) source = rank
     induction rank using Nat.strong_induction_on generalizing source with
-    | h rank ih =>
+    | ind rank ih =>
         by_cases hsource :
             G.vriezeOccupationSupport controller z source
         · exact ⟨source, hsource, Relation.ReflTransGen.refl⟩

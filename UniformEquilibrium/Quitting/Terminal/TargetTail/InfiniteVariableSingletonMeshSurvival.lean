@@ -476,7 +476,7 @@ theorem
       (gap * totalFloor - 2 * bound) / (gap + 2 * bound) = eta := by
     dsimp only [totalFloor]
     field_simp [ne_of_gt hgapPos, ne_of_gt hgapDenom]
-    all_goals ring
+    ring
   have hopponent : eta ≤
       quittingEssentialAPSOpponentWindowMass owner mass who start fuel := by
     rw [hfloorEq] at hopponentRaw

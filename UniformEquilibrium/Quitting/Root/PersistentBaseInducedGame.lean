@@ -57,7 +57,7 @@ def quittingPersistentBaseRootOfProfile
     (profile : Profile (quittingBinaryForm free).sig.mixed) : ι → PMF Bool :=
   fun who => if _hbase : who ∈ base then PMF.pure true
     else if hfree : who ∈ free then
-      (profile ⟨who, hfree⟩).toPMF
+      profile ⟨who, hfree⟩
     else PMF.pure false
 
 /-- Extend one mixed point of the induced game to the ambient quitting row. -/
@@ -81,7 +81,7 @@ omit [Fintype ι] in
     (point : mixedPolytope (quittingBinaryForm free).sig)
     {who : ι} (hwho : who ∈ free) :
     quittingPersistentBaseRoot base free point who =
-      ((ofPolytope (quittingBinaryForm free).sig point.2) ⟨who, hwho⟩).toPMF := by
+      ofPolytope (quittingBinaryForm free).sig point.2 ⟨who, hwho⟩ := by
   have hnotBase : who ∉ base := fun hbase => Finset.disjoint_left.mp hdisjoint hbase hwho
   simp [quittingPersistentBaseRoot, quittingPersistentBaseRootOfProfile,
     hnotBase, hwho]
@@ -111,7 +111,7 @@ omit [Fintype ι] in
     (profile : Profile (quittingBinaryForm free).sig.mixed)
     {who : ι} (hwho : who ∈ free) :
     quittingPersistentBaseRootOfProfile base free profile who =
-      (profile ⟨who, hwho⟩).toPMF := by
+      profile ⟨who, hwho⟩ := by
   have hnotBase : who ∉ base := fun hbase =>
     Finset.disjoint_left.mp hdisjoint hbase hwho
   simp [quittingPersistentBaseRootOfProfile, hnotBase, hwho]
@@ -197,13 +197,13 @@ theorem expectedUtility_persistentBase_eq_rootExpectedPayoff
   have hmarginals :
       principalMarginals
           (quittingPersistentBaseRootOfProfile base free profile) free =
-        fun player => (profile player).toPMF := by
+        profile := by
     funext player
     exact quittingPersistentBaseRootOfProfile_apply_of_mem_free
       base free hdisjoint profile player.2
   rw [hmarginals]
-  apply congrArg (Math.Probability.expect
-    (pmfPi (fun player => (profile player).toPMF)))
+  apply congrArg (_root_.Math.Probability.expect
+    (pmfPi profile))
   funext action
   exact quittingRootPayoff_principalExtend_persistentBase
     reward base free hbase hdisjoint action who
@@ -214,12 +214,12 @@ updating that coordinate's ambient PMF afterwards. -/
 theorem quittingPersistentBaseRootOfProfile_update
     (base free : Finset ι) (hdisjoint : Disjoint base free)
     (profile : Profile (quittingBinaryForm free).sig.mixed)
-    (who : free) (deviation : FinDist Bool) :
+    (who : free) (deviation : PMF Bool) :
     quittingPersistentBaseRootOfProfile base free
         (Function.update profile who deviation) =
       Function.update
         (quittingPersistentBaseRootOfProfile base free profile)
-        who.1 deviation.toPMF := by
+        who.1 deviation := by
   funext player
   by_cases heq : player = who.1
   · subst player
@@ -252,7 +252,8 @@ theorem isNash_of_mem_quittingPersistentBaseNashSet
     (quittingPersistentBaseUtility reward base free) point.1 at hpoint
   apply (probs_mem_bestReplies_self_iff_isNash
     (F := quittingBinaryForm free)
-    (quittingPersistentBaseUtility reward base free) _).mp
+    (quittingPersistentBaseUtility reward base free)
+    ((quittingBinaryForm free).hasIntegrableUtility_of_finiteOutcome _) _).mp
   simpa [probs_ofPolytope (quittingBinaryForm free).sig point.2] using hpoint
 
 /-- An induced Nash point gives the exact pure-Quit and pure-Continue
@@ -276,21 +277,25 @@ theorem quittingPersistentBaseRoot_free_purePayoff_le
   let freeWho : free := ⟨who, hwho⟩
   have hnash := isNash_of_mem_quittingPersistentBaseNashSet
     reward base free point hpoint
-  have hpure := (isNash_mixed_iff profile).mp hnash
+  rw [isNash_iff] at hnash
   have hcurrent := expectedUtility_persistentBase_eq_rootExpectedPayoff
     reward base free hbase hdisjoint profile freeWho
-  have hquit := hpure freeWho true
-  have hcontinue := hpure freeWho false
+  have hquit := (euPreference_iff _ _ _ _
+    (payoffIntegrable_of_finite _ _) (payoffIntegrable_of_finite _ _)).mp
+      (hnash freeWho (PMF.pure true))
+  have hcontinue := (euPreference_iff _ _ _ _
+    (payoffIntegrable_of_finite _ _) (payoffIntegrable_of_finite _ _)).mp
+      (hnash freeWho (PMF.pure false))
   have hquitExpected := expectedUtility_persistentBase_eq_rootExpectedPayoff
     reward base free hbase hdisjoint
-      (Function.update profile freeWho (FinDist.pure true)) freeWho
+      (Function.update profile freeWho (PMF.pure true)) freeWho
   have hcontinueExpected := expectedUtility_persistentBase_eq_rootExpectedPayoff
     reward base free hbase hdisjoint
-      (Function.update profile freeWho (FinDist.pure false)) freeWho
+      (Function.update profile freeWho (PMF.pure false)) freeWho
   have hquitRoot := quittingPersistentBaseRootOfProfile_update
-    base free hdisjoint profile freeWho (FinDist.pure true)
+    base free hdisjoint profile freeWho (PMF.pure true)
   have hcontinueRoot := quittingPersistentBaseRootOfProfile_update
-    base free hdisjoint profile freeWho (FinDist.pure false)
+    base free hdisjoint profile freeWho (PMF.pure false)
   change quittingRootExpectedPayoff reward 0
       (Function.update
         (quittingPersistentBaseRootOfProfile base free profile) freeWho.1
@@ -304,11 +309,9 @@ theorem quittingPersistentBaseRoot_free_purePayoff_le
       quittingRootExpectedPayoff reward 0
         (quittingPersistentBaseRootOfProfile base free profile) freeWho.1
   constructor
-  · rw [← show (FinDist.pure true).toPMF = PMF.pure true by simp,
-      ← hquitRoot, ← hquitExpected, ← hcurrent]
+  · rw [← hquitRoot, ← hquitExpected, ← hcurrent]
     exact hquit
-  · rw [← show (FinDist.pure false).toPMF = PMF.pure false by simp,
-      ← hcontinueRoot, ← hcontinueExpected, ← hcurrent]
+  · rw [← hcontinueRoot, ← hcontinueExpected, ← hcurrent]
     exact hcontinue
 
 omit [Fintype ι] in

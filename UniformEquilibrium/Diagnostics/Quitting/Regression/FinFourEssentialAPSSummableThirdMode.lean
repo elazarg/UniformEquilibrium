@@ -1021,7 +1021,7 @@ theorem abs_executionValue_sub_baseline_le {initial : ℝ}
     have habs : |nextOneCoordinate (circuitCoordinate initial (time / 3))| =
         nextOneCoordinate (circuitCoordinate initial (time / 3)) := abs_of_nonneg hy0
     fin_cases who <;> simp [valueOne, baseline, habs, hx.1]
-    all_goals linarith
+    linarith
   · have hx := circuitCoordinate_mem hinitial (time / 3)
     have hdiv : (3 * (time / 3) + 2) / 3 = time / 3 := by omega
     rw [hdiv]
@@ -1033,7 +1033,7 @@ theorem abs_executionValue_sub_baseline_le {initial : ℝ}
       nextTwoCoordinate (nextOneCoordinate (circuitCoordinate initial (time / 3))) :=
         abs_of_nonneg hz0
     fin_cases who <;> simp [valueTwo, baseline, habs, hx.1]
-    all_goals linarith
+    linarith
 
 theorem executionValue_tendsto_baseline {initial : ℝ}
     (hinitial : initial ∈ Icc (0 : ℝ) (1 / 2)) (who : Player) :

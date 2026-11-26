@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import GameTheory.Math.Probability.FiniteUniform
 import UniformEquilibrium.VanishingDiscount.Analytic.Accounting.AnalyticFinkPublicResponse
 
 /-!
@@ -381,7 +382,7 @@ instance (who : Player) : DecidableEq (game.Act who) :=
 
 /-- Prescribed play mixes the two publicly observed actions equally. -/
 def prescribedProfile : ∀ _ : Player, PMF Action :=
-  fun _ => PMF.uniformOfFintype Action
+  fun _ => GameTheory.Math.Probability.uniformLaw Action
 
 /-- The comparison behavior puts all mass on the selected action. -/
 def comparisonProfile : ∀ _ : Player, PMF Action :=
@@ -403,9 +404,9 @@ theorem centered_and_positive_action_detector :
   · exact game.expect_publicActionFrequencyScore_pos_of_overweight
       () prescribedProfile comparisonProfile true (by
         change
-          ((PMF.uniformOfFintype Bool) true).toReal <
+          ((GameTheory.Math.Probability.uniformLaw Bool) true).toReal <
             ((PMF.pure true) true).toReal
-        norm_num [PMF.uniformOfFintype_apply, PMF.pure_apply])
+        norm_num [GameTheory.Math.Probability.uniformLaw_apply, PMF.pure_apply])
 
 /-- The out-of-range target used to show that detection alone cannot create
 a target-preserving public-phase certificate. -/

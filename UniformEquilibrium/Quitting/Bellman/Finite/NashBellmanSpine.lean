@@ -74,12 +74,14 @@ theorem continuous_quittingRootExpectedPayoff_simplex
   · intro player _
     exact (Convexity.StdSimplex.continuous_weights_apply ℝ (action player)).comp
       ((continuous_apply player).comp continuous_snd)
-  · by_cases hquit : (quittingQuitters action).Nonempty
-    · simpa [quittingRootPayoff, hquit] using
+  · change Continuous (fun point : Payoff ι × QuittingRootSimplex ι =>
+      quittingRootPayoff reward point.1 action who)
+    by_cases hquit : (quittingQuitters action).Nonempty
+    · simpa only [quittingRootPayoff_of_nonempty _ _ _ _ hquit] using
         (continuous_const : Continuous
           (fun _ : Payoff ι × QuittingRootSimplex ι =>
             reward ⟨quittingQuitters action, hquit⟩ who))
-    · simp only [quittingRootPayoff, dite_eq_right hquit]
+    · simp only [quittingRootPayoff_of_not_nonempty _ _ _ _ hquit]
       exact (continuous_apply who).comp continuous_fst
 
 /-- Replace one simplex marginal by a pure Boolean action. -/
@@ -370,33 +372,24 @@ theorem isClosed_quittingNashBellmanEdgeGraph
       {edge : QuittingNashBellmanPoint ι × QuittingNashBellmanPoint ι |
         edge.2 ∈ quittingNashBellmanBox M} :=
     hbox.preimage continuous_snd
+  let successor (point : Payoff ι × QuittingRootSimplex ι) : Payoff ι :=
+    quittingRootSuccessorPayoff reward point.1 (quittingRootOfSimplex point.2)
+  have hsuccessor : Continuous successor :=
+    continuous_quittingRootSuccessorPayoff_simplex reward
+  have hvalue : Continuous (fun edge : QuittingNashBellmanPoint ι ×
+      QuittingNashBellmanPoint ι => edge.1.1) :=
+    continuous_fst.comp continuous_fst
   have hbellman : IsClosed
       {edge : QuittingNashBellmanPoint ι × QuittingNashBellmanPoint ι |
-        edge.1.1 = quittingRootSuccessorPayoff reward edge.2.1
-          (quittingRootOfSimplex edge.1.2)} := by
-    exact isClosed_eq
-      (continuous_fst.comp continuous_fst)
-      ((continuous_quittingRootSuccessorPayoff_simplex reward).comp hedgeData)
+        edge.1.1 = (successor ∘ edgeData) edge} :=
+    isClosed_eq hvalue (hsuccessor.comp hedgeData)
   have hnash : IsClosed
       {edge : QuittingNashBellmanPoint ι × QuittingNashBellmanPoint ι |
         IsεQuittingRootEndpointNash reward edge.2.1 0
           (quittingRootOfSimplex edge.1.2)} := by
-    exact (isClosed_isZeroQuittingRootEndpointNash_simplex reward).preimage
-      hedgeData
-  have heq : {edge : QuittingNashBellmanPoint ι ×
-        QuittingNashBellmanPoint ι |
-      edge.1 ∈ quittingNashBellmanBox M ∧
-        edge.2 ∈ quittingNashBellmanBox M ∧
-        IsQuittingNashBellmanEdge reward edge.1 edge.2} =
-      {edge | edge.1 ∈ quittingNashBellmanBox M} ∩
-        ({edge | edge.2 ∈ quittingNashBellmanBox M} ∩
-          ({edge | edge.1.1 = quittingRootSuccessorPayoff reward edge.2.1
-              (quittingRootOfSimplex edge.1.2)} ∩
-            {edge | IsεQuittingRootEndpointNash reward edge.2.1 0
-              (quittingRootOfSimplex edge.1.2)})) := by
-    ext edge
-    simp [IsQuittingNashBellmanEdge]
-  rw [heq]
+    change IsClosed (edgeData ⁻¹' {point : Payoff ι × QuittingRootSimplex ι |
+      IsεQuittingRootEndpointNash reward point.1 0 (quittingRootOfSimplex point.2)})
+    exact (isClosed_isZeroQuittingRootEndpointNash_simplex reward).preimage hedgeData
   exact hcurrentBox.inter (htailBox.inter (hbellman.inter hnash))
 
 /-- Every bounded tail state has a bounded exact Nash--Bellman predecessor. -/

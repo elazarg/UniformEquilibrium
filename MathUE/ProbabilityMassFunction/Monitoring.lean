@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import GameTheory.Math.Probability.FiniteUniform
 import MathUE.AlgebraicSelection
 import MathUE.OnlineLearning.AnytimeMultiplicativeWeights
 import MathUE.Probability.Adaptive
@@ -565,7 +566,7 @@ namespace FixedMonitorSwitchingCounterexample
 
 /-- Uniform baseline for the two-round switching counterexample. -/
 def baseline : PMF Bool :=
-  PMF.uniformOfFintype Bool
+  GameTheory.Math.Probability.uniformLaw Bool
 
 /-- The comparison law puts all mass on `false` in round zero and on `true` in round one. -/
 def comparison (t : Fin 2) : PMF Bool :=
@@ -594,12 +595,12 @@ theorem positive_each_round_but_every_fixed_monitor_cancels :
   · intro t
     fin_cases t
     · refine ⟨(false, true), ?_⟩
-      norm_num [comparison, baseline, PMF.uniformOfFintype_apply, PMF.pure_apply]
+      norm_num [comparison, baseline, GameTheory.Math.Probability.uniformLaw_apply, PMF.pure_apply]
     · refine ⟨(true, true), ?_⟩
-      norm_num [comparison, baseline, PMF.uniformOfFintype_apply, PMF.pure_apply]
+      norm_num [comparison, baseline, GameTheory.Math.Probability.uniformLaw_apply, PMF.pure_apply]
   · rintro ⟨destination, positive⟩
     cases destination <;> cases positive <;>
-      norm_num [comparison, baseline, PMF.uniformOfFintype_apply, PMF.pure_apply,
+      norm_num [comparison, baseline, GameTheory.Math.Probability.uniformLaw_apply, PMF.pure_apply,
         Fin.sum_univ_two]
 
 /-- No predictable mixture has positive drift against every distinct comparison kernel, even
@@ -618,15 +619,15 @@ theorem exists_distinct_comparison_with_nonpositive_mixture_drift
   have hcenter :=
     expect_weightedPMFCoordinateMonitorScore_baseline baseline monitorDist
   rw [expect_eq_sum, Fintype.sum_bool] at hcenter
-  norm_num [baseline, PMF.uniformOfFintype_apply] at hcenter
+  norm_num [baseline, GameTheory.Math.Probability.uniformLaw_apply] at hcenter
   have hfalse : PMF.pure false ≠ baseline := by
     intro h
     have hmass := congrArg (fun p : PMF Bool => (p false).toReal) h
-    norm_num [baseline, PMF.uniformOfFintype_apply, PMF.pure_apply] at hmass
+    norm_num [baseline, GameTheory.Math.Probability.uniformLaw_apply, PMF.pure_apply] at hmass
   have htrue : PMF.pure true ≠ baseline := by
     intro h
     have hmass := congrArg (fun p : PMF Bool => (p true).toReal) h
-    norm_num [baseline, PMF.uniformOfFintype_apply, PMF.pure_apply] at hmass
+    norm_num [baseline, GameTheory.Math.Probability.uniformLaw_apply, PMF.pure_apply] at hmass
   by_cases hnonpos :
       weightedPMFCoordinateMonitorScore baseline monitorDist false ≤ 0
   · refine ⟨PMF.pure false, hfalse, ?_⟩
@@ -636,10 +637,10 @@ theorem exists_distinct_comparison_with_nonpositive_mixture_drift
     rw [expect_pure]
     change
       weightedPMFCoordinateMonitorScore
-        (PMF.uniformOfFintype Bool) monitorDist false > 0 at hnonpos
+        (GameTheory.Math.Probability.uniformLaw Bool) monitorDist false > 0 at hnonpos
     change
       weightedPMFCoordinateMonitorScore
-        (PMF.uniformOfFintype Bool) monitorDist true ≤ 0
+        (GameTheory.Math.Probability.uniformLaw Bool) monitorDist true ≤ 0
     linarith
 
 end FixedMonitorSwitchingCounterexample

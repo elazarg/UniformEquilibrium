@@ -438,7 +438,7 @@ theorem signalHistoryDist_congr_before
 over the distribution of realized public histories. -/
 def stageEU (M : G.PublicMonitoring) (σ : M.MonitoredProfile)
     (t : ℕ) (who : ι) : ℝ :=
-  Math.Probability.expect (M.signalHistoryDist σ t)
+  _root_.Math.Probability.expect (M.signalHistoryDist σ t)
     (fun h => G.eu (fun i => σ i t h) who)
 
 /-- At the initial stage there is a unique empty public history. -/
@@ -454,12 +454,12 @@ theorem stageEU_succ_eq_expect_afterSignal
     (n : ℕ) (who : ι) {C : ℝ}
     (hbd : ∀ ρ : Profile G, |G.eu ρ who| ≤ C) :
     M.stageEU σ (n + 1) who =
-      Math.Probability.expect
+      _root_.Math.Probability.expect
         (M.signalKernel (fun i => σ i 0 (fun k => k.elim0)))
         (fun y => M.stageEU (M.afterSignal σ y) n who) := by
   unfold stageEU
   rw [M.signalHistoryDist_succ_eq_bind_first σ n]
-  rw [Math.Probability.expect_bind_of_bounded
+  rw [_root_.Math.Probability.expect_bind_of_bounded
     (hbd := fun h => hbd (fun i => σ i (n + 1) h))]
   apply congrArg
   funext y
@@ -511,7 +511,7 @@ expected utility, independently of the monitoring structure. -/
 @[simp] theorem stageEU_stationaryMonitoredProfile
     (M : G.PublicMonitoring) (σ : Profile G) (t : ℕ) (who : ι) :
     M.stageEU (M.stationaryMonitoredProfile σ) t who = G.eu σ who := by
-  simp [stageEU, stationaryMonitoredProfile, Math.Probability.expect_const]
+  simp [stageEU, stationaryMonitoredProfile, _root_.Math.Probability.expect_const]
 
 /-- Bound a monitored stage payoff by a constant using pointwise bounds at
 every realized history.  The absolute bounds justify monotonicity of `expect`
@@ -523,7 +523,7 @@ theorem stageEU_le_const_of_forall
     (habs : ∀ h, |G.eu (fun i => σ i t h) who| ≤ C)
     (hB : |B| ≤ C) :
     M.stageEU σ t who ≤ B := by
-  rw [stageEU, ← Math.Probability.expect_const (M.signalHistoryDist σ t) B]
+  rw [stageEU, ← _root_.Math.Probability.expect_const (M.signalHistoryDist σ t) B]
   exact Math.ProbabilityMassFunction.expect_mono_of_pointwise_bounded
     (M.signalHistoryDist σ t)
     (fun h => G.eu (fun i => σ i t h) who) (fun _ => B) hle habs (fun _ => hB)
@@ -536,7 +536,7 @@ theorem abs_stageEU_le_of_forall_eu_abs_le
     |M.stageEU σ t who| ≤ C := by
   apply abs_le.mpr
   constructor
-  · rw [stageEU, ← Math.Probability.expect_const
+  · rw [stageEU, ← _root_.Math.Probability.expect_const
       (M.signalHistoryDist σ t) (-C)]
     exact Math.ProbabilityMassFunction.expect_mono_of_pointwise_bounded
       (M.signalHistoryDist σ t) (fun _ => -C)

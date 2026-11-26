@@ -62,7 +62,7 @@ theorem
       Summable fun clocks =>
         (source clocks).toReal *
           quittingPureClockEvaluatedPayoff reward evaluation (f clocks) who :=
-    Math.Probability.expect_summable_of_bounded source _ fun clocks =>
+    _root_.Math.Probability.expect_summable_of_bounded source _ fun clocks =>
       abs_quittingPureClockEvaluatedPayoff_le reward evaluation
         evaluation_nonneg evaluation_antitone (f clocks) who
   have hexpectSub (who : Option ι)

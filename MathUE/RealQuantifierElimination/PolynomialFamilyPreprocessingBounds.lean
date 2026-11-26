@@ -18,7 +18,7 @@ theorem allLeaves_trimLeading_length_le
     (trimLeading polynomial).AllLeaves fun trimmed =>
       trimmed.length ≤ polynomial.length := by
   induction hlength : polynomial.length using Nat.strong_induction_on generalizing polynomial with
-  | h length ih =>
+  | ind length ih =>
       cases polynomial with
       | nil => simp [trimLeading]
       | cons coefficient rest =>

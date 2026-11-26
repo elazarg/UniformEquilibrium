@@ -152,20 +152,18 @@ theorem QuittingPositiveMinimumDebtTangentFamily.exists_frozenRadialPaidSquare_o
           (quittingRewardBound_nonneg reward)
             (abs_reward_le_quittingRewardBound reward)
     convert hfixed using 1
-    all_goals
-      simp only [square, edge, frozenRadialFacePayoff, data, x00, x10,
-        x01, x11]
-      ring_nf
+    simp only [square, edge, frozenRadialFacePayoff, data, x00, x10,
+      x01, x11]
+    ring_nf
   have hcurvature' : charge + q + 3 * eta ≤
       |quittingContinuationBestResponseValue reward x11 observer -
           quittingContinuationBestResponseValue reward x10 observer -
           quittingContinuationBestResponseValue reward x01 observer +
           quittingContinuationBestResponseValue reward x00 observer| := by
     convert hcurvature using 1
-    all_goals
-      simp only [cap, square, edge, frozenRadialFaceCap, data, x00, x10,
-        x01, x11]
-      ring_nf
+    simp only [cap, square, edge, frozenRadialFaceCap, data, x00, x10,
+      x01, x11]
+    ring_nf
   have hswitch :=
     exists_pureTimeWitnessSwitchCertificate_of_abs_envelopeCurvature reward
       x00 x10 x01 x11 observer q charge eta hcharge heta hface hcurvature'

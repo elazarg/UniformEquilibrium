@@ -291,7 +291,7 @@ theorem quittingPeriodicPureTimeTerminalValue_some_le_finiteWindow
         (some quitTime) 0 ≤
       quittingPeriodicWindowBestResponseValue reward roots who period := by
   induction quitTime using Nat.strong_induction_on with
-  | h quitTime ih =>
+  | ind quitTime ih =>
       by_cases hphase : quitTime < period
       · let phase : Fin period := ⟨quitTime, hphase⟩
         have hphaseLe :

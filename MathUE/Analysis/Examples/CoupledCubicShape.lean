@@ -99,7 +99,8 @@ theorem quasiconvexOn (lower : ι → ℝ) (domain : Set (ι → ℝ))
     nlinarith [hsum]
   have hcube : Monotone (fun value : ℝ => value ^ 3) :=
     (show Odd 3 by decide).strictMono_pow.monotone
-  exact haffine.quasiconvexOn.monotone_comp hcube
+  exact QuasiconvexOn.monotone_comp
+    (g := fun value : ℝ => value ^ 3) hcube haffine.quasiconvexOn
 
 @[simp] theorem argument_lower_add_single (lower : ι → ℝ) (owner : ι) (rate : ℝ) :
     argument lower (lower + Pi.single owner rate) = rate - 1 / 2 := by
@@ -196,20 +197,18 @@ theorem not_exists_additive_eqOn (lower upper : ι → ℝ)
   have hboth : lower + Pi.single owner (1 / 4 : ℝ) + Pi.single receiver (1 / 4) ∈
       Icc lower upper := by
     constructor <;> intro who
-    all_goals by_cases howner : who = owner
-    all_goals first
-      | subst who
+    all_goals
+      by_cases howner : who = owner
+      · subst who
         simp only [Pi.add_apply, Pi.single_eq_same, Pi.single_eq_of_ne hne, add_zero]
         linarith [hwidth owner]
-      | skip
-    all_goals by_cases hreceiver : who = receiver
-    all_goals first
-      | subst who
-        simp only [Pi.add_apply, Pi.single_eq_same, Pi.single_eq_of_ne hne.symm, add_zero]
-        linarith [hwidth receiver]
-      | simp only [Pi.add_apply, Pi.single_eq_of_ne howner,
-          Pi.single_eq_of_ne hreceiver, add_zero]
-        linarith [hwidth who]
+      · by_cases hreceiver : who = receiver
+        · subst who
+          simp only [Pi.add_apply, Pi.single_eq_same, Pi.single_eq_of_ne hne.symm, add_zero]
+          linarith [hwidth receiver]
+        · simp only [Pi.add_apply, Pi.single_eq_of_ne howner,
+            Pi.single_eq_of_ne hreceiver, add_zero]
+          linarith [hwidth who]
   have hargument : argument lower
       (lower + Pi.single owner (1 / 4 : ℝ) + Pi.single receiver (1 / 4)) = 0 := by
     simp only [argument, map_sub, map_add, coordinateSum_single]

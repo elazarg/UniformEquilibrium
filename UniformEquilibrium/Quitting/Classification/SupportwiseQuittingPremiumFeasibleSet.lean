@@ -83,7 +83,6 @@ theorem isClosed_supportwiseQuittingPremiumFeasibleSet
         continuous_const
     · simp only [hsubset, false_implies]
       exact isClosed_univ
-  change IsClosed (_ ∩ (_ ∩ (_ ∩ _)))
   exact hnonneg.inter (hsupport.inter (hsum.inter hpremium))
 
 /-- The finite supportwise feasible set is a closed subset of the standard

@@ -4,7 +4,7 @@ import Mathlib.LinearAlgebra.Determinant
 import Mathlib.Analysis.Calculus.FDeriv.Comp
 import Mathlib.Analysis.Calculus.FDeriv.Congr
 import Mathlib.Analysis.Calculus.FDeriv.Linear
-import Mathlib.Topology.Algebra.Module.Equiv
+import Mathlib.Topology.Algebra.Module.Equiv.Pi
 
 /-! # The actual index of a unique cube-valued fixed point
 

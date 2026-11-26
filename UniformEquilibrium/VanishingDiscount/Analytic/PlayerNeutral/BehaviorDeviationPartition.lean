@@ -168,6 +168,16 @@ def fullEndpointNeutralShadowSelection
     (fun index => ⟨index, Finset.mem_univ index⟩)
     (germ.endpointNeutralShadowSelection source who deviation)
 
+private theorem subtype_property_of_map_ne_zero {α : Type*} {p : α → Prop}
+    (law : PMF α) (lift : ∀ a, p a) (property : α → Prop)
+    (hlaw : ∀ a, law a ≠ 0 → property a) (index : Subtype p)
+    (hindex : (law.map (fun a => ⟨a, lift a⟩)) index ≠ 0) : property index.1 := by
+  let embed (a : α) : Subtype p := ⟨a, lift a⟩
+  have hmem : index ∈ (law.map embed).support := (PMF.mem_support_iff _ _).mpr hindex
+  obtain ⟨a, ha, heq⟩ := (PMF.mem_support_map_iff embed law index).mp hmem
+  rw [← heq]
+  exact hlaw a ((PMF.mem_support_iff law a).mp ha)
+
 omit [DecidableEq G.State] in
 /-- The lifted full-family selector is source compatible. -/
 theorem fullEndpointNeutralShadowSelection_source_compatible
@@ -180,42 +190,11 @@ theorem fullEndpointNeutralShadowSelection_source_compatible
       germ.fullEndpointNeutralShadowSelection
           source who deviation index ≠ 0) :
     germ.playerNeutralOccupationSource who index.1 = source := by
-  have support_mem :
-      index ∈
-        (germ.fullEndpointNeutralShadowSelection
-          source who deviation).support := by
-    exact (PMF.mem_support_iff
-      (germ.fullEndpointNeutralShadowSelection
-        source who deviation) index).2 index_mem
-  change
-    index ∈
-      (PMF.map
-        (fun ambientIndex :
-            germ.PlayerNeutralOccupationIndex who =>
-          ⟨ambientIndex, Finset.mem_univ ambientIndex⟩)
-        (germ.endpointNeutralShadowSelection
-          source who deviation)).support
-    at support_mem
-  rcases
-      (PMF.mem_support_map_iff
-        (fun ambientIndex :
-            germ.PlayerNeutralOccupationIndex who =>
-          ⟨ambientIndex, Finset.mem_univ ambientIndex⟩)
-        (germ.endpointNeutralShadowSelection
-          source who deviation) index).1 support_mem with
-    ⟨ambientIndex, ambient_mem, index_eq⟩
-  have ambient_ne_zero :
-      germ.endpointNeutralShadowSelection
-          source who deviation ambientIndex ≠ 0 :=
-    (PMF.mem_support_iff
-      (germ.endpointNeutralShadowSelection
-        source who deviation) ambientIndex).1 ambient_mem
-  have source_eq :=
-    germ.endpointNeutralShadowSelection_source_compatible
-      source who deviation ambientIndex ambient_ne_zero
-  have value_eq : index.1 = ambientIndex := by
-    simpa only using congrArg Subtype.val index_eq.symm
-  simpa only [value_eq] using source_eq
+  exact subtype_property_of_map_ne_zero
+    (germ.endpointNeutralShadowSelection source who deviation)
+    (fun a => Finset.mem_univ a)
+    (fun a => germ.playerNeutralOccupationSource who a = source)
+    (germ.endpointNeutralShadowSelection_source_compatible source who deviation) index index_mem
 
 /-- Predictable full-family neutral shadow selector induced by a
 state-history-dependent action distribution of one fixed player. -/

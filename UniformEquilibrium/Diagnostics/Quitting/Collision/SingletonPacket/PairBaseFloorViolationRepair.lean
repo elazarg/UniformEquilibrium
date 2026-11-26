@@ -308,40 +308,25 @@ theorem exists_other_and_laterPaidRow_and_floorRepair
         quittingTerminalSemanticCarrier reward :=
     quittingTerminalSemanticPair_mem_carrier reward
       (target.floorRepairProfile who)
-  simp only [Finset.mem_insert, Finset.mem_singleton] at hwho
-  rcases hwho with hfirst | hsecond
-  · subst who
-    have hotherRoot : target.root baseSecond = PMF.pure true := by
-      apply quittingPersistentBaseRoot_apply_of_mem_base
-      simp
-    have hupdated :
-        (Function.update target.root baseFirst (PMF.pure false)) baseSecond =
-          PMF.pure true := by
-      rw [Function.update_of_ne target.base_ne.symm, hotherRoot]
-    have habsorption : quittingRootAbsorptionMass
-        (Function.update target.root baseFirst (PMF.pure false)) = 1 := by
-      unfold quittingRootAbsorptionMass
-      rw [quittingStationaryContinueMass_of_sureQuitter hupdated]
-      norm_num
-    exact ⟨baseSecond, row, by simp, target.base_ne.symm,
-      hotherRoot, hupdated, hgap, hrepairProfile, habsorption, hrepairMem,
-      hsource, hreceiving, hlater, hrepairFloor, hrepairDebt⟩
-  · subst who
-    have hotherRoot : target.root baseFirst = PMF.pure true := by
-      apply quittingPersistentBaseRoot_apply_of_mem_base
-      simp
-    have hupdated :
-        (Function.update target.root baseSecond (PMF.pure false)) baseFirst =
-          PMF.pure true := by
-      rw [Function.update_of_ne target.base_ne, hotherRoot]
-    have habsorption : quittingRootAbsorptionMass
-        (Function.update target.root baseSecond (PMF.pure false)) = 1 := by
-      unfold quittingRootAbsorptionMass
-      rw [quittingStationaryContinueMass_of_sureQuitter hupdated]
-      norm_num
-    exact ⟨baseFirst, row, by simp, target.base_ne, hotherRoot, hupdated,
-      hgap, hrepairProfile, habsorption, hrepairMem, hsource, hreceiving,
-      hlater, hrepairFloor, hrepairDebt⟩
+  obtain ⟨other, hother, hotherNe⟩ :
+      ∃ other ∈ ({baseFirst, baseSecond} : Finset (Fin 4)), other ≠ who := by
+    simp only [Finset.mem_insert, Finset.mem_singleton] at hwho
+    rcases hwho with hfirst | hsecond
+    · exact ⟨baseSecond, by simp, hfirst.symm ▸ target.base_ne.symm⟩
+    · exact ⟨baseFirst, by simp, hsecond.symm ▸ target.base_ne⟩
+  have hotherRoot : target.root other = PMF.pure true := by
+    apply quittingPersistentBaseRoot_apply_of_mem_base
+    exact hother
+  have hupdated :
+      (Function.update target.root who (PMF.pure false)) other = PMF.pure true := by
+    rw [Function.update_of_ne hotherNe, hotherRoot]
+  have habsorption : quittingRootAbsorptionMass
+      (Function.update target.root who (PMF.pure false)) = 1 := by
+    unfold quittingRootAbsorptionMass
+    rw [quittingStationaryContinueMass_of_sureQuitter hupdated]
+    norm_num
+  exact ⟨other, row, hother, hotherNe, hotherRoot, hupdated, hgap, hrepairProfile,
+    habsorption, hrepairMem, hsource, hreceiving, hlater, hrepairFloor, hrepairDebt⟩
 
 end FinFourPairBasePaidResetTarget
 

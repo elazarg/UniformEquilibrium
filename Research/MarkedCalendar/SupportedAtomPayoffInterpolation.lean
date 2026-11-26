@@ -230,7 +230,7 @@ theorem signedAtom_payoff_eq_booleanEndpointInterpolant
     (reward : Finset ι → ℝ) :
     (∫ sample, MathUE.MarkedCalendar.payoffKernel limit reward sample
       ∂(ProbabilityMeasure.pi (signedAtomMarginals active atoms directions
-        (fun i => parameters i.1) hparameters) : Measure (ι → unitInterval))) =
+        (fun i => parameters i.1)) : Measure (ι → unitInterval))) =
       _root_.Math.booleanEndpointInterpolant (fun vertex =>
         ∫ sample, MathUE.MarkedCalendar.payoffKernel limit reward sample
           ∂(ProbabilityMeasure.pi (atomEndpointMarginals active atoms directions vertex) :
@@ -281,7 +281,7 @@ theorem signedAtom_finite_reply_eq_booleanEndpointInterpolant
     (ht : Tendsto (fun k => mark (source (subsequence k)) (dates k)) atTop (𝓝 t)) :
     (∫ sample, MathUE.MarkedCalendar.responsePayoffKernel limit who (t : WithTop ℝ)
       reward sample ∂(ProbabilityMeasure.pi (fun j : {j : ι // j ≠ who} =>
-        signedAtomMarginals active atoms directions (fun i => parameters i.1) hparameters j.1) :
+        signedAtomMarginals active atoms directions (fun i => parameters i.1) j.1) :
           Measure ({j : ι // j ≠ who} → unitInterval))) =
       _root_.Math.booleanEndpointInterpolant (fun vertex =>
         ∫ sample, MathUE.MarkedCalendar.responsePayoffKernel limit who (t : WithTop ℝ)
@@ -333,7 +333,7 @@ theorem signedAtom_never_reply_eq_booleanEndpointInterpolant
     (who : ι) (reward : Finset ι → ℝ) :
     (∫ sample, MathUE.MarkedCalendar.responsePayoffKernel limit who ⊤ reward sample
       ∂(ProbabilityMeasure.pi (fun j : {j : ι // j ≠ who} =>
-        signedAtomMarginals active atoms directions (fun i => parameters i.1) hparameters j.1) :
+        signedAtomMarginals active atoms directions (fun i => parameters i.1) j.1) :
           Measure ({j : ι // j ≠ who} → unitInterval))) =
       _root_.Math.booleanEndpointInterpolant (fun vertex =>
         ∫ sample, MathUE.MarkedCalendar.responsePayoffKernel limit who ⊤ reward sample

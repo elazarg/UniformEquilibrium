@@ -132,7 +132,7 @@ def truncateStoppingLaw (law : PMF (Option Nat)) (horizon : Nat) :
     (law : PMF (Option Nat)) (horizon : Nat) :
     truncateStoppingLaw law horizon none = 0 := by
   classical
-  rw [truncateStoppingLaw, PMF.map_apply, ENNReal.tsum_eq_zero]
+  rw [truncateStoppingLaw, PMF.map_apply, tsum_eq_zero_iff]
   intro choice
   cases choice with
   | none => simp [truncateStoppingOutcome]

@@ -47,7 +47,7 @@ theorem pmfMass_toReal_add_not {α : Type*} (law : PMF α) (event : α → Prop)
   have hsum : pmfMass (μ := law) event +
       pmfMass (μ := law) (fun sample => ¬ event sample) = 1 := by
     unfold pmfMass
-    rw [← ENNReal.tsum_add]
+    rw [← tsum_add]
     rw [show (∑' sample, (pmfMask (μ := law) event sample +
         pmfMask (μ := law) (fun sample => ¬ event sample) sample)) =
           ∑' sample, law sample from tsum_congr fun sample => ?_]
@@ -86,7 +86,7 @@ theorem compactStoppingLawCapDefect_pure_eq_zero
   have hzero : pmfMass (μ := PMF.pure choice)
       (fun sample => ¬ compactStoppingTimeCap horizon sample = sample) = 0 := by
     simp only [pmfMass, pmfMask]
-    rw [ENNReal.tsum_eq_zero]
+    rw [tsum_eq_zero_iff]
     intro sample
     by_cases hcap : compactStoppingTimeCap horizon sample = sample
     · simp [hcap]
@@ -149,11 +149,18 @@ theorem abs_expect_quittingTerminalPayoff_sub_capProfile_le
     (Math.PMFProduct.pmfPi_push_coordwise laws
       (fun _ => compactStoppingTimeCap horizon)).symm
   rw [hpush, expect_map, ← pmfMass_toReal_pmfPi_capMoves_eq laws horizon]
-  refine abs_expect_sub_le_mul_pmfMass (Math.PMFProduct.pmfPi laws) _ _ _
-    (observableBound := bound)
-    (fun choices => abs_quittingTerminalPayoff_le reward _ observer hreward)
-    (fun choices => abs_quittingTerminalPayoff_le reward _ observer hreward)
-    (fun choices => ?_)
+  let value (choices : ι → CompactStoppingTime) : ℝ :=
+    quittingTerminalPayoff reward (quittingPureStoppingTimeProfile reward choices) observer
+  let cap (choices : ι → CompactStoppingTime) (player : ι) :=
+    compactStoppingTimeCap horizon (choices player)
+  let moves : Set (ι → CompactStoppingTime) :=
+    {choices | ¬ ∀ player, cap choices player = choices player}
+  have hvalue (choices : ι → CompactStoppingTime) : |value choices| ≤ bound :=
+    abs_quittingTerminalPayoff_le reward (quittingPureStoppingTimeProfile reward choices)
+      observer hreward
+  refine abs_expect_sub_le_mul_pmfMass (Math.PMFProduct.pmfPi laws)
+    value (fun choices => value (cap choices)) moves (bound := 2 * bound)
+    hvalue (fun choices => hvalue (cap choices)) (fun choices => ?_)
   change _ ≤ 2 * bound * Set.indicator
     (Set.ofPred fun choices : ι → CompactStoppingTime =>
       ¬ ∀ player, compactStoppingTimeCap horizon (choices player) = choices player)
@@ -183,7 +190,8 @@ theorem abs_expect_quittingTerminalPayoff_sub_capProfile_le
         compactStoppingTimeCap horizon (choices player) = choices player := by
       by_contra hcontra
       exact hmoves hcontra
-    rw [funext hall, sub_self, abs_zero, mul_zero]
+    have hcap : cap choices = choices := funext hall
+    rw [hcap, sub_self, abs_zero, mul_zero]
 
 /-! ## Sums over the compactified clock -/
 
@@ -192,7 +200,7 @@ series. -/
 theorem tsum_compactStoppingTime (value : CompactStoppingTime → ℝ≥0∞) :
     ∑' choice, value choice =
       value ⊤ + ∑' date : ℕ, value (WithTop.some date) := by
-  rw [ENNReal.tsum_eq_add_tsum_ite (⊤ : CompactStoppingTime)]
+  rw [tsum_eq_add_tsum_ite (⊤ : CompactStoppingTime)]
   congr 1
   have hsupport : Function.support
       (fun choice => if choice = ⊤ then 0 else value choice) ⊆
@@ -390,7 +398,7 @@ theorem tsum_exposedMass_add_limitNeverMass (player : ι) :
           family.neverMass horizon player := by
       intro horizon
       rw [← family.sum_exposedMass_add_neverMass horizon player]
-      exact add_le_add_left (ENNReal.sum_le_tsum _) _
+      exact add_le_add_left (sum_le_tsum _) _
     calc (1 : ℝ≥0∞) ≤ ⨅ horizon : ℕ,
           ((∑' date, family.exposedMass date player) +
             family.neverMass horizon player) := le_iInf hlower
@@ -410,7 +418,7 @@ theorem sum_range_add_tsum_tail_exposedMass (deadline : ℕ) (player : ι) :
       (fun date hdate => ite_eq_right (by simpa using hdate))]
     exact Finset.sum_congr rfl fun date hdate =>
       ite_eq_left (Finset.mem_range.1 hdate)
-  rw [← hhead, ← ENNReal.tsum_add]
+  rw [← hhead, ← tsum_add]
   refine tsum_congr fun date => ?_
   by_cases hdate : date < deadline
   · simp [hdate, Nat.not_le.2 hdate]
@@ -468,7 +476,7 @@ theorem tsum_limitValue (player : ι) :
 def limitLaw (player : ι) : PMF CompactStoppingTime :=
   ⟨family.limitValue player, by
     rw [← family.tsum_limitValue player]
-    exact ENNReal.summable.hasSum⟩
+    exact CompleteLattice.summable.hasSum⟩
 
 @[simp] theorem limitLaw_apply_top (player : ι) :
     family.limitLaw player ⊤ = family.limitNeverMass player := rfl
@@ -516,7 +524,7 @@ theorem map_cap_limitLaw_apply_coe (player : ι) (horizon date : ℕ) :
         exact ite_eq_right fun hcontra => hother (by simpa using hcontra.symm)
       · rw [compactStoppingTimeCap_coe_of_lt horizon other (Nat.not_le.1 hle)]
         exact ite_eq_right (by simp)
-  · rw [ite_eq_right hdate, ENNReal.tsum_eq_zero]
+  · rw [ite_eq_right hdate, tsum_eq_zero_iff]
     intro other
     by_cases hle : other ≤ horizon
     · rw [compactStoppingTimeCap_coe_of_le horizon other hle]
@@ -567,7 +575,7 @@ theorem limitNeverMass_ne_top (player : ι) :
 theorem limitTailMass_antitone (player : ι) :
     Antitone fun deadline => family.limitTailMass deadline player := by
   refine antitone_nat_of_succ_le fun deadline => ?_
-  refine ENNReal.tsum_le_tsum fun date => ?_
+  refine tsum_le_tsum fun date => ?_
   by_cases hdate : deadline + 1 ≤ date
   · rw [ite_eq_left hdate, ite_eq_left (by omega)]
   · rw [ite_eq_right hdate]

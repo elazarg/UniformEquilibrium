@@ -221,96 +221,47 @@ def excludedEndpointRowSum
         weightOfReward reward (finFourCoalitionOfRow row) who
     else 0
 
-private theorem excludedValue_zero_eq_excludedEndpointRowSum
-    (reward : {coalition : Finset (Fin 4) // coalition.Nonempty} → Payoff (Fin 4))
-    (hazard : (Fin 4) → ℝ) :
-    excludedValue (weightOfReward reward) hazard 0 =
-      excludedEndpointRowSum reward hazard 0 := by
-  rw [excludedValue,
-    show (Finset.univ.erase (0 : (Fin 4))).powerset.erase ∅ =
-      ({ {1}, {2}, {1, 2}, {3}, {1, 3}, {2, 3}, {1, 2, 3} } :
-        Finset (Finset (Fin 4))) by decide]
-  repeat' rw [Finset.sum_insert (by decide)]
-  rw [Finset.sum_singleton]
-  rw [← opponentCoalitionMass_eq_products_of_not_mem hazard 0 {1} (by decide),
-    ← opponentCoalitionMass_eq_products_of_not_mem hazard 0 {2} (by decide),
-    ← opponentCoalitionMass_eq_products_of_not_mem hazard 0 {1, 2} (by decide),
-    ← opponentCoalitionMass_eq_products_of_not_mem hazard 0 {3} (by decide),
-    ← opponentCoalitionMass_eq_products_of_not_mem hazard 0 {1, 3} (by decide),
-    ← opponentCoalitionMass_eq_products_of_not_mem hazard 0 {2, 3} (by decide),
-    ← opponentCoalitionMass_eq_products_of_not_mem hazard 0 {1, 2, 3} (by decide)]
-  simp [excludedEndpointRowSum, Fin.sum_univ_succ, finFourCoalitionOfRow]
-
-private theorem excludedValue_one_eq_excludedEndpointRowSum
-    (reward : {coalition : Finset (Fin 4) // coalition.Nonempty} → Payoff (Fin 4))
-    (hazard : (Fin 4) → ℝ) :
-    excludedValue (weightOfReward reward) hazard 1 =
-      excludedEndpointRowSum reward hazard 1 := by
-  rw [excludedValue,
-    show (Finset.univ.erase (1 : (Fin 4))).powerset.erase ∅ =
-      ({ {0}, {2}, {0, 2}, {3}, {0, 3}, {2, 3}, {0, 2, 3} } :
-        Finset (Finset (Fin 4))) by decide]
-  repeat' rw [Finset.sum_insert (by decide)]
-  rw [Finset.sum_singleton]
-  rw [← opponentCoalitionMass_eq_products_of_not_mem hazard 1 {0} (by decide),
-    ← opponentCoalitionMass_eq_products_of_not_mem hazard 1 {2} (by decide),
-    ← opponentCoalitionMass_eq_products_of_not_mem hazard 1 {0, 2} (by decide),
-    ← opponentCoalitionMass_eq_products_of_not_mem hazard 1 {3} (by decide),
-    ← opponentCoalitionMass_eq_products_of_not_mem hazard 1 {0, 3} (by decide),
-    ← opponentCoalitionMass_eq_products_of_not_mem hazard 1 {2, 3} (by decide),
-    ← opponentCoalitionMass_eq_products_of_not_mem hazard 1 {0, 2, 3} (by decide)]
-  simp [excludedEndpointRowSum, Fin.sum_univ_succ, finFourCoalitionOfRow]
-
-private theorem excludedValue_two_eq_excludedEndpointRowSum
-    (reward : {coalition : Finset (Fin 4) // coalition.Nonempty} → Payoff (Fin 4))
-    (hazard : (Fin 4) → ℝ) :
-    excludedValue (weightOfReward reward) hazard 2 =
-      excludedEndpointRowSum reward hazard 2 := by
-  rw [excludedValue,
-    show (Finset.univ.erase (2 : (Fin 4))).powerset.erase ∅ =
-      ({ {0}, {1}, {0, 1}, {3}, {0, 3}, {1, 3}, {0, 1, 3} } :
-        Finset (Finset (Fin 4))) by decide]
-  repeat' rw [Finset.sum_insert (by decide)]
-  rw [Finset.sum_singleton]
-  rw [← opponentCoalitionMass_eq_products_of_not_mem hazard 2 {0} (by decide),
-    ← opponentCoalitionMass_eq_products_of_not_mem hazard 2 {1} (by decide),
-    ← opponentCoalitionMass_eq_products_of_not_mem hazard 2 {0, 1} (by decide),
-    ← opponentCoalitionMass_eq_products_of_not_mem hazard 2 {3} (by decide),
-    ← opponentCoalitionMass_eq_products_of_not_mem hazard 2 {0, 3} (by decide),
-    ← opponentCoalitionMass_eq_products_of_not_mem hazard 2 {1, 3} (by decide),
-    ← opponentCoalitionMass_eq_products_of_not_mem hazard 2 {0, 1, 3} (by decide)]
-  simp [excludedEndpointRowSum, Fin.sum_univ_succ, finFourCoalitionOfRow]
-
-private theorem excludedValue_three_eq_excludedEndpointRowSum
-    (reward : {coalition : Finset (Fin 4) // coalition.Nonempty} → Payoff (Fin 4))
-    (hazard : (Fin 4) → ℝ) :
-    excludedValue (weightOfReward reward) hazard 3 =
-      excludedEndpointRowSum reward hazard 3 := by
-  rw [excludedValue,
-    show (Finset.univ.erase (3 : (Fin 4))).powerset.erase ∅ =
-      ({ {0}, {1}, {0, 1}, {2}, {0, 2}, {1, 2}, {0, 1, 2} } :
-        Finset (Finset (Fin 4))) by decide]
-  repeat' rw [Finset.sum_insert (by decide)]
-  rw [Finset.sum_singleton]
-  rw [← opponentCoalitionMass_eq_products_of_not_mem hazard 3 {0} (by decide),
-    ← opponentCoalitionMass_eq_products_of_not_mem hazard 3 {1} (by decide),
-    ← opponentCoalitionMass_eq_products_of_not_mem hazard 3 {0, 1} (by decide),
-    ← opponentCoalitionMass_eq_products_of_not_mem hazard 3 {2} (by decide),
-    ← opponentCoalitionMass_eq_products_of_not_mem hazard 3 {0, 2} (by decide),
-    ← opponentCoalitionMass_eq_products_of_not_mem hazard 3 {1, 2} (by decide),
-    ← opponentCoalitionMass_eq_products_of_not_mem hazard 3 {0, 1, 2} (by decide)]
-  simp [excludedEndpointRowSum, Fin.sum_univ_succ, finFourCoalitionOfRow]
+private theorem sum_excluded_coalitions_eq_sum_rows (term : Finset (Fin 4) → ℝ)
+    (who : Fin 4) :
+    (∑ coalition ∈ (Finset.univ.erase who).powerset.erase ∅, term coalition) =
+      ∑ row : Fin 15, if who ∉ finFourCoalitionOfRow row then term (finFourCoalitionOfRow row)
+        else 0 := by
+  rw [← Finset.sum_filter]
+  symm
+  apply Finset.sum_bij (fun row _ => finFourCoalitionOfRow row)
+  · intro row hrow
+    have hnot := (Finset.mem_filter.mp hrow).2
+    apply Finset.mem_erase.mpr
+    refine ⟨(finFourCoalitionOfRow_nonempty row).ne_empty, Finset.mem_powerset.mpr ?_⟩
+    intro player hplayer
+    exact Finset.mem_erase.mpr ⟨fun heq => hnot (heq ▸ hplayer), Finset.mem_univ player⟩
+  · intro row _ other _ heq
+    apply finFourCoalitionRowEquiv.injective
+    exact Subtype.ext heq
+  · intro coalition hcoalition
+    obtain ⟨hne, hsubset⟩ := Finset.mem_erase.mp hcoalition
+    obtain ⟨row, hrow⟩ :=
+      finFourCoalitionRowEquiv.surjective ⟨coalition, Finset.nonempty_iff_ne_empty.mpr hne⟩
+    have heq : finFourCoalitionOfRow row = coalition := congrArg Subtype.val hrow
+    refine ⟨row, Finset.mem_filter.mpr ⟨Finset.mem_univ row, ?_⟩, heq⟩
+    rw [heq]
+    intro hmem
+    exact (Finset.mem_erase.mp (Finset.mem_powerset.mp hsubset hmem)).1 rfl
+  · intro row _
+    rfl
 
 theorem excludedValue_eq_excludedEndpointRowSum
     (reward : {coalition : Finset (Fin 4) // coalition.Nonempty} → Payoff (Fin 4))
     (hazard : (Fin 4) → ℝ) (who : (Fin 4)) :
     excludedValue (weightOfReward reward) hazard who =
       excludedEndpointRowSum reward hazard who := by
-  fin_cases who
-  · exact excludedValue_zero_eq_excludedEndpointRowSum reward hazard
-  · exact excludedValue_one_eq_excludedEndpointRowSum reward hazard
-  · exact excludedValue_two_eq_excludedEndpointRowSum reward hazard
-  · exact excludedValue_three_eq_excludedEndpointRowSum reward hazard
+  unfold excludedValue excludedEndpointRowSum
+  rw [← sum_excluded_coalitions_eq_sum_rows (fun coalition =>
+    opponentCoalitionMass hazard who coalition * weightOfReward reward coalition who) who]
+  refine Finset.sum_congr rfl fun coalition hcoalition => ?_
+  have hsubset := Finset.mem_powerset.mp (Finset.mem_erase.mp hcoalition).2
+  have hnot : who ∉ coalition := fun hmem => (Finset.mem_erase.mp (hsubset hmem)).1 rfl
+  rw [opponentCoalitionMass_eq_products_of_not_mem hazard who coalition hnot]
 
 /-- At all-sure hazards, the actual zero-discount response is grand reward
 minus the reward obtained when only the recipient withdraws. The reward table

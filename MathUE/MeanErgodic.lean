@@ -59,7 +59,7 @@ theorem pow_apply_eq_of_fixed {P : E →ₗ[ℝ] E} {z : E} (hz : P z = z) :
   intro t
   induction t with
   | zero => simp
-  | succ t ih => rw [pow_succ, Module.End.mul_apply, hz, ih]
+  | succ t ih => rw [pow_succ, mul_apply_eq_comp, hz, ih]
 
 /-- The orbit sums of a one-step increment telescope. -/
 theorem sum_range_pow_apply_sub (P : E →ₗ[ℝ] E) (y : E) (T : ℕ) :
@@ -67,7 +67,7 @@ theorem sum_range_pow_apply_sub (P : E →ₗ[ℝ] E) (y : E) (T : ℕ) :
   have hterm : ∀ t : ℕ,
       (P ^ t) (P y - y) = (P ^ (t + 1)) y - (P ^ t) y := by
     intro t
-    rw [map_sub, pow_succ, Module.End.mul_apply]
+    rw [map_sub, pow_succ, mul_apply_eq_comp]
   rw [Finset.sum_congr rfl fun t _ => hterm t,
     Finset.sum_range_sub (fun t => (P ^ t) y)]
   simp
@@ -387,7 +387,7 @@ theorem markovOperator_pow_apply (κ : S → PMF S) (t : ℕ) (w : S → ℝ)
   induction t generalizing w with
   | zero => simp
   | succ t ih =>
-    rw [pow_succ, Module.End.mul_apply, ih, Math.PMFIter.iter_succ',
+    rw [pow_succ, mul_apply_eq_comp, ih, Math.PMFIter.iter_succ',
       expect_bind]
     rfl
 
@@ -485,7 +485,7 @@ theorem tendsto_cesaro_of_harmonic_add_poisson
     induction t with
     | zero => simp
     | succ t ih =>
-        rw [pow_succ, Module.End.mul_apply, hPo, ih]
+        rw [pow_succ, mul_apply_eq_comp, hPo, ih]
   have hf : f = o + g := by
     ext s
     simpa only [g, Pi.add_apply] using hdecomp s

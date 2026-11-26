@@ -294,7 +294,7 @@ theorem quittingProfileLiveRoot_eq_pure_false_before_anchoredOwnerSupport
         PMF.pure false := by
   intro earlier hearlier
   induction earlier using Nat.strong_induction_on with
-  | h earlier ih =>
+  | ind earlier ih =>
       let shiftedHazard : ℕ → PMF Bool := fun shift =>
         quittingBehaviorLiveHazard reward (profile who) (anchor + shift)
       have hsurvival : quittingHazardSurvival shiftedHazard earlier = 1 := by

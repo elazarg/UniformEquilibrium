@@ -218,10 +218,8 @@ def germ : game.AnalyticBellmanGerm where
     | val state player =>
         cases state <;> cases player
         · norm_num [assignment, value]
-          exact
-            analyticAt_id.neg.div
-              (analyticAt_const.sub analyticAt_id)
-              (by norm_num)
+          have hnonzero : (2 : ℝ) - 0 ≠ 0 := by norm_num
+          exact analyticAt_id.neg.div (analyticAt_const.sub analyticAt_id) hnonzero
         all_goals norm_num [assignment, value]
         all_goals exact analyticAt_const
     | disc =>
@@ -427,7 +425,7 @@ private theorem stageEUAt_prescribed_eq
   simp_rw [germ_endpointValue]
   cases history.2 <;>
     simp [profile, game]
-  all_goals ring
+  ring
 
 theorem expectedStagePayoff_prescribed_eq
     (stage : ℕ) :

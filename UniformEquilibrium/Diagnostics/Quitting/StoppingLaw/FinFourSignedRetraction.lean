@@ -480,6 +480,94 @@ inductive QuittingFinFourUniformExcessPaidAlternative
         32 * M * M * quittingSurvivalPrefix
           (quittingProfileLiveRoot reward edge.moreOffMinimum) row.start)
 
+private theorem uniformExcessPaidAlternative_of_moverPaid
+    {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
+    {source target : (quittingGame reward).BehaviorProfile}
+    {epsilon M : ℝ}
+    (edge : QuittingFinFourSignedRetraction source target (epsilon / 2))
+    (hgain : epsilon / 2 / 8 ≤ edge.reverseGain)
+    (row : QuittingPaidFirstDisagreementRow reward edge.moreOffMinimum edge.mover
+      (epsilon / 2 / 32))
+    (hsource : row.sourceWitness ∈
+      (quittingBehaviorStoppingLaw reward (edge.moreOffMinimum edge.mover)).support)
+    (hown : epsilon / 2 / 8 ≤ 4 * M * quittingHazardSurvival
+      (quittingBehaviorLiveHazard reward (edge.moreOffMinimum edge.mover)) row.start)
+    (hopponent : epsilon / 2 / 8 ≤ 8 * M * row.liveMass)
+    (hjoint : (epsilon / 2 / 8) * (epsilon / 2 / 8) ≤
+      32 * M * M * quittingSurvivalPrefix
+        (quittingProfileLiveRoot reward edge.moreOffMinimum) row.start) :
+    Nonempty (QuittingFinFourUniformExcessPaidAlternative (M := M) edge) := by
+  have hfloor : epsilon / 2 / 8 = epsilon / 16 := by ring
+  have hrowGain : epsilon / 2 / 32 = epsilon / 64 := by ring
+  let row' := row.castGain hrowGain
+  have hsource' : row'.sourceWitness ∈
+      (quittingBehaviorStoppingLaw reward
+        (edge.moreOffMinimum edge.mover)).support := by
+    rw [row.castGain_sourceWitness hrowGain]
+    exact hsource
+  have hown' : epsilon / 16 ≤ 4 * M *
+      quittingHazardSurvival
+        (quittingBehaviorLiveHazard reward
+          (edge.moreOffMinimum edge.mover)) row'.start := by
+    rw [row.castGain_start hrowGain, ← hfloor]
+    exact hown
+  have hopponent' : epsilon / 16 ≤ 8 * M * row'.liveMass := by
+    rw [row.castGain_liveMass hrowGain, ← hfloor]
+    exact hopponent
+  have hjoint' : (epsilon / 16) * (epsilon / 16) ≤
+      32 * M * M * quittingSurvivalPrefix
+        (quittingProfileLiveRoot reward edge.moreOffMinimum) row'.start := by
+    rw [row.castGain_start hrowGain, ← hfloor]
+    exact hjoint
+  rw [hfloor] at hgain
+  exact ⟨.moverPaid hgain row' hsource' hown' hopponent' hjoint'⟩
+
+private theorem uniformExcessPaidAlternative_of_nonmoverPaid
+    {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
+    {source target : (quittingGame reward).BehaviorProfile}
+    {epsilon M : ℝ}
+    (edge : QuittingFinFourSignedRetraction source target (epsilon / 2))
+    (observer : Fin 4) (hne : observer ≠ edge.mover)
+    (hdebt : epsilon / 2 / 24 ≤
+      quittingTerminalSemanticDebt
+        (quittingTerminalSemanticPair reward edge.moreOffMinimum) observer)
+    (row : QuittingPaidFirstDisagreementRow reward edge.moreOffMinimum observer
+      (epsilon / 2 / 96))
+    (hsource : row.sourceWitness ∈
+      (quittingBehaviorStoppingLaw reward (edge.moreOffMinimum observer)).support)
+    (hown : epsilon / 2 / 24 ≤ 4 * M * quittingHazardSurvival
+      (quittingBehaviorLiveHazard reward (edge.moreOffMinimum observer)) row.start)
+    (hopponent : epsilon / 2 / 24 ≤ 8 * M * row.liveMass)
+    (hjoint : (epsilon / 2 / 24) * (epsilon / 2 / 24) ≤
+      32 * M * M * quittingSurvivalPrefix
+        (quittingProfileLiveRoot reward edge.moreOffMinimum) row.start) :
+    Nonempty (QuittingFinFourUniformExcessPaidAlternative (M := M) edge) := by
+  have hfloor : epsilon / 2 / 24 = epsilon / 48 := by ring
+  have hrowGain : epsilon / 2 / 96 = epsilon / 192 := by ring
+  let row' := row.castGain hrowGain
+  have hsource' : row'.sourceWitness ∈
+      (quittingBehaviorStoppingLaw reward
+        (edge.moreOffMinimum observer)).support := by
+    rw [row.castGain_sourceWitness hrowGain]
+    exact hsource
+  have hown' : epsilon / 48 ≤ 4 * M *
+      quittingHazardSurvival
+        (quittingBehaviorLiveHazard reward
+          (edge.moreOffMinimum observer)) row'.start := by
+    rw [row.castGain_start hrowGain, ← hfloor]
+    exact hown
+  have hopponent' : epsilon / 48 ≤ 8 * M * row'.liveMass := by
+    rw [row.castGain_liveMass hrowGain, ← hfloor]
+    exact hopponent
+  have hjoint' : (epsilon / 48) * (epsilon / 48) ≤
+      32 * M * M * quittingSurvivalPrefix
+        (quittingProfileLiveRoot reward edge.moreOffMinimum) row'.start := by
+    rw [row.castGain_start hrowGain, ← hfloor]
+    exact hjoint
+  rw [hfloor] at hdebt
+  exact ⟨.nonmoverPaid observer hne hdebt row' hsource' hown'
+    hopponent' hjoint'⟩
+
 /-- The exact `epsilon / 16`, `epsilon / 64`, `epsilon / 48`, and
 `epsilon / 192` specialization used by a uniformly off-minimum cycle. -/
 theorem nonempty_uniformExcessPaidAlternative
@@ -493,55 +581,10 @@ theorem nonempty_uniformExcessPaidAlternative
   obtain ⟨alternative⟩ := nonempty_paidAlternative edge hreward (by positivity)
   cases alternative with
   | moverPaid hgain row hsource hown hopponent hjoint =>
-      have hfloor : epsilon / 2 / 8 = epsilon / 16 := by ring
-      have hrowGain : epsilon / 2 / 32 = epsilon / 64 := by ring
-      let row' := row.castGain hrowGain
-      have hsource' : row'.sourceWitness ∈
-          (quittingBehaviorStoppingLaw reward
-            (edge.moreOffMinimum edge.mover)).support := by
-        rw [row.castGain_sourceWitness hrowGain]
-        exact hsource
-      have hown' : epsilon / 16 ≤ 4 * M *
-          quittingHazardSurvival
-            (quittingBehaviorLiveHazard reward
-              (edge.moreOffMinimum edge.mover)) row'.start := by
-        rw [row.castGain_start hrowGain, ← hfloor]
-        exact hown
-      have hopponent' : epsilon / 16 ≤ 8 * M * row'.liveMass := by
-        rw [row.castGain_liveMass hrowGain, ← hfloor]
-        exact hopponent
-      have hjoint' : (epsilon / 16) * (epsilon / 16) ≤
-          32 * M * M * quittingSurvivalPrefix
-            (quittingProfileLiveRoot reward edge.moreOffMinimum) row'.start := by
-        rw [row.castGain_start hrowGain, ← hfloor]
-        exact hjoint
-      rw [hfloor] at hgain
-      exact ⟨.moverPaid hgain row' hsource' hown' hopponent' hjoint'⟩
+      exact uniformExcessPaidAlternative_of_moverPaid edge hgain row
+        hsource hown hopponent hjoint
   | nonmoverPaid observer hne hdebt row hsource hown hopponent hjoint =>
-      have hfloor : epsilon / 2 / 24 = epsilon / 48 := by ring
-      have hrowGain : epsilon / 2 / 96 = epsilon / 192 := by ring
-      let row' := row.castGain hrowGain
-      have hsource' : row'.sourceWitness ∈
-          (quittingBehaviorStoppingLaw reward
-            (edge.moreOffMinimum observer)).support := by
-        rw [row.castGain_sourceWitness hrowGain]
-        exact hsource
-      have hown' : epsilon / 48 ≤ 4 * M *
-          quittingHazardSurvival
-            (quittingBehaviorLiveHazard reward
-              (edge.moreOffMinimum observer)) row'.start := by
-        rw [row.castGain_start hrowGain, ← hfloor]
-        exact hown
-      have hopponent' : epsilon / 48 ≤ 8 * M * row'.liveMass := by
-        rw [row.castGain_liveMass hrowGain, ← hfloor]
-        exact hopponent
-      have hjoint' : (epsilon / 48) * (epsilon / 48) ≤
-          32 * M * M * quittingSurvivalPrefix
-            (quittingProfileLiveRoot reward edge.moreOffMinimum) row'.start := by
-        rw [row.castGain_start hrowGain, ← hfloor]
-        exact hjoint
-      rw [hfloor] at hdebt
-      exact ⟨.nonmoverPaid observer hne hdebt row' hsource' hown'
-        hopponent' hjoint'⟩
+      exact uniformExcessPaidAlternative_of_nonmoverPaid edge observer hne hdebt row
+        hsource hown hopponent hjoint
 
 end GameTheory

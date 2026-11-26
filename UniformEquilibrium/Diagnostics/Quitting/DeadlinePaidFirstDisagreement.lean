@@ -82,7 +82,7 @@ theorem HasTerminalExploitabilityGap.exists_deadline_paidFirstDisagreement
     exact abs_quittingTerminalPayoff_le reward _ observer
       (abs_reward_le_quittingRewardBound reward)
   have hprescribed : quittingTerminalPayoff reward profile observer =
-      Math.Probability.expect
+      _root_.Math.Probability.expect
         (quittingBehaviorStoppingLaw reward (profile observer)) value := by
     have h := quittingTerminalPayoff_update_eq_expect_stoppingLaw_pureTime
       reward profile observer (profile observer)

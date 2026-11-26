@@ -155,7 +155,7 @@ private theorem pureDeviationAuxEU_eq
   all_goals
     simp [profile, value, game, ownerAction, otherAction,
       expect_coin, Function.update]
-  all_goals ring_nf
+  ring_nf
 
 /-- The parameterized profile and the constant value solve the discounted
 Bellman equations at discount factor `1 - t`. -/
@@ -358,7 +358,7 @@ theorem finkStageGain_nonpos
   cases state <;> cases player <;> cases action <;>
     simp [profile, game, ownerAction, otherAction, expect_coin,
       Function.update]
-  all_goals linarith
+  exact ht1.le
 
 /-- With zero bias, every player-owned moving charge is nonpositive. -/
 theorem rawPlayerOwnedOccupationCharge_zero_nonpos

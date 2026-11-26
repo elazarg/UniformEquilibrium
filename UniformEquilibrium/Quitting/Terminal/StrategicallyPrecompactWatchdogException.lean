@@ -20,6 +20,7 @@ noncomputable section
 
 namespace GameTheory
 
+open _root_.Math.Probability (finDistOfPMF finDistOfPMF_pure)
 open StochasticGame
 open GameTheory.Math.Probability
 
@@ -65,6 +66,7 @@ theorem quittingFiniteMixtureBehaviorProfile_payoff_le_of_isNash_mixed
     (reward : {S : Finset iota // S.Nonempty} -> Payoff iota)
     (menu : (who : iota) ->
       Set ((quittingGame reward).BehaviorStrategy who))
+    [∀ who, Finite {strategy // strategy ∈ menu who}]
     (mixed : Profile (quittingBehaviorMenuForm reward menu).sig.mixed)
     (hnash : IsNash (quittingBehaviorMenuForm reward menu).mixed
       (euPreference (quittingBehaviorMenuUtility reward menu)) mixed) :
@@ -72,18 +74,22 @@ theorem quittingFiniteMixtureBehaviorProfile_payoff_le_of_isNash_mixed
       quittingTerminalPayoff reward
           (Function.update
             (quittingFiniteMixtureBehaviorProfile reward
-              (fun player => (mixed player).map Subtype.val))
+              (fun player => (finDistOfPMF (mixed player)).map Subtype.val))
             who strategy) who <=
         quittingTerminalPayoff reward
           (quittingFiniteMixtureBehaviorProfile reward
-            (fun player => (mixed player).map Subtype.val)) who := by
+            (fun player => (finDistOfPMF (mixed player)).map Subtype.val)) who := by
   intro who strategy hstrategy
   let laws : (player : iota) ->
       FinDist ((quittingGame reward).BehaviorStrategy player) :=
-    fun player => (mixed player).map Subtype.val
+    fun player => (finDistOfPMF (mixed player)).map Subtype.val
   let profile := quittingFiniteMixtureBehaviorProfile reward laws
   let action : {strategy // strategy ∈ menu who} := ⟨strategy, hstrategy⟩
-  have hnashPure := (isNash_mixed_iff mixed).1 hnash who action
+  have hnashPure := (euPreference_iff _ _ _ _
+    (payoffIntegrable_of_finite _ _) (payoffIntegrable_of_finite _ _)).mp
+      ((isNash_iff (F := (quittingBehaviorMenuForm reward menu).mixed)
+        (weaklyPrefers := euPreference (quittingBehaviorMenuUtility reward menu))
+        mixed).mp hnash who (PMF.pure action))
   have hrhs :
       expectedUtility (quittingBehaviorMenuUtility reward menu) who
           ((quittingBehaviorMenuForm reward menu).mixed.play mixed) =
@@ -92,10 +98,10 @@ theorem quittingFiniteMixtureBehaviorProfile_payoff_le_of_isNash_mixed
     simpa only [laws] using
       expectedUtility_quittingBehaviorMenu_mixed_eq_expect_pi
         reward menu mixed who
-  let updatedMixed := Profile.update mixed who (FinDist.pure action)
+  let updatedMixed := Profile.update mixed who (PMF.pure action)
   let updatedLaws : (player : iota) ->
       FinDist ((quittingGame reward).BehaviorStrategy player) :=
-    fun player => (updatedMixed player).map Subtype.val
+    fun player => (finDistOfPMF (updatedMixed player)).map Subtype.val
   have hpureAction :
       (FinDist.pure action).map Subtype.val = FinDist.pure strategy := by
     rw [FinDist.map_pure]
@@ -116,9 +122,10 @@ theorem quittingFiniteMixtureBehaviorProfile_payoff_le_of_isNash_mixed
       by_cases hp : player = who
       · subst player
         change quittingFiniteStoppingLawMixtureBehaviorStrategy reward who
-            ((Profile.update mixed who (FinDist.pure action) who).map
-              Subtype.val) = _
-        rw [Profile.update_same, hpureAction, Function.update_self]
+            ((finDistOfPMF
+              (Profile.update mixed who (PMF.pure action) who)).map Subtype.val) = _
+        rw [Profile.update_same, finDistOfPMF_pure,
+          hpureAction, Function.update_self]
       · simp [updatedLaws, updatedMixed, laws, profile,
           quittingFiniteMixtureBehaviorProfile, hp]
     have hpure :=
@@ -395,9 +402,10 @@ theorem exists_quittingBehaviorProfile_forall_mem_oneException_payoff_le_add
   obtain ⟨mixed, hnash⟩ := exists_isNash_mixed
     (F := quittingBehaviorMenuForm reward menu)
     (quittingBehaviorMenuUtility reward menu)
+    ((quittingBehaviorMenuForm reward menu).hasIntegrableUtility_of_finiteOutcome _)
   let laws : (who : iota) ->
       FinDist ((quittingGame reward).BehaviorStrategy who) :=
-    fun who => (mixed who).map Subtype.val
+    fun who => (finDistOfPMF (mixed who)).map Subtype.val
   let profile := quittingFiniteMixtureBehaviorProfile reward laws
   have hsafe : ∀ who strategy, strategy ∈ menu who ->
       quittingTerminalPayoff reward
@@ -431,7 +439,7 @@ theorem exists_quittingBehaviorProfile_forall_mem_oneException_payoff_le_add
       simpa [quittingExceptionalEvaluation, baseOpponentProfile] using hvector
     have hdistance :=
       abs_quittingTerminalPayoff_update_finiteMixture_le_of_exceptionalEvaluation
-        reward menu mixed exception strategy center hcloseMenu
+        reward menu (fun who => finDistOfPMF (mixed who)) exception strategy center hcloseMenu
     change _ <= quittingTerminalPayoff reward profile exception + error
     rw [abs_le] at hdistance
     linarith

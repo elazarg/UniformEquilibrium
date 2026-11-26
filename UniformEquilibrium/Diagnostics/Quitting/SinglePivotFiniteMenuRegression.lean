@@ -159,11 +159,11 @@ theorem finiteNash :
     simp [mixed, halfLaw, quit0, pureTimingPayoff]
     cases replacement with
     | none =>
-        simp [Math.Probability.expect_eq_sum]
+        simp [_root_.Math.Probability.expect_eq_sum]
         norm_num
     | some time =>
         fin_cases time
-        simp [Math.Probability.expect_eq_sum]
+        simp [_root_.Math.Probability.expect_eq_sum]
   · unfold KernelGame.mixedGain
     rw [(quittingFiniteDeadlineTimingGame reward 1).mixedExtension_eu,
       (quittingFiniteDeadlineTimingGame reward 1).mixedExtension_eu]
@@ -173,10 +173,10 @@ theorem finiteNash :
     simp [mixed, halfLaw, quit0, pureTimingPayoff]
     cases replacement with
     | none =>
-        simp [Math.Probability.expect_eq_sum]
+        simp [_root_.Math.Probability.expect_eq_sum]
     | some time =>
         fin_cases time
-        simp [Math.Probability.expect_eq_sum]
+        simp [_root_.Math.Probability.expect_eq_sum]
 
 theorem pivot_payoff_eq_zero :
     quittingTerminalPayoff reward
@@ -190,7 +190,7 @@ theorem pivot_payoff_eq_zero :
     (quittingFiniteDeadlineTimingGame reward 1).mixedExtension_eu]
   simp only [quittingFiniteDeadlineTimingGame, KernelGame.eu_ofPureEU]
   rw [Math.PMFProduct.expect_pmfPi_boolFamily]
-  simp [mixed, halfLaw, quit0, pureTimingPayoff, Math.Probability.expect_eq_sum]
+  simp [mixed, halfLaw, quit0, pureTimingPayoff, _root_.Math.Probability.expect_eq_sum]
   norm_num
 
 theorem pivot_never_payoff_eq_zero :
@@ -209,7 +209,7 @@ theorem pivot_never_payoff_eq_zero :
     (quittingFiniteDeadlineTimingGame reward 1).mixedExtension_eu]
   simp only [quittingFiniteDeadlineTimingGame, KernelGame.eu_ofPureEU]
   rw [Math.PMFProduct.expect_pmfPi_boolFamily]
-  simp [mixed, halfLaw, quit0, pureTimingPayoff, Math.Probability.expect_eq_sum]
+  simp [mixed, halfLaw, quit0, pureTimingPayoff, _root_.Math.Probability.expect_eq_sum]
 
 theorem opponentNeverProduct_eq_half :
     quittingFiniteDeadlineOpponentNeverProduct 1 mixed false = 1 / 2 := by

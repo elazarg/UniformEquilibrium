@@ -71,6 +71,25 @@ private theorem image_globalChart_nonzeroFixedPointSet
       ring
     exact ⟨point, by simpa only [mem_preimage, hchart] using hsource, hchart⟩
 
+private theorem globalChart_norm_le_of_mem_closure (radius : ℝ)
+    (point : UnitCube (Fin n))
+    (hpoint : point ∈ closure (quittingCrossedGlobalOriginRegion radius)) :
+    ‖quittingCrossedGlobalChart point‖ ≤ radius := by
+  have hchart : Continuous (quittingCrossedGlobalChart (n := n)) :=
+    continuous_rectangularCubePoint (fun _ : Fin n => -2) (fun _ => 2)
+  have hclosed : IsClosed (quittingCrossedGlobalChart ⁻¹'
+      Metric.closedBall (0 : Fin n → ℝ) radius) := Metric.isClosed_closedBall.preimage hchart
+  have hsubset : quittingCrossedGlobalOriginRegion radius ⊆
+      quittingCrossedGlobalChart ⁻¹' Metric.closedBall (0 : Fin n → ℝ) radius := by
+    intro source hsource
+    change quittingCrossedGlobalChart source ∈ Metric.ball (0 : Fin n → ℝ) radius at hsource
+    change quittingCrossedGlobalChart source ∈ Metric.closedBall (0 : Fin n → ℝ) radius
+    exact Metric.ball_subset_closedBall hsource
+  have hmem : point ∈ quittingCrossedGlobalChart ⁻¹'
+      Metric.closedBall (0 : Fin n → ℝ) radius := closure_minimal hsubset hclosed hpoint
+  change dist (quittingCrossedGlobalChart point) 0 ≤ radius at hmem
+  rwa [dist_zero_right] at hmem
+
 /-- A single radius isolates the actual ambient origin, computes its local
 index, and gives degree `1−κ(PΓ)` to an open exterior selecting the entire
 nonzero fixed-point set. All degree statements use the fixed `[-2,2]` chart. -/
@@ -105,18 +124,6 @@ theorem exists_globalCrossed_entireNonzeroSet_degree_eq_one_sub_r0Degree
   let actual := quittingCrossedGlobalProblem reward first second height
   let region : Set (UnitCube (Fin n)) := quittingCrossedGlobalOriginRegion radius
   let houtside := actual.isIsolating_compl_closure region horigin
-  have hclosureSmall (point : UnitCube (Fin n)) (hpoint : point ∈ closure region) :
-      ‖quittingCrossedGlobalChart point‖ ≤ radius := by
-    have hclosed : IsClosed (quittingCrossedGlobalChart ⁻¹'
-        Metric.closedBall (0 : Fin n → ℝ) radius) :=
-      Metric.isClosed_closedBall.preimage
-        (continuous_rectangularCubePoint (fun _ : Fin n => -2) (fun _ => 2))
-    have hsubset : region ⊆ quittingCrossedGlobalChart ⁻¹'
-        Metric.closedBall (0 : Fin n → ℝ) radius := by
-      intro source hsource
-      exact Metric.ball_subset_closedBall hsource
-    have hmem := closure_minimal hsubset hclosed hpoint
-    simpa only [mem_preimage, Metric.mem_closedBall, dist_zero_right] using hmem
   have hselected : actual.solutionsIn (closure region)ᶜ =
       quittingCrossedGlobalChart ⁻¹'
         quittingCrossedNonzeroFixedPointSet reward first second height := by
@@ -138,7 +145,8 @@ theorem exists_globalCrossed_entireNonzeroSet_degree_eq_one_sub_r0Degree
     · rintro ⟨hnonzero, hfixed⟩
       refine ⟨hfixed, ?_⟩
       intro hclosure
-      exact hnonzero (hisolation _ (hclosureSmall point hclosure) hfixed)
+      exact hnonzero
+        (hisolation _ (globalChart_norm_le_of_mem_closure radius point hclosure) hfixed)
   refine ⟨radius, hradius, hsmall, hisolation, horigin, houtside, hdegree, hselected, ?_, ?_⟩
   · rw [hselected]
     exact image_globalChart_nonzeroFixedPointSet

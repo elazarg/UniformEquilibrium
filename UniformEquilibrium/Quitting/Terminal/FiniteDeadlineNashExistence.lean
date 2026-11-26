@@ -56,7 +56,7 @@ theorem finiteDeadline_mixedNash_neverSupport_payoff_eq_never
   let value := fun action : QuittingFiniteDeadlineTimingAction deadline ↦
     game.mixedExtension.eu (Function.update mixed pivot (PMF.pure action)) pivot
   let prescribed := game.mixedExtension.eu mixed pivot
-  have havg : prescribed = Math.Probability.expect (mixed pivot) value := by
+  have havg : prescribed = _root_.Math.Probability.expect (mixed pivot) value := by
     simpa [game, value, prescribed] using game.mixedExtension_eu_update mixed pivot (mixed pivot)
   have hle : ∀ action, value action ≤ prescribed := fun action ↦ hnash pivot (PMF.pure action)
   have hvalue : ∀ action, |value action| ≤ quittingRewardBound reward := by
@@ -84,7 +84,7 @@ theorem finiteDeadline_mixedNash_neverSupport_payoff_eq_never
     have hlt := Math.ProbabilityMassFunction.expect_lt_of_le_on_support_of_bounded
       (mixed pivot) value (fun _ ↦ prescribed) hvalue
       (fun _ ↦ hprescribed) (fun action _ ↦ hle action) ⟨none, hnone, hstrict⟩
-    rw [← havg, Math.Probability.expect_const] at hlt
+    rw [← havg, _root_.Math.Probability.expect_const] at hlt
     linarith
   rw [quittingTerminalPayoff_finiteDeadlineTimingProfile_eq_mixedEU]
   change prescribed = _

@@ -110,7 +110,7 @@ theorem quittingFiniteCalendarDecodedLaws_some_eq_zero_of_le {deadline : ℕ}
   classical
   unfold quittingFiniteCalendarDecodedLaws
   rw [PMF.map_apply]
-  apply ENNReal.tsum_eq_zero.mpr
+  apply tsum_eq_zero_iff.mpr
   intro choice
   rw [ite_eq_right]
   cases choice with

@@ -75,7 +75,7 @@ private lemma stationaryGain_centerAtOne (anchor : Player) (p : Player → ℝ)
   fin_cases anchor <;> fin_cases who <;>
     simp [stationaryGain, centerAtOne, centerAtOneIndex, stationaryGainZero,
       stationaryGainOne, stationaryGainTwo, stationaryGainThree]
-  all_goals first | rfl | ring
+  all_goals ring
 
 private lemma endpoint_or_interior {x : ℝ} (hx0 : 0 ≤ x) (hx1 : x ≤ 1) :
     x = 0 ∨ x = 1 ∨ (0 < x ∧ x < 1) := by
@@ -637,8 +637,9 @@ private lemma no_stationaryGainComplementary_of_x_zero
   rcases endpoint_or_interior hy0 hy1 with (rfl | rfl | hy) <;>
     rcases endpoint_or_interior hz0 hz1 with (rfl | rfl | hz) <;>
       rcases endpoint_or_interior ht0 ht1 with (rfl | rfl | ht)
-  all_goals (norm_num [stationaryGainComplementary, stationaryGainZero,
-    stationaryGainOne, stationaryGainTwo, stationaryGainThree] at * <;> nlinarith)
+  all_goals norm_num [stationaryGainComplementary, stationaryGainZero,
+    stationaryGainOne, stationaryGainTwo, stationaryGainThree] at *
+  all_goals nlinarith
 
 private lemma no_stationaryGainComplementary_of_x_one
     (y z t : ℝ)
@@ -651,16 +652,15 @@ private lemma no_stationaryGainComplementary_of_x_one
   rcases endpoint_or_interior hy0 hy1 with (rfl | rfl | hy) <;>
     rcases endpoint_or_interior hz0 hz1 with (rfl | rfl | hz) <;>
       rcases endpoint_or_interior ht0 ht1 with (rfl | rfl | ht)
-  all_goals
-    first
-    | exact no_stationaryGain_zeros_of_x_one_interior
-        hy.1 hy.2 hz.1 hz.2 ht.1 ht.2
-        (gain_eq_zero_of_interior hy.1 hy.2 hg1.1 hg1.2)
-        (gain_eq_zero_of_interior hz.1 hz.2 hg2.1 hg2.2)
-        (gain_eq_zero_of_interior ht.1 ht.2 hg3.1 hg3.2)
-    | skip
-  all_goals (norm_num [stationaryGainComplementary, stationaryGainZero,
-    stationaryGainOne, stationaryGainTwo, stationaryGainThree] at * <;> nlinarith)
+  all_goals try
+    exact no_stationaryGain_zeros_of_x_one_interior
+      hy.1 hy.2 hz.1 hz.2 ht.1 ht.2
+      (gain_eq_zero_of_interior hy.1 hy.2 hg1.1 hg1.2)
+      (gain_eq_zero_of_interior hz.1 hz.2 hg2.1 hg2.2)
+      (gain_eq_zero_of_interior ht.1 ht.2 hg3.1 hg3.2)
+  all_goals norm_num [stationaryGainComplementary, stationaryGainZero,
+    stationaryGainOne, stationaryGainTwo, stationaryGainThree] at *
+  all_goals nlinarith
 
 private lemma no_stationaryGainComplementary_of_x_interior
     (x y z t : ℝ) (hx : 0 < x ∧ x < 1)

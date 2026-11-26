@@ -3,7 +3,7 @@ import UniformEquilibrium.Quitting.Terminal.FiniteOpponentAtomGapReplyMenu
 import UniformEquilibrium.Quitting.Paths.CommonStoppingCalendarRetiming
 import Mathlib.MeasureTheory.Constructions.UnitInterval
 import Mathlib.MeasureTheory.Measure.WithDensity
-import GameTheory.Math.Probability.Measure
+import MathUE.Probability.FinDistIntegral
 import Mathlib.Logic.Equiv.Option
 
 /-! # Actual finite-law interval charts
@@ -561,7 +561,6 @@ theorem referenceMeasure_map_decodeCell (laws : ι → FinDist (Option ℕ))
         (referenceMeasure laws p).real (interval laws a) := by
       apply measureReal_congr
       filter_upwards [ae_decodeCell_mem_interval_referenceMeasure laws p] with x hx
-      apply propext
       change decodeCell laws x = a ↔ x ∈ interval laws a
       constructor
       · intro h

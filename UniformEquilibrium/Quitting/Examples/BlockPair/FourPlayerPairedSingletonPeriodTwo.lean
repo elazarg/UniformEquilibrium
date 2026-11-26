@@ -87,7 +87,7 @@ theorem deriv_periodTwoPolynomial (x : ℝ) :
   have h := (((h4.sub h3).sub h2).add (hasDerivAt_id x)).add_const (3 : ℝ)
   convert h.deriv using 1
   all_goals norm_num
-  all_goals ring
+  ring
 
 /-- Above `7/10`, the selecting quartic is strictly increasing. -/
 theorem periodTwoPolynomial_strictMonoOn :

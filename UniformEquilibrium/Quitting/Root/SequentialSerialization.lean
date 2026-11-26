@@ -171,6 +171,10 @@ theorem quittingFiniteRootPayoff_serialized_four_step
   rw [hclock0, hclock1, hclock2, hclock3]
   have hnext : 4 * start + 4 = 4 * (start + 1) := by omega
   simp only [hnext]
-  rfl
+  simp only [quittingSerializedBlockPayoff, quittingRootSuccessorPayoff]
+  apply quittingRootExpectedPayoff_continuation_congr
+  apply quittingRootExpectedPayoff_continuation_congr
+  apply quittingRootExpectedPayoff_continuation_congr
+  exact quittingRootExpectedPayoff_continuation_congr reward _ _ _ who rfl
 
 end GameTheory

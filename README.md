@@ -204,7 +204,7 @@ permits only the standard `propext`, `Quot.sound`, and `Classical.choice`
 axioms and runs as a default Lake target. `Research`, `Theorems`,
 `Experiments`, and `Literature` are outside its audit scope.
 
-Lean 4.34.0 is the required toolchain. Lean 4.32.0 is excluded because of a
+Lean 4.36.0 is the required toolchain. Lean 4.32.0 is excluded because of a
 kernel soundness bug.
 
 From a fresh checkout:

@@ -82,7 +82,7 @@ theorem eventuallyEq_zero_nhdsGT_iff_nhds (hf : AnalyticAt ℝ f 0) :
     (∀ᶠ t in 𝓝[>] (0 : ℝ), f t = 0) ↔ ∀ᶠ t in 𝓝 (0 : ℝ), f t = 0 := by
   refine ⟨fun h => ?_, fun h => h.filter_mono nhdsWithin_le_nhds⟩
   by_contra hcon
-  obtain ⟨n, c, hc, hc0, hfac⟩ := hf.exists_eventuallyEq_pow_smul_nonzero_iff.mpr hcon
+  obtain ⟨n, c, hc, hc0, hfac⟩ := hf.exists_eventuallyEq_pow_smul_ne_zero_iff.mpr hcon
   have hcne : ∀ᶠ t in 𝓝 (0 : ℝ), c t ≠ 0 := hc.continuousAt.eventually_ne hc0
   have hfalse : ∀ᶠ _t in 𝓝[>] (0 : ℝ), False := by
     filter_upwards [h, self_mem_nhdsWithin, hfac.filter_mono nhdsWithin_le_nhds,

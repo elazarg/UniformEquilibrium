@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import GameTheory.Math.Probability.FiniteUniform
 import MathUE.ProbabilityMassFunction.Bool
 import UniformEquilibrium.Quitting.Debt.Dynamic.BudgetStableCompatiblePacketIteration
 import UniformEquilibrium.Quitting.Stationary.Root
@@ -45,7 +46,7 @@ theorem nonempty_quittingBudgetStablePacketSystem_iff_two_le_card
   · intro hcard
     have hone : 1 < Fintype.card ι := by omega
     obtain ⟨first, second, hne⟩ := Fintype.one_lt_card_iff.mp hone
-    let root : ι → PMF Bool := fun _ => PMF.uniformOfFintype Bool
+    let root : ι → PMF Bool := fun _ => GameTheory.Math.Probability.uniformLaw Bool
     let profile := quittingStationaryProfile reward root
     let pair := quittingTerminalSemanticPair reward profile
     let bound := 2 * quittingRewardBound reward
@@ -101,11 +102,11 @@ theorem nonempty_quittingBudgetStablePacketSystem_iff_two_le_card
         exact hfixed
       · simp only [Finset.sum_range_succ, Finset.sum_range_zero, zero_add]
         unfold quittingMarginalQuitHazard root
-        norm_num [PMF.uniformOfFintype_apply]
+        norm_num [GameTheory.Math.Probability.uniformLaw_apply]
         linarith
       · simp only [Finset.sum_range_succ, Finset.sum_range_zero, zero_add]
         unfold quittingMarginalQuitHazard root
-        norm_num [PMF.uniformOfFintype_apply]
+        norm_num [GameTheory.Math.Probability.uniformLaw_apply]
         linarith
       · intro offset _ who
         exact quittingTerminalDeviationDebt_nonneg reward profile who

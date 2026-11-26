@@ -1056,9 +1056,8 @@ theorem historyContinuationEU_eq (σ : G.BehaviorProfile)
     G.historyContinuationEU σ (fun t h => f (A.configAt t h)) h =
       expect (G.stageActionDist σ h) fun act =>
         expect (G.transition h.2 act) fun s' =>
-          f (A.step (A.configAt t h) act s') :=
-  congrArg _ (funext fun act => congrArg _ (funext fun s' =>
-    congrArg f (A.configAt_snoc h act s')))
+          f (A.step (A.configAt t h) act s') := by
+  simp only [StochasticGame.historyContinuationEU, A.configAt_snoc]
 
 end ContinuationShape
 

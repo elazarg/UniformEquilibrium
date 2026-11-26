@@ -75,11 +75,25 @@ private theorem favoriteGap_lower {a c : ℝ}
   rw [hidentity]
   exact hbase.trans (le_add_of_nonneg_right (mul_nonneg (sub_nonneg.mpr ha) hg))
 
+private theorem weight_row (row : Fin 15) (player : Fin 4) :
+    weightOfReward reward (Math.Finset.finFourCoalitionOfRow row) player =
+      reward (Math.Finset.finFourCoalitionRowEquiv row) player := by
+  exact dite_eq_left (Math.Finset.finFourCoalitionOfRow_nonempty row)
+
+private theorem sum_fin15 (summand : Fin 15 → ℝ) :
+    (∑ row, summand row) =
+      summand 0 + (summand 1 + (summand 2 + (summand 3 + (summand 4 +
+        (summand 5 + (summand 6 + (summand 7 + (summand 8 + (summand 9 +
+        (summand 10 + (summand 11 + (summand 12 + (summand 13 + summand 14))))))))))))) := by
+  simp [Fin.sum_univ_succ]
+
 private theorem literal_zero_quit (hazard : Fin 4 → ℝ) (missing : Fin 4)
     (hmissing : hazard missing = 0) :
     sigmaValue (weightOfReward reward) hazard (zeroRowOfMissing missing) =
       quitZeroRow (hazard (firstOfMissing missing)) (hazard (favoriteOfMissing missing)) := by
   rw [sigmaValue_eq_pureQuitEndpointRowSum]
+  simp only [pureQuitEndpointRowSum, weight_row, reward_rows, sum_fin15,
+    opponentCoalitionMass, Fin.prod_univ_four]
   fin_cases missing
   all_goals norm_num only at hmissing
   all_goals first
@@ -87,16 +101,16 @@ private theorem literal_zero_quit (hazard : Fin 4 → ℝ) (missing : Fin 4)
     | change hazard (1 : Fin 4) = 0 at hmissing
     | change hazard (2 : Fin 4) = 0 at hmissing
     | change hazard (3 : Fin 4) = 0 at hmissing
-  all_goals norm_num [firstOfMissing, zeroRowOfMissing, favoriteOfMissing, quitZeroRow,
-    pureQuitEndpointRowSum, opponentCoalitionMass, weightOfReward,
-    Math.Finset.finFourCoalitionOfRow, Fin.sum_univ_succ, Fin.prod_univ_succ, hmissing]
-  all_goals norm_num [reward, Math.FiniteCoalition.binaryCode_finFour]
+  all_goals norm_num +decide [firstOfMissing, zeroRowOfMissing, favoriteOfMissing, quitZeroRow,
+    Math.Finset.finFourCoalitionOfRow, hmissing]
   all_goals ring
 
 private theorem literal_zero_continue (hazard : Fin 4 → ℝ) (missing : Fin 4)
     (hmissing : hazard missing = 0) :
     excludedValue (weightOfReward reward) hazard (zeroRowOfMissing missing) = 0 := by
   rw [excludedValue_eq_excludedEndpointRowSum]
+  simp only [excludedEndpointRowSum, weight_row, reward_rows, sum_fin15,
+    opponentCoalitionMass, Fin.prod_univ_four]
   fin_cases missing
   all_goals norm_num only at hmissing
   all_goals first
@@ -104,10 +118,8 @@ private theorem literal_zero_continue (hazard : Fin 4 → ℝ) (missing : Fin 4)
     | change hazard (1 : Fin 4) = 0 at hmissing
     | change hazard (2 : Fin 4) = 0 at hmissing
     | change hazard (3 : Fin 4) = 0 at hmissing
-  all_goals norm_num [zeroRowOfMissing, excludedEndpointRowSum, opponentCoalitionMass,
-    weightOfReward, Math.Finset.finFourCoalitionOfRow, Fin.sum_univ_succ,
-    Fin.prod_univ_succ, hmissing]
-  all_goals norm_num [reward, Math.FiniteCoalition.binaryCode_finFour]
+  all_goals norm_num +decide [zeroRowOfMissing,
+    Math.Finset.finFourCoalitionOfRow, hmissing]
 
 private theorem literal_zero_mass (hazard : Fin 4 → ℝ) (missing : Fin 4)
     (hmissing : hazard missing = 0) :
@@ -131,6 +143,8 @@ private theorem literal_favorite_quit (hazard : Fin 4 → ℝ) (missing : Fin 4)
     sigmaValue (weightOfReward reward) hazard (favoriteOfMissing missing) =
       quitFavorite (hazard (firstOfMissing missing)) (hazard (zeroRowOfMissing missing)) := by
   rw [sigmaValue_eq_pureQuitEndpointRowSum]
+  simp only [pureQuitEndpointRowSum, weight_row, reward_rows, sum_fin15,
+    opponentCoalitionMass, Fin.prod_univ_four]
   fin_cases missing
   all_goals norm_num only at hmissing
   all_goals first
@@ -138,10 +152,8 @@ private theorem literal_favorite_quit (hazard : Fin 4 → ℝ) (missing : Fin 4)
     | change hazard (1 : Fin 4) = 0 at hmissing
     | change hazard (2 : Fin 4) = 0 at hmissing
     | change hazard (3 : Fin 4) = 0 at hmissing
-  all_goals norm_num [firstOfMissing, zeroRowOfMissing, favoriteOfMissing, quitFavorite,
-    pureQuitEndpointRowSum, opponentCoalitionMass, weightOfReward,
-    Math.Finset.finFourCoalitionOfRow, Fin.sum_univ_succ, Fin.prod_univ_succ, hmissing]
-  all_goals norm_num [reward, Math.FiniteCoalition.binaryCode_finFour]
+  all_goals norm_num +decide [firstOfMissing, zeroRowOfMissing, favoriteOfMissing, quitFavorite,
+    Math.Finset.finFourCoalitionOfRow, hmissing]
   all_goals ring
 
 private theorem literal_favorite_continue (hazard : Fin 4 → ℝ) (missing : Fin 4)
@@ -149,6 +161,8 @@ private theorem literal_favorite_continue (hazard : Fin 4 → ℝ) (missing : Fi
     excludedValue (weightOfReward reward) hazard (favoriteOfMissing missing) =
       continueFavorite (hazard (firstOfMissing missing)) (hazard (zeroRowOfMissing missing)) := by
   rw [excludedValue_eq_excludedEndpointRowSum]
+  simp only [excludedEndpointRowSum, weight_row, reward_rows, sum_fin15,
+    opponentCoalitionMass, Fin.prod_univ_four]
   fin_cases missing
   all_goals norm_num only at hmissing
   all_goals first
@@ -156,10 +170,8 @@ private theorem literal_favorite_continue (hazard : Fin 4 → ℝ) (missing : Fi
     | change hazard (1 : Fin 4) = 0 at hmissing
     | change hazard (2 : Fin 4) = 0 at hmissing
     | change hazard (3 : Fin 4) = 0 at hmissing
-  all_goals norm_num [firstOfMissing, zeroRowOfMissing, favoriteOfMissing, continueFavorite,
-    excludedEndpointRowSum, opponentCoalitionMass, weightOfReward,
-    Math.Finset.finFourCoalitionOfRow, Fin.sum_univ_succ, Fin.prod_univ_succ, hmissing]
-  all_goals norm_num [reward, Math.FiniteCoalition.binaryCode_finFour]
+  all_goals norm_num +decide [firstOfMissing, zeroRowOfMissing, favoriteOfMissing, continueFavorite,
+    Math.Finset.finFourCoalitionOfRow, hmissing]
   all_goals ring
 
 private theorem literal_favorite_mass (hazard : Fin 4 → ℝ) (missing : Fin 4)

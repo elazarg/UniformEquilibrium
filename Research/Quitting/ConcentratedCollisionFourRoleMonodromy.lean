@@ -190,7 +190,7 @@ theorem ThreeRoleTransfer.recipient_globalFloor
       gain reward profile stage transfer.mover - epsilon := by
     have hdouble : A / (2 * c) = 2 * (A / (4 * c)) := by
       field_simp [hc.ne']
-      all_goals ring
+      ring
     rw [hdouble] at hgainLower
     linarith
   have hdenominator : A / (4 * c ^ 2) ≤ (A / (4 * c)) / r := by

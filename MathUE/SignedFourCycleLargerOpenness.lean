@@ -57,13 +57,22 @@ theorem isOpen_hasSignedFourCycleLargerTests :
     have hcoord : Continuous (fun matrix : FourMatrix => matrix player (player + 3)) :=
       continuous_apply_apply player (player + 3)
     exact isOpen_lt continuous_const hcoord
+  have hcoord (i j : Fin 4) : Continuous (fun matrix : FourMatrix => matrix i j) :=
+    continuous_id.matrix_elem i j
+  have h02 : IsOpen {matrix : FourMatrix | matrix 0 2 < 0} :=
+    isOpen_lt (hcoord 0 2) continuous_const
+  have h13 : IsOpen {matrix : FourMatrix | 0 < matrix 1 3} :=
+    isOpen_lt continuous_const (hcoord 1 3)
+  have h20 : IsOpen {matrix : FourMatrix | matrix 2 0 < 0} :=
+    isOpen_lt (hcoord 2 0) continuous_const
+  have h31 : IsOpen {matrix : FourMatrix | 0 < matrix 3 1} :=
+    isOpen_lt continuous_const (hcoord 3 1)
+  have hgap : IsOpen {matrix : FourMatrix | 0 < signedFourCycleLargerDGap matrix} :=
+    isOpen_lt continuous_const continuous_signedFourCycleLargerDGap
+  have hdet : IsOpen {matrix : FourMatrix | 0 < matrix.det} :=
+    isOpen_lt continuous_const continuous_id.matrix_det
   exact hsuccessor.inter (hpredecessor.inter
-    ((isOpen_lt (continuous_apply_apply 0 2) continuous_const).inter
-    ((isOpen_lt continuous_const (continuous_apply_apply 1 3)).inter
-    ((isOpen_lt (continuous_apply_apply 2 0) continuous_const).inter
-    ((isOpen_lt continuous_const (continuous_apply_apply 3 1)).inter
-    ((isOpen_lt continuous_const continuous_signedFourCycleLargerDGap).inter
-      (isOpen_lt continuous_const continuous_id.matrix_det)))))))
+    (h02.inter (h13.inter (h20.inter (h31.inter (hgap.inter hdet))))))
 
 /-- The cleared strict test is exactly the original transfer inequality. -/
 theorem lowerRight_gt_one_iff_largerDGap_pos {matrix : FourMatrix}

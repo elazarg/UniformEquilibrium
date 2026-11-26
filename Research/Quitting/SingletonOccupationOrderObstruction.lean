@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import GameTheory.Math.Probability.FiniteUniform
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticFixedTableDiffuseIncidenceRegression
 import MathUE.PMFProduct.FiniteFubini
 import UniformEquilibrium.Quitting.AbsorptionPath.NormalizedFiniteWindowOccupation
@@ -44,7 +45,7 @@ abbrev owner : Player := 0
 abbrev left : Player := 1
 abbrev right : Player := 2
 
-abbrev fairCoin : PMF Bool := PMF.uniformOfFintype Bool
+abbrev fairCoin : PMF Bool := GameTheory.Math.Probability.uniformLaw Bool
 
 /-- Only the owner's rewards matter.  Quitting alone and quitting with
 `left` pay `1`; quitting with `right` pays `-1`.  Opponent-only outcomes pay
@@ -103,7 +104,7 @@ def rightThenLeft : ℕ → Player → PMF Bool
   unfold fairSingletonRow
   rw [quittingRootCoalitionMass_solo_of_nonempty active fairCoin {active}
     (by simp)]
-  norm_num [fairSingletonRow, fairCoin, PMF.uniformOfFintype_apply]
+  norm_num [fairSingletonRow, fairCoin, GameTheory.Math.Probability.uniformLaw_apply]
 
 @[simp] theorem fairSingletonRow_coalitionMass_other
     (active other : Player) (hne : other ≠ active) :
@@ -167,7 +168,7 @@ def rightThenLeft : ℕ → Player → PMF Bool
     quittingStationaryContinueMass (fairSingletonRow active) = 1 / 2 := by
   unfold fairSingletonRow
   rw [quittingStationaryContinueMass_solo]
-  norm_num [fairCoin, PMF.uniformOfFintype_apply]
+  norm_num [fairCoin, GameTheory.Math.Probability.uniformLaw_apply]
 
 @[simp] theorem sureSingletonRow_continueMass (active : Player) :
     quittingStationaryContinueMass (sureSingletonRow active) = 0 := by
@@ -201,7 +202,7 @@ theorem singletonOccupation_eq :
   fin_cases who <;>
     norm_num [twoRowSingletonOccupation, quittingSurvivalPrefix,
       leftThenRight, rightThenLeft, fairSingletonRow,
-      sureSingletonRow, fairCoin, PMF.uniformOfFintype_apply,
+      sureSingletonRow, fairCoin, GameTheory.Math.Probability.uniformLaw_apply,
       owner, left, right,
       Finset.sum_range_succ, Finset.prod_range_succ]
 
@@ -212,7 +213,7 @@ theorem terminalSurvival_eq_zero :
   constructor <;>
     norm_num [quittingSurvivalPrefix,
       leftThenRight, rightThenLeft, fairSingletonRow, sureSingletonRow,
-      fairCoin, PMF.uniformOfFintype_apply, owner, left, right,
+      fairCoin, GameTheory.Math.Probability.uniformLaw_apply, owner, left, right,
       Finset.prod_range_succ]
 
 /-- Neither chronology contains a simultaneous opponent collision. -/
@@ -226,7 +227,7 @@ theorem twoRowCollisionMass_eq_zero :
   constructor <;>
     norm_num [quittingSurvivalPrefix,
       leftThenRight, rightThenLeft, fairSingletonRow, sureSingletonRow,
-      fairCoin, PMF.uniformOfFintype_apply, owner, left, right,
+      fairCoin, GameTheory.Math.Probability.uniformLaw_apply, owner, left, right,
       Finset.sum_range_succ, Finset.prod_range_succ]
 
 /-- At the first date of the first word, quitting yields `1`: either the
@@ -238,7 +239,7 @@ theorem leftThenRight_quitValue_zero :
   rw [Math.PMFProduct.expect_pmfPi_fin3]
   norm_num [expect_eq_sum, quittingRootPayoff, reward, leftThenRight,
     fairSingletonRow, quittingSoloStationaryRoot, fairCoin,
-    PMF.uniformOfFintype_apply,
+    GameTheory.Math.Probability.uniformLaw_apply,
     owner, left, right]
 
 /-- Reversing the first button averages the owner's solo payoff `1` and its
@@ -250,7 +251,7 @@ theorem rightThenLeft_quitValue_zero :
   rw [Math.PMFProduct.expect_pmfPi_fin3]
   norm_num [expect_eq_sum, quittingRootPayoff, reward, rightThenLeft,
     fairSingletonRow, quittingSoloStationaryRoot, fairCoin,
-    PMF.uniformOfFintype_apply,
+    GameTheory.Math.Probability.uniformLaw_apply,
     owner, left, right]
 
 theorem leftThenRight_quitValue_one :
@@ -281,7 +282,7 @@ theorem first_continueReward_eq_zero :
     norm_num [expect_eq_sum, quittingRootPayoff, reward,
       leftThenRight, rightThenLeft, fairSingletonRow,
       quittingSoloStationaryRoot, fairCoin,
-      PMF.uniformOfFintype_apply, owner, left, right]
+      GameTheory.Math.Probability.uniformLaw_apply, owner, left, right]
 
 /-- The sure opponent singleton at the second row also gives the continuing
 owner zero immediate payoff. -/
@@ -306,14 +307,14 @@ theorem first_opponentContinueMass_eq_half :
     unfold fairSingletonRow
     rw [update_quittingSoloStationaryRoot_other (by decide : owner ≠ left),
       quittingStationaryContinueMass_solo]
-    norm_num [fairCoin, PMF.uniformOfFintype_apply]
+    norm_num [fairCoin, GameTheory.Math.Probability.uniformLaw_apply]
   · change quittingStationaryContinueMass
       (Function.update (fairSingletonRow right) owner (PMF.pure false)) =
         1 / 2
     unfold fairSingletonRow
     rw [update_quittingSoloStationaryRoot_other (by decide : owner ≠ right),
       quittingStationaryContinueMass_solo]
-    norm_num [fairCoin, PMF.uniformOfFintype_apply]
+    norm_num [fairCoin, GameTheory.Math.Probability.uniformLaw_apply]
 
 theorem leftThenRight_pureTimeValues :
     quittingRootSequencePureTimeTerminalValue reward leftThenRight owner

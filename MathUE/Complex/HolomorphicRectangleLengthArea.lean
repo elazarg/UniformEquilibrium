@@ -21,7 +21,7 @@ namespace Math.ComplexAnalysis
 open MeasureTheory Set
 open scoped ENNReal
 
-@[expose] def openComplexSquare (width : ℝ) : Set ℂ :=
+@[expose] noncomputable def openComplexSquare (width : ℝ) : Set ℂ :=
   Complex.measurableEquivRealProd.symm '' (Ioo 0 width ×ˢ Ioo 0 width)
 
 @[expose] noncomputable def chartRectangleSpeed (f : ℂ → ℂ) (U : Set ℂ)
@@ -137,7 +137,10 @@ theorem exists_chart_short_slice {f : ℂ → ℂ} {U : Set ℂ} {width : ℝ}
           ∫⁻ y in Ioo 0 width, chartRectangleSpeed f U (x, y) := by
       intro x hx
       exact le_of_not_gt fun hlt => hnot ⟨x, hx, Or.inr hlt⟩
-    have hlower := measure_mono (μ := volume.restrict (Ioo 0 width)) hall
+    have hsubset : Ioo 0 width ⊆
+        {x | ENNReal.ofReal (2 * Real.sqrt (chartSquareEnergy f U width).toReal) ≤
+          ∫⁻ y in Ioo 0 width, chartRectangleSpeed f U (x, y)} := hall
+    have hlower := measure_mono (μ := volume.restrict (Ioo 0 width)) hsubset
     rw [Measure.restrict_apply_self, Real.volume_Ioo, sub_zero] at hlower
     have hquarter := hlower.trans (chart_long_slices_le_quarter hU hf hinj hcontained hzero)
     have hstrict : ENNReal.ofReal width / 4 < ENNReal.ofReal width := by

@@ -49,6 +49,16 @@ private theorem certificateProfile_liveMassZero (m : ℕ) (hm : 0 < m) :
     (tendsto_quittingJointSurvivalLimit
       (quittingCyclicRootSequence roots phase) 0) hjoint
 
+private theorem exists_mesh_with_small_error
+    {scale error : ℝ} (hscale : 0 ≤ scale) (herror : 0 < error) :
+    ∃ m : ℕ, 0 < m ∧ scale / (m : ℝ) < error := by
+  obtain ⟨m, hmLarge⟩ := exists_nat_gt (scale / error)
+  have hmReal : 0 < (m : ℝ) :=
+    lt_of_le_of_lt (div_nonneg hscale herror.le) hmLarge
+  refine ⟨m, by exact_mod_cast hmReal, ?_⟩
+  rw [div_lt_iff₀ hmReal, mul_comm error]
+  exact (div_lt_iff₀ herror).mp hmLarge
+
 /-- The signed four-cycle certificate supplies the unrestricted terminal
 profiles needed by finite-menu early absorption. -/
 theorem hasTerminalProfiles_liveMassZero
@@ -64,21 +74,16 @@ theorem hasTerminalProfiles_liveMassZero
   have hscale : 0 ≤ scale := mul_nonneg
     (balancedSingletonCycleCollisionCap_nonneg reward)
     (balancedSingletonCycleIntensityCap_nonneg certificate)
-  obtain ⟨m, hmLarge⟩ := exists_nat_gt (scale / error)
-  have hmReal : 0 < (m : ℝ) :=
-    lt_of_le_of_lt (div_nonneg hscale herror.le) hmLarge
-  have hm : 0 < m := by exact_mod_cast hmReal
+  obtain ⟨m, hm, hratio⟩ := exists_mesh_with_small_error hscale herror
   let profile := quittingCyclicBehaviorProfile reward
     (quittingSingletonArcCycleRoot certificate.owner certificate.hazard m
       certificate.hazard_nonneg certificate.hazard_lt_one)
     (quittingSingletonMeshInitialPhase certificate.initial m hm)
   refine ⟨profile, ?_, data.certificateProfile_liveMassZero tests m hm⟩
   have hnash := (certificate.isTerminalNash_and_hasValue m hm).1
-  have herrorBound := quittingTerminalExploitability_le_of_isεAsymptoticNash
-    reward profile (div_nonneg hscale (Nat.cast_nonneg m)) hnash
-  have hratio : scale / (m : ℝ) < error := by
-    rw [div_lt_iff₀ hmReal]
-    simpa [mul_comm] using (div_lt_iff₀ herror).mp hmLarge
+  have herrorBound : quittingTerminalExploitability reward profile ≤ scale / (m : ℝ) :=
+    quittingTerminalExploitability_le_of_isεAsymptoticNash
+      reward profile (div_nonneg hscale (Nat.cast_nonneg m)) hnash
   exact herrorBound.trans_lt hratio
 
 /-- The signed four-cycle construction retains an unrestricted terminal cap

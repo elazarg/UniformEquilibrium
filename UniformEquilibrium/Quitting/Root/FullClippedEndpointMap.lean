@@ -48,7 +48,7 @@ theorem contDiff_quittingRealHazardEndpointGap
     apply contDiff_const.mul
     apply contDiff_prod
     intro who _
-    exact contDiff_apply ℝ ℝ who
+    exact contDiff_apply ℝ (fun _ : ι => ℝ) who
   · simp only [hplayer, ite_false]
     exact contDiff_const
 

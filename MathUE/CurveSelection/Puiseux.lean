@@ -188,7 +188,8 @@ theorem monic_natDegree_two_eq
     f = Polynomial.X ^ 2 +
       Polynomial.C (f.coeff 1) * Polynomial.X +
         Polynomial.C (f.coeff 0) := by
-  apply Polynomial.ext
+  apply AddMonoidAlgebra.ext
+  apply DFunLike.ext
   intro n
   by_cases hn0 : n = 0
   · subst n
@@ -655,7 +656,9 @@ theorem coeff_newtonTransform_of_le
     (newtonTransform f d p q hq).coeff i =
       newtonCoefficient f d p q hq i := by
   classical
-  simp [newtonTransform, Polynomial.coeff_monomial, hi]
+  simp only [newtonTransform, Polynomial.finsetSum_coeff,
+    Polynomial.coeff_monomial_apply, Finset.sum_ite_eq', Finset.mem_range, Nat.lt_succ_iff,
+    ite_eq_left hi]
 
 theorem coeff_newtonTransform_of_lt
     (f : Polynomial (PowerSeries K))
@@ -663,8 +666,9 @@ theorem coeff_newtonTransform_of_lt
     {i : ℕ} (hi : d < i) :
     (newtonTransform f d p q hq).coeff i = 0 := by
   classical
-  simp [newtonTransform, Polynomial.coeff_monomial,
-    Nat.not_le_of_gt hi]
+  simp only [newtonTransform, Polynomial.finsetSum_coeff,
+    Polynomial.coeff_monomial_apply, Finset.sum_ite_eq', Finset.mem_range, Nat.lt_succ_iff,
+    ite_eq_right (Nat.not_le_of_gt hi)]
 
 /-- The normalized Newton transform remains monic. -/
 theorem newtonTransform_monic
@@ -710,7 +714,8 @@ theorem C_X_pow_mul_newtonTransform
         newtonTransform f d p q hq =
       (ramifyPowerSeriesPolynomial q hq f).comp
         (Polynomial.C (PowerSeries.X ^ p) * Polynomial.X) := by
-  apply Polynomial.ext
+  apply AddMonoidAlgebra.ext
+  apply DFunLike.ext
   intro i
   rw [Polynomial.coeff_C_mul,
     Polynomial.comp_C_mul_X_coeff]
@@ -876,7 +881,8 @@ theorem nextCoeff_comp_X_add_C_of_monic_powerSeries
       Polynomial.hasseDeriv (d - 1) P =
         Polynomial.C (P.coeff (d - 1)) +
           Polynomial.C (d : PowerSeries K) * Polynomial.X := by
-    apply Polynomial.ext
+    apply AddMonoidAlgebra.ext
+    apply DFunLike.ext
     intro n
     rcases n with _ | _ | n
     · simp [Polynomial.hasseDeriv_coeff]
@@ -1225,7 +1231,7 @@ theorem hasRamifiedRootProperty_algClosed
   intro f hf hpositive
   generalize hdegree : f.natDegree = d
   induction d using Nat.strong_induction_on generalizing f with
-  | h d ih =>
+  | ind d ih =>
       have hd : 0 < d := by
         simpa [← hdegree] using hpositive
       let a : PowerSeries K :=

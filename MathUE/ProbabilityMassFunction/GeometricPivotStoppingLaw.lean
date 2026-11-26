@@ -48,7 +48,7 @@ theorem geometricFiniteStoppingLaw_some_of_lt
     {time : ℕ} (htime : time < deadline) :
     geometricFiniteStoppingLaw deadline hazard hpositive hle (some time) = 0 := by
   rw [geometricFiniteStoppingLaw, PMF.map_apply]
-  apply ENNReal.tsum_eq_zero.mpr
+  apply tsum_eq_zero_iff.mpr
   intro offset
   rw [ite_eq_right]
   simp only [Option.some.injEq]

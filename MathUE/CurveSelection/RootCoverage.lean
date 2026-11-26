@@ -291,9 +291,9 @@ theorem tendsto_coeff_specializeBivPolynomial
       l
       (𝓝 ((specializeBivPolynomial Q x₀).coeff i)) := by
   simp only [coeff_specializeBivPolynomial]
-  exact Filter.Tendsto.comp
-    (Polynomial.continuous_eval₂
-      (Q.coeff i) (RingHom.id ℂ)).continuousAt hx
+  have hc : ContinuousAt (fun z : ℂ => (Q.coeff i).eval z) x₀ :=
+    (Q.coeff i).continuousAt
+  exact hc.tendsto.comp hx
 
 /-- Weierstrass preparation identifies the number of centered local branches
 with the exact multiplicity of the specialized concrete polynomial at zero.
@@ -377,7 +377,7 @@ theorem eventually_ne_of_distinct_polynomial_jets
   have hbracketContinuous : ContinuousAt bracket 0 := by
     dsimp [bracket]
     exact
-      (Polynomial.continuous_eval₂ E (RingHom.id ℂ)).continuousAt.add
+      E.continuousAt.add
         ((continuousAt_id.pow (n - m)).mul (hz.sub hw))
   have hnmpos : 0 < n - m := Nat.sub_pos_of_lt hmn
   have hbracketZero : bracket 0 ≠ 0 := by

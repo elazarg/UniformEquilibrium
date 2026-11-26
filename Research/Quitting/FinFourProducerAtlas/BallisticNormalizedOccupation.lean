@@ -64,13 +64,15 @@ theorem continuous_work (who : Fin 4) :
     continuous_subtype_val.comp (continuous_snd.comp continuous_snd)
   unfold work
   apply Continuous.add
-  · apply continuous_finsetSum
-    intro owner _
-    exact continuous_const.mul (htail owner)
+  · exact continuous_finsetSum
+      (f := fun (owner : Fin 4) (state : FinFourBallisticNormalizedState data.eta) =>
+        flow.analysis.normalized.soloMatrix who owner * state.2.1.weights owner)
+      Finset.univ (fun owner _ => continuous_const.mul (htail owner))
   · apply Continuous.mul hratio
-    apply continuous_finsetSum
-    intro owner _
-    exact continuous_const.mul (hcurrent owner)
+    exact continuous_finsetSum
+      (f := fun (owner : Fin 4) (state : FinFourBallisticNormalizedState data.eta) =>
+        flow.analysis.normalized.collisionMatrix who owner * state.1.weights owner)
+      Finset.univ (fun owner _ => continuous_const.mul (hcurrent owner))
 
 theorem isClosed_ballisticEdgeGraph :
     IsClosed {edge : FinFourBallisticNormalizedState data.eta ×

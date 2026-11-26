@@ -1905,7 +1905,8 @@ theorem eq_zero_of_forall_bivEval_eq_zero_of_ne_one
     (F : Polynomial (Polynomial ℝ))
     (hF : ∀ l : ℝ, l ≠ 1 → ∀ v : ℝ, bivEval l v F = 0) :
     F = 0 := by
-  apply Polynomial.ext
+  apply AddMonoidAlgebra.ext
+  apply DFunLike.ext
   intro n
   have hcoeff :
       ∀ l : ℝ, l ≠ 1 → Polynomial.eval l (F.coeff n) = 0 := by

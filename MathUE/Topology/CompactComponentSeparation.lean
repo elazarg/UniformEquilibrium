@@ -1,4 +1,4 @@
-import Mathlib.Topology.Separation.Profinite
+import Mathlib.Topology.Separation.Regular
 
 /-!
 # Separating closed sets that meet no common connected component

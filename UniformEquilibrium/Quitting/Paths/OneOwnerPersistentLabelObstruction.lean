@@ -1149,7 +1149,7 @@ theorem rationalSuccessor_tendsto_zero (who : Player) :
     have hdiv := absorption_rationalScale_tendsto_zero.div
       hdenominator (by norm_num : (1 : ℝ) ≠ 0)
     convert hdiv using 1
-    all_goals norm_num
+    norm_num
   · have heq : (fun n => rationalSuccessor n who) = fun _ => (0 : ℝ) := by
       funext n
       exact successor_outsider (rationalScale n) hwho

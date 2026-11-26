@@ -5,7 +5,7 @@ import Mathlib.Analysis.Calculus.FDeriv.Comp
 import Mathlib.Analysis.Calculus.FDeriv.Congr
 import Mathlib.Analysis.Calculus.FDeriv.Linear
 import Mathlib.LinearAlgebra.Determinant
-import Mathlib.Topology.Algebra.Module.Equiv
+import Mathlib.Topology.Algebra.Module.Equiv.Pi
 
 /-! # A cube-valued map cannot have only negative regular fixed points
 

@@ -120,7 +120,7 @@ theorem reducedSupportRankAlternative
   classical
   generalize hrank : frontier.positiveDebtSupport.card = rank
   induction rank using Nat.strong_induction_on generalizing frontier with
-  | h rank ih =>
+  | ind rank ih =>
       have continue_of_flat_noEntry
           (hflat : ∀ mover, ∑ observer, frontier.tangent mover observer = 0)
           (hnoEntry : ¬HasQuittingStoppingLawFlatSupportEntry

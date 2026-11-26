@@ -100,10 +100,9 @@ theorem boxComplementarityEndpointEquivFloorPullbackExternal_signedWeight
   · convert kuhnFloorSimplexLift_determinant_eq
       (boxComplementaritySpernerCube problem p hp) k hk
         endpoint.1 endpoint.2.1 using 1
-    all_goals
-      apply congrArg OrientedSimplexFacet.determinant
-      funext vertex coordinate
-      rfl
+    apply congrArg OrientedSimplexFacet.determinant
+    funext vertex coordinate
+    rfl
   · apply congrArg SignedSimplexLabel.orientation
     funext vertex
     change boxComplementarityFinLabel problem p
@@ -469,7 +468,7 @@ theorem boxComplementarityLocalSignedCount_floorRefinement_eq_of_cleared
         ((dist_floorRefinementPrismFace_labelSamplePoints_le_three_div
           problem p k hp hk face first second).trans hmesh)
     convert hnear using 1
-    all_goals first | rfl |
+    all_goals
       simp only [face, boxComplementarityFloorRefinementLeftFace_sample]
   have hfineAgrees
       (endpoint : KuhnEndpointLabeledSimplex
@@ -486,7 +485,7 @@ theorem boxComplementarityLocalSignedCount_floorRefinement_eq_of_cleared
         ((dist_floorRefinementPrismFace_labelSamplePoints_le_three_div
           problem p k hp hk face first second).trans hmesh)
     convert hnear using 1
-    all_goals first | rfl |
+    all_goals
       simp only [face, boxComplementarityFloorRefinementRightFace_sample]
   have hleftSelection
       (endpoint : KuhnEndpointLabeledSimplex problem p hp) :
@@ -510,8 +509,7 @@ theorem boxComplementarityLocalSignedCount_floorRefinement_eq_of_cleared
     have hnear := floorRefinementPrismFace_sample_mem_iff_nearby_of_cleared
       problem p k hp hk region hopen radius hcleared face 0 _ hdistance'
     convert hnear using 1
-    all_goals first | rfl |
-      simp only [face, boxComplementarityFloorRefinementLeftFace_sample]
+    simp only [face, boxComplementarityFloorRefinementLeftFace_sample]
   rw [boxComplementarityLocalSignedCount_eq_endpoint_base_sum
       problem p hp region hcoarseAgrees,
     boxComplementarityLocalSignedCount_eq_endpoint_base_sum

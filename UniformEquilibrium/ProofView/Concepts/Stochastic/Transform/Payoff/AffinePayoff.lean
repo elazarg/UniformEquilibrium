@@ -78,9 +78,9 @@ theorem affinePayoff_finiteAveragePayoff
       c * G.finiteAveragePayoff s₀ T σ who + d who := by
   rw [finiteAveragePayoff, affinePayoff_histDist]
   simp_rw [affinePayoff_totalPayoff]
-  rw [Math.Probability.expect_add,
-    Math.Probability.expect_const_mul,
-    Math.Probability.expect_const]
+  rw [_root_.Math.Probability.expect_add,
+    _root_.Math.Probability.expect_const_mul,
+    _root_.Math.Probability.expect_const]
   rw [finiteAveragePayoff]
   have hTR : (T : ℝ) ≠ 0 := by exact_mod_cast hT.ne'
   field_simp

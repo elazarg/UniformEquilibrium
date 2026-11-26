@@ -499,10 +499,9 @@ theorem card_nonsingletonCoalition {Player : Type*} [Fintype Player]
   let zero : Finset Player → Prop := fun coalition => coalition.card = 0
   let one : Finset Player → Prop := fun coalition => coalition.card = 1
   have hdisjoint : Disjoint zero one := by
-    refine Set.disjoint_left.2 ?_
-    intro coalition hzero hone
-    change coalition.card = 0 at hzero
-    change coalition.card = 1 at hone
+    intro predicate hzero hone coalition hmem
+    have h0 : coalition.card = 0 := hzero coalition hmem
+    have h1 : coalition.card = 1 := hone coalition hmem
     omega
   have hor := Fintype.card_subtype_or_disjoint zero one hdisjoint
   have hzero : Fintype.card {coalition : Finset Player // zero coalition} = 1 := by

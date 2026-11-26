@@ -64,7 +64,7 @@ theorem censorLateFiniteStoppingLaw_none_ge
   rw [censorLateFiniteStoppingLaw, PMF.map_apply] at hne ⊢
   apply ENNReal.toReal_mono
   · exact hne
-  · convert ENNReal.le_tsum
+  · convert le_tsum
       (f := fun choice : Option ℕ =>
         if none = censorLateFiniteStoppingOutcome horizon choice then law choice else 0)
       none using 1

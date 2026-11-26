@@ -81,9 +81,7 @@ theorem exists_tied_max_of_isPreconnected
   have hlastLabel : winner ⟨last, hlast⟩ = j := by
     by_contra hne
     exact (hlastWins _ hne).not_ge (winner_max ⟨last, hlast⟩ j)
-  have hconstant := PreconnectedSpace.constant
-    (inferInstance : PreconnectedSpace source) hlabel
-    (x := ⟨first, hfirst⟩) (y := ⟨last, hlast⟩)
+  have hconstant := hlabel.isConst_of_preconnectedSpace ⟨first, hfirst⟩ ⟨last, hlast⟩
   rw [hfirstLabel, hlastLabel] at hconstant
   exact hij hconstant
 

@@ -1224,7 +1224,7 @@ theorem dispatchedClosedSegment_stageMass_ge_initial
           (trace.orbit (trace.segment.segment.start + n))) := by
     intro n
     induction n using Nat.strong_induction_on with
-    | h n ih =>
+    | ind n ih =>
       intro hn
       cases n with
       | zero =>

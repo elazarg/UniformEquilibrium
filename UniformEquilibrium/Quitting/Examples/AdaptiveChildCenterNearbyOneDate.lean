@@ -90,7 +90,7 @@ theorem nearbyProfile_stoppingLaw_eq_map
     (probability : Fin 3 → ℝ) :
     quittingBehaviorStoppingLaw table (nearbyProfile table probability 3) = PMF.pure (some 0) := by
   rw [nearbyProfile_stoppingLaw_eq_map, nearbyRoot_anchor]
-  exact PMF.pure_map (fun action => if action then some 0 else none) true
+  rw [PMF.pure_map, ite_eq_left rfl]
 
 theorem nearbyProfile_active_stoppingLaw_masses
     (table : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))

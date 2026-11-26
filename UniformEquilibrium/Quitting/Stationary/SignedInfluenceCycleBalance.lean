@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import Maths.Graph.Condensation
 import Maths.Multitubes.NormalForms
 import Maths.Multitubes.SCC
 import MathUE.DirectedTransport.SimpleCycleBalance
@@ -130,7 +131,7 @@ def EveryDirectedInfluenceCyclePositive
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) : Prop :=
   ∀ (base : ι)
     (cycle : (quittingInfluenceGraph reward).Walk base base),
-    Maths.AdditiveTransport.IsSimpleCycle cycle →
+    Maths.EdgeGraph.Walk.IsSimpleCycle cycle →
       walkLabel quittingInfluenceLabel cycle = 1
 
 omit [Fintype ι] in
@@ -141,7 +142,7 @@ private theorem influenceWalkLabel_eq_one_or_neg_one
       walkLabel quittingInfluenceLabel walk = -1 := by
   induction walk with
   | nil => simp
-  | concat walk edge legal ih =>
+  | concat edge walk ih =>
       by_cases hnegative :
           IsNegativeQuittingInfluence reward edge.1.1 edge.1.2
       · have hedgeLabel : quittingInfluenceLabel edge = -1 := by
@@ -294,13 +295,7 @@ def influenceBlockCertificate_of_cycleBalancedSignConsistentInfluence
       (α := ReachabilityVertex graph) (· ≤ ·) component :
         ReachabilityVertex graph)
   let potential : SCC graph → ι → ℤˣ := fun component =>
-    Classical.choose (show ∃ potential : ι → ℤˣ, ∀ edge,
-        LinkedTo graph (representative component) (graph.source edge) →
-        LinkedTo graph (representative component) (graph.target edge) →
-        quittingInfluenceLabel edge =
-          ((potential (graph.target edge) *
-            (potential (graph.source edge))⁻¹ : ℤˣ) : ℤ) from
-      hcomponents (representative component))
+    Classical.choose (hcomponents (representative component))
   have hrepresentative (component : SCC graph) :
       toSCC graph (representative component) = component := by
     exact toAntisymmetrization_ofAntisymmetrization (· ≤ ·) component
@@ -310,13 +305,10 @@ def influenceBlockCertificate_of_cycleBalancedSignConsistentInfluence
       quittingInfluenceLabel edge =
         ((potential component edge.1.2 *
           (potential component edge.1.1)⁻¹ : ℤˣ) : ℤ) := by
-    exact Classical.choose_spec (show ∃ potential : ι → ℤˣ, ∀ edge,
-        LinkedTo graph (representative component) (graph.source edge) →
-        LinkedTo graph (representative component) (graph.target edge) →
-        quittingInfluenceLabel edge =
-          ((potential (graph.target edge) *
-            (potential (graph.source edge))⁻¹ : ℤˣ) : ℤ) from
-      hcomponents (representative component)) edge hsource htarget
+    change quittingInfluenceLabel edge = (potential component (graph.target edge) : ℤ) *
+      ((potential component (graph.source edge))⁻¹ : ℤˣ)
+    exact (Units.eq_mul_inv_iff_mul_eq (potential component (graph.source edge))).mpr
+      (Classical.choose_spec (hcomponents (representative component)) edge hsource htarget)
   let switched : Finset ι := Finset.univ.filter fun who =>
     potential (toSCC graph who) who = -1
   have mem_switched_iff (who : ι) :
@@ -605,7 +597,7 @@ theorem exists_negativeSimpleInfluenceCycle_of_no_sureExitSet
     (hnoExit : ¬∃ S, IsQuittingSureExitSet reward S) :
     ∃ (base : ι)
       (cycle : (quittingInfluenceGraph reward).Walk base base),
-      Maths.AdditiveTransport.IsSimpleCycle cycle ∧
+      Maths.EdgeGraph.Walk.IsSimpleCycle cycle ∧
         walkLabel quittingInfluenceLabel cycle = -1 := by
   by_contra hnegative
   have hcycle : EveryDirectedInfluenceCyclePositive reward := by

@@ -53,11 +53,12 @@ theorem HasTerminalExploitabilityGap.exists_supported_pureTimePayoff_sub_at_with
       (abs_reward_le_quittingRewardBound reward)
   have hdeviation : quittingTerminalPayoff reward
       (Function.update profile observer deviation) observer =
-      Math.Probability.expect (quittingBehaviorStoppingLaw reward deviation) value := by
+      _root_.Math.Probability.expect (quittingBehaviorStoppingLaw reward deviation) value := by
     exact quittingTerminalPayoff_update_eq_expect_stoppingLaw_pureTime
       reward profile observer deviation
   have hprescribed : quittingTerminalPayoff reward profile observer =
-      Math.Probability.expect (quittingBehaviorStoppingLaw reward (profile observer)) value := by
+      _root_.Math.Probability.expect
+        (quittingBehaviorStoppingLaw reward (profile observer)) value := by
     have h := quittingTerminalPayoff_update_eq_expect_stoppingLaw_pureTime
       reward profile observer (profile observer)
     rw [Function.update_eq_self] at h
@@ -75,8 +76,9 @@ theorem HasTerminalExploitabilityGap.exists_supported_pureTimePayoff_sub_at_with
     gap ≤ quittingTerminalPayoff reward
         (Function.update profile observer deviation) observer -
       quittingTerminalPayoff reward profile observer := hgain'
-    _ = Math.Probability.expect (quittingBehaviorStoppingLaw reward deviation) value -
-        Math.Probability.expect (quittingBehaviorStoppingLaw reward (profile observer)) value := by
+    _ = _root_.Math.Probability.expect (quittingBehaviorStoppingLaw reward deviation) value -
+        _root_.Math.Probability.expect
+          (quittingBehaviorStoppingLaw reward (profile observer)) value := by
       rw [hdeviation, hprescribed]
     _ ≤ value receivingWitness - value sourceWitness := havg
 

@@ -131,6 +131,32 @@ theorem toNativeBehaviorProfile_update
         (toNativePublicPolicy G initial deviation)) = _
   rw [← G.toNative.toBehaviorProfile_update]
 
+omit [DecidableEq ι] in
+private theorem native_horizonUtility_integrable (initial : G.State) (horizon : ℕ)
+    (profile : G.toNative.BehaviorProfile initial) (who : ι) :
+    UtilityIntegrable (G.toNative.horizonUtility initial horizon) who
+      ((G.toNative.horizonForm initial horizon).play profile) := by
+  rw [G.toNative.horizonForm_play]
+  apply payoffIntegrable_of_finite_support
+  exact (G.toNative.perfectMonitoring initial).runBehavioralFrom_support_finite_of_finite_branching
+    profile horizon (G.toNative.toExecution initial).initHistory
+    (fun _ _ _ => Set.toFinite _) (fun _ => Set.toFinite _)
+
+/-- Finite branching makes the native Nash condition a real payoff comparison. -/
+theorem native_isεHorizonNash_iff (initial : G.State) (horizon : ℕ) (epsilon : ℝ)
+    (profile : G.toNative.BehaviorProfile initial) :
+    G.toNative.IsεHorizonNash initial horizon epsilon profile ↔
+      ∀ who (deviation : (G.toNative.perfectMonitoring initial).BehavioralPolicy who),
+        G.toNative.finiteAveragePayoff initial horizon (Profile.update profile who deviation) who ≤
+          G.toNative.finiteAveragePayoff initial horizon profile who + epsilon := by
+  unfold Stochastic.Game.IsεHorizonNash IsεNash
+  rw [isNash_iff]
+  exact forall_congr' fun who => forall_congr' fun deviation =>
+    euPreferenceWithin_iff epsilon (G.toNative.horizonUtility initial horizon) who _ _
+      (native_horizonUtility_integrable G initial horizon profile who)
+      (native_horizonUtility_integrable G initial horizon
+        (Profile.update profile who deviation) who)
+
 /-- Native approximate Nash for public policies is exactly approximate Nash
 for their decoded proof view. -/
 theorem isεHorizonNash_publicProfile_iff
@@ -143,7 +169,7 @@ theorem isεHorizonNash_publicProfile_iff
   constructor
   · intro hnative who deviation
     let publicDeviation := toNativePublicPolicy G initial deviation
-    have hbound := (G.toNative.isεHorizonNash_iff initial horizon epsilon
+    have hbound := (native_isεHorizonNash_iff G initial horizon epsilon
       (G.toNative.toBehaviorProfile initial profile)).mp hnative who
         (G.toNative.toBehavioralPolicy initial publicDeviation)
     have hagree := toNativePublicProfile_update_ofProofViewDeviation_agrees
@@ -157,7 +183,7 @@ theorem isεHorizonNash_publicProfile_iff
         horizon who] at hbound
     exact hbound
   · intro hold
-    rw [G.toNative.isεHorizonNash_iff]
+    rw [native_isεHorizonNash_iff]
     intro who nativeDeviation
     let publicDeviation :=
       G.toNative.ofBehavioralPolicy initial nativeDeviation
@@ -192,7 +218,7 @@ theorem isεHorizonNash_toNative_iff
   constructor
   · intro hnative who deviation
     let publicDeviation := toNativePublicPolicy G initial deviation
-    have hbound := (G.toNative.isεHorizonNash_iff initial horizon epsilon
+    have hbound := (native_isεHorizonNash_iff G initial horizon epsilon
       (toNativeBehaviorProfile G initial profile)).mp hnative who
         (G.toNative.toBehavioralPolicy initial publicDeviation)
     have hagree : ∀ i history,
@@ -211,7 +237,7 @@ theorem isεHorizonNash_toNative_iff
       native_finiteAveragePayoff_eq G profile initial horizon who] at hbound
     exact hbound
   · intro hold
-    rw [G.toNative.isεHorizonNash_iff]
+    rw [native_isεHorizonNash_iff]
     intro who nativeDeviation
     let publicProfile := toNativePublicProfile G initial profile
     let publicDeviation :=
@@ -260,7 +286,7 @@ theorem isUniformEquilibriumPayoff_toNative_iff
     · intro who
       rw [← native_finiteAveragePayoff_eq_of_publicProfile G initial
         publicProfile horizon who, hroundtrip]
-      exact hpayoff who
+      exact (hpayoff who).2
   · intro hold epsilon hepsilon
     obtain ⟨profile, threshold, hprofile⟩ := hold epsilon hepsilon
     refine ⟨toNativeBehaviorProfile G initial profile, threshold,
@@ -270,6 +296,8 @@ theorem isUniformEquilibriumPayoff_toNative_iff
     · exact (isεHorizonNash_toNative_iff G initial horizon epsilon
         profile).mpr hnash
     · intro who
+      refine ⟨native_horizonUtility_integrable G initial horizon
+        (toNativeBehaviorProfile G initial profile) who, ?_⟩
       rw [native_finiteAveragePayoff_eq G profile initial horizon who]
       exact hpayoff who
 

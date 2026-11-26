@@ -565,7 +565,6 @@ theorem limit_never_gap_of_positive_own_atom
       with x hxc hxone
     have hxcReal : (x : ℝ) ≠ (limit.cutoff : ℝ) := fun h => hxc (Subtype.ext h)
     have hxoneReal : (x : ℝ) ≠ 1 := fun h => hxone (Subtype.ext h)
-    apply propext
     change ((limit.cutoff : ℝ) < (x : ℝ) ∧ (x : ℝ) < 1) ↔
       (limit.cutoff : ℝ) ≤ (x : ℝ)
     exact ⟨fun h => h.1.le, fun h =>

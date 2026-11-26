@@ -171,7 +171,7 @@ deterministic repeated-play path. -/
 @[simp] theorem stageEU_profileMonitoring
     (G : KernelGame ι) (σ : G.RepeatedProfile) (t : ℕ) (who : ι) :
     G.profileMonitoring.stageEU σ t who = G.eu (G.repeatedPlay σ t) who := by
-  rw [stageEU, signalHistoryDist_profileMonitoring, Math.Probability.expect_pure]
+  rw [stageEU, signalHistoryDist_profileMonitoring, _root_.Math.Probability.expect_pure]
   apply congrArg (fun ρ => G.eu ρ who)
   funext i
   rw [KernelGame.repeatedPlay]

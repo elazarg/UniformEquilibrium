@@ -25,7 +25,7 @@ Strong induction over the finite objective list closes the construction.
 theorem all_isAlgebraic_of_lex_and_separable_step
     {S ι κ σ : Type*} {d : ℕ}
     [CommRing S] [Algebra (Polynomial ℝ) S]
-    [Algebra (Polynomial ℝ) GermField]
+    {germAlgebra : Algebra (Polynomial ℝ) GermField}
     [Finite ι]
     [Finite κ]
     (source : ℕ → (σ → ℝ))
@@ -33,13 +33,13 @@ theorem all_isAlgebraic_of_lex_and_separable_step
     (hinjective :
       Function.Injective
         (fun n => source n parameter))
-    (φ : S →ₐ[Polynomial ℝ] GermField)
+    (φ : letI := germAlgebra; S →ₐ[Polynomial ℝ] GermField)
     (P :
       Algebra.SubmersivePresentation
         (Polynomial ℝ) S ι κ)
     (hbase :
       ∀ p : Polynomial ℝ,
-        algebraMap (Polynomial ℝ) GermField p =
+        (@algebraMap (Polynomial ℝ) GermField _ _ germAlgebra) p =
           ((fun n =>
             p.eval (source n parameter)) :
             GermField))
@@ -92,6 +92,7 @@ theorem all_isAlgebraic_of_lex_and_separable_step
         source parameter hinjective
     ∀ j : Fin d,
       IsAlgebraic K (φ (objective j)) := by
+  let _ := germAlgebra
   classical
   let : Fintype ι := Fintype.ofFinite ι
   let : Fintype κ := Fintype.ofFinite κ
@@ -122,13 +123,13 @@ theorem all_isAlgebraic_of_lex_and_separable_step
           IsAlgebraic K (φ (objective l))) →
         IsAlgebraic K (φ (objective j)) := by
     intro j hprior
-    have hpriorSubtype :
-        ∀ l : {l : Fin d // l < j},
-          IsAlgebraic K (φ (objective l.1)) :=
-      fun l => hprior l.1 l.2
-    choose relation hrelationNe hrelationS hderiv using
-      fun l => separableStep
-        (objective l.1) (hpriorSubtype l)
+    let earlier (l : {l : Fin d // l < j}) : S := objective l.1
+    have hpriorSubtype (l : {l : Fin d // l < j}) : IsAlgebraic K (φ (earlier l)) :=
+      hprior l.1 l.2
+    dsimp only at separableStep
+    have hseparable (l : {l : Fin d // l < j}) :=
+      separableStep (earlier l) (hpriorSubtype l)
+    choose relation hrelationNe hrelationS hderiv using hseparable
     have hderivAll :
         ∀ᶠ n in (sequenceUltrafilter : Filter ℕ),
           ∀ l : {l : Fin d // l < j},
@@ -252,7 +253,7 @@ theorem all_isAlgebraic_of_lex_and_separable_step
           (φ (objective ⟨n, hn⟩)) := by
     intro n
     induction n using Nat.strong_induction_on with
-    | h n ih =>
+    | ind n ih =>
         intro hn
         apply step ⟨n, hn⟩
         intro l hl

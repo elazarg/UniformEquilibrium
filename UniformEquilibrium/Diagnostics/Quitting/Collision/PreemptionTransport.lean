@@ -77,7 +77,7 @@ walk. -/
 theorem augmentedCycleWeight_eq_walkWeight
     (data : QuittingStaticObserverSwitchData witness cycle) :
     data.augmentedCycleWeight =
-      Maths.MaxPlusPotential.walkWeight (cycle.augmentedCellWeight data.cost)
+      Maths.walkSum (cycle.augmentedCellWeight data.cost)
         cycle.augmentedCellWalk :=
   (cycle.walkWeight_augmentedCellWalk data.cost).symm
 

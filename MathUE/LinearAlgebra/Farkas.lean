@@ -290,7 +290,7 @@ theorem farkas_lemma (A : I → Fin n → 𝕜) (b : I → 𝕜) (c : Fin n → 
         have hlam_eq : lam = (∑ j, c j * y j) - d + 1 := rfl
         linarith
     -- Step 2: apply ToA to get a Farkas certificate of the augmented system.
-    have h_aug_cert : HasCertificate (farkasAugA A b c d) (farkasAugB b) :=
+    have h_aug_cert : HasFarkasCertificate (farkasAugA A b c d) (farkasAugB b) :=
       (theorem_of_alternative _ _).mp h_aug_infeas
     obtain ⟨u', hu'_nn, hu'_zero, hu'_pos⟩ := h_aug_cert
     -- Read off `β > 0` from the RHS-positivity sum.

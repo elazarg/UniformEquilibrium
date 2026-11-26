@@ -94,7 +94,7 @@ theorem finFour_mover_drop
         packet.resolution ^ 2 *
           quittingTerminalSemanticDebtSum source.point.1 / 8 := by
   convert endpoint.mover_drop using 1
-  all_goals norm_num
+  norm_num
 
 /-- In Fin4 the recipient rises by at least the literal
 `rho^2 * D_* / 64`. -/
@@ -106,7 +106,7 @@ theorem finFour_recipient_rise
       quittingTerminalSemanticDebtChange endpoint.sourceLimit
         endpoint.targetPoint.1 recipient := by
   convert endpoint.recipient_rise using 1
-  all_goals norm_num
+  norm_num
 
 /-- Equality of the endpoint debt with the incoming minimum debt causalizes
 the endpoint's own routed law atom at the exact same joint point. -/

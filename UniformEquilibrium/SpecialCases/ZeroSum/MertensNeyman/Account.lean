@@ -125,7 +125,7 @@ theorem hasDerivAt_discountRate {s : ℝ} (hs : 1 < s) :
     hden.inv hden0
   unfold discountRate
   convert hinv using 1
-  all_goals first | rfl | field_simp [hs0, hlog0]
+  all_goals field_simp [hs0, hlog0]
 
 /-- Chain rule for a discounted-value coordinate evaluated along the
 slow account schedule. -/
@@ -171,9 +171,9 @@ theorem exists_logCorrector_secant
       DifferentiableOn ℝ logCorrector (Set.Ioi 1) := by
     unfold logCorrector
     exact Real.differentiableOn_inv_log
-  have hcont :
-      ContinuousOn logCorrector (Set.Icc a b) :=
-    (hdiffIoi.mono (fun x hx => lt_of_lt_of_le ha hx.1)).continuousOn
+  have hsubset : Set.Icc a b ⊆ Set.Ioi (1 : ℝ) := fun _ hx => ha.trans_le hx.1
+  have hcont : ContinuousOn logCorrector (Set.Icc a b) :=
+    (hdiffIoi.mono hsubset).continuousOn
   have hderiv :
       ∀ x ∈ Set.Ioo a b,
         HasDerivAt logCorrector (-discountRate x) x := by
@@ -807,7 +807,7 @@ theorem abs_value_sub_le_corrector_sub_of_deriv_bound
       (ne_of_gt (lt_trans zero_lt_one hx1))
       (ne_of_gt hx1) (by linarith)
     convert (hc.const_mul η).add (hderiv x hxM) using 1
-    all_goals first | rfl | ring
+    ring
   have hminusDeriv : ∀ x ∈ Set.Icc a b,
       HasDerivAt (fun u => η * logCorrector u - V u)
         (-η * discountRate x - V' x) x := by
@@ -818,7 +818,7 @@ theorem abs_value_sub_le_corrector_sub_of_deriv_bound
       (ne_of_gt (lt_trans zero_lt_one hx1))
       (ne_of_gt hx1) (by linarith)
     convert (hc.const_mul η).sub (hderiv x hxM) using 1
-    all_goals first | rfl | ring
+    ring
   have hplus :
       η * logCorrector b + V b ≤
         η * logCorrector a + V a := by

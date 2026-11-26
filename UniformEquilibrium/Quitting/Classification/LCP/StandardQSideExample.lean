@@ -58,7 +58,7 @@ private def pairZeroOneSolution (q : CorePlayer → ℝ)
   residual_nonneg := by
     intro i
     fin_cases i <;> simp [cyclicMatrix, Fin.sum_univ_succ]
-    all_goals linarith
+    linarith
   complementary := by
     intro i
     fin_cases i <;> simp [cyclicMatrix, Fin.sum_univ_succ]
@@ -74,7 +74,7 @@ private def pairOneTwoSolution (q : CorePlayer → ℝ)
   residual_nonneg := by
     intro i
     fin_cases i <;> simp [cyclicMatrix, Fin.sum_univ_succ]
-    all_goals linarith
+    linarith
   complementary := by
     intro i
     fin_cases i <;> simp [cyclicMatrix, Fin.sum_univ_succ]
@@ -90,7 +90,7 @@ private def pairTwoZeroSolution (q : CorePlayer → ℝ)
   residual_nonneg := by
     intro i
     fin_cases i <;> simp [cyclicMatrix, Fin.sum_univ_succ]
-    all_goals linarith
+    linarith
   complementary := by
     intro i
     fin_cases i <;> simp [cyclicMatrix, Fin.sum_univ_succ]

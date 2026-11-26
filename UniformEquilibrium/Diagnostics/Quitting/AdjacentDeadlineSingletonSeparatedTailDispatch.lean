@@ -231,11 +231,13 @@ private theorem censoredError_lt_of_total_lt
     (htotal : source.censoredErrorMass < threshold) (player : ι) :
     quittingFiniteDeadlineCensoredError source.deadline source.old source.new
         player < threshold := by
-  apply lt_of_le_of_lt _ htotal
-  unfold QuittingAdjacentDeadlineGapSource.censoredErrorMass
-  exact Finset.single_le_sum
-    (fun other _ => Math.Probability.pmfTV_nonneg _ _)
-    (Finset.mem_univ player)
+  let error := quittingFiniteDeadlineCensoredError source.deadline source.old source.new
+  have hnonneg (other : ι) : 0 ≤ error other :=
+    Math.Probability.pmfTV_nonneg (source.old other)
+      (quittingFiniteDeadlineTimingProfileCensor source.new other)
+  have hsingle : error player ≤ source.censoredErrorMass :=
+    Finset.single_le_sum (f := error) (fun other _ => hnonneg other) (Finset.mem_univ player)
+  exact hsingle.trans_lt htotal
 
 private theorem oldNever_sub_censoredError_le_censoredNever
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}

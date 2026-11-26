@@ -618,16 +618,14 @@ theorem exists_pos_nearMinimum_capNash_eq_allContinue_radius
           (nhds (reference - q - 0)))
   have hfirstRatio : Tendsto
       (fun n ↦ error n / (reference - error n)) atTop (nhds 0) := by
-    (convert herrorTendsto.div hreferenceSub (ne_of_gt hreference) using 1;
-      try rfl)
+    convert herrorTendsto.div hreferenceSub (ne_of_gt hreference) using 1
     simp
   have hqPos : 0 < reference - q := by
     dsimp only [q]
     linarith
   have hsecondRatio : Tendsto
       (fun n ↦ error n / (reference - q - error n)) atTop (nhds 0) := by
-    (convert herrorTendsto.div hqSub (ne_of_gt hqPos) using 1;
-      try rfl)
+    convert herrorTendsto.div hqSub (ne_of_gt hqPos) using 1
     simp
   let M := quittingRewardBound reward
   have hcost : Tendsto

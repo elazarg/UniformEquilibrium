@@ -70,7 +70,7 @@ theorem quittingLiftDeletedProfile_outsideTerminalDebt_le_of_oneOutsiderBound_ad
           quittingTerminalPayoff (quittingDeleteReward optionReward (· = none)) childProfile
               ⟨some who, Option.some_ne_none who⟩) + allowance := hoption
     _ = _ := by
-      congr 1
+      apply congrArg (fun debt : ℝ => debt + allowance)
       apply Finset.sum_congr rfl
       intro who _
       change weight who *

@@ -122,7 +122,7 @@ theorem optimalPurePolicyValue_eq_worstCasePotential
   intro node
   generalize rank_eq : model.rank node = depth
   induction depth using Nat.strong_induction_on generalizing node with
-  | h depth ih =>
+  | ind depth ih =>
       by_cases terminal : model.terminal node
       · rw [
           model.controlledPolicyValue_of_terminal

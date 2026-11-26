@@ -134,6 +134,79 @@ private theorem opponents_as_updates (N : ℕ) (hN : 1 ≤ N) :
   funext player
   fin_cases player <;> rfl
 
+def fixtureLawPayoff (observer : Fin 4) (laws : Fin 4 → PMF (Option ℕ)) : ℝ :=
+  quittingTerminalPayoff reward (quittingStoppingLawProfile reward laws) observer
+
+private theorem payoff_update_quitOrNever
+    (laws : Fin 4 → PMF (Option ℕ)) (mixer observer : Fin 4) (time : ℕ)
+    (weight : ℝ) (hzero : 0 ≤ weight) (hone : weight ≤ 1) :
+    fixtureLawPayoff observer (Function.update laws mixer (quitOrNever time weight hzero hone)) =
+      (1 - weight) * fixtureLawPayoff observer (Function.update laws mixer (PMF.pure none)) +
+      weight * fixtureLawPayoff observer (Function.update laws mixer (PMF.pure (some time))) := by
+  unfold fixtureLawPayoff
+  rw [quittingTerminalPayoff_stoppingLawProfile_update_eq_expect, expect_quitOrNever]
+
+private theorem payoff_conditioned_first
+    (base : Fin 4 → PMF (Option ℕ)) (time : ℕ) (observer : Fin 4)
+    (choice : Option ℕ) :
+    fixtureLawPayoff observer (Function.update (Function.update base 1
+        (quitOrNever time (4 / 7) (by norm_num) (by norm_num))) 2 (PMF.pure choice)) =
+      (3 / 7) * fixtureLawPayoff observer
+        (Function.update (Function.update base 1 (PMF.pure none)) 2 (PMF.pure choice)) +
+      (4 / 7) * fixtureLawPayoff observer
+        (Function.update (Function.update base 1 (PMF.pure (some time))) 2 (PMF.pure choice)) := by
+  rw [Function.update_comm (by decide : (1 : Fin 4) ≠ 2)]
+  rw [payoff_update_quitOrNever]
+  rw [← Function.update_comm (by decide : (1 : Fin 4) ≠ 2)
+      (PMF.pure none) (PMF.pure choice) base,
+    ← Function.update_comm (by decide : (1 : Fin 4) ≠ 2)
+      (PMF.pure (some time)) (PMF.pure choice) base]
+  rw [show (1 : ℝ) - 4 / 7 = 3 / 7 by norm_num]
+
+theorem payoff_conditioned_both
+    (base : Fin 4 → PMF (Option ℕ)) (time : ℕ) (observer : Fin 4)
+    (hfirst : base 1 = PMF.pure none) (hsecond : base 2 = PMF.pure none) :
+    fixtureLawPayoff observer (Function.update
+      (Function.update base 1 (quitOrNever time (4 / 7) (by norm_num) (by norm_num))) 2
+      (quitOrNever time (1 / 7) (by norm_num) (by norm_num))) =
+      (6 / 7) * ((3 / 7) * fixtureLawPayoff observer base +
+        (4 / 7) * fixtureLawPayoff observer (Function.update base 1 (PMF.pure (some time)))) +
+      (1 / 7) * ((3 / 7) * fixtureLawPayoff observer
+          (Function.update base 2 (PMF.pure (some time))) +
+        (4 / 7) * fixtureLawPayoff observer (Function.update
+          (Function.update base 1 (PMF.pure (some time))) 2 (PMF.pure (some time)))) := by
+  have hfirstSame : Function.update base 1 (PMF.pure none) = base := by
+    rw [← hfirst, Function.update_eq_self]
+  have hsecondSame : Function.update base 2 (PMF.pure none) = base := by
+    rw [← hsecond, Function.update_eq_self]
+  let one := Function.update base 1 (PMF.pure (some time))
+  have hone : one 2 = PMF.pure none := by
+    rw [show one 2 = base 2 from Function.update_of_ne (by decide : (2 : Fin 4) ≠ 1) _ _, hsecond]
+  have honeSame : Function.update one 2 (PMF.pure none) = one := by
+    rw [← hone, Function.update_eq_self]
+  rw [payoff_update_quitOrNever, payoff_conditioned_first, payoff_conditioned_first,
+    hfirstSame, hsecondSame, show (1 : ℝ) - 1 / 7 = 6 / 7 by norm_num]
+  rw [show Function.update (Function.update base 1 (PMF.pure (some time))) 2
+    (PMF.pure none) = Function.update base 1 (PMF.pure (some time)) from honeSame]
+
+private theorem pivotLaws_eq_opponent_updates
+    (N : ℕ) (hN : 1 ≤ N) (choice : Option ℕ) :
+    Function.update (opponents N hN) 0 (PMF.pure choice) =
+      Function.update
+        (Function.update (Function.update neverLaws 0 (PMF.pure choice)) 1
+          (quitOrNever (N - 1) (4 / 7) (by norm_num) (by norm_num))) 2
+        (quitOrNever (N - 1) (1 / 7) (by norm_num) (by norm_num)) := by
+  rw [opponents_as_updates]
+  rw [Function.update_comm (by decide : (2 : Fin 4) ≠ 0),
+    Function.update_comm (by decide : (1 : Fin 4) ≠ 0)]
+
+private theorem purePivotPayoff_eq_fixtureLawPayoff
+    (N : ℕ) (hN : 1 ≤ N) (choice : Option ℕ) (observer : Fin 4) :
+    (input N hN).purePivotPayoff choice observer =
+      fixtureLawPayoff observer (Function.update (opponents N hN) 0 (PMF.pure choice)) := by
+  unfold QuittingPivotRepairLPInput.purePivotPayoff fixtureLawPayoff
+  simp only [input]
+
 /-- The payoff of any observer conditions over the two independent opponent atoms. -/
 theorem observerPayoff_conditioned (N : ℕ) (hN : 1 ≤ N)
     (choice : Option ℕ) (observer : Fin 4) :
@@ -152,61 +225,9 @@ theorem observerPayoff_conditioned (N : ℕ) (hN : 1 ≤ N)
             (Function.update
             (Function.update (Function.update neverLaws 0 (PMF.pure choice)) 1
               (PMF.pure (some (N - 1)))) 2 (PMF.pure (some (N - 1))))) observer) := by
-  change quittingTerminalPayoff reward
-    (quittingStoppingLawProfile reward
-      (Function.update (opponents N hN) 0 (PMF.pure choice))) observer = _
-  rw [opponents_as_updates]
-  have hmove : Function.update
-      (Function.update
-        (Function.update neverLaws 1
-          (quitOrNever (N - 1) (4 / 7) (by norm_num) (by norm_num))) 2
-        (quitOrNever (N - 1) (1 / 7) (by norm_num) (by norm_num))) 0
-      (PMF.pure choice) = Function.update
-        (Function.update (Function.update neverLaws 0 (PMF.pure choice)) 1
-          (quitOrNever (N - 1) (4 / 7) (by norm_num) (by norm_num))) 2
-        (quitOrNever (N - 1) (1 / 7) (by norm_num) (by norm_num)) := by
-    funext player
-    fin_cases player <;> rfl
-  rw [hmove, quittingTerminalPayoff_stoppingLawProfile_update_eq_expect,
-    expect_quitOrNever]
-  congr 1
-  · rw [show Function.update
-        (Function.update (Function.update neverLaws 0 (PMF.pure choice)) 1
-          (quitOrNever (N - 1) (4 / 7) (by norm_num) (by norm_num))) 2
-          (PMF.pure none) = Function.update
-        (Function.update (Function.update neverLaws 0 (PMF.pure choice)) 2
-          (PMF.pure none)) 1
-          (quitOrNever (N - 1) (4 / 7) (by norm_num) (by norm_num)) by
-      exact Function.update_comm (by decide : (1 : Fin 4) ≠ 2) _ _ _]
-    rw [quittingTerminalPayoff_stoppingLawProfile_update_eq_expect,
-      expect_quitOrNever]
-    norm_num
-    congr 1
-    · congr 2
-      funext player
-      fin_cases player <;> rfl
-
-    · congr 2
-      funext player
-      fin_cases player <;> rfl
-  · rw [show Function.update
-        (Function.update (Function.update neverLaws 0 (PMF.pure choice)) 1
-          (quitOrNever (N - 1) (4 / 7) (by norm_num) (by norm_num))) 2
-          (PMF.pure (some (N - 1))) = Function.update
-        (Function.update (Function.update neverLaws 0 (PMF.pure choice)) 2
-          (PMF.pure (some (N - 1)))) 1
-          (quitOrNever (N - 1) (4 / 7) (by norm_num) (by norm_num)) by
-      exact Function.update_comm (by decide : (1 : Fin 4) ≠ 2) _ _ _]
-    rw [quittingTerminalPayoff_stoppingLawProfile_update_eq_expect,
-      expect_quitOrNever]
-    norm_num
-    congr 1
-    · congr 2
-      funext player
-      fin_cases player <;> rfl
-    · congr 2
-      funext player
-      fin_cases player <;> rfl
+  rw [purePivotPayoff_eq_fixtureLawPayoff, pivotLaws_eq_opponent_updates]
+  exact payoff_conditioned_both (Function.update neverLaws 0 (PMF.pure choice))
+    (N - 1) observer rfl rfl
 
 private theorem pureCoalitionPayoff (coalition : Finset (Fin 4))
     (hne : coalition.Nonempty) (time : ℕ) :

@@ -213,21 +213,21 @@ theorem isContinuationNeutralOnSupport_endpoint
     exact heq.symm
   have hexcessive :
       ∀ s who (d : G.Act who),
-        Math.Probability.expect
+        _root_.Math.Probability.expect
             (Math.PMFProduct.pmfPi
               (Function.update (germ.endpointProfile s) who (PMF.pure d)))
             (fun a =>
-              Math.Probability.expect (G.transition s a)
+              _root_.Math.Probability.expect (G.transition s a)
                 (fun s' => germ.endpointValue s' who)) ≤
           germ.endpointValue s who := by
     intro s who d
     have hgain :=
       germ.finkContinuationGain_endpointValue_nonpos s who d
     have hbase :
-        Math.Probability.expect
+        _root_.Math.Probability.expect
             (Math.PMFProduct.pmfPi (germ.endpointProfile s))
             (fun a =>
-              Math.Probability.expect (G.transition s a)
+              _root_.Math.Probability.expect (G.transition s a)
                 (fun s' => germ.endpointValue s' who)) =
           germ.endpointValue s who := by
       simpa [finkContinuationEU,
@@ -311,7 +311,7 @@ structure StateKernelMonitorPowerCharge
   margin : ℝ
   margin_pos : 0 < margin
   baseline_centered :
-    Math.Probability.expect
+    _root_.Math.Probability.expect
         (G.finkStateKernel germ.endpointFinkPoint source)
         (pmfCoordinateTestScore
           (G.finkStateKernel germ.endpointFinkPoint source)
@@ -325,13 +325,13 @@ structure StateKernelMonitorPowerCharge
       t ∈ Ioo (0 : ℝ) germ.radius ∧
         ∀ ht : t ∈ Ioo (0 : ℝ) germ.radius,
           margin * t ^ order ≤
-              Math.Probability.expect
+              _root_.Math.Probability.expect
                 (G.finkStateKernel (germ.finkPointAt ht) source)
                 (pmfCoordinateTestScore
                   (G.finkStateKernel germ.endpointFinkPoint source)
                   destination positive) ∧
             0 <
-              Math.Probability.expect
+              _root_.Math.Probability.expect
                 (G.finkStateKernel (germ.finkPointAt ht) source)
                 (pmfCoordinateTestScore
                   (G.finkStateKernel germ.endpointFinkPoint source)
@@ -352,7 +352,7 @@ theorem eventually_universalEpochSignal
               Ioo (0 : ℝ) germ.radius,
           charge.margin *
                 Math.OnlineLearning.universalEpochScale k ^ charge.order ≤
-              Math.Probability.expect
+              _root_.Math.Probability.expect
                 (G.finkStateKernel
                   (germ.finkPointAt ht) charge.source)
                 (pmfCoordinateTestScore
@@ -360,7 +360,7 @@ theorem eventually_universalEpochSignal
                     germ.endpointFinkPoint charge.source)
                   charge.destination charge.positive) ∧
             0 <
-              Math.Probability.expect
+              _root_.Math.Probability.expect
                 (G.finkStateKernel
                   (germ.finkPointAt ht) charge.source)
                 (pmfCoordinateTestScore
@@ -390,7 +390,7 @@ theorem mul_sub_regret_le_expect_causalMonitorScore
     {t : ℝ} (ht : t ∈ Ioo (0 : ℝ) germ.radius)
     (hsignal :
       charge.margin * t ^ charge.order ≤
-        Math.Probability.expect
+        _root_.Math.Probability.expect
           (G.finkStateKernel (germ.finkPointAt ht) charge.source)
           (pmfCoordinateTestScore
             (G.finkStateKernel
@@ -402,7 +402,7 @@ theorem mul_sub_regret_le_expect_causalMonitorScore
           (Real.log
               (Fintype.card (PMFCoordinateMonitor G.State)) + 1)
           (Math.OnlineLearning.anytimeEpochIndex T) ≤
-      Math.Probability.expect
+      _root_.Math.Probability.expect
         (Math.Probability.adaptiveHistoryLaw
           (fun _ _ =>
             G.finkStateKernel
@@ -710,7 +710,7 @@ theorem rawStageCurve_eq_finkStageEU
       fun s who => G.finkStageEU (germ.finkPointAt ht) s who := by
   ext s who
   unfold rawStageCurve finkStageEU
-  rw [Math.Probability.expect_eq_sum]
+  rw [_root_.Math.Probability.expect_eq_sum]
   apply Finset.sum_congr rfl
   intro a _
   rw [germ.rawProfileWeight_eq_pmfPi_finkPointAt ht]
@@ -727,11 +727,11 @@ theorem rawContinuationCurve_eq_finkContinuationEU
         G.finkContinuationEU (H t) (germ.finkPointAt ht) s who := by
   ext s who
   unfold rawContinuationCurve finkContinuationEU
-  rw [Math.Probability.expect_eq_sum]
+  rw [_root_.Math.Probability.expect_eq_sum]
   apply Finset.sum_congr rfl
   intro a _
   rw [germ.rawProfileWeight_eq_pmfPi_finkPointAt ht,
-    Math.Probability.expect_eq_sum]
+    _root_.Math.Probability.expect_eq_sum]
 
 omit [DecidableEq G.State] in
 /-- Raw continuation at the endpoint agrees with continuation under the
@@ -744,12 +744,12 @@ theorem rawContinuationCurve_zero_eq_finkContinuationEU
         G.finkContinuationEU (H 0) germ.endpointFinkPoint s who := by
   ext s who
   unfold rawContinuationCurve finkContinuationEU
-  rw [Math.Probability.expect_eq_sum]
+  rw [_root_.Math.Probability.expect_eq_sum]
   apply Finset.sum_congr rfl
   intro a _
   rw [germ.rawProfileWeight_zero_eq_pmfPi_endpointProfile,
     germ.finkProfile_endpointFinkPoint,
-    Math.Probability.expect_eq_sum]
+    _root_.Math.Probability.expect_eq_sum]
 
 omit [DecidableEq G.State] in
 /-- Raw continuation is expectation against the raw analytic state kernel. -/
@@ -1386,7 +1386,7 @@ theorem exists_fixed_stateKernelMonitor_powerCharge
         (jet.factor 0) germ.endpointFinkPoint ≠ 0) :
     ∃ s destination positive n c,
       0 < c ∧
-        Math.Probability.expect
+        _root_.Math.Probability.expect
             (G.finkStateKernel germ.endpointFinkPoint s)
             (pmfCoordinateTestScore
               (G.finkStateKernel germ.endpointFinkPoint s)
@@ -1399,13 +1399,13 @@ theorem exists_fixed_stateKernelMonitor_powerCharge
           t ∈ Ioo (0 : ℝ) germ.radius ∧
             ∀ ht : t ∈ Ioo (0 : ℝ) germ.radius,
               c * t ^ n ≤
-                  Math.Probability.expect
+                  _root_.Math.Probability.expect
                     (G.finkStateKernel (germ.finkPointAt ht) s)
                     (pmfCoordinateTestScore
                       (G.finkStateKernel germ.endpointFinkPoint s)
                       destination positive) ∧
                 0 <
-                  Math.Probability.expect
+                  _root_.Math.Probability.expect
                     (G.finkStateKernel (germ.finkPointAt ht) s)
                     (pmfCoordinateTestScore
                       (G.finkStateKernel germ.endpointFinkPoint s)

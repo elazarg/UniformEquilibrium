@@ -429,7 +429,7 @@ private theorem value_eq_sigma (who : Fin 4) (hwho : who ≠ 3) :
   rw [equilibriumHazard, sigmaValue_eq]
   fin_cases who
   all_goals simp [value] at *
-  all_goals ring
+  ring
 
 private theorem active_residual_zero (who : Fin 4) (hwho : who ≠ 3) :
     quittingDiscountedDisplacement reward 0 equilibriumHazard who = 0 := by

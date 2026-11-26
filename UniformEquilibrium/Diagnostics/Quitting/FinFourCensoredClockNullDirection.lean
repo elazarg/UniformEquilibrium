@@ -107,7 +107,7 @@ theorem oldWeight_sum (N : ℕ) (c : ℝ) (hN : 3 ≤ N) (who : Player) :
     ∑ action, oldWeight N c hN who action = 1 := by
   fin_cases who <;>
     simp [oldWeight, Fintype.sum_option]
-  all_goals norm_num
+  norm_num
 
 /-- The old deadline-`N` product timing law `p`. -/
 def oldLaw (N : ℕ) (c : ℝ) (hN : 3 ≤ N)
@@ -320,7 +320,7 @@ theorem censor_newLaw_eq_reshuffledLaw
       fin_cases who
       all_goals simp [hboundary, newWeight, reshuffledWeight, oldWeight,
         hboundaryNeLate, hboundaryNeOne]
-      all_goals norm_num
+      norm_num
   | some time =>
       change (((newLaw N c hN hc0 hc1 who).map
         quittingFiniteDeadlineTimingActionCensor) (some time)).toReal = _
@@ -726,17 +726,17 @@ private theorem expect_oldLaw_zero
     (N : ℕ) (c : ℝ) (hN : 3 ≤ N)
     (hc0 : 0 ≤ c) (hc1 : c ≤ 1)
     (f : QuittingFiniteDeadlineTimingAction N → ℝ) :
-    Math.Probability.expect (oldLaw N c hN hc0 hc1 0) f = f none := by
-  rw [Math.Probability.expect_eq_sum, Fintype.sum_option]
+    _root_.Math.Probability.expect (oldLaw N c hN hc0 hc1 0) f = f none := by
+  rw [_root_.Math.Probability.expect_eq_sum, Fintype.sum_option]
   simp [oldLaw_apply, oldWeight]
 
 private theorem expect_oldLaw_one
     (N : ℕ) (c : ℝ) (hN : 3 ≤ N)
     (hc0 : 0 ≤ c) (hc1 : c ≤ 1)
     (f : QuittingFiniteDeadlineTimingAction N → ℝ) :
-    Math.Probability.expect (oldLaw N c hN hc0 hc1 1) f =
+    _root_.Math.Probability.expect (oldLaw N c hN hc0 hc1 1) f =
       (1 / 2 : ℝ) * f (some (oldLate N hN)) + 1 / 2 * f none := by
-  rw [Math.Probability.expect_eq_sum, Fintype.sum_option]
+  rw [_root_.Math.Probability.expect_eq_sum, Fintype.sum_option]
   simp [oldLaw_apply, oldWeight]
   ring
 
@@ -744,9 +744,9 @@ private theorem expect_oldLaw_two
     (N : ℕ) (c : ℝ) (hN : 3 ≤ N)
     (hc0 : 0 ≤ c) (hc1 : c ≤ 1)
     (f : QuittingFiniteDeadlineTimingAction N → ℝ) :
-    Math.Probability.expect (oldLaw N c hN hc0 hc1 2) f =
+    _root_.Math.Probability.expect (oldLaw N c hN hc0 hc1 2) f =
       c * f (some (oldZero N hN)) + (1 - c) * f none := by
-  rw [Math.Probability.expect_eq_sum, Fintype.sum_option]
+  rw [_root_.Math.Probability.expect_eq_sum, Fintype.sum_option]
   simp [oldLaw_apply, oldWeight]
   ring
 
@@ -754,8 +754,8 @@ private theorem expect_oldLaw_three
     (N : ℕ) (c : ℝ) (hN : 3 ≤ N)
     (hc0 : 0 ≤ c) (hc1 : c ≤ 1)
     (f : QuittingFiniteDeadlineTimingAction N → ℝ) :
-    Math.Probability.expect (oldLaw N c hN hc0 hc1 3) f = f none := by
-  rw [Math.Probability.expect_eq_sum, Fintype.sum_option]
+    _root_.Math.Probability.expect (oldLaw N c hN hc0 hc1 3) f = f none := by
+  rw [_root_.Math.Probability.expect_eq_sum, Fintype.sum_option]
   simp [oldLaw_apply, oldWeight]
 
 /-- The old law's displayed hard payoff for player `0` is exactly one. -/
@@ -798,7 +798,7 @@ private theorem old_pure_zero_payoff_le_one
     Function.update_of_ne (by decide : (1 : Player) ≠ 0),
     Function.update_of_ne (by decide : (2 : Player) ≠ 0),
     Function.update_of_ne (by decide : (3 : Player) ≠ 0),
-    Math.Probability.expect_pure]
+    _root_.Math.Probability.expect_pure]
   simp_rw [expect_oldLaw_one, expect_oldLaw_two, expect_oldLaw_three]
   simp_rw [old_two_zero_value N hN action (some (oldLate N hN)) (by
       intro heq
@@ -838,7 +838,7 @@ private theorem old_pure_other_payoff_eq_zero
   rw [show Function.update (oldLaw N c hN hc0 hc1) who
       (PMF.pure action) 0 = PMF.pure none by
         rw [Function.update_of_ne (Ne.symm hwho), hzeroLaw]]
-  simp only [Math.Probability.expect_pure]
+  simp only [_root_.Math.Probability.expect_pure]
   have hpoint (a b d : QuittingFiniteDeadlineTimingAction N) :
       timingPurePayoff reward N ![none, a, b, d] who = 0 :=
     timingPurePayoff_zero_of_playerZero_never N _ who hwho rfl
@@ -853,7 +853,7 @@ private theorem timingMixedPayoff_eq_zero_of_zeroLaw
     timingMixedPayoff reward dates mixed who = 0 := by
   unfold timingMixedPayoff
   rw [expect_pmfPi_fin4, hzero]
-  simp only [Math.Probability.expect_pure]
+  simp only [_root_.Math.Probability.expect_pure]
   have hpoint (a b d : QuittingFiniteDeadlineTimingAction dates) :
       timingPurePayoff reward dates ![none, a, b, d] who = 0 :=
     timingPurePayoff_zero_of_playerZero_never dates _ who hwho rfl
@@ -1063,15 +1063,15 @@ private theorem expect_newLaw_zero
     (N : ℕ) (c : ℝ) (hN : 3 ≤ N)
     (hc0 : 0 ≤ c) (hc1 : c ≤ 1)
     (f : QuittingFiniteDeadlineTimingAction (N + 1) → ℝ) :
-    Math.Probability.expect (newLaw N c hN hc0 hc1 0) f = f none := by
-  rw [Math.Probability.expect_eq_sum, Fintype.sum_option]
+    _root_.Math.Probability.expect (newLaw N c hN hc0 hc1 0) f = f none := by
+  rw [_root_.Math.Probability.expect_eq_sum, Fintype.sum_option]
   simp [newLaw_apply, newWeight]
 
 private theorem expect_newLaw_one
     (N : ℕ) (c : ℝ) (hN : 3 ≤ N)
     (hc0 : 0 ≤ c) (hc1 : c ≤ 1)
     (f : QuittingFiniteDeadlineTimingAction (N + 1) → ℝ) :
-    Math.Probability.expect (newLaw N c hN hc0 hc1 1) f =
+    _root_.Math.Probability.expect (newLaw N c hN hc0 hc1 1) f =
       (1 / 2 : ℝ) * f (some (newLate N hN)) +
         1 / 6 * f (some (newBoundary N hN)) + 1 / 3 * f none := by
   have hne : newLate N hN ≠ newBoundary N hN := by
@@ -1099,7 +1099,7 @@ private theorem expect_newLaw_one
         · by_cases hy : x = newBoundary N hN <;>
             simp [hx, hy, Ne.symm hne]
       _ = _ := by simp
-  rw [Math.Probability.expect_eq_sum, Fintype.sum_option]
+  rw [_root_.Math.Probability.expect_eq_sum, Fintype.sum_option]
   simp only [newLaw_apply, newWeight]
   simp
   have hsum' :
@@ -1124,9 +1124,9 @@ private theorem expect_newLaw_two
     (N : ℕ) (c : ℝ) (hN : 3 ≤ N)
     (hc0 : 0 ≤ c) (hc1 : c ≤ 1)
     (f : QuittingFiniteDeadlineTimingAction (N + 1) → ℝ) :
-    Math.Probability.expect (newLaw N c hN hc0 hc1 2) f =
+    _root_.Math.Probability.expect (newLaw N c hN hc0 hc1 2) f =
       c * f (some (newOne N hN)) + (1 - c) * f none := by
-  rw [Math.Probability.expect_eq_sum, Fintype.sum_option]
+  rw [_root_.Math.Probability.expect_eq_sum, Fintype.sum_option]
   simp [newLaw_apply, newWeight]
   ring
 
@@ -1134,8 +1134,8 @@ private theorem expect_newLaw_three
     (N : ℕ) (c : ℝ) (hN : 3 ≤ N)
     (hc0 : 0 ≤ c) (hc1 : c ≤ 1)
     (f : QuittingFiniteDeadlineTimingAction (N + 1) → ℝ) :
-    Math.Probability.expect (newLaw N c hN hc0 hc1 3) f = f none := by
-  rw [Math.Probability.expect_eq_sum, Fintype.sum_option]
+    _root_.Math.Probability.expect (newLaw N c hN hc0 hc1 3) f = f none := by
+  rw [_root_.Math.Probability.expect_eq_sum, Fintype.sum_option]
   simp [newLaw_apply, newWeight]
 
 private theorem newLate_ne_zero (N : ℕ) (hN : 3 ≤ N) :
@@ -1247,7 +1247,7 @@ private theorem new_pure_zero_payoff_le
       c + (1 - c) * (4 / 3) := by
   unfold timingMixedPayoff
   rw [expect_pmfPi_fin4]
-  simp only [Function.update_self, Math.Probability.expect_pure,
+  simp only [Function.update_self, _root_.Math.Probability.expect_pure,
     Function.update_of_ne (by decide : (1 : Player) ≠ 0),
     Function.update_of_ne (by decide : (2 : Player) ≠ 0),
     Function.update_of_ne (by decide : (3 : Player) ≠ 0)]
@@ -1402,9 +1402,9 @@ private theorem expect_reshuffledLaw_two
     (N : ℕ) (c : ℝ) (hN : 3 ≤ N)
     (hc0 : 0 ≤ c) (hc1 : c ≤ 1)
     (f : QuittingFiniteDeadlineTimingAction N → ℝ) :
-    Math.Probability.expect (reshuffledLaw N c hN hc0 hc1 2) f =
+    _root_.Math.Probability.expect (reshuffledLaw N c hN hc0 hc1 2) f =
       c * f (some (oldOne N hN)) + (1 - c) * f none := by
-  rw [Math.Probability.expect_eq_sum, Fintype.sum_option]
+  rw [_root_.Math.Probability.expect_eq_sum, Fintype.sum_option]
   simp [reshuffledLaw_apply, reshuffledWeight]
   ring
 
@@ -1425,7 +1425,7 @@ private theorem old_pure_zero_payoff_eq_formula
     omega
   unfold timingMixedPayoff
   rw [expect_pmfPi_fin4]
-  simp only [Function.update_self, Math.Probability.expect_pure,
+  simp only [Function.update_self, _root_.Math.Probability.expect_pure,
     Function.update_of_ne (by decide : (1 : Player) ≠ 0),
     Function.update_of_ne (by decide : (2 : Player) ≠ 0),
     Function.update_of_ne (by decide : (3 : Player) ≠ 0)]
@@ -1459,7 +1459,7 @@ private theorem reshuffled_pure_zero_payoff_eq_formula
     omega
   unfold timingMixedPayoff
   rw [expect_pmfPi_fin4]
-  simp only [Function.update_self, Math.Probability.expect_pure,
+  simp only [Function.update_self, _root_.Math.Probability.expect_pure,
     Function.update_of_ne (by decide : (1 : Player) ≠ 0),
     Function.update_of_ne (by decide : (2 : Player) ≠ 0),
     Function.update_of_ne (by decide : (3 : Player) ≠ 0)]
@@ -1826,7 +1826,7 @@ chamber, written as its finite probability mass function. -/
 def hardTerminalCoalitionMass {deadline : ℕ}
     (mixed : Player → PMF (QuittingFiniteDeadlineTimingAction deadline))
     (outcome : QuittingTerminalOutcome Player) : ℝ :=
-  Math.Probability.expect (pmfPi mixed) fun choices ↦
+  _root_.Math.Probability.expect (pmfPi mixed) fun choices ↦
     if hardTerminalCoalitionOutcome choices = outcome then 1 else 0
 
 /-- Moving player `2`'s stopping mass from date zero to date one leaves the
@@ -1870,35 +1870,35 @@ private theorem expect_includedOldLaw_one
     (N : ℕ) (c : ℝ) (hN : 3 ≤ N)
     (hc0 : 0 ≤ c) (hc1 : c ≤ 1)
     (f : QuittingFiniteDeadlineTimingAction (N + 1) → ℝ) :
-    Math.Probability.expect
+    _root_.Math.Probability.expect
         (quittingFiniteDeadlineTimingProfileInclude
           (oldLaw N c hN hc0 hc1) 1) f =
       1 / 2 * f (some (newLate N hN)) + 1 / 2 * f none := by
   unfold quittingFiniteDeadlineTimingProfileInclude
-  rw [Math.Probability.expect_map, expect_oldLaw_one]
+  rw [_root_.Math.Probability.expect_map, expect_oldLaw_one]
   rfl
 
 private theorem expect_includedOldLaw_two
     (N : ℕ) (c : ℝ) (hN : 3 ≤ N)
     (hc0 : 0 ≤ c) (hc1 : c ≤ 1)
     (f : QuittingFiniteDeadlineTimingAction (N + 1) → ℝ) :
-    Math.Probability.expect
+    _root_.Math.Probability.expect
         (quittingFiniteDeadlineTimingProfileInclude
           (oldLaw N c hN hc0 hc1) 2) f =
       c * f (some 0) + (1 - c) * f none := by
   unfold quittingFiniteDeadlineTimingProfileInclude
-  rw [Math.Probability.expect_map, expect_oldLaw_two]
+  rw [_root_.Math.Probability.expect_map, expect_oldLaw_two]
   rfl
 
 private theorem expect_includedOldLaw_three
     (N : ℕ) (c : ℝ) (hN : 3 ≤ N)
     (hc0 : 0 ≤ c) (hc1 : c ≤ 1)
     (f : QuittingFiniteDeadlineTimingAction (N + 1) → ℝ) :
-    Math.Probability.expect
+    _root_.Math.Probability.expect
         (quittingFiniteDeadlineTimingProfileInclude
           (oldLaw N c hN hc0 hc1) 3) f = f none := by
   unfold quittingFiniteDeadlineTimingProfileInclude
-  rw [Math.Probability.expect_map, expect_oldLaw_three]
+  rw [_root_.Math.Probability.expect_map, expect_oldLaw_three]
   rfl
 
 /-- The newly exposed date `N` against the old law pays exactly
@@ -1919,21 +1919,21 @@ theorem old_boundaryPayoff_zero_eq
     Function.update_of_ne (by decide : (1 : Player) ≠ 0),
     Function.update_of_ne (by decide : (2 : Player) ≠ 0),
     Function.update_of_ne (by decide : (3 : Player) ≠ 0)]
-  change Math.Probability.expect
+  change _root_.Math.Probability.expect
       (PMF.pure (some (newBoundary N hN)) :
         PMF (QuittingFiniteDeadlineTimingAction (N + 1))) (fun a ↦
-      Math.Probability.expect
+      _root_.Math.Probability.expect
         (quittingFiniteDeadlineTimingProfileInclude
           (oldLaw N c hN hc0 hc1) 1) (fun b ↦
-      Math.Probability.expect
+      _root_.Math.Probability.expect
         (quittingFiniteDeadlineTimingProfileInclude
           (oldLaw N c hN hc0 hc1) 2) (fun cAction ↦
-      Math.Probability.expect
+      _root_.Math.Probability.expect
         (quittingFiniteDeadlineTimingProfileInclude
           (oldLaw N c hN hc0 hc1) 3) (fun d ↦
       timingPurePayoff reward (N + 1) ![a, b, cAction, d] 0)))) =
     3 / 2 - c / 2
-  rw [Math.Probability.expect_pure]
+  rw [_root_.Math.Probability.expect_pure]
   simp_rw [expect_includedOldLaw_one, expect_includedOldLaw_two,
     expect_includedOldLaw_three]
   have hNsucc : 3 ≤ N + 1 := by omega
@@ -2054,7 +2054,7 @@ theorem separatedTail_singletonGap_eq_one (who : Player) :
   rw [separatedTail_terminalPayoff_eq]
   fin_cases who
   all_goals simp [separatedTailValue]
-  all_goals norm_num
+  norm_num
 
 private theorem separatedTail_fixedPoint :
     separatedTailValue =

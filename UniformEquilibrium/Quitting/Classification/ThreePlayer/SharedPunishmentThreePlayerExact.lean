@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import GameTheory.Math.Probability.FiniteUniform
 import UniformEquilibrium.Quitting.Classification.ThreePlayer.SharedPunishmentThreePlayer
 import Mathlib.Probability.Distributions.Uniform
 
@@ -74,7 +75,7 @@ theorem quittingStationaryFixedOpponentsContinueMass_eq
 /-! ## The fair stationary row -/
 
 /-- The fair Boolean marginal. -/
-def fairMarginal : PMF Bool := PMF.uniformOfFintype Bool
+def fairMarginal : PMF Bool := GameTheory.Math.Probability.uniformLaw Bool
 
 /-- Every player quits with probability one half. -/
 def fairRoot : Player → PMF Bool := fun _ => fairMarginal
@@ -82,7 +83,7 @@ def fairRoot : Player → PMF Bool := fun _ => fairMarginal
 @[simp] theorem fairMarginal_apply_toReal (action : Bool) :
     (fairMarginal action).toReal = (1 / 2 : ℝ) := by
   unfold fairMarginal
-  rw [PMF.uniformOfFintype_apply]
+  rw [GameTheory.Math.Probability.uniformLaw_apply]
   have hcard : Fintype.card Bool = 2 := by rfl
   rw [hcard]
   norm_num

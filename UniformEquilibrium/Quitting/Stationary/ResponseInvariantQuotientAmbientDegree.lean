@@ -44,8 +44,10 @@ theorem mem_quittingQuotientClosedOriginBox_iff (radius : ℝ) (hradius : 0 < ra
 
 theorem isOpen_quittingQuotientOmega : IsOpen (quittingQuotientOmega (k := k)) := by
   have hopen (coordinate : Fin k) : IsOpen {point : Fin k → ℝ |
-      (-1 : ℝ) < point coordinate ∧ point coordinate < 2} :=
-    (isOpen_lt continuous_const (continuous_apply coordinate)).inter
+      (-1 : ℝ) < point coordinate ∧ point coordinate < 2} := by
+    change IsOpen ({point : Fin k → ℝ | (-1 : ℝ) < point coordinate} ∩
+      {point : Fin k → ℝ | point coordinate < (2 : ℝ)})
+    exact (isOpen_lt continuous_const (continuous_apply coordinate)).inter
       (isOpen_lt (continuous_apply coordinate) continuous_const)
   simpa only [quittingQuotientOmega, ofPred_forall] using isOpen_iInter_of_finite hopen
 

@@ -237,7 +237,7 @@ theorem exists_uniformPayoff_of_sourceMatchedSnellCandidate
           (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
     intro n
     induction n using Nat.strong_induction_on with
-    | h n ih =>
+    | ind n ih =>
       intro d hrem hd
       rcases hinterface d hd with ⟨hpayoff⟩ | ⟨d', hd', hsubset⟩
       · exact hpayoff

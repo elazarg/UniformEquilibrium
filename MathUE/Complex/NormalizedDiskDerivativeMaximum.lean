@@ -76,10 +76,11 @@ theorem exists_normalized_disk_derivative_maximum {U : Set ℂ}
     · simp [evaluate, hfzero]
   have hcompact := ArzelaAscoli.isCompact_closure_of_isClosedEmbedding hcompactSets
     (α := ℂ) (s := family) (F := evaluate) .id ?_ ?_
-  · have hclosure : closure family ⊆
+  · let closedFamily : Set _ :=
         {f | MapsTo (evaluate f) U (ball 0 1) ∧
           ((∃ c, EqOn (evaluate f) (const ℂ c) U) ∨ InjOn (evaluate f) U) ∧
-          DifferentiableOn ℂ (evaluate f) U ∧ evaluate f base = 0} := by
+          DifferentiableOn ℂ (evaluate f) U ∧ evaluate f base = 0}
+    have hclosure : closure family ⊆ closedFamily := by
       intro f hf
       rw [mem_closure_iff_nhdsWithin_neBot] at hf
       have hlimit : TendstoLocallyUniformlyOn evaluate (evaluate f) (𝓝[family] f) U :=
@@ -89,12 +90,12 @@ theorem exists_normalized_disk_derivative_maximum {U : Set ℂ}
       have hnorm : ∀ z ∈ U, ‖evaluate f z‖ ≤ 1 := by
         intro z hz
         refine le_of_tendsto (hlimit.tendsto_at hz).norm
-          (eventually_mem_nhdsWithin.mono fun g hg => ?_)
+          (eventually_mem_nhdsWithin (s := family) |>.mono fun g hg => ?_)
         exact (mem_ball_zero_iff.mp (hg.1 hz)).le
       have hzero : evaluate f base = 0 := by
         refine tendsto_nhds_unique (hlimit.tendsto_at hbase) ?_
         exact tendsto_const_nhds.congr'
-          (eventually_mem_nhdsWithin.mono fun g hg => hg.2.2.2.2.symm)
+          (eventually_mem_nhdsWithin (s := family) |>.mono fun g hg => hg.2.2.2.2.symm)
       refine ⟨?_, ?_, hd, hzero⟩
       · by_contra hnotDisk
         obtain ⟨z, hz, hlarge⟩ : ∃ z ∈ U, 1 ≤ ‖evaluate f z‖ := by
@@ -109,13 +110,14 @@ theorem exists_normalized_disk_derivative_maximum {U : Set ℂ}
         exact (not_le_of_gt zero_lt_one) hlarge
       · exact eqOn_const_or_injOn_of_tendstoLocallyUniformlyOn hopen
           hconnected.isPathConnected.isConnected.isPreconnected
-          (eventually_mem_nhdsWithin.mono fun g hg => hg.2.1)
+          (eventually_mem_nhdsWithin (s := family) |>.mono fun g hg => hg.2.1)
           (eventually_mem_nhdsWithin.mono hanalytic) hlimit
     have hderivativeContinuous : ContinuousOn (fun f => ‖deriv (evaluate f) base‖)
         (closure family) := by
       refine ContinuousOn.mono (ContinuousOn.norm fun f hf => ?_) hclosure
-      exact (hevaluate.deriv
-        (eventually_mem_nhdsWithin.mono fun g hg => hg.2.2.1) hopen).tendsto_at hbase
+      have hdiff : ∀ᶠ g in 𝓝[closedFamily] f, DifferentiableOn ℂ (evaluate g) U :=
+        eventually_mem_nhdsWithin.mono fun g hg => hg.2.2.1
+      exact (hevaluate.deriv hdiff hopen).tendsto_at hbase
     obtain ⟨maximizer, hmaximizer, hmaximum⟩ :=
       hcompact.exists_isMaxOn hnonempty.closure hderivativeContinuous
     have hpositive : 0 < ‖deriv (evaluate maximizer) base‖ := by

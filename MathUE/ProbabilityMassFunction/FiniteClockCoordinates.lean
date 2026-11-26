@@ -141,7 +141,7 @@ theorem finiteClockLawCoordinates_aux_eq_zero
   rw [ENNReal.toReal_eq_zero_iff]
   left
   classical
-  rw [finiteClockEncodeLaw, PMF.map_apply, ENNReal.tsum_eq_zero]
+  rw [finiteClockEncodeLaw, PMF.map_apply, tsum_eq_zero_iff]
   intro choice
   by_cases hmass : law choice = 0
   · simp [hmass]

@@ -76,7 +76,7 @@ theorem zMatrixPositiveVectorContraction_norm_lt_one
       intro j
       exact Real.norm_of_nonneg (hnonnegative i j)
     apply NNReal.coe_lt_coe.mp
-    simpa only [NNReal.coe_sum, coe_nnnorm, NNReal.coe_one, hnorm] using hsum
+    simpa only [NNReal.coe_sum, coe_nnNorm, NNReal.coe_one, hnorm] using hsum
   have hsup : Finset.sup (Finset.univ : Finset ι) (fun i : ι =>
       ∑ j : ι, ‖zMatrixPositiveVectorContraction matrix vector i j‖₊) < (1 : ℝ≥0) :=
     (Finset.sup_lt_iff (by norm_num)).mpr (fun i _ => hrows i)

@@ -32,18 +32,18 @@ theorem walkLabel_eq_reverse_prod {start finish : V}
     walkLabel label walk = (walk.edges.map label).reverse.prod := by
   induction walk with
   | nil => simp
-  | concat walk edge legal ih =>
+  | concat edge walk ih =>
       simp [walkLabel, ih]
 
 /-- Identity labels on directed simple cycles suffice to check identity on
 all closed walks. -/
 theorem hasTrivialCycleLabels_of_simpleCycles
     (hsimple : ∀ (base : V) (cycle : G.Walk base base),
-      AdditiveTransport.IsSimpleCycle cycle → walkLabel label cycle = 1) :
+      EdgeGraph.Walk.IsSimpleCycle cycle → walkLabel label cycle = 1) :
     HasTrivialCycleLabels G label := by
   intro base cycle
   induction hlength : cycle.length using Nat.strong_induction_on generalizing base with
-  | h length ih =>
+  | ind length ih =>
       by_cases hzero : cycle.length = 0
       · have hedges : cycle.edges = [] := by
           apply List.eq_nil_of_length_eq_zero
@@ -51,9 +51,9 @@ theorem hasTrivialCycleLabels_of_simpleCycles
         rw [walkLabel_eq_reverse_prod, hedges]
         simp
       · have hpositive : 0 < cycle.length := Nat.pos_of_ne_zero hzero
-        by_cases hsimpleCycle : AdditiveTransport.IsSimpleCycle cycle
+        by_cases hsimpleCycle : EdgeGraph.Walk.IsSimpleCycle cycle
         · exact hsimple base cycle hsimpleCycle
-        · simp only [AdditiveTransport.IsSimpleCycle, hpositive,
+        · simp only [EdgeGraph.Walk.IsSimpleCycle, hpositive,
             true_and] at hsimpleCycle
           push Not at hsimpleCycle
           obtain ⟨vertex, before, inner, after, hedges, hinner, hremainder⟩ :=

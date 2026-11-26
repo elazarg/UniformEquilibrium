@@ -417,57 +417,42 @@ private theorem playerThreeResponse_conditioned (N : ℕ) (hN : 1 ≤ N)
         (4 / 7) * quittingTerminalPayoff reward
           (quittingStoppingLawProfile reward (fun player ↦ PMF.pure
             (playerThreeResponseTimes N pivotChoice response true true player))) 3) := by
-  unfold QuittingPivotRepairLPInput.purePivotResponderPayoff
-  change quittingTerminalPayoff reward (quittingStoppingLawProfile reward
-    (Function.update (Function.update (opponents N hN) 0 (PMF.pure pivotChoice)) 3
-      (PMF.pure response))) 3 = _
-  rw [show Function.update
-      (Function.update (opponents N hN) 0 (PMF.pure pivotChoice)) 3
-        (PMF.pure response) = Function.update
-      (Function.update
-        (Function.update
-          (Function.update neverLaws 0 (PMF.pure pivotChoice)) 3 (PMF.pure response)) 1
-          (quitOrNever (N - 1) (4 / 7) (by norm_num) (by norm_num))) 2
-        (quitOrNever (N - 1) (1 / 7) (by norm_num) (by norm_num)) by
+  let base := Function.update (Function.update neverLaws 0 (PMF.pure pivotChoice)) 3
+    (PMF.pure response)
+  let time := N - 1
+  let first := quitOrNever time (4 / 7) (by norm_num) (by norm_num)
+  let second := quitOrNever time (1 / 7) (by norm_num) (by norm_num)
+  have hlaws :
+      Function.update (Function.update (opponents N hN) 0 (PMF.pure pivotChoice)) 3
+        (PMF.pure response) =
+      Function.update (Function.update base 1 first) 2 second := by
     funext player
-    fin_cases player <;> rfl,
-    quittingTerminalPayoff_stoppingLawProfile_update_eq_expect,
-    expect_quitOrNever]
-  congr 1
-  · rw [show Function.update
-        (Function.update
-          (Function.update
-            (Function.update neverLaws 0 (PMF.pure pivotChoice)) 3
-              (PMF.pure response)) 1
-            (quitOrNever (N - 1) (4 / 7) (by norm_num) (by norm_num))) 2
-          (PMF.pure none) = Function.update
-        (Function.update
-          (Function.update
-            (Function.update neverLaws 0 (PMF.pure pivotChoice)) 3
-              (PMF.pure response)) 2 (PMF.pure none)) 1
-        (quitOrNever (N - 1) (4 / 7) (by norm_num) (by norm_num)) by
-      exact Function.update_comm (by decide : (1 : Fin 4) ≠ 2) _ _ _]
-    rw [quittingTerminalPayoff_stoppingLawProfile_update_eq_expect,
-      expect_quitOrNever]
-    norm_num
-    congr 1 <;> congr 2 <;> funext player <;> fin_cases player <;> rfl
-  · rw [show Function.update
-        (Function.update
-          (Function.update
-            (Function.update neverLaws 0 (PMF.pure pivotChoice)) 3
-              (PMF.pure response)) 1
-            (quitOrNever (N - 1) (4 / 7) (by norm_num) (by norm_num))) 2
-          (PMF.pure (some (N - 1))) = Function.update
-        (Function.update
-          (Function.update
-            (Function.update neverLaws 0 (PMF.pure pivotChoice)) 3
-              (PMF.pure response)) 2 (PMF.pure (some (N - 1)))) 1
-        (quitOrNever (N - 1) (4 / 7) (by norm_num) (by norm_num)) by
-      exact Function.update_comm (by decide : (1 : Fin 4) ≠ 2) _ _ _]
-    rw [quittingTerminalPayoff_stoppingLawProfile_update_eq_expect,
-      expect_quitOrNever]
-    norm_num
-    congr 1 <;> congr 2 <;> funext player <;> fin_cases player <;> rfl
+    fin_cases player <;> rfl
+  have h00 : base = fun player => PMF.pure
+      (playerThreeResponseTimes N pivotChoice response false false player) := by
+    funext player
+    fin_cases player <;> rfl
+  have h10 : Function.update base 1 (PMF.pure (some time)) = fun player => PMF.pure
+      (playerThreeResponseTimes N pivotChoice response true false player) := by
+    funext player
+    fin_cases player <;> rfl
+  have h01 : Function.update base 2 (PMF.pure (some time)) = fun player => PMF.pure
+      (playerThreeResponseTimes N pivotChoice response false true player) := by
+    funext player
+    fin_cases player <;> rfl
+  have h11 : Function.update (Function.update base 1 (PMF.pure (some time))) 2
+      (PMF.pure (some time)) = fun player => PMF.pure
+        (playerThreeResponseTimes N pivotChoice response true true player) := by
+    funext player
+    fin_cases player <;> rfl
+  change fixtureLawPayoff 3 (Function.update
+    (Function.update (opponents N hN) 0 (PMF.pure pivotChoice)) 3 (PMF.pure response)) = _
+  rw [hlaws]
+  have hconditioned := payoff_conditioned_both base time 3 rfl rfl
+  conv at hconditioned =>
+    rhs
+    rw [h11, h10, h01, h00]
+  exact hconditioned
 
 private def playerThreeAtCoalition (pivotAt oneQuits twoQuits : Bool) : Finset (Fin 4) :=
   {3} ∪ (if pivotAt then {0} else ∅) ∪ (if oneQuits then {1} else ∅) ∪

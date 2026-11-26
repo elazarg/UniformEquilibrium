@@ -121,15 +121,87 @@ theorem source_failed_column :
 theorem working_hazard : rationalPositiveColumnWorkingHazard 21 (1 / 10) = 1 / 3360 := by
   norm_num [rationalPositiveColumnWorkingHazard]
 
+private theorem pow_add_mem_of_bounds
+    {x lowerLeft upperLeft lowerRight upperRight lower upper : ℝ}
+    {left right : ℕ}
+    (hx : 0 ≤ x) (hleft : x ^ left ∈ Set.Icc lowerLeft upperLeft)
+    (hright : x ^ right ∈ Set.Icc lowerRight upperRight) (hright0 : 0 ≤ lowerRight)
+    (hlower : lower ≤ lowerLeft * lowerRight) (hupper : upperLeft * upperRight ≤ upper) :
+    x ^ (left + right) ∈ Set.Icc lower upper := by
+  rw [Set.mem_Icc, pow_add]
+  exact ⟨hlower.trans (mul_le_mul hleft.1 hright.1 hright0 (pow_nonneg hx _)),
+    (mul_le_mul hleft.2 hright.2 (pow_nonneg hx _)
+      ((pow_nonneg hx _).trans hleft.2)).trans hupper⟩
+
+-- Rounded rational intervals keep each arithmetic check small.
+private theorem hit_power_bounds :
+    (95519422 / 100000000 : ℝ) ≤ (3359 / 3360 : ℝ) ^ 154 ∧
+      (3359 / 3360 : ℝ) ^ 155 ≤ 95491142 / 100000000 := by
+  let x : ℝ := 3359 / 3360
+  have hx : 0 ≤ x := by norm_num [x]
+  have h1 : x ^ 1 ∈ Set.Icc x x := by rw [pow_one]; exact ⟨le_rfl, le_rfl⟩
+  have h2 : x ^ 2 ∈ Set.Icc (99940485 / 100000000) (99940486 / 100000000) := by
+    rw [show (2 : ℕ) = 1 + 1 by decide]
+    exact pow_add_mem_of_bounds (left := 1) (right := 1)
+      hx h1 h1 hx (by norm_num [x]) (by norm_num [x])
+  have h4 : x ^ 4 ∈ Set.Icc (99881005 / 100000000) (99881008 / 100000000) := by
+    rw [show (4 : ℕ) = 2 + 2 by decide]
+    exact pow_add_mem_of_bounds (left := 2) (right := 2)
+      hx h2 h2 (by norm_num) (by norm_num) (by norm_num)
+  have h8 : x ^ 8 ∈ Set.Icc (99762151 / 100000000) (99762158 / 100000000) := by
+    rw [show (8 : ℕ) = 4 + 4 by decide]
+    exact pow_add_mem_of_bounds (left := 4) (right := 4)
+      hx h4 h4 (by norm_num) (by norm_num) (by norm_num)
+  have h16 : x ^ 16 ∈ Set.Icc (99524867 / 100000000) (99524882 / 100000000) := by
+    rw [show (16 : ℕ) = 8 + 8 by decide]
+    exact pow_add_mem_of_bounds (left := 8) (right := 8)
+      hx h8 h8 (by norm_num) (by norm_num) (by norm_num)
+  have h32 : x ^ 32 ∈ Set.Icc (99051991 / 100000000) (99052022 / 100000000) := by
+    rw [show (32 : ℕ) = 16 + 16 by decide]
+    exact pow_add_mem_of_bounds (left := 16) (right := 16)
+      hx h16 h16 (by norm_num) (by norm_num) (by norm_num)
+  have h64 : x ^ 64 ∈ Set.Icc (98112969 / 100000000) (98113031 / 100000000) := by
+    rw [show (64 : ℕ) = 32 + 32 by decide]
+    exact pow_add_mem_of_bounds (left := 32) (right := 32)
+      hx h32 h32 (by norm_num) (by norm_num) (by norm_num)
+  have h128 : x ^ 128 ∈ Set.Icc (96261546 / 100000000) (96261669 / 100000000) := by
+    rw [show (128 : ℕ) = 64 + 64 by decide]
+    exact pow_add_mem_of_bounds (left := 64) (right := 64)
+      hx h64 h64 (by norm_num) (by norm_num) (by norm_num)
+  have h144 : x ^ 144 ∈ Set.Icc (95804175 / 100000000) (95804313 / 100000000) := by
+    rw [show (144 : ℕ) = 128 + 16 by decide]
+    exact pow_add_mem_of_bounds (left := 128) (right := 16)
+      hx h128 h16 (by norm_num) (by norm_num) (by norm_num)
+  have h152 : x ^ 152 ∈ Set.Icc (95576305 / 100000000) (95576451 / 100000000) := by
+    rw [show (152 : ℕ) = 144 + 8 by decide]
+    exact pow_add_mem_of_bounds (left := 144) (right := 8)
+      hx h144 h8 (by norm_num) (by norm_num) (by norm_num)
+  have h154 : x ^ 154 ∈ Set.Icc (95519422 / 100000000) (95519570 / 100000000) := by
+    rw [show (154 : ℕ) = 152 + 2 by decide]
+    exact pow_add_mem_of_bounds (left := 152) (right := 2)
+      hx h152 h2 (by norm_num) (by norm_num) (by norm_num)
+  have h155 : x ^ 155 ∈ Set.Icc (95490993 / 100000000) (95491142 / 100000000) := by
+    rw [show (155 : ℕ) = 154 + 1 by decide]
+    exact pow_add_mem_of_bounds (left := 154) (right := 1)
+      hx h154 h1 hx (by norm_num [x]) (by norm_num [x])
+  exact ⟨h154.1, h155.2⟩
+
+private theorem payoff_affine_mono {left right : ℝ} (h : left ≤ right) :
+    -20 + (4199 / 200 : ℝ) * left ≤ -20 + (4199 / 200 : ℝ) * right :=
+  add_le_add (le_refl (-20 : ℝ))
+    (mul_le_mul_of_nonneg_left h (by norm_num : (0 : ℝ) ≤ 4199 / 200))
+
+private theorem payoff_before_of_power_lower_bound
+    (base lower : ℝ) (n k : ℕ) (hbase0 : 0 ≤ base) (hbase1 : base ≤ 1)
+    (hk : k ≤ n) (hlower : lower ≤ base ^ n)
+    (hbound : (1 / 20 : ℝ) < -20 + (4199 / 200) * lower) :
+    (1 / 20 : ℝ) < -20 + (4199 / 200 : ℝ) * base ^ k :=
+  hbound.trans_le (payoff_affine_mono (hlower.trans (pow_le_pow_of_le_one hbase0 hbase1 hk)))
+
 private theorem payoff_before_scalar (k : ℕ) (hk : k < 155) :
-    (1 / 20 : ℝ) < -20 + (4199 / 200 : ℝ) * (3359 / 3360 : ℝ) ^ k := by
-  have hmono := pow_le_pow_of_le_one
-    (by norm_num : (0 : ℝ) ≤ 3359 / 3360)
-    (by norm_num : (3359 / 3360 : ℝ) ≤ 1) (show k ≤ 154 by omega)
-  have hlast :
-      (1 / 20 : ℝ) < -20 + (4199 / 200 : ℝ) * (3359 / 3360 : ℝ) ^ 154 := by
-    norm_num
-  linarith
+    (1 / 20 : ℝ) < -20 + (4199 / 200 : ℝ) * (3359 / 3360 : ℝ) ^ k :=
+  payoff_before_of_power_lower_bound (3359 / 3360) (95519422 / 100000000) 154 k
+    (by norm_num) (by norm_num) (by omega) hit_power_bounds.1 (by norm_num)
 
 /-- The complete cap remains on the affine Continue branch before the PAYOFF hit. -/
 theorem actual_pair_through_hit (k : ℕ) (hk : k ≤ 155) :
@@ -206,10 +278,14 @@ theorem first_payoff_hit :
   · have hpair := congrArg (fun pair : QuittingTerminalSemanticPair (Fin 4) =>
       pair.1 1) (actual_pair_through_hit 155 le_rfl)
     have hlast :
-        -20 + (4199 / 200 : ℝ) * (3359 / 3360 : ℝ) ^ 155 ≤ 1 / 20 := by norm_num
+        -20 + (4199 / 200 : ℝ) * (3359 / 3360 : ℝ) ^ 155 ≤ 1 / 20 := by
+      have hbound : -20 + (4199 / 200 : ℝ) * (95491142 / 100000000) ≤ 1 / 20 := by
+        norm_num
+      exact (payoff_affine_mono (left := (3359 / 3360 : ℝ) ^ 155)
+        (right := 95491142 / 100000000) hit_power_bounds.2).trans hbound
     change quittingTerminalPayoff realReward (wordProfile (word 155)) 1 =
       -20 + (4199 / 200 : ℝ) * (3359 / 3360 : ℝ) ^ 155 at hpair
-    linarith
+    exact hpair.trans_le hlast
 
 private theorem hit_iff_actual (k : ℕ) :
     rationalSoloPayoffDebtThresholdHit reward 0 (1 / 3360) (1 / 10)

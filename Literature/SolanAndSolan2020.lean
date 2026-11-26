@@ -1,3 +1,4 @@
+import GameTheory.Math.Probability.Support
 import UniformEquilibrium.Quitting.Classification.LCP.MatrixClasses
 import UniformEquilibrium.Quitting.Classification.LCP.NormalCore
 import UniformEquilibrium.Quitting.Classification.LCP.StationaryExistence
@@ -6827,6 +6828,12 @@ private theorem KiloblockConstruction.stageActionDist_active_some_core
             rawSingleQuitAction, hwho]]
       exact Math.PMFProduct.pmfPi_pure _
 
+private theorem map_eq_pure_of_eq_on_support {A B : Type*} (law : PMF A)
+    (f : A → B) (value : B) (h : ∀ a ∈ law.support, f a = value) :
+    law.map f = PMF.pure value :=
+  (GameTheory.Math.Probability.map_congr_on_support law (g := fun _ => value) h).trans
+    (PMF.map_const _ _)
+
 private theorem KiloblockConstruction.historyModeStepDist_continue_eq
     {table : Table ι} {ε : ℝ}
     (construction : KiloblockConstruction table ε)
@@ -6885,22 +6892,12 @@ private theorem KiloblockConstruction.historyModeStepDist_continue_eq
               simp only [publicQuittingGame,
                 KiloblockConstruction.continueModeKernel]
               rw [PMF.map_comp]
-              rw [← PMF.bind_pure_comp]
-              calc
-                construction.profile.signalLaw.bind _ =
-                    construction.profile.signalLaw.bind
-                      (fun _ => PMF.pure (.active k choice remaining)) :=
-                  Math.ProbabilityMassFunction.bind_congr_on_support
-                    construction.profile.signalLaw _ _ (by
-                      intro signal hsignal
-                      change PMF.pure (construction.mode (t + 1)
-                        (Fin.snoc past
-                            (PublicQuittingState.draw,
-                              publicAllContinueAction table
-                                construction.profile.signalLaw),
-                          PublicQuittingState.active signal)) = _
-                      rw [hnext signal hsignal])
-                _ = _ := PMF.bind_const _ _
+              exact map_eq_pure_of_eq_on_support construction.profile.signalLaw
+                (fun signal => construction.mode (t + 1)
+                  (Fin.snoc past (PublicQuittingState.draw,
+                    publicAllContinueAction table construction.profile.signalLaw),
+                    PublicQuittingState.active signal))
+                (.active k choice remaining) hnext
           | final =>
               have hnext : ∀ signal,
                   signal ∈ construction.profile.signalLaw.support →
@@ -6931,22 +6928,12 @@ private theorem KiloblockConstruction.historyModeStepDist_continue_eq
               simp only [publicQuittingGame,
                 KiloblockConstruction.continueModeKernel]
               rw [PMF.map_comp]
-              rw [← PMF.bind_pure_comp]
-              calc
-                construction.profile.signalLaw.bind _ =
-                    construction.profile.signalLaw.bind
-                      (fun _ => PMF.pure .finalActive) :=
-                  Math.ProbabilityMassFunction.bind_congr_on_support
-                    construction.profile.signalLaw _ _ (by
-                      intro signal hsignal
-                      change PMF.pure (construction.mode (t + 1)
-                        (Fin.snoc past
-                            (PublicQuittingState.draw,
-                              publicAllContinueAction table
-                                construction.profile.signalLaw),
-                          PublicQuittingState.active signal)) = _
-                      rw [hnext signal hsignal])
-                _ = _ := PMF.bind_const _ _
+              exact map_eq_pure_of_eq_on_support construction.profile.signalLaw
+                (fun signal => construction.mode (t + 1)
+                  (Fin.snoc past (PublicQuittingState.draw,
+                    publicAllContinueAction table construction.profile.signalLaw),
+                    PublicQuittingState.active signal))
+                (.finalActive) hnext
           | choose k =>
               simp only [publicQuittingGame,
                 KiloblockConstruction.continueModeKernel]
@@ -7828,7 +7815,7 @@ private theorem KiloblockConstruction.continueKernel_active_reaches_after
             (construction.attempt block owner).continuation)
           k choice))) := by
   induction remaining using Nat.strong_induction_on with
-  | h remaining ih =>
+  | ind remaining ih =>
       by_cases hsmall : remaining ≤ 1
       · have hstep := construction.continueKernel_active_continue_step
           excluded k choice remaining hremaining
@@ -7871,11 +7858,12 @@ schedule chain. -/
 def KiloblockConstruction.continueBoundary
     {table : Table ι} {ε : ℝ}
     (construction : KiloblockConstruction table ε) :
-    Set (KiloblockFiniteMode construction)
-  | .drawFinal => True
-  | .finalActive => True
-  | .absorbed _ => True
-  | _ => False
+    Set (KiloblockFiniteMode construction) :=
+  Set.ofPred fun
+    | .drawFinal => True
+    | .finalActive => True
+    | .absorbed _ => True
+    | _ => False
 
 theorem KiloblockConstruction.continueBoundary_closed
     {table : Table ι} {ε : ℝ}
@@ -10373,9 +10361,14 @@ private theorem KiloblockConstruction.normalEndpointPotential_draw_final
             PublicQuittingState.active signal) =
           construction.point ⟨0, by omega⟩ who := by
         rw [KiloblockConstruction.normalEndpointPotential, hm]
-      rw [hstate] at hvalue
+      change construction.normalEndpointPotential who (t + 1)
+        (Fin.snoc history.1 (PublicQuittingState.draw, action),
+          PublicQuittingState.active signal) = construction.point ⟨0, by omega⟩ who
+      rw [← hstate]
       exact hvalue
-    _ = _ := Math.Probability.expect_const _ _
+    _ = _ := Math.Probability.expect_const
+      ((publicQuittingGame table construction.profile.signalLaw).stageActionDist
+        construction.profile.strategy history) (construction.point ⟨0, by omega⟩ who)
 
 private theorem KiloblockConstruction.normalEndpointPotential_finalActive
     {table : Table ι} {ε : ℝ}
@@ -15225,7 +15218,8 @@ private theorem KiloblockConstruction.normalDeviationPotential_draw
               simpa [KiloblockModeStep, hmode] using hstep
             simp [KiloblockConstruction.normalDeviationPotential, hnextMode]
         _ = construction.point ⟨0, by omega⟩ excluded :=
-          Math.Probability.expect_const _ _
+          Math.Probability.expect_const construction.profile.signalLaw
+            (construction.point ⟨0, by omega⟩ excluded)
         _ = construction.normalDeviationPotential excluded t
             (past, PublicQuittingState.draw) := by
           simp [KiloblockConstruction.normalDeviationPotential, hmode]
@@ -16370,7 +16364,7 @@ private theorem kiloblockModeStep_next_unique
         | exact hleft.2.trans hright.2.symm
   | absorbed origin =>
       cases nextState <;> simp [KiloblockModeStep] at hleft hright ⊢
-      all_goals exact hleft.trans hright.symm
+      exact hleft.trans hright.symm
 
 theorem KiloblockConstruction.finiteTruncatedContinuation_nonneg
     {table : Table ι} {ε : ℝ}
@@ -21304,9 +21298,10 @@ theorem modeDist_eq_iter
   | succ t ih =>
       rw [blueprint.modeDist_succ t, ih, Math.PMFIter.iter_succ']
 
-def absorbedCore : Set (MMatrixPayoffMode table)
-  | .absorbed => True
-  | _ => False
+def absorbedCore : Set (MMatrixPayoffMode table) :=
+  Set.ofPred fun
+    | .absorbed => True
+    | _ => False
 
 theorem absorbedCore_closed
     (blueprint : MMatrixPayoffBlueprint table hM value accuracy) :
@@ -21629,9 +21624,9 @@ every mode from which absorption is no longer support-reachable. -/
 def continueCore
     (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
     (who : ι) : Set (MMatrixPayoffMode table) :=
-  fun mode => mode = .absorbed ∨
+  {mode | mode = .absorbed ∨
     ¬Math.Probability.PMFReachable
-      (blueprint.continueModeKernel who) mode .absorbed
+      (blueprint.continueModeKernel who) mode .absorbed}
 
 theorem continueCore_closed
     (blueprint : MMatrixPayoffBlueprint table hM value accuracy)

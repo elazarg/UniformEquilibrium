@@ -636,7 +636,7 @@ theorem exists_positiveBellmanGap_of_prescribedValue_lt :
   generalize rank_eq_depth : model.rank node = depth
   induction depth using Nat.strong_induction_on
       generalizing node reachable strict with
-  | h depth ih =>
+  | ind depth ih =>
       by_cases terminal : model.terminal node
       · rw [
           model.prescribedPotential_eq_obstacle_of_terminal

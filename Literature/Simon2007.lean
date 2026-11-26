@@ -653,7 +653,7 @@ theorem historyStepPMF_apply_snoc (profile : Profile G)
       · simp
   · intro otherAction haction
     apply mul_eq_zero_of_right
-    rw [ENNReal.tsum_eq_zero]
+    rw [tsum_eq_zero_iff]
     intro otherTarget
     split_ifs with hzero heq
     · simp
@@ -3535,12 +3535,12 @@ private theorem DiscreteDecisionProcess.map_rawShift_restrict_rawStageCylinder
       (P.measurableSet_rawStageCylinder k tail)]
     rw [Measure.restrict_apply
       ((P.measurable_rawShift i) (P.measurableSet_rawStageCylinder k tail))]
-    rw [Measure.smul_apply, smul_eq_mul]
+    rw [smul_apply, smul_eq_mul]
     exact P.rawLawWithInitial_inter_shiftCylinder initial initialStages tail
   · rw [Measure.map_apply (P.measurable_rawShift i) MeasurableSet.univ]
     simp only [preimage_univ]
     rw [Measure.restrict_apply MeasurableSet.univ]
-    rw [Measure.smul_apply, measure_univ, smul_eq_mul, mul_one]
+    rw [smul_apply, measure_univ, smul_eq_mul, mul_one]
     simp
 
 /-- The restart factorization holds for every measurable tail event, not only cylinders. -/
@@ -3559,7 +3559,7 @@ private theorem DiscreteDecisionProcess.rawLawWithInitial_inter_shift
     (P.map_rawShift_restrict_rawStageCylinder initial initialStages)
   rw [Measure.map_apply (P.measurable_rawShift i) hE] at hmeasure
   rw [Measure.restrict_apply ((P.measurable_rawShift i) hE)] at hmeasure
-  rw [Measure.smul_apply, smul_eq_mul] at hmeasure
+  rw [smul_apply, smul_eq_mul] at hmeasure
   exact hmeasure
 
 /-- At a deterministic time, the future law depends only on the current sampled stage. -/
@@ -3673,10 +3673,9 @@ private theorem DiscreteDecisionProcess.rawLawAfterAction_stagesWithFinal
           P.choose (h.x i.succ) (h.actionsWithFinal P last i.succ))
         (fun i : Fin k =>
           P.move (h.x i.succ.castSucc) (h.y i.succ) (h.x i.succ.succ)) using 1
-    all_goals
-      simp only [DDPFinitePath.actionsWithFinal_castSucc,
-        DDPFinitePath.actionsWithFinal_last, Fin.succ_castSucc,
-        Fin.succ_last, Nat.succ_eq_add_one]
+    simp only [DDPFinitePath.actionsWithFinal_castSucc,
+      DDPFinitePath.actionsWithFinal_last, Fin.succ_castSucc,
+      Fin.succ_last, Nat.succ_eq_add_one]
   rw [DDPFinitePath.afterActionProbability]
   calc
     _ = P.move (h.x 0) (h.y 0) (h.x 1) *
@@ -3842,7 +3841,7 @@ private theorem DiscreteDecisionProcess.rawLawFrom_ddpCylinder
         hfirstLast.symm.trans hsecondLast
     exact hne this
   rw [measure_iUnion hdisjoint hmeasurable]
-  rw [ENNReal.tsum_sigma']
+  rw [tsum_sigma']
   rw [tsum_eq_single (h.x (Fin.last k))]
   · have heq (last : P.Y (h.x (Fin.last k))) :
         {stage : ℕ → DDPStage P |
@@ -3930,7 +3929,7 @@ private theorem DiscreteDecisionProcess.rawLawAfterAction_ddpCylinder
         hfirstLast.symm.trans hsecondLast
     exact hne this
   rw [measure_iUnion hdisjoint hmeasurable]
-  rw [ENNReal.tsum_sigma']
+  rw [tsum_sigma']
   rw [tsum_eq_single (h.x (Fin.last (k + 1)))]
   · have heq (last : P.Y (h.x (Fin.last (k + 1)))) :
         {stage : ℕ → DDPStage P |
@@ -4262,8 +4261,7 @@ theorem ddpSemantics_exists (P : DiscreteDecisionProcess) : Nonempty (DDPSemanti
       afterAction x y {p | p.x 1 = z} = afterAction x y (support ∩ successor) := by
         apply measure_congr
         filter_upwards [hsupportAE] with p hp
-        change (p.x 1 = z) = (p ∈ support ∧ p.x 1 = z)
-        apply propext
+        change (p.x 1 = z) ↔ (p ∈ support ∧ p.x 1 = z)
         exact (and_iff_right hp).symm
       _ = afterAction x y (DDPCylinder P step) := by rw [hcylinderSet]
       _ = P.move x y z := hcylinder
@@ -4977,7 +4975,7 @@ private theorem DiscreteDecisionProcess.ofReal_rawPartialVariation_le
       ∑' i, ENNReal.ofReal |DDPStage.increment P (stage i)| := by
   rw [DiscreteDecisionProcess.rawPartialVariation]
   rw [ENNReal.ofReal_sum_of_nonneg fun _ _ => abs_nonneg _]
-  exact ENNReal.sum_le_tsum (Finset.range (n + 1))
+  exact sum_le_tsum (Finset.range (n + 1))
 
 /-- A stage sampled from the DDP law uses a positive-probability local action almost surely. -/
 private theorem DiscreteDecisionProcess.ae_choose_pos_rawLawFrom
@@ -6102,7 +6100,7 @@ private theorem DDPSemantics.fromState_eq_initialActionMixture
       exact measure_univ
     dsimp only [mixture]
     rw [Measure.sum_apply _ MeasurableSet.univ]
-    simp_rw [Measure.smul_apply, hafterUniv, smul_eq_mul, mul_one]
+    simp_rw [smul_apply, hafterUniv, smul_eq_mul, mul_one]
     exact PMF.tsum_coe (P.choose x)
   apply ext_of_generate_finite
     {U | ∃ k, ∃ h : DDPFinitePath P k, U = DDPCylinder P h}
@@ -6115,19 +6113,19 @@ private theorem DDPSemantics.fromState_eq_initialActionMixture
         rw [Measure.sum_apply _ (measurableSet_ddpCylinder P h)]
         by_cases hstart : h.x 0 = x
         · rw [S.fromStateCylinder x 0 h hstart]
-          simp_rw [Measure.smul_apply, smul_eq_mul,
+          simp_rw [smul_apply, smul_eq_mul,
             S.afterAction_zeroCylinder_eq_one P x _ h hstart, mul_one]
           simp only [DDPFinitePath.probability]
           rw [PMF.tsum_coe]
           simp
         · rw [S.fromState_cylinder_eq_zero_of_wrong P x h hstart]
-          simp_rw [Measure.smul_apply, smul_eq_mul,
+          simp_rw [smul_apply, smul_eq_mul,
             S.afterAction_zeroCylinder_eq_zero P x _ h hstart, mul_zero]
           exact tsum_zero.symm
     | succ k =>
         dsimp only [mixture]
         rw [Measure.sum_apply _ (measurableSet_ddpCylinder P h)]
-        simp_rw [Measure.smul_apply, smul_eq_mul]
+        simp_rw [smul_apply, smul_eq_mul]
         by_cases hstart : h.x 0 = x
         · cases hstart
           rw [S.fromStateCylinder (h.x 0) (k + 1) h rfl]
@@ -6158,7 +6156,7 @@ private theorem DDPSemantics.fromState_returnsTo_eq_tsum
       ∑' y : P.Y x, P.choose x y * ReturnProbability P S A x y := by
   rw [S.fromState_eq_initialActionMixture P x]
   rw [Measure.sum_apply _ (measurableSet_returnsTo P A)]
-  simp only [Measure.smul_apply, smul_eq_mul, ReturnProbability]
+  simp only [smul_apply, smul_eq_mul, ReturnProbability]
 
 /-- The paper's `m_x`: probability of no positive-time return to `A` from `x`. -/
 private def NoReturnProbability (P : DiscreteDecisionProcess) (S : DDPSemantics P)
@@ -6189,7 +6187,7 @@ private theorem noReturnProbability_eq_tsum
   have hmix := congrArg (fun mu : Measure (DDPPath P) => mu (ReturnsTo P A)ᶜ)
     (S.fromState_eq_initialActionMixture P x)
   rw [Measure.sum_apply _ (measurableSet_returnsTo P A).compl] at hmix
-  simp only [Measure.smul_apply, smul_eq_mul] at hmix
+  simp only [smul_apply, smul_eq_mul] at hmix
   have hafter_ne_top (y : P.Y x) (E : Set (DDPPath P)) :
       S.afterAction x y E ≠ ⊤ := by
     let : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
@@ -6375,7 +6373,7 @@ private theorem DiscreteDecisionProcess.lintegral_rawIncrement_eq_tsum_stateVari
   rw [← lintegral_map (f := fun current : DDPStage P =>
     ENNReal.ofReal |DDPStage.increment P current|) Measurable.of_discrete heval]
   rw [lintegral_countable']
-  rw [ENNReal.tsum_sigma']
+  rw [tsum_sigma']
   apply tsum_congr
   intro x
   rw [DiscreteDecisionProcess.rawStateVariation, ← ENNReal.tsum_mul_left]
@@ -6396,7 +6394,7 @@ private theorem ExpectedDDPVariation.eq_tsum_rawStateVariation
   rw [lintegral_map (DDPTotalVariation.measurable P) (DDPPath.measurable_ofRaw P)]
   simp only [P.totalVariation_ofRaw]
   rw [lintegral_tsum]
-  · rw [ENNReal.tsum_prod]
+  · rw [tsum_prod]
     apply tsum_congr
     intro i
     exact P.lintegral_rawIncrement_eq_tsum_stateVariation S P.initial i
@@ -7083,7 +7081,7 @@ theorem proposition2 (P : DiscreteDecisionProcess) (S : DDPSemantics P)
           index : ℕ × P.X // index ∈ ⋃ cell, cellIndices cell}, variation index.1 :=
       hrestrict
     _ ≤ ∑ cell : Fin n, ∑' index : cellIndices cell, variation index.1 :=
-      ENNReal.tsum_iUnion_le variation cellIndices
+      tsum_iUnion_le variation cellIndices
     _ ≤ ∑ _cell : Fin n, ENNReal.ofReal (2 * P.valueDifferenceBound) := by
       exact Finset.sum_le_sum fun cell _ => hcell cell
     _ = ENNReal.ofReal (2 * n * P.valueDifferenceBound) := by
@@ -7389,7 +7387,7 @@ private theorem DiscreteDecisionProcess.sum_choose_le_one_of_fst_eq
       rw [Finset.sum_image]
       exact hinjective.injOn
     _ ≤ ∑' action, P.choose state action :=
-      ENNReal.sum_le_tsum _
+      sum_le_tsum _
     _ = 1 := PMF.tsum_coe _
 
 
@@ -7674,6 +7672,25 @@ private theorem composite_injective
   obtain ⟨c, _, hc⟩ := R.composite_complete x _ (R.composite_valid x b)
   exact (hc a hab).trans (hc b rfl).symm
 
+private theorem pmf_map_apply_eq_fiber_tsum {α β : Type*}
+    (law : PMF α) (f : α → β) (b : β) :
+    law.map f b = ∑' a : {a : α // f a = b}, law a.val := by
+  classical
+  change _ = ∑' a : {a | f a = b}, law a.val
+  rw [PMF.map_apply, tsum_subtype]
+  apply tsum_congr
+  intro a
+  simp only [Set.indicator_apply, Set.mem_ofPred_eq, eq_comm]
+
+private theorem pmf_map_apply_le_tsum_of_fiber_embedding
+    {α β γ : Type*} (law : PMF α) (f : α → β) (b : β)
+    (embed : {a : α // f a = b} → γ) (hinj : Function.Injective embed)
+    (weight : γ → ℝ≥0∞) (hmass : ∀ a : {a : α // f a = b}, law a.val = weight (embed a)) :
+    law.map f b ≤ ∑' c, weight c := calc
+  _ = ∑' a : {a : α // f a = b}, law a.val := pmf_map_apply_eq_fiber_tsum law f b
+  _ = ∑' a : {a : α // f a = b}, weight (embed a) := tsum_congr hmass
+  _ ≤ ∑' c, weight c := tsum_comp_le_tsum_of_injective hinj weight
+
 theorem ChainReductionData.rootFirstAction_map_le
     {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
     {S T : Set P.X} (R : ChainReductionData P PS S T)
@@ -7682,42 +7699,36 @@ theorem ChainReductionData.rootFirstAction_map_le
       P.choose (R.kept x) first := by
   classical
   let fiber := {y : R.reduced.Y x // R.rootFirstAction x hx y = first}
-  let code := {tail : List ((state : P.X) × P.Y state) //
-    IsCompositeActionList P PS (R.witness.chainSet (R.kept x)) T (R.kept x)
-      (⟨R.kept x, first⟩ :: tail)}
+  let action : (state : P.X) × P.Y state := ⟨R.kept x, first⟩
+  let code := {tail : List ((state : P.X) × P.Y state) |
+    IsCompositeActionList P PS (R.witness.chainSet (R.kept x)) T (R.kept x) (action :: tail)}
   have hcons (y : fiber) :
-      R.composite x y.val = ⟨R.kept x, first⟩ :: (R.composite x y.val).tail := by
-    simpa only [y.property] using R.composite_eq_rootFirstAction_cons x hx y.val
+      R.composite x y.val = action :: (R.composite x y.val).tail := by
+    simpa only [action, y.property] using R.composite_eq_rootFirstAction_cons x hx y.val
   let embed : fiber → code := fun y => ⟨(R.composite x y.val).tail, by
+    change IsCompositeActionList P PS (R.witness.chainSet (R.kept x)) T (R.kept x)
+      (action :: (R.composite x y.val).tail)
     rw [← hcons y]
     simpa only [IsChainReductionAction, dite_eq_left hx] using R.composite_valid x y.val⟩
   have hinj : Function.Injective embed := by
     intro a b hab
-    apply Subtype.ext
-    apply composite_injective R x
-    rw [hcons a, hcons b]
-    exact congrArg (List.cons ⟨R.kept x, first⟩) (congrArg Subtype.val hab)
-  have hmass (y : fiber) : R.reduced.choose x y.val =
-      ((⟨R.kept x, first⟩ :: (embed y).val).map
-        fun action => P.choose action.1 action.2).prod := by
-    rw [R.composite_probability, hcons y]
-  calc
-    (R.reduced.choose x).map (R.rootFirstAction x hx) first =
-        ∑' y : fiber, R.reduced.choose x y.val := by
-      change _ = ∑' y : {y | R.rootFirstAction x hx y = first}, _
-      rw [PMF.map_apply, tsum_subtype]
-      congr 1
-      funext y
-      simp only [Set.indicator_apply, Set.mem_ofPred_eq, eq_comm]
-    _ = ∑' y : fiber, ((⟨R.kept x, first⟩ :: (embed y).val).map
-        fun action => P.choose action.1 action.2).prod := tsum_congr hmass
-    _ ≤ ∑' tail : code, ((⟨R.kept x, first⟩ :: tail.val).map
-        fun action => P.choose action.1 action.2).prod :=
-      ENNReal.tsum_comp_le_tsum_of_injective hinj fun tail : code =>
-        ((⟨R.kept x, first⟩ :: tail.val).map
-          fun action => P.choose action.1 action.2).prod
-    _ ≤ P.choose (R.kept x) first :=
-      compositeActionList_tsum_choiceProduct_le_first P PS _ T _ _
+    have htail : (R.composite x a.val).tail = (R.composite x b.val).tail :=
+      congrArg (fun c : code => c.val) hab
+    exact Subtype.ext (composite_injective R x
+      ((hcons a).trans ((congrArg (List.cons action) htail).trans (hcons b).symm)))
+  let weight (tail : code) : ℝ≥0∞ :=
+    ((action :: tail.val).map fun step => P.choose step.1 step.2).prod
+  have hmass (y : fiber) : R.reduced.choose x y.val = weight (embed y) := by
+    change R.reduced.choose x y.val =
+      ((action :: (R.composite x y.val).tail).map fun step => P.choose step.1 step.2).prod
+    exact (R.composite_probability x y.val).trans
+      (congrArg (fun steps : List ((state : P.X) × P.Y state) =>
+        (steps.map fun step => P.choose step.1 step.2).prod) (hcons y))
+  have hsum : (∑' tail : code, weight tail) ≤ P.choose (R.kept x) first :=
+    compositeActionList_tsum_choiceProduct_le_first P PS
+      (R.witness.chainSet (R.kept x)) T (R.kept x) action
+  exact (pmf_map_apply_le_tsum_of_fiber_embedding (R.reduced.choose x)
+    (R.rootFirstAction x hx) first embed hinj weight hmass).trans hsum
 
 /-- Normalization forces the first original action marginal to be exactly the original PMF. -/
 theorem ChainReductionData.rootFirstAction_map
@@ -7768,7 +7779,7 @@ theorem DDPSemantics.fromState_initialAction_inter
       rw [ite_eq_left rfl]
       apply measure_congr
       filter_upwards [hae] with p hp
-      exact propext (and_iff_right hp)
+      exact and_iff_right hp
     · rw [ite_eq_right heq]
       apply measure_mono_null (show B ∩ E ⊆ {p | p.x 0 = x ∧ HEq (p.y 0) other}ᶜ from ?_)
         (ae_iff.mp hae)
@@ -7776,7 +7787,7 @@ theorem DDPSemantics.fromState_initialAction_inter
       exact heq (eq_of_heq (hother.2.symm.trans hp.1.2))
   change PS.fromState x (B ∩ E) = _
   rw [PS.fromState_eq_initialActionMixture P x, Measure.sum_apply _ (hB.inter hE)]
-  simp only [Measure.smul_apply, smul_eq_mul, hterm, mul_ite, mul_zero]
+  simp only [smul_apply, smul_eq_mul, hterm, mul_ite, mul_zero]
   exact tsum_ite_eq y _
 
 /-- A singleton block specifies its initial action and the first subsequent retained state. -/
@@ -7882,7 +7893,7 @@ private theorem DiscreteDecisionProcess.rawLawAfterAction_cylinder_shift
   · simp_rw [hcell]
     rw [ENNReal.tsum_mul_left, PS.fromState_eq_initialActionMixture P _,
       Measure.sum_apply _ hE]
-    simp only [Measure.smul_apply, smul_eq_mul]
+    simp only [smul_apply, smul_eq_mul]
   · intro first second hne
     exact (hpairwise hne).mono inter_subset_right inter_subset_right
   · intro last
@@ -8245,7 +8256,7 @@ theorem ChainReductionData.compositeBlockEvent_union_measure
   rw [measure_iUnion (R.pairwise_disjoint_compositeBlockEvent x)
     (fun pair => measurableSet_compositeBlockEvent P T _ _ _)]
   simp_rw [R.compositeBlockEvent_probability x]
-  rw [ENNReal.tsum_prod']
+  rw [tsum_prod']
   simp only [ENNReal.tsum_mul_left, PMF.tsum_coe, mul_one]
 
 /-- Almost every original path has exactly one completed reduced action and retained exit. -/
@@ -8615,7 +8626,7 @@ theorem DDPSemantics.fromState_cylinder_shift
   rw [Measure.sum_apply _
     (((DDPPath.measurable_shift P (k + 1)) hE).inter (measurableSet_ddpCylinder P h))]
   rw [Measure.sum_apply _ (measurableSet_ddpCylinder P h)]
-  simp only [Measure.smul_apply, smul_eq_mul, PS.afterAction_cylinder_shift_mass P _ _ _ hE]
+  simp only [smul_apply, smul_eq_mul, PS.afterAction_cylinder_shift_mass P _ _ _ hE]
   simp_rw [← mul_assoc]
   exact ENNReal.tsum_mul_right
 
@@ -8918,7 +8929,6 @@ theorem ChainReductionData.retainedTraceFrom_cylinder
         apply measure_congr
         filter_upwards [R.ae_completedBlockIndex (h.x 0)] with p hp
         obtain ⟨⟨⟨a, z⟩, n⟩, hdecode, _⟩ := hp
-        apply propext
         constructor
         · intro hprefix
           change (R.retainedTraceFrom (h.x 0) p).prefix R.reduced (k + 1) = h at hprefix
@@ -13242,14 +13252,27 @@ private theorem continuous_quittingOneStagePayoff (G : QuittingGame) (n : G.Play
     Continuous fun rp : Payoff G.Player × QuitRow G =>
       QuittingOneStagePayoff G rp.1 rp.2 n := by
   classical
+  let coord (player : G.Player) (rp : Payoff G.Player × QuitRow G) : ℝ :=
+    (rp.2 player : ℝ)
+  have hcoord (player : G.Player) : Continuous (coord player) :=
+    continuous_subtype_val.comp ((continuous_apply player).comp continuous_snd)
+  have hcontinue (players : Finset G.Player) :
+      Continuous fun rp : Payoff G.Player × QuitRow G =>
+        ∏ player ∈ players, (1 - coord player rp) :=
+    continuous_finsetProd (f := fun player rp => 1 - coord player rp) players
+      (fun player _ => continuous_const.sub (hcoord player))
   unfold QuittingOneStagePayoff QuitProbability CoalitionProbability
-  apply Continuous.add
-  · fun_prop
-  · apply continuous_finsetSum Finset.univ.powerset
-    intro A _hA
+  refine Continuous.add ?_ (continuous_finsetSum Finset.univ.powerset ?_)
+  · exact (continuous_const.sub (continuous_const.sub (hcontinue Finset.univ))).mul
+      ((continuous_apply n).comp continuous_fst)
+  · intro A _hA
     by_cases hA : A.Nonempty
     · simp only [dite_eq_left hA]
-      fun_prop
+      have hquit : Continuous fun rp : Payoff G.Player × QuitRow G =>
+          ∏ player ∈ A, coord player rp :=
+        continuous_finsetProd (f := coord) A (fun player _ => hcoord player)
+      exact (hquit.mul (hcontinue (Finset.univ.filter fun player => player ∉ A))).mul
+        continuous_const
     · simp only [dite_eq_right hA]
       exact continuous_const
 
@@ -14523,7 +14546,7 @@ theorem exactVariation_append {G : QuittingGame} {η : ℝ}
         ‖QuittingOneStagePayoff G (w.point i.castSucc) (w.row i) -
           w.point i.castSucc‖
   rw [Fin.sum_univ_add]
-  congr 1
+  refine congrArg₂ (fun a b : ℝ => a + b) ?_ ?_
   · apply Finset.sum_congr rfl
     intro i _hi
     have hpoint :
@@ -18187,12 +18210,12 @@ private theorem quittingDDP_expectedVariation_le
     (quittingDecisionProcess G p n T M hM).rawLawFrom (0, ∅)
       (QuittingDDPOwnQuitEvent G p n T M hM i)
   rw [ExpectedDDPVariation.eq_tsum_rawStateVariation P S]
-  rw [ENNReal.tsum_prod]
+  rw [tsum_prod]
   calc
     (∑' i : ℕ, ∑' state : QuittingDDPState G,
         P.rawStateVariation (0, ∅) i state) ≤
         ∑' i : ℕ, if i < T then c * mass i else 0 := by
-      exact ENNReal.tsum_le_tsum fun i =>
+      exact tsum_le_tsum fun i =>
         quittingDDP_tsum_stateVariation_le G p n T i M hM S
     _ = ∑ i ∈ Finset.range T, c * mass i := by
       rw [tsum_eq_sum (s := Finset.range T) (fun i hi => by
@@ -23009,10 +23032,13 @@ theorem exists_compact_connected_repeatedEquilibria_along_continuous_path_with_p
         point.2 ∈ RepeatedEquilibriumCorrespondence G k (path point.1)) ∧
       (∃ p, (0, p) ∈ component) ∧
       (∃ p, (1, p) ∈ component) := by
-  let family : C(unitInterval × RepeatedTimerSimplex G k, RepeatedTimerSimplex G k) :=
-    ⟨fun point => (RepeatedTimerGame G k (path point.1)).nashMapOnMixedSimplex point.2,
-      (continuous_repeatedTimerGame_nashMap G k).comp
-        ((path.continuous.comp continuous_fst).prodMk continuous_snd)⟩
+  let params : C(unitInterval × RepeatedTimerSimplex G k,
+      Payoff G.Player × RepeatedTimerSimplex G k) :=
+    ⟨fun point => (path point.1, point.2),
+      (path.continuous.comp continuous_fst).prodMk continuous_snd⟩
+  let nashMap : C(Payoff G.Player × RepeatedTimerSimplex G k, RepeatedTimerSimplex G k) :=
+    ⟨_, continuous_repeatedTimerGame_nashMap G k⟩
+  let family := nashMap.comp params
   obtain ⟨component, hcompact, hconnected, hfixed, hzero, hone⟩ :=
     GameTheory.exists_compact_connected_mixedSimplex_fixedPoint_continuation family
   have hequilibrium (point : unitInterval × RepeatedTimerSimplex G k)
@@ -23604,12 +23630,12 @@ theorem restrictedEscapeCorrespondence_preserves_rational
     have hrA : r n ≥ MinMaxQuit G n - 3 * a := by
       dsimp [a]
       convert hr n using 1
-      all_goals ring
+      ring
     have hpreserve := (lemma6_quantitative G hM hnormal ha0 ha1 hstep n).1
       hrA
     dsimp [a] at hpreserve
     convert hpreserve using 1
-    all_goals ring
+    ring
   · let zeroRow : QuitRow G := fun _ => (0 : Set.Icc (0 : ℝ) 1)
     have hpFromZero : p = zeroRow.replace G j (p j) := by
       funext k
@@ -26063,12 +26089,16 @@ theorem isOpen_caseThreeCrossingOpen (G : QuittingGame) (k : ℕ)
       simp only [Set.mem_ofPred, Set.mem_iUnion]
     rw [hequal]
     exact isOpen_iUnion fun who : G.Player => isOpen_lt (hpayoff who) continuous_const
-  have hfirst : IsOpen (caseThreeSmallAbsorptionOpen G k threshold) :=
-    (isOpen_lt continuous_const hparameter).inter
+  have hfirst : IsOpen (caseThreeSmallAbsorptionOpen G k threshold) := by
+    change IsOpen ({p : unitInterval × RepeatedQuitProfile G k | (1 / 4 : ℝ) < p.1} ∩
+      {p | RepeatedQuitProbability G k p.2 < threshold})
+    exact (isOpen_lt continuous_const hparameter).inter
       (isOpen_lt habsorption continuous_const)
   have hsecond : IsOpen
-      (caseThreeLowPayoffOpen G k next critical intermediate B accuracy) :=
-    (isOpen_lt hparameter continuous_const).inter hlow
+      (caseThreeLowPayoffOpen G k next critical intermediate B accuracy) := by
+    change IsOpen ({p : unitInterval × RepeatedQuitProfile G k | (p.1 : ℝ) < 1 / 2} ∩
+      {p | ∃ who, RepeatedPayoff G k (path p.1) p.2 who < SoloPayoff G who + accuracy})
+    exact (isOpen_lt hparameter continuous_const).inter hlow
   exact hfirst.union hsecond
 
 /-- The finite empty-or-Continue profile has exactly zero absorption. -/

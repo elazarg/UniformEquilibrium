@@ -12,11 +12,13 @@ package UniformEquilibrium where
   version := v!"0.1.0"
   keywords := #["game-theory", "stochastic-games", "uniform-equilibrium"]
   fixedToolchain := true
+  -- Keep existing legacy modules interoperable with module-system dependencies.
+  allowNonModules := true
 
 require GameTheory from "GameTheory"
 
 require maths from git
-  "https://github.com/elazarg/multitubes" @ "v4.34.0"
+  "https://github.com/elazarg/multitubes" @ "v4.36.0"
 
 @[default_target]
 lean_lib MathUE where

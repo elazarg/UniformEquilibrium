@@ -137,20 +137,20 @@ theorem equilibriumProfile_quit_two_payoff_zero :
   rw [quittingTwoDateTimingProfile, quittingFiniteDeadlineTimingProfile,
     quittingTerminalPayoff_update_compactStoppingLawProfile_pureTime_eq_expect,
     pureDeviationLaws_eq_map_lateCoordinateTime]
-  change Math.Probability.expect
+  change _root_.Math.Probability.expect
       (pmfPi (fun player => Math.ProbabilityMassFunction.pushforward
         (equilibriumProfile player) (lateCoordinateTime player)))
       (fun choices => quittingTerminalPayoff reward
         (quittingPureStoppingTimeProfile reward choices) 0) = 1
   rw [← pmfPi_push_coordwise]
-  change Math.Probability.expect
+  change _root_.Math.Probability.expect
       ((pmfPi equilibriumProfile).map fun choices player =>
         lateCoordinateTime player (choices player))
       (fun choices => quittingTerminalPayoff reward
         (quittingPureStoppingTimeProfile reward choices) 0) = 1
-  rw [Math.Probability.expect_map, expect_pmfPi_fin4]
+  rw [_root_.Math.Probability.expect_map, expect_pmfPi_fin4]
   simp only [equilibriumProfile, activeProfile,
-    Math.Probability.expect_pure, Fin.isValue]
+    _root_.Math.Probability.expect_pure, Fin.isValue]
   simp_rw [terminalPayoff_lateCoordinateTime]
   simp
 

@@ -32,7 +32,7 @@ specified free set. -/
 def quittingRootFreeMixedPoint (free : Finset ι) (root : ι → PMF Bool) :
     mixedPolytope (quittingBinaryForm free).sig := by
   let profile : Profile (quittingBinaryForm free).sig.mixed := fun who =>
-    ⟨root who, Set.toFinite _⟩
+    root who
   exact ⟨probs (quittingBinaryForm free).sig profile,
     probs_mem_mixedPolytope (quittingBinaryForm free).sig profile⟩
 
@@ -49,19 +49,12 @@ theorem quittingPersistentBaseRoot_rootFreeMixedPoint_eq
     simpa using howner.symm
   · have hfree : who ∈ Finset.univ.erase owner := by simp [hwho]
     rw [quittingPersistentBaseRoot_apply_of_mem_free]
-    · change ((ofPolytope (quittingBinaryForm (Finset.univ.erase owner)).sig
-          _ ⟨who, hfree⟩).toPMF) = root who
+    · change ofPolytope (quittingBinaryForm (Finset.univ.erase owner)).sig
+          _ ⟨who, hfree⟩ = root who
       unfold quittingRootFreeMixedPoint
-      calc
-        _ = GameTheory.Math.Probability.FinDist.toPMF
-            (⟨root who, Set.toFinite _⟩ :
-              GameTheory.Math.Probability.FinDist Bool) :=
-          congrArg GameTheory.Math.Probability.FinDist.toPMF
-            (congrFun
-              (ofPolytope_probs (quittingBinaryForm
-                  (Finset.univ.erase owner)).sig
-                (fun player => ⟨root player, Set.toFinite _⟩)) ⟨who, hfree⟩)
-        _ = root who := rfl
+      exact congrFun
+        (ofPolytope_probs (quittingBinaryForm (Finset.univ.erase owner)).sig
+          (fun player => root player)) ⟨who, hfree⟩
     · exact Finset.disjoint_singleton_left.mpr (by simp)
 
 

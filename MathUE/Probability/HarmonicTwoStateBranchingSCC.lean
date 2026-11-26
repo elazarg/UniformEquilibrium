@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import GameTheory.Math.Probability.FiniteUniform
 import MathUE.Probability.HarmonicFunctionalTransientClassVariation
 import MathUE.Probability.DurationMarkovRenewal
 
@@ -48,8 +49,8 @@ def bSuccessor : Bool → State
 
 /-- The transient block is `a ↔ b`, with a self-loop at `b` and an exit from `a`. -/
 def kernel : State → PMF State
-  | .a => (PMF.uniformOfFintype Bool).map aSuccessor
-  | .b => (PMF.uniformOfFintype Bool).map bSuccessor
+  | .a => (GameTheory.Math.Probability.uniformLaw Bool).map aSuccessor
+  | .b => (GameTheory.Math.Probability.uniformLaw Bool).map bSuccessor
   | .recurrentZero => PMF.pure .recurrentOne
   | .recurrentOne => PMF.pure .recurrentZero
 
@@ -83,14 +84,14 @@ theorem value_harmonic (state : State) (time : ℕ) :
   cases state with
   | a =>
       rw [show kernel .a =
-        (PMF.uniformOfFintype Bool).map aSuccessor by rfl]
+        (GameTheory.Math.Probability.uniformLaw Bool).map aSuccessor by rfl]
       rw [expect_map,
         Math.ProbabilityMassFunction.expect_uniformOfFintype_bool]
       simp [aSuccessor, value, phase_succ]
       ring
   | b =>
       rw [show kernel .b =
-        (PMF.uniformOfFintype Bool).map bSuccessor by rfl]
+        (GameTheory.Math.Probability.uniformLaw Bool).map bSuccessor by rfl]
       rw [expect_map,
         Math.ProbabilityMassFunction.expect_uniformOfFintype_bool]
       simp [bSuccessor, value, phase_succ]
@@ -199,7 +200,7 @@ theorem conditionalVariation_eq (state : State) (time : ℕ) :
   cases state with
   | a =>
       rw [show kernel .a =
-        (PMF.uniformOfFintype Bool).map aSuccessor by rfl]
+        (GameTheory.Math.Probability.uniformLaw Bool).map aSuccessor by rfl]
       rw [expect_map,
         Math.ProbabilityMassFunction.expect_uniformOfFintype_bool]
       simp only [aSuccessor, value, phase_succ]
@@ -223,7 +224,7 @@ theorem conditionalVariation_eq (state : State) (time : ℕ) :
       norm_num
   | b =>
       rw [show kernel .b =
-        (PMF.uniformOfFintype Bool).map bSuccessor by rfl]
+        (GameTheory.Math.Probability.uniformLaw Bool).map bSuccessor by rfl]
       rw [expect_map,
         Math.ProbabilityMassFunction.expect_uniformOfFintype_bool]
       simp only [bSuccessor, value, phase_succ]
@@ -278,7 +279,7 @@ theorem expect_uncoupledBernoulliPotential_b_one :
         (bernoulliVariationPotential (value .a 1) +
           bernoulliVariationPotential (value .b 1)) / 2 := by
   rw [show kernel .b =
-    (PMF.uniformOfFintype Bool).map bSuccessor by rfl]
+    (GameTheory.Math.Probability.uniformLaw Bool).map bSuccessor by rfl]
   rw [expect_map,
     Math.ProbabilityMassFunction.expect_uniformOfFintype_bool]
   simp [bSuccessor, uncoupledBernoulliPotential]
@@ -325,13 +326,13 @@ theorem conditionalVariation_add_expect_coupledPotential
   cases state with
   | a =>
       rw [show kernel .a =
-        (PMF.uniformOfFintype Bool).map aSuccessor by rfl]
+        (GameTheory.Math.Probability.uniformLaw Bool).map aSuccessor by rfl]
       rw [expect_map,
         Math.ProbabilityMassFunction.expect_uniformOfFintype_bool]
       norm_num [aSuccessor, coupledPotential]
   | b =>
       rw [show kernel .b =
-        (PMF.uniformOfFintype Bool).map bSuccessor by rfl]
+        (GameTheory.Math.Probability.uniformLaw Bool).map bSuccessor by rfl]
       rw [expect_map,
         Math.ProbabilityMassFunction.expect_uniformOfFintype_bool]
       norm_num [bSuccessor, coupledPotential]

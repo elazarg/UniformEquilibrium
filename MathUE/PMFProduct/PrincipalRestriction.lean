@@ -104,7 +104,7 @@ theorem pmfPi_eq_map_principal
       Finset.prod_eq_zero (Finset.mem_univ i) hfactor
     rw [hleft]
     symm
-    rw [ENNReal.tsum_eq_zero]
+    rw [tsum_eq_zero_iff]
     intro restricted
     rw [ite_eq_right]
     intro heq

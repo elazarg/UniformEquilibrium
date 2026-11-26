@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import GameTheory.Math.Probability.FiniteUniform
 import UniformEquilibrium.Diagnostics.Quitting.ExactRepairCertificate
 import MathUE.PMFProduct.FiniteFubini
 import MathUE.ProbabilityMassFunction.Bool
@@ -41,7 +42,7 @@ def reward (quitters : Terminal) : Payoff Player :=
   else ![1, 1]
 
 /-- The hinted `(1/2, 1/2)` product root from the source table. -/
-def root : Player → PMF Bool := fun _ => PMF.uniformOfFintype Bool
+def root : Player → PMF Bool := fun _ => GameTheory.Math.Probability.uniformLaw Bool
 
 /-- The exact zero-tail payoff recomputed from the source table. -/
 def value : Payoff Player := ![0, 0]
@@ -88,7 +89,7 @@ theorem root_successor_zero :
   funext who
   rw [quittingRootSuccessorPayoff_eq_endpointMix,
     quitPayoff_eq_value, continuePayoff_eq_value]
-  simp [root, PMF.uniformOfFintype_apply, value]
+  simp [root, GameTheory.Math.Probability.uniformLaw_apply, value]
   ring
 
 @[simp] theorem positiveSingletonDebtCap (who : Player) :

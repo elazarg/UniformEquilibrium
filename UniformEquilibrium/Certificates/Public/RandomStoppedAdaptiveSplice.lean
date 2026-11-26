@@ -98,6 +98,13 @@ def stoppedDeviationCharge
 
 end FiniteChildAdaptivePotentialFamily
 
+private theorem stageEUAt_castHist [Fintype ι] (profile : G.BehaviorProfile)
+    {start finish : ℕ} (hlength : start = finish) (history : G.Hist start) (who : ι) :
+    G.stageEUAt profile (cast (congrArg G.Hist hlength) history) who =
+      G.stageEUAt profile history who := by
+  subst finish
+  rfl
+
 /-- Reconstructing a stopped suffix does not change the current-stage payoff
 relative to ordinary history rebasing. -/
 theorem stageEUAt_rootHistoryOfStoppedSuffix
@@ -110,29 +117,11 @@ theorem stageEUAt_rootHistoryOfStoppedSuffix
         (G.rootHistoryOfStoppedSuffix hfuel path) who =
       G.stageEUAt
         (G.afterHistoryProfile profile path.1.2) path.2 who := by
-  let hlength := G.stoppedLength_le_rootHorizon hfuel path.1
-  let hadd :
-      path.1.1.val + (total - path.1.1.val) = total :=
-    Nat.add_sub_of_le hlength
-  change
-    G.stageEUAt profile
-        (cast (congrArg G.Hist hadd)
-          (G.appendHist path.1.2 path.2)) who =
-      G.stageEUAt profile
-        (G.appendHist path.1.2 path.2) who
-  have hpackaged :
-      (⟨total,
-        cast (congrArg G.Hist hadd)
-          (G.appendHist path.1.2 path.2)⟩ :
-          Σ time, G.Hist time) =
-        ⟨path.1.1.val + (total - path.1.1.val),
-          G.appendHist path.1.2 path.2⟩ := by
-    apply Sigma.ext hadd.symm
-    exact cast_heq _ _
-  exact congrArg
-    (fun packaged : Σ time, G.Hist time =>
-      G.stageEUAt profile packaged.2 who)
-    hpackaged
+  rw [G.stageEUAt_afterHistoryProfile]
+  unfold rootHistoryOfStoppedSuffix
+  exact stageEUAt_castHist profile
+    (Nat.add_sub_of_le (G.stoppedLength_le_rootHorizon hfuel path.1))
+    (G.appendHist path.1.2 path.2) who
 
 /-- At a common root horizon, exact stopped-suffix disintegration turns the
 root stage payoff into the stopped-law average of conditional suffix stage

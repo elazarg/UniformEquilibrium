@@ -34,7 +34,7 @@ theorem exists_same_fiber_different_labels
   have hcomp : descended.comp projection = label :=
     hquotient.lift_comp label hfactors
   have hconstant : descended (projection first) = descended (projection last) :=
-    PreconnectedSpace.constant (inferInstance : PreconnectedSpace Y) descended.continuous
+    descended.continuous.isConst_of_preconnectedSpace _ _
   apply hne
   calc
     label first = descended (projection first) :=

@@ -48,17 +48,17 @@ theorem negativeOne_finiteDeadline_payoff
   unfold quittingStoppingLawExpectedPayoff
   let terminalLaw := quittingIndependentTerminalOutcomeLaw laws
   calc
-    Math.Probability.expect terminalLaw
+    _root_.Math.Probability.expect terminalLaw
           (fun outcome => quittingTerminalOutcomeReward negativeOneReward outcome PUnit.unit) =
-        Math.Probability.expect terminalLaw
+        _root_.Math.Probability.expect terminalLaw
           (fun outcome => (if outcome = none then 1 else 0) - 1) := by
       congr 1
       funext outcome
       cases outcome <;> simp [quittingTerminalOutcomeReward, negativeOneReward]
     _ =
-        Math.Probability.expect terminalLaw
+        _root_.Math.Probability.expect terminalLaw
           (fun outcome => if outcome = none then 1 else 0) - 1 := by
-      rw [Math.Probability.expect_sub, Math.Probability.expect_const]
+      rw [_root_.Math.Probability.expect_sub, _root_.Math.Probability.expect_const]
     _ = (terminalLaw none).toReal - 1 := by
       rw [← Math.Probability.apply_toReal_eq_expect_indicator]
     _ = (mixed PUnit.unit none).toReal - 1 := by

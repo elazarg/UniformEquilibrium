@@ -197,8 +197,8 @@ theorem endpointResponseDifference_dotProduct_eq_finkContinuationGain
         germ.endpointFinkPoint
         response.source who response.1.2 := by
   rw [G.finkContinuationGain_playerPotential_self]
-  rw [Math.Probability.expect_eq_sum,
-    Math.Probability.expect_eq_sum]
+  rw [_root_.Math.Probability.expect_eq_sum,
+    _root_.Math.Probability.expect_eq_sum]
   change
     (∑ destination,
       (germ.rawPureDeviationStateKernelCurve
@@ -447,7 +447,7 @@ theorem
                 if destination = source then 1 else 0)
             potential =
           0 at represented
-      rw [Math.Probability.expect_eq_sum]
+      rw [_root_.Math.Probability.expect_eq_sum]
       calc
         (∑ destination,
             (G.finkStateKernel

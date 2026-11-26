@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import GameTheory.Math.Probability.FiniteUniform
 import MathUE.MeanErgodic
 import MathUE.Probability.MarkovOccupation
 import MathUE.Probability.DecisionVariationMaximalInequality
@@ -601,7 +602,7 @@ def sourceSuccessor (coin : Bool) : State :=
 states form a deterministic two-cycle. -/
 def kernel : State → PMF State := fun state =>
   if state = source then
-    (PMF.uniformOfFintype Bool).map sourceSuccessor
+    (GameTheory.Math.Probability.uniformLaw Bool).map sourceSuccessor
   else if state = left then PMF.pure right
   else PMF.pure left
 
@@ -645,7 +646,7 @@ theorem value_harmonic (state : State) (time : ℕ) :
   · change value source time =
       expect (kernel source) (fun successor => value successor (time + 1))
     rw [show kernel source =
-        (PMF.uniformOfFintype Bool).map sourceSuccessor by
+        (GameTheory.Math.Probability.uniformLaw Bool).map sourceSuccessor by
       simp [kernel]]
     rw [expect_map,
       Math.ProbabilityMassFunction.expect_uniformOfFintype_bool]
@@ -710,8 +711,8 @@ def sourceSuccessor (coin₁ coin₂ : Bool) : State :=
   if coin₁ && coin₂ then first else source
 
 def sourceLaw : PMF State :=
-  (PMF.uniformOfFintype Bool).bind fun coin₁ =>
-    (PMF.uniformOfFintype Bool).map (sourceSuccessor coin₁)
+  (GameTheory.Math.Probability.uniformLaw Bool).bind fun coin₁ =>
+    (GameTheory.Math.Probability.uniformLaw Bool).map (sourceSuccessor coin₁)
 
 /-- The source has a three-quarter self-loop and otherwise enters a closed
 deterministic three-cycle. -/

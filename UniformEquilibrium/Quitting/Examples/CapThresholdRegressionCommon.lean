@@ -104,7 +104,7 @@ theorem solo_affine_up_to {ι : Type} [Fintype ι] [DecidableEq ι]
             (source.2 who - reward (quittingSingletonTerminal owner) who)) := by
   intro k
   induction k using Nat.strong_induction_on with
-  | h k ih =>
+  | ind k ih =>
       intro hk
       apply quittingSoloSemanticIterate_eq_affine_of_before_threshold
         reward source owner hreward hsource hθ0 hθ1 k

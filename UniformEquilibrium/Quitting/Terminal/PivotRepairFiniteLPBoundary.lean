@@ -117,9 +117,10 @@ theorem constraintGain_withFirstAtom_sub
   · simp [constraintGain]
   · simp [constraintGain]
   · simp [constraintGain, pureResponsePayoff]
-  · fin_cases endpoint <;> (
+  · fin_cases endpoint <;>
       simp [constraintGain, responderNeverEndpoint, responderFirstEndpoint,
-        responderLimitEndpoint, earlyContribution] <;> ring)
+        responderLimitEndpoint, earlyContribution]
+    ring
 
 private theorem otherNeverProduct_nonneg (responder : ι) :
     0 ≤ input.otherNeverProduct responder := by

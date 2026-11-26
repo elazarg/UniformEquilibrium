@@ -589,7 +589,7 @@ theorem finiteClockRawCellIndex_not_mem_of_even {marks : Finset ℕ}
 theorem exists_finset_sum_gt_of_lt_tsum {α : Type*}
     (f : α → ENNReal) {x : ENNReal} (h : x < ∑' a, f a) :
     ∃ s : Finset α, x < ∑ a ∈ s, f a := by
-  rw [(ENNReal.hasSum (f := f)).tsum_eq] at h
+  rw [(CompleteLattice.hasSum (f := f)).tsum_eq] at h
   exact lt_iSup_iff.mp h
 
 open ProbabilityMassFunction
@@ -609,7 +609,7 @@ theorem pmfMass_some_pred_eq_tsum (law : PMF (Option ℕ)) (P : ℕ → Prop) :
         (e.symm.tsum_eq f).symm
       _ = (∑' time : ℕ, f (e.symm (Sum.inl time))) +
           ∑' never : PUnit.{1}, f (e.symm (Sum.inr never)) :=
-        Summable.tsum_sum ENNReal.summable ENNReal.summable
+        Summable.tsum_sum CompleteLattice.summable CompleteLattice.summable
       _ = _ := by
         have hnever : (∑' never : PUnit.{1},
             f (e.symm (Sum.inr never))) = 0 := by
@@ -678,14 +678,14 @@ theorem stoppingLawFiniteClockRawCellMass_le_one_div
   have hmassTop : mass ≠ ⊤ := by
     have hcellLe : mass ≤ ∑' time : ℕ, law (some time) := by
       dsimp only [mass]
-      apply ENNReal.tsum_le_tsum
+      apply tsum_le_tsum
       intro time
-      split_ifs <;> simp
+      by_cases hcell : finiteClockRawCellIndex marks time = cell <;> simp [hcell]
     have hsomeLe : (∑' time : ℕ, law (some time)) ≤
         ∑' choice : Option ℕ, law choice := by
       exact Summable.tsum_le_tsum_of_inj some (fun _ _ h => Option.some.inj h)
         (fun _ _ => zero_le) (fun _ => le_rfl)
-        ENNReal.summable ENNReal.summable
+        CompleteLattice.summable CompleteLattice.summable
     rw [PMF.tsum_coe] at hsomeLe
     exact ne_of_lt (hcellLe.trans hsomeLe |>.trans_lt ENNReal.one_lt_top)
   have hquantumTop : quantum ≠ ⊤ := ENNReal.ofReal_ne_top

@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: UniformEquilibrium contributors.
 -/
 
+import GameTheory.Math.Probability.FiniteUniform
 import Mathlib.MeasureTheory.Measure.LevyProkhorovMetric
 import Mathlib.MeasureTheory.Measure.Portmanteau
 import Mathlib.MeasureTheory.Measure.Prokhorov
@@ -42,14 +43,14 @@ def empiricalEdgeLaw (path : ℕ → Point) (horizon : ℕ) :
   let law := PMF.map
     (fun time : Fin (horizon + 1) ↦
       (path time, path (time + 1)))
-    (PMF.uniformOfFintype (Fin (horizon + 1)))
+    (GameTheory.Math.Probability.uniformLaw (Fin (horizon + 1)))
   ⟨law.toMeasure, PMF.toMeasure.isProbabilityMeasure law⟩
 
 /-- The uniform law of the first `horizon + 1` states of a forward path. -/
 def empiricalStateLaw (path : ℕ → Point) (horizon : ℕ) :
     ProbabilityMeasure Point :=
   let law := PMF.map (fun time : Fin (horizon + 1) ↦ path time)
-    (PMF.uniformOfFintype (Fin (horizon + 1)))
+    (GameTheory.Math.Probability.uniformLaw (Fin (horizon + 1)))
   ⟨law.toMeasure, PMF.toMeasure.isProbabilityMeasure law⟩
 
 /-- A subsequential weak occupation limit of the actual empirical edge
@@ -78,7 +79,7 @@ theorem integral_empiricalEdgeLaw_eq_average
         ProbabilityMeasure (Point × Point)) =
       (∑ time : Fin (horizon + 1),
         observable (path time, path (time + 1))) / (horizon + 1 : ℝ) := by
-  let indexLaw := PMF.uniformOfFintype (Fin (horizon + 1))
+  let indexLaw := GameTheory.Math.Probability.uniformLaw (Fin (horizon + 1))
   let edgeAt : Fin (horizon + 1) → Point × Point := fun time ↦
     (path time, path (time + 1))
   change ∫ edge, observable edge ∂(PMF.map edgeAt indexLaw).toMeasure = _
@@ -86,7 +87,7 @@ theorem integral_empiricalEdgeLaw_eq_average
   rw [integral_map (measurable_of_finite _).aemeasurable
     observable.continuous.aestronglyMeasurable]
   rw [PMF.integral_eq_sum]
-  simp only [indexLaw, PMF.uniformOfFintype_apply, ENNReal.toReal_inv,
+  simp only [indexLaw, GameTheory.Math.Probability.uniformLaw_apply, ENNReal.toReal_inv,
     ENNReal.toReal_natCast, Fintype.card_fin, smul_eq_mul]
   simp_rw [edgeAt]
   rw [← Finset.mul_sum]
@@ -225,7 +226,7 @@ theorem empiricalEdgeLaw_apply_edgeGraph
       edge pair.1 pair.2}) :
     (empiricalEdgeLaw path horizon : Measure (Point × Point))
         {pair | edge pair.1 pair.2} = 1 := by
-  let indexLaw := PMF.uniformOfFintype (Fin (horizon + 1))
+  let indexLaw := GameTheory.Math.Probability.uniformLaw (Fin (horizon + 1))
   let edgeAt : Fin (horizon + 1) → Point × Point := fun time ↦
     (path time, path (time + 1))
   change (PMF.map edgeAt indexLaw).toMeasure

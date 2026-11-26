@@ -69,8 +69,8 @@ theorem hasFDerivAt_quittingFullClippedDisplacement
   · simp only [hactive, ite_false]
     rcases hsaturated player hactive with hlower | hupper
     · apply (hasFDerivAt_apply player point).congr_of_eventuallyEq
-      filter_upwards [hinput.continuousAt.eventually
-        (isOpen_Iio.mem_nhds hlower)] with hazard hhazard
+      filter_upwards [Filter.Tendsto.eventually_lt_const hlower
+        hinput.continuousAt.tendsto] with hazard hhazard
       change hazard player - min 1 (max 0
         (hazard player + quittingRealHazardEndpointGap reward tail hazard player)) = _
       rw [max_eq_left hhazard.le, min_eq_right zero_le_one, sub_zero]
@@ -78,8 +78,8 @@ theorem hasFDerivAt_quittingFullClippedDisplacement
         (hasFDerivAt_const (𝕜 := ℝ) (1 : ℝ) point)
       simp only [sub_zero] at hrow
       apply hrow.congr_of_eventuallyEq
-      filter_upwards [hinput.continuousAt.eventually
-        (isOpen_Ioi.mem_nhds hupper)] with hazard hhazard
+      filter_upwards [Filter.Tendsto.eventually_const_lt hupper
+        hinput.continuousAt.tendsto] with hazard hhazard
       change hazard player - min 1 (max 0
         (hazard player + quittingRealHazardEndpointGap reward tail hazard player)) = _
       rw [max_eq_right (zero_le_one.trans hhazard.le), min_eq_left hhazard.le]

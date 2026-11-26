@@ -4,8 +4,9 @@ Released under the MIT license as described in the file LICENSE.
 Authors: UniformEquilibrium contributors
 -/
 
+import GameTheory.Protocol.Predraw
 import GameTheory.Stochastic.Kuhn
-import MathUE.Probability.FinDistIntegral
+import MathUE.Probability.FinitePMF
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Discounted
 import UniformEquilibrium.ProofView.Native.History
 
@@ -39,7 +40,7 @@ def compiledPublicHistoryLaw (profile : G.BehaviorProfile) :
   | initial, horizon + 1 =>
       (FinDist.pi fun i => finDistOfPMF
         (profile i 0 (G.emptyHist initial))).bind fun actions =>
-        (G.toNative.transition initial actions).bindOnSupport fun target _ =>
+        (finDistOfPMF (G.transition initial actions)).bindOnSupport fun target _ =>
           FinDist.map
             (fun continuation => continuation ++
               [{ source := initial, joint := actions, target := target }])
@@ -59,7 +60,7 @@ theorem compiledPublicHistoryLaw_succ (profile : G.BehaviorProfile)
     compiledPublicHistoryLaw G profile initial (horizon + 1) =
       (FinDist.pi fun i => finDistOfPMF
         (profile i 0 (G.emptyHist initial))).bind fun actions =>
-        (G.toNative.transition initial actions).bindOnSupport fun target _ =>
+        (finDistOfPMF (G.transition initial actions)).bindOnSupport fun target _ =>
           FinDist.map
             (fun continuation => continuation ++
               [{ source := initial, joint := actions, target := target }])
@@ -74,14 +75,14 @@ theorem native_publicHistoryLaw_eq_compiled
     ∀ horizon,
       G.toNative.publicHistoryLaw initial
           (toNativeBehaviorProfile G initial profile) horizon =
-        compiledPublicHistoryLaw G profile initial horizon := by
+        (compiledPublicHistoryLaw G profile initial horizon).toPMF := by
   intro horizon
   induction horizon generalizing profile initial with
   | zero =>
-      change G.toNative.restartHistoryLaw
-          (toNativeBehaviorProfile G initial profile) [] initial 0 = _
-      rw [Stochastic.Game.restartHistoryLaw_zero]
-      rfl
+      have hzero := G.toNative.restartHistoryLaw_zero
+        (toNativeBehaviorProfile G initial profile) [] initial
+      simpa only [Stochastic.Game.restartHistoryLaw, Stochastic.Game.afterPublicHistory_nil,
+        compiledPublicHistoryLaw_zero, FinDist.toPMF_pure] using hzero
   | succ horizon ih =>
       let publicProfile := toNativePublicProfile G initial profile
       have hstep := G.toNative.restartHistoryLaw_succ_toPublicProfile
@@ -95,10 +96,18 @@ theorem native_publicHistoryLaw_eq_compiled
             (G.toNative.toBehaviorProfile initial publicProfile)
               (horizon + 1) by
         simp [Stochastic.Game.restartHistoryLaw]]
-      rw [hstep, compiledPublicHistoryLaw_succ]
-      apply FinDist.bind_congr
+      rw [hstep, compiledPublicHistoryLaw_succ, FinDist.toPMF_bind]
+      have hproduct :
+          (FinDist.pi fun i => finDistOfPMF
+            (profile i 0 (G.emptyHist initial))).toPMF =
+            independentProduct (fun i => profile i 0 (G.emptyHist initial)) := by
+        ext actions
+        rfl
+      rw [hproduct]
+      apply bind_congr_on_support
       intro actions _
-      apply FinDist.bindOnSupport_congr
+      rw [FinDist.toPMF_bindOnSupport]
+      apply bindOnSupport_congr
       intro target realized
       let record : G.toNative.StageRecord :=
         { source := initial, joint := actions, target := target }
@@ -117,10 +126,19 @@ theorem native_publicHistoryLaw_eq_compiled
           hpublic]
       unfold Stochastic.Game.restartHistoryLaw
       rw [hbehavior]
-      apply congrArg (FinDist.map
+      rw [FinDist.toPMF_map]
+      apply congrArg (PMF.map
         (fun continuation => continuation ++ [record]))
       simpa only [toNativeBehaviorProfile] using
         ih (G.shiftProfile profile (initial, actions)) target
+
+private theorem native_boundedInformationSites_finite
+    [∀ i, Fintype (G.Act i)] (initial : G.State) (horizon : ℕ) (i : ι) :
+    (G.toNative.boundedInformationSites initial horizon i).Finite :=
+  (G.toNative.perfectMonitoring initial).behavioralSupportSitesFrom_finite_of_finite_branching
+    (G.toNative.fullyMixedBehaviorProfile initial) horizon
+    (G.toNative.toExecution initial).initHistory
+    (fun _ _ _ => Set.toFinite _) (fun _ => Set.toFinite _) i
 
 /-- Predraw the translated proof-view profile at every counterfactual public
 history through `horizon`. Unlike a bare existence result, this is the explicit
@@ -132,6 +150,7 @@ def toNativeMixedPublicProfile (profile : G.BehaviorProfile)
   exact fun i =>
     Stochastic.Game.PublicPolicy.toMixed G.toNative initial horizon
       (toNativePublicProfile G initial profile i)
+      (native_boundedInformationSites_finite G initial horizon i)
 
 /-- The explicit bounded mixed public profile has exactly the translated
 proof-view behavioral history law. -/
@@ -144,7 +163,8 @@ theorem nativeMixedPublicProfile_play_eq_toNativeBehaviorProfile
   let (i : ι) : Fintype (G.Act i) := Fintype.ofFinite (G.Act i)
   unfold toNativeMixedPublicProfile
   rw [G.toNative.kuhn_behavioral_to_mixed initial
-    (toNativePublicProfile G initial profile) horizon]
+    (toNativePublicProfile G initial profile) horizon
+    (native_boundedInformationSites_finite G initial horizon)]
   exact G.toNative.publicHorizonForm_play initial horizon
     (toNativePublicProfile G initial profile)
 
@@ -153,8 +173,8 @@ policies, without changing its induced bounded law. -/
 def toNativeMixedProfile (profile : G.BehaviorProfile)
     (initial : G.State) (horizon : ℕ) :
     (i : ι) → (G.toNative.perfectMonitoring initial).MixedPolicy i :=
-  fun i => FinDist.map (G.toNative.purePolicyEquiv initial i).symm
-    (toNativeMixedPublicProfile G profile initial horizon i)
+  fun i => (toNativeMixedPublicProfile G profile initial horizon i).map
+    (G.toNative.purePolicyEquiv initial i).symm
 
 /-- The explicit certified mixed profile has exactly the translated
 proof-view behavioral history law. -/
@@ -195,11 +215,11 @@ theorem exists_nativeMixed_runMixed_eq_toNativeBehaviorProfile
 the proof view's compiled public-history law exactly. -/
 theorem nativeMixed_publicHistoryLaw_eq_compiled
     (profile : G.BehaviorProfile) (initial : G.State) (horizon : ℕ) :
-    FinDist.map
+    PMF.map
         (fun history => G.toNative.publicHistoryOfTrace initial history.trace)
         ((G.toNative.perfectMonitoring initial).runMixed
           (toNativeMixedProfile G profile initial horizon) horizon) =
-      compiledPublicHistoryLaw G profile initial horizon := by
+      (compiledPublicHistoryLaw G profile initial horizon).toPMF := by
   rw [nativeMixed_runMixed_eq_toNativeBehaviorProfile]
   exact native_publicHistoryLaw_eq_compiled G profile initial horizon
 
@@ -209,11 +229,11 @@ theorem exists_nativeMixed_publicHistoryLaw_eq_compiled
     (profile : G.BehaviorProfile) (initial : G.State) (horizon : ℕ) :
     ∃ mixed : (i : ι) →
         (G.toNative.perfectMonitoring initial).MixedPolicy i,
-      FinDist.map
+      PMF.map
           (fun history =>
             G.toNative.publicHistoryOfTrace initial history.trace)
           ((G.toNative.perfectMonitoring initial).runMixed mixed horizon) =
-        compiledPublicHistoryLaw G profile initial horizon := by
+        (compiledPublicHistoryLaw G profile initial horizon).toPMF := by
   exact ⟨toNativeMixedProfile G profile initial horizon,
     nativeMixed_publicHistoryLaw_eq_compiled G profile initial horizon⟩
 
@@ -393,9 +413,6 @@ theorem expect_compiledPublicHistoryLaw_latestPayoff_eq
 stage payoff under compilation. -/
 theorem native_behavioralStageExpectation_eq
     (profile : G.BehaviorProfile) (initial : G.State)
-    [MeasurableSpace (G.toNative.toExecution initial).History]
-    [DiscreteMeasurableSpace (G.toNative.toExecution initial).History]
-    [MeasurableSingletonClass (G.toNative.toExecution initial).History]
     (who : ι) (time : ℕ) :
     G.toNative.behavioralStageExpectation initial
         (toNativePublicProfile G initial profile) who time =
@@ -403,22 +420,10 @@ theorem native_behavioralStageExpectation_eq
   classical
   let run := (G.toNative.perfectMonitoring initial).runBehavioral
     (toNativeBehaviorProfile G initial profile) (time + 1)
-  obtain ⟨bound, hbound⟩ :=
-    _root_.Math.Probability.exists_abs_bound_of_finite
-      (fun x : G.State × G.JointAct =>
-        G.stagePayoff x.1 x.2 who)
-  have hlatest : ∀ history : (G.toNative.toExecution initial).History,
-      ‖G.toNative.latestStageUtility initial who history‖ ≤ bound := by
-    intro history
-    rw [Real.norm_eq_abs]
-    apply G.toNative.abs_latestStageUtility_le initial who bound
-    intro state actions
-    exact hbound (state, actions)
   unfold Stochastic.Game.behavioralStageExpectation
     Protocol.InformationModel.behavioralPrefixExpectation
-  change (∫ history,
-      G.toNative.latestStageUtility initial who history ∂run.toMeasure) = _
-  rw [FinDist.integral_toMeasure_eq_expect_of_bound run _ hlatest]
+  change GameTheory.Math.Probability.expect run
+    (G.toNative.latestStageUtility initial who) = _
   have hobservable : G.toNative.latestStageUtility initial who =
       fun history => publicHistoryLatestPayoff G
         (G.toNative.publicHistoryOfTrace initial history.trace) who := by
@@ -432,17 +437,16 @@ theorem native_behavioralStageExpectation_eq
         unfold Stochastic.Game.stageRecordUtility
         rfl
   rw [hobservable]
-  change run.expect (fun history =>
-      publicHistoryLatestPayoff G
-        (G.toNative.publicHistoryOfTrace initial history.trace) who) = _
-  rw [← FinDist.expect_map
-    (f := fun history =>
-      G.toNative.publicHistoryOfTrace initial history.trace)
-    (μ := run)
-    (u := fun history => publicHistoryLatestPayoff G history who)]
-  change (G.toNative.publicHistoryLaw initial
-      (toNativeBehaviorProfile G initial profile) (time + 1)).expect
-        (fun history => publicHistoryLatestPayoff G history who) = _
+  change GameTheory.Math.Probability.expect run
+    ((fun history => publicHistoryLatestPayoff G history who) ∘
+      (fun history => G.toNative.publicHistoryOfTrace initial history.trace)) = _
+  rw [← GameTheory.Math.Probability.expect_map
+    (fun history => G.toNative.publicHistoryOfTrace initial history.trace)
+    run (fun history => publicHistoryLatestPayoff G history who)]
+  change GameTheory.Math.Probability.expect
+    (G.toNative.publicHistoryLaw initial
+      (toNativeBehaviorProfile G initial profile) (time + 1))
+    (fun history => publicHistoryLatestPayoff G history who) = _
   rw [native_publicHistoryLaw_eq_compiled]
   exact expect_compiledPublicHistoryLaw_latestPayoff_eq
     G profile initial who time
@@ -451,19 +455,20 @@ theorem native_behavioralStageExpectation_eq
 compilation. -/
 theorem native_behavioralDiscountedPayoff_eq
     (profile : G.BehaviorProfile) (initial : G.State)
-    [MeasurableSpace (G.toNative.toExecution initial).History]
-    [DiscreteMeasurableSpace (G.toNative.toExecution initial).History]
-    [MeasurableSingletonClass (G.toNative.toExecution initial).History]
-    (discount : ℝ) (who : ι) :
+    (discount : ℝ) (who : ι)
+    (hsum : Summable fun time => discount ^ time *
+      G.toNative.behavioralStageExpectation initial
+        (toNativePublicProfile G initial profile) who time) :
     G.toNative.behavioralDiscountedPayoff initial discount
-        (toNativePublicProfile G initial profile) who =
+        (toNativePublicProfile G initial profile) who hsum =
       G.discountedPayoff discount profile initial who := by
   unfold Stochastic.Game.behavioralDiscountedPayoff
     StochasticGame.discountedPayoff
     GameTheory.Math.normalizedDiscountedSum
   congr 2
   funext time
-  rw [native_behavioralStageExpectation_eq]
+  exact congrArg (discount ^ time * ·)
+    (native_behavioralStageExpectation_eq G profile initial who time)
 
 /-- Finite-average payoff is preserved exactly by compilation to
 GameTheory's canonical behavioral runner. -/
@@ -517,7 +522,7 @@ theorem native_runBehavioral_eq_of_support_agreement
   rw [G.toNative.perfectMonitoring_infoOf_eq_publicHistoryOfTrace]
   unfold toNativeBehaviorProfile Stochastic.Game.toBehaviorProfile
     Stochastic.Game.toBehavioralPolicy
-  apply congrArg (FinDist.map
+  apply congrArg (PMF.map
     (G.toNative.actionChoiceEquiv initial i
       (G.toNative.publicHistoryOfTrace initial history.trace)))
   exact hagree elapsed helapsed history hhistory i
@@ -559,9 +564,6 @@ theorem native_runBehavioral_roundtrip
 as its decoded proof-view profile. -/
 theorem native_behavioralStageExpectation_eq_of_publicProfile
     (initial : G.State) (profile : G.toNative.PublicProfile initial)
-    [MeasurableSpace (G.toNative.toExecution initial).History]
-    [DiscreteMeasurableSpace (G.toNative.toExecution initial).History]
-    [MeasurableSingletonClass (G.toNative.toExecution initial).History]
     (who : ι) (time : ℕ) :
     G.toNative.behavioralStageExpectation initial profile who time =
       G.expectedStagePayoff
@@ -577,11 +579,10 @@ theorem native_behavioralStageExpectation_eq_of_publicProfile
 decoded proof-view profile. -/
 theorem native_behavioralDiscountedPayoff_eq_of_publicProfile
     (initial : G.State) (profile : G.toNative.PublicProfile initial)
-    [MeasurableSpace (G.toNative.toExecution initial).History]
-    [DiscreteMeasurableSpace (G.toNative.toExecution initial).History]
-    [MeasurableSingletonClass (G.toNative.toExecution initial).History]
-    (discount : ℝ) (who : ι) :
-    G.toNative.behavioralDiscountedPayoff initial discount profile who =
+    (discount : ℝ) (who : ι)
+    (hsum : Summable fun time => discount ^ time *
+      G.toNative.behavioralStageExpectation initial profile who time) :
+    G.toNative.behavioralDiscountedPayoff initial discount profile who hsum =
       G.discountedPayoff discount
         (ofNativePublicProfile G initial profile) initial who := by
   unfold Stochastic.Game.behavioralDiscountedPayoff
@@ -589,7 +590,8 @@ theorem native_behavioralDiscountedPayoff_eq_of_publicProfile
     GameTheory.Math.normalizedDiscountedSum
   congr 2
   funext time
-  rw [native_behavioralStageExpectation_eq_of_publicProfile]
+  exact congrArg (discount ^ time * ·)
+    (native_behavioralStageExpectation_eq_of_publicProfile G initial profile who time)
 
 /-- A native public profile and a proof-view profile that agree on coherent
 histories have exactly the same normalized discounted payoff. -/
@@ -599,23 +601,21 @@ theorem native_behavioralDiscountedPayoff_eq_of_coherent
     (hagree : ∀ i history, IsCoherentPublicHistory G initial history →
       toNativePublicProfile G initial proofProfile i history =
         nativeProfile i history)
-    [MeasurableSpace (G.toNative.toExecution initial).History]
-    [DiscreteMeasurableSpace (G.toNative.toExecution initial).History]
-    [MeasurableSingletonClass (G.toNative.toExecution initial).History]
-    (discount : ℝ) (who : ι) :
-    G.toNative.behavioralDiscountedPayoff initial discount nativeProfile who =
+    (discount : ℝ) (who : ι)
+    (hsum : Summable fun time => discount ^ time *
+      G.toNative.behavioralStageExpectation initial nativeProfile who time) :
+    G.toNative.behavioralDiscountedPayoff initial discount nativeProfile who hsum =
       G.discountedPayoff discount proofProfile initial who := by
-  rw [← native_behavioralDiscountedPayoff_eq G proofProfile initial
-    discount who]
-  unfold Stochastic.Game.behavioralDiscountedPayoff
+  unfold Stochastic.Game.behavioralDiscountedPayoff StochasticGame.discountedPayoff
     GameTheory.Math.normalizedDiscountedSum
   congr 2
   funext time
-  unfold Stochastic.Game.behavioralStageExpectation
-    Protocol.InformationModel.behavioralPrefixExpectation
-  rw [← native_runBehavioral_eq_of_coherent G initial proofProfile
-    nativeProfile (time + 1) hagree]
-  rfl
+  apply congrArg (discount ^ time * ·)
+  rw [← native_behavioralStageExpectation_eq G proofProfile initial who time]
+  exact congrArg
+    (fun law => GameTheory.Math.Probability.expect law (G.toNative.latestStageUtility initial who))
+    (native_runBehavioral_eq_of_coherent G initial proofProfile
+      nativeProfile (time + 1) hagree).symm
 
 /-- A native public profile and a proof-view profile that agree on coherent
 histories have exactly the same finite-average payoff. -/

@@ -430,7 +430,7 @@ theorem measure_iUnion_dyadicBlockCrossing_le [IsProbabilityMeasure μ]
         ∑' j, μ (dyadicBlockCrossing M c rate budget j) :=
       measure_iUnion_le _
     _ ≤ ∑' j, ENNReal.ofReal (budget j) :=
-      ENNReal.tsum_le_tsum fun j =>
+      tsum_le_tsum fun j =>
         measure_dyadicBlockCrossing_le hM c hsubG rate budget j
           (hbudget j) (hrate j)
     _ ≤ delta := hsum

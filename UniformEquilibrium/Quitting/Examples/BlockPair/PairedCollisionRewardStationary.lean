@@ -66,13 +66,12 @@ theorem exists_stationaryHazard {c : ℝ} (hc2 : 2 ≤ c) (hc4 : c ≤ 4) :
   have hright : 0 < stationaryResidual c (1 / 2) := by
     rw [stationaryResidual_half]
     linarith
-  have hcontinuous : ContinuousOn (stationaryResidual c)
-      (Set.Icc ((1 : ℝ) / 100) (1 / 2)) := by
+  have hcontinuous : Continuous (stationaryResidual c) := by
     unfold stationaryResidual stationaryOpponentMass stationaryQuitValue
       stationaryContinueReward
     fun_prop
   obtain ⟨q, hq, hroot⟩ := intermediate_value_Icc
-    (by norm_num : (1 : ℝ) / 100 ≤ 1 / 2) hcontinuous ⟨hleft.le, hright.le⟩
+    (by norm_num : (1 : ℝ) / 100 ≤ 1 / 2) hcontinuous.continuousOn ⟨hleft.le, hright.le⟩
   refine ⟨q, ⟨?_, ?_⟩, hroot⟩
   · exact lt_of_le_of_ne hq.1 fun h ↦ by subst q; linarith
   · exact lt_of_le_of_ne hq.2 fun h ↦ by subst q; linarith

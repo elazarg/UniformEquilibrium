@@ -855,7 +855,7 @@ theorem expect_bind_summable_of_bounded {α β : Type*}
     have hbind : Summable (fun ab : α × β =>
         (p ab.1).toReal * (q ab.1 ab.2).toReal) := by
       have h_ennreal : ∑' ab : α × β, (p ab.1 * q ab.1 ab.2 : ENNReal) = 1 := by
-        rw [ENNReal.tsum_prod']
+        rw [tsum_prod']
         calc
           ∑' a, ∑' b, p a * q a b
               = ∑' a, p a * ∑' b, q a b := by
@@ -1068,7 +1068,7 @@ finiteness-free engine behind `expect_map`: it holds unconditionally because
 theorem tsum_map_mul {α β : Type*} (f : α → β) (p : PMF α) (v : β → ENNReal) :
     ∑' b, (PMF.map f p) b * v b = ∑' a, p a * v (f a) := by
   simp_rw [PMF.map_apply, ← ENNReal.tsum_mul_right]
-  rw [ENNReal.tsum_comm]
+  rw [tsum_comm]
   refine tsum_congr (fun a => ?_)
   rw [tsum_eq_single (f a) (fun b hb => by simp [hb])]
   simp

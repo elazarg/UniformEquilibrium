@@ -114,12 +114,12 @@ theorem sum_transitionMonitoring_deviationSignalVector_mul
         (G.transitionMonitoring source).mixedExtension.deviationSignalVector
             (G.finkProfile z source) owner (PMF.pure action) destination *
           score destination =
-      Math.Probability.expect
+      _root_.Math.Probability.expect
           (G.finkPureDeviationStateKernel z source owner action) score -
-        Math.Probability.expect (G.finkStateKernel z source) score := by
+        _root_.Math.Probability.expect (G.finkStateKernel z source) score := by
   rw [transitionMonitoring_deviationSignalVector_finkPureDeviation]
   simp only [Finset.sum_sub_distrib, sub_mul]
-  rw [Math.Probability.expect_eq_sum, Math.Probability.expect_eq_sum]
+  rw [_root_.Math.Probability.expect_eq_sum, _root_.Math.Probability.expect_eq_sum]
 
 end FinkRows
 

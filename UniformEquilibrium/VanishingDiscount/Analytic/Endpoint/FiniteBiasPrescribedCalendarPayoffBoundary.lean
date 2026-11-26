@@ -72,9 +72,9 @@ def expectedPrescribedCalendarPoissonResidual
       (prescribedPlayerOwnedFinkCalendarProfile
         germ startEpoch valid)
       entry
-      (fun _ history =>
+      (fun atStage history =>
         seed.playerOwnedPoissonResidualCurve correction
-          (playerOwnedCalendarScale startEpoch stage)
+          (playerOwnedCalendarScale startEpoch atStage)
           history.2 who)
       stage
 
@@ -184,6 +184,49 @@ theorem prescribedCalendar_poissonBellman_eq
             germ.endpointValue entry who) by
       linarith [hsemantic])
 
+private theorem sum_prescribed_payoff_telescope
+    (payoff bias residual transport : ℕ → ℝ) (target : ℝ)
+    (hstep : ∀ stage, payoff stage =
+      target + bias stage - bias (stage + 1) + residual stage + transport stage)
+    (T : ℕ) :
+    (∑ stage ∈ Finset.range T, payoff stage) =
+      (T : ℝ) * target + bias 0 - bias T +
+        (∑ stage ∈ Finset.range T, residual stage) +
+        (∑ stage ∈ Finset.range T, transport stage) := by
+  induction T with
+  | zero => simp
+  | succ T ih =>
+    rw [Finset.sum_range_succ, ih, Finset.sum_range_succ, Finset.sum_range_succ, hstep T]
+    push_cast
+    ring
+
+omit [DecidableEq G.State] [DecidableEq ι] [∀ i, DecidableEq (G.Act i)] in
+private theorem expectedStagePayoff_of_pointwise
+    (profile : G.BehaviorProfile) (entry : G.State) (who : ι)
+    (bias residual transport : G.HistoryPotential) (target : ℝ) (stage : ℕ)
+    (pointwise : ∀ history : G.Hist stage,
+      G.stageEUAt profile history who + G.historyContinuationEU profile bias history =
+        target + bias stage history + residual stage history + transport stage history) :
+    G.expectedStagePayoff profile entry stage who =
+      target + G.expectedHistoryValue profile entry bias stage -
+        G.expectedHistoryValue profile entry bias (stage + 1) +
+        G.expectedHistoryValue profile entry residual stage +
+        G.expectedHistoryValue profile entry transport stage := by
+  have averaged :=
+    congrArg
+      (expect (G.histDist profile entry stage))
+      (funext pointwise)
+  simp only [expect_add, expect_const] at averaged
+  rw [← G.expectedHistoryValue_succ] at averaged
+  change
+    G.expectedStagePayoff profile entry stage who +
+          G.expectedHistoryValue profile entry bias (stage + 1) =
+      target +
+        G.expectedHistoryValue profile entry bias stage +
+        G.expectedHistoryValue profile entry residual stage +
+        G.expectedHistoryValue profile entry transport stage at averaged
+  linarith
+
 omit [DecidableEq G.State] in
 /-- Exact finite-horizon prescribed payoff identity. -/
 theorem sum_expectedStagePayoff_prescribedCalendar_eq
@@ -247,20 +290,8 @@ theorem sum_expectedStagePayoff_prescribedCalendar_eq
       exact
         seed.prescribedCalendar_poissonBellman_eq
           correction who entry startEpoch valid history
-    have averaged :=
-      congrArg
-        (expect (G.histDist profile entry stage))
-        (funext pointwise)
-    simp only [expect_add, expect_const] at averaged
-    rw [← G.expectedHistoryValue_succ] at averaged
-    change
-      G.expectedStagePayoff profile entry stage who +
-            G.expectedHistoryValue profile entry bias (stage + 1) =
-        germ.endpointValue entry who +
-          G.expectedHistoryValue profile entry bias stage +
-          G.expectedHistoryValue profile entry residual stage +
-          G.expectedHistoryValue profile entry transport stage at averaged
-    linarith
+    exact expectedStagePayoff_of_pointwise profile entry who bias residual transport
+      (germ.endpointValue entry who) stage pointwise
   change
     (∑ stage ∈ Finset.range T,
         G.expectedStagePayoff profile entry stage who) =
@@ -271,14 +302,19 @@ theorem sum_expectedStagePayoff_prescribedCalendar_eq
           G.expectedHistoryValue profile entry residual stage) +
         (∑ stage ∈ Finset.range T,
           G.expectedHistoryValue profile entry transport stage)
-  induction T with
-  | zero =>
-      simp [profile, bias, expectedHistoryValue, emptyHist]
-  | succ T inductionHypothesis =>
-      rw [Finset.sum_range_succ, inductionHypothesis,
-        Finset.sum_range_succ, Finset.sum_range_succ, step T]
-      push_cast
-      ring
+  have hbase : G.expectedHistoryValue profile entry bias 0 =
+      seed.playerOwnedPoissonBias correction entry who := by
+    exact G.expectedHistoryValue_zero profile entry bias
+  have htelescope := sum_prescribed_payoff_telescope
+    (fun stage => G.expectedStagePayoff profile entry stage who)
+    (G.expectedHistoryValue profile entry bias)
+    (G.expectedHistoryValue profile entry residual)
+    (G.expectedHistoryValue profile entry transport) (germ.endpointValue entry who) step T
+  exact htelescope.trans (congrArg
+    (fun initialBias => (T : ℝ) * germ.endpointValue entry who + initialBias -
+      G.expectedHistoryValue profile entry bias T +
+      (∑ stage ∈ Finset.range T, G.expectedHistoryValue profile entry residual stage) +
+      (∑ stage ∈ Finset.range T, G.expectedHistoryValue profile entry transport stage)) hbase)
 
 omit [DecidableEq G.State] in
 /-- Exact finite-average form of the prescribed payoff identity. -/
@@ -347,9 +383,9 @@ theorem abs_expectedPrescribedCalendarPoissonResidual_le
           (prescribedPlayerOwnedFinkCalendarProfile
             germ startEpoch valid)
           entry
-          (fun _ history =>
+          (fun atStage history =>
             seed.playerOwnedPoissonResidualCurve correction
-              (playerOwnedCalendarScale startEpoch stage)
+              (playerOwnedCalendarScale startEpoch atStage)
               history.2 who)
           stage| ≤
         ∑ stage ∈ Finset.range T,
@@ -357,9 +393,9 @@ theorem abs_expectedPrescribedCalendarPoissonResidual_le
             (prescribedPlayerOwnedFinkCalendarProfile
               germ startEpoch valid)
             entry
-            (fun _ history =>
+            (fun atStage history =>
               seed.playerOwnedPoissonResidualCurve correction
-                (playerOwnedCalendarScale startEpoch stage)
+                (playerOwnedCalendarScale startEpoch atStage)
                 history.2 who)
             stage| :=
       Finset.abs_sum_le_sum_abs _ _

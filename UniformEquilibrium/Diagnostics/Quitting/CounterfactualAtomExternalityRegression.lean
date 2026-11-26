@@ -37,7 +37,7 @@ observer-side strategic sign); exact-prefix chronology alone cannot do so.
 
 noncomputable section
 
-open GameTheory.Math.Probability
+open GameTheory.Math.Probability hiding expect_eq_sum
 
 namespace GameTheory
 

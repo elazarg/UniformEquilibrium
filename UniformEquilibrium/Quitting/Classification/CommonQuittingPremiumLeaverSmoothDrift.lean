@@ -25,7 +25,8 @@ theorem isCompact_quittingProtectedSingletonSublevelDomain
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (bound : ℝ) (player : ι) :
     IsCompact (quittingProtectedSingletonSublevelDomain reward bound player) := by
   apply isCompact_Icc.inter_right
-  apply IsClosed.inter (isClosed_le continuous_const (continuous_apply player))
+  have hlower : IsClosed {point : Payoff ι | quittingSoloReward reward player player ≤
+      point player} := isClosed_le continuous_const (continuous_apply player)
   have hclosed := isClosed_iUnion_of_finite fun other : ι =>
     isClosed_le (continuous_apply other)
       (continuous_const (y := quittingSoloReward reward other other))
@@ -36,7 +37,7 @@ theorem isCompact_quittingProtectedSingletonSublevelDomain
     ext point
     simp
   rw [← hset] at hclosed
-  exact hclosed
+  exact hlower.inter hclosed
 
 /-- Signed unprotected premiums are allowed. Continuity is needed only on
 the compact protected sublevel domain, and differentiability on the singleton

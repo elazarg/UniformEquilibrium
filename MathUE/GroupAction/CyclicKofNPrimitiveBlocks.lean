@@ -138,7 +138,7 @@ theorem initialBlock_stabilizer_card_eq_one {n k : ℕ} [NeZero n]
       (Finset.neg_vadd_mem_iff).mpr hbadTranslate
     have : (-1 : ZMod n) ∈ initialBlock n k := by
       convert hminus using 1
-      all_goals ring
+      ring
     apply hentry.2
     simpa using this
   exact (initialBlock_entry_iff hkpos hkproper g).mp ⟨hgmem, hgprev⟩

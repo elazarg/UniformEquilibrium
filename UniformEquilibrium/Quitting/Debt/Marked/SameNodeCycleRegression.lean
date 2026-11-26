@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import GameTheory.Math.Probability.FiniteUniform
 import UniformEquilibrium.Examples.BigMatch.Basic
 import UniformEquilibrium.Quitting.Debt.Marked.FenceIteration
 import UniformEquilibrium.Quitting.Root.SuccessorCertificate
@@ -45,7 +46,7 @@ def reward (quitters : {S : Finset Bool // S.Nonempty}) : Payoff Bool :=
   fun _ => if quitters.1.card = 2 then -1 else -3
 
 /-- The first root, at which both players quit with probability one half. -/
-def halfRoot : Bool → PMF Bool := fun _ => PMF.uniformOfFintype Bool
+def halfRoot : Bool → PMF Bool := fun _ => GameTheory.Math.Probability.uniformLaw Bool
 
 /-- The terminal root, at which both players quit surely. -/
 def sureRoot : Bool → PMF Bool := fun _ => PMF.pure true
@@ -70,11 +71,11 @@ the representation of `Finset.univ` chosen by simplification. -/
 
 @[simp] theorem halfRoot_true_toReal (who : Bool) :
     (halfRoot who true).toReal = 1 / 2 := by
-  norm_num [halfRoot, PMF.uniformOfFintype_apply]
+  norm_num [halfRoot, GameTheory.Math.Probability.uniformLaw_apply]
 
 @[simp] theorem halfRoot_false_toReal (who : Bool) :
     (halfRoot who false).toReal = 1 / 2 := by
-  norm_num [halfRoot, PMF.uniformOfFintype_apply]
+  norm_num [halfRoot, GameTheory.Math.Probability.uniformLaw_apply]
 
 @[simp] theorem sureRoot_true_toReal (who : Bool) :
     (sureRoot who true).toReal = 1 := by

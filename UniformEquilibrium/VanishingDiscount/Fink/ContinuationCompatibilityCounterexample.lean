@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import GameTheory.Math.Probability.FiniteUniform
 import MathUE.LinearAlgebra.MixedCompatibilityCharge
 import MathUE.Probability
 import Mathlib.Probability.Distributions.Uniform
@@ -44,7 +45,7 @@ abbrev Facet := Bool
 
 /-- Uniform baseline transition on the two states. -/
 def baseline : PMF State :=
-  PMF.uniformOfFintype State
+  GameTheory.Math.Probability.uniformLaw State
 
 /-- The two available actions lead deterministically to their namesake
 states. -/
@@ -67,13 +68,13 @@ def continuationGain (action : Action) (x : ℝ) : ℝ :=
 theorem continuationGain_true (x : ℝ) :
     continuationGain true x = x := by
   simp [continuationGain, actionKernel, baseline, continuationValue,
-    expect_eq_sum, PMF.uniformOfFintype_apply]
+    expect_eq_sum, GameTheory.Math.Probability.uniformLaw_apply]
 
 @[simp]
 theorem continuationGain_false (x : ℝ) :
     continuationGain false x = -x := by
   simp [continuationGain, actionKernel, baseline, continuationValue,
-    expect_eq_sum, PMF.uniformOfFintype_apply]
+    expect_eq_sum, GameTheory.Math.Probability.uniformLaw_apply]
 
 /-- Transition-difference column of an action relative to the baseline. -/
 def transitionDifference
@@ -89,7 +90,7 @@ theorem sum_transitionDifference_eq_zero
       transitionDifference action destination = 0 := by
   cases destination <;>
     simp [transitionDifference, actionKernel, baseline,
-      PMF.uniformOfFintype_apply]
+      GameTheory.Math.Probability.uniformLaw_apply]
 
 /-- Right-hand sides of the two Bellman inequalities owned by each player.
 

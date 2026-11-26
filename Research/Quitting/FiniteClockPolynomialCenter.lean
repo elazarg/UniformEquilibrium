@@ -320,10 +320,10 @@ theorem quittingTerminalPayoff_finiteClockDecodedProfile_eq_sum
   let value : (ι → Option ℕ) → ℝ := fun choices =>
     quittingTerminalPayoff reward
       (quittingPureStoppingTimeProfile reward choices) observer
-  have hexpect : Math.Probability.expect
+  have hexpect : _root_.Math.Probability.expect
         ((pmfPi atomLaws).map
           (finiteClockJointStoppingTimes clockBound)) value =
-      Math.Probability.expect (pmfPi atomLaws) fun choices =>
+      _root_.Math.Probability.expect (pmfPi atomLaws) fun choices =>
         value (finiteClockJointStoppingTimes clockBound choices) := by
     simpa [Math.ProbabilityMassFunction.pushforward] using
       expect_pushforward_of_bounded
@@ -331,10 +331,10 @@ theorem quittingTerminalPayoff_finiteClockDecodedProfile_eq_sum
         (fun choices =>
           abs_quittingTerminalPayoff_le_quittingRewardBound
             reward _ observer)
-  change Math.Probability.expect
+  change _root_.Math.Probability.expect
       ((pmfPi atomLaws).map
         (finiteClockJointStoppingTimes clockBound)) value = _
-  rw [hexpect, Math.Probability.expect_eq_sum]
+  rw [hexpect, _root_.Math.Probability.expect_eq_sum]
   refine Finset.sum_congr rfl fun choices _ => ?_
   rw [pmfPi_apply, ENNReal.toReal_prod]
   simp only [atomLaws, finiteClockAtomLaws, ofVector_toReal]
@@ -384,25 +384,25 @@ theorem quittingTerminalPayoff_finiteClockDecodedProfile_update_eq_sum
     rw [hfamily]
     exact (pmfPi_push_coordwise atomModified
       (fun _ => finiteClockAtomToStoppingTime clockBound)).symm
-  change Math.Probability.expect (pmfPi decodedModified) _ = _
+  change _root_.Math.Probability.expect (pmfPi decodedModified) _ = _
   rw [hproduct]
   let value : (ι → Option ℕ) → ℝ := fun choices =>
     quittingTerminalPayoff reward
       (quittingPureStoppingTimeProfile reward choices) player
-  have hexpect : Math.Probability.expect
+  have hexpect : _root_.Math.Probability.expect
         ((pmfPi atomModified).map
           (finiteClockJointStoppingTimes clockBound)) value =
-      Math.Probability.expect (pmfPi atomModified) fun choices =>
+      _root_.Math.Probability.expect (pmfPi atomModified) fun choices =>
         value (finiteClockJointStoppingTimes clockBound choices) := by
     simpa [Math.ProbabilityMassFunction.pushforward] using
       expect_pushforward_of_bounded
         (pmfPi atomModified) (finiteClockJointStoppingTimes clockBound) value
         (fun choices =>
           abs_quittingTerminalPayoff_le_quittingRewardBound reward _ player)
-  change Math.Probability.expect
+  change _root_.Math.Probability.expect
       ((pmfPi atomModified).map
         (finiteClockJointStoppingTimes clockBound)) value = _
-  rw [hexpect, Math.Probability.expect_eq_sum]
+  rw [hexpect, _root_.Math.Probability.expect_eq_sum]
   refine Finset.sum_congr rfl fun choices _ => ?_
   rw [pmfPi_apply_update_family, ENNReal.toReal_mul,
     ENNReal.toReal_prod]
@@ -483,8 +483,8 @@ theorem quittingTerminalPayoff_update_some_eq_clockBound_of_supported
   let value : (ι → Option ℕ) → ℝ := fun choices =>
     quittingTerminalPayoff reward
       (quittingPureStoppingTimeProfile reward choices) player
-  have hpush : Math.Probability.expect ((pmfPi sourceLaws).map shift) value =
-      Math.Probability.expect (pmfPi sourceLaws) fun choices =>
+  have hpush : _root_.Math.Probability.expect ((pmfPi sourceLaws).map shift) value =
+      _root_.Math.Probability.expect (pmfPi sourceLaws) fun choices =>
         value (shift choices) := by
     simpa [Math.ProbabilityMassFunction.pushforward] using
       expect_pushforward_of_bounded (pmfPi sourceLaws) shift value

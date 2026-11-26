@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import GameTheory.Math.Probability.FiniteUniform
 import MathUE.ProbabilityMassFunction.Bool
 import MathUE.PMFProduct.Bool
 import UniformEquilibrium.Quitting.Debt.Dynamic.DebtOwnerTransferCounterexample
@@ -48,7 +49,7 @@ def reward (quitters : {S : Finset Bool // S.Nonempty}) : Payoff Bool :=
       if who then -1 else -1
 
 /-- Both players independently Quit with probability one half. -/
-def root : Bool → PMF Bool := fun _ => PMF.uniformOfFintype Bool
+def root : Bool → PMF Bool := fun _ => GameTheory.Math.Probability.uniformLaw Bool
 
 /-- The exact zero-boundary root value `(-1/2,-1/2)`. -/
 def value : Payoff Bool := fun _ => -1 / 2
@@ -76,7 +77,7 @@ theorem expect_pmfPi_bool (selectedRoot : Bool → PMF Bool)
   Math.PMFProduct.expect_pmfPi_bool selectedRoot f
 
 @[simp] theorem root_apply (who : Bool) :
-    root who = PMF.uniformOfFintype Bool := rfl
+    root who = GameTheory.Math.Probability.uniformLaw Bool := rfl
 
 @[simp] theorem quittingRootOfSimplex_simplexRoot :
     quittingRootOfSimplex simplexRoot = root := by
@@ -148,24 +149,24 @@ theorem true_continuePayoff (tail : Payoff Bool)
 theorem false_quitPayoff_root_zero :
     quittingRootQuitPayoff reward (0 : Payoff Bool) root false = -1 / 2 := by
   rw [false_quitPayoff]
-  norm_num [root, PMF.uniformOfFintype_apply]
+  norm_num [root, GameTheory.Math.Probability.uniformLaw_apply]
 
 theorem false_continuePayoff_root_zero :
     quittingRootContinuePayoff reward (0 : Payoff Bool) root false =
       -1 / 2 := by
   rw [false_continuePayoff]
-  norm_num [root, PMF.uniformOfFintype_apply]
+  norm_num [root, GameTheory.Math.Probability.uniformLaw_apply]
 
 theorem true_quitPayoff_root_zero :
     quittingRootQuitPayoff reward (0 : Payoff Bool) root true = -1 / 2 := by
   rw [true_quitPayoff]
-  norm_num [root, PMF.uniformOfFintype_apply]
+  norm_num [root, GameTheory.Math.Probability.uniformLaw_apply]
 
 theorem true_continuePayoff_root_zero :
     quittingRootContinuePayoff reward (0 : Payoff Bool) root true =
       -1 / 2 := by
   rw [true_continuePayoff]
-  norm_num [root, PMF.uniformOfFintype_apply]
+  norm_num [root, GameTheory.Math.Probability.uniformLaw_apply]
 
 /-- Both players mix indifferently at the zero boundary. -/
 theorem root_isEndpointNash_zero :
@@ -186,9 +187,9 @@ theorem root_successor_zero :
   rw [quittingRootSuccessorPayoff_eq_endpointMix]
   cases who
   · rw [false_quitPayoff_root_zero, false_continuePayoff_root_zero]
-    norm_num [root, PMF.uniformOfFintype_apply, value]
+    norm_num [root, GameTheory.Math.Probability.uniformLaw_apply, value]
   · rw [true_quitPayoff_root_zero, true_continuePayoff_root_zero]
-    norm_num [root, PMF.uniformOfFintype_apply, value]
+    norm_num [root, GameTheory.Math.Probability.uniformLaw_apply, value]
 
 /-- The displayed points form an exact zero-boundary Nash--Bellman edge. -/
 theorem current_terminal_edge :
@@ -217,7 +218,7 @@ theorem current_terminal_edge :
   rw [show quittingRootOfSimplex (current, currentDebt).1.2 = root by
     exact quittingRootOfSimplex_simplexRoot]
   norm_num [quittingStationaryContinueMass, pmfPi_apply,
-    quittingAllContinueAction, root, PMF.uniformOfFintype_apply]
+    quittingAllContinueAction, root, GameTheory.Math.Probability.uniformLaw_apply]
 
 @[simp] theorem opponentContinueMass_true :
     quittingDebtOpponentContinueMass (current, currentDebt) true = 1 / 2 := by
@@ -225,7 +226,7 @@ theorem current_terminal_edge :
   rw [show quittingRootOfSimplex (current, currentDebt).1.2 = root by
     exact quittingRootOfSimplex_simplexRoot]
   norm_num [quittingStationaryContinueMass, pmfPi_apply,
-    quittingAllContinueAction, root, PMF.uniformOfFintype_apply]
+    quittingAllContinueAction, root, GameTheory.Math.Probability.uniformLaw_apply]
 
 /-- Player one's exact dynamic debt at the packet is `1/2`. -/
 theorem dynamicDebtUpdate_false :
@@ -275,7 +276,7 @@ theorem current_terminal_dynamicDebtEdge :
 /-- The opponent-quit atom has fixed positive raw mass. -/
 theorem terminalOpponentAtom_nonvanishing :
     0 < (root true true).toReal := by
-  norm_num [root, PMF.uniformOfFintype_apply]
+  norm_num [root, GameTheory.Math.Probability.uniformLaw_apply]
 
 /-- On that atom player one strictly loses one by joining the quitter set. -/
 theorem terminalOpponentAtom_joiningLoss_eq_one :
@@ -736,8 +737,10 @@ theorem tendsto_approximationError_smallHazard :
     simpa only [one_div] using
       (tendsto_one_div_add_atTop_nhds_zero_nat (𝕜 := ℝ))
   have hcontinuous : ContinuousAt (fun a : ℝ ↦ a ^ 2 / (a + 2)) 0 := by
-    exact (continuousAt_id.pow 2).div
-      (continuousAt_id.add continuousAt_const) (by norm_num)
+    have hdenominator : ContinuousAt (fun a : ℝ => a + 2) 0 :=
+      continuousAt_id.add continuousAt_const
+    have hnonzero : (0 : ℝ) + 2 ≠ 0 := by norm_num
+    exact (continuousAt_id.pow 2).div hdenominator hnonzero
   simpa [approximationError, Function.comp_def] using
     hcontinuous.tendsto.comp hhazard
 

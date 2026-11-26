@@ -175,7 +175,7 @@ theorem xor_strictPositiveNonpositiveCovector_or_sparseNonnegativeConeImprovemen
   let rowFloor : Sum Coordinate Generator → ℝ
     | .inl _ => 1
     | .inr _ => 0
-  rcases Maths.exists_potential_or_nonnegative_incompatibility
+  rcases Maths.FiniteInequality.exists_potential_or_farkasCertificate
       rowVector rowFloor with hseparator | hcombination
   · left
     obtain ⟨weight, hweight⟩ := hseparator

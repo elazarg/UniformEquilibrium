@@ -26,7 +26,7 @@ private theorem exists_fixedPoint_unitInterval_prod
     ∃ p, T p = p := by
   let e := Homeomorph.Set.prod (Icc (0 : ℝ) 1) K
   let lifted : C(↥(Icc (0 : ℝ) 1 ×ˢ K), ↥(Icc (0 : ℝ) 1 ×ˢ K)) :=
-    (toContinuousMap e.symm).comp (T.comp (toContinuousMap e))
+    (ContinuousMap.ofClass e.symm).comp (T.comp (ContinuousMap.ofClass e))
   have hproduct : (Icc (0 : ℝ) 1 ×ˢ K).Nonempty := by
     obtain ⟨x, hx⟩ := hne
     exact ⟨(0, x), ⟨⟨le_rfl, zero_le_one⟩, hx⟩⟩

@@ -153,6 +153,16 @@ theorem one_add_mul_one_sub_ne_zero (c : ℝ) (ω : ℂ) (hω : ‖ω‖ = 1)
       Complex.ofReal_re, Complex.ofReal_im] using hre0
   nlinarith [mul_nonneg hc0 (sub_nonneg.mpr hre_le)]
 
+private theorem tendsto_reciprocal_affine {X K : Type*}
+    [Field K] [TopologicalSpace K] [IsTopologicalRing K] [ContinuousInv₀ K]
+    {l : Filter X} {x : X → K} (hx : Filter.Tendsto x l (nhds 0))
+    (A B : K) (hA : A ≠ 0) :
+    Filter.Tendsto (fun t => (1 : K) / (A - x t * B)) l (nhds (1 / A)) := by
+  have hlimit : Filter.Tendsto (fun t => A - x t * B) l (nhds A) := by
+    simpa only [zero_mul, sub_zero] using
+      (tendsto_const_nhds (x := A)).sub (hx.mul_const B)
+  exact Filter.Tendsto.div tendsto_const_nhds hlimit hA
+
 /-- **Abel multiplier's nonzero limit.** As `λ ↓ 0`, the Abel/resolvent
 multiplier of a unit mode converges to `1/(1+c(1-ω))`, a nonzero value. -/
 theorem abel_mode_tendsto (c : ℝ) (ω : ℂ) (hω : ‖ω‖ = 1)
@@ -161,17 +171,12 @@ theorem abel_mode_tendsto (c : ℝ) (ω : ℂ) (hω : ‖ω‖ = 1)
       (nhdsWithin 0 (Set.Ioi 0)) (nhds (1 / (1 + (c : ℂ) * (1 - ω)))) := by
   set A : ℂ := 1 + (c : ℂ) * (1 - ω) with hA
   have hAne : A ≠ 0 := one_add_mul_one_sub_ne_zero c ω hω hc0
-  have hcont : Continuous (fun lam : ℝ => A - (lam : ℂ) * ((c : ℂ) * (1 - ω))) := by fun_prop
-  have htendstoA : Filter.Tendsto (fun lam : ℝ => A - (lam : ℂ) * ((c : ℂ) * (1 - ω)))
-      (nhdsWithin (0 : ℝ) (Set.Ioi 0)) (nhds A) := by
-    have hcontAt : Filter.Tendsto (fun lam : ℝ => A - (lam : ℂ) * ((c : ℂ) * (1 - ω)))
-        (nhdsWithin (0 : ℝ) (Set.Ioi (0 : ℝ))) (nhds (A - ((0 : ℝ) : ℂ) * ((c : ℂ) * (1 - ω)))) :=
-      (hcont.continuousAt (x := (0 : ℝ))).tendsto.mono_left nhdsWithin_le_nhds
-    simpa using hcontAt
-  have htendstog :
-      Filter.Tendsto (fun lam : ℝ => (1 : ℂ) / (A - (lam : ℂ) * ((c : ℂ) * (1 - ω))))
-        (nhdsWithin (0 : ℝ) (Set.Ioi 0)) (nhds (1 / A)) :=
-    Filter.Tendsto.div tendsto_const_nhds htendstoA hAne
+  have hcoe : Filter.Tendsto (fun lam : ℝ => (lam : ℂ))
+      (nhdsWithin 0 (Set.Ioi 0)) (nhds 0) := by
+    rw [← Complex.ofReal_zero]
+    exact (Complex.continuous_ofReal.continuousAt (x := (0 : ℝ))).tendsto.mono_left
+      nhdsWithin_le_nhds
+  have htendstog := tendsto_reciprocal_affine hcoe A ((c : ℂ) * (1 - ω)) hAne
   have heqF :
       (fun lam : ℝ => (1 : ℂ) / (A - (lam : ℂ) * ((c : ℂ) * (1 - ω)))) =ᶠ[
         nhdsWithin (0 : ℝ) (Set.Ioi 0)]

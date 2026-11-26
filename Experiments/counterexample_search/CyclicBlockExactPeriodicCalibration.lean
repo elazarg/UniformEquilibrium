@@ -206,9 +206,8 @@ theorem isExactAnchoredSoloPeriodic_cyclicCalibration :
     fin_cases phase <;> fin_cases who <;>
       first
         | exact absurd rfl hwho
-        | (simp [calibrationSchedule, calibrationValue, finRotate_apply,
-              reward_singletonTerminal_eval] <;>
-            norm_num)
+        | norm_num [calibrationSchedule, calibrationValue, finRotate_apply,
+            reward_singletonTerminal_eval]
 
 end CyclicBlockExactPeriodicCalibration
 end GameTheory

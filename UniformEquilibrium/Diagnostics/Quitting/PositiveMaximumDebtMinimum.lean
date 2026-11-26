@@ -223,9 +223,13 @@ theorem quittingTerminalExploitability_lt_half_of_attained_positive_minimum
       quittingTerminalExploitability reward profile ≤
         quittingTerminalExploitability reward candidate)
     (hpositive : 0 < quittingTerminalExploitability reward profile) :
-    quittingTerminalExploitability reward profile < (1 : ℝ) / 2 :=
-  minimumTerminalSemantic_maximumDebt_lt_half reward _ hreward
-    (subset_closure ⟨profile, rfl⟩)
-    (terminalSemantic_minimum_of_actualMinimum reward profile hminimum) hpositive
+    quittingTerminalExploitability reward profile < (1 : ℝ) / 2 := by
+  let pair := quittingTerminalSemanticPair reward profile
+  have hpair : pair ∈ quittingTerminalSemanticCarrier reward :=
+    subset_closure ⟨profile, rfl⟩
+  have hpositive' : 0 < quittingTerminalSemanticExploitability pair := hpositive
+  change quittingTerminalSemanticExploitability pair < (1 : ℝ) / 2
+  exact minimumTerminalSemantic_maximumDebt_lt_half reward pair hreward hpair
+    (terminalSemantic_minimum_of_actualMinimum reward profile hminimum) hpositive'
 
 end GameTheory

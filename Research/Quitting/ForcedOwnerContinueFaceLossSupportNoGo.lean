@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import GameTheory.Math.Probability.FiniteUniform
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticForcedOwnerWallRectangleCurvature
 import UniformEquilibrium.Quitting.Debt.Dynamic.DebtOwnerTransferCounterexample
 
@@ -50,11 +51,11 @@ def ownerQuitRoot : Bool → PMF Bool :=
 
 @[simp] theorem outsider_quitProbability :
     (root outsider true).toReal = 1 / 2 := by
-  norm_num [root, outsider, PMF.uniformOfFintype_apply]
+  norm_num [root, outsider, GameTheory.Math.Probability.uniformLaw_apply]
 
 @[simp] theorem outsider_continueProbability :
     (root outsider false).toReal = 1 / 2 := by
-  norm_num [root, outsider, PMF.uniformOfFintype_apply]
+  norm_num [root, outsider, GameTheory.Math.Probability.uniformLaw_apply]
 
 theorem actual_pureQuit_gain_eq_zero :
     quittingRootDeviationGain reward (0 : Payoff Bool) root outsider
@@ -78,7 +79,7 @@ theorem ownerContinue_outsider_quitPayoff_eq_neg_one :
   unfold quittingRootQuitPayoff quittingRootExpectedPayoff ownerContinueRoot
   rw [QuittingDynamicDebtOwnerTransferCounterexample.expect_pmfPi_bool]
   simp only [expect_eq_sum, Fintype.sum_bool]
-  norm_num [root, PMF.uniformOfFintype_apply, quittingRootPayoff, reward,
+  norm_num [root, GameTheory.Math.Probability.uniformLaw_apply, quittingRootPayoff, reward,
     QuittingExactDynamicDebtVanishingCounterexample.quittingQuitters_boolAction,
     owner, outsider]
 
@@ -88,7 +89,7 @@ theorem ownerContinue_outsider_continuePayoff_eq_zero :
   unfold quittingRootContinuePayoff quittingRootExpectedPayoff ownerContinueRoot
   rw [QuittingDynamicDebtOwnerTransferCounterexample.expect_pmfPi_bool]
   simp only [expect_eq_sum, Fintype.sum_bool]
-  norm_num [root, PMF.uniformOfFintype_apply, quittingRootPayoff, reward,
+  norm_num [root, GameTheory.Math.Probability.uniformLaw_apply, quittingRootPayoff, reward,
     QuittingExactDynamicDebtVanishingCounterexample.quittingQuitters_boolAction,
     owner, outsider]
 
@@ -100,7 +101,7 @@ theorem ownerContinue_pureQuit_gain_eq_neg_half :
   rw [ownerContinue_outsider_quitPayoff_eq_neg_one,
     ownerContinue_outsider_continuePayoff_eq_zero]
   norm_num [ownerContinueRoot, root, outsider,
-    PMF.uniformOfFintype_apply]
+    GameTheory.Math.Probability.uniformLaw_apply]
 
 theorem ownerQuit_outsider_quitPayoff_eq_one :
     quittingRootQuitPayoff reward (0 : Payoff Bool) ownerQuitRoot outsider =
@@ -108,7 +109,7 @@ theorem ownerQuit_outsider_quitPayoff_eq_one :
   unfold quittingRootQuitPayoff quittingRootExpectedPayoff ownerQuitRoot
   rw [QuittingDynamicDebtOwnerTransferCounterexample.expect_pmfPi_bool]
   simp only [expect_eq_sum, Fintype.sum_bool]
-  norm_num [root, PMF.uniformOfFintype_apply, quittingRootPayoff, reward,
+  norm_num [root, GameTheory.Math.Probability.uniformLaw_apply, quittingRootPayoff, reward,
     QuittingExactDynamicDebtVanishingCounterexample.quittingQuitters_boolAction,
     owner, outsider]
 
@@ -118,7 +119,7 @@ theorem ownerQuit_outsider_continuePayoff_eq_zero :
   unfold quittingRootContinuePayoff quittingRootExpectedPayoff ownerQuitRoot
   rw [QuittingDynamicDebtOwnerTransferCounterexample.expect_pmfPi_bool]
   simp only [expect_eq_sum, Fintype.sum_bool]
-  norm_num [root, PMF.uniformOfFintype_apply, quittingRootPayoff, reward,
+  norm_num [root, GameTheory.Math.Probability.uniformLaw_apply, quittingRootPayoff, reward,
     QuittingExactDynamicDebtVanishingCounterexample.quittingQuitters_boolAction,
     owner, outsider]
 
@@ -129,7 +130,7 @@ theorem ownerQuit_pureQuit_gain_eq_half :
   unfold quittingRootEndpointDifference
   rw [ownerQuit_outsider_quitPayoff_eq_one,
     ownerQuit_outsider_continuePayoff_eq_zero]
-  norm_num [ownerQuitRoot, root, outsider, PMF.uniformOfFintype_apply]
+  norm_num [ownerQuitRoot, root, outsider, GameTheory.Math.Probability.uniformLaw_apply]
 
 theorem positive_quit_rectangle_eq_one :
     quittingOwnerOutsiderDeviationRectangle reward (0 : Payoff Bool) root
@@ -174,7 +175,7 @@ theorem supportWeighted_faceLoss_eq_ownerInteraction :
           (0 : Payoff Bool) root owner outsider true) 0 := by
   rw [ownerContinue_pureQuit_gain_eq_neg_half,
     positive_quit_rectangle_eq_one]
-  norm_num [root, owner, outsider, PMF.uniformOfFintype_apply]
+  norm_num [root, owner, outsider, GameTheory.Math.Probability.uniformLaw_apply]
 
 end ForcedOwnerContinueFaceLossSupportNoGo
 

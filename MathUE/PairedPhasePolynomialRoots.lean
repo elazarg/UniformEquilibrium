@@ -205,11 +205,18 @@ theorem exists_admissible_rates {c : ℝ} (hc : c ∈ Set.Icc (1 : ℝ) 2) :
       le_trans ha.2 ha₁1.le⟩)
   have hcontinuous : ContinuousOn (fun a => primaryResidual c a (secondaryRate c a))
       (Set.Icc a₀ a₁) := by
-    have hrate : ContinuousOn (secondaryRate c) (Set.Icc a₀ a₁) := by
-      unfold secondaryRate startingPolynomial affineEndpoint
-      exact ContinuousOn.div (by fun_prop) (by fun_prop) hden
-    unfold primaryResidual affineEndpoint
-    fun_prop
+    have hend : Continuous (affineEndpoint c) :=
+      continuous_const.sub (continuous_const.mul continuous_id)
+    have hsquare : Continuous (fun a : ℝ => a ^ 2) := continuous_id.pow 2
+    have hrate : ContinuousOn (secondaryRate c) (Set.Icc a₀ a₁) :=
+      ((continuous_const.mul hsquare).sub hend).continuousOn.div
+        (hsquare.mul (continuous_const.sub hend)).continuousOn hden
+    have hid : ContinuousOn (fun a : ℝ => a) (Set.Icc a₀ a₁) :=
+      continuous_id.continuousOn
+    exact ((hend.comp_continuousOn hrate).mul
+      (continuousOn_const.sub (hid.mul (hrate.pow 2)))).sub
+      ((hrate.mul (continuousOn_const.sub hid)).mul
+        (continuousOn_const.add (continuousOn_const.mul hrate)))
   have hleft : 0 < primaryResidual c a₀ (secondaryRate c a₀) := by
     have hrate : secondaryRate c a₀ = 0 := by
       simp [secondaryRate, hstarting]

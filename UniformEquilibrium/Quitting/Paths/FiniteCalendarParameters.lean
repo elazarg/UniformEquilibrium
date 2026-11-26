@@ -1,7 +1,7 @@
 import Mathlib.Data.Finset.Sort
 import Mathlib.Data.Fintype.Option
 import Mathlib.Data.Fintype.Prod
-import Mathlib.Data.Prod.Lex
+import Mathlib.Order.Prod.Lex.Basic
 import Mathlib.Basic.Real.Basic
 
 /-! # Deterministic parameters for finite quitting calendars -/

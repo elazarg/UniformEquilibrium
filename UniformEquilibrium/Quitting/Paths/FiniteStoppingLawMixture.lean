@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import GameTheory.Analysis.Nash
+import MathUE.Probability.FinDist
 import MathUE.Probability.StoppingLawReconstruction
 import UniformEquilibrium.Quitting.Classification.TableExistenceBranches
 import UniformEquilibrium.Quitting.Paths.StoppingLawMixture
@@ -24,6 +25,7 @@ noncomputable section
 namespace GameTheory
 
 open StochasticGame _root_.Math.Probability Math.ProbabilityMassFunction
+open GameTheory.Math.Probability (FinDist)
 open _root_.Math.Probability.DiscreteHazard
 open GameTheory.Math.Probability
 
@@ -174,7 +176,7 @@ theorem quittingTerminalPayoff_update_finiteStoppingLawMixture_eq_expect
       (Function.update profile mixer
         (quittingFiniteStoppingLawMixtureBehaviorStrategy reward mixer mixture))
       mixer =
-    Math.Probability.expect
+    _root_.Math.Probability.expect
       (quittingBehaviorStoppingLaw observerReward
         (quittingFiniteStoppingLawMixtureBehaviorStrategy reward mixer mixture))
       (fun choice => quittingTerminalPayoff observerReward
@@ -194,7 +196,7 @@ theorem quittingTerminalPayoff_update_finiteStoppingLawMixture_eq_expect
             (quittingFiniteStoppingLawMixtureBehaviorStrategy reward mixer mixture))
           mixer := hleft.symm
     _ =
-      Math.Probability.expect
+      _root_.Math.Probability.expect
         (quittingBehaviorStoppingLaw observerReward
           (quittingFiniteStoppingLawMixtureBehaviorStrategy reward mixer mixture))
         (fun choice =>
@@ -224,13 +226,13 @@ theorem quittingTerminalPayoff_update_finiteStoppingLawMixture_eq_expect
           (Function.update profile mixer
             (quittingPureTimeBehaviorStrategy reward mixer choice)) observer mixer
       rw [hvalueEq]
-      change Math.Probability.expect
+      change _root_.Math.Probability.expect
           (quittingBehaviorStoppingLaw reward
             (quittingFiniteStoppingLawMixtureBehaviorStrategy reward mixer mixture))
           value = _
       rw [quittingBehaviorStoppingLaw_finiteStoppingLawMixture]
       unfold quittingFiniteStrategyStoppingLaw
-      rw [Math.Probability.expect_bind_of_bounded _ _ value hvalue]
+      rw [_root_.Math.Probability.expect_bind_of_bounded _ _ value hvalue]
       unfold FinDist.expect FinDist.prob
       apply tsum_congr
       intro strategy
@@ -239,7 +241,7 @@ theorem quittingTerminalPayoff_update_finiteStoppingLawMixture_eq_expect
         quittingTerminalPayoff_update_eq_expect_stoppingLaw_pureTime
           observerReward profile mixer strategy
       rw [← hvalueEq]
-      change Math.Probability.expect
+      change _root_.Math.Probability.expect
           (quittingBehaviorStoppingLaw observerReward (who := mixer) strategy)
           (fun choice =>
             quittingTerminalPayoff observerReward

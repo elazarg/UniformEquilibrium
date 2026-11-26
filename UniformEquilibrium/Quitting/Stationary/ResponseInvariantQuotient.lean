@@ -234,10 +234,16 @@ theorem continuous_quittingQuotientStationaryClippedMap
     simpa only [quittingBlockLiftCLM_apply] using continuous_const.prodMk hlift
   apply continuous_pi
   intro coordinate
-  exact continuous_const.min (continuous_const.max
-    ((continuous_apply coordinate).add
-      ((continuous_quittingDiscountedDisplacement reward
-        (representative coordinate)).comp hpath)))
+  let displacement (input : ℝ × (ι → ℝ)) : ℝ :=
+    quittingDiscountedDisplacement reward input.1 input.2 (representative coordinate)
+  have hdisplacement : Continuous displacement :=
+    continuous_quittingDiscountedDisplacement reward (representative coordinate)
+  have hcoordinate : Continuous (fun point : Fin k → ℝ => point coordinate) :=
+    continuous_apply coordinate
+  change Continuous (fun point : Fin k → ℝ =>
+    min 1 (max 0 (point coordinate + displacement (0, quittingBlockLift block point))))
+  exact continuous_const.min
+    (continuous_const.max (hcoordinate.add (hdisplacement.comp hpath)))
 
 /-- The quotient clipping map has image in the closed unit cube. -/
 theorem quittingQuotientStationaryClippedMap_mem_unitCube

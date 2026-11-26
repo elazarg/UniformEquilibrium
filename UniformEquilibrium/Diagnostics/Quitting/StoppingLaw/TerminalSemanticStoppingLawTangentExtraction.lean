@@ -110,7 +110,7 @@ theorem exists_commonVanishingResetScale
   have htotalZero : Tendsto total atTop (nhds 0) := by
     dsimp only [total]
     convert (herrorZero.add hsumZero).add htailZero using 1
-    all_goals simp
+    simp
   have hrootPos : ∀ n, 0 < root n := by
     intro n
     exact Real.sqrt_pos.2 (htotalPos n)
@@ -130,7 +130,7 @@ theorem exists_commonVanishingResetScale
       hrootZero.const_add 1
     change Tendsto (root / fun n ↦ 1 + root n) atTop (nhds 0)
     convert hrootZero.div hdenom (by norm_num) using 1
-    all_goals norm_num
+    norm_num
   have hcomponentRate : ∀ component : ℕ → ℝ,
       (∀ n, 0 ≤ component n) →
       (∀ n, component n ≤ total n) →
@@ -139,7 +139,7 @@ theorem exists_commonVanishingResetScale
     have hupperZero : Tendsto (fun n ↦ root n * (1 + root n))
         atTop (nhds 0) := by
       convert hrootZero.mul (tendsto_const_nhds.add hrootZero) using 1
-      all_goals norm_num
+      norm_num
     apply squeeze_zero'
     · exact Eventually.of_forall fun n ↦
         div_nonneg (hcomponentNonneg n) (hscalePos n).le

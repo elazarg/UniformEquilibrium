@@ -68,7 +68,7 @@ theorem finkProfile_weighted_pureDeviationGain_sum_eq_zero
         expect (x who) (fun d =>
           expect (pmfPi (Function.update x who (PMF.pure d))) payoff -
             baseline) := by
-              simp only [Math.Probability.expect_eq_sum, x, baseline]
+              simp only [_root_.Math.Probability.expect_eq_sum, x, baseline]
     _ = expect (x who) (fun d =>
           expect (pmfPi (Function.update x who (PMF.pure d))) payoff) -
         expect (x who) (fun _ => baseline) := by
@@ -128,7 +128,7 @@ theorem finkProfile_weighted_pureDeviationKernel_sub_sum_eq_zero
     G.finkProfile_weighted_continuationGain_sum_eq_zero z
       (G.finkPlayerPotential who (Pi.single destination 1)) s who
   simpa [G.finkContinuationGain_playerPotential_self,
-    Math.Probability.expect_pi_single] using h
+    _root_.Math.Probability.expect_pi_single] using h
 
 omit [∀ i, DecidableEq (G.Act i)] in
 /-- The profile-weighted supported-action columns of the semantic Fink

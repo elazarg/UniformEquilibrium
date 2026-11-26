@@ -37,7 +37,7 @@ theorem measure_iUnion_failure_le
     μ (⋃ k, failure k) ≤ δ := by
   calc
     μ (⋃ k, failure k) ≤ ∑' k, μ (failure k) := measure_iUnion_le _
-    _ ≤ ∑' k, budget k := ENNReal.tsum_le_tsum hfailure
+    _ ≤ ∑' k, budget k := tsum_le_tsum hfailure
     _ ≤ δ := hbudget
 
 /-- Two-level form used for stitched monitoring: `j` indexes time blocks
@@ -55,7 +55,7 @@ theorem measure_iUnion_iUnion_failure_le
       μ (⋃ j, failure k j) ≤ ∑' j, μ (failure k j) :=
         measure_iUnion_le _
       _ ≤ ∑' j, budget k j :=
-        ENNReal.tsum_le_tsum (hfailure k)
+        tsum_le_tsum (hfailure k)
   · exact hbudget
 
 /-- If the total per-epoch error budget is finite, only finitely many epochs
@@ -76,7 +76,7 @@ theorem ae_eventually_not_mem_failure_of_budget
   apply ne_of_lt
   calc
     ∑' k, μ (failure k) ≤ ∑' k, budget k :=
-      ENNReal.tsum_le_tsum hfailure
+      tsum_le_tsum hfailure
     _ < ∞ := lt_top_iff_ne_top.mpr hbudget
 
 /-- An eventually linear signal eventually dominates a boundary whose ratio

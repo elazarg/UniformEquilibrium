@@ -34,8 +34,7 @@ theorem lawFrom_restrict_next_eq_smul_traj
   have hevents : {path : ℕ → State | path 1 = next} =ᵐ[lawFrom transition start]
       exactEvent := by
     filter_upwards [ae_startsAt transition start] with path hstart
-    change (path 1 = next) = (Preorder.frestrictLe 1 path = exactPrefix)
-    apply propext
+    change (path 1 = next) ↔ (Preorder.frestrictLe 1 path = exactPrefix)
     constructor
     · intro hnext
       funext index

@@ -319,7 +319,7 @@ theorem quittingTerminalPayoff_stoppingLawProfile_eq_expect
     (laws : ι → PMF (Option ℕ)) (observer : ι) :
     quittingTerminalPayoff reward
         (quittingStoppingLawProfile reward laws) observer =
-      Math.Probability.expect (pmfPi laws) fun choices =>
+      _root_.Math.Probability.expect (pmfPi laws) fun choices =>
         quittingTerminalPayoff reward
           (quittingPureStoppingTimeProfile reward choices) observer := by
   have hprofile : quittingCompactStoppingLawProfile reward
@@ -334,7 +334,7 @@ theorem quittingTerminalPayoff_stoppingLawProfile_eq_expect
   convert quittingTerminalPayoff_compactStoppingLawProfile_eq_expect
     reward (fun who => Math.Probability.CompactStoppingLaw.ofPMF (laws who))
     observer using 1
-  apply congrArg (fun joint => Math.Probability.expect joint fun choices =>
+  apply congrArg (fun joint => _root_.Math.Probability.expect joint fun choices =>
     quittingTerminalPayoff reward
       (quittingPureStoppingTimeProfile reward choices) observer)
   apply congrArg pmfPi
@@ -357,7 +357,7 @@ theorem quittingTerminalPayoff_update_stoppingLawProfile_pureTime_eq_expect
     quittingTerminalPayoff reward
         (Function.update (quittingStoppingLawProfile reward laws) who
           (quittingPureTimeBehaviorStrategy reward who choice)) observer =
-      Math.Probability.expect
+      _root_.Math.Probability.expect
         (pmfPi (quittingPureDeviationStoppingLaws laws who choice))
         (fun choices => quittingTerminalPayoff reward
           (quittingPureStoppingTimeProfile reward choices) observer) := by
@@ -374,7 +374,7 @@ theorem quittingTerminalPayoff_update_stoppingLawProfile_pureTime_eq_expect
   convert
     quittingTerminalPayoff_update_compactStoppingLawProfile_pureTime_eq_expect
       reward compactLaws who choice observer using 1
-  apply congrArg (fun joint => Math.Probability.expect joint fun choices =>
+  apply congrArg (fun joint => _root_.Math.Probability.expect joint fun choices =>
     quittingTerminalPayoff reward
       (quittingPureStoppingTimeProfile reward choices) observer)
   apply congrArg pmfPi

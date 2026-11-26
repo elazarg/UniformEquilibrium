@@ -70,26 +70,32 @@ theorem isOpen_strictRawRegion (schedule : Schedule ι period) :
       {p : α → ({S : Finset ι // S.Nonempty} → Payoff ι) → Prop}
       (h : ∀ a, IsOpen {r | p a r}) : IsOpen {r | ∀ a, p a r} := by
     simpa only [Set.iInter_ofPred] using isOpen_iInter_of_finite h
-  apply IsOpen.inter
+  have hinter {p q : ({S : Finset ι // S.Nonempty} → Payoff ι) → Prop}
+      (hp : IsOpen {r | p r}) (hq : IsOpen {r | q r}) : IsOpen {r | p r ∧ q r} :=
+    hp.inter hq
+  apply hinter
   · apply hforall
     intro player
-    exact (isOpen_Ioo.preimage (hcoordinate (quittingSingletonTerminal player) player)).inter
-      ((isOpen_Ioo.preimage (hcoordinate (quittingSingletonTerminal (schedule.partner player))
-        player)).inter (isOpen_Ioo.preimage
-          (hcoordinate ⟨schedule.pair (schedule.phase player), schedule.pair_nonempty _⟩ player)))
-  apply IsOpen.inter
+    refine hinter ?_ (hinter ?_ ?_)
+    · exact isOpen_Ioo.preimage (hcoordinate (quittingSingletonTerminal player) player)
+    · exact isOpen_Ioo.preimage
+        (hcoordinate (quittingSingletonTerminal (schedule.partner player)) player)
+    · exact isOpen_Ioo.preimage
+        (hcoordinate ⟨schedule.pair (schedule.phase player), schedule.pair_nonempty _⟩ player)
+  apply hinter
   · apply hforall
     intro player
     apply hforall
     intro phase
     by_cases hquiet : phase ≠ schedule.phase player
     · simp only [ne_eq, hquiet, not_false_eq_true, true_implies]
-      exact (isOpen_Ioo.preimage (hcoordinate
-        (quittingSingletonTerminal (schedule.first phase)) player)).inter
-        ((isOpen_Ioo.preimage (hcoordinate
-          (quittingSingletonTerminal (schedule.second phase)) player)).inter
-          (isOpen_Ioo.preimage (hcoordinate
-            ⟨schedule.pair phase, schedule.pair_nonempty phase⟩ player)))
+      refine hinter ?_ (hinter ?_ ?_)
+      · exact isOpen_Ioo.preimage (hcoordinate (quittingSingletonTerminal (schedule.first phase))
+          player)
+      · exact isOpen_Ioo.preimage (hcoordinate (quittingSingletonTerminal (schedule.second phase))
+          player)
+      · exact isOpen_Ioo.preimage
+          (hcoordinate ⟨schedule.pair phase, schedule.pair_nonempty phase⟩ player)
     · simp [hquiet]
   · apply hforall
     intro player

@@ -98,7 +98,7 @@ theorem lipschitzOnWith_pi_of_hasFDerivAt_entrywise_rowSum
       ‖derivative point (piBasisVector input) output‖ ≤
         bound output input) :
     LipschitzOnWith constant function domain := by
-  apply hconvex.lipschitzOnWith_of_nnnorm_hasFDerivWithin_le
+  apply hconvex.lipschitzOnWith_of_nnNorm_hasFDerivWithin_le
     (fun point hpoint =>
       (hderivative point hpoint).hasFDerivWithinAt)
   intro point hpoint

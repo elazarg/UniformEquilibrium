@@ -157,7 +157,7 @@ theorem collision_surplus_le {v : ℝ} (hv0 : 0 < v) (hv1 : v < 1) :
   fin_cases block <;> fin_cases other <;>
     simp [owner, quittingSingletonCollisionReward, quittingSoloReward,
       terminalReward] at hne ⊢
-  all_goals first | constructor <;> linarith | linarith
+  all_goals constructor! <;> linarith
 
 /-- Each player sees exactly three of the four coarse hazards as opponent
 hazards. -/
@@ -188,7 +188,7 @@ theorem abs_terminalReward_le_five {cost : ℝ}
   <;> by_cases h3 : 3 ∈ S
   <;> fin_cases who
   <;> simp [terminalReward, h0, h1, h2, h3, abs_le]
-  all_goals first | constructor <;> linarith | linarith
+  all_goals constructor! <;> linarith
 
 /-! ## Concrete compiler outputs -/
 

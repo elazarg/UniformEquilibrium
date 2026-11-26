@@ -288,12 +288,12 @@ theorem tendsto_quittingTerminalPayoff_preemptionRoot
       ((hrate.mul (tendsto_const_nhds.sub hrate)).mul
         tendsto_const_nhds)).add
       (hrateSq.mul tendsto_const_nhds) using 1
-    all_goals simp [currentValue, predecessorValue, collisionValue]
+    simp [currentValue, predecessorValue, collisionValue]
   have hdenominator : Filter.Tendsto
       (fun n ↦ 1 + rate n - rate n ^ 2)
       Filter.atTop (nhds 1) := by
     convert (tendsto_const_nhds.add hrate).sub hrateSq using 1
-    all_goals norm_num
+    norm_num
   have hquotient := hnumerator.div hdenominator (by norm_num : (1 : ℝ) ≠ 0)
   have heq : (fun n ↦
       ((1 - rate n ^ 2) * currentValue +
@@ -342,7 +342,7 @@ theorem tendsto_quittingStationaryFixedOpponentsQuitValue_preemptionRoot
       convert tendsto_const_nhds.sub
         ((tendsto_const_nhds.sub hrate).mul
           (tendsto_const_nhds.sub hrateSq)) using 1
-      all_goals norm_num
+      norm_num
     exact hpoly.congr' (Filter.Eventually.of_forall fun n ↦ (hformula n).symm)
   let bound := fun n ↦ 2 * quittingRewardBound reward *
     quittingRootAbsorptionMass (root n)
@@ -484,7 +484,7 @@ theorem tendsto_quittingStationaryUnilateralCap_preemptionRoot
         (nhds (quittingSoloReward reward current current)) := by
       convert ((tendsto_const_nhds.sub hrateSq).mul
         tendsto_const_nhds).add (hrateSq.mul tendsto_const_nhds) using 1
-      all_goals ring_nf
+      ring_nf
     have hcap := hmix.max
       (tendsto_const_nhds : Filter.Tendsto
         (fun _ : ℕ ↦ quittingSoloReward reward predecessor current)
@@ -519,7 +519,7 @@ theorem tendsto_quittingStationaryUnilateralCap_preemptionRoot
           (nhds (quittingSoloReward reward predecessor predecessor)) := by
         convert ((tendsto_const_nhds.sub hrate).mul
           tendsto_const_nhds).add (hrate.mul tendsto_const_nhds) using 1
-        all_goals ring_nf
+        ring_nf
       have hcap := hmix.max
         (tendsto_const_nhds : Filter.Tendsto
           (fun _ : ℕ ↦ quittingSoloReward reward current predecessor)

@@ -386,7 +386,7 @@ theorem exists_preimage_of_tendsto_apply_of_finiteDimensional
     exact mem_closure_of_tendsto hlimit
       (Eventually.of_forall fun n => ⟨jet n, rfl⟩)
   have hclosed : IsClosed (LinearMap.range linear : Set Codomain) :=
-    (LinearMap.range linear).closed_of_finiteDimensional
+    (LinearMap.range linear).isClosed_of_finiteDimensional
   rw [hclosed.closure_eq] at hmemClosure
   exact hmemClosure
 

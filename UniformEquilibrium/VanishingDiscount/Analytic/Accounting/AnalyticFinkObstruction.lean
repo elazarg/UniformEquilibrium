@@ -257,13 +257,13 @@ theorem rawPureDeviationStageGainCurve_eq_finkPointAt
     germ.rawPureDeviationStageGainCurve t s who d =
       G.finkStageGain (germ.finkPointAt ht) s who d := by
   unfold rawPureDeviationStageGainCurve finkStageGain mixedStageEU
-  rw [Math.Probability.expect_eq_sum,
-    Math.Probability.expect_eq_sum]
+  rw [_root_.Math.Probability.expect_eq_sum,
+    _root_.Math.Probability.expect_eq_sum]
   congr 1
   · apply Finset.sum_congr rfl
     intro a _
     rw [germ.rawPureDeviationProfileWeight_eq_pmfPi_finkPointAt ht]
-  · simpa [finkStageEU, Math.Probability.expect_eq_sum] using
+  · simpa [finkStageEU, _root_.Math.Probability.expect_eq_sum] using
       congrFun (congrFun
         (germ.rawStageCurve_eq_finkStageEU ht) s) who
 
@@ -279,8 +279,8 @@ theorem rawPureDeviationContinuationGainCurve_eq_finkPointAt
       G.finkContinuationGain W (germ.finkPointAt ht) s who d := by
   rw [G.finkContinuationGain_eq_expect_stateKernels]
   unfold rawPureDeviationContinuationGainCurve
-  rw [Math.Probability.expect_eq_sum,
-    Math.Probability.expect_eq_sum, ← Finset.sum_sub_distrib]
+  rw [_root_.Math.Probability.expect_eq_sum,
+    _root_.Math.Probability.expect_eq_sum, ← Finset.sum_sub_distrib]
   apply Finset.sum_congr rfl
   intro destination _
   rw [germ.rawPureDeviationStateKernelCurve_eq_finkPointAt ht,

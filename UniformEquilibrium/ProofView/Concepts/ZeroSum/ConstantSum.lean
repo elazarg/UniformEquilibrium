@@ -42,7 +42,7 @@ theorem IsConstantSum.socialWelfare_eq_of_bounded [Fintype ι]
     have hi : ∀ i ∈ (Finset.univ : Finset ι),
         Summable (fun ω => (G.outcomeKernel σ ω).toReal * G.utility ω i) := by
       intro i _
-      exact Math.Probability.expect_summable_of_bounded
+      exact _root_.Math.Probability.expect_summable_of_bounded
         (G.outcomeKernel σ) (fun ω => G.utility ω i) (hbd i)
     rw [Summable.tsum_finsetSum hi]]
   simp_rw [← Finset.mul_sum]

@@ -273,7 +273,6 @@ theorem blockerVertex_ge_floor {x : Fin 4 → ℝ} (hx : x ∈ ratioCube)
   all_goals
     first
     | exact div_nonneg (by linarith) (by positivity)
-    | positivity
     | linarith
 
 /-- The phase owner is pinned to its singleton diagonal at the phase vertex. -/

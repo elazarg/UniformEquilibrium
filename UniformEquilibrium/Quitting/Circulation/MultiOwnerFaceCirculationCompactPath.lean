@@ -275,13 +275,19 @@ theorem isClosed_quittingCirculationPathEdgeGraph
       {edge : QuittingNashBellmanPoint ι × QuittingNashBellmanPoint ι |
         edge.2 ∈ quittingCirculationPathBox bound lower} :=
     hbox.preimage continuous_snd
+  let currentValue (edge : QuittingNashBellmanPoint ι × QuittingNashBellmanPoint ι) :=
+    edge.1.1
+  let successorValue (point : Payoff ι × QuittingRootSimplex ι) :=
+    quittingRootSuccessorPayoff reward point.1 (quittingRootOfSimplex point.2)
+  have hcurrentValue : Continuous currentValue := continuous_fst.comp continuous_fst
+  have hsuccessorValue : Continuous successorValue :=
+    continuous_quittingRootSuccessorPayoff_simplex reward
   have hbellman : IsClosed
       {edge : QuittingNashBellmanPoint ι × QuittingNashBellmanPoint ι |
         edge.1.1 = quittingRootSuccessorPayoff reward edge.2.1
           (quittingRootOfSimplex edge.1.2)} := by
-    exact isClosed_eq
-      (continuous_fst.comp continuous_fst)
-      ((continuous_quittingRootSuccessorPayoff_simplex reward).comp hedgeData)
+    change IsClosed {edge | currentValue edge = (successorValue ∘ edgeData) edge}
+    exact isClosed_eq hcurrentValue (hsuccessorValue.comp hedgeData)
   have hsupport : IsClosed
       {edge : QuittingNashBellmanPoint ι × QuittingNashBellmanPoint ι |
         IsQuittingSimplexRootSupportApproxNash reward edge.2.1 δ
@@ -291,9 +297,11 @@ theorem isClosed_quittingCirculationPathEdgeGraph
   have habsorption : IsClosed
       {edge : QuittingNashBellmanPoint ι × QuittingNashBellmanPoint ι |
         charge ≤ quittingSimplexAbsorptionMass edge.1.2} := by
-    exact isClosed_le continuous_const
-      (continuous_quittingSimplexAbsorptionMass.comp
-        (continuous_snd.comp continuous_fst))
+    let currentRoot (edge : QuittingNashBellmanPoint ι × QuittingNashBellmanPoint ι) :=
+      edge.1.2
+    have hroot : Continuous currentRoot := continuous_snd.comp continuous_fst
+    change IsClosed {edge | charge ≤ (quittingSimplexAbsorptionMass ∘ currentRoot) edge}
+    exact isClosed_le continuous_const (continuous_quittingSimplexAbsorptionMass.comp hroot)
   have heq : {edge : QuittingNashBellmanPoint ι ×
         QuittingNashBellmanPoint ι |
       edge.1 ∈ quittingCirculationPathBox bound lower ∧

@@ -107,7 +107,7 @@ theorem exists_terminalChildPayoffDisplacement_limit_le_neg_of_frequently_quitZe
       (nhds (-limit)) := by
     convert (hsurvival.neg.mul (by simpa [displacement] using hlimit)).add
       herror using 1
-    all_goals ring_nf
+    ring_nf
   have hlower : ∃ᶠ time in atTop, debtFloor ≤
       -survival time * displacement time + error time := by
     apply (hreset.and_eventually (hroot.and hdebt)).mono

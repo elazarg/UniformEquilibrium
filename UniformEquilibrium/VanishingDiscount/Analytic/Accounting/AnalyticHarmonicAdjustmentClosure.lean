@@ -89,8 +89,8 @@ theorem rawPureDeviationStageGainCurve_zero_eq_endpointFinkPoint
     germ.rawPureDeviationStageGainCurve 0 s who d =
       G.finkStageGain germ.endpointFinkPoint s who d := by
   unfold rawPureDeviationStageGainCurve finkStageGain mixedStageEU
-  rw [Math.Probability.expect_eq_sum,
-    Math.Probability.expect_eq_sum]
+  rw [_root_.Math.Probability.expect_eq_sum,
+    _root_.Math.Probability.expect_eq_sum]
   congr 1
   · apply Finset.sum_congr rfl
     intro a _
@@ -113,8 +113,8 @@ theorem
         germ.endpointFinkPoint s who d := by
   rw [G.finkContinuationGain_eq_expect_stateKernels]
   unfold rawPureDeviationContinuationGainCurve
-  rw [Math.Probability.expect_eq_sum,
-    Math.Probability.expect_eq_sum, ← Finset.sum_sub_distrib]
+  rw [_root_.Math.Probability.expect_eq_sum,
+    _root_.Math.Probability.expect_eq_sum, ← Finset.sum_sub_distrib]
   apply Finset.sum_congr rfl
   intro destination _
   rw [
@@ -568,12 +568,12 @@ theorem
         C germ.endpointFinkPoint = 0)
     (hremainingVisible :
       ∀ s who (d : G.Act who),
-        Math.Probability.expect
+        _root_.Math.Probability.expect
             (Math.PMFProduct.pmfPi
               (Function.update
                 (germ.endpointProfile s) who (PMF.pure d)))
             (fun a =>
-              Math.Probability.expect (G.transition s a)
+              _root_.Math.Probability.expect (G.transition s a)
                 (fun s' => germ.endpointValue s' who)) =
             germ.endpointValue s who →
           germ.IsAnalyticallyVisibleAction s who d →
@@ -582,12 +582,12 @@ theorem
               germ.endpointFinkPoint s who d ≤ 0)
     (hinvisibleNeutral :
       ∀ s who (d : G.Act who),
-        Math.Probability.expect
+        _root_.Math.Probability.expect
             (Math.PMFProduct.pmfPi
               (Function.update
                 (germ.endpointProfile s) who (PMF.pure d)))
             (fun a =>
-              Math.Probability.expect (G.transition s a)
+              _root_.Math.Probability.expect (G.transition s a)
                 (fun s' => germ.endpointValue s' who)) =
             germ.endpointValue s who →
           ¬ germ.IsAnalyticallyVisibleAction s who d →
@@ -612,10 +612,10 @@ theorem
   have hharmonic :
       ∀ s who,
         germ.endpointValue s who =
-          Math.Probability.expect
+          _root_.Math.Probability.expect
             (Math.PMFProduct.pmfPi (germ.endpointProfile s))
             (fun a =>
-              Math.Probability.expect (G.transition s a)
+              _root_.Math.Probability.expect (G.transition s a)
                 (fun s' => germ.endpointValue s' who)) := by
     intro s who
     have hzero :=
@@ -636,12 +636,12 @@ theorem
         hcontinuation.symm
   have hexcessive :
       ∀ s who (d : G.Act who),
-        Math.Probability.expect
+        _root_.Math.Probability.expect
             (Math.PMFProduct.pmfPi
               (Function.update
                 (germ.endpointProfile s) who (PMF.pure d)))
             (fun a =>
-              Math.Probability.expect (G.transition s a)
+              _root_.Math.Probability.expect (G.transition s a)
                 (fun s' => germ.endpointValue s' who)) ≤
           germ.endpointValue s who := by
     intro s who d
@@ -656,11 +656,11 @@ theorem
         germ.endpointValue s who +
             (seed.H - K) s who =
           G.mixedStageEU s (germ.endpointProfile s) who +
-            Math.Probability.expect
+            _root_.Math.Probability.expect
               (Math.PMFProduct.pmfPi
                 (germ.endpointProfile s))
               (fun a =>
-                Math.Probability.expect (G.transition s a)
+                _root_.Math.Probability.expect (G.transition s a)
                   (fun s' => (seed.H - K) s' who)) := by
     intro s who
     have hcoordinate :=
@@ -689,11 +689,11 @@ theorem
       ∀ s who,
         germ.endpointValue s who + bias s who =
           G.mixedStageEU s (germ.endpointProfile s) who +
-            Math.Probability.expect
+            _root_.Math.Probability.expect
               (Math.PMFProduct.pmfPi
                 (germ.endpointProfile s))
               (fun a =>
-                Math.Probability.expect (G.transition s a)
+                _root_.Math.Probability.expect (G.transition s a)
                   (fun s' => bias s' who)) := by
     intro s who
     have hDcoordinate :=
@@ -709,11 +709,11 @@ theorem
       germ.endpointValue s who +
             (seed.H - (K + D)) s who =
         G.mixedStageEU s (germ.endpointProfile s) who +
-          Math.Probability.expect
+          _root_.Math.Probability.expect
             (Math.PMFProduct.pmfPi
               (germ.endpointProfile s))
             (fun a =>
-              Math.Probability.expect (G.transition s a)
+              _root_.Math.Probability.expect (G.transition s a)
                 (fun s' => (seed.H - (K + D)) s' who))
     rw [← germ.finkProfile_endpointFinkPoint]
     change
@@ -743,10 +743,10 @@ theorem
   intro s who d hneutral
   have hbaseline :
       G.mixedStageEU s (germ.endpointProfile s) who +
-          Math.Probability.expect
+          _root_.Math.Probability.expect
             (Math.PMFProduct.pmfPi (germ.endpointProfile s))
             (fun a =>
-              Math.Probability.expect (G.transition s a)
+              _root_.Math.Probability.expect (G.transition s a)
                 (fun s' => bias s' who)) =
         germ.endpointValue s who + bias s who :=
     (honProfile s who).symm
@@ -754,12 +754,12 @@ theorem
       G.mixedStageEU s
             (Function.update
               (germ.endpointProfile s) who (PMF.pure d)) who +
-          Math.Probability.expect
+          _root_.Math.Probability.expect
             (Math.PMFProduct.pmfPi
               (Function.update
                 (germ.endpointProfile s) who (PMF.pure d)))
             (fun a =>
-              Math.Probability.expect (G.transition s a)
+              _root_.Math.Probability.expect (G.transition s a)
                 (fun s' => bias s' who)) -
           (germ.endpointValue s who + bias s who) =
         G.finkStageGain germ.endpointFinkPoint s who d +
@@ -779,12 +779,12 @@ theorem
       G.mixedStageEU s
             (Function.update
               (germ.endpointProfile s) who (PMF.pure d)) who +
-          Math.Probability.expect
+          _root_.Math.Probability.expect
             (Math.PMFProduct.pmfPi
               (Function.update
                 (germ.endpointProfile s) who (PMF.pure d)))
             (fun a =>
-              Math.Probability.expect (G.transition s a)
+              _root_.Math.Probability.expect (G.transition s a)
                 (fun s' => bias s' who)) ≤
         germ.endpointValue s who + bias s who
     have hnonposBias :
@@ -801,12 +801,12 @@ theorem
       G.mixedStageEU s
             (Function.update
               (germ.endpointProfile s) who (PMF.pure d)) who +
-          Math.Probability.expect
+          _root_.Math.Probability.expect
             (Math.PMFProduct.pmfPi
               (Function.update
                 (germ.endpointProfile s) who (PMF.pure d)))
             (fun a =>
-              Math.Probability.expect (G.transition s a)
+              _root_.Math.Probability.expect (G.transition s a)
                 (fun s' => bias s' who)) ≤
         germ.endpointValue s who + bias s who
     dsimp only [bias, D, endpointAdjustment]
@@ -831,12 +831,12 @@ theorem
           K germ.endpointFinkPoint)
     (hremainingVisible :
       ∀ s who (d : G.Act who),
-        Math.Probability.expect
+        _root_.Math.Probability.expect
             (Math.PMFProduct.pmfPi
               (Function.update
                 (germ.endpointProfile s) who (PMF.pure d)))
             (fun a =>
-              Math.Probability.expect (G.transition s a)
+              _root_.Math.Probability.expect (G.transition s a)
                 (fun s' => germ.endpointValue s' who)) =
             germ.endpointValue s who →
           germ.IsAnalyticallyVisibleAction s who d →
@@ -845,12 +845,12 @@ theorem
               germ.endpointFinkPoint s who d ≤ 0)
     (hinvisibleNeutral :
       ∀ s who (d : G.Act who),
-        Math.Probability.expect
+        _root_.Math.Probability.expect
             (Math.PMFProduct.pmfPi
               (Function.update
                 (germ.endpointProfile s) who (PMF.pure d)))
             (fun a =>
-              Math.Probability.expect (G.transition s a)
+              _root_.Math.Probability.expect (G.transition s a)
                 (fun s' => germ.endpointValue s' who)) =
             germ.endpointValue s who →
           ¬ germ.IsAnalyticallyVisibleAction s who d →

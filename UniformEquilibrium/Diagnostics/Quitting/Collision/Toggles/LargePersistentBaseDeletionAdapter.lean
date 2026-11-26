@@ -43,8 +43,8 @@ theorem quittingRootExpectedPayoff_update_eq_otherMarginalMix
           quittingRootExpectedPayoff reward tail
             (Function.update root other (PMF.pure false)) who := by
   unfold quittingRootExpectedPayoff
-  rw [Math.PMFProduct.pmfPi_update_bind, Math.Probability.expect_bind,
-    Math.Probability.expect_eq_sum,
+  rw [Math.PMFProduct.pmfPi_update_bind, _root_.Math.Probability.expect_bind,
+    _root_.Math.Probability.expect_eq_sum,
     Fintype.sum_bool]
 
 omit [Nonempty ι] in
@@ -343,8 +343,11 @@ theorem mem_quittingPersistentBaseNashSet_of_free_endpointNash
   have hprofileNash : IsNash (quittingBinaryForm free).mixed
       (euPreference (quittingPersistentBaseUtility reward base free))
       profile := by
-    rw [isNash_mixed_iff]
+    apply (isNash_mixed_iff profile (fun _ _ =>
+      UtilityIntegrable.hasExpectation (payoffIntegrable_of_finite _ _))).2
     intro who action
+    apply (euPreference_iff _ _ _ _
+      (payoffIntegrable_of_finite _ _) (payoffIntegrable_of_finite _ _)).2
     simp only [Profile.update]
     let root := quittingPersistentBaseRootOfProfile base free profile
     have hroot : root = quittingPersistentBaseRoot base free point := by
@@ -353,9 +356,9 @@ theorem mem_quittingPersistentBaseNashSet_of_free_endpointNash
       reward base free hbase hdisjoint profile who
     have hpure := expectedUtility_persistentBase_eq_rootExpectedPayoff
       reward base free hbase hdisjoint
-        (Function.update profile who (FinDist.pure action)) who
+        (Function.update profile who (PMF.pure action)) who
     have hupdate := quittingPersistentBaseRootOfProfile_update
-      base free hdisjoint profile who (FinDist.pure action)
+      base free hdisjoint profile who (PMF.pure action)
     have hendpoint := hnash who.1 who.2
     rw [← hroot] at hendpoint
     cases action
@@ -377,7 +380,8 @@ theorem mem_quittingPersistentBaseNashSet_of_free_endpointNash
     (quittingPersistentBaseUtility reward base free) point.1
   have hpoly := (probs_mem_bestReplies_self_iff_isNash
     (F := quittingBinaryForm free)
-    (quittingPersistentBaseUtility reward base free) profile).mpr hprofileNash
+    (quittingPersistentBaseUtility reward base free)
+    ((quittingBinaryForm free).hasIntegrableUtility_of_finiteOutcome _) profile).mpr hprofileNash
   simpa [profile, probs_ofPolytope (quittingBinaryForm free).sig point.2]
     using hpoly
 

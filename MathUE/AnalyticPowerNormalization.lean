@@ -58,7 +58,7 @@ theorem exists_analytic_reparam_firstCoordinate_eq_pow
         (ne_of_gt h.2) h.1
     exact hfalse.exists.elim fun _s h => h
   obtain ⟨q, b, hb_analytic, hb_ne, hell_factor⟩ :=
-    hell.exists_eventuallyEq_pow_smul_nonzero_iff.mpr hell_ne
+    hell.exists_eventuallyEq_pow_smul_ne_zero_iff.mpr hell_ne
   have hq_pos : 0 < q := by
     by_contra hq
     have hq0 : q = 0 := Nat.eq_zero_of_not_pos hq

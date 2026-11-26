@@ -3,6 +3,7 @@ Copyright (c) 2026 GameTheory contributors. All rights reserved.
 Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
+import GameTheory.Math.Probability.FiniteUniform
 import UniformEquilibrium.ProofView.Concepts.Correlation.CorrelationRegimes
 
 /-!
@@ -69,12 +70,12 @@ def recommendation (slot : Fin 3) : Profile game :=
 
 /-- Uniform private recommendations on `CC`, `CD`, and `DC`. -/
 noncomputable def recommendationLaw : PMF (Profile game) :=
-  PMF.map recommendation (PMF.uniformOfFintype (Fin 3))
+  PMF.map recommendation (GameTheory.Math.Probability.uniformLaw (Fin 3))
 
 theorem expect_recommendationLaw (f : Profile game → ℝ) :
     expect recommendationLaw f = (f cc + f cd + f dc) / 3 := by
   rw [recommendationLaw, expect_map, expect_eq_sum]
-  simp only [PMF.uniformOfFintype_apply, Fintype.card_fin,
+  simp only [GameTheory.Math.Probability.uniformLaw_apply, Fintype.card_fin,
     ENNReal.toReal_inv, ENNReal.toReal_natCast, inv_mul_eq_div]
   rw [Fin.sum_univ_three]
   simp [recommendation]

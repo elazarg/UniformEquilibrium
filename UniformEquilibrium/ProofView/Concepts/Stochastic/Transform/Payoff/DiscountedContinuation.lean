@@ -119,11 +119,9 @@ theorem discountedPayoff_terminalChildDispatcher
     dsimp only [dispatched]
     rw [G.afterHistoryProfile_terminalChildDispatcher_canonical]
     unfold discountedPayoff
-    congr 1
-    apply tsum_congr
-    intro time
-    rw [G.expectedStagePayoff_canonicalTerminalChildProfile
-      depth profile child base time who]
+    exact congrArg (fun tail : ℝ => (1 - β) * tail)
+      (tsum_congr fun time => congrArg (fun payoff : ℝ => β ^ time * payoff)
+        (G.expectedStagePayoff_canonicalTerminalChildProfile depth profile child base time who))
   have h := G.discountedPayoff_prefix_decomposition
     dispatched initial depth who hβ0 hβ1
   rw [hprefix, G.histDist_eq_of_profilesAgreeBefore hagree depth le_rfl] at h

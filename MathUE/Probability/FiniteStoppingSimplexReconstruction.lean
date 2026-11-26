@@ -73,7 +73,7 @@ theorem finiteMass_eq_mass
     simp only [mass, htime, dite_eq_left]
   · have hzero : law simplex (some time) = 0 := by
       rw [law, PMF.map_apply]
-      rw [ENNReal.tsum_eq_zero]
+      rw [tsum_eq_zero_iff]
       intro action
       cases action with
       | none => simp [finiteStoppingTimeDecode]

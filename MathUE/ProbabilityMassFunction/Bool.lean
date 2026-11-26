@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import GameTheory.Math.Probability.FiniteUniform
 import MathUE.ProbabilityMassFunction
 import Mathlib.Probability.Distributions.Uniform
 
@@ -19,9 +20,9 @@ open _root_.Math.Probability
 
 /-- Expectation of a real-valued function under the uniform Boolean PMF. -/
 @[simp] theorem expect_uniformOfFintype_bool (f : Bool → ℝ) :
-    expect (PMF.uniformOfFintype Bool) f = (f false + f true) / 2 := by
+    expect (GameTheory.Math.Probability.uniformLaw Bool) f = (f false + f true) / 2 := by
   rw [expect_eq_sum, Fintype.sum_bool]
-  norm_num [PMF.uniformOfFintype_apply]
+  norm_num [GameTheory.Math.Probability.uniformLaw_apply]
   ring
 
 /-- A Boolean probability mass function with zero real mass at `true` is the

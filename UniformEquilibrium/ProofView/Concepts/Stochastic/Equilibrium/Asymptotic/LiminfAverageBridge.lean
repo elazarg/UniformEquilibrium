@@ -469,7 +469,7 @@ theorem integral_pathwiseAveragePayoff (σ : G.BehaviorProfile) (s₀ : G.State)
       G.finiteAveragePayoff s₀ n σ who := by
   unfold pathwiseAveragePayoff
   rw [G.integral_histOfPlay_infinitePlayMeasure σ s₀ n
-    (fun h => (n : ℝ)⁻¹ * G.totalPayoff who h), Math.Probability.expect_const_mul]
+    (fun h => (n : ℝ)⁻¹ * G.totalPayoff who h), _root_.Math.Probability.expect_const_mul]
   rfl
 
 omit [DecidableEq ι] [Fintype G.State] [DecidableEq G.State]

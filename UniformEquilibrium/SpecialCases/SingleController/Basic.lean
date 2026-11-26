@@ -2229,10 +2229,10 @@ private theorem ergodicProjection_pure_true_kernel (κ : Bool → PMF Bool) (f :
   set o2 : Bool → ℝ := fun _ => (5 : ℝ) with ho2
   set u2 : Bool → ℝ := fun s => cond s 0 5 with hu2
   have ho2harm : ∀ s, expect (κ s) o2 = o2 s := by
-    intro s; rw [hκ s, Math.Probability.expect_pure, ho2]
+    intro s; rw [hκ s, _root_.Math.Probability.expect_pure, ho2]
   have hdecomp2 : ∀ s, f s = o2 s + (expect (κ s) u2 - u2 s) := by
     intro s
-    rw [hκ s, Math.Probability.expect_pure]
+    rw [hκ s, _root_.Math.Probability.expect_pure]
     rcases s with _ | _
     · rw [hfA, ho2, hu2]; norm_num
     · rw [hfB, ho2, hu2]; norm_num

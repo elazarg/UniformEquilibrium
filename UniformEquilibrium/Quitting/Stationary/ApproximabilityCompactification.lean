@@ -434,7 +434,7 @@ theorem singletonLCPFeasible_of_stationaryEndpointNash_tangent
       (2 * (Fintype.card iota : ℝ))
     have hthird := htangent.const_mul (Fintype.card iota : ℝ)
     convert (hfirst.add hsecond).add hthird using 1
-    all_goals norm_num
+    norm_num
   have hmargin : r0Margin (normalizedSoloMatrix reward) ≤ 0 := by
     apply ge_of_tendsto' herror
     intro n

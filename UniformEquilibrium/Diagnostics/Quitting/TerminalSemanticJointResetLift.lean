@@ -273,8 +273,8 @@ omit [DecidableEq ι] in
 private theorem quittingJointActionLaw_expect
     (root : ι → PMF Bool) (observable : (ι → Bool) → ℝ) :
     (quittingJointActionLaw root).expect observable =
-      Math.Probability.expect (pmfPi root) observable := by
-  change Math.Probability.expect (quittingJointActionLaw root).toPMF observable = _
+      _root_.Math.Probability.expect (pmfPi root) observable := by
+  change _root_.Math.Probability.expect (quittingJointActionLaw root).toPMF observable = _
   rw [quittingJointActionLaw_toPMF]
 
 /-- Forcing one coordinate of the coupled action law is the product law with
@@ -324,12 +324,12 @@ theorem quittingJointActionLaw_map_update
 private theorem expect_pmfPi_update_pure
     (root : ι → PMF Bool) (who : ι) (choice : Bool)
     (observable : (ι → Bool) → ℝ) :
-    Math.Probability.expect
+    _root_.Math.Probability.expect
         (pmfPi (Function.update root who (PMF.pure choice))) observable =
-      Math.Probability.expect (pmfPi root)
+      _root_.Math.Probability.expect (pmfPi root)
         (fun action => observable (Function.update action who choice)) := by
   rw [← pmfPi_bind_update_pure root who choice,
-    Math.Probability.expect_bind]
+    _root_.Math.Probability.expect_bind]
   simp
 
 omit [DecidableEq ι] in
@@ -446,7 +446,7 @@ private theorem quittingRootQuitPayoff_tail_irrel
   unfold quittingRootQuitPayoff quittingRootExpectedPayoff
   rw [expect_pmfPi_update_pure root who true,
     expect_pmfPi_update_pure root who true]
-  apply congrArg (Math.Probability.expect (pmfPi root))
+  apply congrArg (_root_.Math.Probability.expect (pmfPi root))
   funext action
   have hnonempty :
       (quittingQuitters (Function.update action who true)).Nonempty := by
@@ -488,7 +488,7 @@ private theorem quittingJointResetStep_cap
         (quittingTerminalLabel action) who)]
     simp only [quittingTerminalLabelValue_label]
     unfold quittingRootContinuePayoff quittingRootExpectedPayoff
-    apply congrArg (Math.Probability.expect
+    apply congrArg (_root_.Math.Probability.expect
       (pmfPi (Function.update root who (PMF.pure false))))
     funext action
     unfold quittingRootPayoff

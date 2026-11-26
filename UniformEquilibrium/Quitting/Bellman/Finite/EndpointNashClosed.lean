@@ -108,9 +108,15 @@ theorem isεQuittingRootEndpointNash_of_tendsto
     (hmem : ∀ᶠ a in l, IsεQuittingRootEndpointNash reward (tails a)
       (tolerance a) (quittingRootOfSimplex (roots a))) :
     IsεQuittingRootEndpointNash reward tail ε
-      (quittingRootOfSimplex root) :=
-  (isClosed_isεQuittingRootEndpointNash_simplex reward).mem_of_tendsto
-    (htolerance.prodMk_nhds (htails.prodMk_nhds hroots)) hmem
+      (quittingRootOfSimplex root) := by
+  let region : Set (ℝ × Payoff ι × QuittingRootSimplex ι) := {point |
+    IsεQuittingRootEndpointNash reward point.2.1 point.1 (quittingRootOfSimplex point.2.2)}
+  have hclosed : IsClosed region := isClosed_isεQuittingRootEndpointNash_simplex reward
+  have hlimit : Tendsto (fun a => (tolerance a, tails a, roots a)) l (𝓝 (ε, tail, root)) :=
+    htolerance.prodMk_nhds (htails.prodMk_nhds hroots)
+  change ∀ᶠ a in l, (tolerance a, tails a, roots a) ∈ region at hmem
+  change (ε, tail, root) ∈ region
+  exact IsClosed.mem_of_tendsto (s := region) hclosed hlimit hmem
 
 /-! ## The two exact slices -/
 

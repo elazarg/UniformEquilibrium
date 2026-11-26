@@ -99,7 +99,7 @@ theorem deriv_stationaryPolynomial (x : ℝ) :
       ((hasDerivAt_id x).const_mul (15 : ℝ))).add_const (1 : ℝ)
   convert h.deriv using 1
   all_goals norm_num
-  all_goals ring
+  ring
 
 /-- The selecting polynomial is strictly decreasing on the interval needed
 for the exact root certificate. -/

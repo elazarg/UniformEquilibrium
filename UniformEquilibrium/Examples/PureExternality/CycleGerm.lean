@@ -483,9 +483,10 @@ theorem analyticAt_prescribedBiasFactor :
   have hrw : (fun t : ℝ => prescribedBiasFactor t s i) =
       fun t : ℝ => (2 - t)⁻¹ * stagePayoffOf s i false := rfl
   rw [hrw]
-  exact
-    (AnalyticAt.fun_inv (analyticAt_const.sub analyticAt_id) (by norm_num)).mul
-      analyticAt_const
+  have hanalytic : AnalyticAt ℝ (fun t : ℝ => 2 - t) 0 :=
+    analyticAt_const.sub analyticAt_id
+  have hnonzero : (2 : ℝ) - 0 ≠ 0 := by norm_num
+  exact (hanalytic.fun_inv hnonzero).mul analyticAt_const
 
 /-- The prescribed germ is a **nondegenerate** finite-bias case: the value
 increment is exactly `t` times the analytic factor `(2 - t)⁻¹ · r`. -/

@@ -64,14 +64,14 @@ theorem hasQuittingActualNonconcentratedGroupExclusion_iff_orderedPair
     refine ⟨first, second, hne, ?_⟩
     dsimp only [surplus] at hpair ⊢
     convert hpair using 1
-    all_goals ring
+    ring
   · rintro ⟨first, second, hne, hpair⟩
     apply (Math.exists_cappedWeight_weightedSum_nonpositive_iff_exists_pair
       surplus beta hhalf hlt).mpr
     refine ⟨first, second, hne, ?_⟩
     dsimp only [surplus] at hpair ⊢
     convert hpair using 1
-    all_goals ring
+    ring
 
 /-- The full actual GE hypothesis has exactly one uniform parameter in
 `(0, 1/2]`, while its ordered pair may depend on the profile. -/

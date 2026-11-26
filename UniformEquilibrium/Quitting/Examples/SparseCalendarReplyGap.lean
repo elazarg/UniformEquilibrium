@@ -1,3 +1,4 @@
+import GameTheory.Math.Probability.FiniteUniform
 import UniformEquilibrium.Quitting.Classification.PlayerReindexNaturality
 import UniformEquilibrium.Quitting.Terminal.FiniteOpponentLateResponse
 
@@ -30,7 +31,7 @@ def reward (coalition : {S : Finset Player // S.Nonempty})
 
 /-- The fair law supported on dates zero and two. -/
 def sparseLaw : PMF (Option ℕ) :=
-  (PMF.uniformOfFintype Bool).map fun coin =>
+  (GameTheory.Math.Probability.uniformLaw Bool).map fun coin =>
     if coin then some 2 else some 0
 
 /-- Player `false` stays at Never and player `true` uses `sparseLaw`. -/
@@ -84,28 +85,28 @@ theorem replyValue_eq (choice : Option ℕ) :
   cases choice with
   | none =>
       simp [reward, expect_eq_sum,
-        PMF.uniformOfFintype_apply, quittingTerminalOutcomeReward,
+        GameTheory.Math.Probability.uniformLaw_apply, quittingTerminalOutcomeReward,
         quittingFirstStoppingOutcome, quittingEarliestStoppingValue,
         quittingEarliestStoppingCoalition, quittingStoppingTimeValue]
   | some time =>
       rcases time with _ | time
       · simp [reward, expect_eq_sum,
-          PMF.uniformOfFintype_apply, quittingTerminalOutcomeReward,
+          GameTheory.Math.Probability.uniformLaw_apply, quittingTerminalOutcomeReward,
           quittingFirstStoppingOutcome, quittingEarliestStoppingValue,
           quittingEarliestStoppingCoalition, quittingStoppingTimeValue]
       · rcases time with _ | time
         · simp [reward, expect_eq_sum,
-            PMF.uniformOfFintype_apply, quittingTerminalOutcomeReward,
+            GameTheory.Math.Probability.uniformLaw_apply, quittingTerminalOutcomeReward,
             quittingFirstStoppingOutcome, quittingEarliestStoppingValue,
             quittingEarliestStoppingCoalition, quittingStoppingTimeValue]
         · rcases time with _ | time
           · simp [reward, expect_eq_sum,
-              PMF.uniformOfFintype_apply, quittingTerminalOutcomeReward,
+              GameTheory.Math.Probability.uniformLaw_apply, quittingTerminalOutcomeReward,
               quittingFirstStoppingOutcome, quittingEarliestStoppingValue,
               quittingEarliestStoppingCoalition, quittingStoppingTimeValue]
             norm_num
           · simp [reward, expect_eq_sum,
-              PMF.uniformOfFintype_apply, quittingTerminalOutcomeReward,
+              GameTheory.Math.Probability.uniformLaw_apply, quittingTerminalOutcomeReward,
               quittingFirstStoppingOutcome, quittingEarliestStoppingValue,
               quittingEarliestStoppingCoalition, quittingStoppingTimeValue]
             intro himpossible

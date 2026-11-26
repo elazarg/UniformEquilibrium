@@ -117,7 +117,7 @@ theorem inactiveFourthHalfRoot_quitPremium
   fin_cases player <;>
     simp +decide [reward, rewardOfOwnPremium, premium, quittingRootPayoff,
       quittingQuitters, inactiveFourthHalfRoot, quittingHazardCoin,
-      Math.Probability.expect_eq_sum] <;>
+      _root_.Math.Probability.expect_eq_sum] <;>
     norm_num
   exact (hplayer rfl).elim
 

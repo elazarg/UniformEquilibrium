@@ -161,7 +161,7 @@ theorem eigenvectors_ne_zero (index : Fin 4) : eigenvectors index ≠ 0 := by
   have hthird := congrFun hzero 2
   fin_cases index
   all_goals norm_num [eigenvectors] at hfirst
-  all_goals norm_num [eigenvectors] at hthird
+  norm_num [eigenvectors] at hthird
 
 /-- Every triple is indexed by the omitted player in increasing order. -/
 def tripleMatrix (omitted : Fin 4) : Matrix (Fin 3) (Fin 3) ℝ :=

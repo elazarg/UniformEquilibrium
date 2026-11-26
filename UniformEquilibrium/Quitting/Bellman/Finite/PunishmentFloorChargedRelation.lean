@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Maths.Graph.ChargedRelation
+import MathUE.ChargedRelation
 import UniformEquilibrium.Quitting.Bellman.Finite.PunishmentFloorForward
 
 /-!

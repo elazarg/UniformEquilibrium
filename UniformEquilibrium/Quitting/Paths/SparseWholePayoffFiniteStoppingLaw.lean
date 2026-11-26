@@ -65,7 +65,7 @@ theorem exists_sparseFiniteStoppingLaw_wholePayoff_eq
   rw [heq observer]
   rw [quittingTerminalPayoff_update_finiteStoppingLawMixture_eq_expect]
   simp only [FinDist.expect_map]
-  change Math.Probability.expect (laws mixer).toPMF (fun choice =>
+  change _root_.Math.Probability.expect (laws mixer).toPMF (fun choice =>
       quittingTerminalPayoff reward
         (Function.update profile mixer
           (quittingPureTimeBehaviorStrategy reward mixer choice)) observer) = _

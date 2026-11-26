@@ -1029,7 +1029,7 @@ theorem nonempty_finiteDeadlineIncidenceSelection
     Nonempty (QuittingFiniteDeadlineIncidenceSelection reward gap source
       stopper deadline) := by
   induction deadline using Nat.strong_induction_on generalizing source stopper with
-  | h deadline ih =>
+  | ind deadline ih =>
       obtain ⟨who, hwhoDebt⟩ := hfloor source
       have hwhoNe : who ≠ stopper := by
         intro heq
@@ -1287,7 +1287,7 @@ theorem exists_bounded_quittingPureTimeSelfResetChain_of_literalNever_outside
     intro candidates
     induction hcard : candidates.card using Nat.strong_induction_on
         generalizing candidates with
-    | h card ih =>
+    | ind card ih =>
         intro profile hcertified
         obtain ⟨who, hwhoDebt⟩ := hfloor profile
         obtain ⟨step⟩ := exists_quittingPureTimeSelfResetStep

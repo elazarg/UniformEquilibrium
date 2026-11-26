@@ -120,7 +120,7 @@ theorem tsum_prefixFree_mass_le
       (∑ label ∈ children, mass (stem ++ [label])) ≤ mass stem)
     (code : Set (List Label)) (hcode : IsPrefixFreeCode code) (stem : List Label) :
     (∑' word : code, mass (stem ++ word.val)) ≤ mass stem := by
-  rw [ENNReal.tsum_eq_iSup_sum]
+  rw [tsum_eq_iSup_sum]
   apply iSup_le
   intro finite
   let words := finite.image (fun word : code => word.val)

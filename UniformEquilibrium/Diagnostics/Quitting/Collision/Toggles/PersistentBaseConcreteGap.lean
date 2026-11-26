@@ -78,7 +78,7 @@ theorem quittingRootOfSimplex_persistentBaseSimplexRoot
         ↓reduceDIte, quittingPersistentBaseRoot,
         quittingPersistentBaseRootOfProfile]
       change point.1 ⟨who, hfree⟩ action =
-        (ofPolytope (quittingBinaryForm free).sig point.2 ⟨who, hfree⟩).prob action
+        (ofPolytope (quittingBinaryForm free).sig point.2 ⟨who, hfree⟩ action).toReal
       exact (congrFun (congrFun
         (probs_ofPolytope (quittingBinaryForm free).sig point.2)
         ⟨who, hfree⟩) action).symm
@@ -168,11 +168,7 @@ theorem continuous_quittingPersistentLargeBaseComponent
     exact h
   by_cases hbase : who ∈ base
   · simp only [quittingPersistentLargeBaseComponent, hbase, ite_eq_left]
-    convert (continuous_const.mul hendpoint : Continuous fun point =>
-      (-1 : ℝ) * quittingRootEndpointDifference reward 0
-        (quittingPersistentBaseRoot base free point) who) using 1
-    funext point
-    simp
+    exact hendpoint.neg
   · by_cases hfree : who ∈ free
     · simpa [quittingPersistentLargeBaseComponent, hbase, hfree] using
         (continuous_const : Continuous fun _ :

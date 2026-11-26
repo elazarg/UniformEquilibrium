@@ -1,7 +1,7 @@
 import UniformEquilibrium.Quitting.Root.RewardTableCoordinates
 import MathUE.Finset.CoalitionBinaryCode
 import Mathlib.Data.Finset.Sort
-import Mathlib.Data.Prod.Lex
+import Mathlib.Order.Prod.Lex.Basic
 
 /-! # Deterministic parameters for quitting reward tables -/
 

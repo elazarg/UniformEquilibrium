@@ -397,7 +397,7 @@ Lagrange multipliers make every objective germ algebraic over `ℝ(t)`.
 theorem exists_eventually_relativeNormalMultipliers_and_isAlgebraic_of_lex
     {S ι κ σ : Type*} {d : ℕ}
     [CommRing S] [Algebra (Polynomial ℝ) S]
-    [Algebra (Polynomial ℝ) GermField]
+    {germAlgebra : Algebra (Polynomial ℝ) GermField}
     [Finite ι]
     [Fintype κ]
     (source : ℕ → (σ → ℝ))
@@ -405,13 +405,13 @@ theorem exists_eventually_relativeNormalMultipliers_and_isAlgebraic_of_lex
     (hinjective :
       Function.Injective
         (fun n => source n parameter))
-    (φ : S →ₐ[Polynomial ℝ] GermField)
+    (φ : letI := germAlgebra; S →ₐ[Polynomial ℝ] GermField)
     (P :
       Algebra.SubmersivePresentation
         (Polynomial ℝ) S ι κ)
     (hbase :
       ∀ p : Polynomial ℝ,
-        algebraMap (Polynomial ℝ) GermField p =
+        (@algebraMap (Polynomial ℝ) GermField _ _ germAlgebra) p =
           ((fun n =>
             p.eval (source n parameter)) :
             GermField))
@@ -473,6 +473,7 @@ theorem exists_eventually_relativeNormalMultipliers_and_isAlgebraic_of_lex
           objective (Λ n)) ∧
       ∀ j : Fin d,
         IsAlgebraic K (φ (objective j)) := by
+  let _ := germAlgebra
   classical
   let : Fintype ι := Fintype.ofFinite ι
   dsimp only

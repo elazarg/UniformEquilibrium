@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import GameTheory.Math.Probability.FiniteUniform
 import Mathlib.Probability.Distributions.Geometric
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPaidFirstDisagreementOrientation
 import UniformEquilibrium.Quitting.Root.TerminalSemanticEqualityStratum
@@ -214,7 +215,7 @@ theorem terminalPayoff_update_atom_never_eq_zero
 
 /-- Uniform law on the first `n + 1` finite dates, with no Never atom. -/
 def uniformClockLaw (n : ℕ) : PMF (Option ℕ) :=
-  (PMF.uniformOfFintype (Fin (n + 1))).map
+  (GameTheory.Math.Probability.uniformLaw (Fin (n + 1))).map
     (fun time => some time.val)
 
 @[simp] theorem uniformClockLaw_none (n : ℕ) :
@@ -343,7 +344,7 @@ theorem profile_payoff_clock (n : ℕ) :
   rw [profile, quittingTerminalPayoff_update_eq_expect_stoppingLaw_pureTime,
     show quittingBehaviorStoppingLaw reward (clockStrategy n) =
         uniformClockLaw n by simp [clockStrategy]]
-  rw [uniformClockLaw, Math.Probability.expect_map]
+  rw [uniformClockLaw, _root_.Math.Probability.expect_map]
   have hvalue : (fun time : Fin (n + 1) =>
       quittingTerminalPayoff reward
         (Function.update (quittingAlwaysContinueProfile reward) clock
@@ -351,8 +352,8 @@ theorem profile_payoff_clock (n : ℕ) :
         clock) = fun _ => -1 := by
     funext time
     exact terminalPayoff_update_allContinue_clock_some_eq_neg_one time.val
-  rw [hvalue, Math.Probability.expect_eq_sum]
-  simp [PMF.uniformOfFintype_apply]
+  rw [hvalue, _root_.Math.Probability.expect_eq_sum]
+  simp [GameTheory.Math.Probability.uniformLaw_apply]
   have htoReal : ((n : ENNReal) + 1).toReal = (n : ℝ) + 1 := by
     rw [ENNReal.toReal_add (by simp) (by simp)]
     simp
@@ -659,7 +660,7 @@ theorem profileOfClockLaw_payoff_clock_of_none_eq_zero
     have htotal := (hasSum_quittingHazardStopMass hazard).tsum_eq
     rw [hnever] at htotal
     linarith
-  change Math.Probability.expect law value = -1
+  change _root_.Math.Probability.expect law value = -1
   rw [← hstopping,
     quittingHazardStoppingLaw_expect hazard value hvalueBound, hnever]
   simp_rw [show ∀ time, value (some time) = -1 by

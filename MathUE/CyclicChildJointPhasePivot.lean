@@ -92,6 +92,9 @@ theorem rootRatio_continuous (data : JointPhaseData) :
     ContinuousOn data.rootRatio (Set.Icc 0 data.upper) := by
   unfold rootRatio
   apply ContinuousOn.div
+    (f := fun y : ℝ =>
+      -2 * (data.b * (data.a * data.c + data.a + 1) * y - gap data.a data.b data.c))
+    (g := data.denominator)
   · fun_prop
   · unfold denominator linear leading quadraticLeading quadraticLinear jointLoss
       quadraticConstant discrim
@@ -213,7 +216,7 @@ theorem selected_denominator_pos (data : JointPhaseData) {y : ℝ}
 theorem secondRatio_continuous (data : JointPhaseData) :
     ContinuousOn data.secondRatio (Set.Icc 0 data.upper) := by
   unfold secondRatio
-  apply ContinuousOn.div
+  apply ContinuousOn.div (g := fun y : ℝ => data.c * (1 - y))
   · have hloss : ContinuousOn (jointLoss data.h₃ data.q₃) (Set.Icc 0 data.upper) := by
       unfold jointLoss
       fun_prop
@@ -229,7 +232,8 @@ theorem thirdRatio_continuous (data : JointPhaseData) :
     unfold jointLoss
     fun_prop
   unfold thirdRatio
-  apply ContinuousOn.div
+  apply ContinuousOn.div (g := fun y : ℝ =>
+    balanceDenominator data.b (jointLoss data.h₂ data.q₂ y) (data.root y) y)
   · exact continuousOn_const.sub (hloss.mul data.rootRatio_continuous)
   · unfold balanceDenominator
     have hroot := data.root_continuous

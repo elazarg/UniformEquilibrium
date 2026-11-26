@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: UniformEquilibrium contributors
 -/
 
+import GameTheory.Math.Probability.FiniteUniform
 import MathUE.PMFProduct.Bool
 import UniformEquilibrium.Diagnostics.Quitting.Collision.Toggles.EmptyBaseSemanticDispatch
 import UniformEquilibrium.Diagnostics.Quitting.Collision.Toggles.SemanticCompactGap
@@ -267,8 +268,11 @@ theorem isClosed_quittingEmptyBaseRhoBox (active : Finset ι) (rho : ℝ) :
         (fun root : QuittingRootSimplex ι => (root who).weights true) :=
       (Convexity.StdSimplex.continuous_weights_apply ℝ true).comp
         (continuous_apply who)
-    exact (isClosed_le continuous_const hcoordinate).inter
-      (isClosed_le hcoordinate continuous_const)
+    have hlower : IsClosed {root : QuittingRootSimplex ι | rho ≤ (root who).weights true} :=
+      isClosed_le continuous_const hcoordinate
+    have hupper : IsClosed {root : QuittingRootSimplex ι |
+        (root who).weights true ≤ 1 - rho} := isClosed_le hcoordinate continuous_const
+    exact hlower.inter hupper
   · apply isClosed_iInter
     intro who
     apply isClosed_iInter
@@ -292,14 +296,14 @@ theorem quittingEmptyBaseRhoBox_nonempty
     (active : Finset ι) {rho : ℝ} (hrhoHalf : rho ≤ 1 / 2) :
     (quittingEmptyBaseRhoBox active rho).Nonempty := by
   let root : QuittingRootSimplex ι := fun who =>
-    if who ∈ active then stdSimplexEquiv (PMF.uniformOfFintype Bool)
+    if who ∈ active then stdSimplexEquiv (GameTheory.Math.Probability.uniformLaw Bool)
     else stdSimplexEquiv (PMF.pure false)
   refine ⟨root, ?_⟩
   constructor
   · intro who hwho
     have hhalf : (root who).weights true = 1 / 2 := by
       norm_num [root, hwho, coe_stdSimplexEquiv_apply, toVector,
-        PMF.uniformOfFintype_apply]
+        GameTheory.Math.Probability.uniformLaw_apply]
     rw [hhalf]
     constructor
     · exact hrhoHalf

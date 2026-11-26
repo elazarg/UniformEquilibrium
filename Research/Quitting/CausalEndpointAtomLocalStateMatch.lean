@@ -425,13 +425,13 @@ theorem rectangleEndpoint_localStateMatch
       rw [← hprofiles]
       dsimp only [base]
       convert hglobal using 1
-      all_goals ring)
+      ring)
   have htails := stagePureEndpoint_shiftedProfiles_commonTail reward base mover
     stage action
   refine ⟨?_, htails.1, htails.2.1, htails.2.2⟩
   dsimp only [base] at hlocal ⊢
   convert hlocal using 1
-  all_goals ring
+  ring
 
 namespace ConcentratedCollisionFourRole
 

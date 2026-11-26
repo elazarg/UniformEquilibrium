@@ -22,7 +22,8 @@ asserted here, and no proper-ranking decay producer is assumed or proved here.
 noncomputable section
 
 open _root_.Math.Probability
-open _root_.Math.ProbabilityMassFunction GameTheory.Math.Probability
+open _root_.Math.ProbabilityMassFunction
+open GameTheory.Math.Probability hiding expect expect_eq_sum expect_pure
 open _root_.Math.Probability.FiniteLawRepair
 open scoped BigOperators
 

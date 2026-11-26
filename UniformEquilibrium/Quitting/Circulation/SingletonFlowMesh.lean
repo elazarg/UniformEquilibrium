@@ -124,7 +124,7 @@ theorem quittingMeshInterpolant_eq_mix_succ
         a * quittingMeshInterpolant root start a (k + 1) := by
   unfold quittingMeshInterpolant
   field_simp [pow_succ, ha]
-  all_goals ring
+  ring
 
 /-- Payoff-vector version of the arc interpolation, applied coordinatewise. -/
 def quittingMeshPayoffInterpolant
@@ -195,7 +195,7 @@ theorem quittingMeshPayoffInterpolant_at_length_eq_next
   rw [one_sub_quittingMeshHazard_pow hp1.le hm, harcWho]
   have hcontinue : 1 - p ≠ 0 := ne_of_gt (sub_pos.mpr hp1)
   field_simp [hcontinue]
-  all_goals ring
+  ring
 
 /-- Closed form for an interpolant whose start lies on the geometric arc
 from `root` to `next`. -/
@@ -210,7 +210,7 @@ theorem quittingMeshInterpolant_eq_pow_sub
   have hpow := pow_sub₀ q hq hk
   rw [hpow]
   field_simp [hq]
-  all_goals ring
+  ring
 
 /-- Every microstage of a subdivided singleton arc lies between its two
 coarse endpoints.  Consequently, any coordinatewise lower bound shared by

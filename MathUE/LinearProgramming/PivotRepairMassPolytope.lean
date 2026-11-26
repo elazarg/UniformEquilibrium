@@ -76,7 +76,8 @@ theorem isClosed_pivotRepairMassFeasibleSet (deadline : ℕ) :
       (∑ time, pivotRepairHead mass time) + pivotRepairLate mass +
         pivotRepairNever mass = 1} := by
     apply isClosed_singleton.preimage
-    exact ((continuous_finsetSum _ fun time _ ↦ continuous_apply (Sum.inl time)).add
+    exact ((continuous_finsetSum _ fun time _ ↦ (continuous_apply (Sum.inl time) :
+      Continuous fun mass : PivotRepairMass deadline ↦ mass (Sum.inl time))).add
       (continuous_apply _)).add (continuous_apply _)
   have halpha : IsClosed {mass : PivotRepairMass deadline |
       0 ≤ pivotRepairFirstAtom mass} :=

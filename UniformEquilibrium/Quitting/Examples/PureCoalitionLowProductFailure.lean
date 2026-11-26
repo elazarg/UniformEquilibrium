@@ -83,7 +83,7 @@ theorem halfRoot_quitPremium
   fin_cases player <;>
     simp +decide [reward, rewardOfOwnPremium, premium, quittingRootPayoff,
       quittingQuitters, halfRoot, quittingHazardCoin,
-      Math.Probability.expect_eq_sum] <;>
+      _root_.Math.Probability.expect_eq_sum] <;>
     norm_num
 
 /-- The table therefore fails product-low premiums although every pure

@@ -890,10 +890,10 @@ theorem abs_quittingTerminalPayoff_update_pureTime_sub_compressed_mapped_le_of_b
   rw [quittingQuantileClockCompressedProfile]
   rw [quittingTerminalPayoff_update_stoppingLawProfile_pureTime_eq_expect,
     quittingTerminalPayoff_update_stoppingLawProfile_pureTime_eq_expect]
-  change |Math.Probability.expect (pmfPi sourceModified) (fun choices =>
+  change |_root_.Math.Probability.expect (pmfPi sourceModified) (fun choices =>
       quittingTerminalPayoff reward
         (quittingPureStoppingTimeProfile reward choices) who) -
-    Math.Probability.expect (pmfPi targetModified) (fun choices =>
+    _root_.Math.Probability.expect (pmfPi targetModified) (fun choices =>
       quittingTerminalPayoff reward
         (quittingPureStoppingTimeProfile reward choices) who)| ≤ _
   have htargetLaw : pmfPi targetModified =
@@ -1020,10 +1020,10 @@ theorem exists_abs_quittingTerminalPayoff_compressed_pureTime_sub_update_le_of_b
   rw [hsourceCanonical,
     quittingTerminalPayoff_update_stoppingLawProfile_pureTime_eq_expect,
     quittingTerminalPayoff_update_stoppingLawProfile_pureTime_eq_expect]
-  change |Math.Probability.expect (pmfPi targetModified) (fun choices =>
+  change |_root_.Math.Probability.expect (pmfPi targetModified) (fun choices =>
       quittingTerminalPayoff reward
         (quittingPureStoppingTimeProfile reward choices) who) -
-    Math.Probability.expect (pmfPi sourceModified) (fun choices =>
+    _root_.Math.Probability.expect (pmfPi sourceModified) (fun choices =>
       quittingTerminalPayoff reward
         (quittingPureStoppingTimeProfile reward choices) who)| ≤ _
   have htargetLaw : pmfPi targetModified =

@@ -4,17 +4,16 @@ Released under the MIT license as described in the file LICENSE.
 Authors: UniformEquilibrium contributors
 -/
 
-import GameTheory.Math.Probability.FinDist
+import MathUE.Probability.FinDist
 import MathUE.PMFProduct
 
 /-!
 # Finite-carrier PMFs as finite-support laws
 
 On a finite carrier, a Mathlib `PMF` has finite support and therefore defines
-the canonical `GameTheory.Math.Probability.FinDist`. This is the narrow
-representation bridge used when a proof is most naturally carried out with
-Mathlib's PMF calculus and execution is delegated to GameTheory's finite-law
-runner.
+a `FinDist`. This representation bridge lets proofs use Mathlib's PMF
+calculus on finite carriers and retain finite-support witnesses when a law is
+then mapped to a larger carrier.
 -/
 
 noncomputable section

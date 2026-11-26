@@ -179,7 +179,7 @@ private theorem hasSum_encodedMass (hazard : ScalarHazard) : HasSum (encodedMass
 
 private def encodedLaw (hazard : ScalarHazard) : PMF ℕ :=
   ⟨fun n => ENNReal.ofReal (encodedMass hazard n), by
-    apply ENNReal.summable.hasSum_iff.2
+    apply CompleteLattice.summable.hasSum_iff.2
     rw [← ENNReal.ofReal_tsum_of_nonneg (encodedMass_nonneg hazard)
       (hasSum_encodedMass hazard).summable]
     rw [(hasSum_encodedMass hazard).tsum_eq]

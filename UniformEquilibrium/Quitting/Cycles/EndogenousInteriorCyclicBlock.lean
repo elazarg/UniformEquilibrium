@@ -384,8 +384,15 @@ theorem continuous_quittingCyclicSoftBellmanMap
       exact ((continuous_excludedValue (weightOfReward reward) who).comp
         hphaseHazard).add
           (((continuous_continueMassExcl who).comp hphaseHazard).mul hnextValue)
-    exact (continuous_interiorBinaryApproximateResponse error).comp
-      (hquit.prodMk hcontinue)
+    let payoffs (point : QuittingCyclicHazardValuePoint ι (m + 1)) : ℝ × ℝ :=
+      (sigmaValue (weightOfReward reward) (phaseHazard point) who,
+        gammaValue (weightOfReward reward) (phaseHazard point) who (nextValue point))
+    let response (payoff : ℝ × ℝ) : ℝ :=
+      interiorBinaryApproximateResponse error payoff.1 payoff.2
+    have hpayoffs : Continuous payoffs := hquit.prodMk hcontinue
+    have hresponse : Continuous response := continuous_interiorBinaryApproximateResponse error
+    change Continuous (response ∘ payoffs)
+    exact hresponse.comp hpayoffs
   · apply continuous_pi
     intro phase
     let phaseHazard : QuittingCyclicHazardValuePoint ι (m + 1) → ι → ℝ :=
@@ -396,8 +403,14 @@ theorem continuous_quittingCyclicSoftBellmanMap
       (continuous_apply phase).comp continuous_fst
     have hnextPayoff : Continuous nextPayoff :=
       (continuous_apply (finRotate (m + 1) phase)).comp continuous_snd
-    exact (continuous_quittingHazardBellmanPayoff reward).comp
-      (hphaseHazard.prodMk hnextPayoff)
+    let inputs (point : QuittingCyclicHazardValuePoint ι (m + 1)) : (ι → ℝ) × Payoff ι :=
+      (phaseHazard point, nextPayoff point)
+    let update (point : (ι → ℝ) × Payoff ι) : Payoff ι :=
+      quittingHazardBellmanPayoff reward point.1 point.2
+    have hinputs : Continuous inputs := hphaseHazard.prodMk hnextPayoff
+    have hupdate : Continuous update := continuous_quittingHazardBellmanPayoff reward
+    change Continuous (update ∘ inputs)
+    exact hupdate.comp hinputs
 
 private theorem quittingCyclicSoftBellmanMap_mem_box
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)

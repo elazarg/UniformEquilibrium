@@ -260,7 +260,7 @@ theorem exists_bounded_quittingPureTimeSelfResetChain
   have haux : ∀ remaining : Finset ι, motive remaining := by
     intro remaining
     induction hcard : remaining.card using Nat.strong_induction_on generalizing remaining with
-    | h card ih =>
+    | ind card ih =>
         intro profile hnever
         obtain ⟨who, hwhoDebt⟩ := hfloor profile
         obtain ⟨step⟩ := exists_quittingPureTimeSelfResetStep

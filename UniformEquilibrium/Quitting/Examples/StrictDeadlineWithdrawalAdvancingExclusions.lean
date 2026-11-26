@@ -187,7 +187,7 @@ theorem dualColumn_eq_neg_three_of_not_mem
   all_goals fin_cases who
   all_goals norm_num [dualChild] at hwho
   all_goals norm_num [dualCoalition, futureIndex, dualChild] at hnot
-  all_goals norm_num [dualColumn]
+  norm_num [dualColumn]
 
 theorem dual_strict_of_dist_lt
     (other : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))

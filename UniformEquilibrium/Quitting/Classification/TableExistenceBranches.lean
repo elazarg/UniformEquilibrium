@@ -560,7 +560,7 @@ theorem quittingRowεPerfect_translate_iff
       unfold quittingRootPayoff
       by_cases hquit : (quittingQuitters action).Nonempty <;> simp [hquit]
     unfold quittingRootExpectedPayoff
-    rw [hsplit, Math.Probability.expect_add, Math.Probability.expect_const]
+    rw [hsplit, _root_.Math.Probability.expect_add, _root_.Math.Probability.expect_const]
   constructor <;> intro hperfect who <;>
       obtain ⟨hquit, hcontinue, hsupportQuit, hsupportContinue⟩ := hperfect who
     <;> refine ⟨?_, ?_, ?_, ?_⟩
@@ -622,7 +622,7 @@ theorem quittingRowεPerfect_scale
       unfold quittingRootPayoff
       by_cases hquit : (quittingQuitters action).Nonempty <;> simp [hquit]
     unfold quittingRootExpectedPayoff
-    rw [hpointwise, Math.Probability.expect_const_mul]
+    rw [hpointwise, _root_.Math.Probability.expect_const_mul]
   intro who
   obtain ⟨hquit, hcontinue, hsupportQuit, hsupportContinue⟩ := hperfect who
   refine ⟨?_, ?_, ?_, ?_⟩

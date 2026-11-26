@@ -398,7 +398,7 @@ def quittingRetainedTailTimingMixedPayoff
     (deadline : ℕ)
     (mixed : ι → PMF (QuittingFiniteDeadlineTimingAction deadline))
     (who : ι) : ℝ :=
-  Math.Probability.expect (pmfPi mixed) fun choices =>
+  _root_.Math.Probability.expect (pmfPi mixed) fun choices =>
     quittingRetainedTailTimingPurePayoff reward tail deadline choices who
 
 omit [DecidableEq ι] in
@@ -505,7 +505,7 @@ theorem quittingRetainedTailTimingPurePayoff_succ
     quittingTerminalPayoff_rootThenContinuation_eq]
   unfold quittingRootExpectedPayoff timingChoicesRoot
   rw [pmfPi_pure]
-  simp only [Math.Probability.expect_pure]
+  simp only [_root_.Math.Probability.expect_pure]
 
 omit [DecidableEq ι] in
 /-- Replacing the retained tail by all-Continue recovers the ordinary hard

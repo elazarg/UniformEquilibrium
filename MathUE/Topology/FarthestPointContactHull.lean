@@ -44,11 +44,24 @@ theorem exists_minimal_affineIndependent_finset_of_mem_convexHull
         point ∈ convexHull ℝ (alternative : Set V) →
         family.card ≤ alternative.card := by
   classical
-  let family := Caratheodory.minCardFinsetOfMemConvexHull hpoint
-  have hsubset : (family : Set V) ⊆ source :=
-    Caratheodory.minCardFinsetOfMemConvexHull_subseteq hpoint
-  have hindependent : AffineIndependent ℝ ((↑) : family → V) :=
-    Caratheodory.affineIndependent_minCardFinsetOfMemConvexHull hpoint
+  have hex : ∃ n : ℕ, ∃ t : Finset V, t.card = n ∧
+      (t : Set V) ⊆ source ∧ point ∈ convexHull ℝ (t : Set V) := by
+    rw [convexHull_eq_union] at hpoint
+    simp only [Set.mem_iUnion, exists_prop] at hpoint
+    obtain ⟨t, ht, _, hx⟩ := hpoint
+    exact ⟨t.card, t, rfl, ht, hx⟩
+  obtain ⟨family, hmin, hsubset, hmem⟩ := Nat.find_spec hex
+  have hminimal (alternative : Finset V) (ha : (alternative : Set V) ⊆ source)
+      (hx : point ∈ convexHull ℝ (alternative : Set V)) : family.card ≤ alternative.card :=
+    hmin.trans_le (Nat.find_min' hex ⟨alternative, rfl, ha, hx⟩)
+  have hnonempty : family.Nonempty := by
+    by_contra h
+    simp [Finset.not_nonempty_iff_eq_empty.mp h] at hmem
+  have hindependent : AffineIndependent ℝ ((↑) : family → V) := by
+    by_contra h
+    obtain ⟨y, hy⟩ := Caratheodory.mem_convexHull_erase h hmem
+    exact (Finset.card_lt_card (Finset.erase_ssubset y.2)).not_ge
+      (hminimal (family.erase y) (fun x hx => hsubset (Finset.mem_of_mem_erase hx)) hy)
   have hspan : vectorSpan ℝ (Set.range ((↑) : family → V)) ≤
       vectorSpan ℝ region := by
     apply vectorSpan_mono ℝ
@@ -56,13 +69,8 @@ theorem exists_minimal_affineIndependent_finset_of_mem_convexHull
     exact hsource (hsubset member.property)
   have hcard := hindependent.card_le_finrank_succ.trans
     (Nat.add_le_add_right (Submodule.finrank_mono hspan) 1)
-  refine ⟨family, Caratheodory.minCardFinsetOfMemConvexHull_nonempty hpoint,
-    hsubset, Caratheodory.mem_minCardFinsetOfMemConvexHull hpoint,
-    hindependent, ?_, ?_⟩
-  · simpa only [Fintype.card_coe] using hcard
-  · intro alternative halternative hmem
-    exact Caratheodory.minCardFinsetOfMemConvexHull_card_le_card hpoint
-      halternative hmem
+  refine ⟨family, hnonempty, hsubset, hmem, hindependent, ?_, hminimal⟩
+  simpa only [Fintype.card_coe] using hcard
 
 /-- Minimality of the actual contact family makes every convex coefficient
 strictly positive. The coefficients are selected, not supplied. -/
@@ -165,7 +173,7 @@ theorem mem_convexHull_contacts_of_farthestPoint
     dsimp [direction] at h ⊢
     linarith
   have hyP : y ∈ P :=
-    convexHull_min (fun _ hx => hKP hx.2) hP hyHull
+    convexHull_min (show contacts ⊆ P from fun _ hx => hKP hx.2) hP hyHull
   have hzNotFrontier : z ∉ intrinsicFrontier ℝ P := by
     intro hzFrontier
     have hdist := infDist_le_dist_of_mem (x := z) (hfrontier hzFrontier)

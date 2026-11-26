@@ -159,7 +159,9 @@ structure QuittingPositiveJointSourceMatchedUniformAllContinuePhantom
   residual : QuittingPositiveJointPrefixReachNoSureExitResidual reward
   endpointLimit : residual.source.SourceMatchedPunishmentEndpoint
   noSureExit : ¬endpointLimit.endpoint.HasSureExitNashPrefix
-  port : endpointLimit.endpoint.exactPrefixOrbit.SummableChargeAllContinuePort
+  orbit : QuittingPunishmentFloorInfiniteOrbit reward
+  orbit_eq : orbit = endpointLimit.endpoint.exactPrefixOrbit
+  port : orbit.SummableChargeAllContinuePort
   phantom : QuittingLowSurvivalAllContinuePhantom reward
   phantom_value_eq : phantom.value = port.limit
   uniformEquilibriumPayoff :
@@ -191,6 +193,8 @@ theorem wellSupported_or_stationary_or_sourceMatchedUniformAllContinuePhantom
         residual := residual
         endpointLimit := endpointLimit
         noSureExit := residual.noSureExitNashPrefix endpoint
+        orbit := endpoint.exactPrefixOrbit
+        orbit_eq := rfl
         port := port
         phantom := phantom
         phantom_value_eq := hvalue

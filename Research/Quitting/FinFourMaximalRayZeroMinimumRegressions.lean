@@ -1088,7 +1088,15 @@ theorem pairStageMass_eq_one
       fragment.pairTerminal = 1 := by
   rw [fragment.pairProfile_eq,
     quittingStageCoalitionMass_rootThenContinuation_zero]
-  exact quittingRootCoalitionMass_pureCoalitionAction_eq_one _
+  change quittingRootCoalitionMass (quittingPureSetRoot fragment.pairTerminal.val)
+    fragment.pairTerminal.val = 1
+  have hroot : quittingPureSetRoot fragment.pairTerminal.val =
+      fun who => PMF.pure (quittingCoalitionAction fragment.pairTerminal.val who) := by
+    funext who
+    by_cases hmem : who ∈ fragment.pairTerminal.val <;>
+      simp [quittingPureSetRoot, quittingSetAction, quittingCoalitionAction, hmem]
+  rw [hroot]
+  exact quittingRootCoalitionMass_pureCoalitionAction_eq_one fragment.pairTerminal.val
 
 /-- Both literal siblings have exactly the stored continuation after their
 common initial date. -/

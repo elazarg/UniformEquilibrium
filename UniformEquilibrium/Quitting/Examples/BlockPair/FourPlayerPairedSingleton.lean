@@ -133,7 +133,7 @@ theorem stationaryPureProfile_isExactTerminalNash :
     fin_cases other <;>
       simp [quittingSoloReward, stationaryCompletionReward_singleton_set,
         pairedSingletonReward, pairedSingletonMatrix] at hother ⊢
-    all_goals norm_num
+    norm_num
 
 /-- The displayed stationary exact Nash profile is a literal zero-debt
 carrier for the canonical maximum all-behavior terminal exploitability. -/

@@ -77,7 +77,9 @@ theorem eval₂_optionEquivRight_optionLocalizedCoordinate
   | mul_X P i hP =>
       simp only [map_mul, MvPolynomial.eval₂_mul,
         hP]
-      congr 1
+      refine congrArg (fun factor =>
+        algebraMap (MvPolynomial (Option ν) ℝ ⧸ J)
+          (Localization.Away (Ideal.Quotient.mk J g)) (Ideal.Quotient.mk J P) * factor) ?_
       cases i with
       | none =>
           rw [MvPolynomial.optionEquivRight_X_none,
@@ -140,7 +142,6 @@ theorem eventually_optionPresentationSectionMap_eq
     (g : MvPolynomial (Option ν) ℝ)
     [Algebra (Polynomial ℝ)
       (MvPolynomial (Option ν) ℝ ⧸ J)]
-    [Algebra (Polynomial ℝ) GermField]
     (hg : g ∉ J)
     (hJmem :
       ∀ Q : MvPolynomial (Option ν) ℝ,

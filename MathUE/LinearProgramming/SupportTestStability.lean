@@ -143,8 +143,8 @@ theorem eventually_strictLCPSupportInventory_and_admissible_eq
           apply eventually_all.mpr
           intro who
           by_cases hwho : who ∈ support
-          · filter_upwards [((continuous_apply who).continuousAt.comp hcandidate).eventually
-              (isOpen_Ioi.mem_nhds (hgood.1 who hwho))] with other hother
+          · filter_upwards [Filter.Tendsto.eventually_const_lt (hgood.1 who hwho)
+              ((continuous_apply who).continuousAt.comp hcandidate).tendsto] with other hother
             exact fun _ => hother
           · exact Eventually.of_forall (fun _ hmem => (hwho hmem).elim)
         have hinactive : ∀ᶠ other : Matrix ι ι ℝ in 𝓝 matrix,
@@ -154,8 +154,8 @@ theorem eventually_strictLCPSupportInventory_and_admissible_eq
           intro who
           by_cases hwho : who ∈ support
           · exact Eventually.of_forall (fun _ hnot => (hnot hwho).elim)
-          · filter_upwards [(hresidual who).eventually
-              (isOpen_Ioi.mem_nhds (hgood.2 who hwho))] with other hother
+          · filter_upwards [Filter.Tendsto.eventually_const_lt (hgood.2 who hwho)
+              (hresidual who).tendsto] with other hother
             exact fun _ => hother
         filter_upwards [hpositive, hinactive] with other hpositiveOther hinactiveOther
         have hmemOther := (mem_admissibleLCPSupports_iff other anchor
@@ -209,7 +209,8 @@ theorem eventually_principal_nonsingular_and_sign_eq
     rcases lt_or_gt_of_ne (hprincipal support hlarge) with hnegative | hpositive
     · filter_upwards [hcontinuous.eventually (isOpen_Iio.mem_nhds hnegative)] with other hother
       exact fun _ => ⟨hother.ne, (sign_neg hother).trans (sign_neg hnegative).symm⟩
-    · filter_upwards [hcontinuous.eventually (isOpen_Ioi.mem_nhds hpositive)] with other hother
+    · filter_upwards [Filter.Tendsto.eventually_const_lt hpositive hcontinuous.tendsto]
+        with other hother
       exact fun _ => ⟨hother.ne', (sign_pos hother).trans (sign_pos hpositive).symm⟩
   · exact Eventually.of_forall (fun _ h => (hlarge h).elim)
 

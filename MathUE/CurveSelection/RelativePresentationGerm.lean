@@ -18,8 +18,8 @@ def relativePresentationSequence
     {S ι κ : Type*}
     [CommRing S]
     [Algebra (Polynomial ℝ) S]
-    [Algebra (Polynomial ℝ) GermField]
-    (φ : S →ₐ[Polynomial ℝ] GermField)
+    {germAlgebra : Algebra (Polynomial ℝ) GermField}
+    (φ : letI := germAlgebra; S →ₐ[Polynomial ℝ] GermField)
     (P : Algebra.Presentation (Polynomial ℝ) S ι κ) :
     ℕ → (ι → ℝ) :=
   fun n i => germRepresentative (φ (P.val i)) n
@@ -28,13 +28,14 @@ theorem coe_relativePresentationSequence
     {S ι κ : Type*}
     [CommRing S]
     [Algebra (Polynomial ℝ) S]
-    [Algebra (Polynomial ℝ) GermField]
-    (φ : S →ₐ[Polynomial ℝ] GermField)
+    {germAlgebra : Algebra (Polynomial ℝ) GermField}
+    (φ : letI := germAlgebra; S →ₐ[Polynomial ℝ] GermField)
     (P : Algebra.Presentation (Polynomial ℝ) S ι κ)
     (i : ι) :
     ((fun n => relativePresentationSequence φ P n i) :
         GermField) =
       φ (P.val i) := by
+  let _ := germAlgebra
   exact coe_germRepresentative _
 
 /-- Under the parameter-germ algebra structure, the scalar polynomial
@@ -62,13 +63,13 @@ theorem coe_eval₂_relativePresentationSequence
     {S ι κ : Type*}
     [CommRing S]
     [Algebra (Polynomial ℝ) S]
-    [Algebra (Polynomial ℝ) GermField]
-    (φ : S →ₐ[Polynomial ℝ] GermField)
+    {germAlgebra : Algebra (Polynomial ℝ) GermField}
+    (φ : letI := germAlgebra; S →ₐ[Polynomial ℝ] GermField)
     (P : Algebra.Presentation (Polynomial ℝ) S ι κ)
     (t : ℕ → ℝ)
     (hbase :
       ∀ p : Polynomial ℝ,
-        algebraMap (Polynomial ℝ) GermField p =
+        (@algebraMap (Polynomial ℝ) GermField _ _ germAlgebra) p =
           ((fun n => p.eval (t n)) : GermField))
     (Q : MvPolynomial ι (Polynomial ℝ)) :
     ((fun n =>
@@ -77,6 +78,7 @@ theorem coe_eval₂_relativePresentationSequence
           (relativePresentationSequence φ P n) Q) :
         GermField) =
       φ (MvPolynomial.aeval P.val Q) := by
+  let _ := germAlgebra
   induction Q using MvPolynomial.induction_on with
   | C p =>
       simp only [MvPolynomial.eval₂_C,
@@ -177,13 +179,13 @@ theorem eventually_eval₂_relativePresentationPolynomial
     {S ι κ : Type*}
     [CommRing S]
     [Algebra (Polynomial ℝ) S]
-    [Algebra (Polynomial ℝ) GermField]
-    (φ : S →ₐ[Polynomial ℝ] GermField)
+    {germAlgebra : Algebra (Polynomial ℝ) GermField}
+    (φ : letI := germAlgebra; S →ₐ[Polynomial ℝ] GermField)
     (P : Algebra.Presentation (Polynomial ℝ) S ι κ)
     (t : ℕ → ℝ)
     (hbase :
       ∀ p : Polynomial ℝ,
-        algebraMap (Polynomial ℝ) GermField p =
+        (@algebraMap (Polynomial ℝ) GermField _ _ germAlgebra) p =
           ((fun n => p.eval (t n)) : GermField))
     (Q : MvPolynomial ι (Polynomial ℝ)) :
     ∀ᶠ n in (sequenceUltrafilter : Filter ℕ),
@@ -192,6 +194,7 @@ theorem eventually_eval₂_relativePresentationPolynomial
           (relativePresentationSequence φ P n) Q =
         germRepresentative
           (φ (MvPolynomial.aeval P.val Q)) n := by
+  let _ := germAlgebra
   apply Filter.Germ.coe_eq.mp
   rw [coe_eval₂_relativePresentationSequence
     φ P t hbase Q]
@@ -203,13 +206,13 @@ theorem eventually_eval₂_relativeRelation
     {S ι κ : Type*}
     [CommRing S]
     [Algebra (Polynomial ℝ) S]
-    [Algebra (Polynomial ℝ) GermField]
-    (φ : S →ₐ[Polynomial ℝ] GermField)
+    {germAlgebra : Algebra (Polynomial ℝ) GermField}
+    (φ : letI := germAlgebra; S →ₐ[Polynomial ℝ] GermField)
     (P : Algebra.Presentation (Polynomial ℝ) S ι κ)
     (t : ℕ → ℝ)
     (hbase :
       ∀ p : Polynomial ℝ,
-        algebraMap (Polynomial ℝ) GermField p =
+        (@algebraMap (Polynomial ℝ) GermField _ _ germAlgebra) p =
           ((fun n => p.eval (t n)) : GermField))
     (j : κ) :
     ∀ᶠ n in (sequenceUltrafilter : Filter ℕ),
@@ -218,6 +221,7 @@ theorem eventually_eval₂_relativeRelation
           (relativePresentationSequence φ P n)
           (P.relation j) =
         0 := by
+  let _ := germAlgebra
   filter_upwards
     [eventually_eval₂_relativePresentationPolynomial
       φ P t hbase (P.relation j),
@@ -231,13 +235,13 @@ theorem eventually_eval₂_relativeSection
     {S ι κ : Type*}
     [CommRing S]
     [Algebra (Polynomial ℝ) S]
-    [Algebra (Polynomial ℝ) GermField]
-    (φ : S →ₐ[Polynomial ℝ] GermField)
+    {germAlgebra : Algebra (Polynomial ℝ) GermField}
+    (φ : letI := germAlgebra; S →ₐ[Polynomial ℝ] GermField)
     (P : Algebra.Presentation (Polynomial ℝ) S ι κ)
     (t : ℕ → ℝ)
     (hbase :
       ∀ p : Polynomial ℝ,
-        algebraMap (Polynomial ℝ) GermField p =
+        (@algebraMap (Polynomial ℝ) GermField _ _ germAlgebra) p =
           ((fun n => p.eval (t n)) : GermField))
     (s : S) :
     ∀ᶠ n in (sequenceUltrafilter : Filter ℕ),
@@ -246,6 +250,7 @@ theorem eventually_eval₂_relativeSection
           (relativePresentationSequence φ P n)
           (P.σ s) =
         germRepresentative (φ s) n := by
+  let _ := germAlgebra
   simpa [P.aeval_val_σ] using
     eventually_eval₂_relativePresentationPolynomial
       φ P t hbase (P.σ s)
@@ -258,16 +263,16 @@ theorem eventually_eval₂_jacobiMatrix_det_ne_zero
     {S ι κ : Type*}
     [CommRing S]
     [Algebra (Polynomial ℝ) S]
-    [Algebra (Polynomial ℝ) GermField]
+    {germAlgebra : Algebra (Polynomial ℝ) GermField}
     [Fintype κ] [DecidableEq κ]
-    (φ : S →ₐ[Polynomial ℝ] GermField)
+    (φ : letI := germAlgebra; S →ₐ[Polynomial ℝ] GermField)
     (P :
       Algebra.SubmersivePresentation
         (Polynomial ℝ) S ι κ)
     (t : ℕ → ℝ)
     (hbase :
       ∀ p : Polynomial ℝ,
-        algebraMap (Polynomial ℝ) GermField p =
+        (@algebraMap (Polynomial ℝ) GermField _ _ germAlgebra) p =
           ((fun n => p.eval (t n)) : GermField)) :
     ∀ᶠ n in (sequenceUltrafilter : Filter ℕ),
       MvPolynomial.eval₂
@@ -275,6 +280,7 @@ theorem eventually_eval₂_jacobiMatrix_det_ne_zero
           (relativePresentationSequence φ
             P.toPreSubmersivePresentation.toPresentation n)
           P.jacobiMatrix.det ≠ 0 := by
+  let _ := germAlgebra
   have hcoe :
       ((fun n =>
           MvPolynomial.eval₂
@@ -315,16 +321,16 @@ theorem eventually_det_evaluatedJacobiMatrix_ne_zero
     {S ι κ : Type*}
     [CommRing S]
     [Algebra (Polynomial ℝ) S]
-    [Algebra (Polynomial ℝ) GermField]
+    {germAlgebra : Algebra (Polynomial ℝ) GermField}
     [Fintype κ] [DecidableEq κ]
-    (φ : S →ₐ[Polynomial ℝ] GermField)
+    (φ : letI := germAlgebra; S →ₐ[Polynomial ℝ] GermField)
     (P :
       Algebra.SubmersivePresentation
         (Polynomial ℝ) S ι κ)
     (t : ℕ → ℝ)
     (hbase :
       ∀ p : Polynomial ℝ,
-        algebraMap (Polynomial ℝ) GermField p =
+        (@algebraMap (Polynomial ℝ) GermField _ _ germAlgebra) p =
           ((fun n => p.eval (t n)) : GermField)) :
     ∀ᶠ n in (sequenceUltrafilter : Filter ℕ),
       (evaluatedJacobiMatrix
@@ -332,6 +338,7 @@ theorem eventually_det_evaluatedJacobiMatrix_ne_zero
           (relativePresentationSequence φ
             P.toPreSubmersivePresentation.toPresentation n)).det ≠
         0 := by
+  let _ := germAlgebra
   filter_upwards
     [eventually_eval₂_jacobiMatrix_det_ne_zero
       φ P t hbase] with n hn
@@ -347,16 +354,16 @@ theorem exists_eventually_regular_relativePresentationSequence
     {S ι κ : Type*}
     [CommRing S]
     [Algebra (Polynomial ℝ) S]
-    [Algebra (Polynomial ℝ) GermField]
+    {germAlgebra : Algebra (Polynomial ℝ) GermField}
     [Fintype κ] [DecidableEq κ]
-    (φ : S →ₐ[Polynomial ℝ] GermField)
+    (φ : letI := germAlgebra; S →ₐ[Polynomial ℝ] GermField)
     (P :
       Algebra.SubmersivePresentation
         (Polynomial ℝ) S ι κ)
     (t : ℕ → ℝ)
     (hbase :
       ∀ p : Polynomial ℝ,
-        algebraMap (Polynomial ℝ) GermField p =
+        (@algebraMap (Polynomial ℝ) GermField _ _ germAlgebra) p =
           ((fun n => p.eval (t n)) : GermField)) :
     ∃ a : ℕ → (ι → ℝ),
       (∀ᶠ n in (sequenceUltrafilter : Filter ℕ),
@@ -374,6 +381,7 @@ theorem exists_eventually_regular_relativePresentationSequence
               (Polynomial.evalRingHom (t n))
               (a n) (P.σ s) =
             germRepresentative (φ s) n) := by
+  let _ := germAlgebra
   refine ⟨relativePresentationSequence φ
     P.toPreSubmersivePresentation.toPresentation, ?_, ?_⟩
   · filter_upwards
@@ -397,16 +405,16 @@ theorem exists_eventually_regular_evaluatedPresentationSequence
     {S ι κ : Type*}
     [CommRing S]
     [Algebra (Polynomial ℝ) S]
-    [Algebra (Polynomial ℝ) GermField]
+    {germAlgebra : Algebra (Polynomial ℝ) GermField}
     [Fintype κ] [DecidableEq κ]
-    (φ : S →ₐ[Polynomial ℝ] GermField)
+    (φ : letI := germAlgebra; S →ₐ[Polynomial ℝ] GermField)
     (P :
       Algebra.SubmersivePresentation
         (Polynomial ℝ) S ι κ)
     (t : ℕ → ℝ)
     (hbase :
       ∀ p : Polynomial ℝ,
-        algebraMap (Polynomial ℝ) GermField p =
+        (@algebraMap (Polynomial ℝ) GermField _ _ germAlgebra) p =
           ((fun n => p.eval (t n)) : GermField)) :
     ∃ a : ℕ → (ι → ℝ),
       (∀ᶠ n in (sequenceUltrafilter : Filter ℕ),
@@ -425,6 +433,7 @@ theorem exists_eventually_regular_evaluatedPresentationSequence
               (Polynomial.evalRingHom (t n))
               (a n) (P.σ s) =
             germRepresentative (φ s) n) := by
+  let _ := germAlgebra
   obtain ⟨a, hregular, hsection⟩ :=
     exists_eventually_regular_relativePresentationSequence
       φ P t hbase

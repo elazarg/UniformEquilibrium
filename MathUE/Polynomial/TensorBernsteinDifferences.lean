@@ -76,7 +76,7 @@ theorem tensorBernsteinBasis_gridSplit (degree : Fin dimension → ℕ)
   classical
   unfold tensorBernsteinBasis
   rw [← Finset.mul_prod_erase _ _ (Finset.mem_univ coordinate)]
-  congr 1
+  refine congrArg₂ (fun x y : MvPolynomial (Fin dimension) ℝ => x * y) ?_ ?_
   · simp [bernsteinGridSplitEquiv, bernsteinCoordinateIndex]
   · unfold tensorBernsteinComplementBasis
     rw [Finset.prod_subtype (p := fun axis ↦ axis ≠ coordinate) _ (by simp)]

@@ -1,5 +1,6 @@
 import GameTheory.Math.Probability.Simplex
 import MathUE.LinearAlgebra.FiniteConicSparseCombination
+import MathUE.Probability.FinitePMF
 import UniformEquilibrium.Quitting.Paths.FiniteStoppingLawMixture
 
 /-! # Sparse finite mixtures preserving every prescribed payoff coordinate
@@ -60,11 +61,10 @@ theorem exists_sparseFiniteStoppingLawMixture_wholePayoff_eq
     simpa [vector] using hnone
   have hsimplex : coefficient ∈ simplexWeights Support :=
     mem_simplexWeights.mpr ⟨hcoefficient, hsum⟩
-  let sparse : FinDist Support := FinDist.ofSimplex hsimplex
+  let sparse : FinDist Support := _root_.Math.Probability.finDistOfPMF (PMF.ofSimplex hsimplex)
+  have hsparseProb : sparse.prob = coefficient := PMF.ofSimplex_toReal hsimplex
   refine ⟨sparse, ?_, ?_⟩
-  · have hsparseProb : sparse.prob = coefficient := by
-      exact FinDist.prob_ofSimplex hsimplex
-    rw [hsparseProb]
+  · rw [hsparseProb]
     change Fintype.card {generator : Support // coefficient generator ≠ 0} ≤
       Fintype.card Player + 1
     simpa only [Fintype.card_option] using hcard
@@ -74,8 +74,6 @@ theorem exists_sparseFiniteStoppingLawMixture_wholePayoff_eq
     simp only [FinDist.expect_map]
     rw [FinDist.expect_eq_sum, FinDist.expect_eq_sum_support]
     have hcoordinate := hreconstruct (some observer)
-    have hsparseProb : sparse.prob = coefficient := by
-      exact FinDist.prob_ofSimplex hsimplex
     rw [hsparseProb]
     change (∑ generator : Support,
       coefficient generator * vector generator (some observer)) = _

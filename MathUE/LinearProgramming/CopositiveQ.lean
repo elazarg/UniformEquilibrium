@@ -196,13 +196,11 @@ private theorem continuous_viExcess {G : (κ → ℝ) → κ → ℝ} (hG : Cont
 
 private theorem continuous_nashExcessMap {G : (κ → ℝ) → κ → ℝ} (hG : Continuous G) :
     Continuous (nashExcessMap G) := by
+  have hden : Continuous (fun u : κ → ℝ => 1 + ∑ l, viExcess G u l) :=
+    continuous_const.add (continuous_finsetSum _ fun l _ => continuous_viExcess hG l)
   refine continuous_pi fun k => ?_
-  refine Continuous.div ((continuous_apply k).add (continuous_viExcess hG k))
-    (continuous_const.add (continuous_finsetSum _ fun l _ => continuous_viExcess hG l))
-    fun u => ?_
-  have h := viExcess_sum_nonneg G u
-  intro hzero
-  linarith
+  exact ((continuous_apply k).add (continuous_viExcess hG k)).div hden fun u =>
+    ne_of_gt (add_pos_of_pos_of_nonneg zero_lt_one (viExcess_sum_nonneg G u))
 
 private theorem nashExcessMap_mem {G : (κ → ℝ) → κ → ℝ} {u : κ → ℝ}
     (hu : u ∈ simplexWeights κ) : nashExcessMap G u ∈ simplexWeights κ := by
@@ -467,10 +465,11 @@ theorem continuous_homogeneousViolation (M : ι → ι → ℝ) :
     refine continuous_finsetSum _ fun j _ => ?_
     have h1 : Continuous fun p : ι → ℝ => p j := continuous_apply j
     exact h1.mul_const (M i j)
-  refine Continuous.add ?_ (continuous_finsetSum _ fun i _ => ?_)
-  · exact continuous_const.max
-      (continuous_finsetSum _ fun i _ => (continuous_apply i).mul (hrow i))
-  · exact continuous_const.max (hrow i).neg
+  have hquad : Continuous (fun p : ι → ℝ => ∑ i, p i * ∑ j, p j * M i j) :=
+    continuous_finsetSum _ fun i _ => (continuous_apply i).mul (hrow i)
+  have hlinear : Continuous (fun p : ι → ℝ => ∑ i, max 0 (-(∑ j, p j * M i j))) :=
+    continuous_finsetSum _ fun i _ => continuous_const.max (hrow i).neg
+  exact (continuous_const.max hquad).add hlinear
 
 /-- A simplex point of zero homogeneous violation is a witness for the
 homogeneous simplex branch. -/

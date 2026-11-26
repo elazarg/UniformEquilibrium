@@ -1,5 +1,5 @@
 import Mathlib.Data.Finset.Sort
-import GameTheory.Math.Probability.FinDist
+import MathUE.Probability.FinDist
 import UniformEquilibrium.Quitting.Paths.CounterfactualStoppingLaw
 
 /-! # Common retiming preserves the first-quitter outcome law

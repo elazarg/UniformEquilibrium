@@ -184,7 +184,7 @@ theorem quittingFiniteCalendarPayoffLaws_wholePayoff_eq
     quittingIndependentTerminalOutcomeLaw_finiteCalendarRetiming_eq sparse
   rw [quittingTerminalPayoff_stoppingLawProfile_eq_expectedPayoff,
     quittingTerminalPayoff_stoppingLawProfile_eq_expectedPayoff]
-  change Math.Probability.expect _ _ = Math.Probability.expect _ _
+  change _root_.Math.Probability.expect _ _ = _root_.Math.Probability.expect _ _
   rw [show (fun who =>
       (quittingFiniteCalendarPayoffLaws reward laws who).toPMF) =
       fun who => (sparse who).toPMF.map

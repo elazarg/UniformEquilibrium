@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import GameTheory.Math.Probability.FiniteUniform
 import MathUE.PMFProduct.Bool
 import UniformEquilibrium.Quitting.Debt.Dynamic.FiniteDynamicDebtChains
 import UniformEquilibrium.Quitting.Bellman.Finite.NashBellmanMinimizer
@@ -115,7 +116,7 @@ def reward (quitters : {S : Finset Bool // S.Nonempty}) : Payoff Bool :=
 /-! ## The terminal row: both players Quit with probability one half -/
 
 /-- Both players independently Quit with probability one half. -/
-def terminalRoot : Bool → PMF Bool := fun _ => PMF.uniformOfFintype Bool
+def terminalRoot : Bool → PMF Bool := fun _ => GameTheory.Math.Probability.uniformLaw Bool
 
 /-- The exact zero-tail value of the terminal row, `(1/2, 0)`. -/
 def terminalValue : Payoff Bool := fun who => if who then 0 else 1 / 2
@@ -130,7 +131,7 @@ def terminalCurrent : QuittingNashBellmanPoint Bool :=
 
 /-- `terminalRoot` unfolds to the uniform coin at every player. -/
 @[simp] theorem terminalRoot_apply (who : Bool) :
-    terminalRoot who = PMF.uniformOfFintype Bool := rfl
+    terminalRoot who = GameTheory.Math.Probability.uniformLaw Bool := rfl
 
 /-- The simplex terminal root converts back to `terminalRoot`. -/
 @[simp] theorem quittingRootOfSimplex_terminalSimplexRoot :
@@ -144,7 +145,7 @@ theorem quitPayoff_terminalRoot_false :
   unfold quittingRootQuitPayoff quittingRootExpectedPayoff
   rw [Math.PMFProduct.expect_pmfPi_bool]
   simp only [expect_eq_sum, Fintype.sum_bool]
-  norm_num [quittingRootPayoff, reward, terminalRoot, PMF.uniformOfFintype_apply,
+  norm_num [quittingRootPayoff, reward, terminalRoot, GameTheory.Math.Probability.uniformLaw_apply,
     quittingSingletonTerminal]
 
 /-- Player one's pure-Continue endpoint at the terminal row is `1/2`. -/
@@ -153,7 +154,7 @@ theorem continuePayoff_terminalRoot_false :
   unfold quittingRootContinuePayoff quittingRootExpectedPayoff
   rw [Math.PMFProduct.expect_pmfPi_bool]
   simp only [expect_eq_sum, Fintype.sum_bool]
-  norm_num [quittingRootPayoff, reward, terminalRoot, PMF.uniformOfFintype_apply,
+  norm_num [quittingRootPayoff, reward, terminalRoot, GameTheory.Math.Probability.uniformLaw_apply,
     quittingSingletonTerminal]
 
 /-- Player two's pure-Quit endpoint at the terminal row is `0`. -/
@@ -162,7 +163,7 @@ theorem quitPayoff_terminalRoot_true :
   unfold quittingRootQuitPayoff quittingRootExpectedPayoff
   rw [Math.PMFProduct.expect_pmfPi_bool]
   simp only [expect_eq_sum, Fintype.sum_bool]
-  norm_num [quittingRootPayoff, reward, terminalRoot, PMF.uniformOfFintype_apply,
+  norm_num [quittingRootPayoff, reward, terminalRoot, GameTheory.Math.Probability.uniformLaw_apply,
     quittingSingletonTerminal]
 
 /-- Player two's pure-Continue endpoint at the terminal row is `0`. -/
@@ -171,7 +172,7 @@ theorem continuePayoff_terminalRoot_true :
   unfold quittingRootContinuePayoff quittingRootExpectedPayoff
   rw [Math.PMFProduct.expect_pmfPi_bool]
   simp only [expect_eq_sum, Fintype.sum_bool]
-  norm_num [quittingRootPayoff, reward, terminalRoot, PMF.uniformOfFintype_apply,
+  norm_num [quittingRootPayoff, reward, terminalRoot, GameTheory.Math.Probability.uniformLaw_apply,
     quittingSingletonTerminal]
 
 /-- Both players are exactly indifferent at the terminal row. -/
@@ -194,16 +195,16 @@ theorem terminalRoot_successor_zero :
   rw [quittingRootSuccessorPayoff_eq_endpointMix]
   cases who
   · rw [quitPayoff_terminalRoot_false, continuePayoff_terminalRoot_false]
-    norm_num [terminalRoot, PMF.uniformOfFintype_apply, terminalValue]
+    norm_num [terminalRoot, GameTheory.Math.Probability.uniformLaw_apply, terminalValue]
   · rw [quitPayoff_terminalRoot_true, continuePayoff_terminalRoot_true]
-    norm_num [terminalRoot, PMF.uniformOfFintype_apply, terminalValue]
+    norm_num [terminalRoot, GameTheory.Math.Probability.uniformLaw_apply, terminalValue]
 
 /-- The terminal row's total absorption mass is `3/4`. -/
 theorem terminalRoot_absorptionMass :
     quittingRootAbsorptionMass terminalRoot = 3 / 4 := by
   unfold quittingRootAbsorptionMass quittingStationaryContinueMass
   rw [pmfPi_apply, ENNReal.toReal_prod]
-  norm_num [quittingAllContinueAction, terminalRoot, PMF.uniformOfFintype_apply,
+  norm_num [quittingAllContinueAction, terminalRoot, GameTheory.Math.Probability.uniformLaw_apply,
     Fintype.prod_bool]
 
 /-- The terminal row is an exact zero-boundary Nash--Bellman edge into any
@@ -446,7 +447,7 @@ theorem quittingFixedOpponentsContinueMass_terminalRow (cutoff : ℕ) (who : Boo
   unfold quittingStationaryContinueMass
   rw [pmfPi_apply, ENNReal.toReal_prod]
   cases who <;>
-    norm_num [quittingAllContinueAction, terminalRoot, PMF.uniformOfFintype_apply,
+    norm_num [quittingAllContinueAction, terminalRoot, GameTheory.Math.Probability.uniformLaw_apply,
       Function.update, Fintype.prod_bool]
 
 /-- Player `who`'s one-stage Quit value at an all-Continue row is the
@@ -705,7 +706,7 @@ theorem true_endpointDifference (t1 : ℝ) (root : Bool → PMF Bool) :
 /-- The stationary root freeing the terminal continuation: player one Quits
 with probability one half at every stage, player two never Quits. -/
 def stationaryRoot : Bool → PMF Bool :=
-  fun who => if who then PMF.pure false else PMF.uniformOfFintype Bool
+  fun who => if who then PMF.pure false else GameTheory.Math.Probability.uniformLaw Bool
 
 /-- The stationary root's own value, `(1/4, 0)`. -/
 def stationaryValue : Payoff Bool := fun who => if who then 0 else 1 / 4
@@ -717,11 +718,11 @@ theorem stationaryValue_eq :
 
 @[simp] theorem stationaryRoot_false_true :
     (stationaryRoot false true).toReal = 1 / 2 := by
-  norm_num [stationaryRoot, PMF.uniformOfFintype_apply]
+  norm_num [stationaryRoot, GameTheory.Math.Probability.uniformLaw_apply]
 
 @[simp] theorem stationaryRoot_false_false :
     (stationaryRoot false false).toReal = 1 / 2 := by
-  norm_num [stationaryRoot, PMF.uniformOfFintype_apply]
+  norm_num [stationaryRoot, GameTheory.Math.Probability.uniformLaw_apply]
 
 @[simp] theorem stationaryRoot_true_true :
     (stationaryRoot true true).toReal = 0 := by simp [stationaryRoot]
@@ -736,7 +737,7 @@ theorem stationaryRoot_absorptionMass :
     quittingRootAbsorptionMass stationaryRoot = 1 / 2 := by
   unfold quittingRootAbsorptionMass quittingStationaryContinueMass
   rw [pmfPi_apply, ENNReal.toReal_prod]
-  norm_num [quittingAllContinueAction, stationaryRoot, PMF.uniformOfFintype_apply,
+  norm_num [quittingAllContinueAction, stationaryRoot, GameTheory.Math.Probability.uniformLaw_apply,
     Fintype.prod_bool]
 
 /-- The stationary root, run against the constant continuation `(1/4, 0)`,

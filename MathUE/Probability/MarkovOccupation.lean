@@ -378,7 +378,7 @@ theorem fullGameIncentiveGap_le_of_coreInterface_two
     hfullDeviation hfullPrescribed hcore
     hdeviationOccupation hprescribedOccupation
   convert h using 1
-  all_goals ring
+  ring
 
 namespace CoreEntryCounterexample
 

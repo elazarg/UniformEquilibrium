@@ -92,7 +92,7 @@ private theorem exists_deadlineBoundedExactPaidPort
       (quittingBehaviorStoppingLaw reward (profile responder))
       value hvalueBound
   have hprescribed : quittingTerminalPayoff reward profile responder =
-      Math.Probability.expect
+      _root_.Math.Probability.expect
         (quittingBehaviorStoppingLaw reward (profile responder)) value := by
     have hmix := quittingTerminalPayoff_update_eq_expect_stoppingLaw_pureTime
       reward profile responder (profile responder)

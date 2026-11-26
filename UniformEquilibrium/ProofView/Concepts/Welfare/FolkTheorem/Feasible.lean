@@ -268,22 +268,22 @@ theorem mixedExtension_eu_profileWithOpponent_le_iSup_pure
     Finite.bddAbove_range _
   rw [hprofile own, G.mixedExtension_eu]
   rw [Math.PMFProduct.pmfPi_update_bind]
-  rw [Math.Probability.expect_bind]
+  rw [_root_.Math.Probability.expect_bind]
   calc
-    Math.Probability.expect own (fun action ↦
-        Math.Probability.expect
+    _root_.Math.Probability.expect own (fun action ↦
+        _root_.Math.Probability.expect
           (Math.PMFProduct.pmfPi
             (Function.update base who (PMF.pure action)))
           (fun outcome ↦ G.eu outcome who)) ≤
-        Math.Probability.expect own (fun _action ↦
+        _root_.Math.Probability.expect own (fun _action ↦
           ⨆ candidate : G.Strategy who,
             G.mixedExtension.eu
               (G.mixedExtension.profileWithOpponent who
                 (PMF.pure candidate) opponents) who) := by
-      apply Math.Probability.expect_mono
+      apply _root_.Math.Probability.expect_mono
       intro action
       calc
-        Math.Probability.expect
+        _root_.Math.Probability.expect
             (Math.PMFProduct.pmfPi
               (Function.update base who (PMF.pure action)))
             (fun outcome ↦ G.eu outcome who) =
@@ -300,7 +300,7 @@ theorem mixedExtension_eu_profileWithOpponent_le_iSup_pure
         G.mixedExtension.eu
           (G.mixedExtension.profileWithOpponent who
             (PMF.pure candidate) opponents) who :=
-      Math.Probability.expect_const _ _
+      _root_.Math.Probability.expect_const _ _
 
 /-- Choose approximate punishment opponent profiles for every player. -/
 theorem exists_approx_punishmentProfiles (G : KernelGame ι) [DecidableEq ι]

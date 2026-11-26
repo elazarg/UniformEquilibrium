@@ -14,6 +14,7 @@ module
 public import Mathlib.Analysis.Complex.UnitDisc.Basic
 public import Mathlib.Analysis.Calculus.Deriv.Inv
 public import Mathlib.Analysis.Calculus.Deriv.Add
+public import Mathlib.Analysis.Calculus.Deriv.Mul
 public import Mathlib.Tactic.LinearCombination
 public import Mathlib.Tactic.FunProp
 

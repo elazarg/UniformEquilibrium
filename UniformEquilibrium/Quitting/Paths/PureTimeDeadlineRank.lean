@@ -178,7 +178,7 @@ theorem exists_pureTimeReplacementAncestry_of_deadlineRank_descent
       IsQuittingPureTimeReplacementAncestry initial target ∧ Exit target := by
   induction hrankEq : quittingPureTimeDeadlineRank initial using
       Nat.strong_induction_on generalizing initial with
-  | h rank ih =>
+  | ind rank ih =>
       rcases hstep initial hminimum with hexit | ⟨next, hnext, hminimumNext, hrank⟩
       · exact ⟨initial, Relation.ReflTransGen.refl, hexit⟩
       · obtain ⟨target, hancestry, hexit⟩ :=
@@ -204,7 +204,7 @@ theorem exists_pureTimeReplacementAncestry_of_ancestry_deadlineRank_descent
       IsQuittingPureTimeReplacementAncestry initial target ∧ Exit target := by
   induction hrankEq : quittingPureTimeDeadlineRank initial using
       Nat.strong_induction_on generalizing initial with
-  | h rank ih =>
+  | ind rank ih =>
       rcases hstep initial hminimum with hexit | ⟨next, hnext, hminimumNext, hrank⟩
       · exact ⟨initial, Relation.ReflTransGen.refl, hexit⟩
       · obtain ⟨target, hancestry, hexit⟩ :=

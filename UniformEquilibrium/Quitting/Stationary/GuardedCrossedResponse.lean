@@ -54,9 +54,14 @@ theorem continuous_quittingCrossedResponse
     Continuous (quittingCrossedResponse reward first second) := by
   apply continuous_pi
   intro coordinate
-  exact (continuous_quittingDiscountedDisplacement reward
-    ((Equiv.swap first second) coordinate)).comp
-      (continuous_const.prodMk continuous_id)
+  let slice : (Fin n → ℝ) → ℝ × (Fin n → ℝ) := fun hazard => (0, hazard)
+  let displacement (point : ℝ × (Fin n → ℝ)) : ℝ :=
+    quittingDiscountedDisplacement reward point.1 point.2 ((Equiv.swap first second) coordinate)
+  have hslice : Continuous slice := continuous_const.prodMk continuous_id
+  have hdisplacement : Continuous displacement :=
+    continuous_quittingDiscountedDisplacement reward ((Equiv.swap first second) coordinate)
+  change Continuous (displacement ∘ slice)
+  exact hdisplacement.comp hslice
 
 theorem continuous_quittingCrossedClippedMap
     (reward : {S : Finset (Fin n) // S.Nonempty} → Payoff (Fin n))
@@ -64,10 +69,10 @@ theorem continuous_quittingCrossedClippedMap
     Continuous (quittingCrossedClippedMap reward first second height) := by
   apply continuous_pi
   intro coordinate
+  have hcoordinate : Continuous (fun hazard : Fin n → ℝ => hazard coordinate) :=
+    continuous_apply coordinate
   exact continuous_const.min (continuous_const.max
-    ((continuous_apply coordinate).add
-      ((continuous_apply coordinate).comp
-        (continuous_quittingCrossedResponse reward first second))))
+    (hcoordinate.add (hcoordinate.comp (continuous_quittingCrossedResponse reward first second))))
 
 theorem quittingCrossedResponse_zero
     (reward : {S : Finset (Fin n) // S.Nonempty} → Payoff (Fin n))

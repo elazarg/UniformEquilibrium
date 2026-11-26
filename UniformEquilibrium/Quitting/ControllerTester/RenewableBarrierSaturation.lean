@@ -333,9 +333,12 @@ theorem exists_minimizer_universalPrefixHull_eq_sInf_wordInf_of_boxLower
       ((quittingControllerWordInf_le_finitePrefix_of_boxLower reward M lower
         hreward objective hlower tail htailBox roots cutoff).trans hinfLeValue)
   have hfloorLeHull : ∀ pair ∈ quittingUniversalPrefixHull reward seed,
-      floor ≤ objective pair :=
-    closure_minimal hfloorLeReachable
-      (isClosed_Ici.preimage hobjectiveContinuous)
+      floor ≤ objective pair := by
+    have hsubset : quittingUniversalPrefixReachable reward seed ⊆ objective ⁻¹' Ici floor := by
+      intro pair hpair
+      exact hfloorLeReachable pair hpair
+    intro pair hpair
+    exact closure_minimal hsubset (isClosed_Ici.preimage hobjectiveContinuous) hpair
   exact ⟨minimizer, hminimizer, hminimum,
     le_antisymm hminLeFloor (hfloorLeHull minimizer hminimizer)⟩
 

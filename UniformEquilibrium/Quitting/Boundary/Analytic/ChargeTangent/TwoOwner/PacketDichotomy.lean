@@ -108,9 +108,10 @@ theorem continuousAt_twoOwnerContinuationRegression
         coalitionMass (packet.twoOwnerHazardAt first second t) S *
           quittingProjectiveCoalitionReward reward S who) := by
     apply continuous_finsetSum
-    intro S hS
-    apply Continuous.mul
-    · unfold coalitionMass
+    intro S _hS
+    have hmass : Continuous (fun t : ℝ => coalitionMass
+        (packet.twoOwnerHazardAt first second t) S) := by
+      unfold coalitionMass
       apply Continuous.mul
       · apply continuous_finsetProd
         intro owner howner
@@ -118,7 +119,7 @@ theorem continuousAt_twoOwnerContinuationRegression
       · apply continuous_finsetProd
         intro owner howner
         exact continuous_const.sub (hcoordinate owner)
-    · fun_prop
+    exact hmass.mul continuous_const
   have hcontinue : Continuous (fun t : ℝ =>
       continueMass (packet.twoOwnerHazardAt first second t)) := by
     unfold continueMass
@@ -135,8 +136,8 @@ theorem continuousAt_twoOwnerContinuationRegression
   apply ContinuousAt.div
   · exact continuousAt_const.sub habsorbing.continuousAt
   · exact hcontinue.continuousAt
-  · rw [hcontinueZero]
-    norm_num
+  · change continueMass (packet.twoOwnerHazardAt first second 0) ≠ 0
+    exact hcontinueZero.trans_ne one_ne_zero
 
 theorem twoOwnerContinuationRegression_zero
     (packet : QuittingChargeTangentPacket reward)

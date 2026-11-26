@@ -218,7 +218,7 @@ theorem viable_valueZero {x : ℝ} (hx : 0 ≤ x) :
   fin_cases who <;>
     norm_num +decide [quittingSoloBaseline, quittingSoloReward,
       completionAReward, singletonReward, valueZero] at hx ⊢
-  all_goals linarith
+  linarith
 
 theorem viable_valueOne {y : ℝ} (hy : 0 ≤ y) :
     QuittingEssentialAPSViable completionAReward (valueOne y) := by
@@ -226,7 +226,7 @@ theorem viable_valueOne {y : ℝ} (hy : 0 ≤ y) :
   fin_cases who <;>
     norm_num +decide [quittingSoloBaseline, quittingSoloReward,
       completionAReward, singletonReward, valueOne] at hy ⊢
-  all_goals linarith
+  linarith
 
 theorem viable_valueTwo {z : ℝ} (hz : 0 ≤ z) :
     QuittingEssentialAPSViable completionAReward (valueTwo z) := by
@@ -234,7 +234,7 @@ theorem viable_valueTwo {z : ℝ} (hz : 0 ≤ z) :
   fin_cases who <;>
     norm_num +decide [quittingSoloBaseline, quittingSoloReward,
       completionAReward, singletonReward, valueTwo] at hz ⊢
-  all_goals linarith
+  linarith
 
 /-- Forced owner-zero mass. -/
 def massZero (x : ℝ) : ℝ := x / 2

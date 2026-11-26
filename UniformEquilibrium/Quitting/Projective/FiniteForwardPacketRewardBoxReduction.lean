@@ -112,7 +112,7 @@ theorem quittingFiniteForwardPacket_survival_mul_one_add_charge_le_one
         unfold quittingRootAbsorptionMass
         linarith [quittingStationaryContinueMass_nonneg (packet.roots offset)])
       0 time using 1
-  all_goals simp only [quittingRootAbsorptionMass, zero_add, sub_sub_cancel]
+  simp only [quittingRootAbsorptionMass, zero_add, sub_sub_cancel]
 
 /-- Exact forward recomputation of a retained suffix from one clipped boundary
 value. -/

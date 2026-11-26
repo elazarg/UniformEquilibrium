@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import GameTheory.Math.Probability.FiniteUniform
 import MathUE.PMFProduct.Bool
 import UniformEquilibrium.Quitting.Debt.Dynamic.PositiveDynamicDebtProvenance
 import UniformEquilibrium.Quitting.Debt.Dynamic.ExactDynamicDebtVanishingCounterexample
@@ -46,7 +47,7 @@ def reward (quitters : {S : Finset Bool // S.Nonempty}) : Payoff Bool :=
       if who then -1 else 1
 
 /-- Both players independently Quit with probability one half. -/
-def root : Bool → PMF Bool := fun _ => PMF.uniformOfFintype Bool
+def root : Bool → PMF Bool := fun _ => GameTheory.Math.Probability.uniformLaw Bool
 
 /-- The exact root value `(1/2,0)`. -/
 def value : Payoff Bool := fun who => if who then 0 else 1 / 2
@@ -74,7 +75,7 @@ theorem expect_pmfPi_bool (selectedRoot : Bool → PMF Bool)
   Math.PMFProduct.expect_pmfPi_bool selectedRoot f
 
 @[simp] theorem root_apply (who : Bool) :
-    root who = PMF.uniformOfFintype Bool := rfl
+    root who = GameTheory.Math.Probability.uniformLaw Bool := rfl
 
 @[simp] theorem quittingRootOfSimplex_simplexRoot :
     quittingRootOfSimplex simplexRoot = root := by
@@ -100,7 +101,7 @@ theorem false_quitPayoff :
   unfold quittingRootQuitPayoff quittingRootExpectedPayoff
   rw [expect_pmfPi_bool]
   simp only [expect_eq_sum, Fintype.sum_bool]
-  norm_num [root, PMF.uniformOfFintype_apply, quittingRootPayoff, reward,
+  norm_num [root, GameTheory.Math.Probability.uniformLaw_apply, quittingRootPayoff, reward,
     QuittingExactDynamicDebtVanishingCounterexample.quittingQuitters_boolAction]
 
 theorem false_continuePayoff :
@@ -108,7 +109,7 @@ theorem false_continuePayoff :
   unfold quittingRootContinuePayoff quittingRootExpectedPayoff
   rw [expect_pmfPi_bool]
   simp only [expect_eq_sum, Fintype.sum_bool]
-  norm_num [root, PMF.uniformOfFintype_apply, quittingRootPayoff, reward,
+  norm_num [root, GameTheory.Math.Probability.uniformLaw_apply, quittingRootPayoff, reward,
     QuittingExactDynamicDebtVanishingCounterexample.quittingQuitters_boolAction]
 
 theorem true_quitPayoff :
@@ -116,7 +117,7 @@ theorem true_quitPayoff :
   unfold quittingRootQuitPayoff quittingRootExpectedPayoff
   rw [expect_pmfPi_bool]
   simp only [expect_eq_sum, Fintype.sum_bool]
-  norm_num [root, PMF.uniformOfFintype_apply, quittingRootPayoff, reward,
+  norm_num [root, GameTheory.Math.Probability.uniformLaw_apply, quittingRootPayoff, reward,
     QuittingExactDynamicDebtVanishingCounterexample.quittingQuitters_boolAction]
 
 theorem true_continuePayoff :
@@ -124,7 +125,7 @@ theorem true_continuePayoff :
   unfold quittingRootContinuePayoff quittingRootExpectedPayoff
   rw [expect_pmfPi_bool]
   simp only [expect_eq_sum, Fintype.sum_bool]
-  norm_num [root, PMF.uniformOfFintype_apply, quittingRootPayoff, reward,
+  norm_num [root, GameTheory.Math.Probability.uniformLaw_apply, quittingRootPayoff, reward,
     QuittingExactDynamicDebtVanishingCounterexample.quittingQuitters_boolAction]
 
 /-- Both players are exactly indifferent, hence the root is endpoint Nash. -/
@@ -146,9 +147,9 @@ theorem root_successor_zero :
   rw [quittingRootSuccessorPayoff_eq_endpointMix]
   cases who
   · rw [false_quitPayoff, false_continuePayoff]
-    norm_num [root, PMF.uniformOfFintype_apply, value]
+    norm_num [root, GameTheory.Math.Probability.uniformLaw_apply, value]
   · rw [true_quitPayoff, true_continuePayoff]
-    norm_num [root, PMF.uniformOfFintype_apply, value]
+    norm_num [root, GameTheory.Math.Probability.uniformLaw_apply, value]
 
 /-- The displayed points form an exact zero-boundary Nash--Bellman edge. -/
 theorem current_terminal_edge :
@@ -183,7 +184,7 @@ theorem current_terminal_edge :
   rw [show quittingRootOfSimplex (current, currentDebt).1.2 = root by
     exact quittingRootOfSimplex_simplexRoot]
   norm_num [quittingStationaryContinueMass, pmfPi_apply,
-    quittingAllContinueAction, root, PMF.uniformOfFintype_apply]
+    quittingAllContinueAction, root, GameTheory.Math.Probability.uniformLaw_apply]
 
 /-- Player one's exact debt at the current point is `1/2`. -/
 theorem dynamicDebtUpdate_false :
@@ -229,7 +230,7 @@ theorem current_terminal_dynamicDebtEdge :
 /-- Player two is genuinely active at the mixed root. -/
 theorem markedPlayer_quitProbability :
     0 < (root true true).toReal := by
-  norm_num [root, PMF.uniformOfFintype_apply]
+  norm_num [root, GameTheory.Math.Probability.uniformLaw_apply]
 
 /-- On the owner-deleted atom where player two quits alone, player two gains
 one by leaving the quitter set and receiving Never payoff zero. -/

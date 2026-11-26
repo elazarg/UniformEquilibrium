@@ -107,7 +107,8 @@ theorem ramifyPowerSeriesPolynomial_comp
     ramifyPowerSeriesPolynomial p hp
         (ramifyPowerSeriesPolynomial q hq f) =
       ramifyPowerSeriesPolynomial (p * q) (p.mul_ne_zero hp hq) f := by
-  apply Polynomial.ext
+  apply AddMonoidAlgebra.ext
+  apply DFunLike.ext
   intro n
   simp only [ramifyPowerSeriesPolynomial, Polynomial.coeff_map]
   exact (PowerSeries.expand_mul p hp q hq (f.coeff n)).symm
@@ -241,7 +242,7 @@ theorem hasRamifiedPowerSeriesSplitting_of_hasRamifiedRootProperty
     HasRamifiedPowerSeriesSplitting f := by
   generalize hfn : f.natDegree = n
   induction n using Nat.strong_induction_on generalizing f with
-  | h n ih =>
+  | ind n ih =>
       by_cases hn : n = 0
       · have hf_one : f = 1 :=
           Polynomial.eq_one_of_monic_natDegree_zero hf (hfn.trans hn)

@@ -51,7 +51,7 @@ theorem pmfMoveAtom_target {Ω : Type*}
         · simp [htarget, Ne.symm hdifferent]
         · simp [hsource, htarget, Ne.symm htarget]
     _ = law source + law target := by
-      rw [ENNReal.tsum_add, tsum_ite_eq, tsum_ite_eq]
+      rw [tsum_add, tsum_ite_eq, tsum_ite_eq]
 
 theorem pmfMoveAtom_apply_of_ne {Ω : Type*}
     (law : PMF Ω) (source target point : Ω)

@@ -186,26 +186,25 @@ theorem discountedShapleyRateValue_eq_lam0
   have hl0 : 0 < l := hl.1
   have hl1 : l ≤ 1 := hl.2
   have hβ := discountFactorOfRate_lt_one hl0
-  rw [discountedShapleyRateValue_eq G hl0]
-  change
-    Math.ShapleyOperator.discountedValue
-        (G.normalizedRowStagePayoff
-          (discountFactorOfRate l : ℝ))
-        G.pairTransition hβ s =
-      _
-  rw [Math.ShapleyOperator.discountedValue_eq_lam0]
-  apply congrArg MinimaxLoomis.lam0
-  funext i j
-  rw [Math.Probability.expect_eq_sum]
-  simp only [normalizedRowStagePayoff]
-  rw [coe_discountFactorOfRate hl1]
-  congr 1
-  · ring
-  · congr 1
-    apply Finset.sum_congr rfl
-    intro z _
-    unfold discountedShapleyValue
-    rw [coe_discountFactorOfRate hl1]
+  let v : G.State → ℝ := G.discountedShapleyValue hβ
+  have hv : G.discountedShapleyRateValue l = v := discountedShapleyRateValue_eq G hl0
+  have hvalue : v s = MinimaxLoomis.lam0 (fun i j =>
+      G.normalizedRowStagePayoff (discountFactorOfRate l : ℝ) s i j +
+        (discountFactorOfRate l : ℝ) * _root_.Math.Probability.expect
+          (G.pairTransition s i j) v) :=
+    Math.ShapleyOperator.discountedValue_eq_lam0
+      (G.normalizedRowStagePayoff (discountFactorOfRate l : ℝ)) G.pairTransition hβ s
+  have hentry (i : G.Act 0) (j : G.Act 1) :
+      G.normalizedRowStagePayoff (discountFactorOfRate l : ℝ) s i j +
+        (discountFactorOfRate l : ℝ) * _root_.Math.Probability.expect
+          (G.pairTransition s i j) v =
+      l * G.rowStagePayoff s i j +
+        (1 - l) * ∑ z, (G.pairTransition s i j z).toReal * v z := by
+    rw [_root_.Math.Probability.expect_eq_sum, normalizedRowStagePayoff,
+      coe_discountFactorOfRate hl1]
+    ring
+  rw [hv, hvalue]
+  exact congrArg MinimaxLoomis.lam0 (funext fun i => funext fun j => hentry i j)
 
 /-- The canonical normalized value is locally Lipschitz in the positive
 rate. The explicit asymmetric modulus is useful near a fixed positive rate;
@@ -232,41 +231,42 @@ theorem dist_discountedShapleyRateValue_le
           MinimaxLoomis.lam0 fun i j =>
             l * G.rowStagePayoff s i j +
               (1 - l) *
-                Math.Probability.expect
+                _root_.Math.Probability.expect
                   (G.pairTransition s i j) vl := by
-      simpa only [vl, Math.Probability.expect_eq_sum] using
+      simpa only [vl, _root_.Math.Probability.expect_eq_sum] using
         G.discountedShapleyRateValue_eq_lam0 hl s
     have hvm :
         vm s =
           MinimaxLoomis.lam0 fun i j =>
             m * G.rowStagePayoff s i j +
               (1 - m) *
-                Math.Probability.expect
+                _root_.Math.Probability.expect
                   (G.pairTransition s i j) vm := by
-      simpa only [vm, Math.Probability.expect_eq_sum] using
+      simpa only [vm, _root_.Math.Probability.expect_eq_sum] using
         G.discountedShapleyRateValue_eq_lam0 hm s
     rw [hvl, hvm]
     apply MinimaxLoomis.abs_lam0_sub_le_of_entrywise_abs_le
     intro i j
     let d := G.pairTransition s i j
-    let El := Math.Probability.expect d vl
-    let Em := Math.Probability.expect d vm
+    let El := _root_.Math.Probability.expect d vl
+    let Em := _root_.Math.Probability.expect d vm
     have hEsub : |El - Em| ≤ dist vl vm := by
-      rw [← Math.Probability.expect_sub]
-      refine Math.Probability.abs_expect_le_of_abs_le
+      dsimp only [El, Em]
+      rw [← _root_.Math.Probability.expect_sub]
+      refine _root_.Math.Probability.abs_expect_le_of_abs_le
         _ _ fun z => ?_
       have hz := dist_le_pi_dist vl vm z
       rwa [Real.dist_eq] at hz
     have hEm0 : 0 ≤ Em := by
-      apply Math.Probability.expect_nonneg
+      apply _root_.Math.Probability.expect_nonneg
       intro z
       exact G.discountedShapleyRateValue_nonneg
         hzs hpayLower m z
     have hEm1 : Em ≤ 1 := by
       calc
         Em ≤
-            Math.Probability.expect d (fun _ => (1 : ℝ)) := by
-          apply Math.Probability.expect_mono
+            _root_.Math.Probability.expect d (fun _ => (1 : ℝ)) := by
+          apply _root_.Math.Probability.expect_mono
           intro z
           exact G.discountedShapleyRateValue_le_one
             hzs hpayLower hpayUpper m z

@@ -78,8 +78,8 @@ private def pairZeroOneSolution (t : ℝ) (q : Player → ℝ)
     intro i
     fin_cases i
     all_goals simp [normalizedCyclicMatrix, Fin.sum_univ_succ]
-    all_goals field_simp [ne_of_gt ht]
-    all_goals simp
+    field_simp [ne_of_gt ht]
+    simp
 
 private def pairOneTwoSolution (t : ℝ) (q : Player → ℝ)
     (ht : 0 < t) (h1 : 0 ≤ q 1) (h2 : q 2 ≤ 0)
@@ -105,8 +105,8 @@ private def pairOneTwoSolution (t : ℝ) (q : Player → ℝ)
     intro i
     fin_cases i
     all_goals simp [normalizedCyclicMatrix, Fin.sum_univ_succ]
-    all_goals field_simp [ne_of_gt ht]
-    all_goals simp
+    field_simp [ne_of_gt ht]
+    simp
 
 private def pairTwoZeroSolution (t : ℝ) (q : Player → ℝ)
     (ht : 0 < t) (h2 : 0 ≤ q 2) (h0 : q 0 ≤ 0)
@@ -132,8 +132,8 @@ private def pairTwoZeroSolution (t : ℝ) (q : Player → ℝ)
     intro i
     fin_cases i
     all_goals simp [normalizedCyclicMatrix, Fin.sum_univ_succ]
-    all_goals field_simp [ne_of_gt ht]
-    all_goals simp
+    field_simp [ne_of_gt ht]
+    simp
 
 private def fullSolution (t : ℝ) (q : Player → ℝ)
     (hden : 0 < t ^ 3 - 1)

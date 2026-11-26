@@ -220,7 +220,7 @@ theorem quittingFiniteDeadlineMenuDebt_nonneg
   obtain ⟨action, _, hmean⟩ :=
     Math.ProbabilityMassFunction.exists_mem_support_expect_le (mixed who) value hbound
   have havg : game.mixedExtension.eu mixed who =
-      Math.Probability.expect (mixed who) value := by
+      _root_.Math.Probability.expect (mixed who) value := by
     simpa [game, value] using game.mixedExtension_eu_update mixed who (mixed who)
   unfold quittingFiniteDeadlineMenuDebt
   have hcap := quittingFiniteDeadline_purePayoff_le_replyCap

@@ -1,4 +1,4 @@
-import Maths.Graph.ChargedRelation
+import MathUE.ChargedRelation
 
 /-!
 # Finite path budgets and bounded potentials

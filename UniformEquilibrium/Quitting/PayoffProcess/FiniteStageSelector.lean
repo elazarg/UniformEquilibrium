@@ -43,26 +43,20 @@ def quittingStageUtility
 
 omit [DecidableEq ι] in
 /-- Expected utility in the deterministic binary game form is the usual
-one-stage quitting payoff after converting its finite laws to PMFs. -/
+one-stage quitting payoff under the independent product law. -/
 theorem expectedUtility_quittingBinaryForm_eq
     (utility : (ι → Bool) → ι → ℝ)
     (profile : Profile (quittingBinaryForm ι).sig.mixed) (who : ι) :
     expectedUtility utility who
         ((quittingBinaryForm ι).mixed.play profile) =
       _root_.Math.Probability.expect
-        (_root_.Math.PMFProduct.pmfPi
-          (fun player ↦ (profile player).toPMF))
+        (_root_.Math.PMFProduct.pmfPi profile)
         (fun action ↦ utility action who) := by
-  calc
-    expectedUtility utility who
-        ((quittingBinaryForm ι).mixed.play profile) =
-        FinDist.expect (FinDist.pi profile)
-          (fun action ↦ utility action who) := by
-      simp [expectedUtility, quittingBinaryForm]
-    _ = _ := by
-      rw [← _root_.Math.Probability.expect_finDistOfPMF,
-        _root_.Math.Probability.finDistOfPMF_pmfPi]
-      simp
+  rw [GameForm.mixed_play]
+  change GameTheory.Math.Probability.expect ((independentProduct profile).bind PMF.pure)
+    (fun action ↦ utility action who) = _
+  rw [PMF.bind_pure]
+  rfl
 
 /-- The measurable strict approximate-Nash weight selector specialized to
 the binary action form. -/
@@ -76,8 +70,8 @@ def quittingStageWeightsSelector {ε : ℝ} (hε : 0 < ε) :
 def quittingStageRootSelector {ε : ℝ} (hε : 0 < ε)
     (utility : (ι → Bool) → ι → ℝ) : ι → PMF Bool :=
   fun who ↦
-    ((ofPolytope (quittingBinaryForm ι).sig
-      (quittingStageWeightsSelector hε utility).2) who).toPMF
+    ofPolytope (quittingBinaryForm ι).sig
+      (quittingStageWeightsSelector hε utility).2 who
 
 /-- A selected action probability is measurable as the one-stage utility
 table varies. -/
@@ -96,7 +90,7 @@ theorem measurable_quittingStageRootSelector_apply {ε : ℝ} (hε : 0 < ε)
       ((continuous_apply who).comp continuous_subtype_val)
   change Measurable fun utility ↦
     (ofPolytope (quittingBinaryForm ι).sig
-      (quittingStageWeightsSelector hε utility).2 who).prob action
+      (quittingStageWeightsSelector hε utility).2 who action).toReal
   convert hcoordinate.measurable.comp hselector using 1
   funext utility
   exact congrFun (congrFun
@@ -165,11 +159,11 @@ theorem measurable_quittingRootExpectedPayoff {Ω : Type*}
   · apply Finset.measurable_prod
     intro player _
     exact hroot player (jointAction player)
-  · by_cases hquit : (quittingQuitters jointAction).Nonempty
-    · simpa only [quittingRootPayoff, hquit, ↓reduceDIte] using
+  · change Measurable (fun ω => quittingRootPayoff (reward ω) (continuation ω) jointAction who)
+    by_cases hquit : (quittingQuitters jointAction).Nonempty
+    · simpa only [quittingRootPayoff_of_nonempty _ _ _ _ hquit] using
         hreward ⟨quittingQuitters jointAction, hquit⟩ who
-    · simpa only [quittingRootPayoff, hquit, ↓reduceDIte] using
-        hcontinuation who
+    · simpa only [quittingRootPayoff_of_not_nonempty _ _ _ _ hquit] using hcontinuation who
 
 omit [DecidableEq ι] in
 /-- A random one-stage payoff is dominated by the reward envelope plus the
@@ -185,10 +179,10 @@ theorem abs_quittingRootExpectedPayoff_le_envelopeSum
   apply _root_.Math.Probability.abs_expect_le_of_abs_le
   intro jointAction
   by_cases hquit : (quittingQuitters jointAction).Nonempty
-  · rw [quittingRootPayoff, dite_eq_left hquit]
+  · rw [quittingRootPayoff_of_nonempty _ _ _ _ hquit]
     exact (hreward ⟨quittingQuitters jointAction, hquit⟩ who).trans
       (le_add_of_nonneg_right (Finset.sum_nonneg fun _ _ ↦ abs_nonneg _))
-  · rw [quittingRootPayoff, dite_eq_right hquit]
+  · rw [quittingRootPayoff_of_not_nonempty _ _ _ _ hquit]
     exact (Finset.single_le_sum (fun player _ ↦ abs_nonneg (continuation player))
       (Finset.mem_univ who)).trans (le_add_of_nonneg_left
         (le_trans (abs_nonneg (reward ⟨{who}, by simp⟩ who))
@@ -199,16 +193,37 @@ utility table. -/
 theorem quittingStageRootSelector_isεNash {ε : ℝ} (hε : 0 < ε)
     (utility : (ι → Bool) → ι → ℝ) :
     IsεNash (quittingBinaryForm ι).mixed utility ε
-      (fun who ↦
-        _root_.Math.Probability.finDistOfPMF
-          (quittingStageRootSelector hε utility who)) := by
+      (quittingStageRootSelector hε utility) := by
   have hstrict := (Classical.choose_spec
     (exists_measurable_isStrictApproximateNashWeights
       (F := quittingBinaryForm ι) hε)).2 utility
-  have hnash := hstrict.isεNash
-  convert hnash using 1
-  funext who
-  exact _root_.Math.Probability.finDistOfPMF_toPMF _
+  exact hstrict.isεNash
+
+omit [Fintype ι] in
+private theorem expectedUtility_deviation_le_of_finite_isεNash
+    (F : GameForm ι) [Finite F.sig.Outcome] (utility : F.sig.Outcome → ι → ℝ)
+    {ε : ℝ} {root : Profile F.sig} (hnash : IsεNash F utility ε root)
+    (who : ι) (replacement : F.sig.Strategy who) :
+    expectedUtility utility who (F.play (Profile.update root who replacement)) ≤
+      expectedUtility utility who (F.play root) + ε :=
+  (euPreferenceWithin_iff ε utility who _ _
+    (payoffIntegrable_of_finite _ _) (payoffIntegrable_of_finite _ _)).mp
+      ((isNash_iff (weaklyPrefers := euPreferenceWithin ε utility) root).mp
+        hnash who replacement)
+
+private theorem quittingRootExpectedPayoff_deviation_le_of_isεNash {ε : ℝ}
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (continuation : Payoff ι) (root : ι → PMF Bool)
+    (hnash : IsεNash (quittingBinaryForm ι).mixed
+      (quittingStageUtility reward continuation) ε root)
+    (who : ι) (replacement : PMF Bool) :
+    quittingRootExpectedPayoff reward continuation (Function.update root who replacement) who ≤
+      quittingRootExpectedPayoff reward continuation root who + ε := by
+  have hdeviation := expectedUtility_deviation_le_of_finite_isεNash
+    (quittingBinaryForm ι).mixed (quittingStageUtility reward continuation) hnash who replacement
+  rw [expectedUtility_quittingBinaryForm_eq,
+    expectedUtility_quittingBinaryForm_eq] at hdeviation
+  exact hdeviation
 
 /-- In quitting notation, no randomized one-player replacement improves the
 selected one-stage root payoff by more than `ε`. -/
@@ -223,33 +238,8 @@ theorem quittingStageRootSelector_deviation_le {ε : ℝ} (hε : 0 < ε)
       quittingRootExpectedPayoff reward continuation
           (quittingStageRootSelector hε
             (quittingStageUtility reward continuation)) who + ε := by
-  have hnash := quittingStageRootSelector_isεNash
-    (ι := ι) hε (quittingStageUtility reward continuation)
-  rw [isεNash_iff] at hnash
-  have hdeviation := hnash who
-    (_root_.Math.Probability.finDistOfPMF replacement)
-  rw [expectedUtility_quittingBinaryForm_eq,
-    expectedUtility_quittingBinaryForm_eq] at hdeviation
-  have hupdate :
-      (fun player ↦
-        FinDist.toPMF (Profile.update
-          (sig := (quittingBinaryForm ι).sig.mixed)
-          ((fun selected ↦
-              _root_.Math.Probability.finDistOfPMF
-                (quittingStageRootSelector hε
-                  (quittingStageUtility reward continuation) selected)) :
-            Profile (quittingBinaryForm ι).sig.mixed)
-          who (_root_.Math.Probability.finDistOfPMF replacement)
-          player)) =
-        Function.update
-          (quittingStageRootSelector hε
-            (quittingStageUtility reward continuation)) who replacement := by
-    funext player
-    by_cases hplayer : player = who
-    · subst player
-      simp
-    · simp [Profile.update, Function.update, hplayer]
-  rw [hupdate] at hdeviation
-  simpa [quittingStageUtility, quittingRootExpectedPayoff] using hdeviation
+  exact quittingRootExpectedPayoff_deviation_le_of_isεNash reward continuation _
+    (quittingStageRootSelector_isεNash hε (quittingStageUtility reward continuation))
+    who replacement
 
 end GameTheory

@@ -70,15 +70,17 @@ theorem measurable_quittingRootAbsorbingContribution
   apply Measurable.tsum
   intro action
   simp_rw [pmfPi_apply, ENNReal.toReal_prod]
-  apply Measurable.mul
-  · apply Finset.measurable_prod
-    intro player _
-    exact hroot player (action player)
-  · by_cases hquit : (quittingQuitters action).Nonempty
-    · simpa only [quittingRootPayoff, hquit, ↓reduceDIte] using
+  let weight (ω : Ω) := ∏ player, (root ω player (action player)).toReal
+  let payoff (ω : Ω) := quittingRootPayoff (reward ω) 0 action who
+  have hweight : Measurable weight := Finset.measurable_prod _ fun player _ =>
+    hroot player (action player)
+  have hpayoff : Measurable payoff := by
+    by_cases hquit : (quittingQuitters action).Nonempty
+    · simpa only [payoff, quittingRootPayoff, dite_eq_left hquit] using
         hreward ⟨quittingQuitters action, hquit⟩ who
-    · simp only [quittingRootPayoff, hquit, ↓reduceDIte, Pi.zero_apply]
+    · simp only [payoff, quittingRootPayoff, dite_eq_right hquit, Pi.zero_apply]
       exact measurable_const
+  exact hweight.mul hpayoff
 
 omit [DecidableEq ι] in
 /-- A varying-table path payoff is measurable from coordinatewise measurable

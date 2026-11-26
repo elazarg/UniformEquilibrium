@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import GameTheory.Math.Probability.FiniteUniform
 import UniformEquilibrium.Quitting.Debt.Dynamic.FiniteDynamicDebtSemantics
 import MathUE.PMFProduct.FiniteFubini
 import UniformEquilibrium.Quitting.Debt.Dynamic.DebtAugmentedEdge
@@ -49,7 +50,7 @@ def reward (S : Terminal) : Payoff Player :=
 
 /-- The source row has quit rates `(0,1/2,0)`. -/
 def sourceRoot : Player → PMF Bool := fun who =>
-  ![PMF.pure false, PMF.uniformOfFintype Bool, PMF.pure false] who
+  ![PMF.pure false, GameTheory.Math.Probability.uniformLaw Bool, PMF.pure false] who
 
 /-- The exact append row `(1,0,0)`. -/
 def appendRoot : Player → PMF Bool := fun who =>
@@ -119,7 +120,7 @@ theorem source_quit_value_player_zero :
   rw [show sourceRoots 0 = sourceRoot by rfl, Math.PMFProduct.expect_pmfPi_fin3]
   norm_num [sourceRoot, reward, quittingRootPayoff, quittingQuitters,
     vector3_quitters_nonempty,
-    PMF.uniformOfFintype_apply,
+    GameTheory.Math.Probability.uniformLaw_apply,
     expect_eq_sum, Fintype.sum_bool]
 
 theorem source_continue_value_player_zero :
@@ -130,7 +131,7 @@ theorem source_continue_value_player_zero :
   rw [show sourceRoots 0 = sourceRoot by rfl, Math.PMFProduct.expect_pmfPi_fin3]
   norm_num [sourceRoot, reward, quittingRootPayoff, quittingQuitters,
     vector3_quitters_nonempty,
-    PMF.uniformOfFintype_apply,
+    GameTheory.Math.Probability.uniformLaw_apply,
     expect_eq_sum, Fintype.sum_bool]
 
 theorem source_continue_mass_player_zero :
@@ -176,7 +177,7 @@ theorem repaired_row_zero_quit_value_player_zero :
     quittingRootExpectedPayoff
   rw [show repairedRoots 0 = sourceRoot by rfl, Math.PMFProduct.expect_pmfPi_fin3]
   norm_num [sourceRoot, reward, quittingRootPayoff, quittingQuitters,
-    vector3_quitters_nonempty, PMF.uniformOfFintype_apply,
+    vector3_quitters_nonempty, GameTheory.Math.Probability.uniformLaw_apply,
     expect_eq_sum, Fintype.sum_bool]
 
 theorem repaired_row_zero_continue_value_player_zero :
@@ -186,7 +187,7 @@ theorem repaired_row_zero_continue_value_player_zero :
     quittingRootExpectedPayoff
   rw [show repairedRoots 0 = sourceRoot by rfl, Math.PMFProduct.expect_pmfPi_fin3]
   norm_num [sourceRoot, reward, quittingRootPayoff, quittingQuitters,
-    vector3_quitters_nonempty, PMF.uniformOfFintype_apply,
+    vector3_quitters_nonempty, GameTheory.Math.Probability.uniformLaw_apply,
     expect_eq_sum, Fintype.sum_bool]
 
 theorem repaired_row_zero_continue_mass_player_zero :
@@ -203,7 +204,7 @@ theorem source_one_row_prescribed_player_zero :
   rw [quittingFiniteTerminalHazardValue]
   rw [source_quit_value_player_zero, source_continue_value_player_zero,
     source_continue_mass_player_zero]
-  norm_num [sourceRoots, sourceRoot, PMF.uniformOfFintype_apply]
+  norm_num [sourceRoots, sourceRoot, GameTheory.Math.Probability.uniformLaw_apply]
 
 theorem source_one_row_best_response_player_zero :
     bestResponseValue sourceRoots 0 1 = 1 := by
@@ -231,7 +232,7 @@ theorem repaired_two_row_prescribed_player_zero :
     append_quit_value_player_zero, append_continue_value_player_zero,
     append_continue_mass_player_zero]
   norm_num [repairedRoots, sourceRoot, appendRoot,
-    PMF.uniformOfFintype_apply]
+    GameTheory.Math.Probability.uniformLaw_apply]
 
 theorem repaired_two_row_best_response_player_zero :
     bestResponseValue repairedRoots 0 2 = 1 := by
@@ -244,7 +245,7 @@ theorem repaired_two_row_best_response_player_zero :
     append_quit_value_player_zero, append_continue_value_player_zero,
     append_continue_mass_player_zero]
   norm_num [repairedRoots, sourceRoot, appendRoot,
-    PMF.uniformOfFintype_apply]
+    GameTheory.Math.Probability.uniformLaw_apply]
 
 theorem repaired_two_row_player_zero_gain :
     singletonCappedGain repairedRoots 0 2 = 0 := by

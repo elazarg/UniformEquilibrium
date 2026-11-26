@@ -507,7 +507,7 @@ theorem
             (G.finkPureDeviationStateKernel z s who d t).toReal -
               (G.finkStateKernel z s t).toReal else 0) = 0 := by
   classical
-  simpa [Math.Probability.expect_pi_single, Pi.single_apply] using
+  simpa [_root_.Math.Probability.expect_pi_single, Pi.single_apply] using
     NormalizedFinkSupportTangentObstructionFlow.player_transition_balance
       G z H K F who (Pi.single t 1)
 
@@ -998,7 +998,7 @@ lemma selection_pureDeviationStateKernel_live_playerOne_actionA_eq :
         expect (game.finkStateKernel selectionLimitPoint .live)
           (Pi.single t 1) :=
     sub_eq_zero.mp hgain
-  simpa [Math.Probability.expect_pi_single] using hexpect
+  simpa [_root_.Math.Probability.expect_pi_single] using hexpect
 
 /-- Normalization reverses the coordinate witness in the
 selection-resistant example: its active action weight is negative. -/

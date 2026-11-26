@@ -565,7 +565,7 @@ theorem finiteSupportRankAlternative
   classical
   generalize hrank : frontier.positiveDebtSupport.card = rank
   induction rank using Nat.strong_induction_on generalizing frontier with
-  | h rank ih =>
+  | ind rank ih =>
       rcases frontier.exhaustiveAlternative with hpositive | hentry |
           hcirculation | hpotential
       · exact ⟨frontier, Or.inl hpositive⟩

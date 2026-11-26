@@ -857,7 +857,7 @@ theorem exists_multipliers_of_localMaxOn_zeroLocus
   exact
     exists_multipliers_of_localExtrOn_presentationFiber
       P t x (P.σ objectiveValue)
-      hpull.isExtr hdet
+      hpull.isExtrFilter hdet
 
 end CurveSelection.RelativePresentation
 end Math

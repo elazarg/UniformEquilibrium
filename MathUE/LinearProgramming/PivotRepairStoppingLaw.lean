@@ -117,7 +117,7 @@ theorem pivotRepairProvisionalStoppingLaw_some_of_gt {deadline : ℕ}
     {time : ℕ} (htime : deadline < time) :
     pivotRepairProvisionalStoppingLaw mass hfeasible (some time) = 0 := by
   rw [pivotRepairProvisionalStoppingLaw, PMF.map_apply]
-  apply ENNReal.tsum_eq_zero.mpr
+  apply tsum_eq_zero_iff.mpr
   intro choice
   rw [ite_eq_right]
   cases choice with

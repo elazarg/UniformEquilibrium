@@ -39,7 +39,7 @@ theorem contDiff_eval_mvPolynomial (polynomial : MvPolynomial (Fin dimension) �
   | C coefficient => simpa using contDiff_const (c := coefficient)
   | add first second hfirst hsecond => simpa using hfirst.add hsecond
   | mul_X polynomial coordinate hpolynomial =>
-      simpa using hpolynomial.mul (contDiff_apply ℝ ℝ coordinate)
+      simpa using hpolynomial.mul (contDiff_apply ℝ (fun _ => ℝ) coordinate)
 
 /-- Formal partial evaluation is the actual Fréchet derivative on a coordinate vector. -/
 theorem fderiv_eval_mvPolynomial_apply_single (polynomial : MvPolynomial (Fin dimension) ℝ)

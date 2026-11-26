@@ -55,18 +55,15 @@ theorem isCompact_convexHull_of_finiteDimensional {K : Set E} (hK : IsCompact K)
       ⋃ m : Fin (dimension + 2), combinationImage K m.val := by
     apply Set.Subset.antisymm
     · intro point hpoint
-      let t := Caratheodory.minCardFinsetOfMemConvexHull hpoint
-      have htK : (t : Set E) ⊆ K :=
-        Caratheodory.minCardFinsetOfMemConvexHull_subseteq hpoint
-      have hind : AffineIndependent ℝ ((↑) : t → E) :=
-        Caratheodory.affineIndependent_minCardFinsetOfMemConvexHull hpoint
+      rw [convexHull_eq_union] at hpoint
+      simp only [Set.mem_iUnion, exists_prop] at hpoint
+      obtain ⟨t, htK, hind, hpoint⟩ := hpoint
       have hcard : t.card ≤ dimension + 1 := by
         have h := hind.card_le_finrank_succ.trans
           (Nat.add_le_add_right (Submodule.finrank_le _) 1)
         simpa only [Fintype.card_coe, dimension] using h
       obtain ⟨weights, hweights, hsum, hvalue⟩ :=
-        Finset.mem_convexHull'.mp
-          (Caratheodory.mem_minCardFinsetOfMemConvexHull hpoint)
+        Finset.mem_convexHull'.mp hpoint
       let e : t ≃ Fin t.card := t.equivFin
       let points : Fin t.card → E := fun i => (e.symm i : E)
       let weights' : Fin t.card → ℝ := fun i => weights (points i)

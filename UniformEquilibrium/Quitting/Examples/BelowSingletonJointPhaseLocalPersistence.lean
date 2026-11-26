@@ -90,7 +90,7 @@ theorem jointOddsResponse_base : jointOddsResponse (baseParameters, baseOdds) = 
 theorem jointOddsResponse_partial_invertible :
     (fderiv ℝ jointOddsResponse (baseParameters, baseOdds) ∘L
       ContinuousLinearMap.inr ℝ RewardParameters (Fin 4 → ℝ)).IsInvertible := by
-  have hderivative := (contDiffAt_jointOddsResponse.hasStrictFDerivAt
+  have hderivative := (contDiffAt_jointOddsResponse.hasStrictFDerivAt_fderiv
     (by norm_num : (1 : ℕ∞ω) ≠ 0)).hasFDerivAt
   have hchain := hderivative.comp baseOdds
     (hasFDerivAt_prodMk_right baseParameters baseOdds)

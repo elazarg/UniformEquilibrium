@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import GameTheory.Math.Probability.FinDist
+import MathUE.Probability.FinDist
 import MathUE.PMFProduct.Update
 
 /-!
@@ -162,10 +162,10 @@ theorem expect_pmfPi_eq_of_separatelyAffine
     {C : Real} (hbound : forall profile, |observable profile| <= C)
     (haffine : forall (i : ι) (profile : (j : ι) -> A j),
       observable (Function.update profile i (barycenter i (laws i))) =
-        Math.Probability.expect (laws i) (fun action =>
+        _root_.Math.Probability.expect (laws i) (fun action =>
           observable (Function.update profile i (realize i action)))) :
     observable (fun i => barycenter i (laws i)) =
-      Math.Probability.expect (Math.PMFProduct.pmfPi laws)
+      _root_.Math.Probability.expect (Math.PMFProduct.pmfPi laws)
         (fun samples => observable (fun i => realize i (samples i))) := by
   classical
   let randomizedFamily (active : Finset ι)
@@ -177,7 +177,7 @@ theorem expect_pmfPi_eq_of_separatelyAffine
   have hind : forall active : Finset ι,
       forall base : (i : ι) -> Sample i,
       observable (realizedProfile active base) =
-        Math.Probability.expect
+        _root_.Math.Probability.expect
           (Math.PMFProduct.pmfPi (randomizedFamily active base))
           (fun samples => observable (fun i => realize i (samples i))) := by
     intro active
@@ -192,7 +192,7 @@ theorem expect_pmfPi_eq_of_separatelyAffine
           funext i
           simp [realizedProfile]
         rw [hfamily, Math.PMFProduct.pmfPi_pure,
-          Math.Probability.expect_pure, hprofile]
+          _root_.Math.Probability.expect_pure, hprofile]
     | @insert player active hnot ih =>
         intro base
         let sourceFamily := randomizedFamily active base
@@ -229,7 +229,7 @@ theorem expect_pmfPi_eq_of_separatelyAffine
             simp [realizedProfile]
           · simp [realizedProfile, hi]
         rw [hfamily, Math.PMFProduct.pmfPi_update_bind,
-          Math.Probability.expect_bind_of_bounded
+          _root_.Math.Probability.expect_bind_of_bounded
             (laws player)
             (fun action => Math.PMFProduct.pmfPi
               (Function.update sourceFamily player (PMF.pure action)))

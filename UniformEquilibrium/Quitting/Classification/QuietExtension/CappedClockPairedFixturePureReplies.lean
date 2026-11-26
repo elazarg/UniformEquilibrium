@@ -98,7 +98,8 @@ theorem pureReplyValue_some_succ (time : ℕ) :
     unfold quittingRootContinuePayoff quittingRootExpectedPayoff
     rw [Math.PMFProduct.expect_pmfPi_fin4]
     simp [root, twoThirdsCoin, quittingRootPayoff, quittingQuitters,
-      exampleReward, expect_eq_sum] <;> norm_num
+      exampleReward, expect_eq_sum]
+  all_goals norm_num
 
 /-- Never replies have the displayed four payoff values. -/
 theorem pureReplyValue_none :
@@ -121,7 +122,8 @@ theorem pureReplyValue_none :
     unfold quittingRootContinuePayoff quittingRootExpectedPayoff
     rw [Math.PMFProduct.expect_pmfPi_fin4]
     simp [root, twoThirdsCoin, quittingRootPayoff, quittingQuitters,
-      exampleReward, expect_eq_sum] <;> norm_num
+      exampleReward, expect_eq_sum]
+  all_goals norm_num
 
 end CappedClockPairedFixturePureReplies
 end GameTheory

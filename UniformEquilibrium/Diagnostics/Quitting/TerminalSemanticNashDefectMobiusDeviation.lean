@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import GameTheory.Math.Probability.FiniteUniform
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticNashDefectMobiusIncidence
 import UniformEquilibrium.Quitting.Debt.Dynamic.FiniteDynamicDebtSemantics
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalPacketSimpleFallbackCounterexample
@@ -48,7 +49,7 @@ theorem positive_singleton_incidence_eq_half :
     quittingPlayedPositiveMobiusIncidenceTerm reward (0 : Payoff Bool)
         root false {false} = 1 / 2 := by
   rw [quittingPlayedPositiveMobiusIncidenceTerm]
-  norm_num [mobiusCoeff_false_singleton, root, PMF.uniformOfFintype_apply,
+  norm_num [mobiusCoeff_false_singleton, root, GameTheory.Math.Probability.uniformLaw_apply,
     hazardOfRoot]
 
 /-- The cancelling pair incidence is also positive, in the opposite action
@@ -57,7 +58,7 @@ theorem negative_pair_incidence_eq_half :
     quittingPlayedNegativeMobiusIncidenceTerm reward (0 : Payoff Bool)
         root false {false, true} = 1 / 2 := by
   rw [quittingPlayedNegativeMobiusIncidenceTerm]
-  norm_num [mobiusCoeff_false_pair, root, PMF.uniformOfFintype_apply,
+  norm_num [mobiusCoeff_false_pair, root, GameTheory.Math.Probability.uniformLaw_apply,
     hazardOfRoot]
 
 theorem endpointDifference_false_eq_zero :

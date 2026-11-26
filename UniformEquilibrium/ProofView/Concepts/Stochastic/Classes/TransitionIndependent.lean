@@ -92,7 +92,7 @@ theorem expect_snd_histDist_of_forall_transition_eq
       expect (Math.PMFIter.iter κ t s₀) w := by
   let : Fintype G.State := Fintype.ofFinite G.State
   rw [← G.map_snd_histDist_of_forall_transition_eq hκ σ s₀ t,
-    Math.Probability.expect_map_fintype_target]
+    _root_.Math.Probability.expect_map_fintype_target]
 
 /-- Under action-independent transitions, the expected total payoff of
 Markov play is the sum of the expected stage values along the autonomous

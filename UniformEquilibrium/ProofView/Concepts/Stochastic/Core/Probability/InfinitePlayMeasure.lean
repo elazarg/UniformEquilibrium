@@ -615,11 +615,11 @@ theorem integral_histOfPlay_infinitePlayMeasure_of_integrable
     (σ : G.BehaviorProfile) (s₀ : G.State) (t : ℕ) (f : G.Hist t → ℝ)
     (hf : Integrable f (G.histDist σ s₀ t).toMeasure) :
     ∫ p, f (G.histOfPlay t p) ∂(G.infinitePlayMeasure σ s₀) =
-      Math.Probability.expect (G.histDist σ s₀ t) f := by
+      _root_.Math.Probability.expect (G.histDist σ s₀ t) f := by
   rw [← integral_map (G.measurable_histOfPlay t).aemeasurable
       Measurable.of_discrete.aestronglyMeasurable,
     G.map_histOfPlay_infinitePlayMeasure, PMF.integral_eq_tsum _ _ hf]
-  simp [Math.Probability.expect, smul_eq_mul]
+  simp [_root_.Math.Probability.expect, smul_eq_mul]
 
 omit [DecidableEq ι] in
 /-- For finite games, every function of a finite history is integrable, so the integral
@@ -628,7 +628,7 @@ theorem integral_histOfPlay_infinitePlayMeasure [Fintype G.State]
     [∀ i, Fintype (G.Act i)] (σ : G.BehaviorProfile) (s₀ : G.State)
     (t : ℕ) (f : G.Hist t → ℝ) :
     ∫ p, f (G.histOfPlay t p) ∂(G.infinitePlayMeasure σ s₀) =
-      Math.Probability.expect (G.histDist σ s₀ t) f := by
+      _root_.Math.Probability.expect (G.histDist σ s₀ t) f := by
   exact G.integral_histOfPlay_infinitePlayMeasure_of_integrable σ s₀ t f
     Integrable.of_finite
 

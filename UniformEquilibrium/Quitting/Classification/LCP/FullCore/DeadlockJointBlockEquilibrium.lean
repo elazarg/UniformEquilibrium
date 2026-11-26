@@ -638,7 +638,7 @@ def jointBlockValuePath : Fin 4 → Payoff Player :=
     jointBlockValue 1 = 1 + 4 * jointBlockParameter := by
   simp [jointBlockValue, reward_quittingSingleton, deadlockMatrix]
   convert jointBlock_identity_E1 using 1
-  all_goals ring
+  ring
 
 @[simp] theorem jointBlockValue_three :
     jointBlockValue 3 = 1 / jointBlockQ1 := by
@@ -895,8 +895,8 @@ theorem jointBlockRoot_joint_successor :
   · have hq2 : jointBlockQ2 ≠ 0 := by
       linarith [jointBlockQ2_bounds.1]
     convert eq_inv_of_mul_eq_one_right jointBlock_identity_E0 using 1
-    all_goals simp [jointBlockQ1, jointBlockQ3]
-    all_goals ring
+    simp [jointBlockQ1, jointBlockQ3]
+    ring
   · have hden : 1 + 2 * jointBlockParameter ≠ 0 := by
       linarith [jointBlockParameter_pos]
     unfold jointBlockQ3
@@ -904,8 +904,8 @@ theorem jointBlockRoot_joint_successor :
     field_simp [hden]
     ring
   · convert jointBlock_identity_E2 using 1
-    all_goals simp [jointBlockQ1, jointBlockQ3]
-    all_goals ring
+    simp [jointBlockQ1, jointBlockQ3]
+    ring
   · have hq1 : jointBlockQ1 ≠ 0 := by
       unfold jointBlockQ1
       linarith [jointBlockP1_bounds.2]
@@ -930,8 +930,8 @@ theorem jointBlockRoot_zero_endpointDifference (who : Player) :
       quittingRootPayoff, quittingQuitters, FullCoreDeadlock.reward,
       deadlockMatrix, jointBlockQ0]
   · convert jointBlock_identity_E1 using 1
-    all_goals simp [jointBlockQ0]
-    all_goals ring
+    simp [jointBlockQ0]
+    ring
   · ring
   · have hq1 : jointBlockQ1 ≠ 0 := by
       unfold jointBlockQ1 jointBlockP1

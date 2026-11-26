@@ -863,12 +863,11 @@ private theorem akrsSmallCellProductization
         hlaw_zero coalition hcoalition, hp_zero]
       simp
   · have hp_pos : 0 < 1 - law ∅ := by
+      let player : ι := Classical.choice (inferInstance : Nonempty ι)
       have hp_nonneg := akrsLawMass_le_absorption_of_nonempty
-        hlaw_nonneg hlaw_sum (coalition := ({Classical.choice
-          (inferInstance : Nonempty ι)} : Finset ι)) (by simp)
+        hlaw_nonneg hlaw_sum (coalition := {player}) (by simp)
       have hp_nonnegative : 0 ≤ 1 - law ∅ :=
-        (hlaw_nonneg {Classical.choice
-          (inferInstance : Nonempty ι)}).trans hp_nonneg
+        (hlaw_nonneg {player}).trans hp_nonneg
       exact lt_of_le_of_ne hp_nonnegative (Ne.symm hp_zero)
     let players : Finset ι :=
       Finset.univ.filter fun player => 0 < law {player}

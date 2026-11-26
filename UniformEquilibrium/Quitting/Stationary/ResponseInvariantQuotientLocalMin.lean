@@ -44,13 +44,20 @@ theorem continuous_quittingQuotientResponse
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (block : ι → Fin k) (representative : Fin k → ι) :
     Continuous (quittingQuotientResponse reward block representative) := by
-  have hlift : Continuous (quittingBlockLift block) := by
-    change Continuous (fun point : Fin k → ℝ => fun who => point (block who))
-    fun_prop
+  have hpath : Continuous fun point : Fin k → ℝ =>
+      ((0 : ℝ), quittingBlockLift block point) := by
+    have hlift : Continuous (quittingBlockLift block) := by
+      change Continuous (fun point : Fin k → ℝ => fun who => point (block who))
+      exact continuous_pi fun who => continuous_apply (block who)
+    exact continuous_const.prodMk hlift
   apply continuous_pi
   intro coordinate
-  exact (continuous_quittingDiscountedDisplacement reward
-    (representative coordinate)).comp (continuous_const.prodMk hlift)
+  let displacement (input : ℝ × (ι → ℝ)) : ℝ :=
+    quittingDiscountedDisplacement reward input.1 input.2 (representative coordinate)
+  have hdisplacement : Continuous displacement :=
+    continuous_quittingDiscountedDisplacement reward (representative coordinate)
+  change Continuous fun point : Fin k → ℝ => displacement (0, quittingBlockLift block point)
+  exact hdisplacement.comp hpath
 
 /-- Upper clipping is inactive in one ambient neighborhood of all-Continue. -/
 theorem eventually_quittingQuotient_upperClip_inactive
@@ -62,12 +69,13 @@ theorem eventually_quittingQuotient_upperClip_inactive
           point coordinate < 1 := by
   apply Filter.eventually_all.mpr
   intro coordinate
+  have hcoordinate : Continuous (fun point : Fin k → ℝ => point coordinate) :=
+    continuous_apply coordinate
   have hcontinuous : Continuous (fun point : Fin k → ℝ =>
       point coordinate + quittingQuotientResponse reward block representative
         point coordinate) :=
-    (continuous_apply coordinate).add
-      ((continuous_apply coordinate).comp
-        (continuous_quittingQuotientResponse reward block representative))
+    hcoordinate.add
+      (hcoordinate.comp (continuous_quittingQuotientResponse reward block representative))
   have hzero : (0 : Fin k → ℝ) coordinate +
       quittingQuotientResponse reward block representative 0 coordinate = 0 := by
     simp [quittingQuotientResponse_zero]

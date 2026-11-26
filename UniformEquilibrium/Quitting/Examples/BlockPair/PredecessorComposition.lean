@@ -72,6 +72,21 @@ theorem IsCorePredecessorStep.isValid
     simp only [hsupport] at hcoreWho ⊢
     exact ⟨hcoreWho, hinactive who hsupportFalse⟩
 
+private theorem corePredecessorStep_of_coordinates
+    (support : QuitterMask) (hazard successor predecessor : ContinuationValue)
+    (hvalue : predecessorValue hazard successor = predecessor)
+    (hzero : if maskHasPlayer support 0 = true then difference hazard successor 0 = 0
+      else hazard 0 = 0)
+    (hone : if maskHasPlayer support 1 = true then difference hazard successor 1 = 0
+      else hazard 1 = 0)
+    (htwo : if maskHasPlayer support 2 = true then difference hazard successor 2 = 0
+      else hazard 2 = 0)
+    (hthree : if maskHasPlayer support 3 = true then difference hazard successor 3 = 0
+      else hazard 3 = 0) :
+    IsCorePredecessorStep support hazard successor predecessor := by
+  refine ⟨hvalue, fun who => ?_⟩
+  fin_cases who <;> assumption
+
 theorem supportNine_core
     (successor : ContinuationValue)
     (hzero : successor 0 ≠ 0)
@@ -80,9 +95,17 @@ theorem supportNine_core
       (supportNineValue successor) := by
   obtain ⟨hactiveZero, hactiveThree⟩ :=
     supportNine_active successor hzero hthree
-  refine ⟨supportNine_predecessorValue successor hzero hthree, ?_⟩
-  intro who
-  fin_cases who <;> simp +decide <;> first | assumption | rfl
+  refine corePredecessorStep_of_coordinates 9 (supportNineHazard successor) successor
+    (supportNineValue successor)
+    (supportNine_predecessorValue successor hzero hthree) ?_ ?_ ?_ ?_
+  · rw [ite_eq_left (show maskHasPlayer 9 0 = true by decide)]
+    exact hactiveZero
+  · rw [ite_eq_right (show ¬ maskHasPlayer 9 1 = true by decide)]
+    rfl
+  · rw [ite_eq_right (show ¬ maskHasPlayer 9 2 = true by decide)]
+    rfl
+  · rw [ite_eq_left (show maskHasPlayer 9 3 = true by decide)]
+    exact hactiveThree
 
 theorem supportTen_core
     (successor : ContinuationValue)
@@ -92,9 +115,17 @@ theorem supportTen_core
       (supportTenValue successor) := by
   obtain ⟨hactiveOne, hactiveThree⟩ :=
     supportTen_active successor hone hthree
-  refine ⟨supportTen_predecessorValue successor hone hthree, ?_⟩
-  intro who
-  fin_cases who <;> simp +decide <;> first | assumption | rfl
+  refine corePredecessorStep_of_coordinates 10 (supportTenHazard successor) successor
+    (supportTenValue successor)
+    (supportTen_predecessorValue successor hone hthree) ?_ ?_ ?_ ?_
+  · rw [ite_eq_right (show ¬ maskHasPlayer 10 0 = true by decide)]
+    rfl
+  · rw [ite_eq_left (show maskHasPlayer 10 1 = true by decide)]
+    exact hactiveOne
+  · rw [ite_eq_right (show ¬ maskHasPlayer 10 2 = true by decide)]
+    rfl
+  · rw [ite_eq_left (show maskHasPlayer 10 3 = true by decide)]
+    exact hactiveThree
 
 theorem supportSeven_core
     (successor : ContinuationValue)
@@ -105,10 +136,17 @@ theorem supportSeven_core
       (supportSevenValue successor) := by
   obtain ⟨hactiveZero, hactiveOne, hactiveTwo⟩ :=
     supportSeven_active successor htwo hmiddle hcoefficient
-  refine ⟨supportSeven_predecessorValue successor htwo hmiddle hcoefficient,
-    ?_⟩
-  intro who
-  fin_cases who <;> simp +decide <;> first | assumption | rfl
+  refine corePredecessorStep_of_coordinates 7 (supportSevenHazard successor) successor
+    (supportSevenValue successor)
+    (supportSeven_predecessorValue successor htwo hmiddle hcoefficient) ?_ ?_ ?_ ?_
+  · rw [ite_eq_left (show maskHasPlayer 7 0 = true by decide)]
+    exact hactiveZero
+  · rw [ite_eq_left (show maskHasPlayer 7 1 = true by decide)]
+    exact hactiveOne
+  · rw [ite_eq_left (show maskHasPlayer 7 2 = true by decide)]
+    exact hactiveTwo
+  · rw [ite_eq_right (show ¬ maskHasPlayer 7 3 = true by decide)]
+    rfl
 
 theorem supportFourteen_core
     (successor : ContinuationValue)
@@ -119,10 +157,17 @@ theorem supportFourteen_core
       (supportFourteenValue successor) := by
   obtain ⟨hactiveOne, hactiveTwo, hactiveThree⟩ :=
     supportFourteen_active successor hone hmiddle hcoefficient
-  refine ⟨supportFourteen_predecessorValue successor hone hmiddle hcoefficient,
-    ?_⟩
-  intro who
-  fin_cases who <;> simp +decide <;> first | assumption | rfl
+  refine corePredecessorStep_of_coordinates 14 (supportFourteenHazard successor) successor
+    (supportFourteenValue successor)
+    (supportFourteen_predecessorValue successor hone hmiddle hcoefficient) ?_ ?_ ?_ ?_
+  · rw [ite_eq_right (show ¬ maskHasPlayer 14 0 = true by decide)]
+    rfl
+  · rw [ite_eq_left (show maskHasPlayer 14 1 = true by decide)]
+    exact hactiveOne
+  · rw [ite_eq_left (show maskHasPlayer 14 2 = true by decide)]
+    exact hactiveTwo
+  · rw [ite_eq_left (show maskHasPlayer 14 3 = true by decide)]
+    exact hactiveThree
 
 theorem supportThirteen_core
     (successor : ContinuationValue) (z : ℝ)
@@ -133,10 +178,17 @@ theorem supportThirteen_core
       (supportThirteenValue successor z) := by
   obtain ⟨hactiveZero, hactiveTwo, hactiveThree⟩ :=
     supportThirteen_active successor z hzero htwo hpolynomial
-  refine ⟨supportThirteen_predecessorValue successor z hzero htwo hpolynomial,
-    ?_⟩
-  intro who
-  fin_cases who <;> simp +decide <;> first | assumption | rfl
+  refine corePredecessorStep_of_coordinates 13 (supportThirteenHazard successor z) successor
+    (supportThirteenValue successor z)
+    (supportThirteen_predecessorValue successor z hzero htwo hpolynomial) ?_ ?_ ?_ ?_
+  · rw [ite_eq_left (show maskHasPlayer 13 0 = true by decide)]
+    exact hactiveZero
+  · rw [ite_eq_right (show ¬ maskHasPlayer 13 1 = true by decide)]
+    rfl
+  · rw [ite_eq_left (show maskHasPlayer 13 2 = true by decide)]
+    exact hactiveTwo
+  · rw [ite_eq_left (show maskHasPlayer 13 3 = true by decide)]
+    exact hactiveThree
 
 theorem supportEleven_core
     (successor : ContinuationValue) (z : ℝ)
@@ -147,10 +199,17 @@ theorem supportEleven_core
       (supportElevenValue successor z) := by
   obtain ⟨hactiveZero, hactiveOne, hactiveThree⟩ :=
     supportEleven_active successor z hzero hone hpolynomial
-  refine ⟨supportEleven_predecessorValue successor z hzero hone hpolynomial,
-    ?_⟩
-  intro who
-  fin_cases who <;> simp +decide <;> first | assumption | rfl
+  refine corePredecessorStep_of_coordinates 11 (supportElevenHazard successor z) successor
+    (supportElevenValue successor z)
+    (supportEleven_predecessorValue successor z hzero hone hpolynomial) ?_ ?_ ?_ ?_
+  · rw [ite_eq_left (show maskHasPlayer 11 0 = true by decide)]
+    exact hactiveZero
+  · rw [ite_eq_left (show maskHasPlayer 11 1 = true by decide)]
+    exact hactiveOne
+  · rw [ite_eq_right (show ¬ maskHasPlayer 11 2 = true by decide)]
+    rfl
+  · rw [ite_eq_left (show maskHasPlayer 11 3 = true by decide)]
+    exact hactiveThree
 
 /-- A single-valued choice from the predecessor correspondence. -/
 structure SelectedPredecessorChart where

@@ -85,7 +85,8 @@ theorem quittingStationaryQuitNowSegment_semanticPair
     quittingTerminalSemanticPair_eq_compactStoppingLawsOfProfile reward
       (quittingCapResponseSegment reward (quittingStationaryProfile reward root) owner
         (quittingPureTimeBehaviorStrategy reward owner (some 0)) parameter)]
-  congr 2
+  apply congrArg (fun laws =>
+    quittingTerminalSemanticPair reward (quittingCompactStoppingLawProfile reward laws))
   funext who
   apply congrArg Math.Probability.CompactStoppingLaw.ofPMF
   by_cases hwho : who = owner

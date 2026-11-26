@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.Probability.FiniteIndependentMixture
+import MathUE.Probability.FinitePMF
 import UniformEquilibrium.Quitting.Paths.FiniteStoppingLawMixture
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformPayoffSelection
 
@@ -25,6 +26,7 @@ noncomputable section
 
 namespace GameTheory
 
+open _root_.Math.Probability (finDistOfPMF finDistOfPMF_pure)
 open StochasticGame
 open GameTheory.Math.Probability
 
@@ -89,15 +91,17 @@ independent law of the underlying quitting strategies. -/
 theorem expectedUtility_quittingBehaviorMenu_mixed_eq_expect_pi
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (menu : (who : ι) → Set ((quittingGame reward).BehaviorStrategy who))
+    [∀ who, Finite {strategy // strategy ∈ menu who}]
     (mixed : Profile (quittingBehaviorMenuForm reward menu).sig.mixed)
     (observer : ι) :
     expectedUtility (quittingBehaviorMenuUtility reward menu) observer
         ((quittingBehaviorMenuForm reward menu).mixed.play mixed) =
-      (FinDist.pi (fun who => (mixed who).map Subtype.val)).expect
+      (FinDist.pi (fun who => (finDistOfPMF (mixed who)).map Subtype.val)).expect
         fun profile => quittingTerminalPayoff reward profile observer := by
-  rw [GameForm.mixed_play, expectedUtility_bind]
-  simp only [expectedUtility_pure]
-  rw [FinDist.pi_map, FinDist.expect_map]
+  rw [GameForm.mixed_play]
+  change GameTheory.Math.Probability.expect ((independentProduct mixed).bind PMF.pure)
+    (fun profile => quittingBehaviorMenuUtility reward menu profile observer) = _
+  rw [PMF.bind_pure, FinDist.pi_map, FinDist.expect_map]
   rfl
 
 /-- **Finite-watchdog impossibility.** Every player-dependent finite nonempty
@@ -122,13 +126,18 @@ theorem exists_quittingBehaviorProfile_forall_mem_finiteMenu_payoff_le
   obtain ⟨mixed, hnash⟩ := exists_isNash_mixed
     (F := quittingBehaviorMenuForm reward menu)
     (quittingBehaviorMenuUtility reward menu)
+    ((quittingBehaviorMenuForm reward menu).hasIntegrableUtility_of_finiteOutcome _)
   let laws : (who : ι) →
       FinDist ((quittingGame reward).BehaviorStrategy who) :=
-    fun who => (mixed who).map Subtype.val
+    fun who => (finDistOfPMF (mixed who)).map Subtype.val
   let profile := quittingFiniteMixtureBehaviorProfile reward laws
   refine ⟨profile, fun who strategy hstrategy => ?_⟩
   let action : {strategy // strategy ∈ menu who} := ⟨strategy, hstrategy⟩
-  have hnashPure := (isNash_mixed_iff mixed).1 hnash who action
+  have hnashPure := (euPreference_iff _ _ _ _
+    (payoffIntegrable_of_finite _ _) (payoffIntegrable_of_finite _ _)).mp
+      ((isNash_iff (F := (quittingBehaviorMenuForm reward menu).mixed)
+        (weaklyPrefers := euPreference (quittingBehaviorMenuUtility reward menu))
+        mixed).mp hnash who (PMF.pure action))
   have hrhs :
       expectedUtility (quittingBehaviorMenuUtility reward menu) who
           ((quittingBehaviorMenuForm reward menu).mixed.play mixed) =
@@ -137,10 +146,10 @@ theorem exists_quittingBehaviorProfile_forall_mem_finiteMenu_payoff_le
     simpa only [laws] using
       expectedUtility_quittingBehaviorMenu_mixed_eq_expect_pi
         reward menu mixed who
-  let updatedMixed := Profile.update mixed who (FinDist.pure action)
+  let updatedMixed := Profile.update mixed who (PMF.pure action)
   let updatedLaws : (player : ι) →
       FinDist ((quittingGame reward).BehaviorStrategy player) :=
-    fun player => (updatedMixed player).map Subtype.val
+    fun player => (finDistOfPMF (updatedMixed player)).map Subtype.val
   have hpureAction :
       (FinDist.pure action).map Subtype.val = FinDist.pure strategy := by
     rw [FinDist.map_pure]
@@ -161,9 +170,10 @@ theorem exists_quittingBehaviorProfile_forall_mem_finiteMenu_payoff_le
       by_cases hp : player = who
       · subst player
         change quittingFiniteStoppingLawMixtureBehaviorStrategy reward who
-            ((Profile.update mixed who (FinDist.pure action) who).map
-              Subtype.val) = _
-        rw [Profile.update_same, hpureAction, Function.update_self]
+            ((finDistOfPMF
+              (Profile.update mixed who (PMF.pure action) who)).map Subtype.val) = _
+        rw [Profile.update_same, finDistOfPMF_pure,
+          hpureAction, Function.update_self]
       · simp [updatedLaws, updatedMixed, laws, profile,
           quittingFiniteMixtureBehaviorProfile, hp]
     have hpure :=

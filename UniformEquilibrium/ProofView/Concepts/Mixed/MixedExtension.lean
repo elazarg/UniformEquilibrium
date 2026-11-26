@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import GameTheory.Math.Probability.FiniteUniform
 import MathUE.PMFProduct
 import MathUE.Probability
 import Mathlib.Probability.Distributions.Uniform
@@ -166,7 +167,7 @@ theorem weighted_gain_sum_zero_of_bounded
     fun a => G.mixedExtension.eu_abs_le_of_bounded who hbd _
   have h_summable_eu : Summable (fun a => ((σ who) a).toReal *
       G.mixedExtension.eu (Function.update σ who (PMF.pure a)) who) :=
-    Math.Probability.expect_summable_of_bounded (σ who) _ h_eu_bd
+    _root_.Math.Probability.expect_summable_of_bounded (σ who) _ h_eu_bd
   have h_summable_const : Summable (fun a : G.Strategy who =>
       ((σ who) a).toReal * G.mixedExtension.eu σ who) :=
     (Math.Probability.pmf_toReal_summable (σ who)).mul_right _
@@ -190,7 +191,7 @@ theorem weighted_gain_sum_zero_of_bounded
       G.mixedExtension.eu σ who := by
     rw [tsum_mul_right, Math.Probability.pmf_toReal_tsum_one, one_mul]
   -- Subtract the two.
-  unfold Math.Probability.expect
+  unfold _root_.Math.Probability.expect
   simp_rw [mul_sub]
   rw [h_summable_eu.tsum_sub h_summable_const, hdecomp, hconst, sub_self]
 
@@ -347,7 +348,7 @@ theorem mixedExtension_eu_tendsto_of_forall_pmfConvergesPointwise
     by
       obtain ⟨C, hC⟩ :=
         Math.Probability.exists_abs_bound_of_finite (fun ω => G.utility ω who)
-      exact Math.Probability.expect_tendsto_of_forall_tendsto_of_bounded
+      exact _root_.Math.Probability.expect_tendsto_of_forall_tendsto_of_bounded
         (fun s : Profile G => G.eu s who)
         (fun s => G.eu_abs_le_of_bounded who hC s) hprod
   rw [show (fun n : ℕ => G.mixedExtension.eu (σs n) who) =
@@ -436,7 +437,7 @@ variable [∀ i, Nonempty (G.Strategy i)]
 /-- The independent profile where every player uses the uniform distribution on
 their finite strategy set. -/
 def uniformMixedProfile : Profile G.mixedExtension :=
-  fun i => PMF.uniformOfFintype (G.Strategy i)
+  fun i => GameTheory.Math.Probability.uniformLaw (G.Strategy i)
 
 /-- A game is balanced at the uniform mixed profile if every pure unilateral
 deviation gives the same expected utility as the uniform profile itself.

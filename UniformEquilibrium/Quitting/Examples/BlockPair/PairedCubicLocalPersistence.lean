@@ -86,7 +86,7 @@ theorem jointActiveResponse_partial_invertible :
   have hderivative : HasFDerivAt jointActiveResponse
       (fderiv ℝ jointActiveResponse (baseParameters, activeBase))
       (baseParameters, activeBase) :=
-    (contDiff_jointActiveResponse.contDiffAt.hasStrictFDerivAt
+    (contDiff_jointActiveResponse.contDiffAt.hasStrictFDerivAt_fderiv
       (by norm_num : (1 : ℕ∞ω) ≠ 0)).hasFDerivAt
   have hchain : HasFDerivAt (fun point => jointActiveResponse (baseParameters, point))
       (fderiv ℝ jointActiveResponse (baseParameters, activeBase) ∘L

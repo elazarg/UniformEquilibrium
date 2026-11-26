@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import GameTheory.Math.Probability.FiniteUniform
 import MathUE.ProbabilityMassFunction.Bool
 import MathUE.PMFProduct.Bool
 import UniformEquilibrium.Quitting.Debt.Dynamic.FiniteDynamicDebtPositiveLimit
@@ -67,12 +68,12 @@ zero-boundary exact-D compiler. -/
 def equilibriumValue : Payoff Bool := fun who => if who then 0 else 1
 
 /-- Both players independently quit with probability one half. -/
-def mixedRoot : Bool → PMF Bool := fun _ => PMF.uniformOfFintype Bool
+def mixedRoot : Bool → PMF Bool := fun _ => GameTheory.Math.Probability.uniformLaw Bool
 
 /-- Player one quits with probability one half and player two always
 continues. -/
 def stationaryRoot : Bool → PMF Bool := fun who =>
-  if who then PMF.pure false else PMF.uniformOfFintype Bool
+  if who then PMF.pure false else GameTheory.Math.Probability.uniformLaw Bool
 
 /-- Fubini expansion of a two-player Boolean product law. -/
 theorem expect_pmfPi_bool (selectedRoot : Bool → PMF Bool)
@@ -118,15 +119,15 @@ theorem expect_pmfPi_bool (selectedRoot : Bool → PMF Bool)
   simp [equilibriumValue]
 
 @[simp] theorem mixedRoot_apply (who : Bool) :
-    mixedRoot who = PMF.uniformOfFintype Bool := by
+    mixedRoot who = GameTheory.Math.Probability.uniformLaw Bool := by
   rfl
 
 @[simp] theorem mixedRoot_quitProbability (who : Bool) :
     (mixedRoot who true).toReal = 1 / 2 := by
-  simp [mixedRoot, PMF.uniformOfFintype_apply]
+  simp [mixedRoot, GameTheory.Math.Probability.uniformLaw_apply]
 
 @[simp] theorem stationaryRoot_false :
-    stationaryRoot false = PMF.uniformOfFintype Bool := by
+    stationaryRoot false = GameTheory.Math.Probability.uniformLaw Bool := by
   simp [stationaryRoot]
 
 @[simp] theorem stationaryRoot_true :
@@ -223,19 +224,19 @@ theorem true_continuePayoff (tail : Payoff Bool)
 theorem pmf_bool_eq_uniform_of_apply_true_toReal_eq_half
     (marginal : PMF Bool)
     (htrue : (marginal true).toReal = 1 / 2) :
-    marginal = PMF.uniformOfFintype Bool := by
+    marginal = GameTheory.Math.Probability.uniformLaw Bool := by
   ext action
   apply (ENNReal.toReal_eq_toReal_iff'
     (PMF.apply_ne_top marginal action)
-    (PMF.apply_ne_top (PMF.uniformOfFintype Bool) action)).mp
+    (PMF.apply_ne_top (GameTheory.Math.Probability.uniformLaw Bool) action)).mp
   cases action
   · have hsum :
         (marginal false).toReal + (marginal true).toReal = 1 := by
       simpa [Fintype.sum_bool, add_comm] using pmf_toReal_sum_one marginal
     rw [htrue] at hsum
-    norm_num [PMF.uniformOfFintype_apply]
+    norm_num [GameTheory.Math.Probability.uniformLaw_apply]
     linarith
-  · simpa [PMF.uniformOfFintype_apply] using htrue
+  · simpa [GameTheory.Math.Probability.uniformLaw_apply] using htrue
 
 /-- Against the zero tail, exact endpoint Nash forces both players to mix
 half--half. -/
@@ -343,9 +344,9 @@ theorem mixedRoot_successor_zero :
   rw [quittingRootSuccessorPayoff_eq_endpointMix]
   cases who
   · rw [false_quitPayoff, false_continuePayoff]
-    norm_num [mixedRoot, trapValue, PMF.uniformOfFintype_apply]
+    norm_num [mixedRoot, trapValue, GameTheory.Math.Probability.uniformLaw_apply]
   · rw [true_quitPayoff, true_continuePayoff]
-    norm_num [mixedRoot, trapValue, PMF.uniformOfFintype_apply]
+    norm_num [mixedRoot, trapValue, GameTheory.Math.Probability.uniformLaw_apply]
 
 /-- Against the trap tail, exact endpoint Nash forces all-Continue. -/
 theorem root_eq_allContinue_of_endpointNash_trapValue
@@ -600,7 +601,7 @@ theorem finitePath_dynamicDebt_forced_at_positive_distance
           rw [hroot, false_quitPayoff, false_continuePayoff,
             fixedOpponentsContinueMass_false, hroot, hnext,
             hcurrentFalse]
-          norm_num [mixedRoot, PMF.uniformOfFintype_apply]
+          norm_num [mixedRoot, GameTheory.Math.Probability.uniformLaw_apply]
         · unfold quittingFiniteNashBellmanPathDynamicDebt
           rw [hfuel, quittingFiniteDynamicDebt_succ_eq_endpoints]
           change
@@ -618,7 +619,7 @@ theorem finitePath_dynamicDebt_forced_at_positive_distance
           rw [hroot, true_quitPayoff, true_continuePayoff,
             fixedOpponentsContinueMass_true, hroot, hnext,
             hcurrentTrue]
-          norm_num [mixedRoot, PMF.uniformOfFintype_apply]
+          norm_num [mixedRoot, GameTheory.Math.Probability.uniformLaw_apply]
       · have hremainingPositive : 0 < remaining :=
           Nat.pos_of_ne_zero hremaining
         have htail := ih (time + 1) hremainingPositive (by omega)
@@ -849,11 +850,11 @@ theorem stationaryRoot_isEndpointNash :
   · rw [quittingRootEndpointDifference, false_quitPayoff,
       false_continuePayoff]
     norm_num [stationaryRoot, equilibriumValue,
-      PMF.uniformOfFintype_apply]
+      GameTheory.Math.Probability.uniformLaw_apply]
   · rw [quittingRootEndpointDifference, true_quitPayoff,
       true_continuePayoff]
     norm_num [stationaryRoot, equilibriumValue,
-      PMF.uniformOfFintype_apply]
+      GameTheory.Math.Probability.uniformLaw_apply]
 
 /-- The stationary root's Bellman successor is exactly `(1,0)`. -/
 theorem stationaryRoot_successor :
@@ -864,16 +865,16 @@ theorem stationaryRoot_successor :
   cases who
   · rw [false_quitPayoff, false_continuePayoff]
     norm_num [stationaryRoot, equilibriumValue,
-      PMF.uniformOfFintype_apply]
+      GameTheory.Math.Probability.uniformLaw_apply]
   · rw [true_quitPayoff, true_continuePayoff]
     norm_num [stationaryRoot, equilibriumValue,
-      PMF.uniformOfFintype_apply]
+      GameTheory.Math.Probability.uniformLaw_apply]
 
 /-- The stationary root is the standard solo stationary root owned by player
 one. -/
 theorem stationaryRoot_eq_solo :
     stationaryRoot = quittingSoloStationaryRoot false
-      (PMF.uniformOfFintype Bool) := by
+      (GameTheory.Math.Probability.uniformLaw Bool) := by
   funext who
   cases who <;>
     simp [stationaryRoot, quittingSoloStationaryRoot]
@@ -885,8 +886,8 @@ theorem terminalPayoff_stationaryRoot (who : Bool) :
       equilibriumValue who := by
   rw [stationaryRoot_eq_solo,
     quittingTerminalPayoff_soloStationary reward false who
-      (PMF.uniformOfFintype Bool) (by
-        norm_num [PMF.uniformOfFintype_apply])]
+      (GameTheory.Math.Probability.uniformLaw Bool) (by
+        norm_num [GameTheory.Math.Probability.uniformLaw_apply])]
   cases who <;>
     simp [quittingSoloReward, reward, equilibriumValue]
 
@@ -898,7 +899,7 @@ theorem stationaryFixedOpponentsQuitValue_true :
   rw [← quittingRootQuitPayoff_eq_fixedOpponentsQuitValue
     reward (fun _ ↦ stationaryRoot) true (0 : Payoff Bool) 0,
     true_quitPayoff]
-  norm_num [stationaryRoot, PMF.uniformOfFintype_apply]
+  norm_num [stationaryRoot, GameTheory.Math.Probability.uniformLaw_apply]
 
 /-- Player one's stationary hazard makes player two's opponent-only process
 contract by one half each stage. -/
@@ -906,18 +907,18 @@ theorem stationaryFixedOpponentsContinueMass_true_lt_one :
     quittingStationaryFixedOpponentsContinueMass stationaryRoot true < 1 := by
   unfold quittingStationaryFixedOpponentsContinueMass
   rw [fixedOpponentsContinueMass_true]
-  norm_num [stationaryRoot, PMF.uniformOfFintype_apply]
+  norm_num [stationaryRoot, GameTheory.Math.Probability.uniformLaw_apply]
 
 /-- Player two's full stationary unilateral cap is zero. -/
 theorem stationaryUnilateralCap_true :
     quittingStationaryUnilateralCap reward stationaryRoot true = 0 := by
   have hpositive :
-      0 < ((PMF.uniformOfFintype Bool) true).toReal := by
-    norm_num [PMF.uniformOfFintype_apply]
+      0 < ((GameTheory.Math.Probability.uniformLaw Bool) true).toReal := by
+    norm_num [GameTheory.Math.Probability.uniformLaw_apply]
   have hquit := stationaryFixedOpponentsQuitValue_true
   rw [stationaryRoot_eq_solo] at hquit ⊢
   rw [quittingStationaryUnilateralCap_solo_other reward
-    (show true ≠ false by decide) (PMF.uniformOfFintype Bool) hpositive,
+    (show true ≠ false by decide) (GameTheory.Math.Probability.uniformLaw Bool) hpositive,
     hquit]
   simp [quittingSoloReward, reward]
 
@@ -930,7 +931,7 @@ theorem stationaryProfile_isTerminalNash :
   intro who deviation
   cases who
   · have howner := quittingTerminalPayoff_update_solo_owner_le
-      reward false (PMF.uniformOfFintype Bool) deviation
+      reward false (GameTheory.Math.Probability.uniformLaw Bool) deviation
     rw [← stationaryRoot_eq_solo] at howner
     calc
       quittingTerminalPayoff reward

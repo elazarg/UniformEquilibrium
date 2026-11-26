@@ -49,6 +49,93 @@ theorem rationalQuittingSingletonProbeSource_cast
 
 noncomputable section
 
+private theorem exists_rational_solo_face
+    (reward : RationalQuittingReward players) (bound : ℚ)
+    (hreward : ∀ terminal who, |reward terminal who| ≤ bound)
+    (potential : (Fin players → ℝ) → ℝ) (hsmooth : ContDiff ℝ 1 potential)
+    (point : Fin players → ℝ)
+    (hpoint : point ∈ quittingSingletonBox (rationalQuittingRewardToReal reward) (bound : ℝ))
+    (owner : Fin players)
+    (howner : point owner = quittingSoloReward (rationalQuittingRewardToReal reward) owner owner)
+    (hnonpositive : fderiv ℝ potential point
+      (point - quittingSoloReward (rationalQuittingRewardToReal reward) owner) ≤ 0) :
+    ∃ rationalFace : Fin players → ℚ,
+      let face := fun who => (rationalFace who : ℝ)
+      (∀ who, quittingSoloReward (rationalQuittingRewardToReal reward) who who ≤ face who ∧
+        face who ≤ (bound : ℝ) + 1) ∧
+      face owner = quittingSoloReward (rationalQuittingRewardToReal reward) owner owner ∧
+      fderiv ℝ potential face
+        (face - quittingSoloReward (rationalQuittingRewardToReal reward) owner) < 1 / 2 := by
+  let realReward := rationalQuittingRewardToReal reward
+  let lower : Fin players → ℚ := fun who => reward (quittingSingletonTerminal who) who
+  let upper : Fin players → ℚ :=
+    Function.update (fun _ => bound + 1) owner (lower owner)
+  have hwidth : lower ≤ upper := by
+    intro who
+    by_cases heq : who = owner
+    · subst who; simp [upper]
+    · have h := (le_abs_self _).trans (hreward (quittingSingletonTerminal who) who)
+      simpa [upper, heq] using h.trans (by linarith : bound ≤ bound + 1)
+  have hface : point ∈ Icc (fun who => (lower who : ℝ)) (fun who => (upper who : ℝ)) := by
+    constructor
+    · exact hpoint.1
+    · intro who
+      by_cases heq : who = owner
+      · subst who
+        simp only [upper, Function.update_self]
+        change point owner ≤ (reward (quittingSingletonTerminal owner) owner : ℝ)
+        change point owner = (reward (quittingSingletonTerminal owner) owner : ℝ) at howner
+        exact howner.le
+      · simpa [upper, heq] using hpoint.2 who
+  let boxedPoint : Icc (fun who => (lower who : ℝ)) (fun who => (upper who : ℝ)) :=
+    ⟨point, hface⟩
+  let drift := fun input => fderiv ℝ potential input (input - quittingSoloReward realReward owner)
+  have hdirection : Continuous (fun input : Fin players → ℝ =>
+      input - quittingSoloReward realReward owner) := continuous_id.sub continuous_const
+  have hdrift : Continuous drift :=
+    (hsmooth.continuous_fderiv one_ne_zero).clm_apply hdirection
+  have hnear : ∀ᶠ candidate in 𝓝 boxedPoint, drift candidate.1 < 1 / 2 := by
+    have hcontinuous : Continuous (fun candidate : Icc (fun who => (lower who : ℝ))
+        (fun who => (upper who : ℝ)) => drift candidate.1) := hdrift.comp continuous_subtype_val
+    exact Filter.Tendsto.eventually_lt_const
+      (lt_of_le_of_lt hnonpositive (by norm_num)) hcontinuous.continuousAt
+  obtain ⟨rationalPoint, hrationalDrift⟩ :=
+    (Math.Interval.denseRange_rationalClosedBoxCast lower upper hwidth).mem_nhds hnear
+  let rationalFace := rationalPoint.1
+  let face := fun who => (rationalFace who : ℝ)
+  have hupper : ∀ who, upper who ≤ bound + 1 := by
+    intro who
+    by_cases heq : who = owner
+    · subst who
+      simpa [upper, lower] using
+        ((le_abs_self _).trans (hreward (quittingSingletonTerminal owner) owner)).trans
+          (by linarith : bound ≤ bound + 1)
+    · simp [upper, heq]
+  have hfaceCoordinates : ∀ who,
+      quittingSoloReward realReward who who ≤ face who ∧ face who ≤ (bound : ℝ) + 1 := by
+    intro who
+    constructor
+    · change (reward (quittingSingletonTerminal who) who : ℝ) ≤ (rationalPoint.1 who : ℝ)
+      have h : reward (quittingSingletonTerminal who) who ≤ rationalPoint.1 who :=
+        rationalPoint.2.1 who
+      exact_mod_cast h
+    · change (rationalPoint.1 who : ℝ) ≤ (bound : ℝ) + 1
+      have h : rationalPoint.1 who ≤ bound + 1 :=
+        (rationalPoint.2.2 who).trans (hupper who)
+      exact_mod_cast h
+  have hfaceOwner : face owner = quittingSoloReward realReward owner owner := by
+    apply le_antisymm
+    · change (rationalPoint.1 owner : ℝ) ≤
+        (reward (quittingSingletonTerminal owner) owner : ℝ)
+      have h : rationalPoint.1 owner ≤ lower owner := by
+        simpa only [upper, Function.update_self] using rationalPoint.2.2 owner
+      change rationalPoint.1 owner ≤ reward (quittingSingletonTerminal owner) owner at h
+      exact_mod_cast h
+    · exact (hfaceCoordinates owner).1
+  have hsmallDrift : fderiv ℝ potential face (face - quittingSoloReward realReward owner) <
+      1 / 2 := hrationalDrift
+  exact ⟨rationalFace, hfaceCoordinates, hfaceOwner, hsmallDrift⟩
+
 /-- Theorem 4 of the shape packet, with every witness produced internally.
 The same rational owner face is retained during approximation. The source
 root is EXACT Nash, quits only at its rational owner rate in (0,1), and its
@@ -93,71 +180,12 @@ theorem exists_rational_exact_solo_rejection_of_standardQ_quasiconvex
     exact not_quasiconvex_singletonBox_of_standardQ_positive_face_drift
       realReward hrewardReal hQ potential hdiff hnone hquasiconvex
   obtain ⟨point, hpoint, owner, howner, hnonpositive⟩ := hfaceViolation
-  let lower : Fin players → ℚ := fun who => reward (quittingSingletonTerminal who) who
-  let upper : Fin players → ℚ :=
-    Function.update (fun _ => bound + 1) owner (lower owner)
-  have hwidth : lower ≤ upper := by
-    intro who
-    by_cases heq : who = owner
-    · subst who; simp [upper]
-    · have h := (le_abs_self _).trans (hreward (quittingSingletonTerminal who) who)
-      simpa [upper, heq] using h.trans (by linarith : bound ≤ bound + 1)
-  have hface : point ∈ Icc (fun who => (lower who : ℝ)) (fun who => (upper who : ℝ)) := by
-    constructor
-    · exact hpoint.1
-    · intro who
-      by_cases heq : who = owner
-      · subst who
-        simp only [upper, Function.update_self]
-        change point owner ≤ (reward (quittingSingletonTerminal owner) owner : ℝ)
-        change point owner = (reward (quittingSingletonTerminal owner) owner : ℝ) at howner
-        exact howner.le
-      · simpa [upper, heq] using hpoint.2 who
-  let boxedPoint : Icc (fun who => (lower who : ℝ)) (fun who => (upper who : ℝ)) :=
-    ⟨point, hface⟩
-  let drift := fun input => fderiv ℝ potential input (input - quittingSoloReward realReward owner)
-  have hdrift : Continuous drift := (hsmooth.continuous_fderiv one_ne_zero).clm_apply
-    (continuous_id.sub continuous_const)
-  have hnear : ∀ᶠ candidate in 𝓝 boxedPoint, drift candidate.1 < 1 / 2 :=
-    (hdrift.comp continuous_subtype_val).continuousAt.eventually
-      (gt_mem_nhds (lt_of_le_of_lt hnonpositive (by norm_num)))
-  obtain ⟨rationalPoint, hrationalDrift⟩ :=
-    (Math.Interval.denseRange_rationalClosedBoxCast lower upper hwidth).mem_nhds hnear
-  let rationalFace := rationalPoint.1
+  obtain ⟨rationalFace, hfaceCoordinates, hfaceOwner, hsmallDrift⟩ :=
+    exists_rational_solo_face reward bound hreward potential hsmooth point hpoint owner
+      howner hnonpositive
   let face := fun who => (rationalFace who : ℝ)
-  have hupper : ∀ who, upper who ≤ bound + 1 := by
-    intro who
-    by_cases heq : who = owner
-    · subst who
-      simpa [upper, lower] using
-        ((le_abs_self _).trans (hreward (quittingSingletonTerminal owner) owner)).trans
-          (by linarith : bound ≤ bound + 1)
-    · simp [upper, heq]
-  have hfaceCoordinates : ∀ who,
-      quittingSoloReward realReward who who ≤ face who ∧ face who ≤ (bound : ℝ) + 1 := by
-    intro who
-    constructor
-    · change (reward (quittingSingletonTerminal who) who : ℝ) ≤ (rationalPoint.1 who : ℝ)
-      have h : reward (quittingSingletonTerminal who) who ≤ rationalPoint.1 who :=
-        rationalPoint.2.1 who
-      exact_mod_cast h
-    · change (rationalPoint.1 who : ℝ) ≤ (bound : ℝ) + 1
-      have h : rationalPoint.1 who ≤ bound + 1 :=
-        (rationalPoint.2.2 who).trans (hupper who)
-      exact_mod_cast h
-  have hfaceOwner : face owner = quittingSoloReward realReward owner owner := by
-    apply le_antisymm
-    · change (rationalPoint.1 owner : ℝ) ≤
-        (reward (quittingSingletonTerminal owner) owner : ℝ)
-      have h : rationalPoint.1 owner ≤ lower owner := by
-        simpa only [upper, Function.update_self] using rationalPoint.2.2 owner
-      change rationalPoint.1 owner ≤ reward (quittingSingletonTerminal owner) owner at h
-      exact_mod_cast h
-    · exact (hfaceCoordinates owner).1
   have hfaceC : face ∈ quittingSingletonBox realReward (bound : ℝ) :=
     ⟨fun who => (hfaceCoordinates who).1, fun who => (hfaceCoordinates who).2⟩
-  have hsmallDrift : fderiv ℝ potential face (face - quittingSoloReward realReward owner) <
-      1 / 2 := hrationalDrift
   obtain ⟨probeRadius, hprobeOne, hprobePositive, hprobe⟩ :=
     exists_small_rates_quittingSingletonProbe realReward hrewardReal
       (by linarith : (bound : ℝ) < (bound : ℝ) + 1)
@@ -169,8 +197,8 @@ theorem exists_rational_exact_solo_rejection_of_standardQ_quasiconvex
   have hquotient : ∀ᶠ rate : ℝ in 𝓝[>] 0,
       (potential (face + (rate / (1 - rate)) • correction) -
         potential (face + rate • (correction + quittingSoloReward realReward owner - face))) /
-          rate < 3 / 4 := hlimit.eventually (gt_mem_nhds (by linarith :
-      fderiv ℝ potential face (face - quittingSoloReward realReward owner) < 3 / 4))
+          rate < 3 / 4 :=
+    hlimit.eventually (gt_mem_nhds (hsmallDrift.trans (by norm_num : (1 : ℝ) / 2 < 3 / 4)))
   obtain ⟨quotientRadius, hquotientRadius, hquotientBall⟩ :=
     Metric.mem_nhdsWithin_iff.mp hquotient
   obtain ⟨rate, hratePositive, hrateSmall⟩ :=
@@ -219,13 +247,13 @@ theorem exists_rational_exact_solo_rejection_of_standardQ_quasiconvex
   · intro who
     have h := hsourceBox who
     rw [← hsourceCast] at h
-    have h' : |(source who : ℝ)| ≤ (bound : ℝ) + 2 := h.trans (by linarith)
+    have h' : |(source who : ℝ)| ≤ (bound : ℝ) + 2 := h.trans (by linarith only)
     exact_mod_cast h'
   · intro who
     have h := htargetBox who
     rw [hcanonicalTarget] at h
     have h' : |(rationalQuittingRootExpectedPayoff reward source root who : ℝ)| ≤
-        (bound : ℝ) + 2 := h.trans (by linarith)
+        (bound : ℝ) + 2 := h.trans (by linarith only)
     exact_mod_cast h'
   · rw [hsourceCast, hroot]
     exact hnash
@@ -233,7 +261,7 @@ theorem exists_rational_exact_solo_rejection_of_standardQ_quasiconvex
     exact habsorption
   · change potential (fun who => (source who : ℝ)) - potential
       (fun who => (rationalQuittingRootExpectedPayoff reward source root who : ℝ)) < _
-    linarith
+    exact hdrop.trans_eq (by ring)
 
 end
 

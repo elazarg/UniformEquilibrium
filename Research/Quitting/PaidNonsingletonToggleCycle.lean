@@ -328,6 +328,20 @@ def quittingMaximumToggleSiblingProfile
     (quittingGame reward).BehaviorProfile :=
   quittingLiteralPureRootCoalitionProfile reward profile stage coalition
 
+private theorem quittingMaximumToggleSiblingProfile_liveRoot
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (profile : (quittingGame reward).BehaviorProfile) (stage : ℕ)
+    (coalition : FinFourNonsingletonCoalition) :
+    quittingProfileLiveRoot reward
+      (quittingMaximumToggleSiblingProfile reward profile stage coalition) stage =
+      quittingPureSetRoot coalition.1 := by
+  unfold quittingMaximumToggleSiblingProfile quittingLiteralPureRootCoalitionProfile
+  rw [quittingProfileLiveRoot_literalPureRootProfile_self]
+  funext who
+  by_cases h : who ∈ coalition.1 <;>
+    simp [quittingPureRootOfCoalition, quittingCoalitionAction,
+      quittingPureSetRoot, quittingSetAction, h]
+
 /-- The complete target strategy on one maximum-toggle sibling edge. -/
 def quittingMaximumToggleTargetStrategy
     (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
@@ -451,11 +465,7 @@ theorem quittingMaximumToggleSiblingProfile_gain_eq_liveMass_mul
         (quittingCoalitionAction target.1
           (quittingMaximumPositiveTogglePlayer reward source.1))
   rw [quittingMaximumToggleSiblingProfile_liveMass_eq] at hgain
-  rw [show quittingProfileLiveRoot reward
-      (quittingMaximumToggleSiblingProfile reward profile stage source) stage =
-        quittingPureSetRoot source.1 by
-    exact quittingProfileLiveRoot_literalPureRootProfile_self
-      reward profile stage _] at hgain
+  rw [quittingMaximumToggleSiblingProfile_liveRoot] at hgain
   let tail := (quittingTerminalSemanticPair reward
     (quittingAllContinueProfileSpine reward
       (quittingMaximumToggleSiblingProfile reward profile stage source)
@@ -957,7 +967,7 @@ theorem gain_eq_liveMass_mul_toggleGain
   have hroot : quittingProfileLiveRoot reward
       (sourceProfile trace profile stage) stage =
       quittingPureSetRoot (sourceCoalition trace).1 := by
-    exact quittingProfileLiveRoot_literalPureRootProfile_self reward profile stage _
+    exact quittingMaximumToggleSiblingProfile_liveRoot reward profile stage (sourceCoalition trace)
   rw [hroot] at hgain
   have haction : action trace = quittingCoalitionAction
       (quittingMaximumPositiveToggleNext reward (sourceCoalition trace).1)

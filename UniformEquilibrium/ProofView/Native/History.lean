@@ -329,7 +329,7 @@ def toNativePublicPolicy {i : ι} [Finite (G.Act i)]
     G.toNative.PublicPolicy i :=
   fun history =>
     let decoded := packedHistOfPublicHistory G initial history
-    finDistOfPMF (strategy decoded.1 decoded.2)
+    strategy decoded.1 decoded.2
 
 /-- Compile a PMF behavior profile to ordinary native public policies. -/
 def toNativePublicProfile [∀ i, Finite (G.Act i)]
@@ -342,7 +342,7 @@ theorem toNativePublicProfile_toPMF [∀ i, Finite (G.Act i)]
     [∀ i, Nonempty (G.Act i)] (initial : G.State)
     (profile : G.BehaviorProfile) (i : ι)
     (history : G.toNative.PublicHistory) :
-    ((toNativePublicProfile G initial profile i history).toPMF) =
+    toNativePublicProfile G initial profile i history =
       let decoded := packedHistOfPublicHistory G initial history
       profile i decoded.1 decoded.2 :=
   rfl
@@ -358,9 +358,8 @@ theorem toNativePublicProfile_after_record [Fintype ι]
       toNativePublicProfile G record.target
         (G.shiftProfile profile (record.source, record.joint)) := by
   funext i continuation
-  apply FinDist.ext
   simp only [Stochastic.Game.PublicProfile.after_apply,
-    toNativePublicProfile, toNativePublicPolicy, toPMF_finDistOfPMF]
+    toNativePublicProfile, toNativePublicPolicy]
   rw [packedHistOfPublicHistory_append_singleton]
   rfl
 
@@ -376,7 +375,7 @@ def toNativeBehaviorProfile [∀ i, Finite (G.Act i)]
 view. -/
 def ofNativePublicPolicy {i : ι} (policy : G.toNative.PublicPolicy i) :
     G.BehaviorStrategy i :=
-  fun _ history => (policy (publicHistoryOfHist G history)).toPMF
+  fun _ history => policy (publicHistoryOfHist G history)
 
 /-- Decode ordinary native public policies into the indexed PMF proof view. -/
 def ofNativePublicProfile [∀ i, Nonempty (G.Act i)] (_initial : G.State)
@@ -388,7 +387,7 @@ theorem ofNativePublicProfile_apply [∀ i, Nonempty (G.Act i)]
     (initial : G.State) (profile : G.toNative.PublicProfile initial)
     (i : ι) {horizon : ℕ} (history : G.Hist horizon) :
     ofNativePublicProfile G initial profile i horizon history =
-      (profile i (publicHistoryOfHist G history)).toPMF :=
+      profile i (publicHistoryOfHist G history) :=
   rfl
 
 /-- Decoding and recompiling one native public policy recovers it on every
@@ -400,11 +399,8 @@ theorem toNativePublicPolicy_ofNativePublicPolicy_of_coherent
     (hcoherent : IsCoherentPublicHistory G initial history) :
     toNativePublicPolicy G initial (ofNativePublicPolicy G policy) history =
       policy history := by
-  apply FinDist.ext
-  simp only [toNativePublicPolicy, ofNativePublicPolicy,
-    toPMF_finDistOfPMF]
-  change (policy (publicHistoryOfPackedHist G
-      (packedHistOfPublicHistory G initial history))).toPMF = _
+  change policy (publicHistoryOfPackedHist G
+      (packedHistOfPublicHistory G initial history)) = _
   rw [publicHistoryOfPackedHist_packedHistOfPublicHistory
     G initial history hcoherent]
 

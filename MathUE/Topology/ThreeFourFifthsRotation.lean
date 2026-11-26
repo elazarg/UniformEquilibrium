@@ -83,15 +83,14 @@ theorem threeFourFifthsMultiplier_not_isOfFinOrder :
       (threeFourFifthsMultiplier +
         conj threeFourFifthsMultiplier) :=
     hintegral.add hconjIntegral
-  have htraceRat : ∃ value : ℚ,
-      threeFourFifthsMultiplier +
-          conj threeFourFifthsMultiplier = value := by
+  have htraceRat : threeFourFifthsMultiplier + conj threeFourFifthsMultiplier ∈
+      Set.range (Rat.cast : ℚ → ℂ) := by
     refine ⟨6 / 5, ?_⟩
     rw [Complex.add_conj]
     norm_num
   obtain ⟨integer, hinteger⟩ :=
-    htraceIntegral.exists_int_iff_exists_rat.mp htraceRat
-  have hreal := congrArg Complex.re hinteger
+    htraceIntegral.mem_range_ratCast_iff.mp htraceRat
+  have hreal := congrArg Complex.re hinteger.symm
   have hintegerReal : (integer : ℝ) = 6 / 5 := by
     rw [Complex.add_conj] at hreal
     norm_num at hreal ⊢

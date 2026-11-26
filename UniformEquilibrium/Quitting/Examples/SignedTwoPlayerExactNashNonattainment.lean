@@ -327,7 +327,7 @@ theorem finite_atoms_zero_of_exact_nash (delta : ℝ)
   have hvalue := (exact_nash_payoff delta hdelta hsmall profile hnash).2
   intro time
   induction time using Nat.strong_induction_on with
-  | h time ih =>
+  | ind time ih =>
       have hsurvival : StoppingLaw.survival
           (quittingBehaviorStoppingLaw (reward delta) (profile 0)) time = 1 := by
         unfold StoppingLaw.survival

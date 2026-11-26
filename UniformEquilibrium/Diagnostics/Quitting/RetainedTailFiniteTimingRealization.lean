@@ -204,7 +204,7 @@ theorem quittingTerminalPayoff_retainedTailMixedTimingGraft_eq_mixedEU
       (quittingRetainedTailFiniteTimingGame reward deadline tail).mixedExtension.eu
         mixed who := by
   have hindicator :
-      Math.Probability.expect (pmfPi mixed)
+      _root_.Math.Probability.expect (pmfPi mixed)
           (fun choices ↦ if choices = (fun _ ↦ none) then 1 else 0) =
         ∏ player, (mixed player none).toReal := by
     rw [← Math.Probability.apply_toReal_eq_expect_indicator]
@@ -216,11 +216,11 @@ theorem quittingTerminalPayoff_retainedTailMixedTimingGraft_eq_mixedEU
             ∏ player, (mixed player none).toReal := by
     unfold quittingRetainedTailTimingMixedPayoff timingMixedPayoff
     calc
-      Math.Probability.expect (pmfPi mixed)
+      _root_.Math.Probability.expect (pmfPi mixed)
           (fun choices ↦
             quittingRetainedTailTimingPurePayoff reward tail deadline
               choices who) =
-        Math.Probability.expect (pmfPi mixed)
+        _root_.Math.Probability.expect (pmfPi mixed)
           (fun choices ↦ timingPurePayoff reward deadline choices who +
             quittingTerminalPayoff reward tail who *
               (if choices = (fun _ ↦ none) then 1 else 0)) := by
@@ -228,17 +228,17 @@ theorem quittingTerminalPayoff_retainedTailMixedTimingGraft_eq_mixedEU
             funext choices
             exact quittingRetainedTailTimingPurePayoff_eq_timingPurePayoff_add_indicator
               reward tail deadline choices who
-      _ = Math.Probability.expect (pmfPi mixed)
+      _ = _root_.Math.Probability.expect (pmfPi mixed)
               (fun choices ↦ timingPurePayoff reward deadline choices who) +
-            Math.Probability.expect (pmfPi mixed)
+            _root_.Math.Probability.expect (pmfPi mixed)
               (fun choices ↦ quittingTerminalPayoff reward tail who *
                 (if choices = (fun _ ↦ none) then 1 else 0)) := by
-            rw [Math.Probability.expect_add]
+            rw [_root_.Math.Probability.expect_add]
       _ = timingMixedPayoff reward deadline mixed who +
             quittingTerminalPayoff reward tail who *
-              Math.Probability.expect (pmfPi mixed)
+              _root_.Math.Probability.expect (pmfPi mixed)
                 (fun choices ↦ if choices = (fun _ ↦ none) then 1 else 0) := by
-            rw [Math.Probability.expect_const_mul]
+            rw [_root_.Math.Probability.expect_const_mul]
             rfl
       _ = _ := by
         rw [hindicator]
@@ -420,7 +420,7 @@ theorem expect_conditional_quittingRetainedTailTimingPurePayoff
     (hnow : pmfPi (fun who =>
       pushforward (mixed who) timingActionCurrent) now ≠ 0)
     (who : ι) :
-    Math.Probability.expect
+    _root_.Math.Probability.expect
         (pmfPi fun player =>
           condOn (mixed player) timingActionCurrent (now player))
         (fun choices => quittingRetainedTailTimingPurePayoff reward tail
@@ -455,10 +455,10 @@ theorem expect_conditional_quittingRetainedTailTimingPurePayoff
       (by simpa only [PMF.mem_support_iff] using hchoicePlayer)
   by_cases hquit : (quittingQuitters now).Nonempty
   · calc
-      Math.Probability.expect conditional
+      _root_.Math.Probability.expect conditional
           (fun choices => quittingRetainedTailTimingPurePayoff reward tail
             (deadline + 1) choices who) =
-        Math.Probability.expect conditional
+        _root_.Math.Probability.expect conditional
           (fun _ => reward ⟨quittingQuitters now, hquit⟩ who) := by
             apply Math.ProbabilityMassFunction.expect_congr_on_support
             intro choices hchoices
@@ -466,7 +466,7 @@ theorem expect_conditional_quittingRetainedTailTimingPurePayoff
               hcurrent hchoices]
             simp [quittingRootPayoff, hquit]
       _ = reward ⟨quittingQuitters now, hquit⟩ who :=
-        Math.Probability.expect_const conditional _
+        _root_.Math.Probability.expect_const conditional _
       _ = quittingRootPayoff reward
           (fun player => quittingRetainedTailTimingMixedPayoff reward tail
             deadline (fun other => timingLawTail (mixed other)) player)
@@ -479,10 +479,10 @@ theorem expect_conditional_quittingRetainedTailTimingPurePayoff
       rw [hnowAll, pmfPi_push_coordwise]
       rfl
     calc
-      Math.Probability.expect conditional
+      _root_.Math.Probability.expect conditional
           (fun choices => quittingRetainedTailTimingPurePayoff reward tail
             (deadline + 1) choices who) =
-        Math.Probability.expect conditional
+        _root_.Math.Probability.expect conditional
           (fun choices => quittingRetainedTailTimingPurePayoff reward tail
             deadline (timingChoicesTail choices) who) := by
               apply Math.ProbabilityMassFunction.expect_congr_on_support
@@ -490,12 +490,12 @@ theorem expect_conditional_quittingRetainedTailTimingPurePayoff
               rw [quittingRetainedTailTimingPurePayoff_succ,
                 hcurrent hchoices, hnowAll]
               simp [quittingRootPayoff]
-      _ = Math.Probability.expect
+      _ = _root_.Math.Probability.expect
           (pushforward conditional timingChoicesTail)
           (fun choices => quittingRetainedTailTimingPurePayoff reward tail
             deadline choices who) := by
               unfold pushforward
-              exact (Math.Probability.expect_map timingChoicesTail conditional
+              exact (_root_.Math.Probability.expect_map timingChoicesTail conditional
                 (fun choices => quittingRetainedTailTimingPurePayoff reward tail
                   deadline choices who)).symm
       _ = quittingRetainedTailTimingMixedPayoff reward tail deadline
@@ -523,7 +523,7 @@ theorem quittingRetainedTailTimingMixedPayoff_bellman
         (fun player => pushforward (mixed player) timingActionCurrent) who := by
   unfold quittingRetainedTailTimingMixedPayoff
   rw [pmfPi_disintegrate_timingCurrent,
-    Math.Probability.expect_bind]
+    _root_.Math.Probability.expect_bind]
   unfold quittingRootExpectedPayoff
   apply Math.ProbabilityMassFunction.expect_congr_on_support
   intro now hnow
@@ -918,7 +918,7 @@ theorem quittingRetainedTailMixedTimingRootStack_succ
           (fun who ↦ timingLawTail (mixed who)) := by
   unfold quittingRetainedTailMixedTimingRootStack
   rw [List.ofFn_succ]
-  congr 1
+  refine congrArg₂ (List.cons : (ι → PMF Bool) → List (ι → PMF Bool) → _) ?_ ?_
   · change quittingProfileRoot reward
         (quittingFiniteDeadlineTimingProfile reward (deadline + 1) mixed) = _
     exact finiteDeadlineTimingProfile_root_eq_current reward deadline mixed

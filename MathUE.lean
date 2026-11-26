@@ -186,7 +186,7 @@ import MathUE.BonferroniProductBounds
 import Maths.Graph.ZeroChargeLasso
 import MathUE.CalendarSummability
 import MathUE.CaristiFixedPoint
-import Maths.Graph.ChargedRelation
+import MathUE.ChargedRelation
 import MathUE.ChargedPathBudgetCounterexamples
 import MathUE.ChargedPathCode
 import MathUE.ChargedPathExecution
@@ -571,6 +571,7 @@ import MathUE.Probability.FiniteLawRepairExpectation
 import MathUE.Probability.FiniteSignedConditioning
 import MathUE.Probability.SignedConditioningLikelihood
 import MathUE.Probability.FinitePathLawAdapter
+import MathUE.Probability.FinDist
 import MathUE.Probability.FinDistIntegral
 import MathUE.Probability.FinitePMF
 import MathUE.Probability.FiniteProductFlowKinematics

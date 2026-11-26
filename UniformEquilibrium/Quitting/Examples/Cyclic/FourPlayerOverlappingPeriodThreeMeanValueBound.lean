@@ -117,7 +117,9 @@ theorem normalizedHazardDisplacement_abs_le_five_sixths
     (hradius : dist point center ≤ 1) :
     |evalReal (leadingCoordinatePoint point parameter)
       (normalizedHazardDisplacementExpression output)| ≤ (5 : ℝ) / 6 := by
-  have hcenterContains :=
+  have hcenterContains : (centeredNormalizedHazardDisplacementEnclosure output).Contains
+      (evalReal (leadingCoordinatePoint center parameter)
+        (normalizedHazardDisplacementExpression output)) :=
     centeredNormalizedHazardDisplacementEnclosure_contains
       (leadingCoordinatePoint center parameter) hcenterParameter output
   have hderivativeContains : ∀ varying,
@@ -145,19 +147,20 @@ theorem normalizedHazardDisplacement_abs_le_five_sixths
         ((DyadicInterval.scale neighborhoodPrecision : ℤ) : ℚ) := by
     rw [← Int.cast_add]
     change (preconditionedActiveGapMeanValueNumerator output : ℚ) ≤ _
-    rw [preconditionedActiveGapMeanValueNumerator_exact]
-    fin_cases output <;>
-      norm_num [preconditionedActiveGapMeanValueNumeratorValue,
-        DyadicInterval.scale, neighborhoodPrecision]
-  have hresult := abs_evalReal_le_of_suppliedCenteredPartialEnclosures
+    have hnum : 6 * (preconditionedActiveGapMeanValueNumerator output : ℚ) <
+        5 * ((DyadicInterval.scale neighborhoodPrecision : ℤ) : ℚ) := by
+      exact_mod_cast preconditionedActiveGapMeanValueNumerator_lt_five_sixths output
+    linarith only [hnum]
+  have hcast : (((5 : ℚ) / 6 : ℚ) : ℝ) = (5 : ℝ) / 6 := by norm_num
+  rw [← hcast]
+  exact abs_evalReal_le_of_suppliedCenteredPartialEnclosures
+    (variableCount := 8) (parameterCount := 60) (precision := neighborhoodPrecision)
     (normalizedHazardDisplacementExpression output)
     fullNormalizedCoordinateBox center point parameter
     (centeredNormalizedHazardDisplacementEnclosure output)
     (fullBoxNormalizedHazardDisplacementDerivativeEnclosure output)
     hcenterBox hpoint hcenterContains hderivativeContains hradius
     ((5 : ℚ) / 6) hbound
-  norm_num at hresult ⊢
-  exact hresult
 
 end GameTheory.FourPlayerOverlappingPeriodThree
 

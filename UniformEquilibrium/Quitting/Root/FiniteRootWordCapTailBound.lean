@@ -75,7 +75,7 @@ private theorem affine_finiteRootWordCap_le_max
           quittingOpponentSurvivalWeight_shift]
         dsimp [continueReward, continueMass] at hsuffix
         convert hsuffix using 1
-        all_goals first | rfl | ring_nf
+        all_goals ring_nf
 
 /-- If every pure response inside a finite prefix is bounded by `bound`, its
 root-word cap with any signed suffix cap is bounded by the larger of `bound`

@@ -213,7 +213,7 @@ theorem endpointTransitionEnd_pow_apply_of_mem
   induction n with
   | zero => simp
   | succ n ih =>
-    rw [pow_succ, Module.End.mul_apply,
+    rw [pow_succ, mul_apply_eq_comp,
       germ.endpointTransitionEnd_apply_of_mem hW, ih]
 
 /-- **Trivial character.**  On the endpoint harmonic submodule the
@@ -228,7 +228,7 @@ theorem aeval_endpointTransitionEnd_apply_of_mem
   | add p q hp hq =>
     rw [map_add, LinearMap.add_apply, hp, hq, Polynomial.eval_add, add_smul]
   | monomial n a =>
-    rw [Polynomial.aeval_monomial, Module.End.mul_apply,
+    rw [Polynomial.aeval_monomial, mul_apply_eq_comp,
       germ.endpointTransitionEnd_pow_apply_of_mem n hW,
       Module.algebraMap_end_apply, Polynomial.eval_monomial, one_pow,
       mul_one]

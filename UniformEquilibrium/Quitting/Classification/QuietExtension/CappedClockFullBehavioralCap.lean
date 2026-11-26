@@ -16,7 +16,7 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nonempty ι]
 omit [DecidableEq ι] [Nonempty ι] in
 private theorem expect_parentSource_jointNeverIndicator_eq_prod_none
     (childLaws : ι → PMF (Option ℕ)) (outsideLaw : PMF (Option ℕ)) :
-    Math.Probability.expect
+    _root_.Math.Probability.expect
         (pmfPi (cappedClockParentSourceLaws childLaws outsideLaw))
         (fun clocks => cappedClockJointNeverIndicator
           (fun i => clocks (some i))) =
@@ -42,16 +42,16 @@ private theorem expect_parentSource_jointNeverIndicator_eq_prod_none
   have hmap := map_pmfPi_cappedClockParentSourceLaws_quiet
     childLaws outsideLaw
   have hexpect := congrArg
-    (fun law => Math.Probability.expect law fullIndicator) hmap
-  rw [Math.Probability.expect_map] at hexpect
+    (fun law => _root_.Math.Probability.expect law fullIndicator) hmap
+  rw [_root_.Math.Probability.expect_map] at hexpect
   simp_rw [hindicator] at hexpect
   rw [hexpect]
   have hsingleton (law : PMF (Option ι → Option ℕ))
       (point : Option ι → Option ℕ) :
-      Math.Probability.expect law
+      _root_.Math.Probability.expect law
           (fun other => if other = point then 1 else 0) =
         (law point).toReal := by
-    unfold Math.Probability.expect
+    unfold _root_.Math.Probability.expect
     rw [tsum_eq_single point]
     · simp
     · intro other hne
@@ -82,14 +82,14 @@ theorem outsideStoppingLawGain_le_weighted_behaviorDeviationDebt_add_slack
     (fun i => clocks (some i), clocks none)
   have h := expect_cappedClockActualOutsideGain_le_sum_childExpectations_add_slack
     reward certificate coupled
-  simp only [coupled, Math.Probability.expect_map] at h
+  simp only [coupled, _root_.Math.Probability.expect_map] at h
   simp only [cappedClockActualOutsideGain, cappedClockActualChildGain] at h
   have hpayBound (who : Option ι)
       (f : (Option ι → Option ℕ) → (Option ι → Option ℕ)) :
       Summable fun clocks =>
         (source clocks).toReal * quittingPureClockTerminalPayoff reward
           (f clocks) who :=
-    Math.Probability.expect_summable_of_bounded source _ fun clocks =>
+    _root_.Math.Probability.expect_summable_of_bounded source _ fun clocks =>
       (by
         have hb := abs_quittingPureClockEvaluatedPayoff_le reward
           cappedClockTerminalEvaluation cappedClockTerminalEvaluation_nonneg
@@ -98,17 +98,17 @@ theorem outsideStoppingLawGain_le_weighted_behaviorDeviationDebt_add_slack
         simpa using hb)
   have hexpectSub (who : Option ι)
       (f g : (Option ι → Option ℕ) → (Option ι → Option ℕ)) :
-      Math.Probability.expect source (fun clocks => quittingPureClockTerminalPayoff reward
+      _root_.Math.Probability.expect source (fun clocks => quittingPureClockTerminalPayoff reward
           (f clocks) who - quittingPureClockTerminalPayoff reward (g clocks) who) =
-        Math.Probability.expect source (fun clocks => quittingPureClockTerminalPayoff reward
+        _root_.Math.Probability.expect source (fun clocks => quittingPureClockTerminalPayoff reward
           (f clocks) who) -
-        Math.Probability.expect source (fun clocks => quittingPureClockTerminalPayoff reward
+        _root_.Math.Probability.expect source (fun clocks => quittingPureClockTerminalPayoff reward
           (g clocks) who) := by
-    change Math.Probability.expect source (fun clocks =>
+    change _root_.Math.Probability.expect source (fun clocks =>
         quittingPureClockTerminalPayoff reward (f clocks) who +
           -quittingPureClockTerminalPayoff reward (g clocks) who) = _
-    rw [Math.Probability.expect_add_of_summable]
-    · rw [Math.Probability.expect_neg]
+    rw [_root_.Math.Probability.expect_add_of_summable]
+    · rw [_root_.Math.Probability.expect_neg]
       ring
     · exact hpayBound who f
     · simpa [mul_neg] using (hpayBound who g).neg
@@ -122,11 +122,11 @@ theorem outsideStoppingLawGain_le_weighted_behaviorDeviationDebt_add_slack
   refine h.trans ?_
   have hsum :
       (∑ i, certificate.weight i *
-        (Math.Probability.expect source (fun clocks =>
+        (_root_.Math.Probability.expect source (fun clocks =>
             quittingPureClockTerminalPayoff reward
               (cappedChildParentClocks (fun j => clocks (some j))
                 (clocks none) i) (some i)) -
-          Math.Probability.expect source (fun clocks =>
+          _root_.Math.Probability.expect source (fun clocks =>
             quittingPureClockTerminalPayoff reward
               (quietParentClocks fun j => clocks (some j)) (some i)))) ≤
         ∑ i, certificate.weight i *

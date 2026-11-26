@@ -632,18 +632,12 @@ theorem KuhnPrismCell.even_incidentFaceDegree
     fun face ↦ kuhnPrismIncident cell face
   have hdeletionCard : Fintype.card {index // deletionPredicate index} =
       (Finset.univ.filter deletionPredicate).card :=
-    Fintype.card_ofFinset (Finset.univ.filter deletionPredicate) (by
-      intro index
-      simp only [Finset.mem_filter, Finset.mem_univ, true_and,
-        deletionPredicate]
-      rfl)
+    Fintype.card_of_subtype (p := deletionPredicate) (Finset.univ.filter deletionPredicate)
+      (fun index => by simp only [Finset.mem_filter, Finset.mem_univ, true_and])
   have hincidentCard : Fintype.card {face // incidentPredicate face} =
       (Finset.univ.filter incidentPredicate).card :=
-    Fintype.card_ofFinset (Finset.univ.filter incidentPredicate) (by
-      intro face
-      simp only [Finset.mem_filter, Finset.mem_univ, true_and,
-        incidentPredicate]
-      rfl)
+    Fintype.card_of_subtype (p := incidentPredicate) (Finset.univ.filter incidentPredicate)
+      (fun face => by simp only [Finset.mem_filter, Finset.mem_univ, true_and])
   have hequivalentCard :
       Fintype.card {index // deletionPredicate index} =
         Fintype.card {face // incidentPredicate face} := by
@@ -1253,10 +1247,8 @@ theorem card_boxComplementarityDiscretePrism_leftEnd_eq
     fun face ↦ face.IsLeftEnd
   have hsubtype : Fintype.card {face // predicate face} =
       (Finset.univ.filter predicate).card :=
-    Fintype.card_ofFinset (Finset.univ.filter predicate) (by
-      intro face
-      simp only [Finset.mem_filter, Finset.mem_univ, true_and]
-      rfl)
+    Fintype.card_of_subtype (p := predicate) (Finset.univ.filter predicate)
+      (fun face => by simp only [Finset.mem_filter, Finset.mem_univ, true_and])
   rw [← hsubtype]
   exact Fintype.card_congr
     (boxComplementarityDiscretePrismLeftEndEquiv
@@ -1279,10 +1271,8 @@ theorem card_boxComplementarityDiscretePrism_rightEnd_eq
     fun face ↦ face.IsRightEnd
   have hsubtype : Fintype.card {face // predicate face} =
       (Finset.univ.filter predicate).card :=
-    Fintype.card_ofFinset (Finset.univ.filter predicate) (by
-      intro face
-      simp only [Finset.mem_filter, Finset.mem_univ, true_and]
-      rfl)
+    Fintype.card_of_subtype (p := predicate) (Finset.univ.filter predicate)
+      (fun face => by simp only [Finset.mem_filter, Finset.mem_univ, true_and])
   rw [← hsubtype]
   exact Fintype.card_congr
     (boxComplementarityDiscretePrismRightEndEquiv

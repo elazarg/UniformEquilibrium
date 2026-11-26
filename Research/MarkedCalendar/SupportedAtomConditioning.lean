@@ -126,7 +126,6 @@ private theorem integral_referenceLaw_conditionalSelectedCellLaw
   have hsets : decodeCell laws ⁻¹' {decodeCell laws x}
       =ᵐ[(chartLaw laws i : Measure unitInterval)] interval laws (decodeCell laws x) := by
     filter_upwards [ae_decodeCell_mem_interval laws i] with y hy
-    apply propext
     change decodeCell laws y = decodeCell laws x ↔ y ∈ interval laws (decodeCell laws x)
     exact ⟨fun h => h ▸ hy, decodeCell_of_mem_interval laws⟩
   have hevent : MeasurableSet (decodeCell laws ⁻¹' {decodeCell laws x}) :=

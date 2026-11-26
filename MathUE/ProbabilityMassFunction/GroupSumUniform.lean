@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import GameTheory.Math.Probability.FiniteUniform
 import Mathlib.Probability.Distributions.Uniform
 
 /-!
@@ -77,7 +78,8 @@ variable {G : Type} [Fintype G] [Group G]
 /-- Left translation of the uniform law on a finite group by a fixed element
 is again uniform. -/
 theorem map_mul_left_uniform (g : G) :
-    (PMF.uniformOfFintype G).map (fun x => g * x) = PMF.uniformOfFintype G := by
+    (GameTheory.Math.Probability.uniformLaw G).map (fun x => g * x) =
+      GameTheory.Math.Probability.uniformLaw G := by
   classical
   ext a
   simp only [← PMF.toOuterMeasure_apply_singleton, PMF.toOuterMeasure_map_apply]
@@ -88,12 +90,13 @@ theorem map_mul_left_uniform (g : G) :
     · intro h; rw [← h, inv_mul_cancel_left]
     · intro h; rw [h, mul_inv_cancel_left]
   rw [hpre]
-  simp [PMF.uniformOfFintype_apply]
+  simp [GameTheory.Math.Probability.uniformLaw_apply]
 
 /-- Right translation of the uniform law on a finite group by a fixed element
 is again uniform. -/
 theorem map_mul_right_uniform (g : G) :
-    (PMF.uniformOfFintype G).map (fun x => x * g) = PMF.uniformOfFintype G := by
+    (GameTheory.Math.Probability.uniformLaw G).map (fun x => x * g) =
+      GameTheory.Math.Probability.uniformLaw G := by
   classical
   ext a
   simp only [← PMF.toOuterMeasure_apply_singleton, PMF.toOuterMeasure_map_apply]
@@ -104,22 +107,22 @@ theorem map_mul_right_uniform (g : G) :
     · intro h; rw [← h, mul_inv_cancel_right]
     · intro h; rw [h, inv_mul_cancel_right]
   rw [hpre]
-  simp [PMF.uniformOfFintype_apply]
+  simp [GameTheory.Math.Probability.uniformLaw_apply]
 
 /-- Honest-left robustness: if one contributor's draw `x` is exactly uniform
 and independent of the other contributor's arbitrary law `q` for `y`, the
 product `x * y` is uniform no matter what `q` is. -/
 theorem bind_uniform_mul_eq (q : PMF G) :
-    (PMF.uniformOfFintype G).bind (fun x => q.map (fun y => x * y)) =
-      PMF.uniformOfFintype G := by
+    (GameTheory.Math.Probability.uniformLaw G).bind (fun x => q.map (fun y => x * y)) =
+      GameTheory.Math.Probability.uniformLaw G := by
   classical
   have hmap : ∀ x : G, q.map (fun y => x * y) = q.bind (fun y => PMF.pure (x * y)) :=
     fun _ => rfl
   simp_rw [hmap]
   rw [PMF.bind_comm]
   have hinner : ∀ y : G,
-      (PMF.uniformOfFintype G).bind (fun x => PMF.pure (x * y)) =
-        PMF.uniformOfFintype G := by
+      (GameTheory.Math.Probability.uniformLaw G).bind (fun x => PMF.pure (x * y)) =
+        GameTheory.Math.Probability.uniformLaw G := by
     intro y
     have heq : (fun x : G => PMF.pure (x * y)) = PMF.pure ∘ (fun x : G => x * y) := rfl
     rw [heq, PMF.bind_pure_comp]
@@ -130,8 +133,8 @@ theorem bind_uniform_mul_eq (q : PMF G) :
 /-- Honest-right robustness: the mirrored statement with the honest draw
 multiplied on the right. -/
 theorem bind_mul_uniform_eq (q : PMF G) :
-    q.bind (fun y => (PMF.uniformOfFintype G).map (fun x => y * x)) =
-      PMF.uniformOfFintype G := by
+    q.bind (fun y => (GameTheory.Math.Probability.uniformLaw G).map (fun x => y * x)) =
+      GameTheory.Math.Probability.uniformLaw G := by
   classical
   simp_rw [map_mul_left_uniform]
   exact PMF.bind_const _ _
@@ -144,8 +147,8 @@ law `ps.bind k`, so no new argument is needed; contrast with
 `lastMover_forces`, where the deviator instead reacts to `x` itself and
 uniformity fails completely. -/
 theorem bind_uniform_mul_eq_of_kernel {S : Type} (ps : PMF S) (k : S → PMF G) :
-    (PMF.uniformOfFintype G).bind (fun x => (ps.bind k).map (fun y => x * y)) =
-      PMF.uniformOfFintype G :=
+    (GameTheory.Math.Probability.uniformLaw G).bind (fun x => (ps.bind k).map (fun y => x * y)) =
+      GameTheory.Math.Probability.uniformLaw G :=
   bind_uniform_mul_eq (ps.bind k)
 
 /-! ## The sequential collapse: an observing last mover forces the outcome
@@ -162,7 +165,7 @@ the XOR-product `x ^^ y` is deterministically `true` -- full collapse of the
 uniformity guaranteed above once the deviator can react to the honest draw
 itself, in sharp contrast to `bind_uniform_mul_eq`. -/
 theorem lastMover_forces :
-    (PMF.uniformOfFintype Bool).bind (fun x => PMF.pure (xor x (!x))) =
+    (GameTheory.Math.Probability.uniformLaw Bool).bind (fun x => PMF.pure (xor x (!x))) =
       PMF.pure true := by
   have hconst : (fun x : Bool => PMF.pure (xor x (!x))) = fun _ => PMF.pure true := by
     funext x

@@ -179,8 +179,9 @@ theorem pairRawEvenSomeCollisionMass_le
             laws first (some cell) * laws second (some cell)
           else 0) ≤
           ∑' cell, bound * laws second (some cell) := by
-        apply ENNReal.tsum_le_tsum
+        apply tsum_le_tsum
         intro cell
+        dsimp only
         by_cases heven : Even cell
         · rw [ite_eq_left heven]
           exact mul_le_mul_left (hfirst cell heven) _
@@ -195,7 +196,7 @@ theorem pairRawEvenSomeCollisionMass_le
           exact Summable.tsum_le_tsum_of_inj some
             (fun _ _ h => Option.some.inj h)
             (fun _ _ => zero_le) (fun _ => le_rfl)
-            ENNReal.summable ENNReal.summable
+            CompleteLattice.summable CompleteLattice.summable
         simpa only [PMF.tsum_coe] using hsomeLe
       _ = bound := mul_one bound
   unfold pairRawEvenSomeCollisionMass

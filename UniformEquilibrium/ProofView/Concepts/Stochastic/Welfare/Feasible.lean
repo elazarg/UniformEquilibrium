@@ -186,11 +186,11 @@ theorem expectedStagePayoff_mem_of_stagePayoff_mem_convex
   convert hmem using 1
   funext who
   dsimp only [realizedLaw]
-  rw [Math.Probability.expect_bind]
+  rw [_root_.Math.Probability.expect_bind]
   unfold StochasticGame.expectedStagePayoff StochasticGame.stageEUAt
   congr 1
   funext history
-  rw [Math.Probability.expect_map]
+  rw [_root_.Math.Probability.expect_map]
 
 /-- If every stage-payoff vector lies in a convex set, then every positive
 finite-horizon average payoff vector lies there too. -/
@@ -258,34 +258,34 @@ theorem discountedPayoff_mem_of_stagePayoff_mem_convex
     exact hstage data.1 data.2
   have hmem := convexHull_min hrange hconvex hhull
   suffices heq : (fun who ↦ G.discountedPayoff β profile initial who) =
-      fun who ↦ Math.Probability.expect discountedLaw
+      fun who ↦ _root_.Math.Probability.expect discountedLaw
         (fun data ↦ G.stagePayoff data.1 data.2 who) by
     rwa [heq]
   funext who
   have hrealized (time : ℕ) :
-      Math.Probability.expect (realizedLaw time)
+      _root_.Math.Probability.expect (realizedLaw time)
           (fun data ↦ G.stagePayoff data.1 data.2 who) =
         G.expectedStagePayoff profile initial time who := by
     dsimp only [realizedLaw]
-    rw [Math.Probability.expect_bind]
+    rw [_root_.Math.Probability.expect_bind]
     unfold StochasticGame.expectedStagePayoff
     congr 1
     funext history
-    rw [Math.Probability.expect_map]
+    rw [_root_.Math.Probability.expect_map]
     rfl
-  rw [show Math.Probability.expect discountedLaw
+  rw [show _root_.Math.Probability.expect discountedLaw
       (fun data ↦ G.stagePayoff data.1 data.2 who) =
-    Math.Probability.expect timeLaw fun time ↦
-      Math.Probability.expect (realizedLaw time)
+    _root_.Math.Probability.expect timeLaw fun time ↦
+      _root_.Math.Probability.expect (realizedLaw time)
         (fun data ↦ G.stagePayoff data.1 data.2 who) by
-    exact Math.Probability.expect_bind _ _ _]
+    exact _root_.Math.Probability.expect_bind _ _ _]
   simp_rw [hrealized]
   unfold StochasticGame.discountedPayoff
-  rw [show Math.Probability.expect timeLaw
+  rw [show _root_.Math.Probability.expect timeLaw
       (fun time ↦ G.expectedStagePayoff profile initial time who) =
     ∑' time : ℕ, β ^ time * (1 - β) *
       G.expectedStagePayoff profile initial time who by
-    unfold Math.Probability.expect timeLaw
+    unfold _root_.Math.Probability.expect timeLaw
     apply tsum_congr
     intro time
     rw [MeasureTheory.Measure.toPMF_apply]

@@ -37,10 +37,14 @@ private theorem continuous_one_sub_continueMass :
 private theorem continuous_singletonMass :
     Continuous (singletonMass : (ι → ℝ) → ℝ) := by
   unfold singletonMass coalitionMass
-  exact continuous_finsetSum _ fun player _ =>
-    (continuous_finsetProd _ fun coordinate _ => continuous_apply coordinate).mul
-      (continuous_finsetProd _ fun coordinate _ =>
-        continuous_const.sub (continuous_apply coordinate))
+  refine continuous_finsetSum Finset.univ fun player _ => ?_
+  have hselected : Continuous (fun rates : ι → ℝ => ∏ i ∈ ({player} : Finset ι), rates i) :=
+    continuous_finsetProd _ fun coordinate _ => continuous_apply coordinate
+  have hremaining : Continuous (fun rates : ι → ℝ =>
+      ∏ i ∈ ({player} : Finset ι)ᶜ, (1 - rates i)) :=
+    continuous_finsetProd _ fun coordinate _ =>
+      continuous_const.sub (continuous_apply coordinate)
+  exact hselected.mul hremaining
 
 private theorem singletonMass_nonneg
     (rates : ι → ℝ) (h0 : ∀ player, 0 ≤ rates player)

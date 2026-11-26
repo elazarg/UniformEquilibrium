@@ -84,7 +84,7 @@ theorem abs_sum_mul_sub_sum_mul_le_of_singleton_domination
     (by simpa using hempty)
     (by simpa using htargetCollision)
   convert hcomparison using 1
-  all_goals ring
+  ring
 
 /-- Comparison of the nonempty parts of two subprobability laws.  The total
 mass mismatch replaces the empty-atom mismatch in the probability-law
@@ -141,7 +141,7 @@ theorem abs_sum_nonempty_mul_sub_sum_nonempty_mul_le_of_singleton_domination
           simp at hcoalition, Finset.mem_univ _⟩
       simpa [Finset.inter_eq_right.mpr hsubset] using htargetCollision)
   convert hcomparison using 1
-  all_goals ring
+  ring
 
 /-! ## Scaled product laws -/
 

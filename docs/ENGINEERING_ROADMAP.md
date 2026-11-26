@@ -36,7 +36,7 @@ repository gates agree.
 - `AxiomAudit.lean` imports every `MathUE` and `UniformEquilibrium` module.
   Only `propext`, `Quot.sound`, and `Classical.choice` are permitted library axioms.
 - Lean options are scoped to the smallest library that needs them.
-- Lean 4.34.0 and the committed dependency pins define the supported build.
+- Lean 4.36.0 and the committed dependency pins define the supported build.
 
 ### Ownership and dependencies
 

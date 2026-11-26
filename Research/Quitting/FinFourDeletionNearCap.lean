@@ -103,6 +103,20 @@ structure FinFourDeletionNearCapData
 
 /-! ## The literal deletion/near-cap producer -/
 
+private theorem exists_finiteDate_value_gt_cap_sub
+    (value : Option ℕ → ℝ) {cap delta : ℝ}
+    (hcap : sSup (Set.range value) = cap) (hdelta : 0 < delta)
+    (hne : value none ≤ cap - delta) :
+    ∃ t : ℕ, cap - delta < value (some t) := by
+  have hbelow : cap - delta < sSup (Set.range value) := by
+    rw [hcap]
+    exact sub_lt_self cap hdelta
+  obtain ⟨v, ⟨date, rfl⟩, hvalue⟩ :=
+    exists_lt_of_lt_csSup (Set.range_nonempty value) hbelow
+  cases date with
+  | none => exact (not_lt_of_ge hne hvalue).elim
+  | some t => exact ⟨t, hvalue⟩
+
 theorem exists_finFour_deletionNearCapData
     (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
     (j : Fin 4) {gamma epsilon delta : ℝ}
@@ -142,18 +156,18 @@ theorem exists_finFour_deletionNearCapData
     have hbest := quittingBestReplyValue_le reducedReward rho who
       (fun deviation => by
         exact hrho who deviation)
-    linarith
+    linarith only [hbest]
   have hgap := hexploit sigma
   obtain ⟨witness, deviation, hwitness⟩ := hgap
   have hdebt_witness : gamma ≤ quittingTerminalDebt reward sigma witness := by
     rw [quittingTerminalDebt_def]
     have hbest := le_quittingBestReplyValue reward sigma witness deviation
-    linarith
+    linarith only [hbest, hwitness]
   have hnot_survivor : witness = j := by
     by_contra hne
     let who : QuittingDeletedPlayer j := ⟨witness, hne⟩
     have hsmall := hsurvivor who
-    linarith
+    linarith only [hsmall, hdebt_witness, hepsilon_lt]
   subst witness
   let cap := quittingBestReplyValue reward sigma j
   let current := quittingTerminalPayoff reward sigma j
@@ -162,69 +176,53 @@ theorem exists_finFour_deletionNearCapData
   let behaviorValues : Set ℝ := Set.range fun deviation :
       (quittingGame reward).BehaviorStrategy j =>
     quittingTerminalPayoff reward (Function.update sigma j deviation) j
-  let pureValues : Set ℝ := Set.range fun quitTime : Option ℕ =>
+  let pureValue (quitTime : Option ℕ) : ℝ :=
     quittingTerminalPayoff reward
       (Function.update sigma j (quittingPureTimeBehaviorStrategy reward j quitTime)) j
-  have hpure_nonempty : pureValues.Nonempty := by
-    exact ⟨current, ⟨none, by
-      change quittingTerminalPayoff reward
-        (Function.update sigma j
-          (quittingPureTimeBehaviorStrategy reward j none)) j = current
-      rw [show Function.update sigma j
-          (quittingPureTimeBehaviorStrategy reward j none) = sigma by
-            exact Function.update_liftDeletedProfile_never reward deleted rho
-              (howner := rfl)]
-      ⟩⟩
+  have hnever : pureValue none = current := by
+    change quittingTerminalPayoff reward
+      (Function.update sigma j (quittingPureTimeBehaviorStrategy reward j none)) j = current
+    have hupdate : Function.update sigma j
+        (quittingPureTimeBehaviorStrategy reward j none) = sigma :=
+      Function.update_liftDeletedProfile_never reward deleted rho (howner := rfl)
+    rw [hupdate]
   have hcap_sSup : cap = sSup behaviorValues := by
     rw [sSup_range]
     rfl
-  have hpure_sSup : sSup pureValues = cap := by
-    rw [show pureValues = Set.range (fun quitTime : Option ℕ =>
-        quittingTerminalPayoff reward
-          (Function.update sigma j
-            (quittingPureTimeBehaviorStrategy reward j quitTime)) j) by rfl]
+  have hpure_sSup : sSup (Set.range pureValue) = cap := by
+    change sSup (Set.range (fun quitTime : Option ℕ =>
+      quittingTerminalPayoff reward
+        (Function.update sigma j (quittingPureTimeBehaviorStrategy reward j quitTime)) j)) = cap
     rw [← sSup_range_quittingTerminalPayoff_update_eq_pureTime reward sigma j]
     exact hcap_sSup.symm
-  have hbelow : current + (cap - current) - delta < sSup pureValues := by
-    rw [hpure_sSup]
-    linarith
-  obtain ⟨value, hvalue_mem, hvalue⟩ :=
-    exists_lt_of_lt_csSup hpure_nonempty hbelow
-  obtain ⟨quitTime, rfl⟩ := hvalue_mem
-  have htime_never : quitTime ≠ none := by
-    intro hnone
-    subst quitTime
-    have heq : Function.update sigma j
-        (quittingPureTimeBehaviorStrategy reward j none) = sigma := by
-      exact Function.update_liftDeletedProfile_never reward deleted rho
-        (howner := rfl)
-    simp only [heq] at hvalue
-    linarith
-  obtain ⟨t, rfl⟩ := Option.ne_none_iff_exists'.mp htime_never
+  have hnever_le : pureValue none ≤ cap - delta := by
+    rw [hnever]
+    linarith only [hdebt, hdelta_lt_gamma]
+  obtain ⟨t, hvalue⟩ := exists_finiteDate_value_gt_cap_sub pureValue hpure_sSup hdelta hnever_le
   let tau := Function.update sigma j
     (quittingPureTimeBehaviorStrategy reward j (some t))
+  change cap - delta < quittingTerminalPayoff reward tau j at hvalue
   have hgain : gamma - delta ≤
       quittingTerminalPayoff reward tau j - quittingTerminalPayoff reward sigma j := by
-    dsimp [tau, current] at hvalue
-    linarith
+    change gamma - delta ≤ quittingTerminalPayoff reward tau j - current
+    linarith only [hvalue, hdebt]
   have hcap_tau : quittingBestReplyValue reward tau j = cap := by
     apply quittingBestReplyValue_congr_of_opponents reward j
     intro player hplayer
     simp [tau, hplayer]
   have hdebt_tau : quittingTerminalDebt reward tau j ≤ delta := by
     rw [quittingTerminalDebt_def, hcap_tau]
-    dsimp [tau, current] at hvalue
-    linarith
+    linarith only [hvalue]
   have hgap_tau := hexploit tau
   obtain ⟨i, deviation_i, hi⟩ := hgap_tau
   have hi_debt : gamma ≤ quittingTerminalDebt reward tau i := by
     rw [quittingTerminalDebt_def]
     have hbest := le_quittingBestReplyValue reward tau i deviation_i
-    linarith
+    linarith only [hbest, hi]
   have hi_survivor : i ≠ j := by
     intro hij
     subst i
-    linarith
+    linarith only [hi_debt, hdebt_tau, hdelta_lt_gamma]
   let survivor : QuittingDeletedPlayer j := ⟨i, hi_survivor⟩
   exact ⟨{
     rho := rho

@@ -58,7 +58,7 @@ theorem exists_quittingSureOwnerJoiningRoot
     intro hazard
     constructor <;> intro who <;>
       simp only [quittingSureOwnerJoiningClippedMap, quittingDiscountedClippedMap] <;>
-      split_ifs <;> try norm_num
+      split_ifs <;> norm_num
   let selfMap : cube → cube := fun point =>
     ⟨quittingSureOwnerJoiningClippedMap reward owner passive point.1, hmaps point.1⟩
   have hcontinuous : Continuous selfMap :=

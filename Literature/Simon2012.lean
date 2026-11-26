@@ -3798,7 +3798,7 @@ theorem lemma3_3 (G : QuittingGame) (M ε : ℝ)
   have hscale : M / 3 * (N * δ) = ε / 6 := by
     dsimp only [δ, N]
     field_simp
-    all_goals ring
+    ring
   have hscaleFive : (5 * M / 3) * (N * δ) = 5 * ε / 6 := by
     rw [show 5 * M / 3 = 5 * (M / 3) by ring, mul_assoc, hscale]
     ring
@@ -8434,9 +8434,10 @@ theorem isCompact_upperGlueGraph (G : QuittingGame) (R ε δ : ℝ) (hδ : 0 ≤
       ∀ j, (z.2 j : ℝ) ≤ δ ∧
         (z.1 ∈ UpperNeighborhoodFor G R ε j ∨ (z.2 j : ℝ) = 0)}
   have hclosed : IsClosed K := by
+    change IsClosed (Prod.fst ⁻¹' UpperNeighborhood G R ε ∩
+      {z : Payoff G.Player × QuitRow G | ∀ j,
+        (z.2 j : ℝ) ≤ δ ∧ (z.1 ∈ UpperNeighborhoodFor G R ε j ∨ (z.2 j : ℝ) = 0)})
     apply ((isCompact_upperNeighborhood G R ε).isClosed.preimage continuous_fst).inter
-    change IsClosed {z : Payoff G.Player × QuitRow G | ∀ j,
-      (z.2 j : ℝ) ≤ δ ∧ (z.1 ∈ UpperNeighborhoodFor G R ε j ∨ (z.2 j : ℝ) = 0)}
     rw [Set.ofPred_forall]
     apply isClosed_iInter
     intro j

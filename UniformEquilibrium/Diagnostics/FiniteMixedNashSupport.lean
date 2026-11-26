@@ -37,7 +37,7 @@ theorem mixedGain_eq_zero_of_mem_support
       G.mixedGain mixed who choice ≤ 0 :=
     fun choice ↦ (G.isNash_iff_gains_nonpos mixed).mp hnash who choice
   have hweighted := G.weighted_gain_sum_zero mixed who
-  unfold Math.Probability.expect at hweighted
+  unfold _root_.Math.Probability.expect at hweighted
   rw [tsum_fintype] at hweighted
   have hterm :
       (mixed who action).toReal * G.mixedGain mixed who action = 0 :=

@@ -68,13 +68,17 @@ theorem isClosed_quittingFloorRobustChargedEdge
   simp only [ofPred_forall]
   apply isClosed_iInter
   intro who
-  apply IsClosed.inter
-  · exact isClosed_le continuous_const
+  have hsrc : IsClosed {edge : QuittingRobustChargedEdge reward tolerance bound |
+      floor who - tolerance ≤ edge.1.1.1.1 who} :=
+    isClosed_le continuous_const
       ((continuous_apply who).comp (continuous_subtype_val.comp
         (continuous_quittingFloorFreeRobustChargedRelation_src reward tolerance bound)))
-  · exact isClosed_le continuous_const
+  have htgt : IsClosed {edge : QuittingRobustChargedEdge reward tolerance bound |
+      floor who - tolerance ≤ edge.1.2.1 who} :=
+    isClosed_le continuous_const
       ((continuous_apply who).comp (continuous_subtype_val.comp
         (continuous_quittingFloorFreeRobustChargedRelation_tgt reward tolerance bound)))
+  exact hsrc.inter htgt
 
 instance (reward : {coalition : Finset player // coalition.Nonempty} → Payoff player)
     (floor : Payoff player) (tolerance bound : ℝ) :

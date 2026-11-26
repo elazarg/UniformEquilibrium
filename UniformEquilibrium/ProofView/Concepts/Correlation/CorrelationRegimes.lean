@@ -66,7 +66,7 @@ theorem correlatedEu_abs_le_of_bounded
     |G.correlatedEu μ who| ≤ C := by
   let d : PMF G.Outcome := G.correlatedOutcome μ
   have h_summable :=
-    Math.Probability.expect_summable_of_bounded d
+    _root_.Math.Probability.expect_summable_of_bounded d
       (fun ω => G.utility ω who) hbd
   have h_summable_bd : Summable (fun ω : G.Outcome => (d ω).toReal * C) :=
     (Math.Probability.pmf_toReal_summable d).mul_right C

@@ -510,9 +510,9 @@ theorem localCompleteSimplices_centeredDiagonal_eq_singleton
     exact Finset.mem_singleton.mpr
       (eq_diagonalOrderedChain_of_anchor_mem entries hentries hk vertices hcomplete hanchor)
   · intro hmem
-    change vertices ∈ ({diagonalCentralChain
-      (diagonalCoordinatePermutation (diagonalNegativeCoordinates entries)) k} :
-        Finset (Fin (n + 1) → Fin n → Fin (2 * k + 1 + 1))) at hmem
+    let chain := diagonalCentralChain
+      (diagonalCoordinatePermutation (diagonalNegativeCoordinates entries)) k
+    change vertices ∈ ({chain} : Finset _) at hmem
     have heq := Finset.mem_singleton.mp hmem
     rw [heq]
     exact diagonalOrderedChain_mem_localCompleteSimplices entries hentries (by omega)
@@ -526,11 +526,6 @@ theorem localSignedCount_centeredDiagonal_odd
         (-1 : ℤ) ^ n * (-1 : ℤ) ^ (diagonalNegativeCoordinates entries).card := by
   rw [boxComplementarityLocalSignedCount,
     localCompleteSimplices_centeredDiagonal_eq_singleton entries hentries hk]
-  change (∑ vertices ∈ ({diagonalCentralChain
-      (diagonalCoordinatePermutation (diagonalNegativeCoordinates entries)) k} :
-        Finset (Fin (n + 1) → Fin n → Fin (2 * k + 1 + 1))),
-    boxComplementarityCompleteSimplexSignedWeight (centeredDiagonalProblem entries)
-      (2 * k + 1) (by omega) vertices) = _
   rw [Finset.sum_singleton, signedWeight_diagonalOrderedChain entries hentries (by omega)]
 
 theorem isOpen_diagonalCentralRegion : IsOpen (diagonalCentralRegion n) := by
@@ -538,8 +533,11 @@ theorem isOpen_diagonalCentralRegion : IsOpen (diagonalCentralRegion n) := by
       1 / 4 < (point who : ℝ) ∧ (point who : ℝ) < 3 / 4} := by
     have hcontinuous : Continuous (fun point : UnitCube (Fin n) => (point who : ℝ)) :=
       (continuous_apply who).subtype_val
-    exact (isOpen_lt continuous_const hcontinuous).inter
-      (isOpen_lt hcontinuous continuous_const)
+    have hlo : IsOpen {point : UnitCube (Fin n) | 1 / 4 < (point who : ℝ)} :=
+      isOpen_lt continuous_const hcontinuous
+    have hhi : IsOpen {point : UnitCube (Fin n) | (point who : ℝ) < 3 / 4} :=
+      isOpen_lt hcontinuous continuous_const
+    exact hlo.inter hhi
   simpa only [diagonalCentralRegion, ofPred_forall] using isOpen_iInter_of_finite hopen
 
 theorem coordinate_bounds_of_mem_closure_diagonalCentralRegion

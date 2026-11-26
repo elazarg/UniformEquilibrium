@@ -207,7 +207,7 @@ theorem pureClock_child_reply (evaluation : WithTop ℕ → ℝ) (choice : Optio
         (child_event_late choice hzero hone)
       simp only [quittingPureClockEvaluatedPayoff, houtcome, htime]
       norm_num +decide [reward, hzero, hone]
-      all_goals ring
+      ring
 
 /-- Exact actual outsider replies for ANY evaluation; late dates and Never give zero. -/
 theorem pureClock_outside_reply (evaluation : WithTop ℕ → ℝ) (choice : Option ℕ) :

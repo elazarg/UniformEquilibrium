@@ -208,16 +208,16 @@ theorem row_now_value (row column : PMF Action) :
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
-  change Math.Probability.expect
+  change _root_.Math.Probability.expect
       (pmfPi (Function.update (activeProfile row column) 0 (PMF.pure now)))
       (fun choices => timingPurePayoff reward 2 choices 0) = _
   rw [expect_pmfPi_fin4]
   simp only [activeProfile, Function.update_self,
-    Math.Probability.expect_pure, Fin.isValue,
+    _root_.Math.Probability.expect_pure, Fin.isValue,
     Function.update_of_ne (by decide : (1 : Player) ≠ 0),
     Function.update_of_ne (by decide : (2 : Player) ≠ 0),
     Function.update_of_ne (by decide : (3 : Player) ≠ 0)]
-  simp [Math.Probability.expect_eq_sum]
+  simp [_root_.Math.Probability.expect_eq_sum]
   rw [show (some (0 : Fin 2) : Action) = now by rfl,
     show (some (1 : Fin 2) : Action) = next by rfl]
   rw [pure_row_now_value none, pure_row_now_value now,
@@ -237,16 +237,16 @@ theorem row_next_value (row column : PMF Action) :
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
-  change Math.Probability.expect
+  change _root_.Math.Probability.expect
       (pmfPi (Function.update (activeProfile row column) 0 (PMF.pure next)))
       (fun choices => timingPurePayoff reward 2 choices 0) = _
   rw [expect_pmfPi_fin4]
   simp only [activeProfile, Function.update_self,
-    Math.Probability.expect_pure, Fin.isValue,
+    _root_.Math.Probability.expect_pure, Fin.isValue,
     Function.update_of_ne (by decide : (1 : Player) ≠ 0),
     Function.update_of_ne (by decide : (2 : Player) ≠ 0),
     Function.update_of_ne (by decide : (3 : Player) ≠ 0)]
-  simp [Math.Probability.expect_eq_sum]
+  simp [_root_.Math.Probability.expect_eq_sum]
   rw [show (some (0 : Fin 2) : Action) = now by rfl,
     show (some (1 : Fin 2) : Action) = next by rfl]
   rw [pure_row_next_value none, pure_row_next_value now,
@@ -266,16 +266,16 @@ theorem row_never_value (row column : PMF Action) :
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
-  change Math.Probability.expect
+  change _root_.Math.Probability.expect
       (pmfPi (Function.update (activeProfile row column) 0 (PMF.pure never)))
       (fun choices => timingPurePayoff reward 2 choices 0) = _
   rw [expect_pmfPi_fin4]
   simp only [activeProfile, Function.update_self,
-    Math.Probability.expect_pure, Fin.isValue,
+    _root_.Math.Probability.expect_pure, Fin.isValue,
     Function.update_of_ne (by decide : (1 : Player) ≠ 0),
     Function.update_of_ne (by decide : (2 : Player) ≠ 0),
     Function.update_of_ne (by decide : (3 : Player) ≠ 0)]
-  simp [Math.Probability.expect_eq_sum]
+  simp [_root_.Math.Probability.expect_eq_sum]
   rw [show (some (0 : Fin 2) : Action) = now by rfl,
     show (some (1 : Fin 2) : Action) = next by rfl]
   rw [pure_row_never_value none, pure_row_never_value now,
@@ -287,10 +287,10 @@ theorem row_never_value (row column : PMF Action) :
   linarith
 
 private theorem expect_pure_row_now (column : PMF Action) :
-    Math.Probability.expect column (fun action =>
+    _root_.Math.Probability.expect column (fun action =>
       timingPurePayoff reward 2 ![now, action, never, never] 0) =
       1 - 2 * mass column now := by
-  rw [Math.Probability.expect_eq_sum, Fintype.sum_option,
+  rw [_root_.Math.Probability.expect_eq_sum, Fintype.sum_option,
     Fin.sum_univ_two]
   rw [show (some (0 : Fin 2) : Action) = now by rfl,
     show (some (1 : Fin 2) : Action) = next by rfl]
@@ -303,10 +303,10 @@ private theorem expect_pure_row_now (column : PMF Action) :
   linarith
 
 private theorem expect_pure_row_next (column : PMF Action) :
-    Math.Probability.expect column (fun action =>
+    _root_.Math.Probability.expect column (fun action =>
       timingPurePayoff reward 2 ![next, action, never, never] 0) =
       1 - 2 * mass column next := by
-  rw [Math.Probability.expect_eq_sum, Fintype.sum_option,
+  rw [_root_.Math.Probability.expect_eq_sum, Fintype.sum_option,
     Fin.sum_univ_two]
   rw [show (some (0 : Fin 2) : Action) = now by rfl,
     show (some (1 : Fin 2) : Action) = next by rfl]
@@ -319,10 +319,10 @@ private theorem expect_pure_row_next (column : PMF Action) :
   linarith
 
 private theorem expect_pure_row_never (column : PMF Action) :
-    Math.Probability.expect column (fun action =>
+    _root_.Math.Probability.expect column (fun action =>
       timingPurePayoff reward 2 ![never, action, never, never] 0) =
       1 - mass column never := by
-  rw [Math.Probability.expect_eq_sum, Fintype.sum_option,
+  rw [_root_.Math.Probability.expect_eq_sum, Fintype.sum_option,
     Fin.sum_univ_two]
   rw [show (some (0 : Fin 2) : Action) = now by rfl,
     show (some (1 : Fin 2) : Action) = next by rfl]
@@ -345,17 +345,17 @@ theorem active_row_payoff_eq (row column : PMF Action) :
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
-  change Math.Probability.expect (pmfPi (activeProfile row column))
+  change _root_.Math.Probability.expect (pmfPi (activeProfile row column))
       (fun choices => timingPurePayoff reward 2 choices 0) = _
   rw [expect_pmfPi_fin4]
-  simp only [activeProfile, Math.Probability.expect_pure]
-  rw [Math.Probability.expect_eq_sum, Fintype.sum_option,
+  simp only [activeProfile, _root_.Math.Probability.expect_pure]
+  rw [_root_.Math.Probability.expect_eq_sum, Fintype.sum_option,
     Fin.sum_univ_two]
   rw [show (some (0 : Fin 2) : Action) = now by rfl,
     show (some (1 : Fin 2) : Action) = next by rfl]
   rw [expect_pure_row_now, expect_pure_row_next]
   change mass row never *
-      Math.Probability.expect column (fun b =>
+      _root_.Math.Probability.expect column (fun b =>
         timingPurePayoff reward 2 ![never, b, never, never] 0) +
       (mass row now * (1 - 2 * mass column now) +
         mass row next * (1 - 2 * mass column next)) = _
@@ -372,7 +372,7 @@ theorem mixedPayoff_one_eq_neg_zero (mixed : Player → PMF Action) :
     (quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
   simp_rw [terminalPayoff_one_eq_neg_zero]
-  exact Math.Probability.expect_neg _ _
+  exact _root_.Math.Probability.expect_neg _ _
 
 theorem column_now_value (row column : PMF Action) :
     (quittingTwoDateTimingGame reward).mixedExtension.eu
@@ -384,17 +384,17 @@ theorem column_now_value (row column : PMF Action) :
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
   simp_rw [terminalPayoff_one_eq_neg_zero]
-  change Math.Probability.expect
+  change _root_.Math.Probability.expect
       (pmfPi (Function.update (activeProfile row column) 1 (PMF.pure now)))
       (fun choices => -timingPurePayoff reward 2 choices 0) = _
   rw [expect_pmfPi_fin4]
   simp only [activeProfile,
     Function.update_of_ne (by decide : (0 : Player) ≠ 1),
-    Function.update_self, Math.Probability.expect_pure,
+    Function.update_self, _root_.Math.Probability.expect_pure,
     Fin.isValue,
     Function.update_of_ne (by decide : (2 : Player) ≠ 1),
     Function.update_of_ne (by decide : (3 : Player) ≠ 1)]
-  rw [Math.Probability.expect_eq_sum, Fintype.sum_option,
+  rw [_root_.Math.Probability.expect_eq_sum, Fintype.sum_option,
     Fin.sum_univ_two]
   rw [show (some (0 : Fin 2) : Action) = now by rfl,
     show (some (1 : Fin 2) : Action) = next by rfl,
@@ -417,17 +417,17 @@ theorem column_next_value (row column : PMF Action) :
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
   simp_rw [terminalPayoff_one_eq_neg_zero]
-  change Math.Probability.expect
+  change _root_.Math.Probability.expect
       (pmfPi (Function.update (activeProfile row column) 1 (PMF.pure next)))
       (fun choices => -timingPurePayoff reward 2 choices 0) = _
   rw [expect_pmfPi_fin4]
   simp only [activeProfile,
     Function.update_of_ne (by decide : (0 : Player) ≠ 1),
-    Function.update_self, Math.Probability.expect_pure,
+    Function.update_self, _root_.Math.Probability.expect_pure,
     Fin.isValue,
     Function.update_of_ne (by decide : (2 : Player) ≠ 1),
     Function.update_of_ne (by decide : (3 : Player) ≠ 1)]
-  rw [Math.Probability.expect_eq_sum, Fintype.sum_option,
+  rw [_root_.Math.Probability.expect_eq_sum, Fintype.sum_option,
     Fin.sum_univ_two]
   rw [show (some (0 : Fin 2) : Action) = now by rfl,
     show (some (1 : Fin 2) : Action) = next by rfl,
@@ -450,17 +450,17 @@ theorem column_never_value (row column : PMF Action) :
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
   simp_rw [terminalPayoff_one_eq_neg_zero]
-  change Math.Probability.expect
+  change _root_.Math.Probability.expect
       (pmfPi (Function.update (activeProfile row column) 1 (PMF.pure never)))
       (fun choices => -timingPurePayoff reward 2 choices 0) = _
   rw [expect_pmfPi_fin4]
   simp only [activeProfile,
     Function.update_of_ne (by decide : (0 : Player) ≠ 1),
-    Function.update_self, Math.Probability.expect_pure,
+    Function.update_self, _root_.Math.Probability.expect_pure,
     Fin.isValue,
     Function.update_of_ne (by decide : (2 : Player) ≠ 1),
     Function.update_of_ne (by decide : (3 : Player) ≠ 1)]
-  rw [Math.Probability.expect_eq_sum, Fintype.sum_option,
+  rw [_root_.Math.Probability.expect_eq_sum, Fintype.sum_option,
     Fin.sum_univ_two]
   rw [show (some (0 : Fin 2) : Action) = now by rfl,
     show (some (1 : Fin 2) : Action) = next by rfl,
@@ -712,7 +712,7 @@ private theorem equilibrium_dummy_two_now_deviation :
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
-  change Math.Probability.expect
+  change _root_.Math.Probability.expect
       (pmfPi (Function.update equilibriumProfile 2 (PMF.pure now)))
       (fun choices => timingPurePayoff reward 2 choices 2) = -1
   rw [expect_pmfPi_fin4]
@@ -721,7 +721,7 @@ private theorem equilibrium_dummy_two_now_deviation :
     Function.update_of_ne (by decide : (1 : Player) ≠ 2),
     Function.update_self,
     Function.update_of_ne (by decide : (3 : Player) ≠ 2),
-    Math.Probability.expect_pure, Fin.isValue]
+    _root_.Math.Probability.expect_pure, Fin.isValue]
   simp_rw [pure_dummy_two_now_value]
   simp
 
@@ -733,7 +733,7 @@ private theorem equilibrium_dummy_two_never_deviation :
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
-  change Math.Probability.expect
+  change _root_.Math.Probability.expect
       (pmfPi (Function.update equilibriumProfile 2 (PMF.pure never)))
       (fun choices => timingPurePayoff reward 2 choices 2) = 0
   rw [expect_pmfPi_fin4]
@@ -742,7 +742,7 @@ private theorem equilibrium_dummy_two_never_deviation :
     Function.update_of_ne (by decide : (1 : Player) ≠ 2),
     Function.update_self,
     Function.update_of_ne (by decide : (3 : Player) ≠ 2),
-    Math.Probability.expect_pure, Fin.isValue]
+    _root_.Math.Probability.expect_pure, Fin.isValue]
   simp_rw [pure_dummy_two_never_value]
   simp
 
@@ -755,7 +755,7 @@ private theorem equilibrium_dummy_two_next_deviation :
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
-  change Math.Probability.expect
+  change _root_.Math.Probability.expect
       (pmfPi (Function.update equilibriumProfile 2 (PMF.pure next)))
       (fun choices => timingPurePayoff reward 2 choices 2) = -9 / 16
   rw [expect_pmfPi_fin4]
@@ -764,9 +764,9 @@ private theorem equilibrium_dummy_two_next_deviation :
     Function.update_of_ne (by decide : (1 : Player) ≠ 2),
     Function.update_self,
     Function.update_of_ne (by decide : (3 : Player) ≠ 2),
-    Math.Probability.expect_pure, Fin.isValue]
+    _root_.Math.Probability.expect_pure, Fin.isValue]
   simp_rw [pure_dummy_two_next_value]
-  simp [Math.Probability.expect_eq_sum, Fintype.sum_option,
+  simp [_root_.Math.Probability.expect_eq_sum, Fintype.sum_option,
     Fin.sum_univ_two, equilibriumLaw, PMF.ofFintype_apply,
     equilibriumWeight, now]
   norm_num
@@ -877,7 +877,7 @@ private theorem equilibrium_dummy_three_now_deviation :
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
-  change Math.Probability.expect
+  change _root_.Math.Probability.expect
       (pmfPi (Function.update equilibriumProfile 3 (PMF.pure now)))
       (fun choices => timingPurePayoff reward 2 choices 3) = -1
   rw [expect_pmfPi_fin4]
@@ -885,7 +885,7 @@ private theorem equilibrium_dummy_three_now_deviation :
     Function.update_of_ne (by decide : (0 : Player) ≠ 3),
     Function.update_of_ne (by decide : (1 : Player) ≠ 3),
     Function.update_of_ne (by decide : (2 : Player) ≠ 3),
-    Function.update_self, Math.Probability.expect_pure, Fin.isValue]
+    Function.update_self, _root_.Math.Probability.expect_pure, Fin.isValue]
   simp_rw [pure_dummy_three_now_value]
   simp
 
@@ -897,7 +897,7 @@ private theorem equilibrium_dummy_three_never_deviation :
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
-  change Math.Probability.expect
+  change _root_.Math.Probability.expect
       (pmfPi (Function.update equilibriumProfile 3 (PMF.pure never)))
       (fun choices => timingPurePayoff reward 2 choices 3) = 0
   rw [expect_pmfPi_fin4]
@@ -905,7 +905,7 @@ private theorem equilibrium_dummy_three_never_deviation :
     Function.update_of_ne (by decide : (0 : Player) ≠ 3),
     Function.update_of_ne (by decide : (1 : Player) ≠ 3),
     Function.update_of_ne (by decide : (2 : Player) ≠ 3),
-    Function.update_self, Math.Probability.expect_pure, Fin.isValue]
+    Function.update_self, _root_.Math.Probability.expect_pure, Fin.isValue]
   simp_rw [pure_dummy_three_never_value]
   simp
 
@@ -918,7 +918,7 @@ private theorem equilibrium_dummy_three_next_deviation :
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
-  change Math.Probability.expect
+  change _root_.Math.Probability.expect
       (pmfPi (Function.update equilibriumProfile 3 (PMF.pure next)))
       (fun choices => timingPurePayoff reward 2 choices 3) = -9 / 16
   rw [expect_pmfPi_fin4]
@@ -926,9 +926,9 @@ private theorem equilibrium_dummy_three_next_deviation :
     Function.update_of_ne (by decide : (0 : Player) ≠ 3),
     Function.update_of_ne (by decide : (1 : Player) ≠ 3),
     Function.update_of_ne (by decide : (2 : Player) ≠ 3),
-    Function.update_self, Math.Probability.expect_pure, Fin.isValue]
+    Function.update_self, _root_.Math.Probability.expect_pure, Fin.isValue]
   simp_rw [pure_dummy_three_next_value]
-  simp [Math.Probability.expect_eq_sum, Fintype.sum_option,
+  simp [_root_.Math.Probability.expect_eq_sum, Fintype.sum_option,
     Fin.sum_univ_two, equilibriumLaw, PMF.ofFintype_apply,
     equilibriumWeight, now]
   norm_num

@@ -579,6 +579,13 @@ theorem exists_algebraic_strictAnti_signCell_approach_with_endpoint
     bivEval_endpoint_eq_zero_of_tendsto
       hxlim parameter j.1 (q j) (fun n => hqroot n j)
 
+private theorem tendsto_bivEval_at_origin
+    (p : Polynomial (Polynomial ℝ)) {x y : ℕ → ℝ}
+    (h : Tendsto (fun n => (x n, y n)) atTop (𝓝 (0, 0))) :
+    Tendsto (fun n => bivEval p (x n) (y n)) atTop (𝓝 (bivEval p 0 0)) := by
+  have hc := (continuous_bivEval p).continuousAt (x := ((0, 0) : ℝ × ℝ))
+  simpa only [Function.comp_def] using hc.tendsto.comp h
+
 /-- Removing parameter-only content and translating the limiting value
 preserves an algebraic sequence branch up to its endpoint.  This is the exact
 boundary datum consumed by Weierstrass preparation. -/
@@ -620,8 +627,8 @@ theorem bivEval_translate_primPart_endpoint_eq_zero_of_sequence
       Tendsto
         (fun n => bivEval Q.primPart (lam n) (y n - L))
         atTop
-        (𝓝 (bivEval Q.primPart 0 0)) := by
-    exact (continuous_bivEval Q.primPart).continuousAt.tendsto.comp hpair
+        (𝓝 (bivEval Q.primPart 0 0)) :=
+    tendsto_bivEval_at_origin Q.primPart hpair
   have hvalue_zero :
       Tendsto
         (fun n => bivEval Q.primPart (lam n) (y n - L))

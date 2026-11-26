@@ -178,7 +178,7 @@ theorem analyticAt_eventually_eq_or_lt_or_gt
       obtain ⟨x, hne, heq⟩ := (hnonzero.and hz).exists
       exact hne heq
     obtain ⟨n, u, hu, hu0, hfactor⟩ :=
-      hd.exists_eventuallyEq_pow_smul_nonzero_iff.mpr hnotzero
+      hd.exists_eventuallyEq_pow_smul_ne_zero_iff.mpr hnotzero
     rcases lt_or_gt_of_ne hu0.symm with hu0pos | hu0neg
     · right
       right
@@ -398,7 +398,7 @@ theorem analyticAt_eventually_const_mul_pow_le_of_eventually_pos
       ((hzero.filter_mono nhdsWithin_le_nhds).and hpos).exists
     exact (ne_of_gt hxpos) hxzero
   obtain ⟨n, u, hu, hu0, hfactor⟩ :=
-    hg.exists_eventuallyEq_pow_smul_nonzero_iff.mpr hnotzero
+    hg.exists_eventuallyEq_pow_smul_ne_zero_iff.mpr hnotzero
   have hu0pos : 0 < u x₀ := by
     by_contra hnotpos
     have hu0neg : u x₀ < 0 :=
@@ -1077,12 +1077,13 @@ theorem exists_regularPolynomialDerivativeBound
     bivEval (bivDerivLam P) lam (w lam)
   let D : ℝ → ℝ := fun lam =>
     bivEval (Polynomial.derivative P) lam (w lam)
-  have hpair : ContinuousAt (fun lam : ℝ => (lam, w lam)) 0 :=
-    continuousAt_id.prodMk hw0
-  have hNcont : ContinuousAt N 0 := by
-    exact (continuous_bivEval (bivDerivLam P)).continuousAt.comp' hpair
-  have hDcont : ContinuousAt D 0 := by
-    exact (continuous_bivEval (Polynomial.derivative P)).continuousAt.comp' hpair
+  let point : ℝ → ℝ × ℝ := fun lam => (lam, w lam)
+  have hpair : ContinuousAt point 0 := continuousAt_id.prodMk hw0
+  have hcomp (Q : Polynomial (Polynomial ℝ)) :
+      ContinuousAt ((fun p : ℝ × ℝ => bivEval Q p.1 p.2) ∘ point) 0 :=
+    ((continuous_bivEval Q).continuousAt (x := point 0)).comp' hpair
+  have hNcont : ContinuousAt N 0 := hcomp (bivDerivLam P)
+  have hDcont : ContinuousAt D 0 := hcomp (Polynomial.derivative P)
   have hD0' : D 0 ≠ 0 := hD0
   have hDabs : 0 < |D 0| := abs_pos.mpr hD0'
   have hNclose : ∀ᶠ lam in 𝓝 (0 : ℝ),

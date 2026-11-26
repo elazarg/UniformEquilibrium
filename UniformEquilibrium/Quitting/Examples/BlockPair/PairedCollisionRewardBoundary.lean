@@ -74,7 +74,10 @@ theorem membershipToggleGap {c : ℝ} (hc : 1 ≤ c) :
           | (refine Or.inr ⟨0, ?_, ?_, ?_⟩
              · decide
              · decide
-             · norm_num +decide [reward] <;> linarith)
+             · solve
+               | norm_num +decide [reward]
+               | norm_num +decide [reward]
+                 linarith only [hgapOne, hgapPair, hc])
           | (refine Or.inr ⟨1, ?_, ?_, ?_⟩
              · decide
              · decide

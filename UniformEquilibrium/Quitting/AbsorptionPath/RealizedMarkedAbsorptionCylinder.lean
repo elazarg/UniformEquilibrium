@@ -261,8 +261,7 @@ theorem absorptionPath_total_eq_one_sub_survival [Nonempty ι]
               (1 - quittingStationaryContinueMass
                 (anchor.roots (c.block.start + i.castSucc)))) =
             1 - realizedBlockFullSurvival c.block fuel (by omega) := by
-        convert ih (by omega) using 1
-        all_goals rfl
+        exact ih (by omega)
       rw [htail, realizedBlockFullSurvival_succ]
       simp only [Fin.val_last]
       ring_nf

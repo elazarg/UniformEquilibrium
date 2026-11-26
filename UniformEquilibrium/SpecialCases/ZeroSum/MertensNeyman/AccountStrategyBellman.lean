@@ -171,7 +171,7 @@ theorem account_bellman_ge_of_securityFamily
     (fun o => v lam o.2 who)
   rw [hpay, hnext]
   convert hsecure using 1
-  all_goals ring
+  ring
 
 /-- A controller outcome kernel is the state/action outcome law obtained by
 replacing the selected player's component of the opposing profile. -/
@@ -368,7 +368,7 @@ theorem row_account_bellman_ge
     (fun o => G.stagePayoff s o.1 0) (fun o => V o.2 0)
   rw [hpay, hnext]
   convert hrow using 1
-  all_goals ring
+  ring
 
 /-- For the row player, a controller outcome kernel whose selected action is
 the row component of `x` is the state-action outcome law of `x` against the

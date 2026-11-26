@@ -144,7 +144,7 @@ theorem adaptiveHistoryLaw_succ_apply
   · intro other hother
     have hmap : (step n other).map (Fin.snoc other) history = 0 := by
       rw [PMF.map_apply]
-      rw [ENNReal.tsum_eq_zero]
+      rw [tsum_eq_zero_iff]
       intro successor
       rw [ite_eq_right]
       intro heq

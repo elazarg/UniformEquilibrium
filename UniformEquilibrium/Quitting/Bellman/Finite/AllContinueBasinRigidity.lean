@@ -185,16 +185,16 @@ theorem exactNashBellmanPath_eq_anchor_of_tendsto_unique_allContinue
   have hconstant : ∀ time, threshold ≤ time →
       value time = value threshold := by
     intro time htime
-    refine Nat.le_induction (m := threshold)
-      (P := fun stage _ => value stage = value threshold) rfl ?_ time htime
-    intro stage hthreshold ih
-    have htail : value (stage + 1) ∈ basin :=
-      hlate (stage + 1) (by omega)
-    have hroot := hunique (value (stage + 1)) htail
-      (root stage) (hnash stage)
-    have hedge := hbellman stage
-    rw [hroot, quittingRootSuccessorPayoff_allContinueRoot_eq] at hedge
-    exact hedge.symm.trans ih
+    induction time, htime using Nat.le_induction with
+    | base => rfl
+    | succ stage hthreshold ih =>
+      have htail : value (stage + 1) ∈ basin :=
+        hlate (stage + 1) (by omega)
+      have hroot := hunique (value (stage + 1)) htail
+        (root stage) (hnash stage)
+      have hedge := hbellman stage
+      rw [hroot, quittingRootSuccessorPayoff_allContinueRoot_eq] at hedge
+      exact hedge.symm.trans ih
   have heq : value =ᶠ[atTop] fun _ => value threshold :=
     Filter.eventually_atTop.mpr ⟨threshold, hconstant⟩
   have hconstantTendsto : Tendsto (fun _ : ℕ => value threshold)

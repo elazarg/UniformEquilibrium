@@ -81,12 +81,12 @@ theorem tsum_pmfPi_factor
     _ = ∑' a : A j, ∑' s : (∀ i, A i), W (e (a, s)) := by
         simp only [H_W_eq]
     _ = ∑' p : A j × (∀ i, A i), W (e p) := by
-        rw [ENNReal.tsum_prod']
+        rw [tsum_prod']
     _ = ∑' p : A j × (∀ i, A i), W p :=
         Math.Reindex.tsum_eq_tsum_of_involutive e he W
     _ = ∑' a : A j, σ j a *
           (∑' s : (∀ i, A i), (∏ i, σ i (s i)) * F a s) := by
-        rw [ENNReal.tsum_prod']
+        rw [tsum_prod']
         apply tsum_congr
         intro a
         dsimp [W]

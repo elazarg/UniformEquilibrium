@@ -83,6 +83,7 @@ import MathUE.ChargedPathExecution
 import MathUE.ChargedPathFiniteHorizon
 import MathUE.ChargedPathSelection
 import MathUE.ChargedPathSelectionCounterexamples
+import MathUE.ChargedRelation
 import MathUE.CoerciveIntervalMinimum
 import MathUE.CofiniteIdeal
 import MathUE.CompactChargedPathCapacity
@@ -511,6 +512,7 @@ import MathUE.Probability.EntryReachableChargedClass
 import MathUE.Probability.EntryReachableChargedOccupation
 import MathUE.Probability.EntryReachableDistinguishedCirculation
 import MathUE.Probability.ExactRankPositiveScaling
+import MathUE.Probability.FinDist
 import MathUE.Probability.FinDistIntegral
 import MathUE.Probability.FiniteClosedCoreReach
 import MathUE.Probability.FiniteControlledStoppingEnvelope

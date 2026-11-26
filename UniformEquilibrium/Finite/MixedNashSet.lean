@@ -10,9 +10,9 @@ import GameTheory.Analysis.Nash
 # Compact mixed-Nash carrier for a finite game
 
 A continuous excess can be minimized over the complete mixed-Nash set
-of a finite game. The Nash existence
-theorem supplies nonemptiness; its closed-graph proof also gives compactness
-of the exact equilibrium carrier in the same mixed-polytope coordinates.
+of a finite game. Kakutani's theorem supplies nonemptiness, and the closed
+graph of the best-reply correspondence gives compactness of the carrier in
+mixed-polytope coordinates.
 -/
 
 noncomputable section
@@ -54,13 +54,13 @@ theorem mixedNashPolytopeSet_nonempty
     [∀ who, Nonempty (F.sig.Strategy who)]
     (utility : F.sig.Outcome → ι → ℝ) :
     (mixedNashPolytopeSet utility).Nonempty := by
-  obtain ⟨profile, hnash⟩ := exists_isNash_mixed utility
-  let point : mixedPolytope F.sig := ⟨probs F.sig profile,
-    fun who _ => (profile who).prob_mem_simplexWeights⟩
-  refine ⟨point, ?_⟩
-  change point.1 ∈ bestReplies F utility point.1
-  change probs F.sig profile ∈ bestReplies F utility (probs F.sig profile)
-  exact (probs_mem_bestReplies_self_iff_isNash utility profile).mpr hnash
+  obtain ⟨point, hpoint⟩ :=
+    kakutani_fixed_point (mixedPolytope F.sig) (convex_mixedPolytope F.sig)
+      (isCompact_mixedPolytope F.sig) (mixedPolytope_nonempty F.sig)
+      (fun x => bestReplies F utility x.1) (closedGraph_bestReplies utility)
+      (fun x => ⟨bestReplies_subset utility x.1, convex_bestReplies utility x.1,
+        bestReplies_nonempty utility x.1⟩)
+  exact ⟨point, hpoint⟩
 
 /-- A continuous semantic excess on the full Nash carrier either accepts an
 exact Nash point or has a strictly positive attained gap on every Nash point. -/

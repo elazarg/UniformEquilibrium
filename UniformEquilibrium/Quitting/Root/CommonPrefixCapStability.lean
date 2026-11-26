@@ -214,12 +214,12 @@ theorem quittingContinuationBestResponseValue_literalRootStack_eq_capFold
       rw [quittingLiteralRootStackProfile_cons,
         quittingContinuationBestResponseValue_rootThenContinuation_eq_max,
         ih]
-      unfold quittingFiniteRootWordCap quittingCommonPrefixCapStep
-      congr 1
-      · exact quittingRootQuitPayoff_continuation_invariant reward _ 0 root who
-      · unfold quittingRootContinuePayoff
-        apply quittingRootExpectedPayoff_continuation_congr
-        simp
+      rw [quittingRootQuitPayoff_continuation_invariant reward _ 0 root who]
+      simp only [quittingFiniteRootWordCap, List.foldr_cons, quittingCommonPrefixCapStep]
+      apply congrArg (max (quittingRootQuitPayoff reward 0 root who))
+      unfold quittingRootContinuePayoff
+      apply quittingRootExpectedPayoff_continuation_congr
+      simp
 
 private theorem abs_quittingFiniteRootWordCap_cons_sub_max_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)

@@ -230,10 +230,10 @@ private theorem quittingFiniteDeadlineTimingGame_passiveNone_mixedEU
     (quittingFiniteDeadlineTimingGame reward deadline).mixedExtension_eu_update
       (fun _ : ι => PMF.pure none) mover law
   rw [hupdate]
-  change Math.Probability.expect law (fun action : Option (Fin deadline) =>
+  change _root_.Math.Probability.expect law (fun action : Option (Fin deadline) =>
       (quittingFiniteDeadlineTimingGame reward deadline).mixedExtension.eu
         (Function.update (fun _ => PMF.pure none) mover (PMF.pure action)) mover) = _
-  rw [Math.Probability.expect_eq_sum]
+  rw [_root_.Math.Probability.expect_eq_sum]
   simp_rw [hpure, timingPurePayoff_passiveNone reward mover]
   rw [Fintype.sum_option]
   simp only [Option.some_ne_none, ↓reduceIte, mul_zero, zero_add]
@@ -672,6 +672,17 @@ theorem finFourAdjacentSpectatorPaidFloor_pos
   · positivity
   · exact finFourAdjacentLargeSelectedEffectPaidFloor_pos hgamma hbound hdelta
 
+private theorem abs_branch_of_displaced_gain
+    {gamma observed correction first second : ℝ}
+    (hobserved : gamma / 2 ≤ observed)
+    (hdecomposition : observed ≤ |first - second| + correction)
+    (hcorrection : correction < gamma / 4) :
+    gamma / 8 < |first| ∨ gamma / 8 < |second| := by
+  by_contra hnone
+  push Not at hnone
+  linarith only [hobserved, hdecomposition, hcorrection, hnone.1, hnone.2,
+    abs_sub first second]
+
 /-- A macroscopic selected-effect gauge constructs a literal same-tail paid
 update.  A large timing-`none` coefficient uses a passive probe; otherwise
 the hard boundary response survives the exact retained-tail seam. -/
@@ -815,15 +826,9 @@ theorem finFourAdjacentLargeSelectedEffect_exists_sameTailPaidUpdate
         ring
       rw [hdecomposition]
       exact abs_add_le _ _
-    have htailDifference : gamma / 4 <
-        |oldTailGain - censoredTailGain| := by
-      linarith
-    have hresponse : gamma / 8 < |oldTailGain| ∨
-        gamma / 8 < |censoredTailGain| := by
-      by_contra hnone
-      push Not at hnone
-      have htriangle := abs_sub oldTailGain censoredTailGain
-      linarith
+    have hresponse : gamma / 8 < |oldTailGain| ∨ gamma / 8 < |censoredTailGain| :=
+      abs_branch_of_displaced_gain (first := oldTailGain) (second := censoredTailGain)
+        hboundary hhardLe hcorrection
     rcases hresponse with hold | hcensored
     · obtain ⟨update, -⟩ := exists_sameTailPaidUpdate_of_abs_payoff_sub_ge
         reward (source.deadline + 1) oldTiming
@@ -1067,6 +1072,14 @@ theorem finFour_terminalSemanticDebtSum_le_eight_mul_bound
 
 /-! ## Final cap-lifted summable port -/
 
+private theorem capLifted_reachFloor_lower
+    {ι : Type} [Fintype ι] [DecidableEq ι]
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (source : QuittingPaidCapLiftedSource reward) {budget : ℝ}
+    (hbudget : source.initialDebt ≤ budget) :
+    quittingTerminalSemanticDebtSum source.minimum / budget ≤ source.reachFloor :=
+  div_le_div_of_nonneg_left source.minimum_pos.le source.initialDebt_pos hbudget
+
 namespace QuittingSameTailActualReachPaidUpdatePassport
 
 variable {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
@@ -1092,11 +1105,7 @@ theorem minimumDebt_div_eightBound_le_capLiftedReachFloor
   have hinitial : capSource.initialDebt ≤ 8 * bound :=
     finFour_terminalSemanticDebtSum_le_eight_mul_bound
       reward update.sourceProfile bound hreward
-  have hdenom : 0 < 8 * bound := mul_pos (by norm_num) passport.bound_pos
-  have hinitialPos : 0 < capSource.initialDebt := capSource.initialDebt_pos
-  unfold QuittingPaidCapLiftedSource.reachFloor
-  rw [div_le_div_iff₀ hdenom hinitialPos]
-  exact mul_le_mul_of_nonneg_left hinitial hminimumPos.le
+  exact capLifted_reachFloor_lower capSource hinitial
 
 /-- Every shifted paid row retains the literal gain
 `D_* * floor / (32M)`. -/
@@ -1138,6 +1147,27 @@ theorem minimumDebt_mul_floor_div_thirtyTwoBound_le_shiftedGain
 
 end QuittingSameTailActualReachPaidUpdatePassport
 
+/-- A paid update has a summable cap-lifted port with the explicit reach and gain bounds. -/
+def QuittingFiniteDeadlineSameTailPaidUpdate.HasCapLiftedSummablePort
+    {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
+    {deadline : ℕ} {tail : (quittingGame reward).BehaviorProfile} {floor : ℝ}
+    (update : QuittingFiniteDeadlineSameTailPaidUpdate reward deadline tail floor)
+    (bound : ℝ) (minimum : QuittingTerminalSemanticPair (Fin 4))
+    (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
+      quittingTerminalSemanticDebtSum minimum ≤ quittingTerminalSemanticDebtSum candidate)
+    (hminimumPos : 0 < quittingTerminalSemanticDebtSum minimum) : Prop :=
+  ∃ passport : QuittingSameTailActualReachPaidUpdatePassport (bound := bound) update,
+    let capSource := passport.capLiftedSource minimum hminimum hminimumPos
+    Nonempty (QuittingPaidCapLiftedSource.SummablePort capSource) ∧
+      quittingTerminalSemanticDebtSum minimum / (8 * bound) ≤ capSource.reachFloor ∧
+      ∀ horizon, quittingTerminalSemanticDebtSum minimum * floor / (32 * bound) ≤
+        quittingPureTimeDeviationPayoff reward
+          (quittingCapLiftedPrefixProfile reward update.sourceProfile horizon) update.mover
+          (quittingCapLiftPureTimeShift horizon passport.row.receivingWitness) -
+        quittingPureTimeDeviationPayoff reward
+          (quittingCapLiftedPrefixProfile reward update.sourceProfile horizon) update.mover
+          (quittingCapLiftPureTimeShift horizon passport.row.sourceWitness)
+
 /-- Every adjacent spectator source satisfying the packet hypotheses enters
 the existing cap-lifted summable paid port, with no supplied paid update. -/
 theorem finFourAdjacentSpectator_nonempty_capLiftedSummablePort
@@ -1162,28 +1192,7 @@ theorem finFourAdjacentSpectator_nonempty_capLiftedSummablePort
     ∃ update : QuittingFiniteDeadlineSameTailPaidUpdate reward
         (source.deadline + 1) tail
         (finFourAdjacentSpectatorPaidFloor gamma bound delta),
-      ∃ passport : QuittingSameTailActualReachPaidUpdatePassport
-          (bound := bound) update,
-        Nonempty (QuittingPaidCapLiftedSource.SummablePort
-            (passport.capLiftedSource minimum hminimum hminimumPos)) ∧
-          quittingTerminalSemanticDebtSum minimum / (8 * bound) ≤
-            (passport.capLiftedSource minimum hminimum hminimumPos).reachFloor ∧
-          ∀ horizon,
-            quittingTerminalSemanticDebtSum minimum *
-                  finFourAdjacentSpectatorPaidFloor gamma bound delta /
-                    (32 * bound) ≤
-              quittingPureTimeDeviationPayoff reward
-                  (quittingCapLiftedPrefixProfile reward
-                    update.sourceProfile horizon)
-                  update.mover
-                  (quittingCapLiftPureTimeShift horizon
-                    passport.row.receivingWitness) -
-                quittingPureTimeDeviationPayoff reward
-                  (quittingCapLiftedPrefixProfile reward
-                    update.sourceProfile horizon)
-                  update.mover
-                  (quittingCapLiftPureTimeShift horizon
-                    passport.row.sourceWitness) := by
+      update.HasCapLiftedSummablePort bound minimum hminimum hminimumPos := by
   obtain ⟨update⟩ := finFourAdjacentSpectator_exists_sameTailPaidUpdate
     source tail hgamma hbound hdelta hscale hreward hpass htail
   obtain ⟨passport⟩ := update.nonempty_actualReachPassport
@@ -1194,7 +1203,76 @@ theorem finFourAdjacentSpectator_nonempty_capLiftedSummablePort
     minimum hminimum hminimumPos hreward
   have hshift := passport.minimumDebt_mul_floor_div_thirtyTwoBound_le_shiftedGain
     minimum hminimum hminimumPos hreward
-  exact ⟨update, passport, ⟨port⟩, hreach, hshift⟩
+  refine ⟨update, ?_⟩
+  exact ⟨passport, ⟨port⟩, hreach, hshift⟩
+
+private theorem solo_le_bestResponse_of_terminal_margin
+    {ι : Type} [Fintype ι] [DecidableEq ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile) (player : ι)
+    (hmargin : 0 ≤ quittingTerminalPayoff reward profile player -
+      reward (quittingSingletonTerminal player) player) :
+    reward (quittingSingletonTerminal player) player ≤
+      quittingContinuationBestResponseValue reward profile player := by
+  have hself := quittingTerminalPayoff_update_le_continuationBestResponseValue
+    reward profile player (profile player)
+  rw [Function.update_eq_self] at hself
+  exact (sub_nonneg.mp hmargin).trans hself
+
+private theorem exists_paidUpdate_with_ancestry
+    {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
+    {deadline : ℕ} {tail : (quittingGame reward).BehaviorProfile} {floor : ℝ}
+    (property : QuittingFiniteDeadlineSameTailPaidUpdate reward deadline tail floor → Prop)
+    (hexists : ∃ update, property update)
+    (hsolo : ∀ player, reward (quittingSingletonTerminal player) player ≤
+      quittingContinuationBestResponseValue reward tail player) :
+    ∃ update : QuittingFiniteDeadlineSameTailPaidUpdate reward deadline tail floor,
+      (∃ base : (quittingGame reward).BehaviorProfile,
+        quittingTerminalSemanticPair reward base = quittingTerminalSemanticPair reward tail ∧
+          Nonempty (FinFourBehaviorReplacementAncestry base update.sourceProfile)) ∧
+      property update :=
+  hexists.imp fun update hproperty =>
+    ⟨update.exists_allContinuePrefixAncestry hsolo, hproperty⟩
+
+private theorem finFourAdjacentSpectator_nonempty_capLiftedSummablePort_with_ancestry
+    {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
+    {gamma bound delta : ℝ}
+    (source : QuittingAdjacentDeadlineGapSource reward gamma bound)
+    (tail : (quittingGame reward).BehaviorProfile)
+    (hgamma : 0 < gamma) (hbound : 0 < bound) (hdelta : 0 < delta)
+    (hscale : gamma / bound ≤ 1)
+    (hreward : ∀ terminal player, |reward terminal player| ≤ bound)
+    (hpass : 1 - (source.old source.observer none).toReal <
+      gamma / bound / 8)
+    (htail : ∀ player, delta / 2 ≤
+      quittingTerminalPayoff reward tail player -
+        reward (quittingSingletonTerminal player) player)
+    (minimum : QuittingTerminalSemanticPair (Fin 4))
+    (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
+      quittingTerminalSemanticDebtSum minimum ≤ quittingTerminalSemanticDebtSum candidate)
+    (hminimumPos : 0 < quittingTerminalSemanticDebtSum minimum) :
+    ∃ update : QuittingFiniteDeadlineSameTailPaidUpdate reward
+        (source.deadline + 1) tail
+        (finFourAdjacentSpectatorPaidFloor gamma bound delta),
+      (∃ base : (quittingGame reward).BehaviorProfile,
+        quittingTerminalSemanticPair reward base =
+            quittingTerminalSemanticPair reward tail ∧
+          Nonempty
+            (FinFourBehaviorReplacementAncestry base update.sourceProfile)) ∧
+      update.HasCapLiftedSummablePort bound minimum hminimum hminimumPos := by
+  have hnonneg : 0 ≤ delta / 2 := div_nonneg hdelta.le (by norm_num)
+  have hsolo (player : Fin 4) :
+      reward (quittingSingletonTerminal player) player ≤
+        quittingContinuationBestResponseValue reward tail player :=
+    solo_le_bestResponse_of_terminal_margin reward tail player (hnonneg.trans (htail player))
+  let property (update : QuittingFiniteDeadlineSameTailPaidUpdate reward
+      (source.deadline + 1) tail (finFourAdjacentSpectatorPaidFloor gamma bound delta)) : Prop :=
+    update.HasCapLiftedSummablePort bound minimum hminimum hminimumPos
+  have hport : ∃ update, property update :=
+    finFourAdjacentSpectator_nonempty_capLiftedSummablePort source tail
+      hgamma hbound hdelta hscale hreward hpass htail
+      minimum hminimum hminimumPos
+  exact exists_paidUpdate_with_ancestry property hport hsolo
 
 /-- Exact packet specialization: the retained tail itself realizes the
 supplied positive global minimum, and the produced source has explicit
@@ -1227,47 +1305,10 @@ theorem finFourAdjacentSpectatorTailMinimum_nonempty_capLiftedSummablePort
             quittingTerminalSemanticPair reward tail ∧
           Nonempty
             (FinFourBehaviorReplacementAncestry base update.sourceProfile)) ∧
-      ∃ passport : QuittingSameTailActualReachPaidUpdatePassport
-          (bound := bound) update,
-        Nonempty (QuittingPaidCapLiftedSource.SummablePort
-            (passport.capLiftedSource
-              (quittingTerminalSemanticPair reward tail) hminimum hminimumPos)) ∧
-          quittingTerminalSemanticDebtSum
-                (quittingTerminalSemanticPair reward tail) / (8 * bound) ≤
-            (passport.capLiftedSource
-              (quittingTerminalSemanticPair reward tail)
-                hminimum hminimumPos).reachFloor ∧
-          ∀ horizon,
-            quittingTerminalSemanticDebtSum
-                  (quittingTerminalSemanticPair reward tail) *
-                finFourAdjacentSpectatorPaidFloor gamma bound delta /
-                  (32 * bound) ≤
-              quittingPureTimeDeviationPayoff reward
-                  (quittingCapLiftedPrefixProfile reward
-                    update.sourceProfile horizon)
-                  update.mover
-                  (quittingCapLiftPureTimeShift horizon
-                    passport.row.receivingWitness) -
-                quittingPureTimeDeviationPayoff reward
-                  (quittingCapLiftedPrefixProfile reward
-                    update.sourceProfile horizon)
-                  update.mover
-                  (quittingCapLiftPureTimeShift horizon
-                    passport.row.sourceWitness) := by
-  obtain ⟨update, passport, port, hreach, hshift⟩ :=
-    finFourAdjacentSpectator_nonempty_capLiftedSummablePort source tail
-      hgamma hbound hdelta hscale hreward hpass htail
-      (quittingTerminalSemanticPair reward tail) hminimum hminimumPos
-  have hsolo : ∀ player, reward (quittingSingletonTerminal player) player ≤
-      quittingContinuationBestResponseValue reward tail player := by
-    intro player
-    have hself := quittingTerminalPayoff_update_le_continuationBestResponseValue
-      reward tail player (tail player)
-    rw [Function.update_eq_self] at hself
-    linarith [htail player]
-  obtain ⟨base, hbase, ancestry⟩ :=
-    update.exists_allContinuePrefixAncestry hsolo
-  exact ⟨update, ⟨base, hbase, ancestry⟩,
-    passport, port, hreach, hshift⟩
+      update.HasCapLiftedSummablePort bound (quittingTerminalSemanticPair reward tail)
+        hminimum hminimumPos :=
+  finFourAdjacentSpectator_nonempty_capLiftedSummablePort_with_ancestry
+    source tail hgamma hbound hdelta hscale hreward hpass htail
+    (quittingTerminalSemanticPair reward tail) hminimum hminimumPos
 
 end GameTheory

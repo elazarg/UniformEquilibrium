@@ -45,7 +45,7 @@ theorem rootExpectedPayoff_update_true_two
   unfold quittingRootExpectedPayoff
   rw [expect_pmfPi_fin4]
   simp [reward, quittingRootPayoff, quittingQuitters,
-    Math.Probability.expect_eq_sum]
+    _root_.Math.Probability.expect_eq_sum]
   rw [hzero', hone', hthree']
   ring
 
@@ -66,7 +66,7 @@ theorem rootExpectedPayoff_update_true_three
   unfold quittingRootExpectedPayoff
   rw [expect_pmfPi_fin4]
   simp [reward, quittingRootPayoff, quittingQuitters,
-    Math.Probability.expect_eq_sum]
+    _root_.Math.Probability.expect_eq_sum]
   rw [hzero', hone', htwo']
   ring
 
@@ -78,7 +78,7 @@ theorem rootExpectedPayoff_update_false_two
   unfold quittingRootExpectedPayoff
   rw [expect_pmfPi_fin4]
   simp [reward, quittingRootPayoff, quittingQuitters,
-    Math.Probability.expect_eq_sum, hcontinuation]
+    _root_.Math.Probability.expect_eq_sum, hcontinuation]
 
 theorem rootExpectedPayoff_update_false_three
     (root : Player → PMF Bool) (continuation : Payoff Player)
@@ -88,7 +88,7 @@ theorem rootExpectedPayoff_update_false_three
   unfold quittingRootExpectedPayoff
   rw [expect_pmfPi_fin4]
   simp [reward, quittingRootPayoff, quittingQuitters,
-    Math.Probability.expect_eq_sum, hcontinuation]
+    _root_.Math.Probability.expect_eq_sum, hcontinuation]
 
 theorem timingMixedPayoff_update_current_two
     (dates : ℕ)
@@ -152,9 +152,9 @@ theorem timingMixedPayoff_zero
     timingMixedPayoff reward 0 mixed who = 0 := by
   unfold timingMixedPayoff
   calc
-    Math.Probability.expect (pmfPi mixed)
+    _root_.Math.Probability.expect (pmfPi mixed)
         (fun choices ↦ timingPurePayoff reward 0 choices who) =
-      Math.Probability.expect (pmfPi mixed) (fun _ ↦ 0) := by
+      _root_.Math.Probability.expect (pmfPi mixed) (fun _ ↦ 0) := by
         apply Math.ProbabilityMassFunction.expect_congr_on_support
         intro choices _
         have hchoices : choices = fun _ ↦ none := by
@@ -176,7 +176,7 @@ theorem timingMixedPayoff_zero
         change quittingTerminalPayoff reward
           (quittingPureStoppingTimeProfile reward (fun _ : Player ↦ ⊤)) who = 0
         rw [hprofile, quittingTerminalPayoff_quittingAlwaysContinue]
-    _ = 0 := Math.Probability.expect_const (pmfPi mixed) 0
+    _ = 0 := _root_.Math.Probability.expect_const (pmfPi mixed) 0
 
 @[simp] theorem timingLawTail_pure_none {dates : ℕ} :
     timingLawTail
@@ -403,7 +403,7 @@ theorem rootExpectedPayoff_one_of_zero_sure
   unfold quittingRootExpectedPayoff
   rw [expect_pmfPi_fin4]
   simp [hzero, htwo, hthree, reward, quittingRootPayoff,
-    quittingQuitters, Math.Probability.expect_eq_sum]
+    quittingQuitters, _root_.Math.Probability.expect_eq_sum]
   rw [Math.PMFProduct.pmfBool_false_toReal]
   ring
 
@@ -417,7 +417,7 @@ theorem rootExpectedPayoff_zero_of_one_sure
   unfold quittingRootExpectedPayoff
   rw [expect_pmfPi_fin4]
   simp [hone, htwo, hthree, reward, quittingRootPayoff,
-    quittingQuitters, Math.Probability.expect_eq_sum]
+    quittingQuitters, _root_.Math.Probability.expect_eq_sum]
   rw [Math.PMFProduct.pmfBool_false_toReal]
 
 /-- Under a sure current stop by player `0`, player `1`'s full timing payoff
@@ -705,8 +705,8 @@ theorem timingMixedPayoff_update_one_ge_neg_one_add_atom
   let floor :
       (Player → QuittingFiniteDeadlineTimingAction dates) → ℝ :=
     fun choices ↦ if choices 0 = action then 0 else -1
-  have hmono : Math.Probability.expect joint floor ≤
-      Math.Probability.expect joint
+  have hmono : _root_.Math.Probability.expect joint floor ≤
+      _root_.Math.Probability.expect joint
         (fun choices ↦ timingPurePayoff reward dates choices 1) := by
     apply Math.ProbabilityMassFunction.expect_mono_on_support
     intro choices hchoices
@@ -727,29 +727,29 @@ theorem timingMixedPayoff_update_one_ge_neg_one_add_atom
     rw [pmfPi_push_coord]
     unfold updated
     rw [Function.update_of_ne (by decide : (0 : Player) ≠ 1)]
-  have hfloor : Math.Probability.expect joint floor =
+  have hfloor : _root_.Math.Probability.expect joint floor =
       -1 + (mixed 0 action).toReal := by
     calc
-      Math.Probability.expect joint floor =
-          Math.Probability.expect
+      _root_.Math.Probability.expect joint floor =
+          _root_.Math.Probability.expect
             (pushforward joint fun choices ↦ choices 0)
             (fun choice ↦ if choice = action then 0 else -1) := by
               unfold pushforward floor
-              exact (Math.Probability.expect_map
+              exact (_root_.Math.Probability.expect_map
                 (fun choices ↦ choices 0) joint
                 (fun choice ↦ if choice = action then 0 else -1)).symm
-      _ = Math.Probability.expect (mixed 0)
+      _ = _root_.Math.Probability.expect (mixed 0)
           (fun choice ↦ if choice = action then 0 else -1) := by
             rw [hcoord]
-      _ = Math.Probability.expect (mixed 0)
+      _ = _root_.Math.Probability.expect (mixed 0)
           (fun choice ↦ (if choice = action then 1 else 0) - 1) := by
             congr 1
             funext choice
             split_ifs <;> ring
       _ = (mixed 0 action).toReal - 1 := by
-            rw [Math.Probability.expect_sub,
+            rw [_root_.Math.Probability.expect_sub,
               Math.Probability.apply_toReal_eq_expect_indicator,
-              Math.Probability.expect_const]
+              _root_.Math.Probability.expect_const]
       _ = -1 + (mixed 0 action).toReal := by ring
   rw [hfloor] at hmono
   exact hmono
@@ -764,7 +764,7 @@ theorem rootExpectedPayoff_one_of_one_sure_zero_continue
   unfold quittingRootExpectedPayoff
   rw [expect_pmfPi_fin4]
   simp [hzero, hone, htwo, hthree, reward, quittingRootPayoff,
-    quittingQuitters, Math.Probability.expect_eq_sum]
+    quittingQuitters, _root_.Math.Probability.expect_eq_sum]
 
 theorem timingMixedPayoff_one_of_one_current_sure_zero_continue
     (dates : ℕ)
@@ -881,7 +881,7 @@ theorem rootEndpointDifference_zero_formula
     quittingRootContinuePayoff quittingRootExpectedPayoff
   rw [expect_pmfPi_fin4, expect_pmfPi_fin4]
   simp [htwo, hthree, valueAfter, reward, quittingRootPayoff,
-    quittingQuitters, Math.Probability.expect_eq_sum]
+    quittingQuitters, _root_.Math.Probability.expect_eq_sum]
   rw [Math.PMFProduct.pmfBool_false_toReal]
   ring
 
@@ -897,7 +897,7 @@ theorem rootEndpointDifference_one_formula
     quittingRootContinuePayoff quittingRootExpectedPayoff
   rw [expect_pmfPi_fin4, expect_pmfPi_fin4]
   simp [htwo, hthree, valueAfter, reward, quittingRootPayoff,
-    quittingQuitters, Math.Probability.expect_eq_sum]
+    quittingQuitters, _root_.Math.Probability.expect_eq_sum]
   rw [Math.PMFProduct.pmfBool_false_toReal]
   ring
 

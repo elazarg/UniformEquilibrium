@@ -1,5 +1,5 @@
 import MathUE.Analysis.BooleanEndpointInterpolation
-import GameTheory.Math.Probability.FinDist
+import MathUE.Probability.FinDist
 
 /-! # Boolean endpoint expansion of actual independent finite laws
 

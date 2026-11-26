@@ -218,7 +218,9 @@ theorem quittingMaximalCapPrefixProfile_eq_semanticPrefixProfile
   | succ time ih =>
       rw [quittingMaximalCapPrefixProfile_succ,
         quittingMaximalCapSemanticPrefixProfile_succ, ih]
-      congr 2
+      apply congrArg (fun root : ι → PMF Bool => quittingRootThenContinuationProfile
+        reward root (quittingMaximalCapSemanticPrefixProfile reward
+          (quittingTerminalSemanticPair reward terminal) terminal time))
       apply quittingMaximalAbsorptionCapRoot_eq_of_cap_eq reward
       exact congrArg Prod.snd
         (quittingTerminalSemanticPair_maximalCapSemanticPrefixProfile_eq

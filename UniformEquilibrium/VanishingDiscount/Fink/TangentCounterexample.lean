@@ -269,7 +269,7 @@ lemma pure_discountedAuxEU_eq (n : ℕ) (s : State) (who : Player) (d : Bool) :
   all_goals
     rw [profile_apply_toReal, profile_apply_toReal]
     simp [weight]
-    try nlinarith [discount_mul_rareProbability n]
+  all_goals nlinarith [discount_mul_rareProbability n]
 
 lemma mixedDeviation_discountedAuxEU_eq (n : ℕ) (s : State) (who : Player)
     (dev : PMF Bool) :
@@ -303,7 +303,7 @@ lemma isDiscountedStationaryBellmanEq (n : ℕ) :
 
 lemma abs_payoff_le_one (s : State) (a : Player → Bool) (who : Player) :
     |game.stagePayoff s a who| ≤ 1 := by
-  cases s <;> cases who <;> (try by_cases h : a false) <;> simp [payoff, h]
+  cases s <;> cases who <;> (by_cases h : a false) <;> simp [payoff, h]
 
 /-- Every encoded point in the family is literally a fixed point of Fink's
 finite-dimensional map. -/

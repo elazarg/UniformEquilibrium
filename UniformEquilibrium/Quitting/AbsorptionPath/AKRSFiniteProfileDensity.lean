@@ -1242,7 +1242,7 @@ theorem tendsto_partitionDensityApproximant_value_of_lt_one
   have hthresholdTendsto : Tendsto (fun index : ℕ ↦
       1 - 1 / (partitionDensityResolution index : ℝ)) atTop (nhds 1) := by
     convert tendsto_const_nhds.sub hinv using 1
-    all_goals norm_num
+    norm_num
   have hthreshold : ∀ᶠ index in atTop,
       time < 1 - 1 / (partitionDensityResolution index : ℝ) :=
     hthresholdTendsto.eventually (Ioi_mem_nhds htime.2)
@@ -1253,7 +1253,7 @@ theorem tendsto_partitionDensityApproximant_value_of_lt_one
         (1 - time) * (1 / (partitionDensityResolution index : ℝ)))
         atTop (nhds 0) := by
       convert (tendsto_const_nhds.mul hinv) using 1
-      all_goals ring_nf
+      ring_nf
     simpa [partitionProbe, div_eq_mul_inv] using
       tendsto_const_nhds.add hgap
   have hprobeWithin : Tendsto (fun index ↦
@@ -1274,7 +1274,7 @@ theorem tendsto_partitionDensityApproximant_value_of_lt_one
       path.1.value (partitionProbe (partitionDensityResolution index) time)
           coalition - path.1.value time coalition) atTop (nhds 0) := by
     convert hvalueProbe.sub tendsto_const_nhds using 1
-    all_goals ring_nf
+    ring_nf
   have hproductization : Tendsto (fun index : ℕ ↦
       akrsSmallCellCoordinateConstant ι *
         partitionSmallCellError (partitionDensityResolution index))
@@ -1284,7 +1284,7 @@ theorem tendsto_partitionDensityApproximant_value_of_lt_one
         atTop (nhds 0) :=
       tendsto_partitionSmallCellError_partitionDensityResolution
     convert herror.const_mul (akrsSmallCellCoordinateConstant ι) using 1
-    all_goals ring_nf
+    ring_nf
   have hboundTendsto : Tendsto (fun index : ℕ ↦
       akrsSmallCellCoordinateConstant ι *
           partitionSmallCellError (partitionDensityResolution index) +
@@ -1326,7 +1326,7 @@ theorem tendsto_leftValue_partitionDensityCutoff
     tendsto_one_div_partitionDensityResolution
   have hthreshold : Tendsto threshold atTop (nhds 1) := by
     convert tendsto_const_nhds.sub hinv using 1
-    all_goals norm_num
+    norm_num
   have hthresholdWithin : Tendsto threshold atTop
       (nhdsWithin 1 (Set.Icc (0 : ℝ) 1 \ {1})) := by
     apply tendsto_nhdsWithin_iff.mpr
@@ -1418,7 +1418,7 @@ theorem tendsto_partitionDensityApproximant_value_one
       akrsSmallCellCoordinateConstant ι *
         partitionSmallCellError (resolution index)) atTop (nhds 0) := by
     convert herror.const_mul (akrsSmallCellCoordinateConstant ι) using 1
-    all_goals ring_nf
+    ring_nf
   have hprefixDiff : Tendsto (fun index : ℕ ↦
       prefixMass index - reference index)
       atTop (nhds 0) := by

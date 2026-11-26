@@ -24,7 +24,7 @@ noncomputable section
 
 open _root_.Math.Probability _root_.Math.ProbabilityMassFunction
 open _root_.Math.Probability.FiniteLawRepair
-open GameTheory.Math.Probability
+open GameTheory.Math.Probability hiding expect_eq_sum expect_pure
 open Filter
 open scoped BigOperators Topology
 

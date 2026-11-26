@@ -84,7 +84,7 @@ theorem quitPremium_formula (singleton scale : Payoff (Fin 4))
   fin_cases player <;>
     simp +decide [reward, rewardOfOwnPremium, premium,
       quitPremiumPolynomial, quittingRootPayoff,
-      quittingQuitters, Math.Probability.expect_eq_sum,
+      quittingQuitters, _root_.Math.Probability.expect_eq_sum,
       pmfBool_false_toReal] <;>
     ring
 

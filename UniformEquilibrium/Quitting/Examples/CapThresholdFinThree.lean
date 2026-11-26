@@ -163,8 +163,13 @@ theorem affine_cap_eventually_false (k : ℕ) (hk : 100 ≤ k) :
     -1 + 2 * (157 / 160 : ℝ) ^ k <
       (quittingTerminalSemanticPair realReward (profile reward (word k))).2 1 := by
   have hmono := pow_le_pow_of_le_one
-    (by norm_num : (0 : ℝ) ≤ 157 / 160) (by norm_num : (157 / 160 : ℝ) ≤ 1) hk
-  have hnegative : -1 + 2 * (157 / 160 : ℝ) ^ 100 < 0 := by norm_num
+    (by norm_num : (0 : ℝ) ≤ 157 / 160) (by norm_num : (157 / 160 : ℝ) ≤ 1)
+    (show 40 ≤ k by omega)
+  have hten : (157 / 160 : ℝ) ^ 10 < 5 / 6 := by norm_num
+  have hforty : (157 / 160 : ℝ) ^ 40 < 1 / 2 := by
+    rw [show (40 : ℕ) = 10 * 4 by decide, pow_mul]
+    exact (pow_lt_pow_left₀ hten (by positivity) (by decide : (4 : ℕ) ≠ 0)).trans
+      (by norm_num)
   have hpredicted : -1 + 2 * (157 / 160 : ℝ) ^ k < 0 := by linarith
   refine ⟨hpredicted, hpredicted.trans_le ?_⟩
   cases k with

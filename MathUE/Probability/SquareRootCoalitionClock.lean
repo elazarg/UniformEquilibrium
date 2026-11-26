@@ -598,6 +598,32 @@ theorem mem_gateInterval_of_two_mass_floors
       Real.sqrt_le_iff.mpr ⟨by linarith [hazard_mem.2], second_floor⟩
     linarith
 
+private theorem twoPairNormalizedBudget_eq_one_of_tendsto
+    {point : ℕ → ℝ × ℝ × ℝ × ℝ × ℝ} {limit : ℝ × ℝ × ℝ × ℝ × ℝ}
+    (h : Filter.Tendsto point Filter.atTop (nhds limit))
+    (hbudget : Filter.Tendsto (fun n => twoPairNormalizedBudget (point n).1 (point n).2.1
+      (point n).2.2.1 (point n).2.2.2.1 (point n).2.2.2.2) Filter.atTop (nhds 1)) :
+    twoPairNormalizedBudget limit.1 limit.2.1 limit.2.2.1 limit.2.2.2.1 limit.2.2.2.2 = 1 := by
+  have hc := continuous_twoPairNormalizedBudget.continuousAt (x := limit)
+  exact tendsto_nhds_unique (hc.tendsto.comp h) hbudget
+
+private theorem tendsto_clock_coordinates
+    {a b c d e : ℕ → ℝ} {a₀ b₀ c₀ d₀ e₀ : ℝ}
+    (ha : Filter.Tendsto a Filter.atTop (nhds a₀))
+    (hb : Filter.Tendsto b Filter.atTop (nhds b₀))
+    (hc : Filter.Tendsto c Filter.atTop (nhds c₀))
+    (hd : Filter.Tendsto d Filter.atTop (nhds d₀))
+    (he : Filter.Tendsto e Filter.atTop (nhds e₀)) :
+    Filter.Tendsto (fun n => (a n, b n, c n, d n, e n))
+      Filter.atTop (nhds (a₀, b₀, c₀, d₀, e₀)) :=
+  ha.prodMk_nhds (hb.prodMk_nhds (hc.prodMk_nhds (hd.prodMk_nhds he)))
+
+private theorem clock_limit_mem_unitInterval {x : ℕ → ℝ} {limit : ℝ}
+    (hlim : Filter.Tendsto x Filter.atTop (nhds limit))
+    (hmem : ∀ n, x n ∈ Set.Icc (0 : ℝ) 1) :
+    limit ∈ Set.Icc (0 : ℝ) 1 :=
+  isClosed_Icc.mem_of_tendsto hlim (Filter.Eventually.of_forall hmem)
+
 /-- Closed limit form of the first-gate equality classification.  This is the local consumer
 used after finite-dimensional subsequence extraction. -/
 theorem twoPair_hazard_limit_firstGate
@@ -620,32 +646,18 @@ theorem twoPair_hazard_limit_firstGate
       pairContinueAmplitude thirdLimit fourthLimit) :
     backgroundLimit = 1 ∧ thirdLimit = 0 ∧ fourthLimit = 0 ∧
       firstLimit = secondLimit := by
-  have hfirstLimit : firstLimit ∈ Set.Icc (0 : ℝ) 1 :=
-    isClosed_Icc.mem_of_tendsto hfirst (Filter.Eventually.of_forall first_mem)
-  have hsecondLimit : secondLimit ∈ Set.Icc (0 : ℝ) 1 :=
-    isClosed_Icc.mem_of_tendsto hsecond (Filter.Eventually.of_forall second_mem)
-  have hthirdLimit : thirdLimit ∈ Set.Icc (0 : ℝ) 1 :=
-    isClosed_Icc.mem_of_tendsto hthird (Filter.Eventually.of_forall third_mem)
-  have hfourthLimit : fourthLimit ∈ Set.Icc (0 : ℝ) 1 :=
-    isClosed_Icc.mem_of_tendsto hfourth (Filter.Eventually.of_forall fourth_mem)
-  have hbackgroundLimit : backgroundLimit ∈ Set.Icc (0 : ℝ) 1 :=
-    isClosed_Icc.mem_of_tendsto hbackground
-      (Filter.Eventually.of_forall background_mem)
-  have hpoint : Filter.Tendsto
-      (fun n => (first n, second n, third n, fourth n, background n)) Filter.atTop
-      (nhds (firstLimit, secondLimit, thirdLimit, fourthLimit, backgroundLimit)) :=
-    by
-      simpa only [nhds_prod_eq] using
-        hfirst.prodMk (hsecond.prodMk (hthird.prodMk (hfourth.prodMk hbackground)))
-  have hcontinuous : Filter.Tendsto (fun n => twoPairNormalizedBudget
-      (first n) (second n) (third n) (fourth n) (background n)) Filter.atTop
-      (nhds (twoPairNormalizedBudget firstLimit secondLimit thirdLimit fourthLimit
-        backgroundLimit)) :=
-    continuous_twoPairNormalizedBudget.continuousAt.tendsto.comp hpoint
   have hlocal : twoPairNormalizedBudget firstLimit secondLimit thirdLimit fourthLimit
-      backgroundLimit = 1 := tendsto_nhds_unique hcontinuous budget_tendsto
-  exact twoPair_hazard_local_eq_one_of_first_active hfirstLimit hsecondLimit
-    hthirdLimit hfourthLimit hbackgroundLimit hlocal first_active
+      backgroundLimit = 1 :=
+    twoPairNormalizedBudget_eq_one_of_tendsto
+      (point := fun n => (first n, second n, third n, fourth n, background n))
+      (limit := (firstLimit, secondLimit, thirdLimit, fourthLimit, backgroundLimit))
+      (tendsto_clock_coordinates hfirst hsecond hthird hfourth hbackground) budget_tendsto
+  exact twoPair_hazard_local_eq_one_of_first_active
+    (clock_limit_mem_unitInterval hfirst first_mem)
+    (clock_limit_mem_unitInterval hsecond second_mem)
+    (clock_limit_mem_unitInterval hthird third_mem)
+    (clock_limit_mem_unitInterval hfourth fourth_mem)
+    (clock_limit_mem_unitInterval hbackground background_mem) hlocal first_active
 
 /-- Symmetric closed limit classifier for a positive second-gate amplitude. -/
 theorem twoPair_hazard_limit_secondGate

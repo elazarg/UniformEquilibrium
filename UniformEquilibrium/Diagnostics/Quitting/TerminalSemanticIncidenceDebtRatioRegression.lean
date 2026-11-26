@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import GameTheory.Math.Probability.FiniteUniform
 import MathUE.ProbabilityMassFunction.Bool
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauPartialResetTransfer
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetIncidenceCapReturn
@@ -62,7 +63,7 @@ theorem totalOpponentIncidence_eq_displayed
   simp
 
 def explicitHalfRoot : Bool → PMF Bool := fun who =>
-  if who then PMF.uniformOfFintype Bool else PMF.pure true
+  if who then GameTheory.Math.Probability.uniformLaw Bool else PMF.pure true
 
 theorem halfRoot_eq_explicitHalfRoot : halfRoot = explicitHalfRoot := by
   funext who
@@ -73,8 +74,8 @@ theorem halfRoot_eq_explicitHalfRoot : halfRoot = explicitHalfRoot := by
       explicitHalfRoot, quittingPartialEndpointRoot, sourceRoot,
       QuittingResetIncidenceCapRegression.collisionRoot,
       QuittingMarkedExitNashificationRegression.markedCollisionRoot,
-      PMF.uniformOfFintype_apply]
-  all_goals norm_num
+      GameTheory.Math.Probability.uniformLaw_apply]
+  norm_num
 
 /-- The reset leaves the marked player at sure Quit and makes the other
 player a fair Quit/Continue coin. -/
@@ -83,7 +84,7 @@ theorem halfRoot_probabilities :
       (halfRoot true true).toReal = 1 / 2 ∧
       (halfRoot true false).toReal = 1 / 2 := by
   rw [halfRoot_eq_explicitHalfRoot]
-  norm_num [explicitHalfRoot, PMF.uniformOfFintype_apply]
+  norm_num [explicitHalfRoot, GameTheory.Math.Probability.uniformLaw_apply]
 
 /-- The half-reset payoff is `(0, 1/2)`.  The unmarked player's behavioral
 envelope remains `1`; the marked cap is intentionally left unevaluated. -/
@@ -106,7 +107,7 @@ theorem halfPair_coordinates :
       quittingRootExpectedPayoff
     rw [QuittingExactDynamicDebtVanishingCounterexample.expect_pmfPi_bool]
     rw [hroot]
-    norm_num [explicitHalfRoot, PMF.uniformOfFintype_apply,
+    norm_num [explicitHalfRoot, GameTheory.Math.Probability.uniformLaw_apply,
       quittingRootPayoff, reward,
       QuittingResetIncidenceCapRegression.regressionReward,
       QuittingMarkedExitNashificationRegression.reward,
@@ -118,7 +119,7 @@ theorem halfPair_coordinates :
     rw [QuittingExactDynamicDebtVanishingCounterexample.expect_pmfPi_bool]
     rw [hroot]
     rw [QuittingExactDynamicDebtVanishingCounterexample.expect_pmfPi_bool]
-    norm_num [explicitHalfRoot, PMF.uniformOfFintype_apply,
+    norm_num [explicitHalfRoot, GameTheory.Math.Probability.uniformLaw_apply,
       quittingRootPayoff, reward,
       QuittingResetIncidenceCapRegression.regressionReward,
       QuittingMarkedExitNashificationRegression.reward,
@@ -128,7 +129,7 @@ theorem halfPair_coordinates :
     rw [QuittingExactDynamicDebtVanishingCounterexample.expect_pmfPi_bool,
       QuittingExactDynamicDebtVanishingCounterexample.expect_pmfPi_bool]
     rw [hroot]
-    norm_num [explicitHalfRoot, PMF.uniformOfFintype_apply,
+    norm_num [explicitHalfRoot, GameTheory.Math.Probability.uniformLaw_apply,
       quittingRootPayoff, reward,
       QuittingResetIncidenceCapRegression.regressionReward,
       QuittingMarkedExitNashificationRegression.reward,
@@ -180,7 +181,7 @@ theorem half_debt_and_incidence :
       rw [halfRoot_eq_explicitHalfRoot]
       norm_num [quittingStationaryContinueMass, explicitHalfRoot,
         quittingAllContinueAction, pmfPi_apply,
-        PMF.uniformOfFintype_apply]
+        GameTheory.Math.Probability.uniformLaw_apply]
     rw [hsingle, hfull, hcontinue]
     norm_num
 

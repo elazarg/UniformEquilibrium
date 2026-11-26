@@ -769,7 +769,7 @@ theorem QuittingTerminalExploitabilityWitness.fullSupport_fullNormalCore_of_finF
   refine ⟨hcore, hnormal, packet, hsupport, hfloorPos, ?_⟩
   intro who
   convert hmass who using 1
-  all_goals norm_num
+  norm_num
 
 /-- In the four-player no-uniform-payoff branch, the terminal witness, full
 normal core, all-player punishment normality, and the quantitative

@@ -105,6 +105,19 @@ theorem irreducible_of_matching_negative_graph
     rw [hfavorite]
     simpa only [other_scheduled_eq_favorite i] using hother (scheduled i)
 
+private theorem mul_favoritePermutedRows_apply
+    (matrix right : Matrix (Fin 4) (Fin 4) ℝ) (i j : Fin 4) :
+    (matrix * Matrix.of (fun k l => right (favorite k) l)) i j =
+      (favoritePermuted matrix * right) i j := by
+  have hsum := Equiv.sum_comp favoriteEquiv
+    (fun k => matrix i k * right (favorite k) j)
+  change (∑ k, matrix i (favorite k) * right (favorite (favorite k)) j) =
+    ∑ k, matrix i k * right (favorite k) j at hsum
+  change (∑ k, matrix i k * right (favorite k) j) =
+    ∑ k, matrix i (favorite k) * right k j
+  refine hsum.symm.trans (Finset.sum_congr rfl fun k _ => ?_)
+  rw [favorite_involutive k]
+
 /-- The literal matching graph and an actual positive image suffice for
 inverse positivity. The caller supplies neither a graph nor an inverse. -/
 theorem hasStrictlyPositiveInverse_of_matching_positive_vector
@@ -155,14 +168,8 @@ theorem hasStrictlyPositiveInverse_of_matching_positive_vector
   have hright : matrix * inverse = 1 := by
     have hMright := Matrix.mul_nonsing_inv M (isUnit_iff_ne_zero.mpr hM.1)
     ext i j
-    have hsum := Equiv.sum_comp favoriteEquiv
-      (fun k => matrix i k * M⁻¹ (favorite k) j)
-    change (∑ k, matrix i (favorite k) * M⁻¹ (favorite (favorite k)) j) =
-      ∑ k, matrix i k * M⁻¹ (favorite k) j at hsum
     have hentryEq : (matrix * inverse) i j = (M * M⁻¹) i j := by
-      change (∑ k, matrix i k * M⁻¹ (favorite k) j) =
-        ∑ k, matrix i (favorite k) * M⁻¹ k j
-      exact hsum.symm
+      exact mul_favoritePermutedRows_apply matrix M⁻¹ i j
     rw [hentryEq, hMright]
   exact hasStrictlyPositiveInverse_of_rightInverse matrix inverse hright
     (fun i j => hM.2 (favorite i) j)
@@ -257,13 +264,10 @@ theorem hasStrictlyPositiveInverse_variableMatrix_of_standardQ
   rw [himage] at hle
   linarith
 
-theorem continuousOn_variableMatrix_nonnegative
-    (matrix : Matrix (Fin 4) (Fin 4) ℝ) (premium passive : Fin 4 → ℝ) :
-    ContinuousOn (variableMatrix matrix premium passive) (Set.Ici (0 : Fin 4 → ℝ)) := by
-  apply continuousOn_pi.mpr
-  intro i
-  apply continuousOn_pi.mpr
-  intro j
+private theorem continuousOn_variableMatrix_entry
+    (matrix : Matrix (Fin 4) (Fin 4) ℝ) (premium passive : Fin 4 → ℝ) (i j : Fin 4) :
+    ContinuousOn (fun point => variableMatrix matrix premium passive point i j)
+      (Set.Ici (0 : Fin 4 → ℝ)) := by
   have hratio : ContinuousOn (fun point : Fin 4 → ℝ =>
       point (scheduled i) / (1 + point (scheduled i))) (Set.Ici (0 : Fin 4 → ℝ)) := by
     apply (continuous_apply (scheduled i)).continuousOn.div
@@ -278,14 +282,26 @@ theorem continuousOn_variableMatrix_nonnegative
   have hsecond : ContinuousOn (fun point : Fin 4 → ℝ =>
       max (passive i) 0 * point (other i)) (Set.Ici (0 : Fin 4 → ℝ)) :=
     (continuous_const.mul (continuous_apply (other i))).continuousOn
-  change ContinuousOn
-    (fun point : Fin 4 → ℝ => variableMatrix matrix premium passive point i j) _
-  unfold variableMatrix
-  split_ifs <;> first
-    | exact (continuous_const.continuousOn.add hfirst).add hsecond
-    | exact (continuous_const.continuousOn.add hfirst).add continuous_const.continuousOn
-    | exact (continuous_const.continuousOn.add continuous_const.continuousOn).add hsecond
-    | exact continuous_const.continuousOn
+  have hfirstIf : ContinuousOn (fun point : Fin 4 → ℝ => if j = scheduled i then
+      max (-premium i) 0 * (point (scheduled i) / (1 + point (scheduled i))) else 0)
+      (Set.Ici (0 : Fin 4 → ℝ)) := by
+    by_cases h : j = scheduled i
+    · simpa only [ite_eq_left h] using hfirst
+    · simpa only [ite_eq_right h] using continuousOn_const
+  have hsecondIf : ContinuousOn (fun point : Fin 4 → ℝ => if j = favorite i then
+      max (passive i) 0 * point (other i) else 0) (Set.Ici (0 : Fin 4 → ℝ)) := by
+    by_cases h : j = favorite i
+    · simpa only [ite_eq_left h] using hsecond
+    · simpa only [ite_eq_right h] using continuousOn_const
+  have hconst : ContinuousOn (fun _ : Fin 4 → ℝ => matrix i j) (Set.Ici (0 : Fin 4 → ℝ)) :=
+    continuousOn_const
+  exact (hconst.add hfirstIf).add hsecondIf
+
+theorem continuousOn_variableMatrix_nonnegative
+    (matrix : Matrix (Fin 4) (Fin 4) ℝ) (premium passive : Fin 4 → ℝ) :
+    ContinuousOn (variableMatrix matrix premium passive) (Set.Ici (0 : Fin 4 → ℝ)) :=
+  continuousOn_pi.mpr fun i =>
+    continuousOn_pi.mpr (continuousOn_variableMatrix_entry matrix premium passive i)
 
 /-- The radius is fixed before the inverse bounds; no unbounded-domain
 uniform inverse estimate is asserted. Empty negative-radius cubes are allowed. -/

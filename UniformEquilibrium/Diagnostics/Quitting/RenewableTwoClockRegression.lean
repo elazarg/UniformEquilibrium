@@ -434,7 +434,7 @@ private theorem sentinelPrefix_eq_zero_of_playerTwo_zero
     simp [quittingTerminalSemanticPrefix, quittingRootSuccessorPayoff,
       quittingRootQuitPayoff, quittingRootContinuePayoff,
       quittingRootExpectedPayoff, quittingRootPayoff, quittingQuitters, reward,
-      Math.PMFProduct.pmfPi_pure, Math.Probability.expect_pure,
+      Math.PMFProduct.pmfPi_pure, _root_.Math.Probability.expect_pure,
       Math.PMFProduct.pmfPi_update_pure_family,
       Function.update_apply, htwoAfterZeroContinues, hwith, hwithout,
       hpayoff, hcap]

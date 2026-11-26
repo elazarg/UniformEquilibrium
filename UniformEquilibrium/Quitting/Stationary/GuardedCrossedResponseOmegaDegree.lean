@@ -24,8 +24,10 @@ def quittingCrossedOmega : Set (Fin n → ℝ) :=
 
 theorem isOpen_quittingCrossedOmega : IsOpen (quittingCrossedOmega (n := n)) := by
   have hopen (who : Fin n) : IsOpen {source : Fin n → ℝ |
-      (-1 : ℝ) < source who ∧ source who < 2} :=
-    (isOpen_lt continuous_const (continuous_apply who)).inter
+      (-1 : ℝ) < source who ∧ source who < 2} := by
+    change IsOpen ({source : Fin n → ℝ | (-1 : ℝ) < source who} ∩
+      {source : Fin n → ℝ | source who < (2 : ℝ)})
+    exact (isOpen_lt continuous_const (continuous_apply who)).inter
       (isOpen_lt (continuous_apply who) continuous_const)
   simpa only [quittingCrossedOmega, ofPred_forall] using isOpen_iInter_of_finite hopen
 

@@ -21,7 +21,7 @@ theorem negative_oneRowCap (root : Bool → PMF Bool) (value : ℝ) :
     quittingRootAbsorbingContribution, quittingRootExpectedPayoff]
   rw [Math.PMFProduct.expect_pmfPi_boolFamily,
     Math.PMFProduct.expect_pmfPi_boolFamily]
-  simp_rw [Math.Probability.expect_eq_sum, Fintype.sum_bool]
+  simp_rw [_root_.Math.Probability.expect_eq_sum, Fintype.sum_bool]
   simp [quittingRootPayoff, negativeReward, quittingQuitters,
     Finset.nonempty_iff_ne_empty]
   rw [quittingFixedOpponentsContinueMass_bool_false,

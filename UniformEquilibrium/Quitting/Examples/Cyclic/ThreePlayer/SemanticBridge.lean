@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import GameTheory.Math.Probability.FiniteUniform
 import UniformEquilibrium.Quitting.Examples.Cyclic.ThreePlayer.FiniteHorizon
 import UniformEquilibrium.Quitting.Examples.Cyclic.ThreePlayer.Minimality
 import UniformEquilibrium.Architectures.PublicResponse.SplitDomainSemanticCredibilityCharacterization
@@ -120,7 +121,7 @@ theorem architectureQuitProb_eq_standardQuitProb :
   fin_cases c <;> fin_cases who <;>
     simp [architectureQuitProb, play,
       GameTheory.CyclicThreePlayerQuitting.Minimality.ExactCyclicPacket.standardQuitProb,
-      PMF.uniformOfFintype_apply]
+      GameTheory.Math.Probability.uniformLaw_apply]
 
 /-- The architecture's three live promises are exactly the normalized
 promise word used by `GameTheory.CyclicThreePlayerQuitting.Minimality.standardPacket`. -/

@@ -225,8 +225,8 @@ theorem exists_exactRoot_strictSingletonInterior_of_not_weakPeeling
       · exact (hquitContinuous player).continuousAt.sub
           (hcontinueContinuous player).continuousAt
       · exact (hemptyContinuous player).continuousAt
-      · rw [hemptyZero player]
-        norm_num
+      · change emptyMass player 0 ≠ 0
+        exact (hemptyZero player).trans_ne one_ne_zero
     · simp only [test, hplayer, ite_false]
       exact ((hcontinueContinuous player).add
         ((hemptyContinuous player).mul continuous_const)).sub

@@ -88,6 +88,32 @@ theorem of_not_standardQMatrixSide
   · exact hclass
   · exact False.elim (hnot hstandard)
 
+private theorem mix_le_of_gap {p low high base bound ε : ℝ}
+    (hp : 0 ≤ p) (hlow : low ≤ base) (hgap : high - low ≤ 2 * bound)
+    (herror : 2 * bound * p ≤ ε) : (1 - p) * low + p * high ≤ base + ε := by
+  calc
+    (1 - p) * low + p * high = low + p * (high - low) := by ring
+    _ ≤ base + p * (2 * bound) := add_le_add hlow (mul_le_mul_of_nonneg_left hgap hp)
+    _ ≤ base + ε := by
+      have hpError : p * (2 * bound) ≤ ε := by
+        rwa [mul_comm]
+      exact add_le_add (le_refl base) hpError
+
+private theorem soloColumn_mixture_le
+    (reward : {S : Finset (Fin 3) // S.Nonempty} → Payoff (Fin 3))
+    (owner who : Fin 3) {p ε : ℝ} (hp : 0 ≤ p)
+    (hbase : quittingSoloReward reward who who ≤ quittingSoloReward reward owner who)
+    (herror : 2 * quittingRewardBound reward * p ≤ ε) :
+    (1 - p) * quittingSoloReward reward who who +
+        p * quittingSingletonCollisionReward reward owner who ≤
+      quittingSoloReward reward owner who + ε := by
+  have hcol : quittingSingletonCollisionReward reward owner who ≤ quittingRewardBound reward :=
+    (abs_le.mp (abs_reward_le_quittingRewardBound reward ⟨{owner, who}, by simp⟩ who)).2
+  have hsoloLower : -quittingRewardBound reward ≤ quittingSoloReward reward who who :=
+    (abs_le.mp (abs_reward_le_quittingRewardBound reward
+      (quittingSingletonTerminal who) who)).1
+  exact mix_le_of_gap hp hbase (by linarith only [hcol, hsoloLower]) herror
+
 /-- A normalized solo column with weak inactive-player comparisons supplies
 stationary terminal approximate equilibria, including equality cases. -/
 theorem of_normalizedSoloColumn
@@ -136,17 +162,8 @@ theorem of_normalizedSoloColumn
           reward (quittingSingletonTerminal owner) who
         rw [hsolo who]
         exact hcross who hwho
-      have hcol : quittingSingletonCollisionReward reward owner who ≤ M :=
-        (abs_le.mp (abs_reward_le_quittingRewardBound reward ⟨{owner, who}, by simp⟩ who)).2
-      have hsoloLower : -M ≤ quittingSoloReward reward who who := by
-        simpa [quittingSoloReward, quittingSingletonTerminal] using
-          (abs_le.mp (abs_reward_le_quittingRewardBound reward
-            (quittingSingletonTerminal who) who)).1
-      have hproduct := mul_le_mul_of_nonneg_left
-        (show quittingSingletonCollisionReward reward owner who -
-          quittingSoloReward reward who who ≤ 2 * M by linarith) hp.le
       simp only [hazard, quittingHazardCoin_false_toReal, quittingHazardCoin_true_toReal]
-      nlinarith
+      exact soloColumn_mixture_le reward owner who hp.le hbase herror.le
     · exact le_add_of_nonneg_right hε.le
 
 /-- The normalized complementary branch, including simplex vertices.

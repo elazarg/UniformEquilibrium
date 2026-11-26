@@ -132,14 +132,14 @@ theorem quittingSingleAnchor_continueReward_le
         rw [ite_eq_right hquit]
         simp]
   have hupper : quittingRootAbsorbingContribution reward opponentRoot anchor ≤
-      Math.Probability.expect (pmfPi opponentRoot) absorbingBound := by
+      _root_.Math.Probability.expect (pmfPi opponentRoot) absorbingBound := by
     unfold quittingRootAbsorbingContribution quittingRootExpectedPayoff
     exact Math.ProbabilityMassFunction.expect_mono_on_support
       (pmfPi opponentRoot) _ _ hpoint
-  have hexpect : Math.Probability.expect (pmfPi opponentRoot) absorbingBound =
+  have hexpect : _root_.Math.Probability.expect (pmfPi opponentRoot) absorbingBound =
       bound * quittingRootAbsorptionMass opponentRoot := by
     unfold absorbingBound
-    rw [Math.Probability.expect_const_mul,
+    rw [_root_.Math.Probability.expect_const_mul,
       expect_quittingNonemptyIndicator_eq_absorptionMass]
   rw [hexpect] at hupper
   simpa [quittingStationaryFixedOpponentsContinueReward,
@@ -188,11 +188,11 @@ theorem quittingSingleAnchorQuitValue_eq_one_of_membership
     quittingStationaryFixedOpponentsQuitValue quittingFixedOpponentsQuitValue
     quittingRootAbsorbingContribution quittingRootExpectedPayoff
   calc
-    Math.Probability.expect
+    _root_.Math.Probability.expect
         (pmfPi (Function.update (quittingSingleAnchorRoot anchor point)
           anchor (PMF.pure true)))
         (fun action => quittingRootPayoff reward (0 : Payoff ι) action anchor) =
-      Math.Probability.expect
+      _root_.Math.Probability.expect
         (pmfPi (Function.update (quittingSingleAnchorRoot anchor point)
           anchor (PMF.pure true))) (fun _action => (1 : ℝ)) := by
       apply Math.ProbabilityMassFunction.expect_congr_on_support
@@ -208,7 +208,7 @@ theorem quittingSingleAnchorQuitValue_eq_one_of_membership
           reward ⟨quittingQuitters action, hquit⟩ anchor by
         simp [quittingRootPayoff, hquit]]
       rw [hmembership ⟨quittingQuitters action, hquit⟩, ite_eq_left hmem]
-    _ = 1 := Math.Probability.expect_const _ _
+    _ = 1 := _root_.Math.Probability.expect_const _ _
 
 /-- Literal anchor membership implies the full singleton-anchor dominance
 screen, independently of the complementary induced Nash point. -/

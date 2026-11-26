@@ -646,7 +646,7 @@ theorem finiteAveragePayoff_devPrime_eq
   rw [G.histDist_devPrime_eq_map_normalizeHist_histDist_dev Legal hLegal ρ who dev s₀
     hρinv hρleg T]
   congr 1
-  rw [Math.Probability.expect_map]
+  rw [_root_.Math.Probability.expect_map]
   apply Math.ProbabilityMassFunction.expect_congr_on_support
   intro h _
   exact G.totalPayoff_normalizedGame_normalizeHist_eq Legal hLegal whoPlayer h

@@ -70,7 +70,7 @@ theorem weakSinkReward_acyclic :
           cases target
           all_goals norm_num [QuittingAugmentedSoloPreemptionEdge,
             quittingSoloReward, weakSinkReward, Finset.ext_iff] at hedge
-          all_goals norm_num
+          norm_num
   | some source =>
       cases target with
       | none =>
@@ -81,7 +81,7 @@ theorem weakSinkReward_acyclic :
           cases source <;> cases target
           all_goals norm_num [QuittingAugmentedSoloPreemptionEdge,
             quittingSoloReward, weakSinkReward, Finset.ext_iff] at hedge
-          all_goals norm_num
+          norm_num
 
 /-- At every positive owner rate, quitting immediately gives the outsider a
 strict gain.  Thus the factor `q` cannot be removed from the quantitative
@@ -149,7 +149,7 @@ theorem strictSinkReward_acyclic :
           cases target
           all_goals norm_num [QuittingAugmentedSoloPreemptionEdge,
             quittingSoloReward, strictSinkReward, Finset.ext_iff] at hedge
-          all_goals norm_num
+          norm_num
   | some source =>
       cases target with
       | none =>
@@ -160,7 +160,7 @@ theorem strictSinkReward_acyclic :
           cases source <;> cases target
           all_goals norm_num [QuittingAugmentedSoloPreemptionEdge,
             quittingSoloReward, strictSinkReward, Finset.ext_iff] at hedge
-          all_goals norm_num
+          norm_num
 
 /-- The displayed rational rate `1/6` is an exact terminal Nash profile. -/
 theorem strictSinkReward_oneSixth_exact :

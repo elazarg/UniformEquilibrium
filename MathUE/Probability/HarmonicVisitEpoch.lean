@@ -592,41 +592,49 @@ private theorem ownerAccount_100 : ownerAccount 100 =
   rw [show 100 = 80 + 20 by omega, ownerAccount_add, ownerAccount_80]
   norm_num [advanceOwnerAccount, ownerAccountStep]
 
-private theorem ownerAccount_123_variation_gt_one :
-    1 < (ownerAccount 123).variation := by
-  rw [show 123 = 100 + 23 by omega, ownerAccount_add, ownerAccount_100]
-  norm_num [advanceOwnerAccount, ownerAccountStep]
+private theorem finiteExpectedStateOwnedMarkovVariation_eq_ownerAccount (horizon : ℕ) :
+    finiteExpectedStateOwnedMarkovVariation .owner kernel value .owner horizon =
+      (ownerAccount horizon).variation := by
+  rw [finiteExpectedStateOwnedMarkovVariation_eq_sum_iter]
+  simp_rw [iter_toReal_eq_stateMass, ownerConditionalVariation_eq]
+  exact (ownerAccount_variation horizon).symm
 
 /-- By transition 123 the finite owner variation has already crossed one. -/
 theorem one_lt_finiteExpectedStateOwnedMarkovVariation_123 :
     1 < finiteExpectedStateOwnedMarkovVariation
       .owner kernel value .owner 123 := by
-  rw [finiteExpectedStateOwnedMarkovVariation_eq_sum_iter]
-  simp_rw [iter_toReal_eq_stateMass, ownerConditionalVariation_eq]
-  rw [← ownerAccount_variation]
-  exact ownerAccount_123_variation_gt_one
+  rw [finiteExpectedStateOwnedMarkovVariation_eq_ownerAccount]
+  rw [show 123 = 100 + 23 by omega, ownerAccount_add, ownerAccount_100]
+  norm_num [advanceOwnerAccount, ownerAccountStep]
+
+private theorem not_visitEpochPrinciple_of_ownerVariation_gt_one (horizon : ℕ)
+    (hvariation :
+      1 < finiteExpectedStateOwnedMarkovVariation .owner kernel value .owner horizon) :
+    ¬ HomogeneousBackwardHarmonicVisitEpochPrinciple State := by
+  intro principle
+  have visitEpoch := principle .owner kernel value
+    value_isUnitIntervalBackwardMarkovHarmonic
+  let slack :=
+    (finiteExpectedStateOwnedMarkovVariation .owner kernel value .owner horizon - 1) / 2
+  have hslack : 0 < slack := by
+    exact div_pos (sub_pos.mpr hvariation) (by norm_num)
+  obtain ⟨visitHorizon, hvisit⟩ :=
+    visitEpoch State.owner horizon slack hslack
+  have hcharge := finiteExpectedMarkovReturnVisitCharge_le_one
+    State.owner kernel State.owner visitHorizon
+  dsimp only [slack] at hvisit
+  generalize finiteExpectedStateOwnedMarkovVariation .owner kernel value .owner horizon =
+    variation at hvariation hvisit
+  linarith only [hvariation, hvisit, hcharge]
 
 /-- The proposed aggregate visit-epoch principle is false for a finite
 homogeneous seven-state chain. -/
 theorem not_homogeneousBackwardHarmonicVisitEpochPrinciple :
     ¬ HomogeneousBackwardHarmonicVisitEpochPrinciple State := by
-  intro principle
-  have visitEpoch := principle .owner kernel value
-    value_isUnitIntervalBackwardMarkovHarmonic
-  let ownedVariation := finiteExpectedStateOwnedMarkovVariation
-    State.owner kernel value State.owner 123
-  have hvariation : 1 < ownedVariation :=
-    one_lt_finiteExpectedStateOwnedMarkovVariation_123
-  let slack := (ownedVariation - 1) / 2
-  have hslack : 0 < slack := by
-    dsimp only [slack]
-    linarith
-  obtain ⟨visitHorizon, hvisit⟩ :=
-    visitEpoch State.owner 123 slack hslack
-  have hcharge := finiteExpectedMarkovReturnVisitCharge_le_one
-    State.owner kernel State.owner visitHorizon
-  dsimp only [ownedVariation, slack] at hvariation hvisit ⊢
-  linarith
+  apply not_visitEpochPrinciple_of_ownerVariation_gt_one 123
+  rw [finiteExpectedStateOwnedMarkovVariation_eq_ownerAccount]
+  rw [show 123 = 100 + 23 by omega, ownerAccount_add, ownerAccount_100]
+  norm_num [advanceOwnerAccount, ownerAccountStep]
 
 end SevenStateVisitEpochCounterexample
 
