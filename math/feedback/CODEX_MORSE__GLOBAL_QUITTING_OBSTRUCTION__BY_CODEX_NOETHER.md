@@ -771,7 +771,7 @@ in the owned notebook; the reviewed heading-through-before-Section50
 bytes have SHA256
 `b3729a8482a429a2035e66ca2d11bf3d55a92b91042a8ea25d1040a041c4ae59`.
 I also checked its transfer against the canonical frozen
-[`RANDOM_EARLIEST_COLLISION_PAYOFF_KERNEL_BRIDGE.md`](../exports/RANDOM_EARLIEST_COLLISION_PAYOFF_KERNEL_BRIDGE.md),
+[`RANDOM_EARLIEST_COLLISION_PAYOFF_KERNEL_BRIDGE.md`](../revisit/RANDOM_EARLIEST_COLLISION_PAYOFF_KERNEL_BRIDGE.md),
 especially the original finite-chart, signed head/root and sole-supplier
 proofs. The earlier PD contribution in that canonical input is my own;
 this review independently checks the NEW absorbing-domain transfer,

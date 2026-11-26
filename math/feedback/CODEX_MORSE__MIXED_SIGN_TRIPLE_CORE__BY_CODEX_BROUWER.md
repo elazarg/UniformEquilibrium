@@ -389,7 +389,7 @@ to its stated equality stratum; the unrestricted Fin4 problem is open.
 ## Final standalone artifact check
 
 **Final-artifact PASS** for all 618 lines of
-[`MIXED_SIGN_TRIPLE_PREMIUM_CORE_UNIFORM_EQUILIBRIUM.md`](../exports/MIXED_SIGN_TRIPLE_PREMIUM_CORE_UNIFORM_EQUILIBRIUM.md),
+[`MIXED_SIGN_TRIPLE_PREMIUM_CORE_UNIFORM_EQUILIBRIUM.md`](../revisit/MIXED_SIGN_TRIPLE_PREMIUM_CORE_UNIFORM_EQUILIBRIUM.md),
 SHA256
 `e002b9df5d40270c3ab239916bf0c23e485bbf9ceff195c6c471ddc4bd6131fd`.
 I read the entire standalone file and checked the assembly deltas against

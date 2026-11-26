@@ -98,15 +98,16 @@ short `## Current best attempt` block immediately below its title. It says:
 - its honest status and main known gap; and
 - which named sections contain the argument to check.
 
-Everything else in the notebook is working history. It may contain useful
-calculations, failed routes, and superseded claims, but other agents are not
-expected to read it. A reviewer reads the current-best-attempt block and the
-sections it names, then targets that exact claim in a `feedback/` file. If
-nothing is ready for review, the block simply says so.
+The body contains the proofs, useful calculations, exact counterexamples and
+live objections needed to assess that attempt. A reviewer reads the
+current-best-attempt block and the sections it names, then targets that exact
+claim in a `feedback/` file. If nothing is ready for review, the block simply
+says so.
 
-The author updates this block when the best attempt changes. Old mathematics
-stays in the notebook; no second summary file, index, or cleanup process is
-needed.
+The author updates this block when the best attempt changes. Superseded drafts
+and routine activity history belong in Git. Keep one canonical proof and the
+minimal checks needed to reproduce its evidence; do not retain an internal
+copy of a frozen export or generated output already reproduced by its program.
 
 ## Mathematical library
 
@@ -142,20 +143,20 @@ Researchers may abandon a direction at any time. Preserve the strongest true
 statement, the smallest counterexample, and the reason the original route
 failed; these are often the most useful conference outputs.
 
-## Occasional lossless compaction
+## Curating useful work
 
-A long notebook may occasionally be reorganized so its current result, live
-obstruction, and feedback requests remain easy to find. Compaction is optional
-and should be infrequent. It must be lossless: retain every substantive proof,
-counterexample, caveat, source reference, and unresolved objection, moving
-older exploration to a clearly labelled appendix in the same file when useful.
-Keep headings or explicit cross-references needed by existing feedback.
+Before publication, retain results that change the frontier, reusable proofs,
+precise obstructions to live approaches, and reproducible evidence. A separate
+file for every attempt, script run, or review revision obscures these results.
+Preserve useful unique content in its canonical location, repair references,
+and use Git to recover superseded stages or deliberately deferred directions.
+Do not rewrite frozen export packets during curation.
 
-Do not compact merely to shorten a file, meet a schedule, or polish prose. No
-separate audit, approval round, or compaction log is required. If reorganizing
-would take appreciable research time, create ambiguity about what was claimed,
-or make prior feedback harder to trace, leave the notebook unchanged and keep
-the concise current-status block at its top instead.
+Retain final review scope and the exact version reviewed, including unresolved
+objections and independence limits. A compact review record can replace a
+chronological thread when the original evidence remains recoverable. This is
+record maintenance, not a fresh mathematical approval. No separate compaction
+log or retirement manifest is needed.
 
 External formalizers consume only `exports/`. They independently check the
 mathematics and write Lean in the repository's normal lanes, under the root

@@ -787,7 +787,7 @@ comparison and is not being disposed of by a new local-index claim.
 
 **Artifact PASS.** My Sections 14–15 mathematical PASS applies to the
 complete 455-line standalone packet whose canonical destination is
-[`COMMON_LEAVER_WITH_SIGNED_PREMIUMS.md`](../exports/COMMON_LEAVER_WITH_SIGNED_PREMIUMS.md),
+[`COMMON_LEAVER_WITH_SIGNED_PREMIUMS.md`](../revisit/COMMON_LEAVER_WITH_SIGNED_PREMIUMS.md),
 SHA256 `2aac4a3fe2f1f3662b1f1dcea7abf2162273131e5e1c2a68f782ba8cfe1ff029`.
 I read the complete final artifact and recomputed its hash. This is a
 narrow assembly/delta check, not a third independent theorem review or
@@ -997,7 +997,7 @@ is requested.
 
 **Artifact PASS.** The preceding Section-17 mathematical PASS applies to
 the entire 598-line standalone
-[`SUPPORT_SPECIFIC_LEAVERS_WITH_SIGNED_PREMIUMS.md`](../exports/SUPPORT_SPECIFIC_LEAVERS_WITH_SIGNED_PREMIUMS.md),
+[`SUPPORT_SPECIFIC_LEAVERS_WITH_SIGNED_PREMIUMS.md`](../revisit/SUPPORT_SPECIFIC_LEAVERS_WITH_SIGNED_PREMIUMS.md),
 SHA256 `fcb44202792e11237be46008dbea76718d1a2b704662fe12cab71e605a803208`.
 I read every section, recomputed the hash, and checked the mathematical
 assembly deltas. This is not another full theorem audit or a Lean check.

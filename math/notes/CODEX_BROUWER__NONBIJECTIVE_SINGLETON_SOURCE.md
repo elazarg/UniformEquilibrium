@@ -14,7 +14,7 @@ all minimum debts and original Never masses are positive, and a random
 nonsure first collision has a paid root-to-later-finite PAYOFF-kernel
 bridge. No row Nash, minimum tail or attained tail deadline is assumed.
 The earlier canonical
-[random-collision](../exports/RANDOM_EARLIEST_COLLISION_PAYOFF_KERNEL_BRIDGE.md)
+[random-collision](../revisit/RANDOM_EARLIEST_COLLISION_PAYOFF_KERNEL_BRIDGE.md)
 and [four-finite](../exports/FOUR_FINITE_CLOCKS_AT_ORIGINAL_MINIMA.md)
 source results remain distinct; their tables are not silently identified.
 
@@ -1198,7 +1198,7 @@ in `UniformEquilibrium/Quitting/Classification/Existence/SignedPairCoreRewardClo
 If K is a pair, both joining gaps are nonnegative by condition1, so their
 product is nonnegative and the pair branch of that same declaration applies.
 If |K|=3, then K=C, and the nonnegative-own-level, nine-joining-gap theorem in
-[JOINING_ATTRACTIVE_TRIPLE_CORE_UNIFORM_EQUILIBRIUM.md](../exports/JOINING_ATTRACTIVE_TRIPLE_CORE_UNIFORM_EQUILIBRIUM.md)
+[JOINING_ATTRACTIVE_TRIPLE_CORE_UNIFORM_EQUILIBRIUM.md](../revisit/JOINING_ATTRACTIVE_TRIPLE_CORE_UNIFORM_EQUILIBRIUM.md)
 applies. Each case contradicts the produced normalized no-UE field.
 
 Thus the ENTIRE ST1 class is covered, including signed-own tables and every
@@ -14962,7 +14962,7 @@ matched/four-clock and passive-inverse classes already named and
 inspected in MP6/FE3, not arbitrary periodic strategies. The grand
 trap comparisons refer to the FULL family of raw support/weight
 conditions in
-[WEIGHTED_FLOOR_RETURN_UNIFORM_EQUILIBRIUM.md](../exports/WEIGHTED_FLOOR_RETURN_UNIFORM_EQUILIBRIUM.md),
+[WEIGHTED_FLOOR_RETURN_UNIFORM_EQUILIBRIUM.md](../revisit/WEIGHTED_FLOOR_RETURN_UNIFORM_EQUILIBRIUM.md),
 [MIXED_PREMIUM_TRAPS_UNIFORM_EQUILIBRIUM.md](../exports/MIXED_PREMIUM_TRAPS_UNIFORM_EQUILIBRIUM.md),
 [MIXED_SUPPORT_UPPER_OR_CHARGE_UNIFORM_EQUILIBRIUM.md](../exports/MIXED_SUPPORT_UPPER_OR_CHARGE_UNIFORM_EQUILIBRIUM.md),
 and the protected-leaver packets. GS3 excludes every accepted

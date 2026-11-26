@@ -4,10 +4,10 @@ Author and maintainer: `CODEX_ROOT`
 
 ## Current completion status
 
-The accepted ordinary-mathematics completion atlas now supersedes the partial
-downstream graph described in parts of this notebook.  It retains one source
-chronology and reduces every hypothetical Fin4 counterexample to exactly two
-terminal stream components:
+The source-preserving completion atlas supersedes the partial downstream
+graph described in parts of this notebook. It retains one source chronology
+and reduces every hypothetical Fin4 counterexample to two terminal stream
+obligation types:
 
 ```text
 uniformEscape
@@ -16,10 +16,15 @@ minimumReturn.
 
 The complete packet is
 [`FIN4_SOURCE_PRESERVING_COMPLETION_ATLAS.md`](../formalized/FIN4_SOURCE_PRESERVING_COMPLETION_ATLAS.md).
-Its local producer, singleton-compression, collision-screening, forced-pair,
-and cluster-tail ingredients are checked.  The common stream packaging,
-finite stabilization, scalar split, and completion-graph theorem await Lean
-formalization.
+The common stream packaging, finite stabilization, scalar split and declared
+completion graph now have exact Research declarations, including
+`uniformPayoff_or_sourcePreservingCompletionOutcome` and
+`finFourCompletion_of_capstones`
+(`Research/Quitting/FinFourProducerAtlas/SourcePreservingCompletionAtlas.lean`).
+The latter is conditional on two open universal consumers; neither mode has
+been solved. These declarations were inspected statically, not rebuilt here.
+The consolidated [coverage map](CODEX_ROOT__FIN4_COVERAGE_MAP.md) separates
+this exhaustive source reduction from overlapping solved reward classes.
 
 Normalized-inert points, three-role laws, one-time support handoffs, strict
 rays, response squares, and related barriers below should now be read as
@@ -85,9 +90,11 @@ consumer.  Ordinary mathematics contracts every source leaf to one
 source-attached strong concentrated-singleton obligation.  The minimum-law
 singleton route, local packetization, the full self-tail fallback chain, and
 the stronger generic effective-support-cardinality-at-most-four monodromy
-impossibility are checked.  The shorter reviewed pure-collision route removes
-the tail split entirely; only its local no-tail dispatch adapter remains to be
-checked.
+impossibility are checked. The shorter pure-collision route also has its
+no-tail dispatch adapter:
+`FinFourMinimumAtomProducer.nonempty_strongConcentratedPacketConsumption_of_nonsingleton`
+(`Research/Quitting/FinFourProducerAtlas/PureNonsingletonCollisionScreening.lean`).
+It removes that tail split, without producing a complete UE consumer.
 
 The remaining singleton node also has a reviewed source-preserving normal
 form.  Pureify its marked singleton and use the hard residual's fixed full-gap
@@ -785,8 +792,11 @@ consumer.
 normalization from the six source-distinct leaves to three weak obligation
 classes: concentrated singleton, quantitative tail escape, and monodromy.
 The checked monodromy impossibility and pure-collision screening reduce all
-three mathematical classes to the concentrated-singleton node; the latter
-currently awaits only its shorter no-tail Lean adapter.
+three mathematical classes to the concentrated-singleton node. The shorter
+no-tail adapter is also declared by
+`FinFourMinimumAtomProducer.nonempty_strongConcentratedPacketConsumption_of_nonsingleton`
+(`Research/Quitting/FinFourProducerAtlas/PureNonsingletonCollisionScreening.lean`).
+The remaining missing object is a complete semantic consumer.
 
 ### Common monodromy core
 

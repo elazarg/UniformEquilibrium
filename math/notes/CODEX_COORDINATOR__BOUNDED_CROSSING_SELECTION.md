@@ -1,0 +1,2831 @@
+# Actual continuation geometry and global source reductions
+
+Owner: CODEX_COORDINATOR. Ordinary mathematics, not Lean checked.
+This is the canonical internal record for actual continuation geometry,
+Nash-word recovery and global least-Never source reductions. The
+[selected mixed-core theorem](../exports/PASSIVE_BOUND_TRIPLE_SELECTION_UNIFORM_EQUILIBRIUM.md)
+contains the closed-passive selected-root consumer. The arguments below retain
+its useful extensions without duplicating that proof or claiming another
+independent reward-class exclusion for the recovery example.
+
+Section21 produces an actual infinite
+full Nash profile with original joint Never strictly between zero and one,
+using pair data and arbitrary finite higher rewards. Section22 adds explicit
+conditions on the entire coalition table and forces Never to zero, producing
+absorbing approximate equilibria. The latter closes both source alternatives
+on an open raw region containing a game with a positive stationary regret
+floor and no sure-first root against any actual continuation. Section23 removes
+the need for any common positive coalitionwise ledger and for a grand-reward
+coefficient bound. Its same target and profiles cover an unbounded lower-grand
+orthant. Proper-coalition geometry remains restrictive; arbitrary Fin4 is open.
+
+Section24 targets the entire positive-collision class and records a global
+obstruction to one proposed reduction: absence of pure-grand Nash does not
+permit eliminating grand-coalition play, even approximately. Its example is
+already solved by a mixed sure-first root. The class itself remains open;
+this obstruction is not counted as additional UE coverage.
+
+The [complete complex-spectrum ray](../exports/COMPLETE_COMPLEX_SPECTRUM_RAY_UNIFORM_EQUILIBRIUM.md)
+is now covered for every delta>=0, using a finite periodic cover through7/5,
+a connected stationary curve through12, and an explicit unbounded stationary
+tail. This settles that entire specified family and a uniform raw neighborhood,
+not the arbitrary positive-collision class. Its
+[global review](../feedback/COMPLETE_COMPLEX_SPECTRUM_RAY_UNIFORM_EQUILIBRIUM__BY_GLOBAL_REVIEW.md)
+and [adversarial review](../feedback/COMPLETE_COMPLEX_SPECTRUM_RAY_UNIFORM_EQUILIBRIUM__BY_ADVERSARIAL_REVIEW.md)
+cover the exact frozen artifact, full deviations, and prior-coverage comparison.
+
+For the numerical core, write a=-K. The selected theorem covers all real a
+when p=0, and a<=0 or a>=1/2 when p>=0. The opposed-pair strip 0<a<1/2,p>0 permits pair12 with positive ambient
+index. Sections6–9 show that exact actual realizability and full zero debt do
+not supply universal Nash-prefix return. The binding example is now
+classified over ALL finite exact calendars: its nonsolo component has a
+positive minimum Never product and an exact barrier through AllNever.
+Section10 nevertheless approximates every compact minimizing source on a
+finite calendar while preserving its payoff, Never response and original
+Never masses EXACTLY. Only full caps incur error. The exact-profile
+classification does not apply to these positive-debt approximants;
+global extremality remains a separate constraint. Exact cap compression
+is unavailable, even for strictly negative marked sources.
+Section11 gives an exact joint head-and-tail descent in C with a finite
+derivative test, including inward-moving quiet ties and the complete finite,
+countable and compact one-owner clock classification. Its hypotheses are not
+produced at every source. Section12 retains the same global Never objective
+in whole-law comparisons and at inherited continuation fibres. It classifies
+proper two-zero prefixes and classifies the complete linear clock relaxation
+by a common matrix-pencil direction. Failure has a finite deadline certificate
+and forces the visible head to terminate finitely. An actual control shows
+why changing the tail escapes this local
+obstruction. These local comparisons close no new raw reward class or complete
+Fin4 source branch. Section13 proves
+that positive root inertia excludes EVERY nonempty proper compact zero-debt head;
+a universal descent there must revise existing laws or construct an
+absorbing head directly. An actual infinite-tail construction gives local
+whole-law descent throughout the existing symmetric infinite-tail family;
+its scalar minima escape by asymmetric clocks. A separate exact control
+shows that positive inert sources can nevertheless be locally isolated
+among all countable-law equilibria, with a local debt floor. The global
+minimum hypothesis remains essential.
+
+## 1. Closed actual domains replace arbitrary virtual boxes
+
+Players are I={0,1,2,3}. Native own and live/Never rewards are zero. Define
+Gamma_ij=Z_i({j}) for ALL i,j in I; its diagonal is zero. Each owner
+independently chooses its first Quit time among natural dates and Never;
+one deviator can replace the complete law. Retain prescribed terminal payoff U, full response cap B, pure
+Never response payoff e, and ORIGINAL marginal Never masses N. For a root q,
+let h=product(1-q_i), H_i=product_(j!=i)(1-q_j), Q_i its forced-Quit offer,
+P_i its nonempty-opponent passive payoff, and E_i=q_i Q_i+(1-q_i)P_i. Then
+
+    U'=E+hU, B'_i=max(Q_i,P_i+H_iB_i),
+    e'_i=P_i+H_ie_i, N'_i=(1-q_i)N_i.                    (1)
+
+Every actual profile satisfies B>=e and d_i=B_i-U_i>=N_i(B_i-e_i).
+Virtual seeds(U,B,e,N)=(z,z,z,1) satisfy the same inequalities, preserved by
+EVERY prefix. The exact nonnegative residual decomposition is
+
+ d'_i-N'_i(B'_i-e'_i)=q_i(B'_i-Q_i)
+ +(1-q_i)(1-N_i)(B'_i-P_i-H_iB_i)
+ +(1-q_i)H_i[d_i-N_i(B_i-e_i)].                         (2)
+
+Thus zero debt at positive survival forces U=B=e. This assertion does not
+bound arbitrary positive-debt intermediate U by passive rewards.
+
+Let K be a compact set of(U,e) pairs containing all actual annotations and
+preserved by every prefix map(1). Call a Nash root good if it has a sure
+quitter or a nonpositive output coordinate. If every v with(v,v) in K and
+min v<=0 has a good root, then the absorbing native debt infimum A_Z is0.
+For nonnegative original own offsets this gives a fixed UE payoff through
+the complete terminal consumer in the linked theorem.
+
+Here is the exact closed-domain change to that proof. At a local stall
+v>=0 with zero set S, a signed separator w Gamma_SS>>0 needs a nearby
+marked seed with positive separator value. Choose j in S and set
+
+    z=(1-t)v+t Gamma[:,j], t>0 small.                   (3)
+
+Then z_j=0, w z_S=t w Gamma_SS[:,j]>0, and positive outsiders stay positive.
+A solo-j prefix sends the pair(v,v) EXACTLY to(z,z), so the seed lies in K
+without any interior or neighborhood assumption. Initialize its cap virtually
+as B=z; this is not claimed to be the actual cap of the solo prefix.
+Every budgeted zero-debt minimum has U=e by(2) and hence remains on K's
+diagonal. Compact closure preserves K. Smaller zero sets use the same seed
+construction. The remainder of the selected good-root induction, including
+length-independent cap nonexpansiveness and the ORIGINAL Never-product
+minimum, is unchanged. Strictly negative seeds are unnecessary; z_j=0 suffices.
+
+One choice is a full-reward payoff box times the CLOSED passive box
+[L_i,R_i], where L_i,R_i are the minimum/maximum of0 and all Z_i(A) with
+i notin A. Another is the convex hull of deterministic calendar(U,e) vectors,
+a correlated outer relaxation. The next section supplies the exact independent
+annotation domain instead of that relaxation.
+
+## 2. Exact independent annotations have a 32-date representation
+
+For Fin4 let K_ind be the image of all actual independent profiles under(U,e),
+WITHOUT B. Every such vector is realized on at most32 finite dates plus Never.
+
+Fix opponents' laws and vary owner i's law. The eight coordinates(U,e) are
+affine in it, but e_i is constant because forcing i Never removes its law.
+Only seven coordinates vary. Their conditional vectors at each finite deadline
+or Never are bounded. A countable average belongs to their convex hull, not
+merely its closure: if the average is on a supporting face of the closed
+convex hull, every positive-weight vector lies on that face, reducing affine
+dimension; otherwise the relative interiors of the convex hull and its closure
+coincide. Induction on dimension proves the assertion. Caratheodory therefore
+replaces owner i's law by at most8 old support points, preserving ALL(U,e).
+
+Apply this successively to all four owners. Every replacement preserves the
+same eight annotations, including those depending on earlier owners. The
+union of the four supports contains at most32 finite dates. Relabel them in
+increasing order into{1,...,32}, retaining ties and Never. All prescribed and
+counterfactual first-coalition outcomes, hence(U,e), stay unchanged.
+
+Conversely every product law on{1,...,32,Never} is actual. Its probability
+space is a product of four33-point simplexes, and its(U,e) map is polynomial.
+Its compact image therefore equals K_ind. Prefixing gives another actual
+profile, compressible again, so K_ind satisfies Section1 exactly; caps are not preserved.
+For an exact warning, set all native rewards0 except Z1(01)=1. AllNever has
+U=e=B=0. Having0 quit surely at date1 while all others Never also gives U=e=0,
+but B1=1 by joining that date. Equal(U,e) does not determine Nash status.
+
+## 3. Finite actual-data crossing tests
+
+A counterexample with nonnegative own levels must admit v with(v,v) in K_ind,
+min v<0, and NO good Nash root. Otherwise Section1 proves A_Z=0. This is a
+finite real-algebraic existential/universal condition once K_ind is represented
+by Section2; it is stronger than assuming one selected bad root exists.
+
+A simpler necessary test asks for ONE proper fully positive crossing at such
+an actual diagonal v. Empty and singleton active supports cannot cross, so
+there are11 supports S of sizes2,3,4. Set q_j=0 off S,0<q_i<1 on S, and impose
+
+    Q_i=P_i+H_i v_i>0                  for i in S,
+    P_j+H_j v_j>=Q_j, P_j+H_j v_j>0    for j outside S,
+    v_i=U_i=e_i for every i, min_i v_i<=0.              (4)
+
+Use probabilities p_i,t>=0 summing to1 over{1,...,32,Never}, and define
+S_i(t)=sum_(finite s>t or s=Never)p_i,s for FINITE t. Both sums below run
+only over t=1,...,32, excluding Never:
+
+ U_i=sum_t sum_(A nonempty) Z_i(A)
+                   product_(j in A)p_j,t product_(k notin A)S_k(t),
+ e_i=sum_t sum_(A nonempty,i notin A) Z_i(A)
+                   product_(j in A)p_j,t product_(k notin A,k!=i)S_k(t).
+
+Expanding the four choices of a nonpositive v_i gives at most44 systems in
+at most140 variables, of degree at most4. Infeasibility proves A_Z=0;
+feasibility is not a no-UE conclusion. No expanded generated payload is needed.
+The cheaper passive-box relaxation eliminates v: active owners require
+Q_i>0 and L_iH_i<=Q_i-P_i<=R_iH_i; quiet owners require
+P_j+R_jH_j>0 and P_j+R_jH_j>=Q_j. An anchor requires Q_i-P_i<=0 for an active
+owner, or P_j>0 and Q_j<=P_j for a quiet owner. Boundary inequalities are weak
+where the passive interval is closed. This relaxation has only four hazards.
+
+## 4. A bounded Nash-word consumer
+
+Keep the closed domain K of Section1. Suppose a fixed finite L has this
+property: every diagonal v in K with min v<=0 has a NONEMPTY word of1,...,L
+Nash prefixes, each Nash at its current continuation, whose final payoff has
+a nonpositive coordinate OR whose joint survival is0. Words are written in
+prefix order; physical dates have the reverse order. Then A_Z=0.
+
+The word correspondence is the finite DISJOINT UNION of lengths1,...,L.
+Each fixed-length Nash graph and its good endpoint condition are closed.
+An empty word is excluded; padding by zero roots is not assumed Nash.
+At the least original-Never source, every nontrivial good word would lower
+the same minimum or give zero absorbing debt. Thus all good words there
+are all-zero. Compactness then makes every nearby good word uniformly small,
+even if unrelated large bad roots remain. Zero words are Nash only at
+nonnegative inputs. Positive outsiders strictly Continue throughout such
+small words because L is fixed.
+
+In the local separator fiber, replace one selected root by one selected good
+word. Choose the root bound delta and c0 so
+(1-4delta)^L(1-c0)>1-eta. Every intermediate root is supported on the same
+zero set, preserves zero debt, and preserves the ORIGINAL separator inequality.
+A nontrivial small good word returns to the marked fiber with less survival.
+At a stall, the weighted inequality gives a proper smaller zero set. Apply
+induction there, using the same L and closed-domain seeds(3). Kernel words,
+compact endpoint extraction, and nonexpansive seed removal are unchanged.
+This is the complete modification to the linked one-root consumer. The
+length bound is essential to this compactness argument.
+
+## 5. A raw02-to-023 recovery branch
+
+The following produces an exact second prefix from certain positive outputs.
+Assume every player0 participant reward is nonpositive and define
+
+ d0=Z0(02)-Gamma02>0, d2=Z2(02)-Gamma20>0,
+ A0=Gamma03-Z0(03)>0,
+ D0=Z0(023)-Z0(03)-Z0(23)+Gamma03>A0,
+ A=Z2(23)-Gamma23>0, D=A-Z2(023)+Z2(03)>A.
+
+Require Z3(23)<Gamma32. Choose U>0 and put
+X=A/D, B=max(U/(U+d0),A0/D0), both in(0,1). Let J(x,b,z) be the product
+expectation of c_empty=0 and c_T=Z1(T)-Z1(T union{1}), for nonempty
+T subset{0,2,3}, under hazards(q0,q2,q3)=(x,b,z). Require J>=0 at all eight
+corners x in{0,X},b in{0,B},z in{0,1}.
+
+Every positive v with v0<=U and v2<A*d2/(D-A) then has a proper nonzero Nash
+root with nonpositive player0 output. Start at z=0 with
+x=v2/(d2+v2), b=v0/(d0+v0), making owners0,2 indifferent. Quiet1 prefers
+Continue by its comparison J+(1-x)(1-b)v1>=0. If quiet3 also Continues,
+this is already the desired root. Otherwise continue the active equations via
+
+ z*=v2/(v2+A),
+ x(z)=[v2(1-z)-Az]/[(d2+v2)(1-z)-Dz],
+ b(z)=[v0(1-z)+A0z]/[(d0+v0)(1-z)+D0z], 0<=z<=z*.
+
+The first denominator stays positive through z*: its endpoint numerator is
+A*d2-(D-A)v2>0. The derivative of x has negative numerator(D-A)v2-A*d2, so
+x decreases from a value below X to0. The ratio b lies between
+v0/(v0+d0) and A0/D0, hence in(0,B]. Multiaffine interpolation gives
+J+(1-x)(1-b)(1-z)v1>=0 along the entire branch.
+
+Player3's Quit-minus-Continue gap is continuous, positive at z=0 in the
+remaining case, and at z* equals b[Z3(23)-Gamma32]-(1-b)v3<0.
+An interior IVT zero makes owners0,2,3 indifferent, while1 Continues.
+All hazards are proper and q0>0, so its supported Quit value is nonpositive.
+No recovery branch or strategic root was assumed.
+
+## 6. The complete table and an actual two-date profile
+
+Native own and live/Never rewards are zero. For nonempty A subset{1,2,3}, use
+
+| A | Z0 | Z1 | Z2 | Z3 |
+|---|---:|---:|---:|---:|
+| 1 | 100 | 0 | -2 | -2 |
+| 2 | -3 | 1/2 | 0 | 1 |
+| 3 | 100 | -3 | -1 | 0 |
+| 12 | -3 | 1/4 | 1 | -6 |
+| 13 | 100 | -100 | -1 | 10 |
+| 23 | -3 | 9 | 3 | -100 |
+| 123 | -3 | 11 | 2 | 1 |
+
+Put gamma=(gamma1,gamma2,gamma3)=(-194/3599,13203/7198,6).
+For every coalition A containing0, set Z0(A)=0, and for i=1,2,3 set
+Zi(A)=-1 if i belongs to A, and Zi(A)=gamma_i otherwise. This specifies
+all sixty coordinates. Every gamma_i>-1. Row0 participant rewards are zero,
+and every row2 passive reward is at most13203/7198<2<10. The table belongs
+to the precise remaining fixed-core strip 0<a<1/2,p>0.
+
+Here date1 and date2 mean the FIRST and SECOND available decision periods
+(physical natural times0 and1). No earlier decision date is omitted.
+Use independent laws with date1 hazards
+
+    s=(0,1/5,0,1/3600),
+
+and, conditional on reaching date2, hazards t=(1/2,0,0,0), then Never.
+Equivalently player0 chooses date2 or Never equally, player1 chooses date1
+with probability1/5, player2 always Never, and player3 chooses date1 with
+probability1/3600. All random choices are independent.
+
+The date2 tail, initialized at AllNever, is exact native Nash and has
+
+    c=U=B=e=(0,-97/3599,13203/14396,3).
+
+Indeed each core player's immediate Quit offer is -1/2 while its Continue
+and Never payoff is gamma_i/2>-1/2; player0 is indifferent at zero. All later
+pure deadlines and Never give gamma_i/2 to a core player, so these are the
+full caps, not merely one-step bounds.
+
+At continuation c, the date1 pair13 prefix is exact Nash. Its active
+indifference equations are
+
+    c1=-97*(1/3600)/(1-1/3600)=-97/3599,
+    c3=12*(1/5)/(1-1/5)=3.
+
+Quiet0 has Quit0 and positive Continue901/45. Quiet2 has
+
+    Q2=3613/18000 < C2=1/3.
+
+The choice c2=13203/14396 makes C2=1/3 exactly. Exact full-cap prefixing and
+indifference therefore give actual
+
+    v=U=B=e=(901/45,-1/36,1/3,2),
+    N=(1/2,4/5,1,3599/3600), product N=3599/9000>0.       (1)
+
+In particular the continuation is on the actual independent diagonal and
+on the FULL zero-debt carrier. It is also strictly inside the passive box
+[-3,100] x [-3,9] x [-2,13203/7198] x [-6,6].
+
+### Complete uniqueness of the first Nash prefix
+
+For core players let g_i^core be Quit-minus-Continue with q0=0 and terminal
+continuation v. Because the rows involving0 have the prescribed constant
+passive/participant structure, their full gaps are exactly
+
+    g_i=(1-q0)g_i^core-(1+gamma_i)q0.                    (2)
+
+If q0=1, all core players strictly Continue; then player0 strictly Continues
+because v0>0. Hence q0<1 at every Nash root, and a core player with positive
+hazard must have g_i^core>=0.
+
+Suppose q1=0. Then g3^core=-101q2-2(1-q2)<0, so q3=0. Next
+ g2^core=-1/3<0, so q2=0. Player0 then strictly Continues, giving q0=0,
+after which player1 strictly Quits since -v1=1/36>0. This contradiction
+proves q1>0.
+
+The exact player1 core gap is
+
+    g1^core=(1-q3)(1-10q2)/36+q3(-97+99q2).             (3)
+
+It is strictly negative whenever 1/10<q2<97/99. Since q1>0, (2) excludes
+that interval. On the high branch q2>=97/99, player0's Continue value is at
+most100(1-q2)-3q2<=-91/99<0: conditional on player2 continuing, every
+payoff including v0 is at most100; conditional on its Quit, it is -3.
+Player0's Quit offer is0, so Nash would force q0=1, already impossible.
+Therefore q2<=1/10.
+
+On this low branch player0's exact Continue value is
+
+    C0=(1-q2)[100-(100-v0)(1-q1)(1-q3)]-3q2
+       >=(1-q2)v0-3q2 >=443/25>0.                     (4)
+
+Thus q0=0. As q2<1, its Continue action must be optimal, so
+
+    0>=g2^core=3q1+4(1-q1)q3-(1-q1)(1-q3)/3
+                >=3q1-(1-q1)/3.
+
+Hence q1<=1/10. At these q1 the affine-in-q2 player3 gap has endpoint bounds
+
+    q2=0: 12q1-2(1-q1)<=-3/5,
+    q2=1: -101(1-q1)+7q1<=-451/5.
+
+Both are strictly negative, so q3=0. If q2=0, player1 strictly Quits, contrary
+to q1<=1/10. Thus 0<q2<1, and its indifference equation gives q1=1/10.
+Player1 is now properly mixed, and (3) forces q2=1/10. Every pure, mixed
+and sure-owner pattern has been included. The UNIQUE Nash prefix is
+
+    q=(0,1/10,1/10,0).
+
+Direct substitution yields
+
+    u=F(q,v)=(12459/500,1/40,1/10,147/100)>>0.          (5)
+
+The inactive0 comparison is C0=12459/500>Q0=0; for inactive3 it is
+C3=147/100>Q3=-809/100. The joint survival is81/100.
+
+### Complete uniqueness of AllContinue after the crossing
+
+More generally let u>>0 with u0<=100. Equation (2) still holds, with the
+core gaps now evaluated at u. A sure0 again makes every core player strictly
+Continue, then makes0 strictly Continue; impossible. So q0<1.
+
+If q1=0, then g3^core=-101q2-u3(1-q2)<0, followed by g2^core=-u2<0.
+Thus any nonzero core support requires q1>0. But its gap is
+
+ g1^core=(1-q3)[-q2/4-u1(1-q2)]+q3(-97+99q2).
+
+The bracket is strictly negative, so q1>0 forces q2>=97/99. The row0 upper
+bound used above again gives C0<=-91/99<0, forcing q0=1, contradiction.
+Hence every core hazard is zero. Since u0>0, player0 strictly Continues too.
+AllContinue is therefore the unique Nash prefix, and it preserves u.
+
+Starting from (1), every nonempty finite Nash word first uses q just computed
+and then only AllContinue. Its output is (5), and its survival is81/100.
+No word of ANY finite length is good in the low-or-sure sense. This statement
+is about exact Nash prefixes, not approximate prefixes or arbitrary strategies.
+
+The table has an absorbing exact equilibrium: player0 quits at the first
+period and everyone else Never. Every quiet player prefers gamma_i>-1 to
+joining. Its row1 payoff is negative and its Never product is zero. The
+positive-Never source above is therefore not a GLOBAL minimum on the marked
+zero-debt carrier. This is a complete actual-source obstruction to universal
+Nash-word recovery, not an obstruction to UE or to a proof using global
+least-Never extremality.
+
+## 7. Joint reselection gives an exact path to absorption
+
+The same table admits a smooth zero-debt path that no added Nash word can
+follow. For 0<r<=1 replace the last solo0 hazard by r and the first hazards by
+
+    q1=r/(r+2), q3=2r/(3599+2r), q0=q2=0.
+
+With D=(r+2)(2r+3599), the actual full zero-debt annotations are
+
+    U=B=e=v(r),
+    v0=100(1-7198/D), v1=-200r/(3599+2r),
+    v2=r(6001-2r)/D, v3=10r/(r+2),
+    nu=7198(1-r)/D.
+
+Indeed the last tail is (0,r*gamma); the first active equations are
+c1=-97*q3/(1-q3) and c3=12*q1/(1-q1). Quiet0 has positive Continue value,
+and quiet2 has Continue-minus-Quit slack 2r(1195-3r)/D>0. Exact cap prefixing
+therefore proves full zero debt, including r=1. The marked condition v1<0
+holds throughout, while
+
+    nu'=7198(2r^2-4r-10801)/D^2<0.
+
+The point in Section6 is r=1/2; r=1 absorbs surely. Thus its two prescribed
+periods can be reselected jointly to reach zero Never mass exactly.
+
+Every v(r) nevertheless retains the finite-word trap. Write A=-v1,B=v2,
+C=v3,V=v0. Directly, 0<A<1/4,0<B<1,V<=100 and
+
+    V-12A=100r(3555-22r)/D>0,
+    C-4B=2r(5993+14r)/D>0.
+
+The Section6 proof now excludes 4A/(1+4A)<q2<97/99. The high branch
+forces the impossible sure0. On the low branch row0 Continue is at least
+(V-12A)/(1+4A)>0, so q0=0. Player2 Continue gives q1<=B/(B+3);
+C>4B and B<1 make both endpoint gaps of player3 negative. The unique root is
+
+    q=(0,B/(B+3),4A/(1+4A),0).
+
+Its active outputs and row0 output are positive. Row3 output has the sign of
+C-2B/3+4A-8AB>4B/3+4A>0, using A<1/4. Row0 output is at most100, so
+only AllContinue can follow. Exact reselection of existing periods escapes
+this trap; adding any finite number of exact Nash prefixes does not.
+
+## 8. The complete marked geometry on every finite calendar
+
+Change only the completion parameter gamma2 in Section6 to5408/3599,
+throughout its coalition rule. Write a=194/3599, g=5408/3599,
+B=2/3599, gamma=(-a,g,6). The same two physical dates and hazards give
+
+    U=B_cap=e=(901/45,-1/36,3613/18000,2),
+    N=(1/2,4/5,1,3599/3600), nu=3599/9000.
+
+Here B_cap denotes the response vector; the scalar B above is2/3599.
+The first quiet2 comparison binds. This point is a global minimum of nu
+across the ENTIRE nonsolo marked finite-calendar class, not just a local
+minimum on its two prescribed dates.
+
+Precisely, every finite-calendar exact native Nash profile with positive
+joint Never probability and min U<=0 has the same FULL(U,B_cap,e,N)
+annotations as one of: AllNever; a solo0 root of hazard0<r<1; one pair13
+root over a solo0 tail with0<r<=1/2; or one triple123 root over a solo0
+tail with0<r<1/2. Every nonsolo form has nu>=3599/9000, with equality
+only at the displayed binding annotations. Every continuous marked exact
+finite-calendar path from these annotations to a smaller nu must pass
+through AllNever, where nu=1. The calendar length and active supports may
+vary arbitrarily along that path. The exact annotation set is a loop of
+the pair and triple arcs, with the solo0 interval attached at AllNever.
+This classifies finite exact profiles, not infinite calendars or limits
+of profiles with positive debt. The table already has pure0 UE.
+
+### Exhaustive roots over a solo0 tail
+
+Write v(r)=(0,-ar,gr,6r), 0<=r<=1. For any one-stage Nash root q,
+
+    g_i=(1-q0) g_i^core-(1+gamma_i) q0,  i=1,2,3,
+    C0=100(1-q2)(q1+q3-q1*q3)-3q2, Q0=0.
+
+A sure0 forces all core players quiet, and is Nash. If q1=0 then
+`g3^core=-101q2-6r(1-q2)` forces q3=0 except possibly r=q2=0;
+in that exception q3>0 makes g2^core=4q3>0 and forces q2=1,
+a contradiction. Then q2>0 would either have g2^core=-gr<0 or,
+when r=0, make C0=-3q2<0 and force the impossible sure0 with core
+activity. Consequently either every core player is quiet or q1>0.
+
+If core players are quiet, the exact roots are solo0 hazards satisfying
+
+    q0 >= ar/(1-a+ar),
+
+including q0=0 when r=0. Their aggregate tail is again v(r') with
+r'=q0+(1-q0)r.
+
+Assume now q1>0. Necessarily q0<1 and g1^core>=0. Its exact expression is
+
+ g1^core=(1-q3)[ar(1-q2)-q2/4]+q3(-97+99q2).
+
+It excludes the entire interval
+
+    b(r)<q2<97/99,  b(r)=4ar/(1+4ar).
+
+The high branch q2>=97/99 gives C0<=100(1-q2)-3q2<0 and forces
+sure0, contradiction. Hence q2<=b(r)<1/4.
+
+If q2=0 then C0>0 and q0=0. Otherwise g2^core>=0. Put S=q1+q3.
+Since g2^core=3q1+4(1-q1)q3-gr(1-q1)(1-q3),
+
+    S>=gr/(4+gr),
+    C0>=50(1-q2)S-3q2
+       >= [50gr/(4+gr)-12ar]/(1+4ar)>0.
+
+The last inequality holds for 0<r<=1 since 50g/(4+g)>12a;
+at r=0 the bound q2<=b(r)=0 excludes this case. Therefore q0=0.
+Moreover q1=1 forces q2=1 by g2^core=3, and q3=1 makes
+g1^core=-97+99q2<0. Thus q1,q2,q3 are all proper, and q1>0.
+No singleton1 root is possible: if q2=q3=0 then g1^core=ar>0,
+forcing q1=1; at r=0, quiet2 again prohibits q1>0.
+All remaining roots have supports12,13,123, as follows.
+
+#### Pair12
+
+For r>0 its odds are x=gr/3, y=4ar, z=0. The quiet3 gap times
+(1+x)(1+y) is
+
+    r(4g-404a-6)+(28/3)ga r^2<0, 0<r<=1.
+
+Its outputs for rows1 and2 are positive by the participant rewards a_core=1/4
+and p=1. Row0 is positive by the preceding argument. The row3 output has
+positive numerator
+
+    r[6-2g/3+4a-8ga r]>0.
+
+So this root leaves the marked set and has all-positive output.
+
+#### Pair13
+
+Its odds are x=r/2,y=0,z=Br. The quiet2 gap multiplied by (1+x)(1+z) is
+
+    F(r,0)=3r(2r-1)/7198.
+
+It exists exactly for 0<r<=1/2. With D=(r+2)(3599+2r), its binding-table
+output (V,-A,C2,C3) is
+
+ (100(1-7198/D), -200r/(3599+2r), r(3614-2r)/D, 10r/(r+2)).
+
+This is the row2 formula for gamma2=5408/3599; the earlier Section7 uses
+a different completion and has a different row2 payoff.
+
+#### Triple123
+
+With odds y of owner2, the active1 and active3 equations force
+
+    x=(6r+101y)/(12+7y),
+    z=(194r/3599-y/4)/(97-2y).
+
+Proper positive roots therefore require 0<y<776r/3599. The remaining
+active2 equation is
+
+    F(r,y)=3x+4z+3xz-gr=0.
+
+On 0<=r<=1, 0<=y<=776r/3599, z>=0,
+
+    x_y=(1212-42r)/(12+7y)^2,
+    z_y=97(16r-3599)/[14396(97-2y)^2].
+
+Since y<1/4, x_y>61/10, -1/300<z_y<0, and x<3, it follows
+that F_y=(3+3z)x_y+(4+3x)z_y>18. Also
+
+ F(r,776r/3599)
+    =13r(32531361-1129856r)/[7198(1358r+10797)]>0,  0<r<=1.
+
+Therefore a unique triple root exists exactly for 0<r<1/2. At r=1/2
+it meets pair13 at y=0. For this range y<1/8 and the same estimates
+sharpen to x_y>7, x<4/3, and F_y>20.
+
+### Every core-marked output has the same one-step trap
+
+For the triple branch put delta=1/2-r. By F_y>20 and the value F(r,0),
+
+    0<y<3r*delta/71980,
+    y<r/47000,  y<delta/47000.
+
+Also x_y<9 and z_y>-1/380 on the relevant rectangle, so
+
+    r/2<=x<501r/1000,
+    r/1800<z<=2r/3599<r/1799.
+
+Write the triple output (V,-A,C2,C3). Exact participant formulas are
+
+    A=(100z-y/4-11yz)/[(1+y)(1+z)],
+    C2=(x+3z+2xz)/[(1+x)(1+z)],
+    C3=(10x-100y+xy)/[(1+x)(1+y)],
+    V=[100(x+z+xz)-3y(1+x)(1+z)]/[(1+x)(1+y)(1+z)].
+
+The displayed elementary bounds imply
+
+    0<A<1/4, 0<C2<51r/100<1, C3>3r>4C2,
+    V>39r>12A,  V<=100.
+
+For example A<100r/1799; C2<x+3z+2xz<503r/1000;
+C3>(5-1/470)r/[(1+251/1000)(1+1/1000)]>3r;
+and V>[50r-4r/47000]/[(1+251/1000)(1+1/1000)^2]>39r.
+A>0 follows from z>r/1800 and y<r/47000.
+
+The canonical Section7 support proof applies to any vector
+(V,-A,C2,C3) satisfying these inequalities: its unique Nash root has
+support12, odds x=C2/3,y=4A, and all-positive output. At every all-positive
+output with row0<=100 only AllContinue is Nash. The pair13 outputs satisfy
+the same inequalities by their binding-table formulas above. Thus no further
+nonzero marked prefix can follow either13 or123.
+
+### The minimum is global within the nonsolo finite class
+
+Pair13 has nu=(1-r)/[(1+r/2)(1+Br)], strictly decreasing for r<=1/2.
+Its minimum is 3599/9000 at r=1/2.
+
+For a triple root, delta=1/2-r>0 and y<delta/47000. Since x<=r/2+9y,
+
+ (1+x)(1+y)
+   <=1+r/2+(10+r/2)y+9y^2
+   <5/4-delta/2+(41/4+9/94000)delta/47000
+   <5/4.
+
+Also 1+z<=1+B/2 and 1-r>1/2. Hence
+
+    nu=(1-r)/[(1+x)(1+y)(1+z)] >3599/9000.
+
+Every positive-Never actual exact equilibrium on a finite calendar is a
+finite word of Nash roots initialized at AllNever, by conditional optimality
+at each all-Continue history, all of which have positive probability because
+nu>0. An empty period is Nash only when its continuation is nonnegative,
+so empty periods cannot be silently prepended to a negative tail. At AllNever the exhaustive classification
+above permits only solo0 (or the zero root). Induction now gives exactly
+the four marked forms claimed. All solo0 stages combine to aggregate r,
+preserving the four actual U,e,B,N coordinates; replacing them by one
+solo0 stage preserves equilibrium. This proves all-support/all-finite-date
+scope, including support changes and arbitrary subdivisions.
+
+### An exact nonlocal barrier for continuous finite-calendar deformations
+
+Let a continuous path of full annotations consist pointwise of exact native
+Nash profiles on finite calendars, with a nonpositive payoff coordinate.
+Calendar lengths may be unbounded along the path. Suppose it starts at the
+binding trap and ends with nu<3599/9000 (in particular, at an absorbing
+profile). Then the path passes through the AllNever annotation nu=1.
+
+Indeed, until the first time it can reach a smaller Never product, every
+positive-Never point belongs to the exhaustive classification. The union of
+the pair13 and triple123 images has nu>=3599/9000. Its closure meets the
+solo0 image only at r=0: at every r>0 both core hazards q1 and q3 are positive,
+while the solo0 image has N1=N2=N3=1. Conversely any sequence on the core
+branches with those Never masses tending to1 has x,z tending to0, hence r
+tending to0, and all four Never masses tend to1. The core-branch closure
+has nu>=3599/9000, so it cannot meet an absorbing annotation. Continuity
+therefore forces the path from the core branch through its sole intersection
+with the solo0 image, namely AllNever. The barrier is sharp: decrease r
+from1/2 to0 along pair13, then increase a solo0 hazard from0 to1 at the
+FIRST physical date. Keeping that hazard behind an empty earlier date
+would fail Nash because row1's continuation is negative.
+
+More precisely, N0=1-r identifies the parameter on both core arcs, and
+N2 distinguishes their interiors. The strict F_y bound and y<3r(1/2-r)/71980
+make the triple arc continuous with the same two endpoints as the pair arc.
+Thus their full annotation images form an embedded circle; the solo0
+interval0<=r<1 attaches to it only at AllNever.
+
+This is stronger than a fixed-calendar local-minimum obstruction. It does
+not apply if the deformation allows positive debt, loses the marked condition,
+uses genuinely infinite-calendar equilibria, or jumps discontinuously between
+components. A global marked minimum compares all components and is not
+constrained by this path barrier.
+
+## 9. Even one full cap prevents exact finite compression
+
+Section2 compresses(U,e), not caps. An elementary control sharpens the
+existing [full-cap obstruction](CODEX_TARSKI_PREMIUM__FINITE_CALENDAR_PRESCRIBED_OUTCOME_REALIZATION.md):
+set Z0(A)=2 if0,1 belong to A, 1 if1 belongs and0 does not, and0 otherwise;
+set every other row to0. These rules specify all native rewards.
+For 0<alpha<1 let players0,2,3 Never, and let player1 quit at physical date
+t=0,1,... with probability alpha*2^(-t-1), and Never with probability1-alpha.
+Every pure deadline of0 gives alpha, as does Never. Thus
+
+    U=B=e=(alpha,0,0,0), N=(1,1-alpha,1,1).
+
+Now allow ANY independent replacement of all four laws. Define effective
+opponent atoms m_t=p1(t)Pr(T2>=t)Pr(T3>=t), including simultaneous dummy
+quits. Then exactly
+
+    e0=sum_t m_t,
+    V0(t)=sum_(s<t)m_s+2m_t,
+    V0(t)-e0=m_t-sum_(s>t)m_s.
+
+If a finite calendar preserves e0=alpha>0, its last positive effective atom
+gives V0(t)>alpha. No finite-calendar replacement preserves even(e0,B0),
+regardless of whether other caps or Never masses must be preserved. Response
+attainment is not the issue: all finite deadlines attain the original cap.
+
+More sharply, if at most m>=1 effective atoms are positive, put delta=B0-e0.
+Their chronological masses a_j satisfy a_j<=delta+sum_(l>j)a_l. Backward
+induction gives alpha<=(2^m-1)delta, hence
+
+    B0-e0>=alpha/(2^m-1).
+
+Equality is achieved with players0,2,3 Never and
+p1(t)=delta*2^(m-1-t) for t=0,...,m-1, delta=alpha/(2^m-1).
+These laws preserve U,e,N EXACTLY; their total debt is delta. This game
+already has the pure0 absorbing equilibrium. The result is a sharp semantic
+compression boundary, not another UE exclusion.
+
+Strict negativity does not repair finite-exact density. Keep row0 and change
+only row2 to -2 when1,2 belong to A, -1 when1 belongs but2 does not, and0
+otherwise. The same infinite geometric law has U=B=e=(alpha,0,-alpha,0)
+and the same N. Every finite exact Nash profile with N0>0 must have e0=0:
+otherwise its last positive effective atom contradicts B0=e0, forced by
+zero debt and N0>0. Thus NO sequence of finite exact Nash annotations can
+approach this strictly marked actual source, even allowing every annotation
+to drift. Its distance in max norm from that entire finite-exact set is at
+least alpha (either N0=0 or e0=0). Pure0 still gives an absorbing equilibrium;
+this is not a positive-gap global minimum counterexample.
+
+## 10. Exact continuation fibres with approximated full caps
+
+Let n>=2 owners independently choose times in Nat union {Never}; the first
+finite coalition is paid by an arbitrary real reward table of absolute bound
+M>=0, with AllNever value zero. U_i is prescribed payoff, e_i is the response
+payoff when i always Never, B_i is the supremum over every behavioral response,
+and N_i is the original marginal Never mass. Write C for the Euclidean closure
+of all actual annotations (U,B,e,N).
+
+For every integer k>=1 and every Y=(u,b,e,N) in C, there is an actual independent
+profile q with all finite atoms on the literal calendar {0,...,L_k-1}, where
+
+    L_k = 2 n(n+1) k + 4 n^2,
+
+such that
+
+    U(q)=u, e(q)=e, N(q)=N,
+    max_i |B_i(q)-b_i| <= n(n-1) M/k.                 (A)
+
+For Fin4: L_k=40k+64 and cap error 12M/k. The statement allows arbitrary
+signed own singleton rewards. The exact equalities hold simultaneously;
+q is one product law, not a correlated mixture. The finite calendar retains
+enough empty gaps to preserve the entire pure-reply menu during retiming.
+
+If u=b=e=v at Y, then exactly
+
+    U(q)=e(q)=v, N(q)=N,
+    0<=B_i(q)-v_i<=n(n-1)M/k.                        (B)
+
+Thus an abstract zero-debt compact source admits arbitrarily accurate actual
+approximants on its EXACT prescribed/Never-payoff and original-Never-mass fibre.
+No payoff-mark drift or Never-product drift is needed in this approximation.
+
+### Common small-mass cells
+
+For each original marginal p_i, mark its first finite crossing of each level
+j/k, j=1,...,k, whenever that level is attained at a finite date. Let F be the
+union of marks, m=|F|<=nk. Partition Nat into its m marked singletons and its
+at most m+1 nonempty intervening gaps, and add {Never} as a separate cell.
+Every owner's mass in any gap is at most 1/k.
+
+Indeed a gap mass greater than 1/k gives a grid level strictly between the
+cumulative mass preceding the gap and the cumulative mass through some finite
+date in the gap. Its first crossing would be marked inside the gap. The same
+argument treats the unbounded final gap by taking a finite partial sum. Zero
+or absent gaps cause no problem. Never is not part of the final finite gap.
+
+### Sparse exact moment matching without changing cell masses
+
+Fix all other current marginals and replace p_i. The vector (U,e) is affine
+in p_i; e_i is constant. At most 2n-1 coordinates therefore change. Let K_i
+be the number of partition cells with positive p_i mass. Adjoin the K_i
+cell indicators, whose sum is one, to those 2n-1 conditional reward vectors.
+Their affine dimension is at most (K_i-1)+(2n-1).
+
+The countable barycentre belongs to the ordinary convex hull of its positive
+support vectors. For completeness: it belongs to the closed convex hull;
+if it lies on a relative supporting hyperplane, the nonnegative distance to
+that hyperplane has mean zero, so every positive-mass vector lies there.
+Reduce affine dimension. If no supporting hyperplane remains, the point lies
+in the relative interior, which agrees with that of the ordinary convex
+hull. Dimension induction proves the assertion. Caratheodory now replaces
+p_i by at most K_i+2n-1 of its existing positive-mass actions while preserving
+all (U,e) and every cell mass exactly.
+
+Perform this once for each owner, using the CURRENT opponents. Every step
+preserves the entire (U,e) vector; each owner's cell masses remain its original
+ones. In particular all N_i are exactly retained. The final independent
+profile q0 is finitely supported. Each occupied cell needs at least one
+support point, so each owner has at most 2n-1 extra points beyond one per
+occupied cell. Marked cells and Never have only one possible point anyway.
+Writing g_i for the number of its occupied finite gaps, its finite gap support
+has at most g_i+2n-1 points. Taking the union over players and then adding the
+m common marked dates, the total number d of occupied finite dates satisfies
+
+    d <= m + sum_i (g_i+2n-1)
+      <= m+n(m+1+2n-1) = (n+1)m+2n^2
+      <= n(n+1)k+2n^2.                               (C)
+
+Some marked dates may disappear from a particular player's support; their
+cell masses across all owners remain fixed. Using m as an upper bound is safe.
+
+### Uniform approximation of EVERY response
+
+Couple each owner's original and reduced times by first selecting their
+common cell and then coupling their conditional draws arbitrarily. Make
+these couplings independent across owners. Against a fixed deviator i at
+one deterministic deadline t, terminal coalitions can differ only if:
+
+(a) two opponents' cell labels coincide in one finite gap; or
+(b) an opponent occupies the finite gap containing t.
+
+Away from (a),(b), opponent clocks have identical weak order and ties,
+and identical comparison with t, in the original and reduced profiles.
+Marked singleton times are literally equal. Never remains Never.
+
+For an opponent pair j,l, independence and small gap masses give
+
+    P(same finite gap)=sum_G p_j(G)p_l(G)<=1/k.
+
+There are choose(n-1,2) opponent pairs. For finite t in a gap, each of the
+n-1 opponents is in that gap with probability at most 1/k. Thus the exceptional
+probability is at most
+
+    [choose(n-1,2)+(n-1)]/k = n(n-1)/(2k).
+
+For t=Never or a marked singleton, clause(b) is absent, so the same upper
+bound remains valid. Every response payoff differs by at most 2M times this
+probability. Hence uniformly over ALL finite deadlines and Never,
+
+    |V_i^q0(t)-V_i^p(t)|<=n(n-1)M/k.
+
+Behavioral responses are mixtures of these pure times. Taking suprema gives
+|B_i(q0)-B_i(p)|<=n(n-1)M/k. This is not merely comparison of the supported
+responses or the compressed timing game's restricted Nash inequalities.
+
+### Retiming preserves all gaps and all caps
+
+List the d occupied finite dates as t_1<...<t_d. If d=0 use AllNever.
+Otherwise set s_1=0 if t_1=0, and s_1=1 if t_1>0. Recursively set
+
+    s_(j+1)-s_j = 1 if t_(j+1)=t_j+1, and 2 otherwise.
+
+Then 0<=s_j<=2d-1. Push every marginal through t_j ->s_j, fixing Never.
+This preserves prescribed terminal coalitions and all Never-counterfactual
+coalitions, hence U,e,N. It also preserves every pure-response payoff in
+both directions: a deadline is either an occupied atom, in a nonempty gap
+before/between atoms, after the last atom, or Never. Exactly the same classes
+exist after retiming. Select the matching atom or any point of the matching
+gap. The weak comparisons with every occupied opponent time agree.
+The after-last finite class and Never are distinct and both retained.
+Therefore ALL B_i are exactly preserved by retiming.
+
+This uses the union of every player's occupied dates. An atom occupied only
+by the deviator is harmless: an extra response class relative to the larger
+union either coincides with an opponent-menu class or subdivides it into
+identical payoffs. No response option is added or removed.
+
+By(C), the finite atoms lie in {0,...,L_k-1}. This proves(A) for actual Y.
+The gap rule is essential for arbitrary singleton rewards; blindly ranking
+occupied dates can remove the initial or intermediate profitable response.
+
+### Compact-closure points and exact-fibre recovery
+
+Take actual annotations Y_r converging to Y in C. For a fixed k, apply the
+construction to every Y_r and place the resulting laws on the SAME literal
+calendar {0,...,L_k-1,Never}. The product of n finite probability simplexes
+is compact, so select a convergent subsequence of these laws, with limit q.
+
+On that fixed calendar U,e,N are polynomials in the law masses. Each B_i is
+the maximum of finitely many polynomial response payoffs, using the menu
+{0,...,L_k,Never}. Every later finite deadline is outcome-equivalent to L_k.
+Consequently the full caps are continuous on this compact simplex, even
+when occupied dates vanish at the limit. The finite menus use all possible
+dates, not a support-dependent menu. Passing to the limit proves(A) exactly.
+Since B_i(q)>=U_i(q), zero-debt sources give(B).
+
+The order of quantifiers is important: fix k, compress the whole approximating
+sequence with one uniform calendar bound, and only then take the finite-law
+limit. Truncating each source at an uncontrolled cutoff would not prove this
+exact-fibre conclusion.
+
+### Exact marked-source consumer
+
+Specialize now to Fin4. Assume native own rewards are zero, and use the
+existing compact marked minimum source: minimize nu=product_i N_i over Y in C with U=B and min_i U_i<=0.
+If the absorbing native debt infimum A_Z>0, its repair estimate gives
+
+    A_Z<=sum_i(B_i-U_i)+14M nu^(1/4),
+
+so its minimum m is positive. Every N_i>0, and the exact actual inequality
+B_i-U_i>=N_i(B_i-e_i), extended to C, yields U=B=e=v.
+The theorem then supplies, for EACH k, an actual finite law q_k with
+
+    U(q_k)=e(q_k)=v, N(q_k)=N*, min v<=0,
+    product_i N_i(q_k)=m,
+    total debt(q_k)<=48M/k                            (Fin4).
+
+This is a stronger normal form for the SAME globally selected source. It
+preserves its marked payoff and original Never product exactly. It does not
+make q_k exact Nash, select a different minimum, or prove that a finite
+calendar has an exact marked minimizer. The exact finite-calendar obstruction
+in Section9 remains consistent with it.
+
+A rigorous practical consequence is a hierarchy of finite real-algebraic
+necessary tests for a proposed selected source (v,N): for every k, there must
+exist a point of the L_k-date product simplex satisfying U=e=v, marginal
+Never masses N, and every pure reply payoff <=v_i+12M/k. Those are finitely
+many polynomial weak inequalities of degree at most n, plus exact moments.
+Failure at ANY level rules out that candidate source. Passing all levels is
+EXACTLY equivalent to (v,v,v,N) lying in C: the reverse direction follows
+by taking these actual annotations to their stated zero-debt limit.
+This equivalence is a countable hierarchy, not a finite UE decision procedure.
+
+No finite level is shown to remove an entire new raw reward class. This
+is a stronger representation of the same actual source. Global marked minimality is not
+replaced by its finite-calendar local version.
+
+## 11. Joint revision of a regular head and its actual continuation
+
+The following is a genuine descent criterion at the SAME globally selected
+source. It changes both the retained head and its continuation, keeping
+full zero debt exactly. It does not assert that every source passes the test.
+
+Use Section1's Q,P,h,H and set
+
+    g_i(q,w)=Q_i(q)-P_i(q)-H_i(q)w_i,
+    F_i(q,w)=q_i Q_i(q)+(1-q_i)P_i(q)+h(q)w_i.
+
+Thus g is Quit minus Continue, and F is prescribed prefix payoff. Let W in C
+have U=B=e=w>=0 and positive original Never coordinates. Suppose q is a
+proper Nash root at w with nonempty support S, and Y=Phi_q(W) has a strictly
+negative payoff coordinate. Active hazards lie in(0,1); quiet hazards are0.
+Assume the active Jacobian
+
+    J=(partial g_i/partial q_l)_(i,l in S)
+
+is invertible. Choose an owner j with w_j=0 for which the CLOSED interval
+
+    I_j={r in[0,1]: r Z_k({k,j})<=Gamma_kj
+                         for every k!=j with w_k=0}  (ELIG)
+
+is nonempty. Rate1 recovers the one-period insertion; smaller rates genuinely
+enlarge the allowed timing class. If j is the only zero payoff of W,
+eligibility is automatic. Define
+
+    a=Gamma[:,j]-w,
+    b=J^(-1) diag_(i in S)(H_i(q)) a_S,
+    L_j=1+sum_(i in S) b_i/(1-q_i).                   (DESC)
+
+At each quiet head tie g_k(q,w)=0 require
+
+    sum_(l in S)(partial g_k/partial q_l)b_l
+                         -H_k(q)a_k<0.              (INWARD)
+
+There is no condition(INWARD) at a strict quiet comparison. If L_j>0 and
+(INWARD) holds, Y has an exact zero-debt marked competitor in C with
+STRICTLY SMALLER original Never product. Therefore any global marked
+least-Never source of this form must, for every eligible j, satisfy L_j<=0
+or have a quiet tie whose displayed derivative is nonnegative.
+
+### Complete one-owner timing classification and full caps
+
+For r>0 in I_j, give j finite atoms t r(1-r)^n at n=0,1,... and original
+Never mass1-t; all other head laws are Never. This is a diluted geometric
+clock, with rate1 interpreted as a single atom. For k!=j, its actual head
+Never payoff and complete head cap are
+
+    e_k(head)=t Gamma_kj,
+    B_k(head)=t max(Gamma_kj,r Z_k({k,j})).
+
+Indeed the deadline n payoff is t Gamma_kj plus
+t(1-r)^n[r Z_k({k,j})-Gamma_kj]; Never has the limiting value. The mover's
+payoff and cap are0. Semantic concatenation with W therefore gives
+
+    w(t)=(1-t)w+t Gamma[:,j],
+    U(W(t))=e(W(t))=w(t),
+    B_k(W(t))=max(t max(Gamma_kj,r Z_k({k,j})),w_k(t)) for k!=j,
+    B_j(W(t))=w_j(t)=0,
+    N_i(W(t))=(1-t*1_(i=j))N_i(W).
+
+Consequently U=B=e exactly whenever
+
+    t[r Z_k({k,j})-Gamma_kj]^+ <= (1-t)w_k for k!=j.  (BUFFER)
+
+Eligibility handles every zero w_k, and positive w_k permit all sufficiently
+small t>=0. Infinite heads are implemented in C by finite truncations,
+retaining a boundary query and appending actual approximants of W. Head
+truncation errors tend to0 uniformly over complete responses. This never
+executes W after infinitely many natural dates.
+
+If the only feasible rate is r=0, use positive geometric rates decreasing
+to0 at FIXED t. Every zero observer's cap excess tends to0, since(ELIG)
+then says Gamma_kj>=0. Positive observers obey(BUFFER) uniformly for small t.
+The limit in C still has U=B=e=w(t) and exactly the displayed original N.
+It need not have an actual head representative. Finite mass escaping to later
+dates is not renamed Never. At t=0 the head has cap0, so nonnegative w is
+essential to preserve the old cap; w(t) itself may become negative.
+
+This classifies ALL one-owner timing insertions, not just geometric witnesses.
+For an arbitrary actual head with atoms p_n, total finite mass t>0 and
+R_n=sum_(m>=n)p_m, each zero observer requires
+
+    Z_k({k,j})p_n<=Gamma_kj R_n for every n.
+
+At any positive atom, p_n/R_n in(0,1] is one COMMON feasible rate. At the
+last atom of a finite head it equals1. Conversely the geometric law realizes
+any feasible positive rate. For a compact head limit of finite masses
+t_l->t>0, the first physical deadline and zero debt at positive original
+Never give Z_k({k,j})p_l(0)-Gamma_kj t_l<=o(1) on every zero row. Extracting
+p_l(0)/t_l in[0,1] proves closed-interval necessity. Thus exact finite heads
+exist iff1 belongs to I_j; actual countable heads iff I_j meets(0,1]; and
+compact heads iff I_j is nonempty, in each case for sufficiently small mass.
+For example Gamma=0<Z_k({k,j}) permits only the compact endpoint r=0.
+
+The geometric burst and common pencil inequality already occur in
+[the canonical pivot reduction, Proof Section13](../exports/UNIVERSAL_CANONICAL_PIVOT_EXIT_REDUCTION.md),
+with an objective transfer in
+[the absorbing partial-Nash minimum note, Section5](CODEX_EXPENSIVE_EXIT__ABSORBING_PARTIAL_NASH_MINIMUM.md).
+They are reused here. The refinements are the complete timing converse,
+closed endpoint, and their application to this same marked Never objective.
+
+### Compensating the retained head
+
+Keep quiet head hazards0. The implicit function theorem gives q_S(t) through
+q_S solving g_i(q(t),w(t))=0 for all i in S. Proper active hazards persist.
+Strict quiet comparisons persist by continuity; at a quiet tie(INWARD)
+makes the comparison strictly favorable to Continue for small positive t.
+Consequently Y(t)=Phi_(q(t))(W(t)) has full zero debt. These statements use
+the COMPLETE prefix cap max(Q_i,P_i+H_i B_i), hence control every later
+deadline and Never, not just the two supported head actions. Finite prefixes
+applied to actual approximants of W(t) place Y(t) in the same C. All prescribed
+randomizations are independent owner hazards.
+
+Differentiating the active equations gives J q'_S(0)=diag(H_i)a_S, so q'=b.
+The original Never product is exactly
+
+    nu(Y(t))=h(q(t))(1-t)nu(W),
+    (log nu(Y(t)))'_(t=0)=-1-sum_(i in S)b_i/(1-q_i)=-L_j.
+
+When L_j>0 it strictly decreases for every sufficiently small t>0. A negative
+original payoff stays negative, and all original Never masses stay positive.
+This supplies the required same-source competitor. No payoff-image openness,
+public mixture of profiles, finite-exact projection, or altered objective
+is used. With rational source data the test is an exact rational expression.
+
+There is also a one-sided zero-mark extension. Writing v=F(q,w), replace
+strict negativity by min v=0; the same proof works whenever some v_a=0 has
+
+    D_q F_a(q,w)b+h(q)a_a<0.
+
+This is exactly its payoff derivative along the constructed path, so the
+perturbed output is strictly marked for small t>0. A zero derivative alone
+does not suffice. The rest of the full-cap and Never tests are unchanged.
+
+### Finite head words
+
+The same construction compensates any FINITE word of regular proper Nash
+heads q^1,...,q^L. Set w^(L+1)=w and w^k=F(q^k,w^(k+1)); require min w^1<0.
+Starting with a^(L+1)=Gamma[:,j]-w, propagate backwards:
+
+    b^k=(J_k)^(-1) diag(H_i(q^k))(a^(k+1))_(S_k),
+    a^k=D_q F(q^k,w^(k+1)) b^k+h(q^k)a^(k+1).
+
+Extend b^k by0 on quiet coordinates. Require every tied quiet comparison's
+derivative D_q g_l b^k-H_l(q^k)a_l^(k+1) to be strictly negative. Successive
+implicit function theorems then keep the whole word Nash. Its log Never
+derivative is -1-sum_k sum_(i in S_k)b_i^k/(1-q_i^k). A negative value gives
+the same contradiction. This finite-word statement supplies no uniform
+inverse bounds or convergence for an infinite head.
+For a zero marked entrance payoff, the extension just stated uses a negative
+coordinate of a^1 at a zero coordinate of w^1 instead of min w^1<0.
+
+### Exact enlargement beyond every finite one-owner insertion
+
+This replaces the weaker one-zero control with an actual all-four-active
+tail having TWO zeros. It is not new UE reward coverage. Put C0={1,2,3}.
+For nonempty A subset C0, row0 is1,-4,12 according as |A|=1,2,3. Core own
+singletons are0 and off-own singletons are-2. Participant pair rewards are
+-3 for owner1 and-2 for owners2,3; passive pair rewards are0 for owner1
+and-1 for owners2,3. The full-core participant vector is(2,0,0).
+On coalitions containing0, row0 is0,2,-6,12 according as |A|=1,2,3,4.
+The other rows are specified by this table; "larger" means larger than the
+displayed singleton or pair while retaining the stated membership:
+
+| Recipient | Passive at{0} | Larger passive coalitions | At{0,i} | Larger participant coalitions |
+|---|---:|---:|---:|---:|
+|1|1|4/5|2|2/5|
+|2|-1|31/5|-1|6|
+|3|2|19/5|2|18/5|
+
+Every one of the sixty native rewards is now specified. The last-period root
+(1/2,1/3,1/3,1/3) over AllNever has both offers equal to w=(0,0,1,1), hence
+
+    U(W)=B(W)=e(W)=w, N(W)=(1/2,2/3,2/3,2/3), nu(W)=4/27.
+
+Prefix q=(0,1/2,1/2,1/2). Direct enumeration gives
+
+    U=B=e=(3/8,-1,-1,-1), N=(1/2,1/3,1/3,1/3), nu=1/54.
+
+The active Jacobian has zero diagonal and unit off-diagonal, determinant2;
+quiet0 has Quit0 and Continue3/8. Both zero owners of W have Gamma=1 and
+joining reward2 against the other. Their last-atom obstruction excludes
+every nonempty finite insertion by either zero owner. Inserting either
+positive-payoff owner alone instead loses its own positive continuation and
+creates debt. Thus EVERY nonempty finite one-owner insertion is excluded.
+But owner0's geometric rate1/2 satisfies the zero-observer comparison.
+Its positive-observer excesses are1/2 and-1, so(BUFFER) gives an exact tail
+path at least for0<=t<=2/3:
+
+    w(t)=(0,t,1-2t,1+t), nu(W(t))=(1-t)4/27.
+
+Here a_S=(1,-2,1), H_i=1/4 and b=(-1/4,1/2,-1/4), so L_0=1>0. The head
+remains marked and quiet0 remains strict for small t. To verify the branch
+without a numerical root search, put x_i=q_i/(1-q_i). Its exact equations are
+
+    -x2-x3+2x2*x3=t, x1*x3=1-2t, x1*x2=1+t.
+
+Elimination leaves t*x1^2+(2-t)*x1-2+2t+4t^2=0, with regular branch x1=1
+at t=0. Its derivatives are x1'=-1,x2'=2,x3'=-1, yielding the stated b and
+log Never derivative-1. Every singleton column of this table has a negative
+off-own entry. Nevertheless pure123 is already absorbing Nash, so the
+example certifies stricter continuation coverage, not a new raw UE class.
+
+The theorem leaves singular heads, ineligible zero faces, unsuccessful quiet
+tie derivatives, nonpositive descent tests and infinite-head limits unresolved.
+A merely zero marked output also remains unless its stated payoff-derivative
+test applies. Regularity alone gives no sign to(DESC).
+
+## 12. What the same global minimum requires of other variations
+
+Let Y*=(v,v,v,N*) minimize nu on C intersect {D=0,min U<=0}, with m=nu(Y*)>0.
+Here D=sum_i(B_i-U_i). Section10 gives actual finite q_k with U=e=v,N=N*
+and D(q_k)<=epsilon_k=48M/k. The following comparisons retain that minimum;
+they do not transfer a weighted SUM or partial-Nash pivot minimum to it.
+
+### Strict marks give an unrestricted one-owner barrier
+
+Suppose v_a<0, M>0. Put t0=-v_a/(4M) and H_i=m/N_i*. For 0<rho<m let
+
+    g(rho)=min {D(Y):Y in C, min U(Y)<=0, nu(Y)<=m-rho}.
+
+This compact set is nonempty (a sure-solo profile has marked own payoff0),
+and global minimality implies g(rho)>0. Fix 0<eta<=N_i*. For ANY complete
+replacement R=q_k[i<-p_i] with N_i(R)<=N_i*-eta,
+
+    D(R)>=[g(t0 H_i eta)-(1-t0)epsilon_k]/t0.          (BARRIER)
+
+Indeed mix only this owner's law by t0. Every U_j is affine in that law;
+every full B_j is convex, being a supremum of affine response values (B_i
+is constant). The mixed profile has debt at most(1-t0)epsilon_k+t0 D(R),
+marked payoff U_a<=v_a+2Mt0=v_a/2<0, and Never product at most m-t0 H_i eta.
+The definition of g proves(BARRIER). The replacement may itself have all
+payoffs positive, and no U=e constraint or calendar bound is imposed on it.
+For fixed eta every sufficiently late k therefore has the uniform floor
+c_i(eta)=g(t0 H_i eta)/(2t0)>0.
+
+This also gives normalized response prices with a strictly positive finite-
+release Never price. Fix eta<N_i*, put lambda=c_i(eta)/2, and take k large.
+For every replacement,
+
+    D(R)+lambda N_i(R)>=lambda(N_i*-eta).
+
+If N_i(R)>N_i*-eta use D>=0; otherwise use D>=c_i(eta)>lambda. On any finite
+calendar containing q_k and the controller's replacement laws, finite minimax
+provides tester weights rho_(j,t)>=0 with sum_t rho_(j,t)=1 for each j such
+that, for EVERY controller law on that calendar,
+
+    sum_(j,t)rho_(j,t)V_j(t;R_-j)-sum_j U_j(R)
+                   +lambda N_i(R)>=lambda(N_i*-eta). (PRICE)
+
+Use deadlines0,...,T and Never when all controller atoms are before T;
+this is the COMPLETE reply menu because later deadlines equal Never.
+The expression is affine in the controller law and in the product of four
+tester simplexes, so maximizing over testers gives exactly D+lambda N_i
+before minimax. At q_k the total unused cap slack is at most
+epsilon_k+lambda eta. Subtracting its priced value from(PRICE) gives
+
+    sum_j[G_j(R)-G_j(q_k)]
+        >=lambda(N_i*-N_i(R)-eta)-epsilon_k,
+    G_j(R)=sum_t rho_(j,t)V_j(t;R_-j)-U_j(R).
+
+If the mover's payoff is preserved, its summand is0, so some observer must
+pay at least one third of a positive right side. A deadline after all old
+opponent atoms preserves that payoff exactly, since U_i(q_k)=e_i(q_k)=v_i.
+The price is uniform in k and calendar size at fixed eta; no lower bound as
+eta tends to0 or common tester across different movers follows. Simultaneous
+independent law changes have cross terms, so these separate prices do not
+prove the missing coordinated descent. A zero marked payoff would not
+justify the strict-mark mixture in(BARRIER).
+
+### Retaining a finite head pins explicit tail coordinates
+
+Suppose Y* is represented by a supplied NONEMPTY finite head P over a zero-debt tail Q
+in C. This is a supplied decomposition, not realization of every carrier
+point. Set a_i=N_i(P)>0, h=product a_i, H_i=h/a_i. Let U^P,e^P be P's native
+values over AllNever, and C_i^P its maximum over deadlines inside the head.
+If u is Q's payoff, full zero debt and positive original Never give
+
+    v_i=U_i^P+h u_i=e_i^P+H_i u_i,
+    B_i=max(C_i^P,e_i^P+H_i u_i)=v_i.
+
+Every head-active owner a_i<1 therefore pins
+u_i=(U_i^P-e_i^P)/(H_i-h). For a head-quiet owner a_i=1, U_i^P=e_i^P and
+the only head-cap condition is u_i>=(C_i^P-e_i^P)/h. A nonpositive pinned
+output retains the mark automatically; otherwise one quiet coordinate must
+also obey u_j<=-e_j^P/h. Replacing Q by ANY zero-debt carrier point satisfying
+these pins, lower bounds and marked union preserves full zero debt. Global
+minimality says Q minimizes nu over this entire set, with value m/h.
+In particular, if all owners act in the head, Q globally minimizes nu on
+its exact payoff fibre. This is a constraint that Section11 revises jointly
+with the head, rather than assuming nearby feasible tail payoffs exist.
+
+### Original Never factors at an inherited zero-payoff face
+
+The incoming extraction and countable-head boundary mechanism are already
+proved for a different objective in the
+[zero-observer boundary note, Sections1–3](CODEX_COORDINATOR__ZERO_OBSERVER_BOUNDARY_REDUCTION.md).
+Here is its same-source specialization with original Never retained; this
+is not a second boundary mechanism.
+
+Starting at Y*, extract proper Nash roots with Y_t=Phi_(q^t)(Y_(t+1)). Positive
+original N forces q_i^t<=1-N_i^t<1, and nonnegative prefix debt forces every
+tail to have U=B=e. A negative value -eta forces sum_i q_i^t>=eta/M.
+At a strictly positive point, put eta=min U and delta=eta/(16M). In exact-fibre actual
+approximants, any initial small-root segment of cumulative activity<=2delta
+keeps all caps on Continue and above3eta/4. Each Quit incurs root regret at
+least eta/2. Joint reach>=1-2delta gives D>=(eta/4) times that activity.
+Consequently only activity tending to0 can precede a root of size>=delta.
+Such a root must exist, or |U_i|<=M times total activity contradicts U_i>=eta.
+Deleting the preceding vanishing segment preserves all limiting U,B,e,N
+by the Continue cap formula and bounded rewards. This is the old positive-
+buffer argument with every owner charged; positive payoff supplies its
+activity trigger instead of the old absorption assumption.
+
+Use these extractions until a nonnegative zero face is reached, then take
+zero roots. With S_i^T=product_(t<T)(1-q_i^t),
+
+    N_i^T=N_i*/S_i^T increases to K_i<=1,
+    S_i=lim_T S_i^T=N_i*/K_i>0,
+    sum_(t,i)q_i^t<=-log m.
+
+The Continue identities give |U_i^(t+1)-U_i^t|<=2M sum_(j!=i)q_j^t.
+Thus the tails converge to W=(w,w,w,K) in C. The negative bound gives w>=0;
+the charged positive extraction rules out w strictly positive, so min w=0.
+Let R be the ACTUAL countable profile with masses S_i^t q_i^t and literal
+Never S_i. Put h=product S_i and H_i=h/S_i. Exact unrolling yields
+
+    U_i(R)=v_i-h w_i, e_i(R)=v_i-H_i w_i,
+    U_i(R)<=B_i(R)<=v_i,
+    S_i<1 implies B_i(R)=v_i and d_i(R)=h w_i,
+    S_i-N_i*=S_i(1-K_i).                             (FACTOR)
+
+For completeness, truncations of R converge in total variation because
+sum_i(S_i^T-S_i) tends to0. Their U,e unroll to the displayed identities.
+Every inside-head deadline pays at most v_i; deadlines beyond a truncated
+head pay e_i(R^T), proving the upper cap bound in the limit. A positive
+prescribed atom has equality by its exact mixed Nash comparison, proving
+the asserted cap equality for each visibly finite owner. The last equation
+records escaping FINITE mass, not an identification with original Never.
+
+The existing semantic head operator extends with e and N as
+
+    (R*W').U_i=U_i(R)+h U_i(W'),
+    (R*W').B_i=max(B_i(R),e_i(R)+H_i B_i(W')),
+    (R*W').e_i=e_i(R)+H_i e_i(W'),
+    (R*W').N_i=S_i N_i(W').
+
+Truncate R, retain a boundary query, append actual approximants of W', and
+take limits. This puts the output in C without executing a continuation
+after infinitely many dates. Equations(FACTOR) imply R*W=Y*. If A_Z>0,
+the existing [zero-payoff renewal theorem](../exports/ZERO_ACTIVE_PAYOFF_SEMANTIC_RENEWAL_AND_SOURCE_INTERSECTION.md)
+and |U_i|<=M(1-nu) give w=0 if and only if product K_i=1. In that case
+K_i=1 for every i, and R realizes the ENTIRE original source including N*.
+Otherwise W is a nontrivial nonnegative zero-face source; some w_i>0 has
+K_i<1 by the same renewal theorem. Under the separate generic hypotheses
+of [three-owner dispersion](../exports/UNIFORM_THREE_OWNER_TAIL_DISPERSION.md),
+at least three K_i<1, so at least three coordinates of the finite escape
+mass in(FACTOR) are positive. This counts escaped owners, not visible clocks.
+
+For ANY zero-debt W' with exact payoff w, A_Z>0 ensures positive Never and
+therefore B=e=w. The displayed operator gives R*W' exactly the original
+U,B,e=v and product h nu(W'). Hence global marked minimality proves
+
+    nu(W')>=m/h=nu(W).
+
+The boundary globally minimizes original Never on its exact payoff fibre,
+even when the visible head is infinite. This supplies no arbitrary local
+openness of that fibre. Removing W can create debt h w_i and increases the
+Never product to h; retaining it leaves the fixed-payoff descent problem.
+The zero-boundary alternative realizes an actual source, possibly infinite,
+whose absorbing repair remains open. Neither alternative closes Fin4.
+
+### Complete one-clock test and the two-zero face
+
+For any nonnegative zero-debt W with positive original Never, let S be its
+zero set and use the intervals I_j from Section11. If W ITSELF is a global
+marked least-Never source, every I_j must be empty: an eligible insertion
+keeps its owner's payoff0 and multiplies nu by1-t. This excludes a singleton
+zero set at that minimum. It does NOT apply directly to the inherited W
+above, which minimizes only on its exact payoff fibre; an insertion changes
+that payoff and requires the head compensation from Section11.
+
+If S={a,b}, both intervals are empty exactly when
+
+    Gamma_ab<0, J_ab>Gamma_ab,
+    Gamma_ba<0, J_ba>Gamma_ba,                       (TWO)
+
+where J_ij=Z_i({i,j}). Indeed min_(r in[0,1]) r J_ij=min(0,J_ij).
+This also classifies ALL proper prefixes supported on these two zero owners,
+not just one-clock insertions. Under(TWO), put
+c_ab=min(0,J_ab)-Gamma_ab>0 and define c_ba similarly. For arbitrary head
+finite masses f_a,f_b and first-date atom p_b(0), the through-W value of a
+is Gamma_ab f_b, whereas its first-date reply is J_ab p_b(0). Hence
+
+    B_a-T_a>=c_ab f_b,
+    d_a>=(1-f_a)c_ab f_b,                            (PAIR)
+
+and symmetrically for b. The second inequality uses the mixture of finite
+head responses and the response that continues through the entire head.
+At positive head Never masses, zero debt forces f_a=f_b=0. These inequalities
+pass to countable heads and compact head limits with ORIGINAL finite masses
+retained. Conversely, failure of(TWO) supplies a nonempty I_j and thus a
+compact insertion of every sufficiently small mass. No genericity is used.
+
+For three zeros the complete ONE-clock test remains elementary: intersect
+the lower bounds r>=Gamma_kj/J_kj for J_kj<0, upper bounds
+r<=Gamma_kj/J_kj for J_kj>0, and[0,1]; a row J_kj=0 requires Gamma_kj>=0.
+Empty intersections do not classify prefixes with several active owners.
+
+### The full linear clock relaxation has a finite certificate
+
+Let1<=|S|<=3, restrict Gamma and J to S, set their diagonals0, and put
+Delta=J-Gamma. The first-date feasibility test is
+
+    0<=p<=f, sum f=1, Gamma f-Jp>=0.                 (LP)
+
+It fails exactly when a positive normalized row lambda satisfies
+lambda Gamma<0 and lambda Delta>0 entrywise. Indeed, set x=f-p,y=p.
+The convex hull of the columns of Gamma and -Delta either meets the
+nonnegative orthant or is strictly separated from it by a nonzero
+nonnegative row. A small positive perturbation preserves the strict
+inequalities. This is the complete one-date alternative, not the complete
+clock test.
+
+For K>=1 define the compact finite domain
+
+    R_0>=0, sum R_0=1,
+    0<=p_n<=R_n, R_(n+1)=R_n-p_n for0<=n<K,
+
+and require Gamma R_n-Jp_n>=0 at every queried date. Its exact margin is
+
+    mu_K=min_domain max_(i in S,0<=n<K)(Jp_n-Gamma R_n)_i.
+
+The K-date test fails iff mu_K>0. Also mu_K<=M when rewards are bounded
+by M, since the domain permits p_n=0 throughout. The K=1 test is(LP).
+The ENTIRE hierarchy has the following complete mathematical alternative:
+
+    some finite K has mu_K>0;                       (FINITE)
+    exists r in[0,1], v>=0, sum v=1,
+                       (Gamma-r J)v>=0.            (RAY)
+
+Exactly one holds. Here is a proof for arbitrary real Gamma,J, without sign
+or irreducibility assumptions. Let C_n be the cone of states R admitting
+n monotone transitions R to R', where
+
+    0<=R'<=R, (Gamma-J)R+J R'>=0.
+
+Each C_n is a closed convex cone: witnesses for convergent initial states
+have all later coordinates bounded by the initial coordinates, so a
+subsequence supplies limiting witnesses. The cones decrease. If all finite
+tests pass, their normalized sections have nonempty compact intersection
+B, the normalized base of C_infty=intersection C_n. Every R in C_infty
+has a successor in C_infty, by intersecting the nested compact sets of
+first successors admitting n further transitions.
+
+If a nonzero R admits successor0, then(RAY) holds with r=1. Otherwise
+all successor masses over B are uniformly bounded away from0: their graph
+is compact and has no zero successor. Normalize each successor by its total
+mass. This defines on B a nonempty compact-valued correspondence with
+closed graph and convex values. Convexity follows by reweighting a convex
+combination before normalization. Kakutani gives a fixed point: some
+successor R'=sR has0<s<=1. Then r=1-s proves(RAY). Conversely a ray
+supplies R_n=(1-r)^n v, p_n=r R_n at every finite depth, including r=0
+and r=1 (with R_0=v and later states0 in the latter case).
+This proves the alternative. No uniform bound on K is asserted.
+
+(RAY) is a common direction in a LINEAR relaxation, not a stationary
+strategy theorem, a full-cap Nash producer, or a complementarity solution.
+The endpoint r=0 may represent diffuse finite mass; it does not provide an
+exact positive-rate countable clock. Contact of supported actions with the
+cap and nonlinear coalition effects remain additional constraints.
+
+### A failed finite test forces a uniform full-debt floor
+
+Assume mu=mu_K>0, w_i>=eta>0 outside S, and put
+
+    delta=min(1/2,mu/(6M),eta/(6M)),
+    kappa=eta*mu/[4(16M+eta)].
+
+For EVERY independent head R with original finite masses f_i and
+beta=sum_i f_i<=delta, including countable heads and compact head limits,
+
+    D(R*W)>=kappa beta>=kappa[1-product_i(1-f_i)].    (FLOOR)
+
+Here W is fixed, and positive-payoff owners may participate in the head.
+First suppose its support lies in S. Let p_j(n) be its date-n atom and
+F_j(n)=sum_(t>=n)p_j(t) its remaining ORIGINAL finite mass. The zero-row
+through-W response has value e_i(R), because w_i=0. At every physical date,
+
+    V_i(n)-e_i(R)=(Jp(n)-Gamma F(n))_i+error,
+    |error|<=3M beta^2.                             (EXP)
+
+To check this directly, condition on head choices and average the independent
+boundary law first. With exactly one finite opposing head clock j, the
+response difference is0 if its date is below n, J_ij-Gamma_ij at n, and
+-Gamma_ij above n. These are exactly the linear terms. With no opposing
+finite head clock, both expected values are0. Discrepancy occurs only when
+at least two opponents have finite head clocks. There are at most two such
+opponents in S; the discrepancy is at most6M and this event has probability
+at most sum_(j<l)f_j f_l<=beta^2/2. This proves(EXP).
+
+Normalizing F,p by beta gives a point in the K-date domain, so some complete
+reply has excess at least mu beta-3M beta^2. Write the prescribed payoff
+as the mixture of finite head responses and, with weight1-f_i, the response
+continuing through the head and playing W. Its latter value is
+T_i=e_i(R)+H_i(R)w_i, so d_i>=(1-f_i)(B_i-T_i) with B_i>=T_i.
+The maximizing row therefore gives
+
+    D>=(1-beta)(mu beta-3M beta^2).
+
+In general put g=sum_(i outside S)f_i. Each positive owner's through-W value
+is at least eta-2M beta, whereas every finite head reply is at most M beta.
+The same mixture gives D>=eta*g/2. Remove only these owners' HEAD clocks,
+retaining W. Coupled complete plays coincide unless a removed head choice
+was finite, an event of probability at most g. Every complete response,
+and the complete through-W response, changes by at most2Mg; taking a
+supremum gives the same cap bound. Apply(EXP) to the stripped head:
+
+    D>=(1-beta)[mu(beta-g)-3M(beta-g)^2-4Mg]
+      >=mu beta/4-(mu/4+4M)g.
+
+Combine this with D>=eta*g/2, using weight theta=eta/(16M+eta) on the
+last bound. The remaining g coefficient is
+eta(4M-mu/4)/(16M+eta)>=0, since mu<=M. This proves(FLOOR).
+For compact head limits extract the finitely many atoms before date K and
+retain f_i; then F_i(n)=f_i-sum_(t<n)p_i(t), including finite mass escaping
+every fixed date. All inequalities pass to the limit with original Never
+unchanged. Semantic composition uses finite truncations and retained boundary
+queries; it never executes W after infinitely many natural dates.
+
+Thus failure of(RAY) forbids arbitrarily small nonempty prefixes with
+D/beta tending to0. Feasibility of(RAY) is not a full-clock Nash sufficiency
+claim. Under(TWO), the first-date test already fails. Changing W by order
+beta can change the zero-row through values by order beta and cancel the
+floor; no bound for changing tails or unrestricted absorbing-debt gap follows.
+
+### A complete noncyclic sign family, with a nineteen-date control
+
+The test excludes all six NONCYCLIC mixed-column singleton sign patterns
+when their joining ratios have a common gap. Relabel their three owners so
+
+    Gamma=[[0,A,B],[C,0,-D],[-E,-F,0]], A,B,C,D,E,F>0.
+
+Put a=min_(Gamma_ij>0) J_ij/Gamma_ij and
+b=max(0,max_(Gamma_ij<0) J_ij/Gamma_ij). If a>b, then(RAY) is impossible.
+For r<=1/a, every negative-Gamma entry of Gamma-rJ is strictly negative.
+Its third row forces v_1=v_2=0, then its second row forces v_3=0.
+For r>1/a, every positive-Gamma entry is strictly negative: the first row
+forces v_2=v_3=0 and the second forces v_1=0. Both contradict normalization.
+Thus every member has a finite deadline obstruction and(FLOOR), regardless
+of higher-coalition rewards, whenever the stated continuation exists.
+This is a family of local continuation exclusions, not a UE theorem.
+
+For S={1,2,3}, fix
+
+    Gamma=[[0,1,1],[1,0,-1],[-1,-100,0]],
+    J=[[0,2,2],[2,0,-3/2],[-3/2,-150,0]].
+
+Every one-owner interval is empty: positive observers require r<=1/2,
+negative observers r>=2/3. Yet(LP) passes: f=(1,1,1)/3,p=(0,1,0)/3
+gives Gamma f-Jp=(0,0,49/3). Suppose nineteen dates passed. At any queried
+n=0,...,18 write R_n=(x,y,z), X=x+100y, Y=y+z. The inequalities give
+
+    p_2+p_3<=Y/2,
+    2p_1-(3/2)p_3<=x-z,
+    p_1+100p_2>=(2/3)X.
+
+The first two imply z<=4x+3y, hence Y<=4X. The second and p_3<=z give
+p_1<=x/2+z/4; combining with the third and p_2<=y gives
+x<=200y+3z/2, hence X<=300Y. Also X_(n+1)<=X_n/3 and
+Y_(n+1)>=Y_n/2. Normalization and X_0<=300Y_0 force Y_0>0, so
+
+    2^(-18)Y_0<=Y_18<=4X_18<=1200*3^(-18)Y_0,
+
+contradicting 3^18>1200*2^18. Therefore mu_19>0. The same strict finite
+margin persists under sufficiently small perturbations of Gamma,J. The
+other rewards enter only through M and the positive continuation buffer.
+This is a complete local prefix obstruction, not a new raw UE class.
+
+The continuation hypotheses are nonvacuous. Complete the table using a
+fourth owner0: for each i in S set all unspecified rewards to0 except
+Z_i(S minus{i})=-sum_(j in S)Gamma_ij and Z_i(S)=-sum_(j in S)J_ij.
+Set row0 to1 on every nonempty coalition except{0}, where it is0. The
+one-date root with all hazards1/2 has U=B=e=(7/8,0,0,0) and every original
+Never mass1/2. Its Quit and Continue numerators cancel in each core row;
+row0's offers are both7/8. Thus all four owners can be active in an ACTUAL
+continuation with this local rigidity. Increasing the EXISTING owner0 root
+from1/2 to1 keeps U=B=e fixed and reduces nu to0. The obstacle concerns
+prefixes; revising the existing law succeeds. No positive-gap or globally
+minimizing source is claimed for this table.
+
+### Moving the continuation can cancel the prefix floor
+
+Here is an ACTUAL finite control of that distinction. Label owners a,b,c,d.
+For every nonempty coalition A set Z_a(A)=1_(c in A)-1_(d in A), except
+Z_a({b})=-2 and Z_a({a,b})=-1. Set row b to0 except Z_b({a})=-2 and
+Z_b({a,b})=-1; set Z_c(A)=1_(d in A), Z_d(A)=1_(c in A). All own
+singletons are0. The last-period root(0,0,s,t) has U=B=e=(s-t,0,t,s).
+At s=t=1/2 this gives a(TWO) face W. For0<beta<1/3 replace its tail root
+by s=1/2+beta/(1-beta),t=1/2 and prefix a solo-b root beta. The complete
+Quit and Continue offers at that prefix are respectively
+
+    Q=(-beta,0,0,0), C=(-beta,0,(1-beta)/2,(1+beta)/2).
+
+Thus the actual two-period output has full zero debt and original Never
+product1/4-3beta/4, strictly below nu(W)=1/4. The changed tail converges
+to W in all annotations. This is a nonlocal-in-law marked descent despite
+the fixed-W floor, even with singular head comparisons; no neighborhood
+version of(FLOOR) is valid without further constraints. Pure{c,d} is already
+absorbing Nash, so this control adds no raw UE coverage.
+
+### Restrictions on a genuinely infinite visible head
+
+In the extracted root chain, every owner with w_i>0 is eventually quiet.
+Otherwise infinitely many active dates give U_i^t=Q_i(q^t), whose absolute
+value is at most M sum_j q_j^t->0, contradicting U_i^t->w_i>0. At a late
+cut the remaining actual visible suffix R_t has finite masses only on S,
+total mass tending to0, and exact semantic composition R_t*W=Y_t.
+
+If S is a singleton {j}, every nonzero late root has U_j^t=0 while all
+other payoffs are positive, so the specified boundary-stopping extraction
+has already stopped. More generally the late solo clock can be replaced
+by one root of its total mass: it preserves all first-coalition probabilities
+and original Never, and positive outsiders prefer the through-W response
+once that mass is at most min_(k!=j)w_k/(4M). This preserves U,B,e,N and
+gives a FINITE head representation over the SAME W. It does not imply an
+invertible active Jacobian; a solo root's own indifference is automatic.
+
+If(FINITE) holds, apply(FLOOR) to each sufficiently late visible suffix.
+Its exact zero debt forces beta=0, hence every later root is zero and the
+source at that cut is already W. The extraction therefore stops finitely.
+In particular this holds for every two-zero boundary satisfying(TWO).
+A genuinely nonstopping chain with some positive limiting payoff must
+therefore have two or three zeros and satisfy(RAY). This is a restriction
+on the limiting visible-head geometry, not an exclusion of such a face
+when it is reached after finitely many roots. It supplies no new root
+extraction through a zero face, and no regularity or descent sign for the
+remaining finite heads.
+
+## 13. Universal descent must go beyond proper compact prefixes
+
+The following closes a potential shortcut in the strictly positive source
+branch. It does not prove universal descent. Even arbitrary compact heads,
+with no calendar or support bound, cannot overcome positive root inertia
+while retaining a positive chance of reaching the old continuation.
+
+### An all-head bound from root inertia alone
+
+Let W in C have U=B=e=w with eta=min_i w_i>0, and let M>0 bound all native
+rewards. For a root q put ell(q)=sum_i q_i, h(q)=product_i(1-q_i), and
+
+    C_i(q;b)=P_i(q)+H_i(q)b_i,
+    R(q;b)=sum_i[max(Q_i(q),C_i(q;b))
+                       -q_i Q_i(q)-(1-q_i)C_i(q;b)].
+
+Assume AllContinue is the ONLY Nash root at w. Define
+
+    delta=eta/(16M),
+    gamma=min_(q in[0,1]^4, ell(q)>=delta) R(q;w)>0,
+    c=min(eta delta/2, gamma eta/(eta+16M))>0.
+
+Positivity of gamma follows from compactness and root uniqueness. For EVERY
+independent head P, finite, countable, or a compact limit of complete head
+annotations, with ORIGINAL head Never masses s_i and h=product_i s_i,
+
+    D(P*W)>=c h(1-h).                                (LOCK)
+
+Thus a zero-debt head has h=0 or h=1. At h=1 its finite masses vanish and
+P*W=W. Every nonempty zero-debt compact head must be fully absorbing.
+
+For the proof, first take a finite chronological word q^0,...,q^(L-1),
+with tail cap b^L=w. Its complete cap recursion and debt identity give
+
+    b_i^t=max(Q_i(q^t),P_i(q^t)+H_i(q^t)b_i^(t+1)),
+    D(P*W)=sum_(t<L) S_t R(q^t;b^(t+1)),
+    S_t=product_(u<t)h(q^u).
+
+The second argument of R is the NEXT FULL CAP, not the prescribed payoff.
+Using the latter would invalidate this identity at positive-debt suffixes.
+Every b coordinate stays in[-M,M]. If h>0, every S_t>=h; write
+E=sum_(t<L)R(q^t;b^(t+1)), so D(P*W)>=h E.
+
+A terminal suffix of total activity A<=2delta has Continue as the cap in
+all rows, Continue-minus-Quit gap at least eta/2, and
+
+    sum_suffix R >=(eta/2)A,
+    ||b_at_suffix_start-w||_infinity<=2M A.           (SUFFIX)
+
+Indeed |Q_i(q)|<=M ell(q) and |C_i(q;b)-b_i|<=2M ell(q).
+Backward induction keeps Continue at least eta-2M A and Quit at most
+2M delta, leaving a gap at least eta-6M delta>=eta/2. Its regret is then
+q_i(C_i-Q_i), proving both assertions in(SUFFIX).
+
+If E>=eta delta/2, then E>=c(1-h). Otherwise no terminal run of roots
+with individual activity below delta can accumulate delta activity: its
+shortest terminal subrun reaching that threshold would have activity below
+2delta and violate(SUFFIX). If every root is small, the entire head has
+activity A<delta, and E>=eta A/2>=eta(1-h)/2>=c(1-h).
+
+In the remaining case take the LAST root with ell(q^t)>=delta. Its later
+suffix has activity A<delta and, by(SUFFIX), A<=2E/eta. Hence
+||b^(t+1)-w||_infinity<=4M E/eta. Each individual root regret is
+1-Lipschitz in its own cap input, being the maximum of
+(1-q_i)(Q_i-C_i) and q_i(C_i-Q_i). Consequently
+
+    E>=R(q^t;b^(t+1))>=gamma-16M E/eta,
+
+which gives E>=gamma eta/(eta+16M)>=c. This proves(LOCK); h=0 needs only
+D>=0. No bound depends on the number of dates.
+
+Censoring an actual head's sufficiently late finite mass to its Never atom
+gives total-variation convergence, uniformly over every response. Semantic
+append to W uses the continuous complete-annotation map
+
+    U_i'=U_i(P)+h w_i,
+    B_i'=max(B_i(P),e_i(P)+H_i(P)w_i),
+    N_i'=s_i N_i(W).
+
+Since w>=0, retaining the head's Never query adds no spurious cap. Finite
+concatenations and approximants of W justify the map in C. The same formula
+passes(LOCK) to all compact head limits, retaining original s_i even when
+finite mass escapes every fixed date. At h=1, the response-uniform bound
+|U_i(P)|,|B_i(P)|,|e_i(P)|<=M sum_j(1-s_j) makes the head empty.
+There is no execution of W after infinitely many natural dates.
+
+### Application to the actual global source
+
+Now select a globally UNMARKED least-Never zero-debt point W. This selection
+is separate from Section12's marked minimum. Under A_Z>0 its Never product
+is positive by the absorbing repair inequality. Every nonzero Nash root at
+w would give a zero-debt carrier point with smaller Never. Therefore its
+strictly positive payoff branch has the root inertia required by(LOCK).
+Any head-only exact descent on that branch would already have to be fully
+absorbing; a proper compact intermediate cannot supply it.
+
+The positive absorbing gap strengthens the conclusion quantitatively. Put
+
+    h0=(A_Z/(28M))^4, kappa=min(A_Z/2,c h0)>0.
+
+Since A_Z<=8M, h0<1. When h<=h0, the repair inequality
+A_Z<=D(P*W)+14M[h nu(W)]^(1/4) gives D(P*W)>=A_Z/2. When h>=h0,
+(LOCK) applies. Thus every independent compact head satisfies
+
+    D(P*W)>=kappa(1-h).                              (GLOBAL LOCK)
+
+This uses the actual full caps and original Never product. It does not
+forbid a proof constructing an absorbing head and thereby contradicting
+A_Z>0, nor a proof revising W's existing laws. An arbitrary native absorbing
+profile is not automatically a valid head over W: a deviator's opponents
+may all continue through it, exposing the extra through-W response.
+
+The positive-buffer estimate is already used in Section12. The additional
+step here is the last-large-root argument, which gives a bound for ALL
+proper compact heads. The
+[global finite-block regret note](CODEX_COORDINATOR__GLOBAL_FINITE_BLOCK_REGRET_RATE.md)
+proves an absorption-relative bound at a different source: a positive
+original MAX-debt minimum with a lowered auxiliary continuation. That
+hypothesis does not hold for this native zero-debt W. The
+[finite exact incompleteness control](CODEX_GLOBAL_CREATIVE__FINITE_EXACT_NASH_INCOMPLETENESS.md)
+already supplies an actual positive inert W and an absorbing two-owner
+infinite head. It realizes both the proper-head exclusion and the possible
+h=0 endpoint; no additional reward table is needed.
+
+### A local whole-law descent beyond every finite exact Nash profile
+
+There is a constructive way past these restrictions in the EXISTING
+[finite exact incompleteness control](CODEX_GLOBAL_CREATIVE__FINITE_EXACT_NASH_INCOMPLETENESS.md).
+Use its core owners0,1,2 and quiet observer3, without changing the table.
+For a uniform core root p, its forced-Quit, passive and survival terms are
+
+    s(p)=Q(p)=2p-p^2, P(p)=p+p^2, H(p)=(1-p)^2,
+    z(p)=[Q(p)-P(p)]/H(p)=p(1-2p)/(1-p)^2.
+
+For0<=p<=1/2 define T(p)=1-sqrt(1-z(p)). Then s(T(p))=z(p), and
+z(p)=p-p^3/(1-p)^2 lies in[0,p]. Rationalizing the square root gives
+
+    0<=T(p)=z(p)/(1+sqrt(1-z(p)))<=3p/5.
+
+For p_0 in(0,1/2), set p_(n+1)=T(p_n). Each core owner independently
+uses these hazards on the natural dates; observer3 chooses Never. All
+hazards are positive and summable, so each core law has literal Never
+mass N=product_(n>=0)(1-p_n)>0. The indifference equations hold exactly:
+
+    P(p_n)+H(p_n)s(p_(n+1))=s(p_n).
+
+Let A_n=product_(t<n)(1-p_t)^2. A core owner's response at deadline n is
+sum_(t<n) A_t P(p_t)+A_n Q(p_n)=s(p_0), by telescoping. Its Never response
+has the same limit since A_n s(p_n)->0. Thus EVERY finite response and
+Never tie, not merely the supported replies. Observer3's Never response
+dominates every finite reply: joining changes reward1 to1/2, and quitting
+alone changes a future nonnegative payoff to0. Consequently the actual
+countable profile has
+
+    U=B=e=(s(p_0),s(p_0),s(p_0),1-N^3),
+    original Never=(N,N,N,1), nu=N^3.
+
+At p_0=1/2 the tail is empty, recovering the old positive inert source
+w=(3/4,3/4,3/4,7/8), nu=1/8. Put p_0=1/2-epsilon instead. Then
+p_1=2epsilon+O(epsilon^2). Near0, T(p)=p/2+O(p^2); the uniform geometric
+bound permits summing its quadratic remainders, giving
+
+    sum_(n>=0)T^n(p)=2p+O(p^2),
+    log product_(n>=0)(1-T^n(p))=-2p+O(p^2).
+
+It follows that
+
+    log nu(epsilon)=log(1/8)-6epsilon+O(epsilon^2),
+    nu(epsilon)=1/8-3epsilon/4+O(epsilon^2)<1/8
+
+for every sufficiently small positive epsilon. The core payoff is exactly
+3/4-epsilon-epsilon^2. The entire new finite tail mass and the first-root
+change are O(epsilon), so the complete independent laws converge to the
+old source in TOTAL VARIATION. This is a local revision of existing laws,
+not a proper prefixed head over the fixed source.
+
+Strict descent holds on the explicit interval0<epsilon<=1/32. Indeed
+(1-p_0)(1-p_1)=sqrt(1/4+3epsilon^2), while p_1>epsilon and
+p_1<=3/10 imply p_2>=p_1/5>6epsilon^2. The bound p_1>epsilon follows from
+p_1>=z(p_0)/2>=480epsilon/289. Since
+1-1/sqrt(1+12epsilon^2)<=6epsilon^2, the product of the FIRST THREE
+survival factors is already below1/2, and hence nu<1/8.
+
+Finite approximation is explicit. Truncate after L>=1 roots and write
+N_L=product_(n<L)(1-p_n). The core annotations are
+
+    B_i=s(p_0),
+    U_i=s(p_0)-N_L^3 s(p_L),
+    e_i=s(p_0)-N_L^2 s(p_L),
+    D=3N_L^3 s(p_L)>0, nu=N_L^3.
+
+The observer still has zero debt. For fixed small epsilon, these actual
+finite profiles have debt tending to0 and Never tending to a value below
+1/8. The positive truncation debt is essential: the old complete census
+allows only AllNever or the isolated half-hazard source as finite EXACT
+Nash profiles. The new path therefore uses a genuinely infinite tail.
+
+The geometric tail-orbit mechanism is related to
+[the canonical pivot proof, Section14](../exports/UNIVERSAL_CANONICAL_PIVOT_EXIT_REDUCTION.md),
+and revising a head together with its continuation is the mechanism of
+Section11. This calculation supplies an actual local escape from the
+finite-exact trap and the positive-inert prefix restriction. It supplies
+neither a producer for arbitrary sources nor a new UE reward class; the
+control's absorbing stationary equilibrium was already known.
+
+### The entire symmetric orbit escapes through actual asymmetric clocks
+
+The preceding construction extends past its first turning point: EVERY
+member with p_0 in[0,1/2] admits arbitrarily small total-variation changes
+to actual full Nash laws with smaller original Never. A scalar minimum of
+this family is a saddle when the core owners may use different clocks.
+This excludes this entire orbit family as local minima, not arbitrary
+sources or a further raw reward class.
+
+For a core vector q, write a=q_next(i), b=q_prev(i). The SAME table gives
+
+    Q_i(q)=4a-2b-ab,
+    z_i(q)=(2a-b-2ab)/[(1-a)(1-b)].
+
+The exact tail recurrence is Q(q_(n+1))=z(q_n). At a diagonal successor
+r=T(p), DQ has symmetric eigenvalue2(1-r) and transverse squared
+eigenvalue modulus r^2-2r+28. Here 0<=r<=1-sqrt(3)/2<1/7, so DQ is
+invertible. The implicit function theorem gives a vector map Psi near
+every diagonal orbit point. At zero, Psi(q)=q/2+O(||q||^2): ALL THREE
+modes contract, not just the symmetric one.
+
+For every0<p<1/2 an open neighborhood of p*one has positive summable
+Psi-orbits. To justify positivity at infinitely many dates, enter a small
+ball where ||Psi(q)||<=theta||q|| with theta<1/sqrt(2). Its analytic
+extension to a complex ball has the same bound after shrinking the ball.
+The successive differences of2^n Psi^n(q) are bounded by
+C(2theta^2)^n||q||^2, so these functions converge normally to A(q).
+Cauchy estimates give convergence through two derivatives on a smaller
+ball. On the positive diagonal, A has strictly positive coordinates,
+because T(x)=x/2+O(x^2) and its iterates are summable. Continuity gives
+A(q)>>0 nearby; the refined remainder
+Psi^n(q)=2^-n A(q)+O(4^-n) makes every late iterate positive. Continuity
+handles the finitely many earlier dates. The geometric estimates also
+give total-variation continuity of the complete stopping laws.
+
+Telescoping the exact recurrence prices EVERY core finite deadline and
+Never at Q_i(q_0). Observer Never still dominates every finite reply.
+Thus these nearby vector orbits are actual full Nash profiles. Their
+log Never F(q)=log product_(n,i)(1-q_(n,i)) is C2 and satisfies
+
+    F(q)=sum_i log(1-q_i)+F(Psi(q)).
+
+Put H(p)=sum_n -log(1-T^n(p)). At q=p*one, cyclic symmetry gives
+gradient F=g(p)*one, g=-H', and Hessian lambda(p) times the identity on
+the plane sum_i d_i=0. Write r=T(p) and d0=r^2-2r+28. Implicit
+differentiation gives, for every transverse d,
+
+    a(p)=||DPsi d||^2/||d||^2
+        =(9p^2-15p+7)/[(1-p)^6 d0]>0,
+    b(p)=sum_i D^2Psi_i[d,d]/||d||^2
+        =[3(1-2p)/(1-p)^4-a(p)]/[2(1-r)],
+    lambda(p)=-(1-p)^(-2)+a(p)lambda(r)+b(p)g(r).       (CURV)
+
+Indeed the transverse squared modulus of Dz is
+(9p^2-15p+7)/(1-p)^6; also
+sum_i D^2z_i[d,d]=3(1-2p)||d||^2/(1-p)^4 and
+sum_i D^2Q_i[v,v]=||v||^2 for transverse v. Dividing the second
+identity by DQ's symmetric eigenvalue gives b(p), including the
+gradient term in(CURV).
+
+For0<=p<=9/20, b(p)>0: using d0>=27 reduces its sign to
+
+    K(p)=74-309p+396p^2-162p^3>0.
+
+This polynomial decreases on[0,9/20] and K(9/20)=1511/4000.
+Every subsequent scalar orbit point lies below1/7, where T'>0 and g<0.
+Iterate(CURV); its factors a tend to1/4 and lambda is bounded near zero,
+so the remainder vanishes and every summand is negative. Hence
+lambda(p)<0 on0<p<=9/20. The transverse first derivative vanishes,
+so any nonzero transverse direction lowers Never to second order.
+
+For the remaining interval use
+
+    T'(p)=(1-3p)/[2(1-p)^3(1-T(p))],
+    H'(p)=1/(1-p)+T'(p)H'(T(p)).
+
+On[0,1/7], H'>=2: the constant2 is a subsolution, since
+1/(1-p)+2T'(p)-2>=p(1-5p+2p^2)/(1-p)^3>=0, and the iterated
+derivative remainder tends to zero. Therefore, on[9/20,1/2],
+
+    H'(p)<=1/(1-p)+2T'(p)
+          <=(p^2-5p+2)/(1-p)^3<0.
+
+Reducing p lowers Never there. At p=0, increasing p lowers Never;
+at p=1/2 the preceding one-sided construction applies. The scalar family
+does have an interior minimum, since its log-Never endpoint derivatives
+are -6 and6. Every scalar minimizer lies in(1/3,9/20), and the negative
+transverse curvature makes it a saddle. No uniqueness is needed.
+
+### Local whole-law descent nevertheless fails at other positive inert sources
+
+The global-source hypothesis cannot be omitted from a universal LOCAL
+descent theorem. Here is a positive root-inert full Nash source isolated
+even among arbitrary countable-law equilibria. Small approximate revisions
+also pay debt proportional to their Never release. This is a mechanism
+counterexample on an already solvable table, not a Fin4 counterexample.
+
+Use core owners0,1,2 cyclically and observer3. For a core recipient i,
+write j=i+1 and k=i-1 modulo3. Without3 in the coalition, set
+
+    Z_i({i})=0, Z_i({j})=2, Z_i({k})=-3,
+    Z_i({i,j})=20, Z_i({i,k})=-10,
+    Z_i({j,k})=100, Z_i({0,1,2})=0.
+
+On coalitions containing3, set Z_i(A)=0 if i is in A, and -1 otherwise.
+Set Z_3(A)=1/10 on nonempty core coalitions, Z_3({3})=0, and Z_3(A)=-1
+when3 joins some core owner. This specifies every reward; M=100.
+For the zero-diagonal singleton and joining matrices Gamma,J,
+
+    one^T Gamma<=-(9/10)one^T, one^T J>=0.             (SEP)
+
+In fact the core column sums are -9/10 and9 respectively, and the
+observer column sums are -3 and0.
+
+For ANY independent tail, let f_i be its original finite mass,
+beta=sum_i f_i, and p_i its atom at date0. Its Never offer e_i differs
+from sum_j Gamma_ij f_j only when at least two opponents have finite
+clocks. With k such opponents the difference is at most
+(k+1)M<=3M binom(k,2). The same argument compares its date0 Quit offer
+Q_i with sum_j J_ij p_j. Summing counts each opponent pair twice;
+p<=f and(SEP) give
+
+    sum_i(e_i-Q_i)<=-(9/10)beta+6M beta^2.
+
+The full cap B_i>=max(e_i,Q_i), and
+B_i-U_i>=(1-f_i)(B_i-e_i). Consequently, for beta<=1,
+
+    D>=(1-beta)[(9/10)beta-6M beta^2].                 (TAIL FLOOR)
+
+For beta<=rho=3/4000 this is at least(9/20)(1-beta)beta.
+The bound covers negative tail payoffs, every countable calendar, and
+compact annotation limits retaining ORIGINAL f_i. No clock-support
+assumption is used. In particular a zero-debt tail with beta<rho is empty.
+
+Now take the one-date core root p*=11/111 and observer Never. Its offers
+are Q(p)=10p(1-p), P(p)=-p+101p^2, so the source is full Nash with
+
+    w=11000/12321,
+    U=B=e=(w,w,w,(1/10)[1-(100/111)^3]),
+    N=(100/111,100/111,100/111,1).
+
+Every sufficiently close profile in marginal total variation has a proper
+first root with all core rates interior and conditional tail beta<rho.
+The exact ledger D(full)=h D(tail)+R(q;B(tail)) forces that tail to be
+empty at zero debt. The remaining observer is strictly quiet. The core
+indifference equations are
+
+    18x-7y-111xy=0, x=q_next(i), y=q_prev(i).
+
+They express x=7y/(18-111y), a strictly increasing map wherever a solution
+is possible. Its three-cycle must be constant, so the only nearby root is
+p*. This proves full-law isolation, including infinite-support revisions.
+It also holds in a retained-root compact cylinder with nearby root and
+conditional beta<rho. It does NOT assert isolation in the unanchored
+finite-dimensional(U,B,e,N) topology, which forgets the retained root.
+
+There is a stronger local error bound. Let d=max_(i<3)|q_i-p*| and
+r0=p*/2. For d,q_3<=r0 and beta<=rho, the zero-tail core comparison is
+F_i^0=18q_j-7q_k-111q_jq_k. Its linearization has coefficients7,-18,
+so max_i|F_i^0|>=11d-111d^2>=(11/2)d. The exact observer dependence is
+F_i=(1-q_3)F_i^0+q_3. Core mixing weights are at least r0, and the
+observer's Continue-minus-Quit gap is at least11r0/10. Thus
+
+    R(q;0)>=(r0/10)(d+q_3).
+
+Every tail cap has absolute value at most M beta, and root regret is
+1-Lipschitz in each cap coordinate. Hence
+D(full)>=(r0/10)(d+q_3)-4M beta. Meanwhile h>1/2 and(TAIL FLOOR) give
+D(full)>=(9/80)beta. A fixed positive weighted sum yields
+
+    D(full)>=c(d+q_3+beta), c>0.                       (LOCAL FLOOR)
+
+The sum of the marginal TV distances, and the absolute change of original
+joint Never, are at most3d+q_3+beta. Thus(LOCAL FLOOR) excludes even
+approximate local repairs with debt=o(Never release). The same annotation
+and Never bounds hold in the retained-root compact cylinder.
+
+At this source AllContinue is the ONLY Nash prefix. The observer strictly
+continues at every prefix root. Core comparisons are
+
+    F_w(x,y)=18x-7y-111xy-w(1-x)(1-y).
+
+Singleton support fails at -w. With two active owners one has x=0,y>0,
+giving F_w<0. A sure core owner forces its active successor's comparison
+F_w(x,1)=-7-93x<0, so full support must be proper. Its equations express
+x=[w+(7-w)y]/[(18+w)-(111+w)y], again strictly increasing; the derivative
+has positive numerator126+100w. All rates must agree. But
+
+    (11p-111p^2)/(1-p)^2<=121/400<w,
+    121(1-p)^2-400(11p-111p^2)=(211p-11)^2,
+
+excluding a symmetric nonzero root as well.
+
+The global competitor is explicit: stationary hazards(3/10,1/10,0,0)
+absorb surely and give payoff(2,-3,9,1/10). Active Quit and Continue
+offers agree at2,-3; quiet owner2 has Quit47/10<Continue9, and observer
+Quit-37/100<Continue1/10. Vanishing survival prices every complete
+response. Hence A_Z=0. Moreover(SEP) fails the residual singleton
+positive-direction screen. This example does not refute descent from a
+GENUINE global minimum or exclude another source case. It shows precisely
+why local whole-law flexibility cannot replace that hypothesis.
+
+
+### Preserving a payoff fibre is insufficient without global source information
+
+There is a simple complete-carrier obstruction to a universal fixed-payoff
+repair without the positive-gap or global-ancestry hypothesis. Set
+Z_i(A)=1 if A contains an owner other than i, and0 otherwise. For every
+actual independent profile and every carrier limit,
+
+    B_i=e_i=1-product_(j!=i)N_j.
+
+Never attains this value, and no response can exceed the probability that
+an opponent has a finite clock. On a zero-debt fibre of payoff u this gives
+
+    nu^3=product_i(1-u_i).
+
+The joint Never mass is therefore FIXED and positive whenever all u_i<1.
+The actual solo0 profile of finite mass t in(0,1) has u=(0,t,t,t); its
+entire zero-debt fibre has N=(1-t,1,1,1). Yet the table has absorbing
+Nash profiles. Thus zero debt, actual realizability and a nonnegative zero
+face do not provide payoff-preserving descent. A universal argument must
+use the counterexample's additional global restrictions or change the
+payoff and compensate its ancestry. Neither statement above closes Fin4.
+
+Source check: `quittingContinuationBestResponseValue_rootThenContinuation_eq_max`
+(`UniformEquilibrium/Quitting/Root/TerminalDebtPrefix.lean`) and the definition
+`quittingTerminalSemanticPrefix`
+(`UniformEquilibrium/Quitting/Root/TerminalSemanticPair.lean`) were inspected
+for the complete cap recursion. Section13's bounds are ordinary proofs;
+no Lean command was run.
+
+## 14. A global unmarked source reduction
+
+The [global least-Never reduction](../exports/GLOBAL_LEAST_NEVER_SOURCE_REDUCTION.md)
+closes the formerly surviving THREE-ZERO case for the globally UNMARKED
+minimum of nu on full zero debt. After a small native generic perturbation
+and FRESH selection, a positive absorbing-gap table has exactly one of two
+source alternatives: mu=1 with only the AllNever zero-debt annotation, or
+0<mu<1 with EVERY minimizing payoff strictly positive in all four coordinates.
+The complete proof transfers the existing finite-word constructions to the
+same original Never objective and uses a three-owner complementarity-degree
+contradiction. The competitors may change payoff and its sign; this is where
+global unmarked minimality does work that a fixed payoff fibre cannot do.
+
+Under the additional explicit generic conditions, the AllNever alternative
+also requires EVERY matrix Gamma-tJ,0<=t<=1, to be R0 of degree1 and standard Q.
+Its exact proof controls the fourth owner's full response along an actual
+infinite orbit, and the packet gives pair data passing both endpoint tests
+but failing in the interior. The whole-pencil idea is reused; its actual
+AllNever-source implication is stated with all hypotheses.
+
+This selection differs from both the marked minimum in Sections11–12 and
+the positive pivot-debt minima. Their inherited zero faces are not eliminated
+by this theorem. The remaining unmarked task is to contradict the all-positive
+global minimum or the globally AllNever-only branch; neither is closed.
+
+## 15. Alternating pairs exclude a further global AllNever region
+
+The [alternating-pair reduction](../exports/ALTERNATING_PAIR_CLOCKS_EXCLUDE_ALLNEVER.md)
+produces an ACTUAL infinite full Nash clock with original joint Never strictly
+between0 and1 from a finite algebraic test on Gamma,J. It thereby excludes
+the globally AllNever-only alternative. In particular, every strictly
+inverse-positive Gamma with a negative perfect matching passes the test for
+all sufficiently small participant-pair rewards J, with arbitrary finite
+higher rewards. Perron--Frobenius produces the expanding mode; strict quiet
+margins and a signed backward orbit produce the complete stopping laws.
+
+An exact generic pair table passes the entire R0/degree1 pencil condition
+in Section14 but is excluded from AllNever by this producer. Thus the new
+constraint is additional to that pencil screen. For generic positive-gap
+data passing the test, Section14 leaves only strictly positive global
+least-Never payoffs. The construction does not descend from such a minimum:
+its small clocks have Never near1. No arbitrary-game source branch is closed.
+
+## 16. Mixed supports exclude asymmetric AllNever sources beyond pair clocks
+
+The [mixed-support reduction](../exports/MIXED_SUPPORT_CLOCKS_EXCLUDE_ALLNEVER.md)
+uses construction-order supports23,02,013 and reverses them in physical play.
+Its raw algebraic test produces an actual independent full Nash clock with
+U=B=e and original joint Never in(0,1), for every finite higher-reward
+completion. At its inverse-positive asymmetric singleton matrix there is
+only one mutually negative pair. Two strict conditions on a fixed small-J
+direction activate the two missing hazard coefficients of an expanding
+pair/pair/triple mode; the signed orbit handles the full nonlinear rewards.
+
+The exact generic witness passes the entire pencil screen of Section14
+and fails all three complementary-pair tests of Section15. No proper literal
+response-invariant quotient exists, even after positive recipient scaling.
+Strict margins give an open pair-data region with arbitrary finite higher
+completions. This adds an AllNever-source exclusion beyond both earlier
+tests. It does not include J=0 under arbitrary completions, descend from an
+all-positive minimum, or prove UE for the original raised table. The packet
+has [two independent full reviews](../feedback/MIXED_SUPPORT_CLOCKS_EXCLUDE_ALLNEVER__BY_GLOBAL_REVIEW.md)
+and a standalone exact checker; no Lean certification is claimed.
+
+## 17. A negative participant box throughout the inverse-positive region
+
+The [negative-box theorem](../exports/NEGATIVE_PARTICIPANT_BOX_EXCLUDES_ALLNEVER.md)
+unifies the support selection over every hollow Gamma with nonzero
+off-diagonals, detGamma>0, Gamma^-1 strictly positive and a mutually negative
+pair. There is eta(Gamma)>0 such that EVERY participant matrix with
+-eta<J_ij<0, and EVERY finite higher completion, has an actual full Nash
+clock with original joint Never in(0,1). No first-hit genericity is required.
+
+A short negative-edge graph proof forces a negative perfect matching or
+the mixed architecture. Depending on which coordinate reaches zero first,
+the latter uses two pairs and a triple or one pair and two triples. Tied
+hits are covered by a continuous exact support selector and compact cone
+shooting, which constructs an actual compatible infinite tail chain.
+The participant box depends only on Gamma; the clock amplitude can depend
+on the completion and on arbitrarily unbalanced negative participant entries.
+
+An exact two-triple example passes the full pencil condition but fails
+every two-pair test and all24 relabelings of Section16's word. The packet
+also checks the two tied-boundary types and excludes a proper literal
+response quotient even after positive recipient scaling. It has
+[two independent full reviews](../feedback/NEGATIVE_PARTICIPANT_BOX_EXCLUDES_ALLNEVER__BY_GLOBAL_REVIEW.md).
+This is a broad AllNever-source exclusion, not an arbitrary-J theorem or
+descent from the strictly positive global minimum. No Lean check was run.
+
+## 18. A local participant rule now gives a global source exclusion
+
+The [local product-low theorem](../exports/LOCAL_PRODUCT_LOW_EXCLUDES_ALLNEVER.md)
+proves mu<1 whenever every sufficiently small nonzero product hazard has an
+active owner whose forced-Quit offer is nonpositive. This is a raw polynomial
+condition, with no genericity, singleton-matrix or strategic-witness premise.
+It holds whenever positive weights satisfy d_i J_ij+d_j J_ji<0 on every
+pair. Thus the ENTIRE strictly negative participant region is excluded from
+the AllNever branch, at arbitrary magnitudes and with arbitrary finite higher
+rewards. Section17's actual-profile construction retains its stronger
+representation conclusion on its smaller domain.
+
+The mechanism is global. Assuming mu=1 gives a signed functional strictly
+positive on singleton columns and a compact full-debt gap away from Never1.
+Small artificial terminal payoffs transfer uniformly to the original carrier.
+The gap therefore confines every zero-debt auxiliary prefix to small activity.
+Maximizing the signed payoff over auxiliary zero-debt points with a nonpositive
+coordinate then contradicts either a Nash root or an exhaustive zero-face
+macro. The proof bounds an entire word at once and permits arbitrarily long
+calendars and changing supports. This is not a bounded word search.
+
+For J with nonzero off-diagonals and nonzero principal determinants of sizes
+2,3,4, the local rule holds exactly when none of the eleven principal matrices
+has x>0 with J_SS x>0. Each test is the ordinary LP x>=one, J_SS x>=one.
+This complete generic classification strictly extends the weighted criterion.
+The packet gives an exact separating circulant and a singular boundary where
+the same J admits or fails the local rule as higher rewards change.
+
+Consequently a generic AllNever source must admit at least one principal
+positive direction as well as the earlier whole-pencil restrictions. Such a
+direction is only a necessary condition. The positive global minimum remains
+open, including for all-negative J; no entire UE-counterexample family is
+eliminated solely by removing its AllNever alternative. The result concerns
+the closed carrier and does not assert an actual exact Nash representative.
+It has [two independent full reviews](../feedback/LOCAL_PRODUCT_LOW_EXCLUDES_ALLNEVER__BY_GLOBAL_REVIEW.md),
+including explicit falsification attempts. The embedded exact boundary checks
+passed; no Lean check was run.
+
+## 19. Proportional participant rays inside the existing pair criterion
+
+The frozen [alternating-pair theorem](../exports/ALTERNATING_PAIR_CLOCKS_EXCLUDE_ALLNEVER.md)
+already covers the following complete raw family. Let Gamma^-1 be strictly
+positive and let S,T be two disjoint mutually negative pairs. Then EVERY
+J=alpha Gamma with alpha<1 passes its finite(PAIR) test, with arbitrary finite
+higher rewards. For each fixed alpha, a full open neighborhood in all twelve
+participant entries passes as well. This gives actual infinite full Nash
+profiles with 0<nu<1. It is a closed-form corollary of the existing criterion,
+so it does not warrant another export or a repeated clock proof.
+
+Here is the complete new algebra. Put C=Gamma_SS, E=Gamma_TT,
+A=-Gamma_ST E^-1 and B=-Gamma_TS C^-1. The frozen theorem's Perron argument
+produces r>1, v>>0, Bv>>0 with ABv=r v and r simple. Set
+
+    beta=1-alpha>0, k=alpha/beta>-1,
+    p(x)=(x+k)^2-(1+k)^2 r x.
+
+The larger root lambda satisfies lambda>max(1,k^2): p(1)<0 and, when k!=0,
+p(k^2)<0, whereas p grows positive at infinity. When k=0, lambda=r.
+Thus lambda+k>0. Put
+
+    c=k(1+k)/(lambda+k), d=1+k-c=(1+k)lambda/(lambda+k)>0,
+    V=(v,-c Bv).
+
+The two support derivatives are
+
+    A_S(w_S,w_T)=(-k w_S,w_T+(1+k)B w_S),
+    A_T(w_S,w_T)=(w_S+(1+k)A w_T,-k w_T).
+
+They send V to W=(-k v,d Bv) and then to lambda V. The two active
+hazard vectors and two quiet Continue-minus-Quit vectors in(PAIR) are
+
+    -beta^-1 C^-1 v, -beta^-1 E^-1(d Bv),
+    (1-c)Bv, ((lambda-k^2)/(1+k))v.
+
+All are strictly positive, since C,E have negative off-diagonals and
+1-c=(lambda-k^2)/(lambda+k)>0. These four inequalities invoke the frozen
+theorem directly, including its complete-response and actual-law conclusions.
+The return characteristic determinant is
+det((x+k)^2 I-(1+k)^2 x AB). Simplicity of r and of the scalar root makes
+lambda simple, so the strict tests persist on an open participant neighborhood.
+That neighborhood depends on Gamma and alpha; the clock amplitude may depend
+on the arbitrary finite higher rewards.
+
+For0<alpha<1, x=Gamma^-1 one>>0 gives Jx=alpha one>>0, so the local
+condition in Section18 fails. For alpha<0, either negative pair becomes a
+mutually positive participant pair, again violating that condition. Moreover
+Gamma-tJ=(1-alpha t)Gamma for0<=t<=1, so any R0, degree-one and standard-Q
+properties of Gamma persist along the whole pencil. This family therefore
+checks a different part of the frontier while using an existing producer.
+The nonmatching proportional family is not settled by this calculation;
+the positive global minimum remains open throughout.
+
+## 20. Proper supports and a common separator give a further exclusion
+
+The [frozen local product-low proof](../exports/LOCAL_PRODUCT_LOW_EXCLUDES_ALLNEVER.md)
+has a further ordinary-mathematical extension. Use its native table, full
+carrier and notation. Suppose there is a real row lambda with
+
+    lambda Gamma >>0, lambda(Gamma-J)>>0,                         (SEP)
+
+and there is delta>0 such that every q>=0 with0<sum q<delta and at most
+three active owners has an active i with Q_i(q)<=0. Call this proper-support
+condition(PPL). Then mu<1. Lambda may have either sign. Higher rewards are
+arbitrary finite numbers. This extension does not supply an actual exact
+Nash representative or a UE conclusion.
+
+Here are all changes to the frozen proof. Under mu=1, Gamma is R0 and every
+column v has a negative entry. Rescale the supplied lambda so lambda Gamma
+is at least one. It gives the same signed whole-word drift and seed b v
+with lambda b v>0. First fix a small reward neighborhood preserving(SEP).
+The Taylor cutoff used below is uniform there; choose the activity cutoff
+below it and below the(PPL) radius before defining the original compact debt
+gap. That gap and uniform terminal transport give the same globally confined
+virtual zero-debt carrier.
+Maximize lambda U over its points with min U<=0, obtaining lambda w>0.
+
+The gap forces every Nash prefix to be proper and small. If all four
+owners are active, indifference implies
+
+    w_i=(Q_i(q)-P_i(q))/H_i(q),
+    w=(J-Gamma)q+O((sum q)^2),
+
+where P_i is the expected passive reward on nonempty opponent coalitions
+and H_i=product_(j!=i)(1-q_j). Condition(SEP) therefore forces lambda w<0
+for every sufficiently small such root, a contradiction. Every other
+nonzero root uses at most three owners; (PPL) places its output back in the
+maximizing set, where the whole-word drift gives the usual contradiction.
+
+The remaining zero-face argument is unchanged. Its three-zero macros keep
+the positive pivot quiet, and its only PL-dependent endpoint is a root
+supported on those three observers. Thus(PPL) supplies the endpoint sign
+there too. Finally perturb participant entries downward to impose joining
+genericity. This preserves(PPL) pointwise. Both strict separator margins
+persist by continuity, including for signed lambda; no monotonicity of the
+second margin is asserted. The uniform full-root Taylor estimate persists
+in this small neighborhood. This completes the extension without any
+genericity assumption on the original data.
+
+For generic J, (PPL) is exactly failure of the six pair and four triple
+S-matrix tests x>=one, J_SS x>=one. Here generic means nonzero off-diagonals
+and nonzero principal determinants only of sizes two and three. The frozen
+robustness proof applies verbatim to these ten supports: every limiting
+support stays proper, so it never uses the full determinant. The remainder
+bound |Q_i-(Jq)_i|<=C(sum q)(sum_(j!=i)q_j) gives the same sufficiency.
+Thus these ten LPs plus(SEP) are finite raw tests for another excluded
+AllNever region. They do not replace the stronger full-PL conclusion in
+cases where(SEP) fails.
+
+Condition(SEP) itself is the LP lambda Gamma>=one,
+lambda(Gamma-J)>=one in four unrestricted real variables. Gordan's strict
+alternative says infeasibility is equivalent to some u,v>=0, not both zero,
+with Gamma u+(Gamma-J)v=0. Set z=u+v and Theta_ii=v_i/z_i when z_i>0,
+zero otherwise. Equivalently there is z>=0, z!=0 and diagonal0<=Theta<=I
+such that
+
+    (Gamma-J Theta)z=0.                                         (COL)
+
+Conversely use u=(I-Theta)z, v=Theta z. Hence a surviving AllNever source
+under(PPL) must have this columnwise-weighted nonnegative kernel. It is a
+kernel certificate with no strategic realization assumed. The
+scalar whole-pencil restrictions alone do not imply it, as follows.
+
+### An exact unbounded family outside full PL
+
+Take
+
+    Gamma=[0,-2,-5,4; -6,0,-4,6; 1,3,0,-5; 1,-1,4,0],
+    D=diag(95,46,127,170), lambda=(95,46,127,170)/21.
+
+For t>0 let C(t) have zero diagonal, four entries C_i,i+1=2t+1/10 with
+indices modulo four, and all eight other off-diagonals -t. Put
+J(t)=D^-1 C(t)D. On every proper support the positive-edge graph is acyclic,
+so topological weights make its weighted reciprocal sums strictly negative.
+The frozen weighted-pair argument gives(PPL) for every finite completion.
+But J(t)D^-1 one=(1/10)D^-1 one>>0, so full PL fails for every t>0.
+Meanwhile lambda Gamma=one and lambda J(t)=(1/10)lambda<one, proving(SEP)
+for the entire unbounded family.
+
+Gamma has strictly positive inverse, determinant42, and only the negative
+reciprocal pair01. For t=1/100 every off-diagonal sign of Gamma-uJ stays
+fixed for0<=u<=1, and all size-two/three/four principal determinants remain
+nonzero. Hence the entire pencil is R0. At Gamma, inverse positivity forces
+any solution of the offset-minus-ones LCP to have full support; its unique
+root Gamma^-1 one has positive determinant index. Thus the R0 degree is
+one, and homotopy gives degree one and standard Q along the entire pencil.
+The following exact checker verifies the matrix facts, with same-sign
+Bernstein coefficients certifying nonvanishing throughout the interval.
+It also rejects all six ordered partitions in the frozen(PAIR) criterion:
+Sturm counts isolate every real expanding eigenvalue, and mixed nonzero
+signs in its eight guards rule out both orientations of its one-dimensional
+eigenspace. Thus this member survives the scalar pencil screen but is outside
+both full PL and the complete two-pair test, not merely its matching subclass.
+
+```python
+from itertools import combinations
+from math import comb
+import sympy as s
+
+G = s.Matrix([[0,-2,-5,4],[-6,0,-4,6],[1,3,0,-5],[1,-1,4,0]])
+D = s.diag(95,46,127,170)
+lam = s.ones(1,4)*D/21
+assert G.det() == 42 and all(z > 0 for z in G.inv())
+assert lam*G == s.ones(1,4)
+t, u = s.Rational(1,100), s.symbols('u')
+C = s.Matrix(4,4,lambda i,j: 0 if i==j else
+             (2*t+s.Rational(1,10) if (j-i)%4==1 else -t))
+J = D.inv()*C*D
+assert J*D.inv()*s.ones(4,1) == D.inv()*s.ones(4,1)/10
+assert lam*J == lam/10 and all(z > 0 for z in lam*(G-J))
+A = G-u*J
+assert all(G[i,j]*A[i,j].subs(u,1)>0 for i in range(4)
+           for j in range(4) if i!=j)
+for n in (2,3,4):
+    for S in combinations(range(4),n):
+        p = s.Poly(A.extract(S,S).det(),u)
+        d = p.degree()
+        b = [sum(p.nth(k)*s.Rational(comb(i,k),comb(d,k))
+                 for k in range(i+1)) for i in range(d+1)]
+        assert all(z*p.eval(0)>0 for z in b)
+print('Proper-support separator and whole-pencil witness verified.')
+
+L, x = J-G, s.symbols('x')
+for S,T,bounds in [([0,1],[2,3],(1138,1139)),
+                   ([0,2],[1,3],None),
+                   ([0,3],[1,2],(7282,7283))]:
+    for S,T in [(S,T),(T,S)]:
+        CS, CT = L.extract(S,S).inv(), L.extract(T,T).inv()
+        DS, DT = J.extract(S,S)*CS, J.extract(T,T)*CT
+        B, A = G.extract(T,S)*CS, G.extract(S,T)*CT
+        H = (DS+A*B).row_join(A).col_join((DT*B).row_join(DT))
+        f = s.Poly(H.charpoly(x).as_expr(),x)
+        assert s.gcd(f,f.diff()).degree()==0
+        if bounds is None:
+            assert f.count_roots(1,s.oo)==0
+            continue
+        lo, hi = (s.Rational(b,1000) for b in bounds)
+        assert f.count_roots(1,s.oo)==f.count_roots(lo,hi)==1
+        v = (x*s.eye(4)-H).adjugate()[:,0]
+        vs, vt = v[:2,0], v[2:,0]
+        z = B*vs+vt
+        tests = list(CS*vs)+list(CT*z)
+        tests += list(z-J.extract(T,S)*CS*vs)
+        tests += list(x*vs-J.extract(S,T)*CT*z)
+        signs = []
+        for e in tests:
+            p = s.Poly(e,x)
+            assert p.count_roots(lo,hi)==0 and p.eval(lo)!=0
+            signs.append(s.sign(p.eval(lo)))
+        assert 1 in signs and -1 in signs
+print('PAIR fails for every ordered pair partition.')
+```
+
+This strictly extends the local sign-rule method, with an unbounded source
+family and an exact member surviving the whole-pencil screen while failing PAIR.
+It does not claim failure of every other clock criterion. The proof reuses the frozen
+carrier and zero-face arguments, so this notebook retains the extension
+without duplicating them in another export. The positive global minimum
+and the other AllNever data remain open.
+
+## 21. A global expanding region produces an actual infinite Nash clock
+
+The [global expanding-region theorem](../exports/GLOBAL_EXPANDING_REGION_NASH_CLOCKS.md)
+uses only native singleton and participant matrices. Put
+
+    M=Gamma^-1, K=Gamma-J, T=M K,
+    rho=min_(i,j) M_ij/sum_l M_lj, tau=max_(i,j)|T_ij|.
+
+If M>>0, K^-1>>0, one^T T>=0 and tau<=rho^2/8, then EVERY finite
+higher-reward completion has an actual independent infinite Nash law with
+U=B=e and 0<nu<1. The conclusion persists on an open neighborhood in all
+participant entries. In particular every inverse-positive Gamma qualifies
+with J=Gamma(I-diag(beta_j)) and 0<beta_j<=rho^2/8; no matching-sign
+condition is needed. Signed, nondiagonal T is also permitted.
+
+The global mechanism is an invariant expanding region in transformed
+continuation coordinates y=Mw. Every homogeneous root expands sum y and
+keeps the smallest normalized coordinate strictly below its upper threshold. Positive
+inverse degree produces uniformly bounded small exact roots. A quadratic
+thickening y_i>=-L(sum y)^2 absorbs the nonlinear error without requiring
+positive exact coordinates or a continuous root selector. Prefixing from
+vanishing seeds until a fixed amplitude is reached, then reversing the
+finite chains and taking a diagonal limit, produces compatible chronological
+roots. Geometric tail bounds prove original Never positivity and the full
+finite/Never response inequalities. No infinite strategy is assumed as data.
+
+The exact matrix
+
+    Gamma=[0,-20,-5,40; -60,0,-4,60; 10,30,0,-50; 10,-10,4,0]
+
+with beta=(1/4096,1/11264,1/2048,1/30720) satisfies the theorem but fails
+all 6 PAIR, 24 PP3 and 12 P33 orders, across all 53 expanding real eigendirections.
+Its whole scalar pencil is inverse-positive of degree one, and its positive
+participant pair 03 violates even proper-support local product-lowness.
+The export contains the complete exact checker; no longer-word impossibility
+or failure of every existing UE producer is inferred.
+
+For an actual normalized counterexample, the native absorbing debt gap still
+implies mu>0. The produced law adds mu<1 on the displayed region. It does
+not prove absorption or exclude the remaining positive global minimum.
+[Two fresh full reviews](../feedback/GLOBAL_EXPANDING_REGION_NASH_CLOCKS__BY_GLOBAL_REVIEW.md)
+checked the exact exported bytes, strategic-input production, unrestricted
+deviations, the actual-source adapter and the complete named finite tests.
+
+## 22. A signed coalition cone closes both source alternatives on a raw region
+
+The [global coalition-cone theorem](../exports/GLOBAL_COALITION_CONES_UNIFORM_EQUILIBRIUM.md)
+proves A_Z=0, rather than only mu<1. It uses the full reward table and applies
+to every finite number of players under its explicit inequalities. Put
+M=Gamma^-1>>0, lambda=one^T M and rho=min M_ij/lambda_j. For each nonempty
+coalition D define
+
+    a^D=M Z(D), t_D=sum a^D,
+    ell_i^D=0 if i in D, else Z_i(D)-Z_i(D+i), b^D=M ell^D.
+
+One sufficient raw region is
+
+    t_D>=0, a_i^D>=-t_D,
+    a_j^D<=(rho/8)t_D for j outside D,
+    sum b^D>=0, |b_i^D|<=[rho^2/(16n)]t_D.
+
+The theorem also gives the more general cone parameters. All strategic
+objects are produced from these inequalities. At an arbitrary Nash prefix,
+the transformed prescribed value and Quit slack obey exact identities
+x'=h x+A and M(U'-Q)=h x+B. The signed cone and a small normalized coordinate
+are globally invariant, including at large roots. The ratio (sum x)/nu grows
+by a uniform factor greater than one, so bounded payoffs force nu to zero.
+
+Start with a virtual terminal seed epsilon Gamma e_j and build finite Nash
+chains. Replacing its terminal value by literal Never costs O(epsilon) in
+the complete response cap, uniformly in chain length. Moving one remaining
+Never atom to a finite deadline then gives actual absorbing Nash debt tending
+to zero. Nonnegative original own-singleton shifts preserve these absorbing
+debts, and the terminal-all-errors consumer supplies one fixed UE payoff.
+No globally selected positive source is locally repaired or assumed realized.
+
+The exact witness uses the nonmatching inverse-positive matrix
+
+    Gamma=[0,-2,-5,4; -6,0,-4,6; 1,3,0,-5; 1,-1,4,0]
+
+and J=(1-10^-6)Gamma, with specified triple/grand corrections of size10^-24.
+It has a strictly positive full-regret infimum over all stationary profiles
+in the original table. Its only possible sole-sure root would require a
+continuation below -2*10^12, whereas every actual cap lies above -100.
+The complete support census excludes all other sure roots. Thus neither
+stationary approximations nor arbitrary sure-first punishment tails already
+cover this example. Exact tests also reject the applicable pair, child,
+product-low and weighted-ledger mechanisms described in the packet.
+
+The signed inequalities are strict at this witness, apart from structural
+identities, so the UE conclusion holds on an open neighborhood in the full
+original reward space. Both stationary and sure-first exclusions persist
+there. This is a new complete UE region, not a proof for arbitrary higher
+rewards. The remaining problem is to replace the global coalition-cone
+inequalities for tables outside this region. The
+[two full independent reviews](../feedback/GLOBAL_COALITION_CONES_UNIFORM_EQUILIBRIUM__BY_GLOBAL_REVIEW.md)
+check the final theorem, witness, unrestricted responses and coverage.
+
+## 23. A finite product cover replaces every common positive ledger
+
+The [global product-cover theorem](../exports/GLOBAL_PRODUCT_COVER_CONES_UNIFORM_EQUILIBRIUM.md)
+strictly broadens the absorbing producer. It permits any invertible strictly
+positive matrix P, a shared signed cone, and finitely many positive coefficient
+rows c. Instead of requiring a single positive reward row omega to satisfy
+omega ell^D>=0 for every coalition, it requires only that every independent
+product hazard admit some c with c dot B(q)>=0. All rows control the SAME
+size sum(PU), so changing the favorable row incurs no accumulated error.
+The transformed-loss bounds also need only coordinate upper bounds.
+
+A participant penalty selects a quiet Nash root at every continuation in
+the cone. If every hazard were positive, complementarity and the selected
+row would contradict the strictly positive penalty term. The all-sure
+vector is excluded by the codimension-one loss tests. Taking the penalty
+to zero preserves a zero hazard. Consequently the prescribed construction
+never uses the grand coalition, and no bound on its transformed reward is
+needed. The proof retains finite virtual terminals, geometric survival
+decay, full-response transport and a final solo absorbing repair.
+
+The raw product cover has an explicit finite two-row certificate. The
+potentially bad monomials form a coalition rectangle; in odds x,y the
+two relevant polynomials obey
+
+    max(1+xy-2x+y,1+xy+x-2y)>=(1+x)(1+y)/4.
+
+The exact Fin4 witness has joining losses satisfying
+
+    ell01+ell02+(C/E)ell03=-delta/(2lambda_2)e_2,
+
+with all three multipliers positive. Hence NO strictly positive scalar
+reward row can make every coalition loss nonnegative, regardless of the
+positive coordinate matrix chosen. Nevertheless the two-row product cover
+holds with strict margins. This separates the new region from the entire
+common-positive-ledger test, not merely one previous numerical choice.
+
+After own-level translation by1, the witness has a positive debt gap over
+the complete stationary cube. Every equilibrium with a sure quitter at its
+first stage is also excluded, against every actual behavioral continuation
+and every punishment selector formed from full response caps. The sole
+remaining sure-root candidate would require a cap below-100, whereas
+literal Never bounds every actual cap above that threshold. A sure stage
+late in the profile is allowed and is used by the construction.
+
+Keep the proper rewards fixed and lower the grand reward independently in
+all four coordinates by any finite nonnegative amounts. The SAME UE target,
+accuracy-dependent profiles and finite-horizon thresholds work everywhere
+in this unbounded family. Prescribed outcomes never contain all players;
+every deviation's reward only decreases. The no-common-ledger certificate
+persists, and stationary and sure-first exclusions hold for each fixed
+table. No uniform positive stationary gap over the entire orthant is claimed.
+The raw and separation margins also give an open neighborhood in all sixty
+original reward entries around the reference table.
+
+This leaves a specific geometric boundary. If any nonempty proper coalition
+has a nonzero coordinatewise nonnegative native reward vector, every positive
+P sends it to a vector whose omitted coordinates are at least rho times
+its sum. The theorem requires an omitted coordinate at most eta times that
+sum, with eta<rho. Thus neither more ledgers nor a better positive matrix
+can cover such tables by this criterion. They need a different mechanism
+or an independent exit; they are not thereby UE counterexamples.
+
+Positivity does not force a simple exit. In the already proved
+[complex-spectrum periodic family](../exports/COMPLEX_SPECTRUM_PERIODIC_UNIFORM_EQUILIBRIUM.md),
+take delta=1/1000 and add a sufficiently small epsilon>0 to every coordinate
+of every proper nonsingleton reward. All ten such reward vectors are then
+strictly positive. The exact25-phase UE persists, as do the complete
+stationary, two-fixed-pair, sure-first and fourteen quiet-child exclusions
+proved there. The admissible epsilon radius is existential. Thus this
+uncovered geometric branch already contains games requiring mechanisms
+beyond those simple exits; positivity alone does not finish the reduction.
+
+The packet includes the complete rational checker and source correspondence.
+Its [two final independent reviews](../feedback/GLOBAL_PRODUCT_COVER_CONES_UNIFORM_EQUILIBRIUM__BY_GLOBAL_REVIEW.md)
+cover the complete proof, fixture, full-deviation and finite-horizon claims,
+and nonredundancy. This is ordinary mathematics, not a new Lean result.
+
+## 24. Positive collisions do not permit a universal grand-free reduction
+
+The target class has native own/live/Never zero, arbitrary off-own singleton
+comparisons, and coordinatewise nonnegative rewards on EVERY proper pair
+and triple; grand rewards are arbitrary finite numbers. Original own levels
+are nonnegative. This entire class remains open. No additional UE reward
+region is claimed in this section.
+
+The following proved obstruction concerns the complete behavioral strategy
+space. It rules out the proposed reduction "pure-grand Nash, or equilibrium
+approximations avoiding the grand coalition." Even strictly positive proper
+collision rewards do not validate that reduction. Its example has a known
+mixed sure-first equilibrium, so the stronger alternative "sure-first exit,
+or grand-free approximations" remains unrefuted here.
+
+### Statement and complete table
+
+Let I={0,1,2,3}, L>=2. Native own singleton and Never rewards are zero;
+every off-own singleton reward is -1. Every pair vector is zero except
+Z_1({2,3})=2. Every triple vector is one, and
+
+    Z(I)=(1/2,L,L,L).
+
+Thus every proper nonsingleton coordinate is nonnegative. Put
+r_i(D)=Z_i(D)+1 on nonempty coalitions and retain original live/Never0.
+For ANY actual independent first-Quit laws on Nat union {Never}, let D_r
+be the sum of the four unrestricted terminal deviation debts, and let G
+be the prescribed probability that the first quitting coalition is I.
+The caps include EVERY finite deadline and literal Never, equivalently every
+complete unilateral behavioral replacement.
+
+**Theorem.** For each L>=2 there are epsilon>0 and g>0 such that
+
+    D_r<=epsilon  ==>  G>g.                              (1)
+
+No absorption assumption, finite calendar, stationary form, support word,
+period bound, or exact Nash hypothesis is imposed. In particular the entire
+class of grand-free profiles has a positive original debt gap.
+
+There is no pure absorbing coalition Nash: singleton quitters invite an
+outsider; pairs invite an outsider at triple reward1 (at23 choose outsider0);
+triples012,013,023 invite the omitted player at grand reward L; owner1
+withdraws from123 to pair23 at2>1; owner0 withdraws from grand at1>1/2.
+Nevertheless at L=2 the single-date root
+
+    q=(1/2,2/3,1,1)
+
+is an exact absorbing Nash root over AllNever, with native payoff
+(2/3,3/2,7/6,7/6) and grand probability1/3. Owners0,1 are indifferent;
+owners2,3 have Quit-minus-Continue gap1. This is an explicit UE in the
+original game too. Hence (1) refutes a pure-grand-or-grand-free reduction;
+it does not refute a sure-first-or-grand-free reduction.
+
+### Root facts and compact margins
+
+Write Q_i(q) for forced-current Quit, P_i(q) for passive current reward,
+H_i=prod_(j!=i)(1-q_j), h=prod_i(1-q_i), and p4=prod_i q_i.
+Against the NEXT FULL CAP b put C_i=P_i+H_i b_i and
+
+    Rdef(q;b)=sum_i[max(Q_i,C_i)-q_i Q_i-(1-q_i)C_i].
+
+It is continuous and nonnegative, and vanishes exactly at Nash roots.
+Every participant reward is nonnegative, so every actual native full cap
+lies in[0,L]. Set K=(1,2,1,1). All native non-grand rewards are at most K
+coordinatewise.
+
+There is no Nash root with p4=0 and some q_i=1, at ANY nonnegative b.
+For singleton or pair supports, a sure quitter forces a second sure quitter,
+and an outsider blocks the resulting pure pair. On any triple other than123,
+an active nonsure owner facing a sure opponent has joining gain1; all active
+owners become sure and the omitted player joins. On123, ordinary owners2,3
+force each other sure; owner1 then withdraws since2>1. All used comparisons
+face an opposing sure quitter, so no continuation term enters this argument.
+
+If p4=0, Rdef=0 and 0<=b<=K, then max q_i<=1/2. At a singleton root t,
+a quiet cap-1 row requires b_i>=t/(1-t). At a pair root a,b, choose a quiet
+row i!=1; its guard requires b_i>=1/[(1-a)(1-b)]-1, so each hazard<=1/2.
+At a triple, every ordinary active row satisfies
+
+    b_i=1/[(1-q_j)(1-q_k)]-1.
+
+Every triple has two such ordinary active rows with cap upper bound1, and
+every active coordinate appears in one of their opponent sets. The only
+exceptional active row is owner1 on123; the two other rows suffice.
+
+These exact facts give TWO compactness margins, including small p4:
+there are a1,h1>0 such that, for 0<=b<=L one,
+
+    Rdef<=a1, p4<=a1  ==> h>=h1;                         (2)
+
+and there are a2,eta>0 such that
+
+    Rdef<=a2, p4<=a2, 0<=b<=K+eta one
+        ==> max q_i<=51/100.                            (3)
+
+Otherwise convergent sequences with the tolerances tending to zero give,
+respectively, a forbidden proper-support sure root or a proper-support root
+with a hazard>=51/100 and b<=K. For (2), first obtain a neighborhood of the
+compact zero-defect, p4=0 set on which h has a positive minimum. These
+arguments impose no correspondence selection or source realization.
+
+### Exact reward certificate, including the grand term
+
+Let R(q) be the prescribed one-stage native reward vector and let
+c=1/5, t=51/100, C=3L+14. On the ENTIRE cube[0,t]^4,
+
+    sum_i R_i(q) <= -c sum_i q_i + C p4(q).               (4)
+
+All expressions are multiaffine, so check the sixteen cube vertices.
+At a vertex with proper active support, the ratios -sum R/sum q are
+
+    support1:                         3;
+    support2={2,3}:                   3-4t;
+    other support2:                   3-3t;
+    support3 containing{2,3}:         (9-20t+7t^2)/3=6207/30000;
+    other support3:                   (9-18t+5t^2)/3.
+
+All exceed c. At the zero vertex both sides vanish. At the all-four vertex,
+
+    sum R(t one)=-12t(1-t)^3+2t^2(1-t)^2
+                    +16t^3(1-t)+(1/2+3L)t^4,
+    [sum R(t one)+4ct]/t^4
+          =3L+3477247/265302 < 3L+14=C.
+
+This proves (4) exactly, with no numerical optimization.
+
+### Actual-law bridge and compulsory-grand bound
+
+For a fixed actual profile write S_n for original joint survival before n,
+U^n,B^n,D_n for its conditional native payoff, full cap and sum debt, and
+G_n for its conditional future grand probability. Condition each marginal
+law separately on that owner's survival, retaining it whenever its marginal
+survival is positive. Complete only zero-marginal-survival own tails
+arbitrarily. A sure owner's own cap is independent of its own completion;
+every other owner's Continue coefficient contains that sure opponent's zero
+survival factor. Thus genuinely arbitrary completions have zero relevant
+coefficients, even before establishing positive joint next-stage survival.
+The completed tails remain actual laws with caps in[0,L]. At S_n>0,
+
+    D_n<=D_0/S_n,   G_n<=G/S_n,
+    D_n=h_n D_(n+1)+Rdef(q^n;B^(n+1)).                  (5)
+
+The first debt inequality follows by copying the prescribed law before n
+and then making a complete conditional deviation; the probability of reaching
+that event is S_n. The exact identity follows from the full cap recursion.
+Also, with delta=(0,L-2,L-1,L-1),
+
+    0<=B_i^n<=L,
+    U_i^n<=K_i+delta_i G_n,
+    B_i^n<=K_i+delta_i G_n+D_n,
+    sum_i U_i^n>=-D_n.                                 (6)
+
+Fix theta=c/[2(c+sum K)]=1/52. Choose d,g>0 sufficiently small that
+
+    d/theta, g/theta <= min(a1,a2),
+    (d+L g)/(theta h1) <= eta,
+    C g<=1/20.
+
+Suppose D_0<=d, G<=g and nu=lim S_n<theta. Let T be the first finite date
+with S_T<=theta. For n<T, (5) gives root defect<=d/theta and
+p4(q^n)<=G/S_n<=g/theta. First (2) gives h_n>=h1, so
+S_(n+1)>=theta h1 and (5)-(6) bound the NEXT full cap by
+K+(d+Lg)/(theta h1). Only NOW apply (3), obtaining q^n<=t one.
+This order prevents small prescribed reach from hiding a large off-path debt.
+
+Unroll actual prescribed payoffs to T and use (4):
+
+    sum U^0
+      <= -c sum_(n<T) S_n sum_i q_i^n
+             + C sum_(n<T) S_n p4(q^n) + S_T sum U^T
+      <= -c(1-S_T)+5S_T+C G
+      <= -1/10+C G <= -1/20.                            (7)
+
+Here sum q_i>=1-h, so the first sum dominates1-S_T. Grand events before T
+and after T are disjoint: their probabilities are sum_(n<T)S_n p4 and
+S_T G_T. The tail reward bonus is (sum delta)S_TG_T, and
+sum delta=3L-4<C, which justifies charging BOTH pieces by C G rather than
+discarding the tail grand events. Since B^0>=0, (7) forces D_0>=1/20.
+
+Finally, for EVERY actual profile the original/native debt relation is
+
+    D_r=D_Z+4nu.                                        (8)
+
+Indeed every finite pure deadline adds exactly1 to its payoff. Native own
+singleton0 makes finite deadlines approximate Never, so the native cap is
+the finite-deadline supremum. The original Never value is no greater than
+that supremum plus1. Therefore B_i^r=B_i^Z+1, whereas prescribed payoff
+adds1-nu, proving (8).
+
+Choose epsilon<=min(d,2theta,1/40). If D_r<=epsilon and G<=g, (8) gives
+D_Z<=d and nu<=epsilon/4<theta. Applying (7) gives D_Z>=1/20>epsilon,
+a contradiction. This proves (1) for all actual complete product laws.
+
+No late finite stopping mass was relabeled Never; no terminal truncation was
+assumed exactly Nash. The constants from compactness are existential finite-
+table constants; the reward certificate and displayed threshold are exact.
+
+### Strict positivity and an open neighborhood
+
+Changing each absorbing reward by at most xi changes each prescribed payoff
+and each full cap by at most xi, uniformly over ALL profiles and deviations.
+Thus |D_r-D_r'|<=8xi. If xi<epsilon/16, every perturbed profile with
+D_r'<=epsilon/2 still has G>g. All pure-coalition exclusions above have strict
+gains, so they too persist in a sufficiently small full reward neighborhood.
+
+For an explicit strict-positive center take L=2 and add xi>0 to EVERY
+coordinate of all six pair and four triple vectors, keeping singleton and
+grand vectors fixed. Choose xi<min(1,epsilon/16). Every proper collision
+coordinate is now positive. There is still a single-date absorbing Nash root:
+
+    q2=q3=1, q0=1/(2-xi), q1=1/(3/2+xi).
+
+Rows0,1 are indifferent; rows2,3 have joining gap
+1+xi(1-q0-q1)>0. The two mixed equations have nonzero cross derivatives,
+so this root persists on an open neighborhood as well. Therefore compulsory
+grand collision and absence of every pure absorbing coalition hold on an
+OPEN strict-positive-proper family that already has a mixed sure exit.
+This is a robust global guardrail, not a new UE class or the hard residual.
+
+### Exact scope and remaining global obligation
+
+The comparison includes every independent countable stopping law, every
+complete unilateral replacement, and profiles with positive Never mass.
+The positive grand-probability floor persists throughout an open reward
+neighborhood. It is stronger than excluding a finite schedule or one
+stationary support. It is nevertheless an obstruction on a solved table:
+the displayed mixed sure-first root supplies UE.
+
+Its singleton matrix has every off-diagonal entry-1. The negative aggregate
+prefix-reward mechanism used here cannot extend directly to the hard
+strictly inverse-positive singleton branch. Indeed if lambda>0 and
+lambda Gamma<0 coordinatewise, then Gamma inverse>0 would imply
+lambda=(lambda Gamma)Gamma inverse<0, a contradiction. Thus this proof
+does not eliminate a surviving positive-inverse counterexample class.
+
+The full-cap identity used above is
+`quittingContinuationBestResponseValue_rootThenContinuation_eq_max`
+(`UniformEquilibrium/Quitting/Root/TerminalDebtPrefix.lean`). The deadline
+limit underlying the row shift is
+`quittingTerminalPayoff_update_finiteTime_tendsto_of_profile`
+(`UniformEquilibrium/Quitting/Terminal/SingletonJointNeverDebt.lean`).
+Their source statements were inspected; no Lean command was run. The new
+compulsory-grand result is ordinary mathematics.
+
+Outside the solved regions, the global source reduction still leaves its
+AllNever-only alternative and its GENUINELY global least-Never zero-debt
+source with strictly positive U=B=e and only AllContinue as a Nash prefix.
+No proof here excludes either alternative throughout the positive-collision
+class. Closure needs those exclusions or an absorbing vanishing-debt
+construction by another global argument. This section is retained as
+a compact global guardrail, with no new export or counterexample claim.
+
+## Verification and remaining target
+
+The complete Section24 proof has
+[two fresh independent reviews](../feedback/CODEX_COORDINATOR__POSITIVE_COLLISION_GRAND_BOUNDARY__BY_REVIEW.md)
+pinned to its exact bytes. Its root census, reward vertices, full conditional
+cap accounting and open strict-positive consequence were independently
+checked. It is an internal all-profile obstruction, not a new UE class.
+
+The [exact geometry checker](../experiments/CODEX_COORDINATOR__ACTUAL_CONTINUATION_GEOMETRY_CHECK.py)
+reconstructs full caps and Never masses and checks the source, crossing,
+reselection, complete finite-calendar classification, and survival bounds.
+The all-support exhaustion and exact-fibre approximation are mathematical
+proofs, not conclusions from numerical root searches.
+
+Section10 sharpens the implemented common-quantile approximation, which
+retains N and controls caps but changes U and e. The new step is simultaneous
+exact moment matching inside its common cells, before fixed-calendar
+compactness. Relevant declarations inspected without running Lean are
+`hasEscapeAwareQuantileClockCompressionAtBound` and
+`HasEscapeAwareQuantileClockPayoffTransportAtBound`
+(`UniformEquilibrium/Quitting/Paths/CommonQuantileClockTransport.lean`),
+`quittingRootSequenceHazardTerminalValue_eq_expect_stoppingLaw`
+(`UniformEquilibrium/Quitting/Paths/BehaviorStoppingPayoff.lean`),
+`quittingPureClockOrderEquivalent_finiteCalendarRetiming`
+(`UniformEquilibrium/Quitting/Paths/CommonStoppingCalendarRetiming.lean`), and
+`exists_mem_quittingFiniteOpponentAtomGapReplyMenu_payoff_eq_cap`
+(`UniformEquilibrium/Quitting/Terminal/FiniteOpponentAtomGapReplyMenu.lean`).
+The quantile cells are defined in `MathUE/Probability/QuantileClock.lean`.
+These checked ingredients do not already state the simultaneous exact-fibre
+conclusion proved here. No fresh Lean certification is claimed.
+
+The checker also verifies Section11's full continuation and head comparisons,
+active Jacobian, geometric-clock eligibility and exact survival derivative,
+and Section12's actual moving-tail control. It reuses the retained
+finite-exact incompleteness fixture to verify Section13's infinite-tail
+recurrence, survival derivative, exact finite-truncation defects and transverse
+curvature identities. It also checks the locally isolated source, its full
+root comparisons, tail-floor data and absorbing competitor. The general timing classification,
+finite-chain/common-ray equivalence, implicit-function, global-minimum and carrier arguments
+are mathematical proofs, not finite search conclusions. They have no fresh
+Lean certification. The prior material has scoped independent reviews for
+[head-and-tail descent](../feedback/CODEX_COORDINATOR__BOUNDED_CROSSING_SELECTION__BY_DESCENT.md)
+and [same-source global comparisons](../feedback/CODEX_COORDINATOR__BOUNDED_CROSSING_SELECTION__BY_SOURCE_MINIMUM.md).
+The broadened timing, zero-face geometry and finite-stopping claims have
+[two scoped independent reviews](../feedback/CODEX_COORDINATOR__BOUNDED_CROSSING_SELECTION__BY_CLOCK_GEOMETRY.md).
+Section13 has [two independent scoped reviews](../feedback/CODEX_COORDINATOR__BOUNDED_CROSSING_SELECTION__BY_UNIVERSAL_DESCENT.md).
+Earlier review hashes retain their original scopes, including the previous
+weaker control replaced by Section11's two-zero example.
+
+The marked route still needs GLOBAL marked least-Never extremality with full caps.
+Section11 supplies a source-consuming descent when its finite test passes;
+it does not supply a qualifying finite head, eligible tail direction or
+descent sign at every minimum. Section12 retains the actual global objective
+through one-owner variations and inherited tails. A genuinely infinite head
+with a nonzero limiting payoff must end on two or three zeros satisfying(RAY).
+Finite heads can still reach the locally rigid faces, and their singularities
+and compensation signs remain unresolved. The original source's finite
+exact-fibre approximants still have positive debt. A universal descent or
+another equilibrium construction is still needed outside the solved raw regions.
+Sections14–21 give the separate unmarked reduction and successive AllNever
+exclusions. Sections22–23 close both alternatives under their global raw
+inequalities. The product-cover extension removes the common-ledger and
+grand-coefficient restrictions but retains proper-coalition restrictions.
+Fin4 remains open.

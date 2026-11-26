@@ -2,9 +2,188 @@
 
 Owner: CODEX_ROOT.
 
-Status: research diagnosis and experiment design, not a mathematical reduction
-or an export. No claim that the current proof route is necessary, exhausted,
-or the most promising. No new theorem or counterexample is established here.
+Status: research diagnosis with proved supporting results on finite-scale
+parameter covers and the cost of revealing future public randomness. A
+[global stationary producer with an arbitrary reward row](../exports/DOMINATED_ROW_ARBITRARY_ROW_STATIONARY_UNIFORM_EQUILIBRIUM.md)
+now closes an explicit unbounded raw class. Arbitrary Fin4 remains open.
+The [complete two-crossing family theorem](../exports/COMPLETE_TWO_CROSSING_FAMILY_UNIFORM_EQUILIBRIUM.md)
+closes the entire two-parameter test family; its regional exact constructions
+remain in the [two-row continuation record](CODEX_ROOT__TWO_ROW_CONTINUATION.md).
+For arbitrary tables, the current source work concerns
+[actual minima and inherited mixed endpoints](CODEX_ROOT__ACTUAL_MINIMUM_AND_MIXED_ENDPOINT.md).
+The [Never-mass saturation theorem](../exports/ACTUAL_MINIMUM_NEVER_MASS_SATURATION.md)
+restricts actual minima through full-support windows and a classified set of
+guarded sparse patterns. It supplies no new UE reward-table class.
+The [eventual-full-support exclusion](../exports/ACTUAL_MINIMUM_EVENTUAL_FULL_SUPPORT_EXCLUSION.md)
+goes beyond saturation near every eligible structured pair J=Gamma D with
+distinct diagonal entries of D in (0,1/2). It excludes this actual-minimum
+support mode even at mass equality and with earlier pivot cap contacts.
+All32 other native reward coordinates are arbitrary finite numbers; the
+small-penalty bound may depend on the full table. The proof uses finite
+multiplier gluing, an exact preserved symplectic form, and a summable-observation
+argument. It includes actual full-support laws demonstrating that global
+minimality is the essential obstruction.
+The earlier positive-pivot pair-star and cyclic-contact packets do not add
+counterexample coverage: their singleton chamber is already excluded by the
+implemented degree criterion. They are internal repair targets, with the
+exact source-overlap audit below. Their finite-variation calculations may
+be valid without constituting additional progress on Fin4. The generalized
+[global context theorem](../revisit/ACTUAL_MINIMUM_GLOBAL_PAIR_STAR_RIGIDITY.md)
+allows a mixed pivot row and explicitly requires strict late pivot and quiet
+comparisons. Any qualifying all-label recurrent actual minimum must become
+an exact directed three-cycle and satisfy explicit price-symmetry equations.
+The proof permits arbitrary recurrence gaps and preserves earlier pivot
+contacts. An open dense raw test makes both orientations impossible for every
+sufficiently small penalty chosen before source selection. The mathematics
+passes independent review, but its complete boundary table is now SOLVED;
+its additional coverage is not certified, so it remains internal.
+
+The [signed solo/triple producer](../exports/SIGNED_SOLO_TRIPLE_UNIFORM_EQUILIBRIUM.md)
+constructs the absorbing equilibrium that resolves this table. It generalizes
+the existing shared-owner return algebra by using exact signed comparisons
+in place of positive-continuation requirements. One linear solve and at most
+two quadratic roots produce the full two-phase law. The test completely
+classifies the stated nondegenerate proper solo/overlapping-triple architecture
+under all24 role assignments. A negative continuation in the exact example
+lies outside the earlier return criterion; the [complete source audit](../feedback/SIGNED_SOLO_TRIPLE_UNIFORM_EQUILIBRIUM__SOURCE_AUDIT.md)
+checks the named prior producers over their full relevant selections. All
+behavioral deviations are controlled by opponents-only absorption, yielding
+a fixed original uniform payoff. This is a new raw existence class, not
+merely another actual-law control or a stronger conclusion on a table already
+covered by those producers. General Fin4 remains open.
+
+The [generic three-date contact gap](../exports/GENERIC_THREE_DATE_OBSERVER_CONTACT_GAP.md)
+applies to every finite chain of three sufficiently small roots with at most
+two active players per date, including nonrealized semantic chains. After a
+dense open raw reward selection, at least one observer's Quit-versus-Continue
+gap is bounded below in absolute value by a constant times the largest
+hazard. On an observer-optimal chain this produces a strict inactive-observer
+comparison. All216 pair words are covered, with no pivot-in-support or
+minimizing assumption. The native absorbing gap survives the perturbation;
+source selection must then be repeated at the perturbed table. This gives
+one strict comparison per sparse triple, not a fully guarded calendar.
+
+Actual minima with mixed supports or partial ties and finite active calendars
+remain unresolved. The [uniform pair-premium incoming reduction](../exports/PAIR_PREMIUM_MIXED_ENDPOINT_REDUCTION.md)
+strictly narrows the nonrealized source: its selected mixed endpoint has either
+at least two zero caps, or a unique zero observer i with
+J_ip>max(0,Gamma_ip). A uniform at-most-eight-root incoming construction handles
+B_i approaching zero from either sign. The whole minimum, head and endpoint
+construction is supplied from the native positive absorbing gap and strict
+inverse column; this is a source reduction, not a new reward-table UE class.
+The remaining endpoint faces are still open. The full-support and generic
+three-date results above are not restricted to the rejected singleton chamber.
+The [actual-minimum note](CODEX_ROOT__ACTUAL_MINIMUM_AND_MIXED_ENDPOINT.md)
+now proves that recurrent pivot ties persist in actual laws on an open raw
+region, even after the singleton stationary exits fail. This refutes generic
+pivot-guard production from those tests alone. Its separate no-child curvature
+argument supplies an arbitrary-length conditional quiet-contact density bound;
+full completion-dependent overlap remains unaudited. The older conservative
+positive-pivot example is only calculus on an already excluded chamber.
+The mixed
+endpoint minimizes an explicit pivot obstacle objective on the cap constraints
+imposed by its actual head. Under a stated nonnegative-kernel condition,
+every small additional head has activity bounded by its induced observer
+error, so vanishing errors cannot buy a fixed improvement. A global comparison
+must overcome these constraints or change the old head. An absorbing
+controlled invariant set of actual Nash transitions remains a separate
+constructive target. Neither route is complete.
+The earlier supporting results have an
+[independent mathematical review](../feedback/CODEX_ROOT__CROSSFIELD_GLOBAL_METHODS__BY_REVIEW.md).
+
+## Singleton-chamber overlap audit
+
+This audit corrects a conjecture-facing admission error, not a claim that
+all the associated calculus is false. The main conclusions of the former positive-pivot
+[pair-star family](../revisit/ACTUAL_MINIMUM_GUARDED_PAIR_STAR_EXCLUSION.md),
+global rigidity,
+[positive timing](../revisit/ACTUAL_MINIMUM_POSITIVE_TIMING_PATCH_EXCLUSION.md),
+and [cyclic contact](../revisit/ACTUAL_MINIMUM_CYCLIC_PAIR_CONTACT_EXCLUSION.md)
+packets were counted against a source chamber already excluded by existing
+mathematics. Their coverage approvals are withdrawn. The general-ratio
+saturation corollary in the first packet has broader scope and is retained
+for separate use; the rejection does not identify an error in that corollary.
+
+The exact source declarations inspected are
+`finFour_singleton_r0Degree_eq_one_of_no_uniformPayoff` in
+`UniformEquilibrium/Diagnostics/Quitting/FinFourSingletonDegreeCriterion.lean`,
+`exists_uniformEquilibriumPayoff_of_r0Degree_ne_one` in
+`UniformEquilibrium/Quitting/Classification/LCP/SingletonDegreeCriterion.lean`,
+and `quittingSingletonMatrix_sub_payoff` in
+`UniformEquilibrium/Quitting/Classification/LCP/QuittingRewardAdapter.lean`.
+The literal singleton matrix is Gamma_ij=R_i({j})-R_i({i}), with the
+recipient as row; neither negation nor transposition occurs. These were
+static source checks, not a fresh Lean build.
+
+The same degree restriction applies to a native own-zero table Z with
+positive absorbing SUM-debt infimum A. If M>=1 bounds its rewards and nu
+is original joint Never, moving one owner's Never mass to a finite date gives
+
+    A <= D_Z+14 M nu^(1/4).
+
+Adding1 to every nonempty terminal reward, while retaining zero AllNever,
+gives R=Z+1 and D_R=D_Z+4nu. Finite deadlines dominate Never in both games,
+so this identity concerns full behavioral caps. For
+c=(A/(28M))^4, either D_Z>=A/2 or nu>=c. Thus D_R>=min(A/2,4c)>0.
+The terminal gap characterization makes R an original no-UE table. Its
+singleton matrix is exactly Gamma, so the checked source theorem forces
+Gamma to be R0 of degree1. This is a source adapter, not a claim that adding
+terminal constants preserves equilibria with AllNever fixed.
+
+Here is a short complete obstruction for the chamber used by those packets.
+Write p=0, h_i=Gamma_0i>0, G_i=Gamma_i0!=0, and
+Gamma_ij/G_i<0 for distinct observers. If the number of negative G_i is
+zero, two, or three, respectively the pivot column, the sole positive-G
+observer's column, or every observer column is nonnegative. A nonnegative
+hollow column gives a nonzero homogeneous complementary root, violating R0.
+
+If exactly one G_a is negative, let b,c be the other observers. The entire
+literal sign chamber is R0. Indeed, for x>=0, Gamma x>=0 and
+x_i(Gamma x)_i=0, x_0>0 forces all observer coordinates zero through the
+positive pivot row; row a is then negative. With x_0=0, x_a>0 forces
+x_b=x_c=0 through row a, making row b negative. If x_0=x_a=0,
+nonnegativity of rows b,c forces x_b=x_c=0. Thus no nonzero homogeneous
+root exists. Linear interpolation within this sign chamber preserves R0,
+and homotopy invariance of the complementarity degree reduces its degree
+to that of
+
+    Gamma_old=[0,1,1,1;-2,0,1,1;2,-1,0,-1;2,-1,-1,0].
+
+For offset minus-ones this matrix has no complementary root. If x_0>0,
+row0 gives x_1+x_2+x_3=1, while row1 requires
+2x_0<=x_2+x_3-1=-x_1, a contradiction. If x_0=0, row2's residual is
+-x_1-x_3-1<0. Its degree is therefore0, and so is that of the whole sign
+chamber. The argument includes singular full matrices and needs no
+participant or higher reward assumptions. Every original table in this
+chamber has UE by the existing R0/degree source theorem and its
+contrapositive. No native positive absorbing-gap source can enter it.
+
+A broader source filter follows directly from the established ten-template
+[residual singleton partition](CODEX_COORDINATOR__FIN4_RESIDUAL_PARTITION.md):
+EVERY strict inverse-column pivot of a native positive-gap source has a
+mixed singleton row. To see the generic case, normalize at
+v=Gamma^-1 e_p>0 to H=[0,c;-r,B], where c dot 1=1 and r=B1.
+If c>0, templates1--4 have an eligible pair with
+D_ij=c_i r_j/B_ji+c_j r_i/B_ij>0, contrary to degree1. Templates5,6,9,10
+force c1<0 by the negative-column condition; template7 forces c3<0.
+In template8, B^-1>0 and c B^-1>0 trigger the already available passive
+triple exit. The ten cases are exhaustive. Nonnegative c with zeros is
+excluded by arbitrarily small generic perturbation making it positive:
+the absorbing SUM-debt infimum is8-Lipschitz in rewards and the strict
+inverse column persists. Finally Gamma_p v=1 forces a positive row entry.
+This is a useful distilled source filter, not additional reward coverage
+beyond the existing matrix exits.
+
+The broader full-support and generic three-date packets survive this
+particular audit. The former allows arbitrary eligible invertible Gamma,
+including degree1 examples; the latter excludes one algebraic zero set in
+all raw24 coordinates and hence intersects every open residual chamber.
+A future pair-star extension must use a mixed pivot row and either control
+pivot contacts or explicitly require their absence. Positive Never and
+ALL-END do not imply nonnegative conditional caps: two owners with atoms
+m*2^(-t-1), passive singleton payoff-1 and pair payoff-2 have every finite
+deadline and Never worth-m. This exact control prevents an invalid shortcut
+when replacing the old automatic pivot-strictness argument.
 
 ## Question
 
@@ -962,3 +1141,351 @@ Next question: which untested global selection or existence mechanism yields
 an actual finite-menu reach improvement, a full-response low-regret profile,
 or a contradiction that does not invoke temporal compilation of the supplied
 best-response edges?
+
+## Row-wise continuation and a two-parameter next target
+
+The [complete complex-spectrum ray](../exports/COMPLETE_COMPLEX_SPECTRUM_RAY_UNIFORM_EQUILIBRIUM.md)
+is a concrete application of global continuation: different periodic words cover its compact region, and a
+connected curve of three-owner stationary equilibria covers the remaining
+finite interval before an explicit stationary tail takes over. Local roots
+alone are insufficient; the interval proofs retain their full incentive
+comparisons, and the stationary proof identifies roots at every seam.
+
+A useful next extension has two reward parameters affecting only rows0,1.
+Freeze their hazards q0=z0,q1=z1 and put h=(1-z0)(1-z1). For owner2, write
+its forced-Quit and passive offers as Q2(u)=Q0+u DeltaQ and
+P2(u)=P0+u DeltaP, where u=q3. Since H2=h(1-u), its stationary field
+F2=(1-H2)Q2-P2 is
+
+    F2=h DeltaQ u^2+[(1-h)DeltaQ+hQ0-DeltaP]u+(1-h)Q0-P0.
+
+It does not depend on q2. Similarly F3 is a quadratic in q2 alone. Thus the
+two opponent equations decouple into scalar quadratics, with at most four
+isolated proper root pairs. Identically zero polynomials and multiple roots
+must be retained as degeneracies; there is no universal four-root bound.
+Quiet, mixed and sure choices give nine support patterns in the complete
+two-owner complementarity problem.
+
+On any continuous proper branch where the relevant coefficients are nonzero,
+the two remaining stationarity equations recover the two reward parameters
+as a map of(z0,z1). A Poincare--Miranda boundary-sign argument could then cover
+a whole parameter rectangle, even when the recovery map folds. This is an
+explicit next producer question, not a proved arbitrary-game reduction:
+proper branches, boundary signs, and compatibility at branch changes still
+have to be produced from the reward data.
+
+### A global construction with an unrestricted fourth row
+
+The [dominated-row theorem](../exports/DOMINATED_ROW_ARBITRARY_ROW_STATIONARY_UNIFORM_EQUILIBRIUM.md)
+fixes two normalized recipient rows, allows the third to increase every
+participant reward and decrease every passive reward from a stated reference,
+and leaves the fourth row arbitrary. An exact finite certificate shows that
+on q2=7/50, best responses by players0,1 force player2's stationary field to
+be strictly positive. Brouwer on the cube q2>=7/50 then produces a full
+stationary equilibrium: its fixed point cannot remain on the artificial
+lower face. The fourth player's incentives enter the global map, so no
+bound on that player's rewards is needed. Every player retains absorbing
+opponents, which supplies full behavioral Nash, arbitrary signed offsets,
+and one fixed uniform payoff. The export contains the complete proof and
+its compact exact checker; it is ordinary mathematics, not a new Lean result.
+
+The [two-row continuation record](CODEX_ROOT__TWO_ROW_CONTINUATION.md)
+now closes the entire explicit two-crossing family, for every delta,epsilon>=0
+and arbitrary fixed signed recipient-row offsets. Five completed periodic
+covers fill the region below the affine stationary frontier; the affine,
+singleton and dominated-row arguments cover the rest. At delta=1/8,
+epsilon=139/200, a separate exact proof excludes arbitrarily accurate
+stationary approximations when an own singleton is positive, while the Middle
+periodic construction supplies UE. The accompanying scope audit checks the
+complete applicable prior producer choices and records the limits of comparison
+with qualitative neighborhoods. This closes this family, not arbitrary Fin4
+or all positive-collision games. The remaining global question concerns
+selection at a positive minimum on the actual absorbing continuation carrier.
+
+### A larger class from conditional averages
+
+The following analytic extension is proved ordinary mathematics, retained
+internally. It uses the reference B and the exact lower-face certificate in
+the dominated-row export above. No new numerical certificate is assumed.
+The construction is by product_cover_fresh_review, with the larger row2 cone
+and sole-quitter case supplied and checked during independent review.
+
+Write r_i(S)=s_i+W_i(S), W_i({i})=0, and set W_i(empty)=B_i(empty)=0.
+Let c=7/50 and O_i=N minus{i,2}. For each i=0,1 require some a_i>0 and
+real k_i such that, for every T subset O_i,
+
+    (1-c)W_i(T union{i})+cW_i(T union{i,2})
+      =a_i[(1-c)B_i(T union{i})+cB_i(T union{i,2})]+k_i,
+    (1-c)W_i(T)+cW_i(T union{2})
+      =a_i[(1-c)B_i(T)+cB_i(T union{2})]
+         +k_i[1-(1-c)1_(T empty)].
+
+For every nonempty opponent coalition T of player2, choose p_T<=0,d_T>=0
+and set
+
+    W_2(T)=B_2(T)+p_T,
+    W_2(T union{2})=B_2(T union{2})+p_T+d_T.
+
+Thus passive rewards decrease and the advantage from joining increases;
+participant rewards themselves may decrease without bound. Row3 is arbitrary.
+Require at least one of
+
+    s2>=0,    k0>-42a0/43,    k1>-21a1/86.                 (A)
+
+Every such raw table has a stationary exact terminal Nash profile and one
+fixed uniform-equilibrium payoff against all behavioral replacements. The
+same profile works at every accuracy. The own levels s0,s1,s3 are unrestricted;
+s2 is also unrestricted when either strict k inequality holds.
+
+To prove this, condition on player2's fixed hazard c. The averaging identities
+give, on that entire face and for i=0,1,
+
+    Q_i^W=a_i Q_i^B+k_i,
+    P_i^W=a_i P_i^B+k_i(1-H_i),     F_i^W=a_i F_i^B.
+
+Hence their endpoint conditions are exactly preserved. The larger row2 cone
+gives everywhere
+
+    F_2^W-F_2^B=sum_(T nonempty) Pr(T)[(1-H_2)d_T-H_2 p_T]>=0.
+
+The reference certificate therefore excludes q2=c at a fixed point of the
+clipped map on [0,1]^2 times[c,1] times[0,1]. Brouwer supplies q2>c and all
+four genuine endpoint conditions. Deleting any owner other than2 leaves an
+absorbing opponent. If q0=q1=q3=0, write t=q2. Directly from the empty-T
+averaging equations,
+
+    F_0^W/t=a0(27t/5+3/5)+k0(t/c-1),
+    F_1^W/t=a1(3t/20+27/20)+k1(t/c-1).
+
+These affine expressions are strictly positive at t=c. At t=1 they equal
+(42a0+43k0)/7 and(21a1+86k1)/14. Either strict k inequality rules out this
+axis by the quiet endpoint condition. In that case all opponent-deleted
+processes absorb geometrically, and the full Bellman and signed-offset
+argument in the export applies.
+
+Otherwise (A) gives s2>=0. On the remaining axis, every replacement by
+player2 pays s2 on eventual quitting and0 on Never, so its terminal payoff
+is at most s2. Its finite-horizon payoff is also at most s2; the prescribed
+geometric delay costs O(s2/(cN)). The other players still face geometric
+opponent absorption. This proves the terminal and uniform conclusions without
+asserting opponent absorption for a player2 deviation which never quits.
+
+The exact general consumer is
+`isUniformEquilibriumPayoff_of_stationaryEndpointCertificate` in
+`UniformEquilibrium/Quitting/Stationary/EndpointCompiler.lean`. Its boundary
+predicate `IsQuittingStationaryBoundaryAdmissible` reduces on this axis to
+max(0,s2)<=s2. This declaration, the boundary definition, and
+`isZeroAsymptoticNash_stationary_iff_boundary_of_fixedPoint_endpointNash`
+were inspected in the same file; no Lean command ran for this extension.
+
+Each modified row0,1 has exactly eight parameters: a,k and the six literal
+coordinates W_i(T),W_i(T union{i}) for nonempty T subset O_i. The averaging
+identities determine all remaining coordinates. Conversely a,k are uniquely
+recovered from W_i({2}),W_i({i,2}), since
+cB_i({i,2})-B_i({2})>0. The native dimension is8+8+14+14=44; the four own
+levels give48 dimensions in the60-dimensional raw space. These are coupled
+families, not48 independently variable reward entries, and this dimension
+does not measure the remaining counterexample set.
+
+For an explicit unbounded change, start at W=B and, for any t>0, add t to
+W_0(03),W_1(01) and subtract43t/7 from W_0(023),W_1(012). The averages are
+unchanged with a0=a1=1,k0=k1=0. Two rows now have negative native participant
+rewards, whereas the earlier dominated-row class permits that in at most
+one row, even after relabeling and positive recipient scaling. These are
+real preference changes away from the preserved face: against player0 alone
+quitting, player1's Quit-minus-Continue gap changes from-1 to t-1.
+
+This proves a strict enlargement of that raw class. A complete comparison
+against all other producers is unfinished, so it is not a separate export.
+The separate boundary condition cannot simply be omitted: with a0=a1=1,
+k0=-2,k1=-1, row2 unchanged, and W3({2})=1,W3({2,3})=0, the sole2 vector
+(0,0,1,0) satisfies every endpoint sign but is not terminal Nash if s2=-1.
+This tests the compiler boundary; it is not a no-UE example.
+
+
+## A finite-scale global alternative from real algebraic geometry
+
+This is a proved supporting procedure, not a UE decision algorithm or a new
+reward-class exclusion. Its useful feature is that neither a polynomial
+degree nor a calendar length must be fixed before the search. All statements
+below concern native reward tables with zero own singletons and Never payoff.
+
+For n players, a root q in [0,1]^n and continuation w, put
+h=product_i(1-q_i), a=1-h, H_i=product_(j!=i)(1-q_j). Let Q_i be the forced
+Quit offer, P_i the nonempty-opponent passive offer, C_i=P_i+H_i w_i, and
+
+    U_i=q_i Q_i+(1-q_i)C_i,
+    d_i=max(Q_i,C_i)-U_i.
+
+On K_b=[-b,b]^n, R(Z,epsilon,b) contains every triple(w,q,u) for which
+|u_i-U_i|<=epsilon a and d_i<=epsilon a for each i. An edge's charge is a.
+A finite budget bounds the sum of charges along EVERY finite path; shared
+vertices must literally agree. A potential satisfies P(w)>=a+P(u) on every
+edge. These are the definitions `IsQuittingFloorFreeRobustEdge` and
+`quittingFloorFreeRobustChargedRelation` in
+`UniformEquilibrium/Quitting/Projective/RobustChargedRelation.lean`.
+
+If native tables Z,Z' differ by at most delta in every entry, then
+
+    |U_i^Z-U_i^Z'|<=delta a,
+    |d_i^Z-d_i^Z'|<=2 delta a,
+    R(Z,epsilon,b) subset R(Z',epsilon+2delta,b).       (A)
+
+Indeed only nonempty prescribed coalitions affect the first difference.
+The identical own singletons mean that each of Q_i and C_i changes by at
+most delta(1-H_i). The function
+d_i=max((1-q_i)(Q_i-C_i),-q_i(Q_i-C_i)) is 1-Lipschitz in Q_i-C_i,
+and 1-H_i<=a. This also proves (A) at a=0. Fixing the own levels is essential.
+
+The existing theorem
+`exists_quittingRobustChargedRelation_rationalPotential_of_finiteBudget`
+in `UniformEquilibrium/Quitting/Projective/RobustChargedRelationPolynomialSeparator.lean`
+produces a rational polynomial potential for R(Z,epsilon/4,b) from finite
+budget for R(Z,epsilon,b+1), for bounded rewards and 0<epsilon<=1.
+It supplies the polynomial; its existence is not an added hypothesis below.
+
+### Uniformity at a fixed positive tolerance
+
+Let F be a compact bounded family of native tables, 0<eta<=1, and let
+A_eta be the tables in F with finite budget for R(Z,eta,b+1).
+There is one finite C such that every Z in A_eta has budget C for
+R(Z,eta/2,b+1). To prove this, take Z in closure(A_eta) and choose
+Z' in A_eta within eta/8. By (A), R(Z,3eta/4,b+1) has a finite budget C_Z.
+For every Y within eta/8 of Z, R(Y,eta/2,b+1) is contained in this relation.
+Extract a finite subcover of compact closure(A_eta) and take max C_Z.
+If A_eta is empty take C=0. No closedness or recognition algorithm for
+A_eta is assumed.
+
+There is also a finite catalogue of rational polynomials such that every
+Z in A_eta accepts one as a potential for R(Z,eta/16,b). At each Z in the
+same closure, finite budget at eta/2 on K_(b+1) gives a polynomial at eta/8
+on K_b. By (A), that SAME polynomial works at eta/16 for every Y within
+eta/32 of Z. Compactness again gives a finite catalogue. In particular its
+degree and rational coefficient height have uniform finite bounds. These
+bounds are existential; no numerical bound or lower bound on eta is proved.
+
+If F is semialgebraic, let S be F intersected with the union of the
+acceptance sets of this finite catalogue. Quantifier elimination makes S
+semialgebraic, and, writing A(t,c) for finite budget on R(Z,t,c),
+
+    F intersect A(eta,b+1) subset S subset F intersect A(eta/16,b).
+
+The two boxes differ. The second inclusion follows by telescoping a bounded
+polynomial on K_b, not by an assertion that the two budget problems coincide.
+
+### A terminating search for a finite cover
+
+Input: n is a natural number; M,b,eta,C are rational with b,C>0 and
+0<eta<=1; and F is given by a rational semialgebraic formula, with the
+promise that it is compact and consists of native tables bounded by M.
+There is an algorithm producing a finite cover of F by acceptance regions
+of the following two kinds:
+
+- a rational polynomial valid as a potential for R(Z,eta/16,b);
+- a rational finite path in R(Z,eta,b+1) whose total charge exceeds C.
+
+Enumerate all rational polynomials and all finite lists of rational boxed
+vertices and roots, interleaving the two enumerations fairly. Reject a path
+unless its rational charge exceeds C. For each remaining object compute its
+semialgebraic acceptance region. For a polynomial this universally quantifies
+boxed w,q,u and tests the edge implication; for a path it is a finite list
+of inequalities in the reward entries. Absolute values and maxima are finite
+Boolean combinations of polynomial inequalities. After each finite stage,
+quantifier elimination decides whether the accumulated regions cover F.
+
+Here is the termination proof. For each Z, consider R(Z,eta/2,b+1).
+If its budget is finite, the polynomial theorem gives a witness at eta/8
+on K_b, which is accepted at eta/16 throughout a neighborhood of Z by (A).
+If its budget is infinite, take a finite path with charge>C. A zero-charge
+edge has q=0 and u=w, so delete such edges. On each remaining edge, raising
+tolerance from eta/2 to 3eta/4 leaves strictly positive slack. There are
+finitely many edges. Joint continuity therefore permits simultaneous rational
+rounding of every vertex and root, preserving all inequalities and charge>C.
+Choose a shared path vertex once, not separately for its two incident edges.
+Rational points are dense even at the box boundary because b+1 is rational.
+The same rounded path is accepted at eta throughout a neighborhood of Z.
+These acceptance neighborhoods cover compact F, so finitely many objects
+suffice; the fair enumeration eventually finds them. The algorithm never
+needs to decide the finite-budget versus infinite-budget alternative.
+
+The labels need not be exclusive. A path label supplies only the requested
+tolerance and charge, not a single fixed UE target across all accuracies.
+A polynomial label supplies a native-box budget certificate. To infer an
+original-game counterexample through
+`quittingGame_not_exists_uniformEquilibriumPayoff_iff_noSureRoot_and_rationalPotential`
+in `UniformEquilibrium/Quitting/Projective/PolynomialForwardCertificateCharacterization.lean`,
+one must separately supply Fin4, normality, a positive original singleton,
+absence of the stated punishment-vector sure root, and the original box of
+radius rewardBound+2. Own-level translation shifts the box and may turn
+rational polynomial coefficients irrational. Use finite capacity and the
+packet characterization, or reapply the separator with its required box
+margin, rather than silently applying the rational-polynomial consumer.
+
+The systematic research question is therefore concrete: can these finite
+covers be produced economically on the surviving parameter families, and can
+one show that their polynomial side is empty at every accuracy? The procedure
+proves termination at a specified scale, not that the desired label wins.
+
+## Information relaxation: what may and may not be frozen
+
+An occupation measure on literal Nash edges and a public lottery over
+continuation values are different objects. In the former, each edge retains
+its own exact successor; a sufficiently absorbing path can be fixed as a
+deterministic calendar. In the latter, a root may be indifferent only against
+the MEAN successor. Revealing the lottery in advance then gives a deviator
+advance information about a future stopping reward.
+
+The exact one-node price is elementary. For one mixing owner, let
+Q=P+H mu, mu=E W, where W is the full cap of an exact continuation revealed
+only after surviving the root. Freezing W while retaining the root gives debt
+
+    H[(1-q)(mu-W)_+ + q(W-mu)_+].
+
+Its expectation is H E|W-mu|/2, independent of q. This is a Wasserstein-1
+dispersion cost. It concerns one root with exact continuations, not a proved
+infinite-tree error bound. A derandomization argument needs vanishing
+dispersion or a modified strategy, rather than a constant-factor prophet bound.
+
+Here is a complete strict-positive test. Use native own/Never0 and
+
+    Gamma=[0,-1,3,-1; -1,0,-1,3; 3,-1,0,-1; -1,3,-1,0].
+
+Every coordinate of every pair/triple reward is1/10, except increments
+Z_1(12)+=1, Z_0(23)+=2, Z_1(23)+=1; grand rewards are arbitrary.
+The pure tails12 and23 are Nash, with values
+a=(1/10,11/10,1/10,1/10) and b=(21/10,11/10,1/10,1/10).
+At root q=(1/2,1/2,0,0), a fair public choice of these tails after survival
+makes Q=C=1/20 for owners0,1, and Q=3/40<C=11/20 for owners2,3.
+Thus the public profile is exact Nash. Freezing EITHER tail creates debt1/4
+for owner0 and zero for everyone else. All deviations absorb by the second
+date, so adding arbitrary signed row offsets preserves this comparison.
+
+Put J_ii=0 and J_ij=Z_i({i,j}) for i!=j. Thus J=(E-I)/10+e_1 e_2^T,
+where E is the all-ones matrix. Both Gamma^-1 and (Gamma-J)^-1 are strictly
+positive. The former has diagonal
+2/15, opposite entries7/15, and other entries1/5. For the latter, put
+B=Gamma-(E-I)/10. Its inverse has diagonal
+(10/7+10/51-20/29)/4>0, opposite entries
+(10/7+10/51+20/29)/4>0, and cross entries110/357<1.
+Since Gamma-J=B-e_1 e_2^T, the Sherman-Morrison identity gives a strictly
+positive inverse. This example has pure sure exits and excludes no new UE
+class. It tests a proposed operation even inside the positive-inverse
+geometry; it does not refute selection of endpoint-compatible Nash paths.
+
+The external literature points to the same distinction.
+[Jenkinson--Li--Liao--Zhang (2025), Theorem3.3](https://arxiv.org/html/2503.18092v2)
+extracts paths from a supplied invariant measure for a compact closed
+multivalued dynamics, but does not supply positive absorption. The relevant
+path mechanism is already available in the conference's ergodic recurrence
+work; no additional UE coverage follows from this citation.
+[Ingalls--Sontag--Wang (2003), Theorem1](https://www.sontaglab.org/FTPDIR/relaxation-di-as-appeared.pdf)
+shadows a supplied convexified differential-inclusion trajectory over an
+infinite horizon. It permits a perturbed initial point and requires local
+Hausdorff-Lipschitz regularity unavailable at general root support changes.
+Neither theorem supplies the missing game-specific producer.
+
+The unresolved constructive target is a finite-amplitude controlled invariant
+set of ACTUAL Nash transitions. A legal transition must retain its
+continuation value and all full deviation comparisons. Certified parameter
+continuation and support-dependent interval boxes offer a concrete way to
+test this target without assuming a continuous global root selector.
