@@ -12,7 +12,7 @@ The reviewed source is Section13 of
 whole-file SHA256
 `4033a7d23312c0781f9c7474de09f4ad352e58e57069d9bdf18d128bd4c3fd3b`.
 The assembled author draft
-[`CODEX_EMMY_BOX__RAW_ENDPOINT_THREE_PASSIVE_POLES.md`](../notes/CODEX_EMMY_BOX__RAW_ENDPOINT_THREE_PASSIVE_POLES.md)
+[`CODEX_EMMY_BOX__RAW_ENDPOINT_THREE_PASSIVE_POLES.md`](../exports/RAW_ENDPOINT_THREE_PASSIVE_POLES_UNIFORM_EQUILIBRIUM.md)
 is byte-identical to the frozen export. The earlier sections of the reviewed
 source are not separately admitted by this gate.
 

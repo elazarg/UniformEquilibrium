@@ -187,7 +187,7 @@ source-free spine selection.
 ## Post-mark two-cut and renewable-source boundary
 
 The law-tight reset arm is not the missing post-mark chronology.  The open
-[post-mark two-cut and renewable child-source question](../questions/FIN4_POST_MARK_TWO_CUT_RENEWABLE_CHILD_SOURCE.md)
+[post-mark two-cut and renewable child-source question](../ideas/QUESTION_BACKLOG/FIN4_POST_MARK_TWO_CUT_RENEWABLE_CHILD_SOURCE.md)
 requires two cuts in one literal post-mark continuation, positive parent
 reach, a hazard floor between those cuts, and reconstruction of a complete
 same-witness child source.  None of those requirements follows from equality
@@ -206,7 +206,7 @@ are summarized in
 The renewal result does not produce the uniformly reached post-mark two-cut,
 does not identify the next packet rank with a later date of the same profile,
 and does not consume its three terminal exits.  Those exits remain the
-[renewal terminal-exit question](../questions/FIN4_RENEWAL_TERMINAL_EXIT_CONSUMERS.md).
+[renewal terminal-exit question](../ideas/QUESTION_BACKLOG/FIN4_RENEWAL_TERMINAL_EXIT_CONSUMERS.md).
 
 ## Plateau moat: stronger source, still a no-go
 

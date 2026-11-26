@@ -204,7 +204,7 @@ in `UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelecti
 The latter requires approximate terminal Nash profiles without a stationary
 restriction. The class exclusions proved here do not imply nonexistence of
 uniform equilibrium. The separately reviewed
-[signed collision-bridge export](../exports/SIGNED_COLLISION_BRIDGE_UNIFORM_EQUILIBRIUM.md)
+[signed collision-bridge export](../revisit/SIGNED_COLLISION_BRIDGE_UNIFORM_EQUILIBRIUM.md)
 now proves a uniform equilibrium for this table using nonstationary profiles.
 
 This review remains an independent audit of the class-exclusion note and

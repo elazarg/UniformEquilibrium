@@ -386,5 +386,5 @@ records the unresolved head contribution. Nothing here supersedes that
 larger admissible optimization. The distinct limited calculation fixes two
 actual calendars and minimizes over one opponent's entire law, with attained
 finite selection and the exact nonnegative one-extra-date boundary.
-[Finite-menu punishment completion](../exports/FINITE_MENU_PUNISHMENT_COMPLETION_AND_EARLY_ABSORPTION_CHARACTERIZATION.md)
+[Finite-menu punishment completion](../formalized/FINITE_MENU_PUNISHMENT_COMPLETION_AND_EARLY_ABSORPTION_CHARACTERIZATION.md)
 already uses scalar backward punishment operators and is not re-proved here.

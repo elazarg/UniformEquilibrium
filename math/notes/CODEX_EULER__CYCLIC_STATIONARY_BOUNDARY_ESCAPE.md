@@ -132,7 +132,7 @@ clocks, not another endpoint or finite-support checklist.
 ## 1. Exact question and scope
 
 The parent question is
-[`../questions/INCENTIVE_GADGET.md`](../questions/INCENTIVE_GADGET.md). It
+[`../questions/INCENTIVE_GADGET.md`](../ideas/QUESTION_BACKLOG/INCENTIVE_GADGET.md). It
 asks for a rational quitting table with a fixed all-behavior terminal
 exploitability gap, obtained by forcing two incompatible pair atoms, or an
 equilibrium/escape theorem excluding a precisely proposed finite-gadget

@@ -10,7 +10,7 @@ coalition law and weakly decreases every unrestricted response cap. The
 result eliminates the infinite-dimensional pivot optimization in favor of a
 finite linear program, including its nonattained zero-first-atom boundary.
 
-The self-contained [reviewed theorem and signed-payoff extension](../exports/GEOMETRIC_PIVOT_TAIL_COMPRESSION_AND_EXACT_REPAIR_LP.md)
+The self-contained [reviewed theorem and signed-payoff extension](../formalized/GEOMETRIC_PIVOT_TAIL_COMPRESSION_AND_EXACT_REPAIR_LP.md)
 give the complete formulas, exact example, and boundary tests. Independent
 checks are in the [RENY review](../feedback/GEOMETRIC_COMPRESSION__BY_CODEX_RENY.md)
 and [HILBERT review](../feedback/GEOMETRIC_COMPRESSION__BY_CODEX_HILBERT.md).

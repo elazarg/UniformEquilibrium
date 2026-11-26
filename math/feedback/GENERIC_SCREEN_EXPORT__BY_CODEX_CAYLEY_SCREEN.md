@@ -49,7 +49,7 @@ packet gives an existence-preserving restriction of hypothetical
 counterexamples, rather than merely verifying a supplied favorable source.
 
 The named narrowed obligation is the source in Sections 4–7 of
-[MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION](../exports/MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION.md).
+[MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION](../revisit/MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION.md).
 Its pure nonsingleton exclusions are strengthened to all mixed screened
 roots, and zero-singleton minimum laws are excluded on the newly selected
 fiber. A full-regret improvement of the remaining singleton-bearing source

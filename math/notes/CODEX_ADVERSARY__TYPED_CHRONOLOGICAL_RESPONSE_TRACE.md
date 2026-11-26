@@ -325,7 +325,7 @@ subsequence.
 
 This is a genuine compact chronological-shadowing consequence of the actual
 source data.  It is not the Tier-I producer requested in
-[`FIN4_TWO_TIER_CHRONOLOGICAL_SHADOWING.md`](../questions/FIN4_TWO_TIER_CHRONOLOGICAL_SHADOWING.md):
+[`FIN4_TWO_TIER_CHRONOLOGICAL_SHADOWING.md`](../ideas/QUESTION_BACKLOG/FIN4_TWO_TIER_CHRONOLOGICAL_SHADOWING.md):
 
 - the common clock is a reparametrization of a finite family of actual and
   counterfactual histories, not one behavioral profile;

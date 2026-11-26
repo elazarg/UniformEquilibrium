@@ -13,7 +13,7 @@ is claimed by this intake.
 ## Adopted: intervention-safe support repair
 
 This is directly relevant to the
-[strict sure-regret source](../exports/MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION.md).
+[strict sure-regret source](../revisit/MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION.md).
 The elementary leakage-to-pair estimate supplies the direction missing from
 FRECHET's concentration-at-one-pair calculation: small total non-pair mass
 forces proximity to one pair, with uniform control of all unilateral caps.

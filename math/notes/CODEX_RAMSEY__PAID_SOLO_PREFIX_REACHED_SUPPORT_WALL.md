@@ -371,7 +371,7 @@ N_d=B_d(sigma)>=U_d(sigma)+Gamma.                      (7.4)
 Thus the paid high endpoint of the actual pair-base two-debtor source is
 necessarily Continue/Never, never immediate Quit.  In particular the
 immediate-Quit singleton-gap/exact-root entrance in
-[`LARGE_BASE_PAID_ENDPOINT_ATOM_DISPATCH.md`](../exports/LARGE_BASE_PAID_ENDPOINT_ATOM_DISPATCH.md)
+[`LARGE_BASE_PAID_ENDPOINT_ATOM_DISPATCH.md`](../formalized/LARGE_BASE_PAID_ENDPOINT_ATOM_DISPATCH.md)
 does not apply directly to this common handoff source.
 
 This is an all-behavior statement, not a stationary-only comparison: the

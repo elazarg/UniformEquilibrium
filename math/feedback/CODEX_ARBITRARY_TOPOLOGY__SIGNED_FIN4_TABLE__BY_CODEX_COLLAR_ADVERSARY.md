@@ -20,7 +20,7 @@ over every fixed stationary hazard vector. Complete behavioral deviations,
 including Never, are included. It also has no Nash root with a sure quitter
 against any actual continuation caps, hence no absorbing exact finite-calendar
 Nash profile. UE existence is now recorded in the separately reviewed
-[collision-bridge export](../exports/SIGNED_COLLISION_BRIDGE_UNIFORM_EQUILIBRIUM.md);
+[collision-bridge export](../revisit/SIGNED_COLLISION_BRIDGE_UNIFORM_EQUILIBRIUM.md);
 this review certifies neither that producer nor its complete export gate.
 No approximate finite-calendar exclusion is asserted.
 

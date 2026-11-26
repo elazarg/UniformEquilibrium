@@ -660,7 +660,7 @@ mathematics. `CODEX_GAUSS` and `CODEX_CEDAR` have completed independent
 unrestricted-class falsification reviews with valid verdicts and no objection.
 The frozen full-Q-bar theorem has passed the conference export gate and is
 packaged in
-[`../exports/PROJECTIVE_QBAR_UNIFORM_PAYOFF_DECODER.md`](../exports/PROJECTIVE_QBAR_UNIFORM_PAYOFF_DECODER.md).
+[`../exports/PROJECTIVE_QBAR_UNIFORM_PAYOFF_DECODER.md`](../formalized/PROJECTIVE_QBAR_UNIFORM_PAYOFF_DECODER.md).
 It has no Lean seal. It
 supersedes Proposition 52's conditional use of the open stationary
 alternative. Section 57 observes that even ambient full Q-bar is unnecessary:
@@ -856,7 +856,7 @@ new Lean seal is claimed.
 
 The frozen Proposition 20 packet passed the mandatory gate item by item and
 is isolated in
-[`../exports/FULL_CORE_DEADLOCK_JOINT_BLOCK_EQUILIBRIUM.md`](../exports/FULL_CORE_DEADLOCK_JOINT_BLOCK_EQUILIBRIUM.md).
+[`../exports/FULL_CORE_DEADLOCK_JOINT_BLOCK_EQUILIBRIUM.md`](../formalized/FULL_CORE_DEADLOCK_JOINT_BLOCK_EQUILIBRIUM.md).
 It contains only the exact named completion and excludes Proposition 21.
 
 `CODEX_GAUSS` independently audited Proposition 21 in
@@ -896,7 +896,7 @@ singleton certificate. The later Propositions 23--25 remain unreviewed.
 
 Proposition 22 has passed every export gate at its exact scope and is isolated
 in
-[`../exports/FULL_CORE_DEADLOCK_RATIONAL_POLYHEDRAL_BLOCK.md`](../exports/FULL_CORE_DEADLOCK_RATIONAL_POLYHEDRAL_BLOCK.md).
+[`../exports/FULL_CORE_DEADLOCK_RATIONAL_POLYHEDRAL_BLOCK.md`](../formalized/FULL_CORE_DEADLOCK_RATIONAL_POLYHEDRAL_BLOCK.md).
 The packet claims only `M` evidence and explicitly leaves overlap with
 arbitrary coordinatewise face-gap rectangles open.
 
@@ -933,7 +933,7 @@ The gate audit for Proposition 34 is complete at that exact scope. Its strict
 improvement over the named checked sign dispatch, checked exact-debt-tail
 adapter, checked complementary-mixture consumer, exact boundary tests, source
 audit, review, and Lean handoff are isolated in
-[`../exports/MINIMAL_FLOOR_CHARGE_TANGENT_DISPATCH.md`](../exports/MINIMAL_FLOOR_CHARGE_TANGENT_DISPATCH.md).
+[`../exports/MINIMAL_FLOOR_CHARGE_TANGENT_DISPATCH.md`](../formalized/MINIMAL_FLOOR_CHARGE_TANGENT_DISPATCH.md).
 The packet carries `M` evidence only and does not claim a producer for either
 residual arm.
 
@@ -952,7 +952,7 @@ near-return for a floor-clipped edge remains open.
 [`../feedback/CODEX_NOETHER__QUIT_TIME_COMPACTIFICATION__BY_CODEX_CEDAR__ROUND_9.md`](../feedback/CODEX_NOETHER__QUIT_TIME_COMPACTIFICATION__BY_CODEX_CEDAR__ROUND_9.md).
 Proposition 35, Corollary 35A, and the paid-row substitution in Proposition
 36 all survived. The accepted packet is isolated in
-[`../exports/PUNISHMENT_FLOOR_PAYOFF_NEAR_RETURN.md`](../exports/PUNISHMENT_FLOOR_PAYOFF_NEAR_RETURN.md).
+[`../exports/PUNISHMENT_FLOOR_PAYOFF_NEAR_RETURN.md`](../formalized/PUNISHMENT_FLOOR_PAYOFF_NEAR_RETURN.md).
 It carries `M` evidence only. A refreshed untracked formalization attempt in
 `UniformEquilibrium/Quitting/Projective/PunishmentFloorNearReturn.lean` failed
 Cedar's narrow Lean check at a dependent finite-index obligation and is not
@@ -7556,7 +7556,7 @@ It also confirms that Proposition 55 uses no ambient Q-bar fact after the
 subtype path is constructed, but does not establish a strict separating game.
 
 The complete gate packet for Proposition 54 only is
-[`../exports/PROJECTIVE_QBAR_UNIFORM_PAYOFF_DECODER.md`](../exports/PROJECTIVE_QBAR_UNIFORM_PAYOFF_DECODER.md).
+[`../exports/PROJECTIVE_QBAR_UNIFORM_PAYOFF_DECODER.md`](../formalized/PROJECTIVE_QBAR_UNIFORM_PAYOFF_DECODER.md).
 It records the exact AGKRS theorem-level overlap, the new proof-repair scope,
 both reviews, all-behavior audit, boundary tests, source declarations,
 consumers, and Lean handoff. Proposition 55 is deliberately excluded.

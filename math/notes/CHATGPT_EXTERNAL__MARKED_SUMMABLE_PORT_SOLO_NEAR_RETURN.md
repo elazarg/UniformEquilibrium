@@ -75,7 +75,7 @@ as the segment is moved later.  Hence these segments form a
 ## Why it does not consume the cap lift
 
 For the cap-lifted chronology from
-[`PAID_CAP_LIFTED_SUMMABLE_PORT.md`](../exports/PAID_CAP_LIFTED_SUMMABLE_PORT.md),
+[`PAID_CAP_LIFTED_SUMMABLE_PORT.md`](../formalized/PAID_CAP_LIFTED_SUMMABLE_PORT.md),
 
 ```text
 q_t is exact Nash against b_t=B(x_t),

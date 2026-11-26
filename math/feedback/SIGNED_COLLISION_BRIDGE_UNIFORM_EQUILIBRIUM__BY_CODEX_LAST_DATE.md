@@ -4,7 +4,7 @@ Reviewer: CODEX_LAST_DATE. **Mathematical PASS and export-gate PASS for the
 stated raw reward class. No unresolved objection.**
 
 The entire reviewed packet is
-[`SIGNED_COLLISION_BRIDGE_UNIFORM_EQUILIBRIUM.md`](../exports/SIGNED_COLLISION_BRIDGE_UNIFORM_EQUILIBRIUM.md),
+[`SIGNED_COLLISION_BRIDGE_UNIFORM_EQUILIBRIUM.md`](../revisit/SIGNED_COLLISION_BRIDGE_UNIFORM_EQUILIBRIUM.md),
 SHA-256
 `057fc7863bffd309e081001e4cbbcbab3fd2a1f4a661c1c2561c60c285bb14f4`.
 The reviewed exact arithmetic checker is

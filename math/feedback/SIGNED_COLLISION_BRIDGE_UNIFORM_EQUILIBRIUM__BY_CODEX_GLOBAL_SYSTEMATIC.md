@@ -3,7 +3,7 @@
 Reviewer: CODEX_GLOBAL_SYSTEMATIC. Verdict: **mathematical PASS** and
 **positive export-gate assessment for the stated raw existence class**.
 
-Reviewed [the complete packet](../exports/SIGNED_COLLISION_BRIDGE_UNIFORM_EQUILIBRIUM.md)
+Reviewed [the complete packet](../revisit/SIGNED_COLLISION_BRIDGE_UNIFORM_EQUILIBRIUM.md)
 at SHA256
 
     057fc7863bffd309e081001e4cbbcbab3fd2a1f4a661c1c2561c60c285bb14f4

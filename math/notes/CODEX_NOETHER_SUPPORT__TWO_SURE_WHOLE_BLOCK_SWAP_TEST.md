@@ -131,8 +131,8 @@ floor passed exactly with rational arithmetic. Zero tested tables are
 claimed to realize the positive-global-minimum source.
 
 The source and complete pure-coalition convention are those in the
-frozen [membership-stretch reduction](../exports/MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION.md)
-and [three-sure packet](../exports/THREE_SURE_MINIMA_REQUIRE_OPPOSED_MEMBERSHIP_REVERSALS.md).
+frozen [membership-stretch reduction](../revisit/MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION.md)
+and [three-sure packet](../revisit/THREE_SURE_MINIMA_REQUIRE_OPPOSED_MEMBERSHIP_REVERSALS.md).
 No Lean implementation or export edit was made.
 
 Next question: can a SAME-table global source restriction bound the

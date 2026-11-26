@@ -6,6 +6,18 @@ researchers regard the result as complete, rigorous, and indisputable
 mathematical progress toward the quitting-game conjecture. It does not mean the
 result is already proved in Lean.
 
+## Fin4 handoff
+
+Start with the
+[single escape obligation](ONE_ESCAPE_OBLIGATION_FOR_ARBITRARY_FOUR_PLAYER_GAMES.md).
+It reduces arbitrary signed Fin4 to a positively reached escape
+configuration. The [independent review record](../feedback/CODEX_ROOT__RESET_AND_INCOMING_CONTROLS__BY_INDEPENDENT_REVIEWS.md#one-escape-obligation-for-arbitrary-fin4)
+identifies the exact manuscript and the source-preservation checks. The
+escape consumer remains open. The
+[coverage map](../notes/CODEX_ROOT__FIN4_COVERAGE_MAP.md) gives the parallel
+routes, and the [revisit queue](../revisit/README.md) gives the work needed to
+make other handoffs ready.
+
 ## What qualifies
 
 Significant conjecture-facing progress is required, not merely a correct new

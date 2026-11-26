@@ -168,7 +168,7 @@ been replaced by a local hypothesis or falsified by an example.
 
 The source's uniform cap margin and all-owner near-activity are supplied
 by the ordinary
-[singleton-fiber source reduction](../exports/MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION.md)
+[singleton-fiber source reduction](../revisit/MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION.md)
 and its fixed-table/silent-source transport. In particular this argument
 does not infer a margin from a singleton outcome count. The underlying
 checked declaration is `minimumTerminalSemantic_exploitabilitySingletonMargin`
@@ -176,7 +176,7 @@ in `UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPlateauDynamicCostat
 It is a global MAX semantic-carrier statement, not a total-debt or
 fixed-calendar-minimum theorem. The all-player-tie argument used only in
 the attained specialization appears in the
-[frozen inverse-stretch packet](../exports/INVERSE_MEMBERSHIP_STRETCH_SURE_CORE_SIGN_REVERSAL.md).
+[frozen inverse-stretch packet](../formalized/INVERSE_MEMBERSHIP_STRETCH_SURE_CORE_SIGN_REVERSAL.md).
 It is now also a checked unit-cube declaration,
 `minimumTerminalSemantic_maximumDebt_allPlayersTie`, with its actual-profile
 adapter `quittingTerminalDeviationDebt_eq_exploitability_of_attained_positive_minimum`,

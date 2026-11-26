@@ -44,7 +44,7 @@ exploitability over the four-player unit reward cube is strictly below 1/3.
 The qualifying category in `math/exports/README.md` is a proved reduction
 that strictly narrows an open obligation. The named obligation is the
 strict-gap singleton-pressure source in Sections 4–7 of
-[MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION.md](../exports/MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION.md).
+[MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION.md](../revisit/MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION.md).
 The packet strengthens its pure sure-coalition floor to all screened mixed
 roots and removes zero-singleton minimizing laws from the selectable
 counterexample source. Its extra harmonic result sharpens the existing

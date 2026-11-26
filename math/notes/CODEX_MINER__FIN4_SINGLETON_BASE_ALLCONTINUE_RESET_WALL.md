@@ -14,7 +14,7 @@ shows exactly where the ambient terminal witness must enter; it is not a
 counterexample to the Fin4 conjecture.
 
 Primary producer:
-[`FIN4_SINGLETON_BASE_SAME_LAW_RESET_PRODUCER.md`](../exports/FIN4_SINGLETON_BASE_SAME_LAW_RESET_PRODUCER.md).
+[`FIN4_SINGLETON_BASE_SAME_LAW_RESET_PRODUCER.md`](../formalized/FIN4_SINGLETON_BASE_SAME_LAW_RESET_PRODUCER.md).
 
 Conjecture-facing conclusion: the source-to-reset interface is locally
 complete.  Its remaining all-Continue arm is not another alignment problem.

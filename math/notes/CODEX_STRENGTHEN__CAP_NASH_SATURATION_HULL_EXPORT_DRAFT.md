@@ -636,7 +636,7 @@ three stated neutral chambers.
 This does **not** answer
 [`FIN4_ACTUAL_PAID_CAP_DESCENT_OR_INERT_STALL.md`](../questions/FIN4_ACTUAL_PAID_CAP_DESCENT_OR_INERT_STALL.md)
 or
-[`FIN4_MINIMUM_RETURN_CAPSTONE.md`](../questions/FIN4_MINIMUM_RETURN_CAPSTONE.md),
+[`FIN4_MINIMUM_RETURN_CAPSTONE.md`](../ideas/QUESTION_BACKLOG/FIN4_MINIMUM_RETURN_CAPSTONE.md),
 because those questions require preservation of an actual paid chronology and
 complete post-row behavioral tail.  The hull retains only terminal semantics,
 the terminal coalition/Never law, and the selected atom inequality.  A final

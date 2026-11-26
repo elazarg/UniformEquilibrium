@@ -79,7 +79,7 @@ e_i=z_i-s_i.                                         (1.3)
 The packet inequalities say `e_i>=0`.  The question is whether the same roots,
 with a suitable tail, satisfy the hypotheses of Proposition 44 in
 `CODEX_NOETHER__QUIT_TIME_COMPACTIFICATION.md`, exported as
-[`SIMON_NORMALIZED_MOTION_STATIONARY_PREFIX_PRODUCER.md`](../exports/SIMON_NORMALIZED_MOTION_STATIONARY_PREFIX_PRODUCER.md).
+[`SIMON_NORMALIZED_MOTION_STATIONARY_PREFIX_PRODUCER.md`](../formalized/SIMON_NORMALIZED_MOTION_STATIONARY_PREFIX_PRODUCER.md).
 
 ## 2. First-order limit of the actual roots
 

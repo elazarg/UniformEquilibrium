@@ -12,7 +12,7 @@ full-regret improvement or equilibrium producer is claimed.
 ## 1. Exact question and source domain
 
 Fix the signed table r from
-[the singleton-fiber reduction](../exports/MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION.md),
+[the singleton-fiber reduction](../revisit/MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION.md),
 with zero Never payoff, η(r)=Ω>0, and every nonsingleton sure-coalition
 regret at least Ω+γ. Clocks are independent private stopping laws. Every
 unilateral behavioral response is allowed.

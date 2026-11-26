@@ -434,7 +434,7 @@ one used by `FinFourLowTailRow.nonempty_leaf` in
    closed monodromy segment.
 
 The reviewed result
-[`FIN4_MONODROMY_PRODUCER_IMPOSSIBLE`](../exports/FIN4_MONODROMY_PRODUCER_IMPOSSIBLE.md)
+[`FIN4_MONODROMY_PRODUCER_IMPOSSIBLE`](../formalized/FIN4_MONODROMY_PRODUCER_IMPOSSIBLE.md)
 shows that the stored Fin4 monodromy segment is impossible. Its proof uses
 only the raw dispatched trace fields, so it applies equally to the trace
 returned from the self-tail-closed row; it does not use the original
@@ -443,7 +443,7 @@ returned from the self-tail-closed row; it does not use the original
 In either surviving singleton branch, the actual routed singleton retains
 the same positive stage-mass floor and its literal post-date tail. The generic
 result
-[`FIN4_MINIMUM_SINGLETON_TO_STRONG_CONCENTRATED_PACKET`](../exports/FIN4_MINIMUM_SINGLETON_TO_STRONG_CONCENTRATED_PACKET.md)
+[`FIN4_MINIMUM_SINGLETON_TO_STRONG_CONCENTRATED_PACKET`](../formalized/FIN4_MINIMUM_SINGLETON_TO_STRONG_CONCENTRATED_PACKET.md)
 then best-endpoint-purifies any fixed nonowner and produces a strong
 concentrated packet with no mass loss.
 

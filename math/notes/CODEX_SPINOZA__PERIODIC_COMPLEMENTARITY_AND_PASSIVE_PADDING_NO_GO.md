@@ -13,7 +13,7 @@ declaration.  Independent mathematical reviews:
 and
 [`CODEX_SNELL`](../feedback/CODEX_SPINOZA__PERIODIC_COMPLEMENTARITY_AND_PASSIVE_PADDING_NO_GO__BY_CODEX_SNELL.md),
 both PASS.  The twice-delta-checked packet is frozen at
-[`PASSIVE_PADDING_PERIODIC_CERTIFICATE_NO_GO.md`](../exports/PASSIVE_PADDING_PERIODIC_CERTIFICATE_NO_GO.md),
+[`PASSIVE_PADDING_PERIODIC_CERTIFICATE_NO_GO.md`](../formalized/PASSIVE_PADDING_PERIODIC_CERTIFICATE_NO_GO.md),
 SHA-256 `47188fbd995d586305ff52a768808d99c78628a73d21a24465f5a07db0b23edd`.
 
 Current consequence: there is a rational four-player quitting table that has

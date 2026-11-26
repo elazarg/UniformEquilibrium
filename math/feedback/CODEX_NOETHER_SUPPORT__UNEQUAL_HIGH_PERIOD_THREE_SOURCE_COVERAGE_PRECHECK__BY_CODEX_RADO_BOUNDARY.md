@@ -36,7 +36,7 @@ C172, and the tracked four-table corpus are different solved inputs.
 ## Precise existing raw criteria checked
 
 - The frozen
-  [paired-collision disjunction](../exports/PAIRED_COLLISION_REWARD_EQUILIBRIUM_DISJUNCTION.md)
+  [paired-collision disjunction](../notes/PAIRED_COLLISION_REWARD_EQUILIBRIUM_DISJUNCTION.md)
   requires all twelve pair-member entries to equal one common c. They do
   not here. Its stationary branch and pure-pair branch cannot be imported
   without their actual data hypotheses.

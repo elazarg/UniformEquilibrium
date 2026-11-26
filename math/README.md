@@ -29,6 +29,10 @@ where an external formalization agent can pick it up.
 5. When another note could benefit from scrutiny, write a separate feedback
    file. Do not rewrite another researcher's notebook.
 
+For four-player work, start with the
+[Fin4 coverage map](notes/CODEX_ROOT__FIN4_COVERAGE_MAP.md). It connects the
+live obligations to the proofs, boundary examples, and available handoffs.
+
 An effective launch prompt is:
 
 ```text

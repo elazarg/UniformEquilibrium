@@ -220,7 +220,7 @@ or over varying generic b approaching Π=0, is established.
 ## 6. Common-calendar attachment and ancestry boundary
 
 The actual predecessor inspected was
-[MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION.md](../exports/MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION.md),
+[MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION.md](../revisit/MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION.md),
 especially Sections 4–6. Its later construction takes a fixed b, a positive
 fiber maximum Ω_b, and a pure nonsingleton sure-coalition floor above Ω_b.
 The original endpoint stretch establishes these fields in Sections 2–3,

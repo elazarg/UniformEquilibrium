@@ -6,7 +6,7 @@ Status: `PROOF_DRAFT`
 ## Exact question
 
 This gives the candidate-level negative answer explicitly accepted by
-[`../questions/SIMON_LYAPUNOV_CERTIFICATE.md`](../questions/SIMON_LYAPUNOV_CERTIFICATE.md):
+[`../questions/SIMON_LYAPUNOV_CERTIFICATE.md`](../ideas/QUESTION_BACKLOG/SIMON_LYAPUNOV_CERTIFICATE.md):
 an exact positive-variation cycle in the full production correspondence of a
 natural rational quitting table.
 

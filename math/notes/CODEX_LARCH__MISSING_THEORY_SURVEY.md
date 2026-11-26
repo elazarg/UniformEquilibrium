@@ -122,7 +122,7 @@ independent-strategy semantics needed by its consumer.
   [finite-calendar prescribed-outcome realization](CODEX_TARSKI_PREMIUM__FINITE_CALENDAR_PRESCRIBED_OUTCOME_REALIZATION.md)
   already states the finite-observable generalization and a full-law version.
   The reviewed export
-  [finite-calendar reward-table tests](../exports/FINITE_CALENDAR_PAYOFF_EXCLUSION_RAW_TABLE_TESTS.md)
+  [finite-calendar reward-table tests](../formalized/FINITE_CALENDAR_PAYOFF_EXCLUSION_RAW_TABLE_TESTS.md)
   contains the prescribed-payoff compression proof and its selector consumers.
 
 The common object is a product of independent measures evaluated on a finite

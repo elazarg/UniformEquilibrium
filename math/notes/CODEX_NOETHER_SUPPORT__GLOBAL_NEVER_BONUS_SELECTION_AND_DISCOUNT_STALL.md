@@ -260,7 +260,7 @@ same example has the elementary exact solo stationary law just proved.
 ## 5. Bonus-box minimization on a genuinely non-solo paired face
 
 This extension uses the already proved raw paired producer in
-[Asymmetric paired-cycle equilibria with exact finite response caps](../exports/ASYMMETRIC_PAIRED_CYCLE_EXACT_CAP_FINITE_SELECTOR.md),
+[Asymmetric paired-cycle equilibria with exact finite response caps](../formalized/ASYMMETRIC_PAIRED_CYCLE_EXACT_CAP_FINITE_SELECTOR.md),
 Sections 1–5, read in full. Credit for testing this connection belongs to
 the coordinator. No new paired-existence proof or coverage claim is made.
 

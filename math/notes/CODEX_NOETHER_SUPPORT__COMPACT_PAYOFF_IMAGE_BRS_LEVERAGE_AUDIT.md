@@ -63,7 +63,7 @@ in `UniformEquilibrium/Quitting/Paths/FiniteCalendarRawPredicates.lean`
 give the corresponding exact raw-payoff predicate and uniform positive
 deficit margin. That is a real finite recognition improvement. It is
 already the strict-exclusion side of the reviewed
-[finite raw-table adapter](../exports/FINITE_CALENDAR_PAYOFF_EXCLUSION_RAW_TABLE_TESTS.md),
+[finite raw-table adapter](../formalized/FINITE_CALENDAR_PAYOFF_EXCLUSION_RAW_TABLE_TESTS.md),
 not a newly covered UE class discovered by this audit.
 
 The additional declarations

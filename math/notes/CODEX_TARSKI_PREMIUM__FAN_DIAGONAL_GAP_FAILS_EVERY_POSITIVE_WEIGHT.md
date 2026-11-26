@@ -135,7 +135,7 @@ No selected finite-Nash target is required here.
 
 ## 5. Paired degree-one calibration, with ACTUAL normalization
 
-Take c=2 in the [paired collision-reward family](../exports/PAIRED_COLLISION_REWARD_EQUILIBRIUM_DISJUNCTION.md).
+Take c=2 in the [paired collision-reward family](PAIRED_COLLISION_REWARD_EQUILIBRIUM_DISJUNCTION.md).
 Normalize at pivot 0 by subtracting one from EVERY absorbing reward
 coordinate of players 1,2,3, leaving player 0 unchanged and Never zero.
 This is the literal `quittingSinglePivotNormalizedReward`, not merely a

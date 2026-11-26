@@ -74,7 +74,7 @@ Their original-table active ties and payoff recursions are exactly
     R/a=4a(1−b)+abR.                                    (3)
 
 Here is the full existence reduction, credited to the reviewed
-[common-c disjunction](../exports/PAIRED_COLLISION_REWARD_EQUILIBRIUM_DISJUNCTION.md).
+[common-c disjunction](PAIRED_COLLISION_REWARD_EQUILIBRIUM_DISJUNCTION.md).
 Set R(a)=c−(c−1)a, and let a₀∈[1/2,2/3) solve 4a₀²=R(a₀).
 The function 4a²−R(a) is increasing, with the required opposite endpoint
 signs. For a∈[a₀,1] put

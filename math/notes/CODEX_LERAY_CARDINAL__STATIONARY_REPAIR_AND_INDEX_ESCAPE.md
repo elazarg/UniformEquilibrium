@@ -223,9 +223,9 @@ algorithm computing the real discounted roots.
 ## Source audit, verification, and remaining question
 
 The uploaded names ending in `(2)` resolve to
-[`INTEGER_LCP_DEGREE_CRITERION_FOR_FOUR_PLAYER_QUITTING_GAMES.md`](../exports/INTEGER_LCP_DEGREE_CRITERION_FOR_FOUR_PLAYER_QUITTING_GAMES.md)
+[`INTEGER_LCP_DEGREE_CRITERION_FOR_FOUR_PLAYER_QUITTING_GAMES.md`](../formalized/INTEGER_LCP_DEGREE_CRITERION_FOR_FOUR_PLAYER_QUITTING_GAMES.md)
 and
-[`INVERSE_POSITIVE_SINGLETON_MATRIX_DISCOUNTED_INDEX_ESCAPE.md`](../exports/INVERSE_POSITIVE_SINGLETON_MATRIX_DISCOUNTED_INDEX_ESCAPE.md).
+[`INVERSE_POSITIVE_SINGLETON_MATRIX_DISCOUNTED_INDEX_ESCAPE.md`](../formalized/INVERSE_POSITIVE_SINGLETON_MATRIX_DISCOUNTED_INDEX_ESCAPE.md).
 They already supply the Fin4 integer-degree mechanism and weak-inverse
 approximation. They expressly do not claim an unrestricted player-count
 theorem or exact stationary equilibrium. The new repair and original-table

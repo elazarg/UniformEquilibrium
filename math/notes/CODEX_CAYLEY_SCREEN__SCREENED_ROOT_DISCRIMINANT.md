@@ -158,7 +158,7 @@ Nash. The fixtures therefore do not falsify the global-minimum theorem;
 they confirm that a positive tie alone is insufficient.
 
 For the raw anchor table in
-[ADAPTIVE_CHILD_EQUILIBRIUM_EXTENSION_NO_GO](../exports/ADAPTIVE_CHILD_EQUILIBRIUM_EXTENSION_NO_GO.md),
+[ADAPTIVE_CHILD_EQUILIBRIUM_EXTENSION_NO_GO](ADAPTIVE_CHILD_EQUILIBRIUM_EXTENSION_NO_GO.md),
 setting q_3=1 cannot increase screened debt. At least one active q_i must be
 one. If E≤e<1/2, the three cases give respectively:
 

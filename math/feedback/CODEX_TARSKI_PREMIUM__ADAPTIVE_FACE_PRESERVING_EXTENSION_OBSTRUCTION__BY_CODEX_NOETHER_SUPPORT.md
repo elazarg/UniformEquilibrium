@@ -274,7 +274,7 @@ No author note, export, Lean source, or shared index was edited.
 ## 8. Final-byte acceptance of the combined packet
 
 The complete final manuscript
-[ADAPTIVE_CHILD_EQUILIBRIUM_EXTENSION_NO_GO](../exports/ADAPTIVE_CHILD_EQUILIBRIUM_EXTENSION_NO_GO.md)
+[ADAPTIVE_CHILD_EQUILIBRIUM_EXTENSION_NO_GO](../notes/ADAPTIVE_CHILD_EQUILIBRIUM_EXTENSION_NO_GO.md)
 was read through EOF and accepted at SHA256
 `358787dd7cac784c8104244bc2431844d414c7bda28e10851a04d8bd7c00da1a`.
 There is no unresolved mathematical objection to these exact bytes.

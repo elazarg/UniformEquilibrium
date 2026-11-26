@@ -73,7 +73,7 @@ in that set. No bound uniform as a tends to zero is obtained or needed.
 ## 3. Calendar attachment passes with the stated ancestry boundary
 
 Sections 4–6 of
-[MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION.md](../exports/MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION.md)
+[MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION.md](../revisit/MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION.md)
 use a fixed singleton fiber, its positive maximizing value, the strict pure
 sure-coalition floor, complete reward-uniform finite approximation, and the
 MAX singleton moat. They do not use the preceding stretch formula or an

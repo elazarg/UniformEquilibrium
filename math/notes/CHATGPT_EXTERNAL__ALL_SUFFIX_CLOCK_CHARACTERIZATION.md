@@ -4,7 +4,7 @@
 
 **External proposal, awaiting incremental review.**  The two-label theorem is
 already independently reviewed and exported in
-[`../exports/PERSISTENT_DELETED_CLOCK_TWO_LABEL_REDUCTION.md`](../exports/PERSISTENT_DELETED_CLOCK_TWO_LABEL_REDUCTION.md).
+[`../exports/PERSISTENT_DELETED_CLOCK_TWO_LABEL_REDUCTION.md`](../formalized/PERSISTENT_DELETED_CLOCK_TWO_LABEL_REDUCTION.md).
 This note proposes three additions:
 
 1. the exact rule for an arbitrary deleted player set `A`;

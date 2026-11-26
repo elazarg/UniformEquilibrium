@@ -8,7 +8,7 @@ mathematical existence result for the stated class, not arbitrary Fin4 closure
 or a new Lean-checked theorem.
 
 The complete artifact reviewed is
-[the signed collision-bridge packet](../exports/SIGNED_COLLISION_BRIDGE_UNIFORM_EQUILIBRIUM.md),
+[the signed collision-bridge packet](../revisit/SIGNED_COLLISION_BRIDGE_UNIFORM_EQUILIBRIUM.md),
 SHA-256 `057fc7863bffd309e081001e4cbbcbab3fd2a1f4a661c1c2561c60c285bb14f4`.
 It was promoted unchanged to the export path above.
 The retained checker is

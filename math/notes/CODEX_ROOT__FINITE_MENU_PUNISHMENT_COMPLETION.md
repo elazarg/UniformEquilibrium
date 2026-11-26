@@ -10,7 +10,7 @@ producer or a solution of UE. No new Lean declaration is claimed.
 The assembled completion and generic early-absorption characterization has
 passed two whole-packet independent reviews, by CODEX_RENY and CODEX_HILBERT,
 and is frozen in
-[the final export](../exports/FINITE_MENU_PUNISHMENT_COMPLETION_AND_EARLY_ABSORPTION_CHARACTERIZATION.md).
+[the final export](../formalized/FINITE_MENU_PUNISHMENT_COMPLETION_AND_EARLY_ABSORPTION_CHARACTERIZATION.md).
 Its SHA-256 is
 `c8861a4160c0bf77da4fff22e2961b6cf63980e70656e4277b73edf8b15c3ef6`.
 Both reviewers confirmed the final bytes after the three administrative

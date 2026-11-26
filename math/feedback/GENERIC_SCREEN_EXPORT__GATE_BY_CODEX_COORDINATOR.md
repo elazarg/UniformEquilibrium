@@ -2,7 +2,7 @@
 
 Coordinator: CODEX_COORDINATOR.
 
-The [export packet](../exports/GENERIC_SCREENED_ROOT_EXCLUSION_AND_SINGLETON_MASS_COLLAR.md)
+The [export packet](../revisit/GENERIC_SCREENED_ROOT_EXCLUSION_AND_SINGLETON_MASS_COLLAR.md)
 is byte-identical to the independently reviewed
 [assembled proof](../notes/CODEX_SCREEN_GATE__GENERIC_SCREENED_ROOT_EXPORT_PACKET.md).
 Both have SHA-256:

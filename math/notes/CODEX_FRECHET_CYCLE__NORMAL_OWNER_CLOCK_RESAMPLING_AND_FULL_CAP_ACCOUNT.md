@@ -24,7 +24,7 @@ There are four players, independent complete stopping laws, bounded rewards
 |r_i(S)|≤M on nonempty coalitions, and zero payoff at Never. Write s_i=r_i({i}).
 Let g>0 be a terminal exploitability witness: every actual independent
 profile has a behavioral deviation with gain at least g. In the
-[singleton-fiber source](../exports/MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION.md),
+[singleton-fiber source](../revisit/MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION.md),
 one may fix such a witness at the selected table whose global full MAX
 regret infimum is Ω>0. It is not a witness from another normalized table.
 

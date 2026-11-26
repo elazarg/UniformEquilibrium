@@ -129,7 +129,7 @@ The bounded comparison read
 [SPINOZA's host-release failure](CODEX_SPINOZA__HOST_RELEASE_THREE_PLAYER_NASH_LIFT_SIGN_REVERSAL.md),
 the finite coupling and canonical regression cited above, and the theorem
 and source scope of the frozen
-[adaptive unchanged-child no-go](../exports/ADAPTIVE_CHILD_EQUILIBRIUM_EXTENSION_NO_GO.md).
+[adaptive unchanged-child no-go](ADAPTIVE_CHILD_EQUILIBRIUM_EXTENSION_NO_GO.md).
 Those unchanged-child and arbitrary selected-source no-gos are not
 substituted for a positive global minimum.
 

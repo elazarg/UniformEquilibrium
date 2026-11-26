@@ -42,7 +42,7 @@ arm instead supplies the unique sure quitter's bounded finite-or-Never cap
 at the literal last-zero child. The latter cap is NOT promised to be Quit0.
 
 The question is whether these literal source facts, combined with the frozen
-[finite cap-threshold block](../exports/FINITE_CAP_THRESHOLD_BLOCKS_AND_WEAK_EXCLUSION_SELECTION.md),
+[finite cap-threshold block](../formalized/FINITE_CAP_THRESHOLD_BLOCKS_AND_WEAK_EXCLUSION_SELECTION.md),
 give a renewed decrease from a globally near-minimal PARENT source after the
 next cap installation, rather than only a decrease from its off-minimum child.
 

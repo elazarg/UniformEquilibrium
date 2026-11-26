@@ -16,7 +16,7 @@ to a theorem using the ENTIRE produced source.
 ## 1. Exact question and genuine source
 
 Use the actual finite silent sources at ONE fixed table supplied by
-[the singleton-fiber reduction](../exports/MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION.md),
+[the singleton-fiber reduction](../revisit/MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION.md),
 SHA-256 `1fdefe4acb70e12b789e045885bc8711cea707daa059a70daab197623afbaa70`.
 There are four players, rewards in [−1,1], zero Never reward, and independent
 complete stopping laws. Every behavioral deviation is allowed.

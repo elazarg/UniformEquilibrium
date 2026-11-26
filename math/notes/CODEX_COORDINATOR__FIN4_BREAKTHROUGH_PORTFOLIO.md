@@ -456,7 +456,7 @@ and its efficient calendar with only one initial joining error. Its UE class
 is contained in the parameter theorem and is not counted again as additional
 counterexample exclusion.
 
-The [signed collision-bridge theorem](../exports/SIGNED_COLLISION_BRIDGE_UNIFORM_EQUILIBRIUM.md)
+The [signed collision-bridge theorem](../revisit/SIGNED_COLLISION_BRIDGE_UNIFORM_EQUILIBRIUM.md)
 covers a class with strongly signed participant rewards and nonadditive
 passive rewards on the difficult singleton matrix. It uses a pair12 root,
 a triple123 root and a finite44-root repair through negative native values.

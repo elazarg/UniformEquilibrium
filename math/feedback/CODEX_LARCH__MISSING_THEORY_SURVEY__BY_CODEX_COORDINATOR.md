@@ -65,7 +65,7 @@ a new proof of equilibrium or a finite-calendar bound on response caps.
 
 The strict regret gap needed by the concentration comparison led to a
 separate reward-table reduction:
-[membership stretching and a singleton-fiber source](../exports/MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION.md).
+[membership stretching and a singleton-fiber source](../revisit/MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION.md).
 It has passed two complete independent reviews and final-byte checks.
 If any counterexample exists, this reduction selects a possibly different
 positive-gap table with strict separation from ALL eleven nonsingleton

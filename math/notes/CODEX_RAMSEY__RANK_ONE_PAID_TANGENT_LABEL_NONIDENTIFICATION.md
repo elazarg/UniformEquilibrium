@@ -10,7 +10,7 @@ a positive tangent recipient.  This note records the two distinct seams and
 stops; it proves no new consumer, descent, or uniform payoff.
 
 Primary boundary:
-[`PAID_CAP_PORT_EXACT_TRICHOTOMY_AND_INERT_STALL.md`](../exports/PAID_CAP_PORT_EXACT_TRICHOTOMY_AND_INERT_STALL.md).
+[`PAID_CAP_PORT_EXACT_TRICHOTOMY_AND_INERT_STALL.md`](../formalized/PAID_CAP_PORT_EXACT_TRICHOTOMY_AND_INERT_STALL.md).
 The inert arm keeps the cap roots all Continue and transports the paid row,
 but adds no new label equality.
 

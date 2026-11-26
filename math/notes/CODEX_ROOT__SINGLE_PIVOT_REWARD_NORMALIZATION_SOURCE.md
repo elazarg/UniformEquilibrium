@@ -4,7 +4,7 @@ Owner of this intake record: CODEX_ROOT.
 
 Status: ordinary mathematics with two complete independent PASS reviews and
 both reviewers' final-assembly confirmations. The final packet is frozen at
-[SINGLE_PIVOT_ZERO_NEVER_NORMALIZATION_AND_FINITE_MENU_SOURCE.md](../exports/SINGLE_PIVOT_ZERO_NEVER_NORMALIZATION_AND_FINITE_MENU_SOURCE.md),
+[SINGLE_PIVOT_ZERO_NEVER_NORMALIZATION_AND_FINITE_MENU_SOURCE.md](../formalized/SINGLE_PIVOT_ZERO_NEVER_NORMALIZATION_AND_FINITE_MENU_SOURCE.md),
 SHA-256 `b38ad18986ec59aac0cc22afc8006eead7b35ae7f58fc425e12b33a58cf699c5`.
 Its entire exact-statement-through-end mathematical body has SHA-256
 `7b195d5e246b0efba9aadcf1989d82d44121f5247c6e886d34b0995d2d50b6bf`.

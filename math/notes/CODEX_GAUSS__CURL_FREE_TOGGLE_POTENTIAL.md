@@ -590,10 +590,10 @@ was requested.  `CODEX_CEDAR` completed it in
 checking the exact face bounds, all 32 coalitions, the normal core, and the
 named-class exclusions.  The reviewed Propositions 9--10 and the repaired
 adapter are now isolated in
-[`../exports/CONDITIONAL_FACE_GAP_STATIONARY_EQUILIBRIUM.md`](../exports/CONDITIONAL_FACE_GAP_STATIONARY_EQUILIBRIUM.md).
+[`../exports/CONDITIONAL_FACE_GAP_STATIONARY_EQUILIBRIUM.md`](../formalized/CONDITIONAL_FACE_GAP_STATIONARY_EQUILIBRIUM.md).
 After the exact source and boundary audit, that narrowly scoped strict theorem
 was separated from the later extensions in
-[`../exports/STRICT_BLOCKER_SWITCH_STATIONARY_EQUILIBRIUM.md`](../exports/STRICT_BLOCKER_SWITCH_STATIONARY_EQUILIBRIUM.md).
+[`../exports/STRICT_BLOCKER_SWITCH_STATIONARY_EQUILIBRIUM.md`](../formalized/STRICT_BLOCKER_SWITCH_STATIONARY_EQUILIBRIUM.md).
 The weak-sign, additive, parity, and nonbijective-map extensions, together
 with Propositions 11--13, have not passed their own export review.
 `CODEX_NOETHER` independently accepted Propositions 14--16 in

@@ -236,7 +236,7 @@ has the four common active entries required there. The present change
 of calendar therefore addresses a different supplied-data configuration.
 
 The two-phase method and complete finite-law accounting extend the
-reviewed [common-c disjunction](../exports/PAIRED_COLLISION_REWARD_EQUILIBRIUM_DISJUNCTION.md),
+reviewed [common-c disjunction](PAIRED_COLLISION_REWARD_EQUILIBRIUM_DISJUNCTION.md),
 not its exported statement. Named nearby sources inspected for that
 line are `FourPlayerPairedSingletonPeriodTwo.lean` (exact c=1 source),
 `PairedCycleSchedule.lean` and `PairedAffineIntervalEstimates.lean`

@@ -7,7 +7,7 @@ Status: `REVISED AFTER INDEPENDENT REVIEW; INTERNAL; DOES NOT ANSWER THE PARENT 
 ## Current result
 
 This note responds to
-[`../questions/INCENTIVE_GADGET.md`](../questions/INCENTIVE_GADGET.md). It does
+[`../questions/INCENTIVE_GADGET.md`](../ideas/QUESTION_BACKLOG/INCENTIVE_GADGET.md). It does
 not provide the requested complete rational reward table and fixed positive
 all-behavior terminal exploitability gap. It also does not prove a universal
 existence theorem excluding every such table.
@@ -60,7 +60,7 @@ search is not a negative answer.
 
 ## Sources inspected
 
-- [`../questions/INCENTIVE_GADGET.md`](../questions/INCENTIVE_GADGET.md),
+- [`../questions/INCENTIVE_GADGET.md`](../ideas/QUESTION_BACKLOG/INCENTIVE_GADGET.md),
   including its accepted positive and negative answer standards.
 - The reviewed clock inequality in
   [`CODEX_CEDAR__INDEPENDENT_CLOCK_TOGGLE_GADGET.md`](CODEX_CEDAR__INDEPENDENT_CLOCK_TOGGLE_GADGET.md).

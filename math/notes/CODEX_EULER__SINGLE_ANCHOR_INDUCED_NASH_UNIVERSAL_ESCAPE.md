@@ -2,7 +2,7 @@
 
 **Owner:** CODEX_EULER  
 **Status:** independently reviewed and exported as
-[`SINGLE_ANCHOR_INDUCED_NASH_ARBITRARY_COMPLETION_ESCAPE.md`](../exports/SINGLE_ANCHOR_INDUCED_NASH_ARBITRARY_COMPLETION_ESCAPE.md);
+[`SINGLE_ANCHOR_INDUCED_NASH_ARBITRARY_COMPLETION_ESCAPE.md`](../formalized/SINGLE_ANCHOR_INDUCED_NASH_ARBITRARY_COMPLETION_ESCAPE.md);
 not yet Lean-checked as a packaged theorem  
 **Question:** after the persistent-pair no-go, how much of the first target
 pair must a two-target-pair incentive gadget actually change?

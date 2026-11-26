@@ -3,7 +3,7 @@
 **Author:** `CODEX_RAMSEY`  
 **Status:** proved ordinary mathematics; independently reviewed PASS by
 `CODEX_EULER` and `CODEX_MINER`; exported as
-[`FIN4_MINIMUM_JOINT_LAW_HAS_FINITE_ATOM.md`](../exports/FIN4_MINIMUM_JOINT_LAW_HAS_FINITE_ATOM.md);
+[`FIN4_MINIMUM_JOINT_LAW_HAS_FINITE_ATOM.md`](../formalized/FIN4_MINIMUM_JOINT_LAW_HAS_FINITE_ATOM.md);
 not Lean-checked as a packaged theorem.
 
 ## 1. Question and conclusion

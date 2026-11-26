@@ -14,7 +14,7 @@ Subsequent independent review sharpened the construction: choosing the first
 positive owner stopping atom after the anchor exposes at least the entire
 anchored singleton mass with the existing literal one-date Quit update.  The
 reviewed final statement is
-[`FIN4_MINIMUM_SINGLETON_CLOCK_COMPRESSION.md`](../exports/FIN4_MINIMUM_SINGLETON_CLOCK_COMPRESSION.md).
+[`FIN4_MINIMUM_SINGLETON_CLOCK_COMPRESSION.md`](../formalized/FIN4_MINIMUM_SINGLETON_CLOCK_COMPRESSION.md).
 The averaging theorem below remains valid but is weaker.
 
 One interface qualification is essential.  The compressed origin carries the

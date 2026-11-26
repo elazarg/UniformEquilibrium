@@ -167,7 +167,7 @@ scattered source boilerplate:
 - [Finite-deadline Nash projective boundary and compatibility](../formalized/FINITE_DEADLINE_NASH_PROJECTIVE_BOUNDARY_AND_COMPATIBILITY.md)
   distinguishes separate finite equilibria from compatible selections and
   gives an actual quantitative adjacent-deadline criterion.
-- [Adaptive unchanged-child extension no-go](../exports/ADAPTIVE_CHILD_EQUILIBRIUM_EXTENSION_NO_GO.md)
+- [Adaptive unchanged-child extension no-go](ADAPTIVE_CHILD_EQUILIBRIUM_EXTENSION_NO_GO.md)
   rules out a universal extension that preserves the supplied child marginals,
   even when the parent game itself has an equilibrium.
 

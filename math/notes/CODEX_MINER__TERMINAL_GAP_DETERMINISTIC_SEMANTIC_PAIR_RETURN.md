@@ -244,7 +244,7 @@ the next prescribed payoff, no punishment floor is retained, and the
 updater's payoff gain is not an absorption charge.
 
 In particular, this does not eliminate the inert arm of
-[`PAID_CAP_PORT_EXACT_TRICHOTOMY_AND_INERT_STALL.md`](../exports/PAID_CAP_PORT_EXACT_TRICHOTOMY_AND_INERT_STALL.md).
+[`PAID_CAP_PORT_EXACT_TRICHOTOMY_AND_INERT_STALL.md`](../formalized/PAID_CAP_PORT_EXACT_TRICHOTOMY_AND_INERT_STALL.md).
 That arm is a literal cap-prefix chronology with zero charge and a fixed
 semantic pair. The present loop has fixed positive unilateral-update gains
 and an exact semantic-pair return, but no Bellman chronology. Existing

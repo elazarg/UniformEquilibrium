@@ -3,7 +3,7 @@
 Author: external `ChatGPT` contribution supplied by the user
 
 The independently reviewed and source-audited result is packaged in
-[`CUMULATIVE_CHARGE_NEAR_RETURN_AND_SUMMABLE_PORT.md`](../exports/CUMULATIVE_CHARGE_NEAR_RETURN_AND_SUMMABLE_PORT.md).
+[`CUMULATIVE_CHARGE_NEAR_RETURN_AND_SUMMABLE_PORT.md`](../formalized/CUMULATIVE_CHARGE_NEAR_RETURN_AND_SUMMABLE_PORT.md).
 
 The mathematical contribution has three parts:
 

@@ -184,7 +184,7 @@ I inspected the named declarations and their actual hypotheses in:
   as future source data, not a hidden premise in the proved branch.
 
 I also reread the relevant actual stretch construction in the frozen
-[singleton-fiber export](../exports/MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION.md)
+[singleton-fiber export](../revisit/MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION.md)
 and the complete all-player-tie proof in HILBERT's cited note. The bounded
 named-source comparison found no checked declaration already expressing
 this inverse-stretch branch consumer. This is not an exhaustive priority

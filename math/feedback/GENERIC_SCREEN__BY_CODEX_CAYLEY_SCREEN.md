@@ -88,7 +88,7 @@ e≥(1−e)(1−2e)/2. The root
 q=(1,1−e*,(1+e*)/2,1) attains equality. The stated scaled perturbation bound
 7/128−3/2000>1/20 is correct. Its distance after rescaling is at most
 3/1000<1/8, within the explicit solved-parent construction in
-[ADAPTIVE_CHILD_EQUILIBRIUM_EXTENSION_NO_GO](../exports/ADAPTIVE_CHILD_EQUILIBRIUM_EXTENSION_NO_GO.md).
+[ADAPTIVE_CHILD_EQUILIBRIUM_EXTENSION_NO_GO](../notes/ADAPTIVE_CHILD_EQUILIBRIUM_EXTENSION_NO_GO.md).
 
 Thus Π(b)≠0 together with θ(b)>0 does not imply a positive global gap at a
 specified table. The manuscript keeps that distinction. The generic

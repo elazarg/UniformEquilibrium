@@ -5,7 +5,7 @@ Status: `PROOF_DRAFT`
 
 ## Exact question
 
-This responds to [`../questions/INCENTIVE_GADGET.md`](../questions/INCENTIVE_GADGET.md).
+This responds to [`../questions/INCENTIVE_GADGET.md`](../ideas/QUESTION_BACKLOG/INCENTIVE_GADGET.md).
 The requested endpoint is a fixed rational quitting-game reward table with a
 fixed all-behavior terminal exploitability gap. No complete table or universal
 impossibility theorem is claimed here. The proposed progress consists of a

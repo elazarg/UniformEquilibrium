@@ -11,7 +11,7 @@ the conjecture. No export is proposed.
 ## 1. Source and target of the test
 
 Use the fixed signed table and actual profiles from
-[the strict singleton-fiber reduction](../exports/MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION.md).
+[the strict singleton-fiber reduction](../revisit/MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION.md).
 Thus rewards lie in [−1,1], Never pays zero, η(r)=Ω_b>0,
 E_r(p_m)→Ω_b, and every nonsingleton sure-coalition regret is at least
 Ω_b+γ. The same source weights have small inactivity, all four positive

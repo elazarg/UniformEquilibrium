@@ -198,7 +198,7 @@ decreasing real debts: it is a renewable family of actual sources whose paid
 certificate and causal atom remain at a fixed positive scale.
 
 It does **not** answer
-[`FIN4_PAID_RESET_REGENERATION_RANK.md`](../questions/FIN4_PAID_RESET_REGENERATION_RANK.md).
+[`FIN4_PAID_RESET_REGENERATION_RANK.md`](../ideas/QUESTION_BACKLOG/FIN4_PAID_RESET_REGENERATION_RANK.md).
 There is still no well-founded rank, positive admissible return, terminal
 approximation, or contradiction.  The family is built by outward prefixing,
 so the marked suffix moves to later dates and can disappear from a literal

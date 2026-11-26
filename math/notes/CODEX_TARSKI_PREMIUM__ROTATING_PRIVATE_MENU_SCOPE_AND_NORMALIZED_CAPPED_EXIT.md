@@ -76,7 +76,7 @@ consumer silently drops the pivot from its hypotheses.
 ## 2. Literal normalization of the solved paired family
 
 Take the original all-unit-singleton table in
-[PAIRED_COLLISION_REWARD_EQUILIBRIUM_DISJUNCTION](../exports/PAIRED_COLLISION_REWARD_EQUILIBRIUM_DISJUNCTION.md).
+[PAIRED_COLLISION_REWARD_EQUILIBRIUM_DISJUNCTION](PAIRED_COLLISION_REWARD_EQUILIBRIUM_DISJUNCTION.md).
 For pivot p, its actual canonical normalization is
 
     r^p_i(S)=r_i(S)−1_(i≠p),       S nonempty;

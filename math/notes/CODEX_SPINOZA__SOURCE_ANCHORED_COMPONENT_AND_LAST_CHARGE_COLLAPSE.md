@@ -30,7 +30,7 @@ positive global minimum essentially.
 
 Start with the actual finite-clock source and two distinct full-gap pure-time
 responses supplied by
-[`FINITE_CLOCK_DOUBLE_FULL_GAP_COSOURCE.md`](../exports/FINITE_CLOCK_DOUBLE_FULL_GAP_COSOURCE.md).
+[`FINITE_CLOCK_DOUBLE_FULL_GAP_COSOURCE.md`](../formalized/FINITE_CLOCK_DOUBLE_FULL_GAP_COSOURCE.md).
 Can a global variational or essential-equilibrium-component argument produce
 a finite exact Nash--Bellman block which
 

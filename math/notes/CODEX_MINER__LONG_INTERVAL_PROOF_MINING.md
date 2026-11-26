@@ -141,7 +141,7 @@ instead of appealing to the non-built transcription.  No full Simon lemma,
 positive-solo sign theorem, or finite-orbit necessity seal should be claimed.
 
 **Gate follow-through (2026-08-25).** This extraction is now assembled as
-[`SIMON_NORMALIZED_MOTION_STATIONARY_PREFIX_PRODUCER.md`](../exports/SIMON_NORMALIZED_MOTION_STATIONARY_PREFIX_PRODUCER.md),
+[`SIMON_NORMALIZED_MOTION_STATIONARY_PREFIX_PRODUCER.md`](../formalized/SIMON_NORMALIZED_MOTION_STATIONARY_PREFIX_PRODUCER.md),
 after rechecking that the explicit `gamma_k`-rationality repair and the
 `c_j = 1` / Never caveat are present in the live source.  The packet contains
 only Proposition 44 and its direct fixed-scale contrapositive; no later Simon
@@ -739,7 +739,7 @@ This has an actual no-uniform-branch adapter and a named downstream semantic
 consumer.  A narrow search found no wrapper retaining the unique-debtor,
 atom, paid-row, collision-selected reset owner, and complete-law fields
 together.  I therefore assembled the focused packet
-[`FIN4_SINGLETON_BASE_SAME_LAW_RESET_PRODUCER.md`](../exports/FIN4_SINGLETON_BASE_SAME_LAW_RESET_PRODUCER.md).
+[`FIN4_SINGLETON_BASE_SAME_LAW_RESET_PRODUCER.md`](../formalized/FIN4_SINGLETON_BASE_SAME_LAW_RESET_PRODUCER.md).
 
 The packet deliberately excludes the source note's later unreviewed Section
 10.  Its remaining conjecture obstruction is explicit: the fixed-law reset

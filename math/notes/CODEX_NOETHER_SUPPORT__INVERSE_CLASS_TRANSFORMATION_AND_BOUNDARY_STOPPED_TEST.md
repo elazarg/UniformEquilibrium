@@ -21,7 +21,7 @@ The new criterion is the matrix class
 
     C={Γ : diagonal Γ=0, det Γ<0, Γ⁻¹≥0}.
 
-The frozen [discounted-index theorem](../exports/INVERSE_POSITIVE_SINGLETON_MATRIX_DISCOUNTED_INDEX_ESCAPE.md)
+The frozen [discounted-index theorem](../formalized/INVERSE_POSITIVE_SINGLETON_MATRIX_DISCOUNTED_INDEX_ESCAPE.md)
 gives one fixed ordinary uniform-equilibrium payoff for every table with
 Γ∈C, without restrictions on own singletons or nonsingleton rewards.
 This note asks whether current literal reward transformations and their
@@ -121,7 +121,7 @@ errors after division by the scaling factor.
 
 ## 4. Why the membership-stretch/fiber source is not a new backward map
 
-The frozen [membership-stretch reduction](../exports/MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION.md)
+The frozen [membership-stretch reduction](../revisit/MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION.md)
 starts from the EXISTENCE of a counterexample in the normalized reward
 cube. It chooses a global worst table r*, then a small common membership
 stretch r*_α, then a maximum over the four own-singleton coordinates of

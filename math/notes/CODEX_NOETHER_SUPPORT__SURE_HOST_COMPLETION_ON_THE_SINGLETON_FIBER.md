@@ -159,7 +159,7 @@ Named declarations inspected:
 
 The ordinary all-player-ties and source-fiber facts are recorded, with
 their exact source scope, in the frozen
-[three-sure packet](../exports/THREE_SURE_MINIMA_REQUIRE_OPPOSED_MEMBERSHIP_REVERSALS.md).
+[three-sure packet](../revisit/THREE_SURE_MINIMA_REQUIRE_OPPOSED_MEMBERSHIP_REVERSALS.md).
 No external uncommitted Lean file is used to upgrade their trust status.
 
 Next question: find a global different-table comparison that controls
